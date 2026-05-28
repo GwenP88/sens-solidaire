@@ -13,6 +13,11 @@ datasource db {
   provider = "postgresql"
 }
 
+// Table Mission
+// Stocke toutes les missions de volontariat proposées par l'association
+// Une mission peut avoir plusieurs tarifs (MissionPricing), plusieurs lieux (Location)
+// et plusieurs témoignages (Testimonial)
+
 model Mission {
   id Int @id @default(autoincrement())
   title String // texte court - NOT NULL par default
@@ -30,4 +35,40 @@ model Mission {
   is_active Boolean @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  pricing MissionPricing[] // lien avec la table prix/durée (MissionPricing)
+  location Location[] // lien avec la table des lieux (Location)
+}
+
+
+// Table MissionPricing
+// Stocke les tarifs associés à une mission selon la durée du séjour
+// Ex : "2 semaines" → 800€ / "4 semaines" → 1400€
+// Une mission peut avoir plusieurs lignes de tarif (relation 1 → N)
+
+model MissionPricing {
+  id Int @id @default(autoincrement())
+  mission Mission @relation(fields: [mission_id], references: [id]) //relation avec la table Mission
+  mission_id Int // clé étrangère 
+  duration_label String
+  price Decimal 
+  display_order Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+// Table Location
+// Stocke tous les lieux associés aus missions
+// un lieu appartient qu'à une seule mission
+
+model Location {
+  id Int @id @default(autoincrement())
+  mission Mission @relation(fields: [mission_id], references: [id]) //relation avec la table Mission
+  mission_id Int // clé étrangère
+  slug String @unique
+  name String
+  country String
+  description String @db.Text
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt  
 }
