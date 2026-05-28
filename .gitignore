@@ -21,3 +21,6 @@ frontend/dist/
 
 # Fichier généré par Prisma Client
 backend/node_modules/.prisma/
+
+# Métadonnées Windows — créées lors du téléchargement de fichiers
+*.Zone.Identifier
