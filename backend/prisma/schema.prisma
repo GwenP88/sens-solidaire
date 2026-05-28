@@ -3,14 +3,12 @@
 // Définit la connexion à PostgreSQL et tous les modèles de données (tables)
 
 // Configuration du générateur Prisma Client
-// Prisma Client est l'outil qui permet de faire des requêtes en JavaScript
 generator client {
   provider = "prisma-client-js"
 }
 
 // Configuration de la source de données
-// On utilise PostgreSQL — l'URL de connexion est dans le fichier .env
+// L'URL de connexion est gérée dans prisma.config.ts (Prisma v7)
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
