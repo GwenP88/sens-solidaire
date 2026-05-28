@@ -12,3 +12,22 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Mission {
+  id Int @id @default(autoincrement())
+  title String // texte court - NOT NULL par default
+  country String // texte court - NOT NULL par default
+  slug String @unique
+  description String @db.Text // texte long - NOT NULL
+  volunteer_role String? @db.Text // texte long - le ? = NULL autorisé
+  programme String? @db.Text
+  included String? @db.Text
+  not_include String? @db.Text
+  admin_info String? @db.Text
+  ministry_url String?
+  health_info String? @db.Text
+  helloasso_url String?
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
