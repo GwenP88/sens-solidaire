@@ -12,8 +12,12 @@ COPY package*.json ./
 # Installation des dépendances
 RUN npm install
 
-# Copie du reste du code source
+# Copie du reste du code source (inclut prisma/schema.prisma)
 COPY . .
+
+# Génère le client Prisma à partir du schema.prisma
+# Doit être APRÈS le COPY pour avoir accès au schema
+RUN npx prisma generate
 
 # Port exposé par Express
 EXPOSE 3000

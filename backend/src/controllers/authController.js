@@ -1,154 +1,130 @@
-// src/services/authService.js
-// Logique métier de l'authentification admin
-// Gère : login, logout, refresh token
-// Interactions : Prisma (base de données), bcrypt (hash), jwt utils (tokens)
+// src/controllers/authController.js
+// Couche controller de l'authentification admin
+// Rôle : extraire les données de la requête, appeler le service,
+//        formater et renvoyer la réponse JSON
+// Ne contient AUCUNE logique métier — tout est délégué à authService.js
 
-// Import de bcrypt pour hasher et comparer les mots de passe
-import bcrypt from "bcrypt"
-
-// Import de l'instance Prisma unique pour accéder à la base de données
-import prisma from "../config/db.js"
-
-// Import des fonctions utilitaires JWT créées dans utils/jwt.js
-import {
-  generateAccessToken,   // génère un access token (15min)
-  generateRefreshToken,  // génère un refresh token (7j)
-  verifyRefreshToken     // vérifie et décode un refresh token
-} from "../utils/jwt.js"
+// Import des fonctions du service d'authentification
+import { login, logout, refresh } from "../services/authService.js"
 
 
 // ── LOGIN ────────────────────────────────────────────────────────────────────
-// Fonction appelée quand l'admin soumet le formulaire de connexion
-// Paramètres : email (string), password (string saisi en clair)
-// Retourne : { accessToken, refreshToken }
-export const login = async (email, password) => {
+// POST /api/auth/login
+// Corps attendu : { email: string, password: string }
+export const loginAdmin = async (req, res, next) => {
+  try {
+    // Extrait email et password du corps de la requête
+    const { email, password } = req.body
 
-  // Cherche un admin en base dont l'email correspond exactement
-  // findUnique → retourne null si aucun résultat (pas d'erreur)
-  const admin = await prisma.admin.findUnique({
-    where: { email }
-  })
+    // Vérifie que les deux champs sont présents
+    if (!email || !password) {
+      return res.status(400).json({
+        error: true,
+        message: "Email et mot de passe requis"
+      })
+    }
 
-  // Compare le password saisi avec le hash stocké en base
-  // bcrypt.compare retourne true si ça correspond, false sinon
-  // Si admin est null (email inconnu), on met false directement
-  // → évite un crash ET garde le même comportement que si le password était faux
-  const validPassword = admin
-    ? await bcrypt.compare(password, admin.password_hash)
-    : false
+    // Délègue la vérification des credentials au service
+    // Le service retourne { accessToken, refreshToken } ou lance une erreur
+    const { accessToken, refreshToken } = await login(email, password)
 
-  // Si email inconnu OU password faux → même message d'erreur dans les deux cas
-  // Sécurité : un attaquant ne peut pas savoir lequel des deux est faux
-  // error.status = 401 → sera lu par le errorMiddleware pour formater la réponse
-  if (!admin || !validPassword) {
-    const error = new Error("Identifiants invalides")
-    error.status = 401
-    throw error
+    // Stocke le refresh token dans un cookie HTTP-Only
+    // HTTP-Only : JavaScript ne peut jamais lire ce cookie → protège contre XSS
+    // Secure : cookie envoyé uniquement en HTTPS (activé en production)
+    // SameSite Strict : protège contre CSRF
+    // maxAge : 7 jours en millisecondes
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    })
+
+    // Retourne l'access token dans le body
+    // On ne retourne JAMAIS le refresh token dans le body
+    return res.status(200).json({
+      success: true,
+      accessToken
+    })
+
+  } catch (error) {
+    // Passe l'erreur au errorMiddleware
+    next(error)
   }
-
-  // Génère l'access token (contient id + role, valide 15min)
-  const accessToken = generateAccessToken(admin)
-
-  // Génère le refresh token (contient uniquement id, valide 7j)
-  const refreshToken = generateRefreshToken(admin)
-
-  // Hashe le refresh token avant de le stocker en base
-  // Le facteur de coût 10 = niveau de sécurité recommandé (bon équilibre sécurité/performance)
-  // On ne stocke JAMAIS un token en clair — si la BDD est compromise,
-  // les hashes sont inutilisables sans le token original
-  const refreshTokenHash = await bcrypt.hash(refreshToken, 10)
-
-  // Met à jour l'admin en base avec le nouveau hash du refresh token
-  // Écrase l'ancien s'il y en avait un → une seule session active à la fois
-  await prisma.admin.update({
-    where: { id: admin.id },
-    data: { refresh_token_hash: refreshTokenHash }
-  })
-
-  // Retourne les deux tokens au controller qui les enverra au frontend
-  return { accessToken, refreshToken }
 }
 
 
 // ── LOGOUT ───────────────────────────────────────────────────────────────────
-// Fonction appelée quand l'admin clique sur "Se déconnecter"
-// Paramètres : adminId (integer) — l'id de l'admin connecté
-// Retourne : rien (void)
-export const logout = async (adminId) => {
+// POST /api/auth/logout
+// Protégé par authMiddleware → req.user est disponible
+export const logoutAdmin = async (req, res, next) => {
+  try {
+    // req.user.id injecté par authMiddleware après vérification du JWT
+    await logout(req.user.id)
 
-  // Supprime le refresh token en base → révoque la session immédiatement
-  // Même si l'access token est encore valide (15min max),
-  // l'admin ne pourra plus en obtenir un nouveau après expiration
-  await prisma.admin.update({
-    where: { id: adminId },
-    data: { refresh_token_hash: null } // null = aucune session active
-  })
+    // Supprime le cookie refresh token côté navigateur
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict"
+    })
+
+    return res.status(200).json({
+      success: true,
+      message: "Déconnexion réussie"
+    })
+
+  } catch (error) {
+    next(error)
+  }
 }
 
 
 // ── REFRESH ──────────────────────────────────────────────────────────────────
-// Fonction appelée automatiquement par le frontend quand l'access token expire
-// Échange un refresh token valide contre un nouvel access token + nouveau refresh token
-// Paramètres : refreshToken (string) — lu depuis le cookie HTTP-Only
-// Retourne : { accessToken, refreshToken }
-export const refresh = async (refreshToken) => {
-
-  // Vérifie la signature cryptographique du refresh token
-  // Si expiré ou falsifié → jwt.verify lance une erreur qu'on attrape ici
-  let payload
+// POST /api/auth/refresh
+// Lit le refresh token depuis le cookie HTTP-Only
+export const refreshToken = async (req, res, next) => {
   try {
-    payload = verifyRefreshToken(refreshToken) // retourne { id, iat, exp }
-  } catch {
-    const error = new Error("Refresh token invalide ou expiré")
-    error.status = 401
-    throw error
-  }
+    // Lit le refresh token depuis le cookie HTTP-Only
+    const token = req.cookies.refreshToken
 
-  // Récupère l'admin en base grâce à l'id extrait du token
-  const admin = await prisma.admin.findUnique({
-    where: { id: payload.id }
-  })
+    // Si pas de cookie → non connecté
+    if (!token) {
+      return res.status(401).json({
+        error: true,
+        message: "Refresh token manquant"
+      })
+    }
 
-  // Si l'admin n'existe plus OU n'a pas de refresh token en base
-  // → session invalide, on refuse
-  if (!admin || !admin.refresh_token_hash) {
-    const error = new Error("Session expirée")
-    error.status = 401
-    throw error
-  }
+    // Délègue au service — retourne les nouveaux tokens
+    const { accessToken, refreshToken: newRefreshToken } = await refresh(token)
 
-  // Vérifie que le refresh token envoyé correspond bien au hash stocké en base
-  // Protection contre la réutilisation d'un ancien token après rotation
-  const validToken = await bcrypt.compare(refreshToken, admin.refresh_token_hash)
-
-  if (!validToken) {
-    // Le token ne correspond pas au hash → quelqu'un utilise un ancien token
-    // C'est le signe d'une possible compromission
-    // On révoque TOUTES les sessions de cet admin par sécurité
-    await prisma.admin.update({
-      where: { id: admin.id },
-      data: { refresh_token_hash: null }
+    // Remplace l'ancien cookie par le nouveau refresh token
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000
     })
-    const error = new Error("Token compromis — toutes les sessions révoquées")
-    error.status = 401
-    throw error
+
+    return res.status(200).json({
+      success: true,
+      accessToken
+    })
+
+  } catch (error) {
+    next(error)
   }
+}
 
-  // Rotation des tokens : on génère deux nouveaux tokens
-  // L'ancien refresh token sera remplacé → ne peut plus être réutilisé
-  const newAccessToken = generateAccessToken(admin)
-  const newRefreshToken = generateRefreshToken(admin)
 
-  // Hashe le nouveau refresh token avant stockage
-  const newRefreshTokenHash = await bcrypt.hash(newRefreshToken, 10)
-
-  // Remplace l'ancien hash par le nouveau en base
-  // → l'ancien refresh token est maintenant invalide
-  await prisma.admin.update({
-    where: { id: admin.id },
-    data: { refresh_token_hash: newRefreshTokenHash }
+// ── VERIFY ───────────────────────────────────────────────────────────────────
+// GET /api/auth/verify
+// Protégé par authMiddleware → si on arrive ici, le token est valide
+export const verifyToken = async (req, res) => {
+  // Token valide → retourne les infos admin extraites du token par authMiddleware
+  return res.status(200).json({
+    success: true,
+    admin: req.user // { id, role } injecté par authMiddleware
   })
-
-  // Retourne les nouveaux tokens au controller
-  return { accessToken: newAccessToken, refreshToken: newRefreshToken }
 }
