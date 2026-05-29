@@ -10,7 +10,7 @@ import bcrypt from "bcrypt"
 import prisma from "../src/config/db.js"
 
 const seed = async () => {
-  console.log("🌱 Démarrage du seed...")
+  console.log("Démarrage du seed...")
 
   // Mot de passe temporaire pour le développement
   // À changer immédiatement en production
@@ -33,15 +33,15 @@ const seed = async () => {
     }
   })
 
-  console.log(`✅ Admin créé : ${admin.email}`)
-  console.log(`🔑 Mot de passe temporaire : ${plainPassword}`)
-  console.log(`⚠️  Changez ce mot de passe en production !`)
+  console.log(`Admin créé : ${admin.email}`)
+  console.log(`Mot de passe temporaire : ${plainPassword}`)
+  console.log(`Changez ce mot de passe en production !`)
 }
 
 // Exécute le seed et ferme la connexion Prisma proprement
 seed()
   .catch((error) => {
-    console.error("❌ Erreur seed :", error)
+    console.error("Erreur seed :", error)
     process.exit(1)
   })
   .finally(async () => {
