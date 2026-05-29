@@ -37,6 +37,7 @@ model Mission {
   updated_at DateTime @updatedAt
   pricing MissionPricing[] // lien avec la table prix/durée (MissionPricing)
   location Location[] // lien avec la table des lieux (Location)
+  testimonials Testimonial[] //lien avec la table Testimonials
 }
 
 
@@ -71,4 +72,59 @@ model Location {
   is_active Boolean @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt  
+}
+
+// Table Testimonial
+// Stocke les témoignages soumis par les bénévoles
+// Un témoignage peut être lié à une mission (optionnel)
+// Le consentement RGPD (consent_given) doit être true pour publication
+// La modération se fait via status : pending → approved ou rejected
+// show_homepage ne peut être true que si status = "approved" (règle métier)
+
+model Testimonial {
+  id            Int      @id @default(autoincrement())
+  mission       Mission? @relation(fields: [mission_id], references: [id])
+  mission_id    Int?
+  author_name   String
+  content       String   @db.Text
+  status        String   @default("pending")
+  show_homepage Boolean  @default(false)
+  consent_given Boolean  @default(false)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}
+
+// Table Admin
+// Stocke les comptes administrateurs de la plateforme
+// Le mot de passe n'est JAMAIS stocké en clair — uniquement son hash bcrypt
+// refresh_token_hash est null quand l'admin n'est pas connecté
+// Il est peuplé après login et vidé après logout
+
+model Admin {
+  id                 Int      @id @default(autoincrement())
+  email              String   @unique
+  password_hash      String
+  role               String   @default("admin")
+  refresh_token_hash String?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+}
+
+// Table Media
+// Centralise TOUS les fichiers uploadés pour toutes les entités
+// Architecture polymorphe : pas de clé étrangère classique
+// entity_type indique quelle table est concernée (ex: "mission", "location")
+// entity_id indique l'ID de l'enregistrement concerné dans cette table
+// La suppression des médias liés doit être gérée manuellement dans le service
+// (Prisma ne peut pas faire de cascade delete sur ce pattern)
+
+model Media {
+  id            Int      @id @default(autoincrement())
+  entity_type   String
+  entity_id     Int
+  file_url      String
+  file_type     String
+  display_order Int      @default(0)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 }
