@@ -1,0 +1,26 @@
+# .gitignore — racine du monorepo
+# Fichiers à ne jamais pousser sur GitHub
+
+# Variables d'environnement — contient des données sensibles
+.env
+**/.env
+
+# Dépendances npm
+node_modules/
+**/node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Fichiers système Mac
+.DS_Store
+
+# Dossier de build Vite
+frontend/dist/
+
+# Fichier généré par Prisma Client
+backend/node_modules/.prisma/
+
+# Métadonnées Windows — créées lors du téléchargement de fichiers
+*.Zone.Identifier

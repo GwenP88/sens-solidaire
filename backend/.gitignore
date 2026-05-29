@@ -1,0 +1,11 @@
+# .gitignore — backend
+# Fichiers à ne jamais pousser sur GitHub
+
+# Variables d'environnement — contient des données sensibles (mots de passe, clés secrètes)
+.env
+
+# Dépendances npm — trop lourdes, se réinstallent avec npm install
+node_modules/
+
+# Fichier généré par Prisma Client — se régénère avec npx prisma generate
+node_modules/.prisma/
