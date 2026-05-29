@@ -1,0 +1,73 @@
+# docker-compose.yml
+# Orchestre les 3 services : frontend, backend, base de données
+# Lancement : docker compose up
+
+services:
+
+  # ── Base de données PostgreSQL ──────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: sensolidaire_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sensolidaire
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      # Persistance des données entre les redémarrages
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend Node.js / Express ───────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sensolidaire_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/sensolidaire
+      JWT_SECRET: change_this_secret_in_production
+      JWT_EXPIRES_IN: 1d
+      JWT_REFRESH_EXPIRES_IN: 7d
+    ports:
+      - "3000:3000"
+    volumes:
+      # Montage du code source pour le hot reload
+      - ./backend:/app
+      # Exclut node_modules du montage (utilise ceux du conteneur)
+      - /app/node_modules
+
+  # ── Frontend React / Vite ───────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sensolidaire_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      # URL de l'API backend accessible depuis le navigateur
+      VITE_API_URL: http://localhost:3000
+    ports:
+      - "5173:5173"
+    volumes:
+      # Montage du code source pour le hot reload
+      - ./frontend:/app
+      # Exclut node_modules du montage
+      - /app/node_modules
+
+# ── Volumes persistants ─────────────────────────
+volumes:
+  postgres_data:
