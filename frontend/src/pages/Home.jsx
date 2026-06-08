@@ -7,6 +7,7 @@ import StatsBar from '../components/layout/StatsBar'
 function Home() {
   return (
     <div>
+      {/* Hero + StatsBar — positionnement relatif pour le chevauchement */}
       <Hero />
       <StatsBar />
       {/* Section Missions */}

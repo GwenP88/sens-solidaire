@@ -34,6 +34,12 @@ Il sera mis à jour en continu et servira à actualiser la documentation officie
 | 18 | Mai 2026 | Composant — TeamMemberCardSmall.jsx | Petite carte compacte avec avatar circle pour conseil/equipe_operationnelle. Champs : nom/prénom, poste (une ligne). Avatar neutre par défaut. | Catégories secondaires — affichage compact pour listes potentiellement longues | 📋 À documenter |
 | 19 | Mai 2026 | Composant — DelegationCard.jsx | Carte immersive pleine largeur (style MissionCard) pour les délégations. Badge drapeau Unicode ISO 3166-1 alpha-2. Titre + liste membres sur la carte. Pas de bouton. | Délégations = identité géographique forte. Badge drapeau via emoji Unicode — aucune dépendance externe. | 📋 À documenter |
 | 20 | 08/06/26 | Tailwind config | Tailwind v4 : pas de tailwind.config.js — configuration via `@theme` dans index.css. Noms sémantiques par rôle : `primary`, `accent`, `accent-green`, `surface`, `surface-mid`, `surface-dark`, `font-heading`, `font-body` | Tailwind v4 installé via @tailwindcss/vite — nouvelle syntaxe de configuration | ✅ Appliquée |
+| 21 | 08/06/26 | Button | `px-7` → `px-5` — padding horizontal réduit | Bouton trop large visuellement | 📋 À documenter |
+| 22 | 08/06/26 | StatsBar | Fond `surface-mid` remplacé par `primary` (#143601) — chiffres et labels en `surface` | Meilleure séparation visuelle avec les sections adjacentes | 📋 À documenter |
+| 23 | 08/06/26 | Navbar | Fond `bg-transparent` — suppression du `bg-primary` temporaire utilisé pendant les tests | Navbar transparente sur le Hero comme prévu dans le Figma | 📋 À documenter |
+| 24 | 08/06/26 | Navbar | Icône maison (FaHome) à la place du texte "Accueil" | Cohérence avec le Figma |  📋 À documenter |
+| 25 | 08/06/26 | Navbar | Chevrons FaChevronDown ajoutés sur Nos missions, À propos et FR | Indication visuelle des dropdowns — cohérence Figma | 📋 À documenter |
+| 26 | 08/06/26 | Button | `uppercase tracking-wider` ajoutés — texte en majuscules | Cohérence avec le Figma | 📋 À documenter |
 
 ---
 

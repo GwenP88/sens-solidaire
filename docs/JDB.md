@@ -485,27 +485,136 @@
 
 ---
 
+
 ## Jour 7 · 8 juin 2026
-### S3 — Début développement React
+### S3 — Début développement React — Composants de base + Layout global
 
 #### Statut général
 
 | Élément | Statut |
 |---|---|
-| Tailwind config — palette + typographie | ✅ Configuré dans index.css avec @theme |
-| Google Fonts — Lora + Source Sans 3 | ✅ Chargées dans index.html |
-| Git — dev mise à jour | ✅ dev-front mergée dans dev + push |
+| Tailwind v4 — palette + typographie | ✅ Configuré via `@theme` dans `index.css` |
+| Google Fonts — Lora + Source Sans 3 | ✅ Chargées dans `index.html` avec `preconnect` |
+| Composant Button (Primary + Secondary) | ✅ Terminé — hover, majuscules, variants |
+| Composant BadgeODD (17 variants) | ✅ Terminé — couleurs officielles ONU, style inline |
+| Composant Navbar | ✅ Terminé — logo, liens, FR, chevrons, icône maison, underline actif |
+| Composant Footer | ✅ Terminé — 3 zones, navigation 4 colonnes, barre légale |
+| Composant Layout | ✅ Terminé — Navbar + Outlet + Footer via React Router |
+| Composant Hero | ✅ Terminé — placeholder gris, titre, accroche, bouton CTA |
+| Composant StatsBar | ✅ Terminé — 4 compteurs, fond primary, map() |
+| Git — branche dev mise à jour | ✅ dev-front mergée dans dev + push |
 
 #### Ce qui a été fait
-- Configuration Tailwind v4 : palette complète (`primary`, `accent`, `accent-green`, `surface`, `surface-mid`, `surface-dark`) et typographie (`heading`, `body`) ajoutées dans `@theme` de `index.css`
-- Chargement Google Fonts dans `index.html` avec `preconnect`
-- Mise à jour de la branche `dev` depuis `dev-front`
-- Test visuel validé : fond beige, titre vert Lora, texte terracotta Source Sans 3, bouton terracotta ✅
+
+**Configuration Tailwind v4**
+- Palette complète ajoutée dans `@theme` de `index.css` : `primary`, `accent`, `accent-green`, `surface`, `surface-mid`, `surface-dark`
+- Typographie ajoutée : `font-heading` (Lora), `font-body` (Source Sans 3)
+- Google Fonts chargées dans `index.html` avec `preconnect`
+- Noms sémantiques par rôle choisis — facilite les changements de palette si la cliente modifie la charte
+
+**Composant Button**
+- Deux variants : `primary` (terracotta #A44A2F) et `secondary` (vert foncé #143601)
+- Objet `styles` pour les classes Tailwind par variant
+- Hover : inversion fond/texte + bordure visible
+- Classes fixes : `px-5 py-2.5 rounded font-body font-semibold uppercase tracking-wider transition-colors cursor-pointer`
+- Leçon apprise : `className` pour les classes fixes, `style` inline pour les valeurs dynamiques
+
+**Composant BadgeODD**
+- 17 variants (1 à 17) — couleurs officielles ONU
+- Prop `number` — valeur par défaut `1`
+- Objet `colors` avec les 17 couleurs
+- `style={{ backgroundColor: colors[number] }}` — couleur dynamique via style inline (Tailwind ne peut pas générer des classes dynamiques à la compilation)
+- Taille `w-7 h-7`, texte `text-sm` blanc bold
+
+**Composant Navbar**
+- Logo avec cercle blanc semi-transparent (`bg-white/40 rounded-full`)
+- Icône maison FaHome à la place du texte "Accueil"
+- Liens navigation : `text-surface font-bold text-base` + `hover:text-accent`
+- Chevrons FaChevronDown sur Nos missions, À propos et FR
+- `useLocation` pour détecter la page active — underline + `underline-offset-4` sur le lien actif
+- Fond `bg-transparent` — s'intègre sur le Hero immersif
+- Bouton "FAIRE UN DON" — composant Button réutilisé
+- react-icons installé : FaHome, FaChevronDown
+
+**Composant Footer**
+- Zone 1 — CTA immersif placeholder gris : titre h2, accroche, 2 boutons
+- Zone 2 — Navigation 4 colonnes : logo + tagline + réseaux sociaux / Découvrir / S'engager / Nous contacter
+- Zone 3 — Barre légale : copyright + liens légaux, fond #0F2108
+- react-icons : FaYoutube, FaLinkedin, FaInstagram, FaFacebook, FaMapMarkerAlt, FaEnvelope
+- Hover réseaux : `hover:text-accent-green`
+
+**Composant Layout**
+- `Outlet` React Router — injecte le contenu de chaque page entre Navbar et Footer
+- Structure : `<Navbar />` + `<main><Outlet /></main>` + `<Footer />`
+- App.jsx mis à jour — route `/` connectée à `<Home />`
+
+**Composant Hero**
+- Placeholder gris `bg-gray-400`, hauteur `h-screen`
+- Surtitre, titre h1 (Lora bold text-6xl), accroche, bouton CTA
+- Contenu aligné en bas à gauche : `items-end` + `px-16 pb-24`
+
+**Composant StatsBar**
+- 4 compteurs : 120+ Actions réalisées / 10 000+ Bénéficiaires / 20+ Ans d'expérience / 12 000+ Jeunes sensibilisés
+- Données dans un tableau `stats[]` — rendu via `.map()`
+- Fond `primary` (#143601) — chiffres et labels en `surface`
+- `key` obligatoire sur chaque élément `.map()`
+
+#### Décisions techniques & design
+
+**Tailwind v4 — noms sémantiques**
+- Noms par rôle (`primary`, `accent`) plutôt que noms de couleur (`vert-foret`, `terracotta`)
+- Si la cliente change la palette, une seule ligne à modifier dans `index.css`
+
+**BadgeODD — style inline pour couleurs dynamiques**
+- Tailwind génère les classes à la compilation — impossible d'utiliser des classes dynamiques (`bg-[${color}]`)
+- Solution : `style={{ backgroundColor: colors[number] }}` pour les valeurs qui changent selon les props
+
+**StatsBar — fond primary**
+- Déviation du Figma (prévu `surface-mid`) — fond `primary` retenu pour mieux séparer visuellement la StatsBar des sections adjacentes de même couleur beige
+
+**react-icons**
+- Librairie installée : `npm install react-icons`
+- Préfixe `Fa` (Font Awesome) utilisé partout pour la cohérence
+
+#### Erreurs rencontrées & solutions
+
+| Erreur | Solution appliquée |
+|---|---|
+| Boutons trop grands dans le test App.jsx | Ajouter `items-start` sur le conteneur flex parent |
+| Tous les liens navbar soulignés | Condition `location.pathname === '/'` copiée sur tous les liens — corriger chaque pathname |
+
+#### Structure fichiers créés aujourd'hui
+
+```
+frontend/src/
+├── components/
+│   ├── layout/
+│   │   ├── Navbar.jsx      ✅
+│   │   ├── Footer.jsx      ✅
+│   │   ├── Layout.jsx      ✅
+│   │   ├── Hero.jsx        ✅
+│   │   └── StatsBar.jsx    ✅
+│   └── ui/
+│       ├── Button.jsx      ✅
+│       └── BadgeODD.jsx    ✅
+└── pages/
+    └── Home.jsx            ✅
+```
 
 #### Notes & observations
-- Tailwind v4 : pas de `tailwind.config.js` — configuration via `@theme` dans le CSS
-- Noms sémantiques par rôle choisis (`primary`, `accent`) plutôt que noms de couleur — facilite les changements de palette
-- `accent-green` (#2F8A3A) réservé aux icônes et états actifs uniquement — jamais en fond de bouton
+- Tailwind v4 : pas de `tailwind.config.js` — configuration via `@theme` dans le CSS (différent des tutos en ligne qui montrent v3)
+- `className` pour les classes fixes, `style` inline pour les valeurs dynamiques — règle à retenir
+- `.map()` nécessite toujours une `key` unique sur chaque élément — React s'en sert pour optimiser le rendu
+- `useLocation` de React Router — hook indispensable pour la navigation active
+- react-icons : toujours utiliser le même préfixe (`Fa`) pour la cohérence visuelle
+
+#### Prévu — Jour 8
+
+- Section Missions (MissionCard + grille)
+- Section Témoignages (TestimonialCard + Carousel)
+- Section Actions terrain (ActionCard)
+- Section Partenaires
+- Mise à jour planning et documents de suivi
 
 ---
 
