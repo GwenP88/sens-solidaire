@@ -3,13 +3,7 @@
 // BrowserRouter gère la navigation entre les pages sans rechargement de la page
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Badge from './components/ui/BadgeODD'
-import Button from './components/ui/Button'
-import Navbar from './components/layout/Navbar'
-import Footer from './components/layout/Footer'
-
-// Import temporaire des pages — seront créées au fur et à mesure
-// import Home from './pages/Home'
+import Layout from './components/layout/Layout'
 
 function App() {
   return (
@@ -19,8 +13,13 @@ function App() {
       {/* Routes — définit toutes les pages et leurs URLs */}
       <Routes>
 
-        {/* Route temporaire — sera remplacée par les vraies pages */}
-        <Route path="/" element={<div className="bg-surface min-h-screen"><Footer /></div>} />
+        {/* Layout — enveloppe toutes les pages avec Navbar + Footer */}
+        <Route element={<Layout />}>
+
+          {/* Route temporaire — sera remplacée par les vraies pages */}
+          <Route path="/" element={<div>Accueil</div>} />
+
+        </Route>
 
       </Routes>
 
