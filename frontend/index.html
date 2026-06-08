@@ -3,18 +3,34 @@
 <!-- React va injecter tout le contenu dynamiquement dans la div id="root" -->
 
 <!doctype html>
-<html lang="fr"> <!-- Langue française — important pour le SEO et l'accessibilité -->
-  <head>
-    <meta charset="UTF-8" /> <!-- Encodage des caractères — support des accents français -->
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" /> <!-- Favicon — à remplacer par le logo Sens Solidaire -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Indispensable pour le responsive mobile -->
-    <title>Sens Solidaire</title> <!-- Titre de l'onglet — à affiner page par page via React Helmet -->
-  </head>
-  <body>
-    <!-- Point de montage de React — tout le site sera injecté ici par main.jsx -->
-    <div id="root"></div>
+<html lang="fr"> 
+    <!-- Langue française — important pour le SEO et l'accessibilité -->
+    <head>
+        <meta charset="UTF-8" /> 
+        <!-- Encodage des caractères — support des accents français -->
 
-    <!-- Vite charge main.jsx ici — type="module" permet d'utiliser les imports ES6 -->
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" /> 
+        <!-- Favicon — à remplacer par le logo Sens Solidaire -->
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+        <!-- Indispensable pour le responsive mobile -->
+
+        <title>Sens Solidaire</title>
+        <!-- Titre de l'onglet — à affiner page par page via React Helmet -->
+
+        <!-- Chargement des polices Google Fonts — Lora (titres) + Source Sans 3 (corps de texte) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+
+
+    </head>
+
+    <body>
+        <!-- Point de montage de React — tout le site sera injecté ici par main.jsx -->
+        <div id="root"></div>
+
+        <!-- Vite charge main.jsx ici — type="module" permet d'utiliser les imports ES6 -->
+        <script type="module" src="/src/main.jsx"></script>
+    </body>
+
 </html>

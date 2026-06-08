@@ -3,3 +3,17 @@
 
 /* Importe toutes les classes utilitaires Tailwind CSS */
 @import "tailwindcss";
+
+@theme {
+  /* Couleurs */
+  --color-primary:      #143601;
+  --color-accent:       #A44A2F;
+  --color-accent-green: #2F8A3A;
+  --color-surface:      #F8F6F1;
+  --color-surface-mid:  #E8DFD1;
+  --color-surface-dark: #D9CBB8;
+
+  /* Typographie */
+  --font-heading: 'Lora', serif;
+  --font-body:    'Source Sans 3', sans-serif;
+}
