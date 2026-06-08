@@ -4,6 +4,7 @@
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/layout/Layout'
+import Home from './pages/Home'
 
 function App() {
   return (
@@ -16,8 +17,8 @@ function App() {
         {/* Layout — enveloppe toutes les pages avec Navbar + Footer */}
         <Route element={<Layout />}>
 
-          {/* Route temporaire — sera remplacée par les vraies pages */}
-          <Route path="/" element={<div>Accueil</div>} />
+          {/* Route Accueil — page principale du site */}
+          <Route path="/" element={<Home />} />
 
         </Route>
 

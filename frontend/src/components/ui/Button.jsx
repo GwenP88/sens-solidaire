@@ -9,7 +9,7 @@ function Button({ label, variant = 'primary', onClick }) {
   }
 
   return (
-    <button onClick={onClick} className={`px-7 py-2.5 rounded font-body font-semibold transition-colors cursor-pointer ${styles[variant]}`}>
+    <button onClick={onClick} className={`px-5 py-2 rounded font-body font-semibold transition-colors cursor-pointer uppercase tracking-wider ${styles[variant]}`}>
       {label}
     </button>
   )
