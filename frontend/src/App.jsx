@@ -3,6 +3,7 @@
 // BrowserRouter gère la navigation entre les pages sans rechargement de la page
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Badge from './components/ui/BadgeODD'
 
 // Import temporaire des pages — seront créées au fur et à mesure
 // import Home from './pages/Home'
