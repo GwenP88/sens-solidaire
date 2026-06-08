@@ -43,7 +43,7 @@
 | # | Dev | Tâche | Période | Statut |
 |---|---|---|---|---|
 | 09 | Gwen | Configurer Tailwind avec le design system (palette, typographie) | À faire S2/S3 | ✅ Terminé |
-| 10 | Gwen | Composants de base : Button (Primary + Secondary), Badge ODD | À faire S2/S3 | ⚠️ En retard |
+| 10 | Gwen | Composants de base : Button (Primary + Secondary), Badge ODD | À faire S2/S3 | ✅ Terminé |
 | 11 | Gwen | Layout global : Navbar + Footer + structure `<Outlet />` React Router | À faire S2/S3 | ⚠️ En retard |
 | 12 | Gwen | Page Accueil statique : Hero + StatsBar + sections (contenu en dur) | À faire S2/S3 | ⚠️ En retard |
 | 13 | Gwen | Page Login admin (formulaire + appel API POST /auth/login) | À faire S2/S3 | ⚠️ En retard |
