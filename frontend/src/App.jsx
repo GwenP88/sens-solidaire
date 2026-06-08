@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Badge from './components/ui/BadgeODD'
 import Button from './components/ui/Button'
 import Navbar from './components/layout/Navbar'
+import Footer from './components/layout/Footer'
 
 // Import temporaire des pages — seront créées au fur et à mesure
 // import Home from './pages/Home'
@@ -19,7 +20,7 @@ function App() {
       <Routes>
 
         {/* Route temporaire — sera remplacée par les vraies pages */}
-        <Route path="/" element={<div className="bg-surface min-h-screen"><Navbar /></div>} />
+        <Route path="/" element={<div className="bg-surface min-h-screen"><Footer /></div>} />
 
       </Routes>
 
