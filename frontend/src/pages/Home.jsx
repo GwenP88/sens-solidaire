@@ -1,10 +1,12 @@
 // Home.jsx
 // Page d'accueil — Hero + StatsBar + Sections
 
+import Hero from '../components/layout/Hero'
+
 function Home() {
   return (
     <div>
-      {/* Hero */}
+      <Hero />
       {/* StatsBar */}
       {/* Section Missions */}
       {/* Section Témoignages */}

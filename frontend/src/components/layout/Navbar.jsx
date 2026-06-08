@@ -9,7 +9,7 @@ import { IoChevronDownSharp } from "react-icons/io5"
 function Navbar() {
   const location = useLocation()
   return (
-    <nav className={`w-full flex items-center justify-between px-16 h-20 bg-primary absolute top-0 left-0 z-10`}>
+    <nav className={`w-full flex items-center justify-between px-16 h-20 bg-transparent absolute top-0 left-0 z-10`}>
       <div className="bg-white/40 rounded-full p-1">
         <img src="/Logo.png" alt="Sens Solidaire" className="h-14" />
       </div>

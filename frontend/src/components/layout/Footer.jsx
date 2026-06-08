@@ -22,7 +22,7 @@ function Footer() {
         </div>
       </div>
 
-      <div className="bg-primary px-28 py-16 flex justify-between">
+      <div className="bg-primary px-20 py-12 flex justify-between">
 
         <div className="flex flex-col gap-8 w-72">
           <div className="bg-white/40 rounded-full p-1 w-fit">
@@ -43,7 +43,7 @@ function Footer() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <h3 className="font-heading font-bold text-surface text-xl uppercase tracking-widest mb-4">
+          <h3 className="font-heading font-bold text-surface text-lg uppercase tracking-widest mb-4">
             Découvrir
           </h3>
           <a href="/" className="font-body text-surface/70 text-sm hover:text-surface transition-colors mt-4">Accueil</a>
@@ -55,7 +55,7 @@ function Footer() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <h3 className="font-heading font-bold text-surface text-xl uppercase tracking-widest mb-4">
+          <h3 className="font-heading font-bold text-surface text-lg uppercase tracking-widest mb-4">
             S'engager
           </h3>
           <a href="/missions" className="font-body text-surface/70 text-sm hover:text-surface transition-colors mt-4">Partir en mission</a>
@@ -64,7 +64,7 @@ function Footer() {
         </div>
         
         <div className="flex flex-col gap-4">
-          <h3 className="font-heading font-bold text-surface text-xl uppercase tracking-widest mb-4">
+          <h3 className="font-heading font-bold text-surface text-lg uppercase tracking-widest mb-4">
             Nous contacter
           </h3>
           <div className="flex gap-4">
