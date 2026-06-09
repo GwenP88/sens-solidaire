@@ -20,6 +20,8 @@ import cookieParser from "cookie-parser"
 
 // Import du router d'authentification
 import authRouter from "./routes/auth.js"
+// Import du router de missions 
+import missionsRouter from "./routes/missions.js"
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -65,6 +67,8 @@ app.get("/api/health", (req, res) => {
 // Routes d'authentification — préfixe /api/auth
 // Ex : POST /api/auth/login, GET /api/auth/verify...
 app.use("/api/auth", authRouter)
+
+app.use("/api/missions", missionsRouter)
 
 
 // ── MIDDLEWARE ERREURS ───────────────────────────────────────────────────────
