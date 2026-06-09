@@ -10,7 +10,7 @@ function Hero() {
       <div className="absolute inset-0 bg-black/50"></div>
       <div className="relative px-16 pb-24 flex flex-col gap-6">
         {/* Surtitre */}
-        <p className="font-body font-bold text-surface text-sm uppercase tracking-widest">
+        <p className="font-body font-bold text-surface text-lg uppercase tracking-widest">
           Sens Solidaire
         </p>
 
@@ -20,7 +20,7 @@ function Hero() {
         </h1>
 
         {/* Accroche */}
-        <p className="font-body text-surface text-lg max-w-xl">
+        <p className="font-body font-semibold text-surface text-lg max-w-xl">
           Sens Solidaire agit en France et à l'international pour l'éducation, l'environnement et la solidarité.
         </p>
 

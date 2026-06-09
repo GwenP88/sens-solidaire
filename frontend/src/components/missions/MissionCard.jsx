@@ -9,12 +9,12 @@ function MissionCard({ image, badge, title, description, duration, slug }) {
       {/* Image de fond */}
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }}></div>
       {/* Overlay sombre */}
-      <div className="absolute inset-0 bg-black/45"></div>
+      <div className="absolute inset-0 bg-black/50"></div>
       {/* Contenu */}
       <div className="relative h-full flex flex-col justify-between p-6">
         {/* Badge */}
         <div className="w-fit">
-          <span className="font-body text-xs font-bold text-surface bg-accent-green px-2 py-1 rounded">
+          <span className="font-body text-xs font-bold text-surface bg-accent-green/80 px-2 py-1 rounded">
             {badge}
           </span>
         </div>
