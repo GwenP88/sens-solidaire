@@ -105,7 +105,7 @@ function Footer() {
       </div>
 
       {/* Zone 3 — Barre légale */}
-      <div style={{ backgroundColor: '#0F2108' }} className="px-20 py-4 flex justify-between items-center border-t border-surface/15">
+      <div className="bg-dark px-20 py-4 flex justify-between items-center border-t border-surface/15">
         <p className="font-body text-surface/50 text-sm">
           © 2026 Sens Solidaire. Tous droits réservés.
         </p>

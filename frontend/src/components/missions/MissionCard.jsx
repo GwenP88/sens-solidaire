@@ -13,7 +13,7 @@ function MissionCard({ image, badge, title, description, duration, slug }) {
   }
 
   return (
-    <article className="w-[380px] h-[240px] rounded-[20px] relative overflow-hidden cursor-pointer">
+    <article className="w-full h-[240px] rounded-[20px] relative overflow-hidden cursor-pointer">
       {/* Image de fond */}
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }}></div>
       {/* Overlay sombre */}

@@ -151,7 +151,7 @@ function Home() {
         </div>
 
         {/* Grille de missions */}
-        <div className="flex flex-wrap justify-between px-12 gap-y-6">
+        <div className="grid grid-cols-3 gap-6 px-12">
           {missions.map((mission) => (
             <MissionCard key={mission.slug} {...mission} />
           ))}
@@ -159,7 +159,7 @@ function Home() {
       </section>
 
       {/* Section Témoignages */}
-      <section className="bg-primary pt-16 pb-12 px-12">
+      <section className="bg-accent-2 pt-16 pb-12 px-12">
         <div className="flex justify-between items-start mb-10 px-12">
           <div>
             <h2 className="font-heading font-bold text-surface text-4xl mb-2">Ils sont partis</h2>

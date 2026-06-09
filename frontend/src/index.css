@@ -5,13 +5,33 @@
 @import "tailwindcss";
 
 @theme {
-  /* Couleurs */
+  /* Couleurs - palette 1 */
   --color-primary:      #143601;
-  --color-accent:       #A44A2F;
-  --color-accent-green: #2F8A3A;
-  --color-surface:      #F8F6F1;
-  --color-surface-mid:  #E8DFD1;
-  --color-surface-dark: #D9CBB8;
+  --color-accent:       #a44a2f;
+  --color-accent-2:     #2f8a3a;
+  --color-dark:         #222222;
+  --color-surface:      #f8f6f1;
+  --color-surface-mid:  #e8dfd1;
+  --color-surface-dark: #d9cbb8;
+
+  /* Couleurs - palette 2
+  --color-primary:      #6B8F71;
+  --color-accent:       #C47A5A;
+  --color-accent-2:     #D9C9A3;
+  --color-dark:         #222222;
+  --color-surface:      #f8f6f1;
+  --color-surface-mid:  #e8dfd1;
+  --color-surface-dark: #d9cbb8; */
+
+    /* Couleurs - palette 3
+  --color-primary:      #2F5D62;
+  --color-accent:       #C49A48;
+  --color-accent-2:     #1F4D3A;
+  --color-dark:         #222222;
+  --color-surface:      #f8f6f1;
+  --color-surface-mid:  #e8dfd1;
+  --color-surface-dark: #d9cbb8; */ 
+
 
   /* Typographie */
   --font-heading: 'Lora', serif;
