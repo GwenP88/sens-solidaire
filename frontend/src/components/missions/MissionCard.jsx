@@ -4,6 +4,14 @@ import Button from '../ui/Button'
 import { PiClockCounterClockwiseBold } from "react-icons/pi";
 
 function MissionCard({ image, badge, title, description, duration, slug }) {
+  
+  const badgeColors = {
+    'Volontariat individuel': '#2F8A3A',
+    'Service civique': '#1D6FA4',
+    'Groupe jeunes': '#A44A2F',
+    'Congé solidaire': '#8B6914',
+  }
+
   return (
     <article className="w-[380px] h-[240px] rounded-[20px] relative overflow-hidden cursor-pointer">
       {/* Image de fond */}
@@ -14,7 +22,7 @@ function MissionCard({ image, badge, title, description, duration, slug }) {
       <div className="relative h-full flex flex-col justify-between p-6">
         {/* Badge */}
         <div className="w-fit">
-          <span className="font-body text-xs font-bold text-surface bg-accent-green/80 px-2 py-1 rounded">
+          <span className="font-body text-xs font-bold text-surface px-2 py-1 rounded" style={{ backgroundColor: badgeColors[badge] || '#2F8A3A' }}>
             {badge}
           </span>
         </div>
@@ -27,7 +35,7 @@ function MissionCard({ image, badge, title, description, duration, slug }) {
             <span className="font-body text-surface text-xs flex items-center gap-2">
               <PiClockCounterClockwiseBold /> {duration}
             </span>
-            <Button label="je veux partir →" variant="primary" />
+            <Button label="je pars en mission →" variant="primary" />
           </div>
         </div>
       </div>
