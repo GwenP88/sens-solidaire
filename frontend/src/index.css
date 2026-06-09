@@ -17,3 +17,17 @@
   --font-heading: 'Lora', serif;
   --font-body:    'Source Sans 3', sans-serif;
 }
+
+.swiper {
+  padding-bottom: 50px !important;
+}
+
+.swiper-pagination-bullet {
+  background-color: #F8F6F1 !important;
+  opacity: 0.4;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #F8F6F1 !important;
+  opacity: 1;
+}

@@ -6,6 +6,7 @@ import StatsBar from '../components/layout/StatsBar'
 import MissionCard from '../components/missions/MissionCard'
 import Button from '../components/ui/Button'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
+import TestimonialCarousel from '../components/testimonials/TestimonialCarousel'
 
 function Home() {
 
@@ -60,6 +61,14 @@ function Home() {
     },
   ]
 
+  const testimonials = [
+    { quote: "Ce séjour à Batu Kapal a été une aventure extraordinaire, très riche en enseignements, en rencontres et en découverte, tant animales qu'humaines.", name: "Cathy et Laurent", mission: "Sri Lanka" },
+    { quote: "Une expérience humaine incroyable. J'ai appris autant des rangers que des éléphants. Partir avec Sens Solidaire, c'est revenir transformé.", name: "Sophie L.", mission: "Kenya" },
+    { quote: "Prendre soin des éléphants du sanctuaire MEF a été le plus beau cadeau que je me sois offert. Une aventure qui donne vraiment du sens.", name: "Thomas D.", mission: "Sri Lanka" },
+    { quote: "Une immersion totale dans la forêt amazonienne. J'ai appris à voir le monde différemment.", name: "Marie P.", mission: "Pérou" },
+    { quote: "Le reboisement de la mangrove avec les communautés locales, une expérience qui change la vie.", name: "Antoine R.", mission: "Sénégal" },
+  ]
+
   return (
     <div>
       {/* Hero + StatsBar */}
@@ -89,12 +98,17 @@ function Home() {
       </section>
 
       {/* Section Témoignages */}
-      <section className="bg-primary py-16 px-20">
-        <TestimonialCard
-          quote="Ce séjour à Batu Kapal a été une aventure extraordinaire, très riche en enseignements, en rencontres et en découverte, tant animales qu'humaines."
-          name="Sophie L."
-          mission="Sri Lanka"
-        />
+      <section className="bg-primary pt-16 pb-12 px-12">
+        <div className="flex justify-between items-start mb-10 px-12">
+          <div>
+            <h2 className="font-heading font-bold text-surface text-4xl mb-2">Ils sont partis</h2>
+            <p className="font-body text-surface/80 text-base">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
+          </div>
+          <Button label="Voir tous les témoignages →" variant="secondary" />
+        </div>
+        <div className="px-12">
+          <TestimonialCarousel testimonials={testimonials} />
+        </div>
       </section>
 
       {/* Section Actions terrain */}
