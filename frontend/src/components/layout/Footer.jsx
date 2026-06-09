@@ -13,11 +13,11 @@ function Footer() {
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative flex flex-col gap-4">
-          <h2 className="font-heading font-bold text-surface text-3xl max-w-lg">
+          <h2 className="font-heading font-bold text-surface text-3xl max-w-2xl">
             Chaque action peut changer une vie.
           </h2>
-          <p className="font-body text-surface text-sm max-w-xl">
-            Rejoignez-nous sur le terrain ou soutenez nos projets. Ensemble, construisons un avenir plus solidaire.
+          <p className="font-body text-surface text-base max-w-2xl">
+            Rejoignez-nous sur le terrain ou soutenez nos projets. <br /> Ensemble, construisons un avenir plus solidaire.
           </p>
           <div className="flex gap-4 mt-2">
             <Button label="Je pars en mission →" variant="primary" />
