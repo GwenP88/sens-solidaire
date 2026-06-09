@@ -22,6 +22,7 @@ model Mission {
   id Int @id @default(autoincrement())
   title String // texte court - NOT NULL par default
   country String // texte court - NOT NULL par default
+  type String  @default("faune_sauvage") // catégorie de mission — utilisée pour les filtres frontend
   slug String @unique
   description String @db.Text // texte long - NOT NULL
   volunteer_role String? @db.Text // texte long - le ? = NULL autorisé
