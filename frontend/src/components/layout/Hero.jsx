@@ -5,15 +5,17 @@ import Button from '../ui/Button'
 
 function Hero() {
   return (
-    <section className="relative w-full h-screen bg-gray-400 flex items-end">
-      <div className="px-16 pb-24 flex flex-col gap-6">
+    <section className="relative w-full h-screen flex items-end" style={{ backgroundImage: `url(/images/hero_home.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      {/* Overlay sombre */}
+      <div className="absolute inset-0 bg-black/50"></div>
+      <div className="relative px-16 pb-24 flex flex-col gap-6">
         {/* Surtitre */}
         <p className="font-body font-bold text-surface text-sm uppercase tracking-widest">
           Sens Solidaire
         </p>
 
         {/* Titre */}
-        <h1 className="font-heading font-bold text-surface text-6xl max-w-2xl leading-tight">
+        <h1 className="font-heading font-bold text-surface text-6xl max-w-3xl leading-tight">
           Une expérience unique de volontariat international
         </h1>
 

@@ -9,8 +9,10 @@ function Footer() {
     <footer>
 
       {/* Zone 1 — CTA immersif */}
-      <div className="relative w-full h-72 bg-gray-400 flex items-end p-16">
-        <div className="flex flex-col gap-4">
+      <div className="relative w-full h-96 flex items-end p-16" style={{ backgroundImage: `url(/images/hero_footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="relative flex flex-col gap-4">
           <h2 className="font-heading font-bold text-surface text-3xl max-w-lg">
             Chaque action peut changer une vie.
           </h2>
