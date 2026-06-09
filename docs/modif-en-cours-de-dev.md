@@ -40,6 +40,7 @@ Il sera mis à jour en continu et servira à actualiser la documentation officie
 | 24 | 08/06/26 | Navbar | Icône maison (FaHome) à la place du texte "Accueil" | Cohérence avec le Figma |  📋 À documenter |
 | 25 | 08/06/26 | Navbar | Chevrons FaChevronDown ajoutés sur Nos missions, À propos et FR | Indication visuelle des dropdowns — cohérence Figma | 📋 À documenter |
 | 26 | 08/06/26 | Button | `uppercase tracking-wider` ajoutés — texte en majuscules | Cohérence avec le Figma | 📋 À documenter |
+| 27 | 09/06/26 | Section Partenaires — Home | Fond changé de `surface` (beige) à `primary` (vert foncé) + texte `surface` | Meilleure alternance visuelle des sections — cohérence vert/beige sur la page Accueil | ✅ Appliquée |
 
 ---
 

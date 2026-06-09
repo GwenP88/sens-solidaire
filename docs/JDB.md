@@ -618,4 +618,69 @@ frontend/src/
 
 ---
 
+---
+
+## Jour 8 · 9 juin 2026
+### S3 — Page Accueil complète + Page Login admin
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| ActionCard.jsx | ✅ Créé — layout horizontal, badges ODD overlay, tags, CTA, pays |
+| Section Actions terrain | ✅ Intégrée dans Home.jsx — grille 2 colonnes, 4 actions en dur |
+| Section Partenaires | ✅ Intégrée dans Home.jsx — 18 logos, grille 6 colonnes, fond primary |
+| Page Login admin | ✅ Créée — split layout image/formulaire, route /admin/login |
+| Seed BDD (Alison) | ✅ Données de test insérées (missions, témoignages, admin) |
+| Merge dev-front → dev | ✅ Effectué |
+
+#### Ce qui a été fait
+
+**Frontend — Gwen**
+
+**Composants créés**
+- `ActionCard.jsx` — layout horizontal image gauche + contenu droite. Badges ODD en overlay `absolute` sur l'image. Tags thématiques, bouton DÉCOUVRIR (terracotta), pays avec icône `FaMapMarkerAlt`. Hauteur fixe `h-[260px]`.
+- Couleur badge `MissionCard` dynamique selon le type : `badgeColors` object, style inline. Service Civique → `#1D6FA4`, Volontariat individuel → `#2F8A3A`.
+
+**Home.jsx — sections ajoutées**
+- Section Actions terrain : 4 `ActionCard` en grille 2 colonnes, données réelles (Sri Lanka, Sénégal, Kenya).
+- Section Partenaires : 18 logos dans `/images/partners/`, grille 6 colonnes, fond `primary`, texte `surface`. 
+
+**Page Login admin**
+- Fichier : `frontend/src/pages/admin/LoginAdmin.jsx`
+- Layout split : image `hero_home.jpg` à gauche (50%), formulaire à droite (50%).
+- Champs : Email + Mot de passe + Se souvenir de moi + bouton CTA + lien mot de passe oublié.
+- Route `/admin/login` ajoutée dans `App.jsx` — hors `<Layout />` (pas de Navbar/Footer).
+- Dossier `components/admin/` réservé aux composants du dashboard.
+
+#### Erreurs rencontrées & solutions
+
+| Erreur | Solution appliquée |
+|---|---|
+| `LoginAdmin.jsx` introuvable — erreur Vite | Fichier créé dans `components/admin/` au lieu de `pages/admin/` — déplacé au bon endroit |
+| Badge Service Civique même couleur que Volontariat | Ajout d'un objet `badgeColors` dans `MissionCard` — couleur dynamique via `style` inline |
+
+#### Notes & observations
+- `components/admin/` = composants réutilisables du dashboard (Sidebar, DashboardTable, etc.)
+- `pages/admin/` = pages complètes admin (LoginAdmin, Dashboard, etc.)
+- Les tableaux de données en dur (`missions`, `testimonials`, `actions`, `partners`) sont du mock data temporaire — à remplacer par des `fetch` API quand le seed BDD sera connecté
+- Logos partenaires : tous en PNG fond dans `/images/partners/` — `jeunesse-sport.jpg` conservé en JPG (document officiel d'agrément, pas un logo)
+
+**Backend — Alison**
+- Seed BDD complet avec données réelles du site actuel
+- 5 missions : Kenya, Sénégal, Pérou, Sri Lanka, Sumatra — avec tarifs réels (10j / 2sem / 3sem / 4sem)
+- 5 villes : Voi, Ziguinchor, Puerto Maldonado, Kegalle, Bohorok
+- 7 témoignages : 6 approuvés + 1 en attente de modération
+- 1 compte admin fonctionnel (bcrypt + JWT)
+- Nouveau champ `type` ajouté sur la table Mission — migration BDD effectuée
+- Types disponibles : `faune_sauvage` · `developpement_communautaire` · `sante` · `education` · `environnement`
+- API missions complète et testée :
+  - `GET /api/missions` → liste avec pricing + lieu
+  - `GET /api/missions?type=faune_sauvage` → filtre par type
+  - `GET /api/missions?country=Kenya` → filtre par pays
+  - `GET /api/missions/:slug` → détail complet (pricing + lieu + témoignages)
+- CORS configuré pour `http://localhost:5173`
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

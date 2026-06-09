@@ -42,10 +42,10 @@
 
 | # | Dev | Tâche | Période | Statut |
 |---|---|---|---|---|
-| 09 | Gwen | Configurer Tailwind avec le design system (palette, typographie) | À faire S2/S3 | ✅ Terminé |
-| 10 | Gwen | Composants de base : Button (Primary + Secondary), Badge ODD | À faire S2/S3 | ✅ Terminé |
-| 11 | Gwen | Layout global : Navbar + Footer + structure `<Outlet />` React Router | À faire S2/S3 | ✅ Terminé |
-| 12 | Gwen | Page Accueil statique : Hero + StatsBar + sections (contenu en dur) | À faire S2/S3 | ✅ Terminé |
+| 09 | Gwen | Configurer Tailwind avec le design system (palette, typographie) | À faire S2/S3 | ⚠️ En retard | |
+| 10 | Gwen | Composants de base : Button (Primary + Secondary), Badge ODD | À faire S2/S3 | ⚠️ En retard | |
+| 11 | Gwen | Layout global : Navbar + Footer + structure `<Outlet />` React Router | À faire S2/S3 | ⚠️ En retard | |
+| 12 | Gwen | Page Accueil statique : Hero + StatsBar + sections (contenu en dur) | À faire S2/S3 | ⚠️ En retard | |
 | 13 | Gwen | Page Login admin (formulaire + appel API POST /auth/login) | À faire S2/S3 | ⚠️ En retard |
 
 #### Dev backend
@@ -69,11 +69,11 @@
 
 | # | Dev | Tâche | Période | Statut |
 |---|---|---|---|---|
-| 19 | Gwen | Composants de base : Button (Primary + Secondary) | 9 juin | 🔵 À faire |
-| 20 | Gwen | Layout global : Navbar + Footer + React Router Outlet | 9-10 juin | 🔵 À faire |
-| 21 | Gwen | Page Accueil statique (Hero, StatsBar, sections) | 10-11 juin | 🔵 À faire |
-| 22 | Gwen | Page Login admin (form + appel API) | 11 juin | 🔵 À faire |
-| 23 | Alison | Seed BDD — données de test réalistes | 10 juin | 🔵 À faire |
+| 19 | Gwen | Composants de base : Button (Primary + Secondary) | 9 juin | ✅ Terminé |
+| 20 | Gwen | Layout global : Navbar + Footer + React Router Outlet | 9-10 juin | ✅ Terminé |
+| 21 | Gwen | Page Accueil statique (Hero, StatsBar, sections) | 10-11 juin | ✅ Terminé |
+| 22 | Gwen | Page Login admin (form + appel API) | 11 juin | ✅ Terminé (formulaire statique — appel API à connecter) |
+| 23 | Alison | Seed BDD — données de test réalistes | 10 juin | ✅ Terminé |
 | 24 | Ensemble | Test connexion front ↔ back (CORS) + Docker fonctionnel avec données | 11 juin | 🔵 À faire |
 
 #### Priorité 2 — Missions (si S2 rattrapée avant jeudi)
@@ -87,6 +87,8 @@
 | 29 | Alison | Service + Controller missions | 12-13 juin | 🔵 À faire |
 
 > 📅 RDV cliente à planifier — logo blanc, logos partenaires, validation types missions
+
+> ⚠️ **S3 — Priorité 1 rattrapée (tâches 19-23 ✅) · Priorité 2 (Missions) à attaquer le 10 juin**
 
 ---
 
