@@ -5,6 +5,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/layout/Layout'
 import Home from './pages/Home'
+import LoginAdmin from './pages/admin/LoginAdmin'
 
 function App() {
   return (
@@ -14,13 +15,13 @@ function App() {
       {/* Routes — définit toutes les pages et leurs URLs */}
       <Routes>
 
-        {/* Layout — enveloppe toutes les pages avec Navbar + Footer */}
+        {/* Routes publiques — avec Navbar + Footer */}
         <Route element={<Layout />}>
-
-          {/* Route Accueil — page principale du site */}
           <Route path="/" element={<Home />} />
-
         </Route>
+
+        {/* Routes admin — sans Navbar ni Footer */}
+        <Route path="/admin/login" element={<LoginAdmin />} />
 
       </Routes>
 
