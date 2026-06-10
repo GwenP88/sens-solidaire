@@ -2,6 +2,9 @@
 // Point d'entrée de l'application — fichier exécuté par Node.js au démarrage
 // Importe l'app Express configurée et démarre le serveur HTTP
 
+// Charge les variables d'environnement depuis .env — doit être en premier
+import "dotenv/config"
+
 // Import de l'application Express configurée dans app.js
 import app from "./app.js"
 

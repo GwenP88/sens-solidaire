@@ -74,7 +74,7 @@
 | 21 | Gwen | Page Accueil statique (Hero, StatsBar, sections) | 10-11 juin | ✅ Terminé |
 | 22 | Gwen | Page Login admin (form + appel API) | 11 juin | ✅ Terminé (formulaire statique — appel API à connecter) |
 | 23 | Alison | Seed BDD — données de test réalistes | 10 juin | ✅ Terminé |
-| 24 | Ensemble | Test connexion front ↔ back (CORS) + Docker fonctionnel avec données | 11 juin | 🔵 À faire |
+| 24 | au choix| Test connexion front ↔ back (CORS) + Docker fonctionnel avec données | 11 juin | 🔵 À faire |
 
 #### Priorité 2 — Missions (si S2 rattrapée avant jeudi)
 

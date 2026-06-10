@@ -19,6 +19,9 @@
 //   - Pricing, témoignages       → deleteMany + recreate (pas de @unique)
 // ============================================================
 
+// Charge les variables d'environnement depuis .env — nécessaire pour DATABASE_URL
+import "dotenv/config"
+
 // bcrypt : librairie de hachage de mots de passe
 // On ne stocke JAMAIS un mot de passe en clair en base
 import bcrypt from "bcrypt"

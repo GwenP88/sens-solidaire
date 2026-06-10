@@ -12,6 +12,7 @@ export default defineConfig({
   // Dossier où seront stockées les migrations
   migrations: {
     path: "prisma/migrations",
+    seed: "node ./prisma/seed.js",
   },
 
   // Connexion à la base de données — lit DATABASE_URL dans le .env
