@@ -210,7 +210,37 @@ const seed = async () => {
     }
   })
 
-  console.log(`✅ Missions créées : Kenya, Sénégal, Pérou, Sri Lanka, Sumatra`)
+  // ── Mission 6 : Service civique Kenya ──────────────────────
+  // Mission spécifique service civique — champs détail non nécessaires (pas de page détail)
+  const missionScKenya = await prisma.mission.upsert({
+    where: { slug: "service-civique-kenya" },
+    update: { type: "service_civique", title: "Service civique au Kenya" },
+    create: {
+      type: "service_civique",
+      title: "Service civique au Kenya",
+      country: "Kenya",
+      slug: "service-civique-kenya",
+      short_description: "Auprès de l'école polytechnique de Taita Taveta, appui aux étudiants en tourisme, potager agroécologique et correspondances scolaires.",
+      is_active: true,
+    }
+  })
+
+  // ── Mission 7 : Service civique Sénégal ────────────────────
+  // Mission spécifique service civique — champs détail non nécessaires (pas de page détail)
+  const missionScSenegal = await prisma.mission.upsert({
+    where: { slug: "service-civique-senegal" },
+    update: { type: "service_civique", title: "Service civique au Sénégal" },
+    create: {
+      type: "service_civique",
+      title: "Service civique au Sénégal",
+      country: "Sénégal",
+      slug: "service-civique-senegal",
+      short_description: "Auprès de l'association AGADA en Casamance, reboisement de la mangrove, agriculture durable et suivi des projets eau potable.",
+      is_active: true,
+    }
+  })
+
+  console.log(`Missions créées : Kenya, Sénégal, Pérou, Sri Lanka, Sumatra`)
 
   // ============================================================
   // ÉTAPE 3 — MISSION PRICING (tarifs par durée)
@@ -232,7 +262,7 @@ const seed = async () => {
   //   Sans @unique → on ne peut pas upsert.
   //   Solution : on supprime tous les pricing des missions concernées,
   //   puis on les recrée proprement.
-  //   ⚠️ Ne jamais faire ça en production avec de vraies données client !
+  //   Ne jamais faire ça en production avec de vraies données client !
   //   En dev c'est safe car ce sont des données de test.
   //
   // missionIds : tableau des ids pour cibler uniquement NOS missions
@@ -246,7 +276,9 @@ const seed = async () => {
     missionSenegal.id,
     missionPerou.id,
     missionSriLanka.id,
-    missionSumatra.id
+    missionSumatra.id,
+    missionScKenya.id,
+    missionScSenegal.id
   ]
 
   // Supprime les anciens pricing pour ces missions (évite les doublons au re-seed)
@@ -280,10 +312,18 @@ const seed = async () => {
       { mission_id: missionSumatra.id, duration_label: "10 jours",   price: 1175, display_order: 1 },
       { mission_id: missionSumatra.id, duration_label: "2 semaines", price: 1500, display_order: 2 },
       { mission_id: missionSumatra.id, duration_label: "3 semaines", price: 2000, display_order: 3 },
+
+      // ── Service civique Kenya ──
+      { mission_id: missionScKenya.id, duration_label: "3 mois", price: 0, display_order: 1 },
+      { mission_id: missionScKenya.id, duration_label: "12 mois", price: 0, display_order: 2 },
+
+      // ── Service civique Sénégal ──
+      { mission_id: missionScSenegal.id, duration_label: "3 mois", price: 0, display_order: 1 },
+      { mission_id: missionScSenegal.id, duration_label: "12 mois", price: 0, display_order: 2 },
     ]
   })
 
-  console.log("✅ Pricing créé (14 lignes)")
+  console.log("Pricing créé (14 lignes)")
 
   // ============================================================
   // ÉTAPE 4 — LOCATIONS (villes de départ des missions)
@@ -375,7 +415,7 @@ const seed = async () => {
     }
   })
 
-  console.log("✅ Locations créées (5)")
+  console.log("Locations créées (5)")
 
   // ============================================================
   // ÉTAPE 5 — TÉMOIGNAGES
@@ -393,9 +433,9 @@ const seed = async () => {
   //                   "approved" = validé, visible sur le site
   //                   "rejected" = refusé, non affiché
   //   show_homepage → true = apparaît dans le carousel de l'accueil
-  //                   ⚠️ Règle métier : ne peut être true que si status = "approved"
+  //                   Règle métier : ne peut être true que si status = "approved"
   //   consent_given → true = le bénévole a coché la case RGPD
-  //                   ⚠️ Ne jamais afficher un témoignage sans consent_given = true
+  //                   Ne jamais afficher un témoignage sans consent_given = true
   //
   // Pourquoi deleteMany + createMany ?
   //   Testimonial n'a pas de champ @unique → upsert impossible.
@@ -490,13 +530,13 @@ const seed = async () => {
     ]
   })
 
-  console.log("✅ Témoignages créés (7 : 6 approved, 1 pending)")
+  console.log("Témoignages créés (7 : 6 approved, 1 pending)")
 
   // ============================================================
   // RÉCAP FINAL — affiché dans le terminal après le seed
   // ============================================================
   console.log("")
-  console.log("🎉 Seed terminé avec succès !")
+  console.log("Seed terminé avec succès !")
   console.log("─────────────────────────────────────────")
   console.log(`Admin      : admin@sensolidaire.org`)
   console.log(`Password   : Admin1234!`)
@@ -505,7 +545,7 @@ const seed = async () => {
   console.log(`Locations  : 5 (Voi, Ziguinchor, Puerto Maldonado, Kegalle, Bohorok)`)
   console.log(`Témoignages: 7 (6 approved, 1 pending)`)
   console.log("─────────────────────────────────────────")
-  console.log("⚠️  Changer le mot de passe admin AVANT la mise en production !")
+  console.log("Changer le mot de passe admin AVANT la mise en production !")
 }
 
 // ============================================================
@@ -524,7 +564,7 @@ const seed = async () => {
 // ============================================================
 seed()
   .catch((error) => {
-    console.error("❌ Erreur seed :", error)
+    console.error("Erreur seed :", error)
     process.exit(1) // code de sortie 1 = échec (0 = succès)
   })
   .finally(async () => {

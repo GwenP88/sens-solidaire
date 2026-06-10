@@ -3,7 +3,7 @@
 import Button from '../ui/Button'
 import { PiClockCounterClockwiseBold } from "react-icons/pi";
 
-function MissionCard({ image, badge, title, description, duration, slug }) {
+function MissionCard({ image, badge, title, description, duration, slug, ctaLabel, ctaUrl }) {
   
   const badgeColors = {
     'Volontariat individuel': '#2F8A3A',
@@ -35,7 +35,13 @@ function MissionCard({ image, badge, title, description, duration, slug }) {
             <span className="font-body text-surface text-xs flex items-center gap-2">
               <PiClockCounterClockwiseBold /> {duration}
             </span>
-            <Button label="je pars en mission →" variant="primary" />
+            {ctaUrl ? (
+              <a href={ctaUrl} target="_blank" rel="noopener noreferrer">
+                <Button label={ctaLabel || 'Je candidate →'} variant="primary" />
+              </a>
+            ) : (
+              <Button label="Je pars en mission →" variant="primary" />
+            )}
           </div>
         </div>
       </div>

@@ -683,4 +683,92 @@ frontend/src/
 
 ---
 
+## Jour 9 · 10 juin 2026
+### S3 — Connexion API + Page Missions
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Connexion front ↔ back | ✅ Fonctionnelle |
+| Page /missions — Volontariat individuel | ✅ Connectée à l'API |
+| Page /missions — Service civique | ✅ Section custom avec destinations BDD |
+| utils/missions.js | ✅ Créé — constantes partagées |
+| Design tokens Tailwind | ✅ section-padding, section-header, section-title, section-subtitle |
+| Migration BDD | ✅ short_description NOT NULL + description nullable |
+| Seed BDD — missions service civique | ✅ 2 nouvelles missions ajoutées |
+| Merge dev-front → dev | ⏳ À faire en fin de session |
+
+#### Ce qui a été fait — Gwen
+
+**Connexion front ↔ back**
+- Création `frontend/src/services/api.js` — fonctions `fetchMissions()` et `fetchMissionBySlug()`
+- Résolution erreur CORS — frontend doit tourner sur `localhost:5173` et non `127.0.0.1:5173`
+- Résolution erreur Prisma — `dotenv/config` ajouté dans `server.js` et `seed.js`
+- `npx prisma db push` pour synchroniser la BDD après migration manquante
+- `npx prisma db seed` → `node prisma/seed.js` après ajout `dotenv/config`
+
+**Page /missions**
+- Création `HeroPage.jsx` — hero compact réutilisable pour toutes les pages intérieures
+- Page `Missions.jsx` connectée à `GET /api/missions`
+- 4 sections par type : Volontariat individuel (dynamique BDD) + Service civique (section custom) + Groupe jeune (à faire) + Congé solidaire (à faire)
+- Section Service civique : layout custom avec infos, "Comment ça fonctionne ?" en 3 étapes, destinations dynamiques depuis BDD
+- `COUNTRY_IMAGES` mapping pays → image locale (accents/espaces dans noms de pays)
+- `getDuration()` — calcul fourchette de durée depuis le tableau pricing
+- `TYPE_LABELS` — labels lisibles pour chaque type de mission
+
+**BDD — migrations**
+- `short_description` passé NOT NULL dans `schema.prisma`
+- `description` passé nullable (`String?`)
+- 2 nouvelles missions service civique seedées : `service-civique-kenya` + `service-civique-senegal`
+- Pricing ajouté pour les 2 missions service civique (3 mois / 12 mois)
+
+**Design system**
+- Utilities Tailwind v4 ajoutées dans `index.css` : `section-padding`, `section-header`, `section-title`, `section-subtitle`
+- Uniformisation des paddings et titres sur Home.jsx et Missions.jsx
+
+**Composants modifiés**
+- `MissionCard.jsx` — ajout props `ctaLabel` et `ctaUrl` pour CTA personnalisable (lien externe service civique)
+- `Home.jsx` — connecté à l'API missions, suppression mock data missions
+
+**Git**
+- Commits du jour sur `dev-front` :
+  - `fix: ajout dotenv/config dans server.js et seed.js + config seed dans prisma.config.ts`
+  - `feat: connexion Home et Missions à l'API + utils/missions partagé + HeroPage + short_description BDD`
+  - `style: uniformisation padding et titres de section Home et Missions`
+  - `style: ajout utilities section-padding, section-header, section-title, section-subtitle dans index.css`
+  - `feat: section service civique custom avec destinations BDD + MissionCard ctaLabel/ctaUrl`
+
+#### Ce qui a été fait — Alison
+
+- Test Docker complet : front sur `:5173`, back sur `:3000`
+- Résolution bug `react-icons` manquant dans le conteneur Docker (`down -v` + rebuild)
+- Re-seed BDD après vidage volume Docker
+- Note : App.jsx modifié côté Alison avec placeholder route `/missions` — à vérifier au prochain pull
+
+#### Erreurs rencontrées & solutions
+
+| Erreur | Solution appliquée |
+|---|---|
+| `SASL: client password must be a string` | `dotenv/config` manquant dans `server.js` et `seed.js` |
+| CORS bloqué | Frontend sur `127.0.0.1:5173` au lieu de `localhost:5173` — toujours utiliser `localhost` |
+| `Mission.type` colonne inexistante | `npx prisma db push` pour synchroniser après merge migration Alison |
+| Port 3000 déjà occupé | `lsof -i :3000` + `kill PID` |
+| `short_description` champ inconnu | Migration manquante — `npx prisma migrate dev` + `npx prisma generate` |
+| Double section service civique | `service_civique` retiré du tableau `SECTIONS` — section gérée manuellement |
+
+#### Notes & observations
+- `npm run dev` frontend démarre sur `:5174` si Docker tourne déjà sur `:5173` — ne pas lancer les deux en même temps
+- Routine quotidienne mise à jour : `routine-quotidienne.md` dans `/docs`
+- `utils/missions.js` — pattern à reproduire pour d'autres entités (témoignages, actions...)
+- Les sections Groupe jeune et Congé solidaire restent à construire demain
+
+#### À faire demain
+- Section Service civique : remplacer les emojis par des icônes React + redesign étapes + verif si les cards service civique sont sur la home (elle ne devrait pas)
+- Sections Groupe jeune + Congé solidaire
+- Vérifier App.jsx après pull Alison
+- Page `/missions/:slug` (détail mission)
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

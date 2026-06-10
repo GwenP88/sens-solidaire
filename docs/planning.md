@@ -74,14 +74,14 @@
 | 21 | Gwen | Page Accueil statique (Hero, StatsBar, sections) | 10-11 juin | ✅ Terminé |
 | 22 | Gwen | Page Login admin (form + appel API) | 11 juin | ✅ Terminé (formulaire statique — appel API à connecter) |
 | 23 | Alison | Seed BDD — données de test réalistes | 10 juin | ✅ Terminé |
-| 24 | au choix| Test connexion front ↔ back (CORS) + Docker fonctionnel avec données | 11 juin | 🔵 À faire |
+| 24 | au choix| Test connexion front ↔ back (CORS) + Docker fonctionnel avec données | 11 juin | ✅ Terminé  |
 
 #### Priorité 2 — Missions (si S2 rattrapée avant jeudi)
 
 | # | Dev | Tâche | Période | Statut |
 |---|---|---|---|---|
-| 25 | Gwen | Page /missions : liste + FilterChips + MissionCard | 12-13 juin | 🔵 À faire |
-| 26 | Gwen | Page /missions/:slug : détail + AnchorNav | 12-13 juin | 🔵 À faire |
+| 25 | Gwen | Page /missions — liste avec vraies données API | 10 juin | ✅ Terminé (sections volontariat individuel + service civique) |
+| 26 | Gwen | Page /missions/:slug — détail mission | 11 juin | 🔵 À faire |
 | 27 | Alison | GET /api/missions (liste + filtres) | 12 juin | 🔵 À faire |
 | 28 | Alison | GET /api/missions/:slug + pricing | 12-13 juin | 🔵 À faire |
 | 29 | Alison | Service + Controller missions | 12-13 juin | 🔵 À faire |
