@@ -77,14 +77,11 @@ function Missions() {
         if (sectionMissions.length === 0) return null
 
         return (
-          <section key={section.key} className="py-16 px-24">
-            {/* En-tête de section */}
+          <section key={section.key} className="section-padding bg-surface">
             <div className="mb-10">
-              <h1 className="font-heading font-bold text-primary text-3xl mb-2">{section.label}</h1>
-              <p className="font-body text-primary/70 text-base">{section.description}</p>
+              <h2 className="section-title text-primary">{section.label}</h2>
+              <p className="section-subtitle text-primary/70">{section.description}</p>
             </div>
-
-            {/* Grille de MissionCards */}
             <div className="grid grid-cols-3 gap-6">
               {sectionMissions.map((mission) => (
                 <MissionCard

@@ -38,6 +38,29 @@
   --font-body:    'Source Sans 3', sans-serif;
 }
 
+@utility section-padding {
+  padding: 4rem 6rem;
+}
+
+@utility section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+}
+
+@utility section-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.25rem;
+  margin-bottom: 0.5rem;
+}
+
+@utility section-subtitle {
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
 .swiper {
   padding-bottom: 50px !important;
 }

@@ -97,21 +97,17 @@ function Home() {
       <StatsBar />
 
       {/* Section Missions */}
-      <section className="bg-surface py-16 px-12">
-
-        {/* En-tête de section */}
-        <div className="flex justify-between items-start mb-10 px-12">
+      <section className="section-padding bg-surface">
+        <div className="section-header">
           <div>
-            <h2 className="font-heading font-bold text-primary text-4xl mb-2">Nos missions</h2>
-            <p className="font-body text-primary/80 text-base">
+            <h2 className="section-title text-primary">Nos missions</h2>
+            <p className="section-subtitle text-primary/80">
               Engagez-vous avec nous et nos partenaires dans des missions variées, pour un but commun : la protection de la biodiversité.
             </p>
           </div>
           <Button label="Voir toutes les missions →" variant="secondary" />
         </div>
-
-        {/* Grille de missions */}
-        <div className="grid grid-cols-3 gap-6 px-12">
+        <div className="grid grid-cols-3 gap-6">
           {missions.map((mission) => (
             <MissionCard
               key={mission.slug}
@@ -127,31 +123,26 @@ function Home() {
       </section>
 
       {/* Section Témoignages */}
-      <section className="bg-accent-2 pt-16 pb-12 px-12">
-        <div className="flex justify-between items-start mb-10 px-12">
+      <section className="section-padding bg-accent-2">
+        <div className="section-header">
           <div>
-            <h2 className="font-heading font-bold text-surface text-4xl mb-2">Ils sont partis</h2>
-            <p className="font-body text-surface/80 text-base">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
+            <h2 className="section-title text-surface">Ils sont partis</h2>
+            <p className="section-subtitle text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
           </div>
           <Button label="Voir tous les témoignages →" variant="secondary" />
         </div>
-        <div className="px-12">
-          <TestimonialCarousel testimonials={testimonials} />
-        </div>
+        <TestimonialCarousel testimonials={testimonials} />
       </section>
 
       {/* Section Actions terrain */}
-      <section className="bg-surface py-16 px-24">
-        {/* En-tête de section */}
-        <div className="flex justify-between items-start mb-10">
+      <section className="section-padding bg-surface">
+        <div className="section-header">
           <div>
-            <h2 className="font-heading font-bold text-primary text-4xl mb-2">Nos actions sur le terrain</h2>
-            <p className="font-body text-primary/80 text-base">Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable.</p>
+            <h2 className="section-title text-primary">Nos actions sur le terrain</h2>
+            <p className="section-subtitle text-primary/80">Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable.</p>
           </div>
           <Button label="Voir toutes les actions →" variant="secondary" />
         </div>
-
-        {/* Grille 2 colonnes */}
         <div className="grid grid-cols-2 gap-12">
           {actions.map((action) => (
             <ActionCard key={action.slug} {...action} />
@@ -159,27 +150,19 @@ function Home() {
         </div>
       </section>
 
-
       {/* Section Partenaires */}
-      <section className="bg-primary py-16 px-24">
-        {/* En-tête de section */}
-        <div className="flex justify-between items-start mb-10">
+      <section className="section-padding bg-primary">
+        <div className="section-header">
           <div>
-            <h2 className="font-heading font-bold text-surface text-4xl mb-2">Ils nous font confiance</h2>
-            <p className="font-body text-surface/80 text-base">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
+            <h2 className="section-title text-surface">Ils nous font confiance</h2>
+            <p className="section-subtitle text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
           </div>
-          <Button label="En savoir plus sur nous →" variant="secondary" />
+          <Button label="En savoir plus sur nous →" variant="primary" />
         </div>
-
-        {/* Grille logos — 6 colonnes */}
         <div className="grid grid-cols-6 gap-8 items-center">
           {partners.map((partner) => (
             <div key={partner.name} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24">
-              <img
-                src={partner.logo}
-                alt={partner.name}
-                className="max-h-14 max-w-full object-contain"
-              />
+              <img src={partner.logo} alt={partner.name} className="max-h-14 max-w-full object-contain" />
             </div>
           ))}
         </div>
