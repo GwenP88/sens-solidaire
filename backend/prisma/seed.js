@@ -36,7 +36,7 @@ import prisma from "../src/config/db.js"
 // (elles attendent une réponse de PostgreSQL)
 // ============================================================
 const seed = async () => {
-  console.log("🌱 Démarrage du seed...")
+  console.log("Démarrage du seed...")
 
   // ============================================================
   // ÉTAPE 1 — ADMIN
@@ -68,7 +68,7 @@ const seed = async () => {
       role: "admin"    // rôle stocké en base — utilisé dans authMiddleware
     }
   })
-  console.log(`✅ Admin : ${admin.email}`)
+  console.log(`Admin : ${admin.email}`)
 
   // ============================================================
   // ÉTAPE 2 — MISSIONS
@@ -102,13 +102,14 @@ const seed = async () => {
 
   // ── Mission 1 : Kenya ──────────────────────────────────────
   const missionKenya = await prisma.mission.upsert({
-    where: { slug: "volontariat-kenya-faune-sauvage" },
-    update: {type: "faune_sauvage"},
+    where: { slug: "volontariat-kenya" },
+    update: { type: "volontariat_individuel", title: "Volontariat au Kenya", short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans." },
     create: {
-      type: "faune_sauvage",
-      title: "Faune sauvage au Kenya",
+      type: "volontariat_individuel",
+      title: "Volontariat au Kenya",
       country: "Kenya",
-      slug: "volontariat-kenya-faune-sauvage",
+      slug: "volontariat-kenya",
+      short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans.",
       description: "Participez à la protection de la faune sauvage dans la région de Voi, au pied du Kilimandjaro. Vous travaillerez au sein d'un sanctuaire animalier aux côtés de rangers locaux et de coordinateurs biodiversité pour contribuer aux projets de conservation et de développement communautaire.",
       volunteer_role: "Observation et suivi de la faune (GPS, photos, notes d'observation), participation aux projets de développement communautaire, soutien aux équipes locales sur les priorités du sanctuaire.",
       programme: "Jour 1 : Transfert depuis l'aéroport, déjeuner, installation, briefing et orientation avant le dîner.\nJour 2 : Formation sur l'observation de la faune, recommandations sécurité, rencontre avec le référent rangers et le chargé des projets biodiversité, présentation de la communauté locale.\nJours 3-6 : Programme des volontaires — 4 jours enrichissants en participant aux projets de développement.\nWeek-end : Quartier libre — visite des Sanctuaires, Parc Tsavo, Hell's Gate, Lac Naivasha, Parc Amboseli ou côte océanienne de Mombasa.\nJours 9-13 : Finalisation du programme de développement avec les communautés.\nJour 14 : Séparation avec la communauté et transfert vers l'aéroport.",
@@ -123,13 +124,14 @@ const seed = async () => {
 
   // ── Mission 2 : Sénégal ────────────────────────────────────
   const missionSenegal = await prisma.mission.upsert({
-    where: { slug: "volontariat-senegal-ziguinchor" },
-    update: {type: "developpement_communautaire"},
+    where: { slug: "volontariat-senegal" },
+    update: { type: "volontariat_individuel", title: "Volontariat au Sénégal", short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères." },
     create: {
-      type: "developpement_communautaire",
+      type: "volontariat_individuel",
       title: "Volontariat au Sénégal",
       country: "Sénégal",
-      slug: "volontariat-senegal-ziguinchor",
+      slug: "volontariat-senegal",
+      short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.",
       description: "Rejoignez nos projets de développement en Casamance, dans la région de Ziguinchor. Entre correspondance scolaire, jardins potagers, filtres à eau et visites terrain, vous contribuerez directement à l'amélioration des conditions de vie des communautés locales.",
       volunteer_role: "Correspondance scolaire, visites terrain, suivi des projets (jardin potager, filtres à eau, puits), sensibilisation communautaire.",
       programme: "8h : Petit déjeuner.\n9h à 12h : Activités de la matinée — correspondance scolaire, visites terrain.\n12h : Déjeuner.\n14h à 17h : Visite de l'avancement des projets sur place — jardin potager, utilisation des filtres à eau et puits.\n19h : Dîner.",
@@ -144,13 +146,14 @@ const seed = async () => {
 
   // ── Mission 3 : Pérou ──────────────────────────────────────
   const missionPerou = await prisma.mission.upsert({
-    where: { slug: "volontariat-perou-amazonie-biodiversite" },
-    update: {type: "faune_sauvage"},
+    where: { slug: "volontariat-perou" },
+    update: { type: "volontariat_individuel", title: "Volontariat au Pérou", short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l'Amazonie." },
     create: {
-      type: "faune_sauvage",
-      title: "Biodiversité en Amazonie péruvienne",
+      type: "volontariat_individuel",
+      title: "Volontariat au Pérou",
       country: "Pérou",
-      slug: "volontariat-perou-amazonie-biodiversite",
+      slug: "volontariat-perou",
+      short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l\'Amazonie.",
       description: "Partez au cœur de l'Amazonie péruvienne, à Puerto Maldonado, pour participer à la protection de la biodiversité. Aux côtés des soigneurs locaux, vous prendrez soin des animaux du sanctuaire et participerez aux projets d'entretien et de conservation.",
       volunteer_role: "Préparation des régimes alimentaires, nourrissage des animaux (dont singes hurleurs), cueillette de feuilles sauvages, entretien et réparation des structures, nettoyage des enclos.",
       programme: "7h30 : Petit déjeuner pour les volontaires.\n8h00 : Préparation des régimes alimentaires pour les animaux.\n8h30-9h30 : Nourrir les animaux.\n10h00 : Cueillette de feuilles sauvages pour les singes hurleurs.\n11h00-13h00 : Projets spécifiques — entretien et réparation.\n13h00 : Déjeuner des volontaires.\n14h00 : Régime alimentaire de l'après-midi et alimentation des animaux.\n16h00 : Nettoyage des enclos et vaisselle.\n17h00 : Préparation de la soirée — couvertures et lait.\n18h00 : Temps de repos des bénévoles.\n19h00 : Dîner des bénévoles.\n20h00 : Activités bénévoles.",
@@ -165,13 +168,14 @@ const seed = async () => {
 
   // ── Mission 4 : Sri Lanka ──────────────────────────────────
   const missionSriLanka = await prisma.mission.upsert({
-    where: { slug: "volontariat-sri-lanka-elephants-kegalle" },
-    update: {type: "faune_sauvage"},
+    where: { slug: "volontariat-sri-lanka" },
+    update: { type: "volontariat_individuel", title: "Volontariat au Sri Lanka", short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise." },
     create: {
-      type: "faune_sauvage",
-      title: "Protection des éléphants au Sri Lanka",
+      type: "volontariat_individuel",
+      title: "Volontariat au Sri Lanka",
       country: "Sri Lanka",
-      slug: "volontariat-sri-lanka-elephants-kegalle",
+      slug: "volontariat-sri-lanka",
+      short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.",
       description: "Engagez-vous pour la protection des éléphants d'Asie dans le sanctuaire de Kegalle. Une expérience unique alliant soins vétérinaires, observation de la faune et découverte de la médecine Ayurveda au cœur du Sri Lanka.",
       volunteer_role: "Préparation des médicaments et vitamines, nourrissage et examen vétérinaire, baignade des éléphants, nettoyage des enclos et litières, travaux de jardinage, peinture et recyclage dans le sanctuaire.",
       programme: "7h30 : Préparation des médicaments et vitamines des éléphants.\n8h00 : Nourrissage des éléphants et examen vétérinaire.\n8h30 : Nettoyage des enclos.\n9h00 : Petit déjeuner à la Colonial House.\n10h00 : Baignade des éléphants.\n11h00 : Nettoyage des litières.\n12h00-14h00 : Pause du midi.\n14h00 : Visite de la fabrique de papier Ecomaximus ou du jardin, apprentissage de la médecine Ayurveda et des plantes.\n15h00-17h00 : Travaux dans le sanctuaire (jardinage, peinture, recyclage).\n17h00-18h00 : Temps libre.\n18h00 : Dîner.",
@@ -186,13 +190,14 @@ const seed = async () => {
 
   // ── Mission 5 : Sumatra ────────────────────────────────────
   const missionSumatra = await prisma.mission.upsert({
-    where: { slug: "volontariat-sumatra-biodiversite-orang-outan" },
-    update: { type: "environnement"},
+    where: { slug: "volontariat-sumatra" },
+    update: { type: "volontariat_individuel", title: "Volontariat à Sumatra", country: "Sumatra", short_description: "Cartographie des habitats d'orang-outans et création de corridors forestiers pour protéger la biodiversité." },
     create: {
-      type: "environnement",
-      title: "Biodiversité et Orang-outans à Sumatra",
-      country: "Indonésie",
-      slug: "volontariat-sumatra-biodiversite-orang-outan",
+      type: "volontariat_individuel",
+      title: "Volontariat à Sumatra",
+      country: "Sumatra",
+      slug: "volontariat-sumatra",
+      short_description: "Cartographie des habitats d\'orang-outans et création de corridors forestiers pour protéger la biodiversité.",
       description: "Partez à Bohorok, Sumatra, pour contribuer à la conservation des orang-outans et à la préservation de la forêt tropicale. Entre observation de la faune, reboisement, projets éco-construction et soutien à l'école locale, chaque journée est une immersion totale dans la conservation.",
       volunteer_role: "Observation de la faune (GPS, photos, notes), activités de conservation (surveillance, corridors faune), projets plastique (Eco-Brick), pépinières et reboisement, soutien à l'école Selang Pangeran Jungle School.",
       programme: "6h30 : Observation de la faune — GPS, photos et notes d'observations.\n8h : Aide à la préparation du petit déjeuner.\n9h : Début des activités de conservation (surveillance, enquête et création de corridors pour la faune).\n12h : Aide à la préparation du déjeuner.\n13h à 17h : Selon les besoins du site — programme de conservation, projets plastique (Eco-Brick), pépinières et reboisement, entretien du jardin potager, projet école (aide aux cours d'anglais, sensibilisation environnementale).\n17h30 : Aide à la préparation du dîner.\n18h30 : Dîner.\n19h30-22h30 : Promenade nocturne (repérage de civettes, léopards, porcs-épics), détente, jeux de cartes, feu de camp et guitare.",

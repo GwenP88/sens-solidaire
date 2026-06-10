@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/layout/Layout'
 import Home from './pages/Home'
 import LoginAdmin from './pages/admin/LoginAdmin'
+import Missions from './pages/Missions'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         {/* Routes publiques — avec Navbar + Footer */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/missions" element={<Missions />} />
         </Route>
 
         {/* Routes admin — sans Navbar ni Footer */}

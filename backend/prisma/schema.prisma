@@ -25,6 +25,7 @@ model Mission {
   type String  @default("faune_sauvage") // catégorie de mission — utilisée pour les filtres frontend
   slug String @unique
   description String @db.Text // texte long - NOT NULL
+  short_description String? @db.Text
   volunteer_role String? @db.Text // texte long - le ? = NULL autorisé
   programme String? @db.Text
   included String? @db.Text
