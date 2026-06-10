@@ -151,13 +151,13 @@ function Home() {
       </section>
 
       {/* Section Partenaires */}
-      <section className="section-padding bg-primary">
+      <section className="section-padding bg-accent-2">
         <div className="section-header">
           <div>
             <h2 className="section-title text-surface">Ils nous font confiance</h2>
             <p className="section-subtitle text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
           </div>
-          <Button label="En savoir plus sur nous →" variant="primary" />
+          <Button label="En savoir plus sur nous →" variant="secondary" />
         </div>
         <div className="grid grid-cols-6 gap-8 items-center">
           {partners.map((partner) => (
