@@ -1,7 +1,7 @@
 // MissionCard.jsx
 // Carte mission — image immersive, badge, titre, description, durée, CTA
 import Button from '../ui/Button'
-import { PiClockCounterClockwiseBold } from "react-icons/pi";
+import { IconClock } from '../../utils/icons'
 
 function MissionCard({ image, badge, title, description, duration, slug, ctaLabel, ctaUrl }) {
   
@@ -33,7 +33,7 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
           <p className="font-body text-surface text-sm line-clamp-2">{description}</p>
           <div className="flex items-center justify-between mt-2">
             <span className="font-body text-surface text-xs flex items-center gap-2">
-              <PiClockCounterClockwiseBold /> {duration}
+              <IconClock /> {duration}
             </span>
             <Button label={ctaLabel} variant="primary" />
           </div>
