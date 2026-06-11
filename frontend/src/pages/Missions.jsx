@@ -49,7 +49,7 @@ function Missions() {
       <HeroPage
         image="/images/hero_missions.jpg"
         title="Nos missions"
-        subtitle="Agissez pour la Biodiversité : Engagez-vous avec nous et nos partenaires dans des missions variées, pour un but commun : la protection de la biodiversité."
+        subtitle="Agissez concrètement pour la protection de la biodiversité et le soutien des communautés locales."
       />
 
       {/* 4 sections par type */}
@@ -64,8 +64,22 @@ function Missions() {
           <section key={section.key} className="section-padding bg-surface">
             <div className="mb-10">
               <h2 className="section-title text-primary">{section.label}</h2>
-              <p className="section-subtitle text-primary/70">{section.description}</p>
+              <p className="section-subtitle font-bold text-primary/70">{section.description}</p>
             </div>
+
+            {/* Texte d'introduction — Volontariat individuel */}
+            <div className="mb-10">
+              <p className="font-body text-primary/80 text-base leading-relaxed">
+                En rejoignant une mission de volontariat avec Sens Solidaires, vous participez à des projets de terrain menés en partenariat avec des acteurs locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka et à Sumatra. Selon vos disponibilités, vous pouvez vous engager pour une durée de 10 jours à 4 semaines.
+              </p>
+              <p className="font-body text-primary/80 text-base leading-relaxed mt-3">
+                Seul(e), en couple ou entre amis, engagez-vous aux côtés de rangers, de soigneurs animaliers, d'agriculteurs et d'associations locales pour contribuer directement à des actions de préservation de l'environnement et de développement durable.<span className="font-bold text-primary/70"> Aucune expérience n'est requise : seule votre motivation compte.</span>
+              </p>
+              <p className="font-body text-primary/80 text-base leading-relaxed mt-3">
+                Découvrez les missions disponibles et trouvez celle qui vous permettra de vous engager à nos côtés. <br /><br /><span className="italic text-primary/70"> Les frais de mission ouvrent droit à une réduction d'impôt de 66 %.</span>
+              </p>
+            </div>
+
             <div className="grid grid-cols-3 gap-6">
               {sectionMissions.map((mission) => (
                 <MissionCard
@@ -76,8 +90,7 @@ function Missions() {
                   image={mission.image_url}
                   badge={TYPE_LABELS[mission.type]}
                   duration={getDuration(mission.pricing)}
-                  ctaLabel="Je candidate →"
-                  ctaUrl="https://www.service-civique.gouv.fr"
+                  ctaLabel="En savoir plus →"
                 />
               ))}
             </div>

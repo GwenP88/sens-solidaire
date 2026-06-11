@@ -117,6 +117,8 @@ function Home() {
               image={mission.image_url}
               badge={TYPE_LABELS[mission.type] || mission.type}
               duration={getDuration(mission.pricing)}
+              ctaLabel="Partir en mission →"
+
             />
           ))}
         </div>

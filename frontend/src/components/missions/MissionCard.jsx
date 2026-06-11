@@ -35,13 +35,7 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
             <span className="font-body text-surface text-xs flex items-center gap-2">
               <PiClockCounterClockwiseBold /> {duration}
             </span>
-            {ctaUrl ? (
-              <a href={ctaUrl} target="_blank" rel="noopener noreferrer">
-                <Button label={ctaLabel || 'Je candidate →'} variant="primary" />
-              </a>
-            ) : (
-              <Button label="Je pars en mission →" variant="primary" />
-            )}
+            <Button label={ctaLabel} variant="primary" />
           </div>
         </div>
       </div>
