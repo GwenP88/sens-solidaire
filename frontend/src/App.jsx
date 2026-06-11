@@ -7,6 +7,7 @@ import Layout from './components/layout/Layout'
 import Home from './pages/Home'
 import LoginAdmin from './pages/admin/LoginAdmin'
 import Missions from './pages/Missions'
+import Dashboard from './pages/admin/Dashboard'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
         {/* Routes admin — sans Navbar ni Footer */}
         <Route path="/admin/login" element={<LoginAdmin />} />
+        <Route path="/admin" element={<Dashboard />} />
 
       </Routes>
 
