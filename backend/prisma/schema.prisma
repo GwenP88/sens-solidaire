@@ -61,7 +61,7 @@ model MissionPricing {
 }
 
 // Table Location
-// Stocke tous les lieux associés aus missions
+// Stocke tous les lieux associés aux missions
 // un lieu appartient qu'à une seule mission
 
 model Location {

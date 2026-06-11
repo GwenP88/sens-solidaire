@@ -372,7 +372,7 @@ const seed = async () => {
   console.log("Pricing créé (14 lignes)")
 
   // ============================================================
-  // ÉTAPE 4 — LOCATIONS (villes de départ des missions)
+  // ÉTAPE 4 — LOCATIONS (villes de départ des missions ou lieux partenaires)
   // ============================================================
   // But : créer la ville associée à chaque mission.
   //       Affichée sur la page détail mission et sur la carte.
@@ -461,7 +461,121 @@ const seed = async () => {
     }
   })
 
-  console.log("Locations créées (5)")
+  // ── Kenya : 4 lieux partenaires ──────────────────────────────
+
+  await prisma.location.upsert({
+    where: { slug: "lumo-kenya" },
+    update: {},
+    create: {
+      mission_id: missionKenya.id,
+      slug: "lumo-kenya",
+      name: "LUMO Community Wildlife Conservancy",
+      country: "Kenya",
+      description: "LUMO a vu le jour en 1997, d'un protocole d'entente entre trois ranchs de la zone des Taita Hills afin de lutter contre le braconnage et de protéger la diversité biologique kényane. Lumo fait partie du corridor historique de migration des éléphants reliant l'écosystème Tsavo aux collines de Shimba. Le sanctuaire aborde une démarche d'ensemble afin de protéger l'environnement et ses peuples : amélioration des conditions de vie des communautés locales, adaptation au changement climatique. Les rangers ainsi que l'administration sont issus de la communauté des villageois.",
+      is_active: true,
+    }
+  })
+
+  await prisma.location.upsert({
+    where: { slug: "ttnp-kenya" },
+    update: {},
+    create: {
+      mission_id: missionKenya.id,
+      slug: "ttnp-kenya",
+      name: "Taita Taveta National Polytechnic",
+      country: "Kenya",
+      description: "Établissement d'enseignement supérieur de la ville de Voi, aux portes du Parc Tsavo. Cette université possède un pôle dédié au tourisme avec lequel nous travaillons particulièrement. Le campus est très engagé pour la biodiversité, possède sa propre pépinière. Sens Solidaires, en partenariat avec le Ministère des affaires étrangères français, a mis en lien les étudiants avec le Sanctuaire de Lumo pour travailler sur un projet de préservation de la biodiversité.",
+      is_active: true,
+    }
+  })
+
+  await prisma.location.upsert({
+    where: { slug: "elsa-conservation-trust-kenya" },
+    update: {},
+    create: {
+      mission_id: missionKenya.id,
+      slug: "elsa-conservation-trust-kenya",
+      name: "Elsa Conservation Trust",
+      country: "Kenya",
+      description: "La Elsa Conservation Trust a fait don de millions de dollars à des projets de conservation de la vie sauvage, aidant à créer les parcs et réserves kenyans de Meru, Samburu, Shaba, Kora et Hells Gate. Ses activités principales sont le Birds Rescue Center, le monitoring des animaux sauvages et l'éducation auprès des jeunes. Le centre offre un environnement propice à la recherche ornithologique avec 450 espèces d'oiseaux recensées sur le lac Naivasha.",
+      is_active: true,
+    }
+  })
+
+  await prisma.location.upsert({
+    where: { slug: "diani-turtle-watch-kenya" },
+    update: {},
+    create: {
+      mission_id: missionKenya.id,
+      slug: "diani-turtle-watch-kenya",
+      name: "Diani Turtle Watch",
+      country: "Kenya",
+      description: "Diani Turtle Watch, créé en 2012, travaille avec une équipe de 14 observateurs couvrant 50 km sur la côte sud du Kenya. Les principales espèces suivies sont les tortues vertes (Chelonia mydas) et les tortues imbriquées (Eretmochelys imbricata). Basé au Centre d'éducation marine du Sands at Nomad Resort, il sensibilise les communautés locales, les écoles et les touristes aux espèces menacées.",
+      is_active: true,
+    }
+  })
+
+  // ── Sri Lanka : 1 lieu partenaire ────────────────────────────
+
+  await prisma.location.upsert({
+    where: { slug: "mef-sri-lanka" },
+    update: {},
+    create: {
+      mission_id: missionSriLanka.id,
+      slug: "mef-sri-lanka",
+      name: "Millenium Elephant Foundation",
+      country: "Sri Lanka",
+      description: "La Millenium Elephant Foundation (MEF) créée en 1999 à Kegalle a pour objectif la protection des éléphants sauvages et domestiques du Sri Lanka. Les éléphants malades et maltraités y sont accueillis. Plus de 60 éléphants ont pu y être hébergés. L'objectif du Sri Lanka est de laisser les éléphants domestiqués en liberté, réduisant progressivement leur nombre.",
+      is_active: true,
+    }
+  })
+
+  // ── Pérou : 1 lieu partenaire ────────────────────────────────
+
+  await prisma.location.upsert({
+    where: { slug: "amazon-shelter-perou" },
+    update: {},
+    create: {
+      mission_id: missionPerou.id,
+      slug: "amazon-shelter-perou",
+      name: "Amazon Shelter",
+      country: "Pérou",
+      description: "Le centre de réhabilitation Amazon Shelter, proche de Puerto Maldonado, est axé sur la conservation des singes laineux et d'atèles. Les communautés locales sont sensibilisées à la préservation de la forêt primaire amazonienne. Amazon Shelter poursuit un travail de plantation d'espèces sauvages menacées sur 90 hectares : cèdres blancs, acajous, fruitiers sauvages et palmiers.",
+      is_active: true,
+    }
+  })
+
+  // ── Sumatra : 1 lieu partenaire  ──────────────────────────────
+
+  await prisma.location.upsert({
+    where: { slug: "batu-kapal-sumatra" },
+    update: {},
+    create: {
+      mission_id: missionSumatra.id,
+      slug: "batu-kapal-sumatra",
+      name: "Batu Kapal Conservation",
+      country: "Indonésie",
+      description: "Le sanctuaire de Batu Kapal se trouve au cœur de la forêt qui surplombe le parc national Gunung Leuser, classé au patrimoine mondial de l'UNESCO. Il accueille des visites fréquentes d'orangs-outans, espèce en danger critique dont la population a diminué de 86% en 100 ans. Sumatra est le dernier habitat naturel de l'orang-outan en Indonésie.",
+      is_active: true,
+    }
+  })
+
+  // ── Sénégal : 1 lieu partenaire  ──────────────────────────────
+
+  await prisma.location.upsert({
+    where: { slug: "agada-senegal" },
+    update: {},
+    create: {
+      mission_id: missionSenegal.id,
+      slug: "agada-senegal",
+      name: "ONG AGADA",
+      country: "Sénégal",
+      description: "AGADA (Agir Autrement pour le Développement en Afrique), basée à Ziguinchor en Casamance, œuvre pour le développement d'activités économiques locales et la réduction de l'insécurité alimentaire. Investie depuis plus de 30 ans dans l'accompagnement des groupements de femmes par l'agroécologie, elle soutient le reboisement de la mangrove, l'agriculture durable et la protection d'espèces patrimoniales comme le lamantin.",
+      is_active: true,
+    }
+  })
+
+  console.log("Locations créées (13)")
 
   // ============================================================
   // ÉTAPE 5 — TÉMOIGNAGES
@@ -586,9 +700,9 @@ const seed = async () => {
   console.log("─────────────────────────────────────────")
   console.log(`Admin      : admin@sensolidaire.org`)
   console.log(`Password   : Admin1234!`)
-  console.log(`Missions   : 5 (Kenya, Sénégal, Pérou, Sri Lanka, Sumatra)`)
-  console.log(`Pricing    : 14 lignes`)
-  console.log(`Locations  : 5 (Voi, Ziguinchor, Puerto Maldonado, Kegalle, Bohorok)`)
+  console.log(`Missions   : 9 (Kenya, Sénégal, Pérou, Sri Lanka, Sumatra, SC Kenya, SC Sénégal, Groupe jeunes, Congé solidaire)`)
+  console.log(`Pricing    : 20 lignes`)
+  console.log(`Locations  : 13 (Voi, Ziguinchor, Puerto Maldonado, Kegalle, Bohorok, LUMO, TTNP, Elsa, DTW, MEF, Amazon Shelter, Batu Kapal, AGADA)`)
   console.log(`Témoignages: 7 (6 approved, 1 pending)`)
   console.log("─────────────────────────────────────────")
   console.log("Changer le mot de passe admin AVANT la mise en production !")

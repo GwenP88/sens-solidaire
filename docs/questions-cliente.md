@@ -14,6 +14,15 @@
 
 ---
 
+## Témoignages
+
+| # | Sujet | Question | Réponse cliente |
+|---|---|---|---|
+| T1 | **Format des témoignages** | Le site intègre un formulaire de soumission de témoignages (prénom, mission associée, commentaire, case RGPD). Souhaites-tu conserver ce format, ou préfères-tu une autre approche (collecte manuelle, import depuis Google Forms, etc.) ? | |
+| T2 | **Extraction depuis les rapports de mission** | Souhaites-tu que nous parcourions les rapports de mission existants pour en extraire des témoignages ? Si oui, note que cela nécessite obligatoirement le consentement écrit des volontaires concernés avant toute publication — les rapports de mission sont des documents personnels. Une solution serait de les recontacter par email pour leur demander leur accord explicite. | |
+
+---
+
 ## Contenu & Structure
 
 | # | Sujet | Question | Réponse cliente |
