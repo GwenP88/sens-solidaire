@@ -1,7 +1,7 @@
 // Button.jsx
 // Composant réutilisable — deux variants : primary (terracotta) et secondary (vert foncé)
 
-function Button({ label, variant = 'primary', onClick }) {
+function Button({ label, variant = 'primary', onClick, fullWidth = false }) {
 
   const styles = {
     primary:   'bg-accent text-surface hover:bg-surface hover:text-accent hover:border-accent border border-transparent',
@@ -9,7 +9,7 @@ function Button({ label, variant = 'primary', onClick }) {
   }
 
   return (
-    <button onClick={onClick} className={`px-3 py-2 rounded font-body font-semibold transition-colors cursor-pointer uppercase tracking-wider ${styles[variant]}`}>
+    <button onClick={onClick} className={`px-3 py-2 rounded font-body font-semibold transition-colors cursor-pointer uppercase tracking-wider ${styles[variant]} ${fullWidth ? 'w-full' : ''}`}>
       {label}
     </button>
   )

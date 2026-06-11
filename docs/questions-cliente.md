@@ -37,6 +37,7 @@
 | C8 | **Congé solidaire** | Valider le contenu de la section Congé solidaire. Y a-t-il un formulaire de contact spécifique ou un email dédié pour les entreprises ? | |
 | C9 | **Tags thématiques missions** | Ajouter des tags thématiques sur les missions (faune_sauvage, environnement, développement_communautaire...) pour filtrage avancé. À valider avec la cliente avant implémentation. | |
 | C10 | **Images missions** | Les images actuelles sont provisoires issues du site actuel. Fournir les photos définitives validées pour chaque mission et action terrain. | |
+| C11 | **Lien officiel Congé solidaire** | Souhaites-tu qu'on ajoute un bouton lien vers la page officielle service-public.fr sur le congé solidaire, pour rassurer les employeurs ? Si oui, on l'intègre dans le bloc contact de cette section. | |
 
 ---
 

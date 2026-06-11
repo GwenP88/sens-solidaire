@@ -4,7 +4,7 @@
 
 function HeroPage({ image, title, subtitle }) {
   return (
-    <div className="relative w-full h-100 flex items-end pb-12 px-24">
+    <div className="relative w-full h-120 flex items-end pb-12 px-24">
       {/* Image de fond */}
       <div
         className="absolute inset-0 bg-cover bg-center"
