@@ -3,7 +3,7 @@
 
 import Badge from '../ui/BadgeODD'
 import Button from '../ui/Button'
-import { FaMapMarkerAlt } from 'react-icons/fa'
+import { IconPin } from '../../utils/icons'
 
 function ActionCard({ title, description, tags, slug, country, image, odds }) {
   return (
@@ -32,7 +32,7 @@ function ActionCard({ title, description, tags, slug, country, image, odds }) {
         <div className="flex items-center justify-between">
           <Button variant="primary" label="Découvrir →" />
           <span className="flex items-center gap-1 text-xs opacity-70">
-            <FaMapMarkerAlt /> {country}
+            <IconPin /> {country}
           </span>
         </div>
       </div>

@@ -28,7 +28,7 @@ export const findAll = async (filters = {}) => {
       pricing: true,
   	  location: true,
     },
-    orderBy: { created_at: "desc" },
+    orderBy: { created_at: "asc" },
 })
 
   return missions

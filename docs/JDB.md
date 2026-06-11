@@ -771,4 +771,107 @@ frontend/src/
 
 ---
 
+## Jour 9 — 11 juin 2026
+
+### 🎯 Objectifs du jour
+- Résoudre les problèmes d'infrastructure Docker
+- Finaliser la page Missions (sections Groupe jeune, Congé solidaire)
+- Connecter le login admin à l'API
+- Démarrer la page détail mission `/missions/:slug`
+
+---
+
+### ✅ Réalisé
+
+#### Infrastructure & Docker
+- Résolution du problème Prisma Studio (port 5555 exposé dans docker-compose.yml)
+- Suppression du volume `/app/node_modules` frontend pour corriger les dépendances manquantes (react-icons, swiper)
+- Correction de la DATABASE_URL dans `.env` backend (`@postgres:5432`)
+- Migration `add_how_to_go` appliquée avec succès
+- Seed complet relancé — 9 missions, 20 pricings, 13 locations, 7 témoignages
+- Ajout de `npx prisma generate` au démarrage dans le `package.json` backend
+- Correction du port frontend fixé à 5173 dans `vite.config.js`
+- Mise à jour de la routine quotidienne — suppression des `npm run dev` manuels
+
+#### Composants UI
+- `Carousel.jsx` → composant générique réutilisable (refacto de `TestimonialCarousel`)
+- `SectionHero.jsx` → en-tête réutilisable avec prop `image` optionnelle (illustrations one-line)
+- `SwiperCarousel` → renommé `Carousel`, centralisé dans `components/ui/`
+- Illustrations one-line générées via Gemini (PNG fond transparent) — `one-line-1.png` et `one-line-2.png`
+
+#### Page Missions (`/missions`)
+- Section Volontariat individuel → carrousel Swiper 3 slides avec `Carousel`
+- Section Service Civique → icônes et boutons centrés, liens lieux d'action
+- Section Groupe jeune → layout 3 colonnes (texte / PDF mock / CTA), `SectionHero` avec illustration
+- Section Congé solidaire → layout 2 colonnes (texte / CTA), lien france-volontaires.org
+- `SectionHero` harmonisé sur toutes les sections avec illustrations alternées
+
+#### Seed BDD
+- Refacto du seed Kenya → pattern `kenyaData` (objet partagé update/create)
+- Nouveau champ `how_to_go` ajouté au schéma Prisma (JSON stringifié, 7 étapes)
+- Mise à jour complète des champs Kenya : `description`, `volunteer_role` (HTML riche), `programme`, `included`, `not_include`, `admin_info`, `health_info`
+- 8 nouveaux lieux partenaires ajoutés : LUMO, TTNP, Elsa Conservation Trust, Diani Turtle Watch (Kenya), MEF (Sri Lanka), Amazon Shelter (Pérou), Batu Kapal (Sumatra), ONG AGADA (Sénégal)
+- Slugs missions mis à jour : `volontariat-kenya` → `kenya`, etc.
+
+#### Login Admin
+- Connexion du formulaire à `POST /api/auth/login`
+- Stockage du JWT en localStorage
+- Redirection vers `/admin` après connexion réussie
+- Page `Dashboard.jsx` temporaire créée
+
+#### Page détail mission (`/missions/:slug`)
+- Création de `MissionDetail.jsx` connectée à `GET /api/missions/:slug`
+- Hero avec durée et prix
+- Section accroche fixe
+- Section description + accroche "De nombreux volontaires" + rôle (HTML riche)
+- Section rôle + journée type côte à côte (1/2 chacun)
+- Section coût & durée (tableau / inclus-non inclus / répartition frais) + CTA
+- Section "Comment partir" (7 étapes avec icônes, données depuis `how_to_go`)
+- Section infos pratiques (santé + à savoir + PDF placeholder)
+- Section lieux partenaires (liste style Groupe jeune)
+- Section témoignages (carrousel `Carousel` sur fond vert)
+- `icons.js` enrichi avec les icônes "Comment partir"
+
+#### Documentation
+- `routine_quotidienne.md` mis à jour — suppression npm run dev, ajout avertissement Docker
+- `Questions_Cliente.docx` — ajout questions témoignages (T1, T2) et congé solidaire (C6)
+
+---
+
+### 🔵 À faire demain
+- Finaliser la mise en page de la page `/missions/kenya`
+- Section "Comment partir" à afficher correctement
+- Section lieux partenaires → vérifier le rendu
+- Connecter les MissionCard de la home et de `/missions` vers `/missions/:slug`
+- Page `/missions/:slug` pour les autres missions (Sénégal, Pérou, Sri Lanka, Sumatra)
+- Dashboard admin (structure, Sidebar, routes protégées)
+
+---
+
+### ⚠️ Points d'attention
+- Prisma Studio non fonctionnel dans Docker (bug v7) → utiliser `docker compose exec postgres psql -U postgres -d sensolidaire` pour accéder aux données directement
+- Ne jamais lancer `npm run dev` manuellement quand Docker est en route
+- Le champ `volunteer_role` est maintenant en HTML — prévoir un éditeur WYSIWYG dans le dashboard
+
+--- 
+
+### 🔍 Investigation — Prisma Studio
+Prisma Studio affichait l'erreur "Could not load schema metadata" malgré son lancement sur le port 5555.
+Après vérification :
+- les conteneurs Docker fonctionnent correctement
+- PostgreSQL démarre sans erreur
+- les tables sont présentes dans la base
+- les données sont accessibles via `psql`
+- `npx prisma db pull` fonctionne et Prisma parvient à introspecter la base
+
+Conclusion : le problème semble provenir de Prisma Studio lui-même et non de la base de données ou de Docker.
+
+Solution retenue : utiliser directement PostgreSQL via :
+```bash
+docker compose exec postgres psql -U postgres -d sensolidaire
+```
+pour consulter et vérifier les données.
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

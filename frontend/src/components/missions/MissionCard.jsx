@@ -1,14 +1,14 @@
 // MissionCard.jsx
 // Carte mission — image immersive, badge, titre, description, durée, CTA
 import Button from '../ui/Button'
-import { PiClockCounterClockwiseBold } from "react-icons/pi";
+import { IconClock } from '../../utils/icons'
 
 function MissionCard({ image, badge, title, description, duration, slug, ctaLabel, ctaUrl }) {
   
   const badgeColors = {
     'Volontariat individuel': '#2F8A3A',
     'Service civique': '#1D6FA4',
-    'Groupe jeunes': '#A44A2F',
+    'Groupe jeunes': '#8B5E3C',
     'Congé solidaire': '#8B6914',
   }
 
@@ -17,12 +17,12 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
       {/* Image de fond */}
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }}></div>
       {/* Overlay sombre */}
-      <div className="absolute inset-0 bg-black/50"></div>
+      <div className="absolute inset-0 bg-black/45"></div>
       {/* Contenu */}
       <div className="relative h-full flex flex-col justify-between p-6">
         {/* Badge */}
         <div className="w-fit">
-          <span className="font-body text-xs font-bold text-surface px-2 py-1 rounded" style={{ backgroundColor: badgeColors[badge] || '#2F8A3A' }}>
+          <span className="font-body text-xs font-bold text-surface px-2 py-1 rounded" style={{ backgroundColor: badgeColors[badge]}}>
             {badge}
           </span>
         </div>
@@ -33,15 +33,9 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
           <p className="font-body text-surface text-sm line-clamp-2">{description}</p>
           <div className="flex items-center justify-between mt-2">
             <span className="font-body text-surface text-xs flex items-center gap-2">
-              <PiClockCounterClockwiseBold /> {duration}
+              <IconClock /> {duration}
             </span>
-            {ctaUrl ? (
-              <a href={ctaUrl} target="_blank" rel="noopener noreferrer">
-                <Button label={ctaLabel || 'Je candidate →'} variant="primary" />
-              </a>
-            ) : (
-              <Button label="Je pars en mission →" variant="primary" />
-            )}
+            <Button label={ctaLabel} variant="primary" />
           </div>
         </div>
       </div>
