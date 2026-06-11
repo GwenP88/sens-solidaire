@@ -24,6 +24,7 @@ model Mission {
   country String // texte court - NOT NULL par default
   type String @default("faune_sauvage") // catégorie de mission — utilisée pour les filtres frontend
   slug String @unique
+  image_url String?
   description String? @db.Text  // nullable — détail page uniquement
   short_description String @db.Text // NOT NULL — toujours requis pour les cards
   volunteer_role String? @db.Text // texte long - le ? = NULL autorisé

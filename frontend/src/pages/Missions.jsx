@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { fetchMissions } from '../services/api'
 import MissionCard from '../components/missions/MissionCard'
 import HeroPage from '../components/layout/HeroPage'
-import { COUNTRY_IMAGES, getDuration, TYPE_LABELS } from '../utils/missions'
+import { getDuration, TYPE_LABELS } from '../utils/missions'
 import Button from '../components/ui/Button'
 
 
@@ -72,8 +72,8 @@ function Missions() {
                   slug={mission.slug}
                   title={mission.title}
                   description={mission.short_description}
-                  image={COUNTRY_IMAGES[mission.country]}
-                  badge={TYPE_LABELS[mission.type] || mission.type}
+                  image={mission.image_url}
+                  badge={TYPE_LABELS[mission.type]}
                   duration={getDuration(mission.pricing)}
                   ctaLabel="Je candidate →"
                   ctaUrl="https://www.service-civique.gouv.fr"
@@ -161,7 +161,7 @@ function Missions() {
               slug={mission.slug}
               title={mission.title}
               description={mission.short_description}
-              image={COUNTRY_IMAGES[mission.country]}
+              image={mission.image_url}
               badge={TYPE_LABELS[mission.type] || mission.type}
               duration={getDuration(mission.pricing)}
               ctaLabel="Je candidate →"

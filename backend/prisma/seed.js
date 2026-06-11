@@ -103,12 +103,13 @@ const seed = async () => {
   // ── Mission 1 : Kenya ──────────────────────────────────────
   const missionKenya = await prisma.mission.upsert({
     where: { slug: "volontariat-kenya" },
-    update: { type: "volontariat_individuel", title: "Volontariat au Kenya", short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans." },
+    update: { type: "volontariat_individuel", title: "Volontariat au Kenya", short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans.", image_url: "/images/kenya.jpg" },
     create: {
       type: "volontariat_individuel",
       title: "Volontariat au Kenya",
       country: "Kenya",
       slug: "volontariat-kenya",
+      image_url: "/images/kenya.jpg",
       short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans.",
       description: "Participez à la protection de la faune sauvage dans la région de Voi, au pied du Kilimandjaro. Vous travaillerez au sein d'un sanctuaire animalier aux côtés de rangers locaux et de coordinateurs biodiversité pour contribuer aux projets de conservation et de développement communautaire.",
       volunteer_role: "Observation et suivi de la faune (GPS, photos, notes d'observation), participation aux projets de développement communautaire, soutien aux équipes locales sur les priorités du sanctuaire.",
@@ -125,12 +126,13 @@ const seed = async () => {
   // ── Mission 2 : Sénégal ────────────────────────────────────
   const missionSenegal = await prisma.mission.upsert({
     where: { slug: "volontariat-senegal" },
-    update: { type: "volontariat_individuel", title: "Volontariat au Sénégal", short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères." },
+    update: { type: "volontariat_individuel", title: "Volontariat au Sénégal", short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.", image_url: "/images/senegal.jpg" },
     create: {
       type: "volontariat_individuel",
       title: "Volontariat au Sénégal",
       country: "Sénégal",
       slug: "volontariat-senegal",
+      image_url: "/images/senegal.jpg",
       short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.",
       description: "Rejoignez nos projets de développement en Casamance, dans la région de Ziguinchor. Entre correspondance scolaire, jardins potagers, filtres à eau et visites terrain, vous contribuerez directement à l'amélioration des conditions de vie des communautés locales.",
       volunteer_role: "Correspondance scolaire, visites terrain, suivi des projets (jardin potager, filtres à eau, puits), sensibilisation communautaire.",
@@ -147,12 +149,13 @@ const seed = async () => {
   // ── Mission 3 : Pérou ──────────────────────────────────────
   const missionPerou = await prisma.mission.upsert({
     where: { slug: "volontariat-perou" },
-    update: { type: "volontariat_individuel", title: "Volontariat au Pérou", short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l'Amazonie." },
+    update: { type: "volontariat_individuel", title: "Volontariat au Pérou", short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l'Amazonie.", image_url: "/images/perou.jpg" },
     create: {
       type: "volontariat_individuel",
       title: "Volontariat au Pérou",
       country: "Pérou",
       slug: "volontariat-perou",
+      image_url: "/images/perou.jpg",
       short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l\'Amazonie.",
       description: "Partez au cœur de l'Amazonie péruvienne, à Puerto Maldonado, pour participer à la protection de la biodiversité. Aux côtés des soigneurs locaux, vous prendrez soin des animaux du sanctuaire et participerez aux projets d'entretien et de conservation.",
       volunteer_role: "Préparation des régimes alimentaires, nourrissage des animaux (dont singes hurleurs), cueillette de feuilles sauvages, entretien et réparation des structures, nettoyage des enclos.",
@@ -169,12 +172,13 @@ const seed = async () => {
   // ── Mission 4 : Sri Lanka ──────────────────────────────────
   const missionSriLanka = await prisma.mission.upsert({
     where: { slug: "volontariat-sri-lanka" },
-    update: { type: "volontariat_individuel", title: "Volontariat au Sri Lanka", short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise." },
+    update: { type: "volontariat_individuel", title: "Volontariat au Sri Lanka", short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.", image_url: "/images/srilanka.jpg" },
     create: {
       type: "volontariat_individuel",
       title: "Volontariat au Sri Lanka",
       country: "Sri Lanka",
       slug: "volontariat-sri-lanka",
+      image_url: "/images/srilanka.jpg",
       short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.",
       description: "Engagez-vous pour la protection des éléphants d'Asie dans le sanctuaire de Kegalle. Une expérience unique alliant soins vétérinaires, observation de la faune et découverte de la médecine Ayurveda au cœur du Sri Lanka.",
       volunteer_role: "Préparation des médicaments et vitamines, nourrissage et examen vétérinaire, baignade des éléphants, nettoyage des enclos et litières, travaux de jardinage, peinture et recyclage dans le sanctuaire.",
@@ -191,12 +195,13 @@ const seed = async () => {
   // ── Mission 5 : Sumatra ────────────────────────────────────
   const missionSumatra = await prisma.mission.upsert({
     where: { slug: "volontariat-sumatra" },
-    update: { type: "volontariat_individuel", title: "Volontariat à Sumatra", country: "Sumatra", short_description: "Cartographie des habitats d'orang-outans et création de corridors forestiers pour protéger la biodiversité." },
+    update: { type: "volontariat_individuel", title: "Volontariat à Sumatra", country: "Sumatra", short_description: "Cartographie des habitats d'orang-outans et création de corridors forestiers pour protéger la biodiversité.", image_url: "/images/sumatra.jpg" },
     create: {
       type: "volontariat_individuel",
       title: "Volontariat à Sumatra",
       country: "Sumatra",
       slug: "volontariat-sumatra",
+      image_url: "/images/sumatra.jpg",
       short_description: "Cartographie des habitats d\'orang-outans et création de corridors forestiers pour protéger la biodiversité.",
       description: "Partez à Bohorok, Sumatra, pour contribuer à la conservation des orang-outans et à la préservation de la forêt tropicale. Entre observation de la faune, reboisement, projets éco-construction et soutien à l'école locale, chaque journée est une immersion totale dans la conservation.",
       volunteer_role: "Observation de la faune (GPS, photos, notes), activités de conservation (surveillance, corridors faune), projets plastique (Eco-Brick), pépinières et reboisement, soutien à l'école Selang Pangeran Jungle School.",
@@ -214,12 +219,13 @@ const seed = async () => {
   // Mission spécifique service civique — champs détail non nécessaires (pas de page détail)
   const missionScKenya = await prisma.mission.upsert({
     where: { slug: "service-civique-kenya" },
-    update: { type: "service_civique", title: "Service civique au Kenya" },
+    update: { type: "service_civique", title: "Service civique au Kenya", image_url: "/images/service-civique-1.jpeg", },
     create: {
       type: "service_civique",
       title: "Service civique au Kenya",
       country: "Kenya",
       slug: "service-civique-kenya",
+      image_url: "/images/service-civique-1.jpeg",
       short_description: "Auprès de l'école polytechnique de Taita Taveta, appui aux étudiants en tourisme, potager agroécologique et correspondances scolaires.",
       is_active: true,
     }
@@ -229,13 +235,45 @@ const seed = async () => {
   // Mission spécifique service civique — champs détail non nécessaires (pas de page détail)
   const missionScSenegal = await prisma.mission.upsert({
     where: { slug: "service-civique-senegal" },
-    update: { type: "service_civique", title: "Service civique au Sénégal" },
+    update: { type: "service_civique", title: "Service civique au Sénégal", image_url: "/images/service-civique-2.jpg" },
     create: {
       type: "service_civique",
       title: "Service civique au Sénégal",
       country: "Sénégal",
       slug: "service-civique-senegal",
-      short_description: "Auprès de l'association AGADA en Casamance, reboisement de la mangrove, agriculture durable et suivi des projets eau potable.",
+      image_url: "/images/service-civique-2.jpg",
+      short_description: "Auprès de l'association AGADA en Casamance, reboisement de la mangrove, agriculture durable et suivi des projets d\'eau potable.",
+      is_active: true,
+    }
+  })
+
+  // ── Mission 8 : Groupe jeunes ──────────────────────────────
+  // Une seule card pour les deux destinations Kenya + Sénégal
+  const missionGroupeJeunes = await prisma.mission.upsert({
+    where: { slug: "mission-groupe-jeunes" },
+    update: { type: "groupe_jeunes", title: "Mission de groupe jeunes", image_url: "/images/groupe-jeune.jpg" },
+    create: {
+      type: "groupe_jeunes",
+      title: "Mission de groupe jeunes",
+      country: "Kenya & Sénégal",
+      slug: "mission-groupe-jeunes",
+      image_url: "/images/groupe-jeune.jpg",
+      short_description: "Partez en groupe au Kenya ou au Sénégal pour des missions interculturelles et environnementales. Ouvert aux lycées, MJC et structures jeunesse.",
+      is_active: true,
+    }
+  })
+
+  // ── Mission 9 : Congé solidaire ────────────────────────────
+  const missionCongeSolidaire = await prisma.mission.upsert({
+    where: { slug: "conge-solidaire" },
+    update: { type: "conge_solidaire", title: "Congé solidaire", image_url: "/images/conge-solidaire.jpg" },
+    create: {
+      type: "conge_solidaire",
+      title: "Congé solidaire",
+      country: "Kenya & Sénégal",
+      slug: "conge-solidaire",
+      image_url: "/images/conge-solidaire.jpg",
+      short_description: "Partez en mission individuelle ou en groupe avec votre entreprise au Kenya ou au Sénégal. Mécénat de compétence déductible des impôts.",
       is_active: true,
     }
   })
@@ -278,7 +316,9 @@ const seed = async () => {
     missionSriLanka.id,
     missionSumatra.id,
     missionScKenya.id,
-    missionScSenegal.id
+    missionScSenegal.id,
+    missionGroupeJeunes.id,
+    missionCongeSolidaire.id
   ]
 
   // Supprime les anciens pricing pour ces missions (évite les doublons au re-seed)
@@ -320,6 +360,12 @@ const seed = async () => {
       // ── Service civique Sénégal ──
       { mission_id: missionScSenegal.id, duration_label: "3 mois", price: 0, display_order: 1 },
       { mission_id: missionScSenegal.id, duration_label: "12 mois", price: 0, display_order: 2 },
+
+      // Groupe jeunes
+      { mission_id: missionGroupeJeunes.id, duration_label: "10 jours", price: 0, display_order: 1 },
+
+      // Congé solidaire
+      { mission_id: missionCongeSolidaire.id, duration_label: "10 jours à 4 semaines", price: 0, display_order: 1 },
     ]
   })
 

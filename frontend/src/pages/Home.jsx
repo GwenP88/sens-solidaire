@@ -10,7 +10,7 @@ import TestimonialCarousel from '../components/testimonials/TestimonialCarousel'
 import ActionCard from '../components/actions/ActionCard'
 import { useState, useEffect } from 'react'
 import { fetchMissions } from '../services/api'
-import { COUNTRY_IMAGES, getDuration, TYPE_LABELS } from '../utils/missions'
+import { getDuration, TYPE_LABELS } from '../utils/missions'
 
 function Home() {
 
@@ -114,7 +114,7 @@ function Home() {
               slug={mission.slug}
               title={mission.title}
               description={mission.short_description}
-              image={COUNTRY_IMAGES[mission.country] || '/images/hero_missions.jpg'}
+              image={mission.image_url}
               badge={TYPE_LABELS[mission.type] || mission.type}
               duration={getDuration(mission.pricing)}
             />
