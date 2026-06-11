@@ -63,14 +63,25 @@
 
 .swiper {
   padding-bottom: 50px !important;
+  width: 100% !important;
 }
 
-.swiper-pagination-bullet {
+/* Dots — fond vert (témoignages) */
+.swiper-carousel-surface .swiper-pagination-bullet {
   background-color: #F8F6F1 !important;
   opacity: 0.4;
 }
-
-.swiper-pagination-bullet-active {
+.swiper-carousel-surface .swiper-pagination-bullet-active {
   background-color: #F8F6F1 !important;
+  opacity: 1;
+}
+
+/* Dots — fond beige (missions) */
+.swiper-carousel-primary .swiper-pagination-bullet {
+  background-color: #143601 !important;
+  opacity: 0.4;
+}
+.swiper-carousel-primary .swiper-pagination-bullet-active {
+  background-color: #143601 !important;
   opacity: 1;
 }

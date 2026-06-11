@@ -7,6 +7,7 @@ import MissionCard from '../components/missions/MissionCard'
 import HeroPage from '../components/layout/HeroPage'
 import { getDuration, TYPE_LABELS } from '../utils/missions'
 import Button from '../components/ui/Button'
+import Carousel from '../components/ui/Carousel'
 import { IconPerson, IconClock, IconPin, IconMoney, IconFrance, IconAbroad, IconGrow } from '../utils/icons'
 
 
@@ -80,10 +81,13 @@ function Missions() {
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-6">
-              {sectionMissions.map((mission) => (
+            {/* Carrousel — 3 missions visibles, navigation flèches custom */}
+            <Carousel
+              color="primary"
+              showPagination={true}
+              items={sectionMissions}
+              renderSlide={(mission) => (
                 <MissionCard
-                  key={mission.slug}
                   slug={mission.slug}
                   title={mission.title}
                   description={mission.short_description}
@@ -92,8 +96,10 @@ function Missions() {
                   duration={getDuration(mission.pricing)}
                   ctaLabel="En savoir plus →"
                 />
-              ))}
-            </div>
+              )}
+              slidesPerView={3}
+              spaceBetween={24}
+            />
           </section>
         )
       })}
@@ -173,7 +179,7 @@ function Missions() {
               <IconAbroad className="text-primary text-3xl shrink-0" />
               <span className="font-heading font-bold text-primary text-2xl">2</span>
               <div>
-                <h4 className="font-heading font-bold text-primary text-base">Mission à l'étranger</h4>
+                <h4 className="font-heading font-bold text-primary text-base">Mission à l'étranger : Kenya ou Sénégal</h4>
                 <p className="font-body text-sm text-primary/60">Découvrir et contribuer</p>
               </div>
             </div>
@@ -216,26 +222,23 @@ function Missions() {
               ))}
             </ul>
           </div>
-
         </div>
 
-        {/* Destinations */}
-        <h3 className="font-heading font-bold text-primary text-2xl text-center mb-8">Nos destinations Service Civique</h3>
-        <div className="grid grid-cols-2 gap-6">
-          {missions.filter(m => m.type === 'service_civique').map((mission) => (
-            <MissionCard
-              key={mission.slug}
-              slug={mission.slug}
-              title={mission.title}
-              description={mission.short_description}
-              image={mission.image_url}
-              badge={TYPE_LABELS[mission.type] || mission.type}
-              duration={getDuration(mission.pricing)}
-              ctaLabel="Je candidate →"
-              ctaUrl="https://www.service-civique.gouv.fr"
-            />
-          ))}
-        </div>
+        {/* Destinations Service Civique — liens vers les pages lieux */}
+          <div className="mt-12">
+            <h3 className="font-heading font-bold text-primary text-2xl text-center mb-8">En savoir plus sur nos lieux d'action</h3>
+            <div className="flex gap-4 justify-center">
+              <a href="/lieux/lumo">
+                <Button label="Sanctuaire LUMO →" variant="secondary" />
+              </a>
+              <a href="/lieux/ttnp">
+                <Button label="Campus Taita Taveta →" variant="secondary" />
+              </a>
+              <a href="/lieux/agada">
+                <Button label="Association AGADA →" variant="secondary" />
+              </a>
+            </div>
+          </div>
 
       </section>
     </div>
