@@ -7,7 +7,7 @@ import { IoIosPin } from 'react-icons/io'
 import { FiClock } from 'react-icons/fi'
 import { BiCoinStack } from 'react-icons/bi'
 import { GiFrance } from 'react-icons/gi'
-import { FaPlaneDeparture, FaHandHoldingHeart, FaEnvelope, FaYoutube, FaLinkedin, FaInstagram, FaFacebook } from 'react-icons/fa'
+import { FaPlaneDeparture, FaHandHoldingHeart, FaEnvelope, FaYoutube, FaLinkedin, FaInstagram, FaFacebook, FaMapMarkerAlt, FaCreditCard, FaFileContract, FaBook, FaFileAlt } from 'react-icons/fa'
 
 // Icônes génériques — utilisées sur tout le site
 export const IconPerson = IoPerson       // âge, profil
@@ -26,3 +26,12 @@ export const IconYoutube = FaYoutube
 export const IconLinkedin = FaLinkedin
 export const IconInstagram = FaInstagram
 export const IconFacebook = FaFacebook
+
+// Icônes Comment partir — page détail mission
+export const IconFlight = FaPlaneDeparture   // déjà importé
+export const IconContact = FaEnvelope        // déjà importé
+export const IconBooking = FaMapMarkerAlt    // réserver la mission
+export const IconPayment = FaCreditCard      // payer
+export const IconContract = FaFileContract  // signer la convention
+export const IconGuide = FaBook             // conseils pratiques
+export const IconFileMission = FaFileAlt    // fiche mission

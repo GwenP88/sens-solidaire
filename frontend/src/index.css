@@ -61,6 +61,12 @@
   font-size: 1rem;
 }
 
+@utility rich-text {
+  p { margin-bottom: 0.75rem; }
+  ul { list-style: disc; padding-left: 1.5rem; }
+  li { margin-bottom: 0.4rem; }
+}
+
 .swiper {
   padding-bottom: 50px !important;
   width: 100% !important;

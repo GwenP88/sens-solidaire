@@ -1,8 +1,11 @@
 // HeroPage.jsx
 // Hero secondaire réutilisable pour toutes les pages intérieures
 // Plus compact que le Hero home — pas de CTA, juste titre + sous-titre
+// Props optionnelles : duration, price — affichées uniquement sur les pages mission détail
 
-function HeroPage({ image, title, subtitle }) {
+import { IconClock, IconMoney } from '../../utils/icons'
+
+function HeroPage({ image, title, subtitle, duration, price }) {
   return (
     <div className="relative w-full h-120 flex items-end pb-12 px-24">
       {/* Image de fond */}
@@ -24,6 +27,23 @@ function HeroPage({ image, title, subtitle }) {
         {/* Sous-titre */}
         {subtitle && (
           <p className="font-body font-semibold text-surface text-lg max-w-2xl">{subtitle}</p>
+        )}
+        {/* Infos rapides — durée + prix — optionnelles */}
+        {(duration || price) && (
+          <div className="flex gap-6 mt-2">
+            {duration && (
+              <span className="flex items-center gap-2 font-body text-sm text-surface/80">
+                <IconClock className="text-surface text-base" />
+                {duration}
+              </span>
+            )}
+            {price && (
+              <span className="flex items-center gap-2 font-body text-sm text-surface/80">
+                <IconMoney className="text-surface text-base" />
+                À partir de {price} €
+              </span>
+            )}
+          </div>
         )}
       </div>
     </div>

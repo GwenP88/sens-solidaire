@@ -101,37 +101,47 @@ const seed = async () => {
   // ============================================================
 
   // ── Mission 1 : Kenya ──────────────────────────────────────
+  const kenyaData = {
+    type: "volontariat_individuel",
+    title: "Volontariat au Kenya",
+    country: "Kenya",
+    image_url: "/images/kenya.jpg",
+    short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans.",
+    description: "Partez au Kenya pour contribuer à la préservation de la biodiversité aux côtés des communautés locales, des étudiants et des rangers. Entre réserves naturelles, projets éducatifs et initiatives de développement durable, vivez une expérience immersive, utile et profondément humaine.",
+    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Patrouilles avec les rangers et participation aux actions de conservation de la biodiversité.</li><li>Recensement de la faune sauvage et des espèces d'oiseaux.</li><li>Entretien des équipements et appui aux projets environnementaux.</li><li>Mise en place et suivi des correspondances scolaires entre la France et le Kenya.</li><li>Accompagnement des élèves et étudiants dans leurs projets éducatifs et interculturels.</li><li>Partage de compétences selon votre expérience : informatique, gestion de projet, tourisme solidaire, hôtellerie, restauration, communication, etc.</li><li>Soutien aux initiatives locales de développement durable, d'agroécologie et d'entrepreneuriat.</li></ul>",
+    programme: "Jour 1 : Transfert depuis l'aéroport, déjeuner, installation, briefing et orientation avant le dîner.\nJour 2 : Formation sur l'observation de la faune, recommandations sécurité, rencontre avec le référent rangers et le chargé des projets biodiversité, présentation de la communauté locale.\nJours 3-6 : Programme des volontaires : 4 jours enrichissants en participant aux projets de développement.\nWeek-end : Quartier libre — visite des Sanctuaires, Parc Tsavo, Hell's Gate, Lac Naivasha, Parc Amboseli ou côte océanienne de Mombasa.\nJours 9-13 : Finalisation du programme de développement avec les communautés.\nJour 14 : Séparation avec la communauté et transfert vers l'aéroport.",
+    included: "Les frais de mission comprennent l'hébergement, la restauration, les déplacements sur place ainsi que l'encadrement par nos équipes et partenaires locaux.",
+    not_include: "Les frais de mission ne comprennent pas l'adhésion à l'association (25 €), les billets d'avion (environ 700 €, avec option annulation fortement recommandée), l'assurance voyage, les frais de visa (32 €), ainsi que les éventuels vaccins et frais de pharmacie.",
+    how_to_go: JSON.stringify([
+      "Vérifier les vols Paris › Mombasa ou Paris › Nairobi",
+      "Nous contacter par mail à contact@sensolidaire.org",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission et adhérer à l'association (25 €)",
+      "Signer les termes d'engagement",
+      "Recevoir les conseils pratiques de préparation",
+      "Recevoir votre fiche mission à remplir à votre retour"
+    ]),
+    admin_info: "Nous vous recommandons d'éviter les périodes de fortes pluies, généralement comprises entre mars et mai et entre novembre et décembre, afin de profiter pleinement de votre mission. Pour entrer au Kenya, vous devrez être muni d'un passeport valide au moins 6 mois après la date de retour ainsi que d'un visa obligatoire. Pour obtenir les meilleurs tarifs, nous vous conseillons de comparer les offres de plusieurs compagnies aériennes, notamment Kenya Airways, KLM, Ethiopian Airlines et Air France.",
+    health_info: "Une bonne condition physique est recommandée pour participer à cette mission. Un certificat médical d'aptitude délivré par votre médecin vous sera demandé avant le départ. Les vaccinations obligatoires doivent être à jour. La vaccination contre la fièvre jaune est requise, et un traitement antipaludéen devra être prescrit par votre médecin en fonction de votre situation et des recommandations sanitaires en vigueur.",
+    helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
+    is_active: true,
+  }
+
   const missionKenya = await prisma.mission.upsert({
-    where: { slug: "volontariat-kenya" },
-    update: { type: "volontariat_individuel", title: "Volontariat au Kenya", short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans.", image_url: "/images/kenya.jpg" },
-    create: {
-      type: "volontariat_individuel",
-      title: "Volontariat au Kenya",
-      country: "Kenya",
-      slug: "volontariat-kenya",
-      image_url: "/images/kenya.jpg",
-      short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans.",
-      description: "Participez à la protection de la faune sauvage dans la région de Voi, au pied du Kilimandjaro. Vous travaillerez au sein d'un sanctuaire animalier aux côtés de rangers locaux et de coordinateurs biodiversité pour contribuer aux projets de conservation et de développement communautaire.",
-      volunteer_role: "Observation et suivi de la faune (GPS, photos, notes d'observation), participation aux projets de développement communautaire, soutien aux équipes locales sur les priorités du sanctuaire.",
-      programme: "Jour 1 : Transfert depuis l'aéroport, déjeuner, installation, briefing et orientation avant le dîner.\nJour 2 : Formation sur l'observation de la faune, recommandations sécurité, rencontre avec le référent rangers et le chargé des projets biodiversité, présentation de la communauté locale.\nJours 3-6 : Programme des volontaires — 4 jours enrichissants en participant aux projets de développement.\nWeek-end : Quartier libre — visite des Sanctuaires, Parc Tsavo, Hell's Gate, Lac Naivasha, Parc Amboseli ou côte océanienne de Mombasa.\nJours 9-13 : Finalisation du programme de développement avec les communautés.\nJour 14 : Séparation avec la communauté et transfert vers l'aéroport.",
-      included: "Hébergement sur place, repas, encadrement par le coordinateur local, formation pré-mission, transport depuis/vers l'aéroport de Nairobi.",
-      not_include: "Billet d'avion international, assurance voyage, vaccins, visa Kenya, dépenses personnelles.",
-      admin_info: "La nature exacte du travail dépendra des priorités du Sanctuaire. En tant que volontaire, il est important de rester flexible.",
-      health_info: "Vaccins recommandés : fièvre jaune, hépatite A et B, typhoïde, méningite. Traitement antipaludéen obligatoire. Prévoir répulsifs et protection solaire.",
-      helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
-      is_active: true, // true = mission visible sur le site public
-    }
+    where: { slug: "kenya" },
+    update: kenyaData,
+    create: { slug: "kenya", ...kenyaData },
   })
 
   // ── Mission 2 : Sénégal ────────────────────────────────────
   const missionSenegal = await prisma.mission.upsert({
-    where: { slug: "volontariat-senegal" },
+    where: { slug: "senegal" },
     update: { type: "volontariat_individuel", title: "Volontariat au Sénégal", short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.", image_url: "/images/senegal.jpg" },
     create: {
       type: "volontariat_individuel",
       title: "Volontariat au Sénégal",
       country: "Sénégal",
-      slug: "volontariat-senegal",
+      slug: "senegal",
       image_url: "/images/senegal.jpg",
       short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.",
       description: "Rejoignez nos projets de développement en Casamance, dans la région de Ziguinchor. Entre correspondance scolaire, jardins potagers, filtres à eau et visites terrain, vous contribuerez directement à l'amélioration des conditions de vie des communautés locales.",
@@ -148,13 +158,13 @@ const seed = async () => {
 
   // ── Mission 3 : Pérou ──────────────────────────────────────
   const missionPerou = await prisma.mission.upsert({
-    where: { slug: "volontariat-perou" },
+    where: { slug: "perou" },
     update: { type: "volontariat_individuel", title: "Volontariat au Pérou", short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l'Amazonie.", image_url: "/images/perou.jpg" },
     create: {
       type: "volontariat_individuel",
       title: "Volontariat au Pérou",
       country: "Pérou",
-      slug: "volontariat-perou",
+      slug: "perou",
       image_url: "/images/perou.jpg",
       short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l\'Amazonie.",
       description: "Partez au cœur de l'Amazonie péruvienne, à Puerto Maldonado, pour participer à la protection de la biodiversité. Aux côtés des soigneurs locaux, vous prendrez soin des animaux du sanctuaire et participerez aux projets d'entretien et de conservation.",
@@ -171,13 +181,13 @@ const seed = async () => {
 
   // ── Mission 4 : Sri Lanka ──────────────────────────────────
   const missionSriLanka = await prisma.mission.upsert({
-    where: { slug: "volontariat-sri-lanka" },
+    where: { slug: "sri-lanka" },
     update: { type: "volontariat_individuel", title: "Volontariat au Sri Lanka", short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.", image_url: "/images/srilanka.jpg" },
     create: {
       type: "volontariat_individuel",
       title: "Volontariat au Sri Lanka",
       country: "Sri Lanka",
-      slug: "volontariat-sri-lanka",
+      slug: "sri-lanka",
       image_url: "/images/srilanka.jpg",
       short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.",
       description: "Engagez-vous pour la protection des éléphants d'Asie dans le sanctuaire de Kegalle. Une expérience unique alliant soins vétérinaires, observation de la faune et découverte de la médecine Ayurveda au cœur du Sri Lanka.",
@@ -194,13 +204,13 @@ const seed = async () => {
 
   // ── Mission 5 : Sumatra ────────────────────────────────────
   const missionSumatra = await prisma.mission.upsert({
-    where: { slug: "volontariat-sumatra" },
+    where: { slug: "sumatra" },
     update: { type: "volontariat_individuel", title: "Volontariat à Sumatra", country: "Sumatra", short_description: "Cartographie des habitats d'orang-outans et création de corridors forestiers pour protéger la biodiversité.", image_url: "/images/sumatra.jpg" },
     create: {
       type: "volontariat_individuel",
       title: "Volontariat à Sumatra",
       country: "Sumatra",
-      slug: "volontariat-sumatra",
+      slug: "sumatra",
       image_url: "/images/sumatra.jpg",
       short_description: "Cartographie des habitats d\'orang-outans et création de corridors forestiers pour protéger la biodiversité.",
       description: "Partez à Bohorok, Sumatra, pour contribuer à la conservation des orang-outans et à la préservation de la forêt tropicale. Entre observation de la faune, reboisement, projets éco-construction et soutien à l'école locale, chaque journée est une immersion totale dans la conservation.",
@@ -250,13 +260,13 @@ const seed = async () => {
   // ── Mission 8 : Groupe jeunes ──────────────────────────────
   // Une seule card pour les deux destinations Kenya + Sénégal
   const missionGroupeJeunes = await prisma.mission.upsert({
-    where: { slug: "mission-groupe-jeunes" },
+    where: { slug: "groupe-jeunes" },
     update: { type: "groupe_jeunes", title: "Mission de groupe jeunes", image_url: "/images/groupe-jeune.jpg" },
     create: {
       type: "groupe_jeunes",
       title: "Mission de groupe jeunes",
       country: "Kenya & Sénégal",
-      slug: "mission-groupe-jeunes",
+      slug: "groupe-jeunes",
       image_url: "/images/groupe-jeune.jpg",
       short_description: "Partez en groupe au Kenya ou au Sénégal pour des missions interculturelles et environnementales. Ouvert aux lycées, MJC et structures jeunesse.",
       is_active: true,

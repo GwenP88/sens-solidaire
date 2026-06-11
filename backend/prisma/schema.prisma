@@ -32,6 +32,7 @@ model Mission {
   included String? @db.Text
   not_include String? @db.Text
   admin_info String? @db.Text
+  how_to_go String? @db.Text
   ministry_url String?
   health_info String? @db.Text
   helloasso_url String?

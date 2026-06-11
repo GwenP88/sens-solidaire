@@ -5,8 +5,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/layout/Layout'
 import Home from './pages/Home'
-import LoginAdmin from './pages/admin/LoginAdmin'
 import Missions from './pages/Missions'
+import MissionDetail from './pages/MissionDetail'
+import LoginAdmin from './pages/admin/LoginAdmin'
 import Dashboard from './pages/admin/Dashboard'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/missions" element={<Missions />} />
+          <Route path="/missions/:slug" element={<MissionDetail />} />
         </Route>
 
         {/* Routes admin — sans Navbar ni Footer */}
