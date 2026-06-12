@@ -7,7 +7,11 @@ import tailwindcss from '@tailwindcss/vite'    // Plugin qui intègre Tailwind C
 
 export default defineConfig({
   plugins: [
-    react(),       // Active le support React + JSX
-    tailwindcss(), // Active Tailwind CSS — les classes utilitaires deviennent disponibles
+    react(),
+    tailwindcss(),
   ],
+  server: {
+    port: 5173,
+    host: true,
+  },
 })

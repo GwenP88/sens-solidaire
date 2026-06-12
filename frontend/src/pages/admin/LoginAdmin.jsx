@@ -1,7 +1,52 @@
 // LoginAdmin.jsx
 // Page de connexion admin — split layout : image gauche, formulaire droite, sans Navbar ni Footer
 
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 function LoginAdmin() {
+  const navigate = useNavigate()
+
+  // États du formulaire
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  // Soumission du formulaire
+  const handleSubmit = async () => {
+    setError(null)
+    setLoading(true)
+
+    try {
+      const response = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        // Le serveur a répondu avec une erreur (401, 400...)
+        setError(data.message || 'Email ou mot de passe incorrect.')
+        return
+      }
+
+      // Stockage du token JWT en localStorage
+      localStorage.setItem('admin_token', data.token)
+
+      // Redirection vers le dashboard
+      navigate('/admin')
+
+    } catch (err) {
+      // Erreur réseau (serveur injoignable)
+      setError('Impossible de contacter le serveur. Vérifie que le backend est démarré.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="flex h-screen">
 
@@ -26,12 +71,21 @@ function LoginAdmin() {
         {/* Formulaire */}
         <div className="w-full max-w-sm flex flex-col gap-4">
 
+          {/* Message d'erreur */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 font-body text-sm px-4 py-3 rounded">
+              {error}
+            </div>
+          )}
+
           {/* Email */}
           <div className="flex flex-col gap-1">
             <label className="font-body text-sm font-semibold text-primary">Email</label>
             <input
               type="email"
               placeholder="votre.email@exemple.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="border border-surface-dark rounded px-4 py-2 font-body text-sm focus:outline-none focus:border-primary"
             />
           </div>
@@ -42,6 +96,8 @@ function LoginAdmin() {
             <input
               type="password"
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="border border-surface-dark rounded px-4 py-2 font-body text-sm focus:outline-none focus:border-primary"
             />
           </div>
@@ -53,8 +109,12 @@ function LoginAdmin() {
           </div>
 
           {/* Bouton */}
-          <button className="bg-accent text-surface font-body font-semibold uppercase tracking-wider px-5 py-2 rounded hover:bg-surface hover:text-accent hover:border-accent border border-transparent transition-colors cursor-pointer">
-            Je me connecte →
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="bg-accent text-surface font-body font-semibold uppercase tracking-wider px-5 py-2 rounded hover:bg-surface hover:text-accent hover:border-accent border border-transparent transition-colors cursor-pointer disabled:opacity-50"
+          >
+            {loading ? 'Connexion...' : 'Je me connecte →'}
           </button>
 
           {/* Mot de passe oublié */}

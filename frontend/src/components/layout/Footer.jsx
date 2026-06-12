@@ -1,7 +1,7 @@
 // Footer.jsx
 // Pied de page — 3 zones : CTA immersif, Navigation 4 colonnes, Barre légale
 
-import { FaYoutube, FaLinkedin, FaInstagram, FaFacebook, FaMapMarkerAlt, FaEnvelope } from 'react-icons/fa'
+import { IconPin, IconMail, IconYoutube, IconLinkedin, IconInstagram, IconFacebook } from '../../utils/icons'
 import Button from '../ui/Button'
 
 function Footer() {
@@ -41,10 +41,10 @@ function Footer() {
             Sur le terrain, nous agissons aux côtés des communautés locales pour un impact positif et durable.
           </p>
           <div className="flex gap-4">
-            <FaYoutube className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            <FaLinkedin className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            <FaInstagram className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            <FaFacebook className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            <IconYoutube className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            <IconLinkedin className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            <IconInstagram className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            <IconFacebook className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
           </div>
         </div>
 
@@ -77,25 +77,25 @@ function Footer() {
             Nous contacter
           </h3>
           <div className="flex gap-3">
-            <FaMapMarkerAlt className="text-surface text-lg mt-1 shrink-0" />
+            <IconPin className="text-surface text-lg mt-1 shrink-0" />
             <p className="font-body text-surface/70 text-sm">
               Maison des associations<br />3bis rue de Guigonis, 06300 Nice
             </p>
           </div>
           <div className="flex gap-3">
-            <FaMapMarkerAlt className="text-surface text-lg mt-1 shrink-0" />
+            <IconPin className="text-surface text-lg mt-1 shrink-0" />
             <p className="font-body text-surface/70 text-sm">
               Annexe<br />Cité de la Solidarité Internationale, 74100 Annemasse
             </p>
           </div>
           <div className="flex gap-3">
-            <FaMapMarkerAlt className="text-surface text-lg mt-1 shrink-0" />
+            <IconPin className="text-surface text-lg mt-1 shrink-0" />
             <p className="font-body text-surface/70 text-sm">
               Antenne Suisse<br />14 Chemin de la Rochette, 1202 Genève
             </p>
           </div>
           <div className="flex gap-3">
-            <FaEnvelope className="text-surface text-lg mt-1 shrink-0" />
+            <IconMail className="text-surface text-lg mt-1 shrink-0" />
             <a href="mailto:contact@sensolidaire.org" className="font-body text-surface/70 text-sm hover:text-surface transition-colors underline">
               contact@sensolidaire.org
             </a>
