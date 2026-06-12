@@ -129,7 +129,7 @@ const seed = async () => {
     included: "Hébergement sur site, repas, encadrement par les coordinateurs locaux, formation à l'arrivée.",
     not_include: "Vols internationaux (~900€, avec option annulation fortement recommandée), assurance, visa, vaccins, équipement personnel.",
     how_to_go: JSON.stringify([
-      "Vérifier les vols Paris › Lima puis Lima › Puerto Maldonado",
+      "Vérifier les vols Paris › Puerto Maldonado",
       "Nous contacter par mail à contact@sensolidaire.org",
       "Réserver vos billets d'avion et nous les envoyer",
       "Payer les frais de mission et adhérer à l'association (25 €)",

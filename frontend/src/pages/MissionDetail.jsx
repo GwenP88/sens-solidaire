@@ -116,7 +116,7 @@ function MissionDetail() {
                   const content = rest.join(':').trim()
                   return (
                     <div key={i} className="flex items-stretch border-l-4 border-accent rounded-r-xl overflow-hidden">
-                      <span className="font-body text-sm font-semibold text-accent bg-surface-dark px-4 py-3 shrink-0 w-28 flex items-center">
+                      <span className="font-body text-sm font-semibold text-accent bg-surface-dark px-4 py-3 shrink-0 w-32 flex items-center">
                         {label.trim()}
                       </span>
                       <span className="font-body text-sm text-primary/80 bg-surface-mid px-5 py-3 leading-relaxed flex-1 flex items-center">
