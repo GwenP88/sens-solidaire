@@ -12,20 +12,22 @@ import SectionHero from '../components/ui/SectionHero'
 import LocationCard from '../components/locations/LocationCard'
 import { IconPerson, IconClock, IconPin, IconMoney, IconFrance, IconAbroad, IconGrow } from '../utils/icons'
 
-// Sections dans l'ordre d'affichage
-const SECTIONS = [
-  {
-    key: 'individuel',
-    label: 'Volontariat individuel',
-    description: 'Partez seul ou à plusieurs pour une expérience humaine unique au contact des communautés locales.',
-    types: ['volontariat_individuel'],
-  },
+// Filtres disponibles — correspond aux clés de section
+const FILTERS = [
+  { label: "Toutes", value: null },
+  { label: "Volontariat individuel", value: "individuel" },
+  { label: "Service civique", value: "service_civique" },
+  { label: "Groupe jeunes", value: "groupe_jeunes" },
+  { label: "Congé solidaire", value: "conge_solidaire" },
 ]
 
 function Missions() {
   const [missions, setMissions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  // Filtre actif — null = toutes les sections visibles
+  const [activeFilter, setActiveFilter] = useState(null)
 
   useEffect(() => {
     const loadMissions = async () => {
@@ -44,6 +46,9 @@ function Missions() {
   if (loading) return <p className="p-12 font-body text-primary">Chargement...</p>
   if (error) return <p className="p-12 font-body text-accent">Erreur : {error}</p>
 
+  // Missions volontariat individuel filtrées depuis l'API
+  const missionVolontariat = missions.filter(m => m.type === 'volontariat_individuel')
+
   return (
     <div className="bg-surface min-h-screen">
 
@@ -54,189 +59,204 @@ function Missions() {
         subtitle="Agissez concrètement pour la protection de la biodiversité et le soutien des communautés locales."
       />
 
+      {/* ── Filtres par type de mission ── */}
+      <div className="py-6 px-24 bg-primary flex gap-3 flex-wrap">
+        {FILTERS.map((f) => (
+          <button
+            key={f.label}
+            onClick={() => setActiveFilter(f.value)}
+            className={`font-body text-sm px-4 py-2 rounded-full border transition-colors ${
+              activeFilter === f.value
+                ? 'bg-surface text-primary border-surface'
+                : 'bg-transparent text-surface border-surfacehover:bg-primary/10'
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
       {/* ── Section Volontariat individuel ── */}
-      {SECTIONS.map((section) => {
-        const sectionMissions = missions.filter(m => section.types.includes(m.type))
-        if (sectionMissions.length === 0) return null
+      {(activeFilter === null || activeFilter === 'individuel') && (
+        <section className="section-padding bg-surface">
+          <SectionHero
+            title="Partir en mission"
+            audience="Pour les volontaires individuels"
+            description="Agissez concrètement pour la protection de la biodiversité et le soutien des communautés locales."
+            image="/images/one-line-1.png"
+          />
 
-        return (
-          <section key={section.key} className="section-padding bg-surface">
-            <SectionHero
-              title="Partir en mission"
-              audience="Pour les volontaires individuels"
-              description="Agissez concrètement pour la protection de la biodiversité et le soutien des communautés locales."
-              image="/images/one-line-1.png"
-            />
-
-            <div className="mb-10">
-              <p className="font-body text-sm text-primary/80 leading-relaxed">
-                En rejoignant une mission de volontariat avec Sens Solidaires, vous participez à des projets de terrain menés en partenariat avec des acteurs locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka et à Sumatra. Selon vos disponibilités, vous pouvez vous engager pour une durée de 10 jours à 4 semaines.
-              </p>
-              <p className="font-body text-sm text-primary/80 leading-relaxed mt-3">
-                Seul(e), en couple ou entre amis, engagez-vous aux côtés de rangers, de soigneurs animaliers, d'agriculteurs et d'associations locales pour contribuer directement à des actions de préservation de l'environnement et de développement durable.
-                <span className="font-bold text-primary/70"> Aucune expérience n'est requise : seule votre motivation compte.</span>
-              </p>
-              <p className="font-body text-sm text-primary/80 leading-relaxed mt-3">
-                Découvrez les missions disponibles et trouvez celle qui vous permettra de vous engager à nos côtés.
-                <br /><br />
-                <span className="italic text-primary/60">Les frais de mission ouvrent droit à une réduction d'impôt de 66 %.</span>
-              </p>
-            </div>
-
-            {/* Carrousel — 3 missions visibles, navigation flèches custom */}
-            <Carousel
-              color="primary"
-              showPagination={true}
-              items={sectionMissions}
-              renderSlide={(mission) => (
-                <MissionCard
-                  slug={mission.slug}
-                  title={mission.title}
-                  description={mission.short_description}
-                  image={mission.image_url}
-                  badge={TYPE_LABELS[mission.type]}
-                  duration={getDuration(mission.pricing)}
-                  ctaLabel="En savoir plus →"
-                />
-              )}
-              slidesPerView={3}
-              spaceBetween={24}
-            />
-          </section>
-        )
-      })}
-
-      {/* ── Section Service Civique ── */}
-      <section className="section-padding bg-surface-mid">
-        <SectionHero
-          title="Effectuer un service civique"
-          audience="Pour les 16 à 25 ans"
-          description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
-          image="/images/one-line-2.png"
-        />
-
-        {/* Texte + icônes + boutons + image */}
-        <div className="flex gap-16 items-center mb-16">
-          <div className="flex flex-col gap-6 flex-1">
-            <p className="section-subtitle text-primary/80">
-              Le Service Civique, c'est l'opportunité de s'engager concrètement pour la société, sans condition de diplôme. Entre 16 et 25 ans (jusqu'à 30 ans en situation de handicap), partez en mission avec Sens Solidaire et vivez une expérience humaine unique de 6 à 12 mois à raison d'au moins 24h hebdomadaires, en France puis à l'étranger (3 mois minimum chacun).
+          <div className="mb-10">
+            <p className="font-body text-sm text-primary/80 leading-relaxed">
+              En rejoignant une mission de volontariat avec Sens Solidaires, vous participez à des projets de terrain menés en partenariat avec des acteurs locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka et à Sumatra. Selon vos disponibilités, vous pouvez vous engager pour une durée de 10 jours à 4 semaines.
             </p>
-
-            {/* Icônes */}
-            <div className="flex gap-12 justify-center">
-              <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
-                <IconPerson className="text-primary text-xl" /><span>16-25 ans</span>
-              </span>
-              <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
-                <IconClock className="text-primary text-xl" /><span>6 à 12 mois</span>
-              </span>
-              <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
-                <IconPin className="text-primary text-xl" /><span>France & étranger</span>
-              </span>
-              <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
-                <IconMoney className="text-primary text-xl" /><span>Indemnité mensuelle</span>
-              </span>
-            </div>
-
-            {/* CTAs pleine largeur */}
-            <div className="flex gap-4 w-full">
-              <a href="https://www.service-civique.gouv.fr/..." target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button label="Candidater →" variant="primary" fullWidth />
-              </a>
-              <div className="flex-1">
-                <Button label="Nous contacter →" variant="secondary" fullWidth />
-              </div>
-            </div>
-
-          </div>
-          <div className="w-2/5 shrink-0">
-            <img src="/images/service_civique.jpg" alt="Service civique" className="w-full h-72 object-cover rounded-xl" />
-          </div>
-        </div>
-
-        {/* Comment ça fonctionne */}
-        <h3 className="font-heading font-bold text-primary text-base text-center mb-2">Comment ça fonctionne ?</h3>
-        <div className="grid grid-cols-3 gap-6 mb-16 items-stretch">
-
-          <div className="bg-white rounded-xl p-6 flex flex-col gap-3 h-full">
-            <div className="flex items-center gap-6">
-              <IconFrance className="text-primary text-3xl shrink-0" />
-              <span className="font-heading font-bold text-primary text-2xl">1</span>
-              <div>
-                <h4 className="font-heading font-bold text-primary text-base">Mission en France</h4>
-                <p className="font-body text-sm text-primary/60">Agir et sensibiliser</p>
-              </div>
-            </div>
-            <p className="font-body text-sm text-primary/80 min-h-[80px]">
-              Basé(e) à Nice ou Annemasse, vous intervenez auprès des scolaires pour leur faire découvrir le monde et les enjeux du développement durable — avant de partir à l'aventure sur le terrain.
+            <p className="font-body text-sm text-primary/80 leading-relaxed mt-3">
+              Seul(e), en couple ou entre amis, engagez-vous aux côtés de rangers, de soigneurs animaliers, d'agriculteurs et d'associations locales pour contribuer directement à des actions de préservation de l'environnement et de développement durable.
+              <span className="font-bold text-primary/70"> Aucune expérience n'est requise : seule votre motivation compte.</span>
             </p>
-            <ul className="flex flex-col gap-1">
-              {['Animations pédagogiques sur les 17 ODD', 'Interventions scolaires — correspondances étrangères', 'Communication et promotion sur les réseaux', 'Démarchage de nouveaux partenaires', 'Aide à la recherche de fonds'].map(item => (
-                <li key={item} className="font-body text-sm text-primary/60">- {item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 flex flex-col gap-3 h-full">
-            <div className="flex items-center gap-6">
-              <IconAbroad className="text-primary text-3xl shrink-0" />
-              <span className="font-heading font-bold text-primary text-2xl">2</span>
-              <div>
-                <h4 className="font-heading font-bold text-primary text-base">Mission à l'étranger : Kenya ou Sénégal</h4>
-                <p className="font-body text-sm text-primary/60">Découvrir et contribuer</p>
-              </div>
-            </div>
-            <p className="font-body text-sm text-primary/80 min-h-[80px]">
-              Cap sur le Kenya ou le Sénégal pour 3 mois minimum. Au Kenya, au cœur du sanctuaire LUMO et du campus de Taita Taveta. Au Sénégal, aux côtés de l'association AGADA en Casamance.
+            <p className="font-body text-sm text-primary/80 leading-relaxed mt-3">
+              Découvrez les missions disponibles et trouvez celle qui vous permettra de vous engager à nos côtés.
+              <br /><br />
+              <span className="italic text-primary/60">Les frais de mission ouvrent droit à une réduction d'impôt de 66 %.</span>
             </p>
-            <ul className="flex flex-col gap-1">
-              {['Coordination des correspondances scolaires France-étranger', 'Suivi des activités du partenaire local', 'Développement de projets biodiversité locaux', 'Accueil des volontaires en mission courte'].map(item => (
-                <li key={item} className="font-body text-sm text-primary/60">- {item}</li>
-              ))}
-            </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-6 flex flex-col gap-3 h-full">
-            <div className="flex items-center gap-6">
-              <IconGrow className="text-primary text-3xl shrink-0" />
-              <span className="font-heading font-bold text-primary text-2xl">3</span>
-              <div>
-                <h4 className="font-heading font-bold text-primary text-base">Grandir et s'engager</h4>
-                <p className="font-body text-sm text-primary/60">Développer ses compétences</p>
-              </div>
-            </div>
-            <p className="font-body text-sm text-primary/80 min-h-[80px]">
-              Partez avec des valeurs, revenez avec des compétences. Le Service Civique, c'est une expérience qui compte vraiment — pour vous, pour les autres, et pour votre avenir.
-            </p>
-            <ul className="flex flex-col gap-1">
-              {["Chargé(e) de projets et mission de terrain", 'Éducation au Développement Durable', 'Coopération territoriale et internationale', 'Communication et recherche de fonds'].map(item => (
-                <li key={item} className="font-body text-sm text-primary/60">- {item}</li>
-              ))}
-            </ul>
-          </div>
-
-        </div>
-
-        {/* Liens vers les pages lieux */}
-        <div className="mt-12">
-          <h3 className="font-heading font-bold text-primary text-base mb-2">En savoir plus sur nos lieux d'action</h3>
-          <p className="font-body text-sm text-primary/60 mb-8">Nos partenaires locaux sont au cœur de chaque mission. Engagés dans la protection de la biodiversité et le développement des communautés, ils accueillent les volontaires et les accompagnent tout au long de leur expérience sur le terrain.</p>
+          {/* Carrousel — 3 missions visibles, navigation flèches custom */}
           <Carousel
-            items={[
-              { slug: "lumo-kenya", name: "Sanctuaire LUMO", image_url: "/images/locations/LUMO-kenya.jpeg" },
-              { slug: "ttnp-kenya", name: "Taita Taveta National Polytechnic", image_url: "/images/locations/TTNP-kenya.jpeg" },
-              { slug: "agada-senegal", name: "ONG AGADA", image_url: "/images/locations/AGADA-senegal.jpg" },
-            ]}
+            color="primary"
+            showPagination={true}
+            items={missionVolontariat}
+            renderSlide={(mission) => (
+              <MissionCard
+                slug={mission.slug}
+                title={mission.title}
+                description={mission.short_description}
+                image={mission.image_url}
+                badge={TYPE_LABELS[mission.type]}
+                duration={getDuration(mission.pricing)}
+                ctaLabel="En savoir plus →"
+              />
+            )}
             slidesPerView={3}
             spaceBetween={24}
-            showPagination={false}
-            color="primary"
-            renderSlide={(loc) => <LocationCard {...loc} />}
           />
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* ── Section Service Civique ── */}
+      {(activeFilter === null || activeFilter === 'service_civique') && (
+        <section className="section-padding bg-surface-mid">
+          <SectionHero
+            title="Effectuer un service civique"
+            audience="Pour les 16 à 25 ans"
+            description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
+            image="/images/one-line-2.png"
+          />
+
+          {/* Texte + icônes + boutons + image */}
+          <div className="flex gap-16 items-center mb-16">
+            <div className="flex flex-col gap-6 flex-1">
+              <p className="section-subtitle text-primary/80">
+                Le Service Civique, c'est l'opportunité de s'engager concrètement pour la société, sans condition de diplôme. Entre 16 et 25 ans (jusqu'à 30 ans en situation de handicap), partez en mission avec Sens Solidaire et vivez une expérience humaine unique de 6 à 12 mois à raison d'au moins 24h hebdomadaires, en France puis à l'étranger (3 mois minimum chacun).
+              </p>
+
+              {/* Icônes infos clés */}
+              <div className="flex gap-12 justify-center">
+                <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+                  <IconPerson className="text-primary text-xl" /><span>16-25 ans</span>
+                </span>
+                <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+                  <IconClock className="text-primary text-xl" /><span>6 à 12 mois</span>
+                </span>
+                <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+                  <IconPin className="text-primary text-xl" /><span>France & étranger</span>
+                </span>
+                <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+                  <IconMoney className="text-primary text-xl" /><span>Indemnité mensuelle</span>
+                </span>
+              </div>
+
+              {/* CTAs pleine largeur */}
+              <div className="flex gap-4 w-full">
+                <a href="https://www.service-civique.gouv.fr/..." target="_blank" rel="noopener noreferrer" className="flex-1">
+                  <Button label="Candidater →" variant="primary" fullWidth />
+                </a>
+                <div className="flex-1">
+                  <Button label="Nous contacter →" variant="secondary" fullWidth />
+                </div>
+              </div>
+
+            </div>
+            <div className="w-2/5 shrink-0">
+              <img src="/images/service_civique.jpg" alt="Service civique" className="w-full h-72 object-cover rounded-xl" />
+            </div>
+          </div>
+
+          {/* Comment ça fonctionne — 3 étapes */}
+          <h3 className="font-heading font-bold text-primary text-base text-center mb-2">Comment ça fonctionne ?</h3>
+          <div className="grid grid-cols-3 gap-6 mb-16 items-stretch">
+
+            <div className="bg-white rounded-xl p-6 flex flex-col gap-3 h-full">
+              <div className="flex items-center gap-6">
+                <IconFrance className="text-primary text-3xl shrink-0" />
+                <span className="font-heading font-bold text-primary text-2xl">1</span>
+                <div>
+                  <h4 className="font-heading font-bold text-primary text-base">Mission en France</h4>
+                  <p className="font-body text-sm text-primary/60">Agir et sensibiliser</p>
+                </div>
+              </div>
+              <p className="font-body text-sm text-primary/80 min-h-[80px]">
+                Basé(e) à Nice ou Annemasse, vous intervenez auprès des scolaires pour leur faire découvrir le monde et les enjeux du développement durable — avant de partir à l'aventure sur le terrain.
+              </p>
+              <ul className="flex flex-col gap-1">
+                {['Animations pédagogiques sur les 17 ODD', 'Interventions scolaires — correspondances étrangères', 'Communication et promotion sur les réseaux', 'Démarchage de nouveaux partenaires', 'Aide à la recherche de fonds'].map(item => (
+                  <li key={item} className="font-body text-sm text-primary/60">- {item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 flex flex-col gap-3 h-full">
+              <div className="flex items-center gap-6">
+                <IconAbroad className="text-primary text-3xl shrink-0" />
+                <span className="font-heading font-bold text-primary text-2xl">2</span>
+                <div>
+                  <h4 className="font-heading font-bold text-primary text-base">Mission à l'étranger : Kenya ou Sénégal</h4>
+                  <p className="font-body text-sm text-primary/60">Découvrir et contribuer</p>
+                </div>
+              </div>
+              <p className="font-body text-sm text-primary/80 min-h-[80px]">
+                Cap sur le Kenya ou le Sénégal pour 3 mois minimum. Au Kenya, au cœur du sanctuaire LUMO et du campus de Taita Taveta. Au Sénégal, aux côtés de l'association AGADA en Casamance.
+              </p>
+              <ul className="flex flex-col gap-1">
+                {['Coordination des correspondances scolaires France-étranger', 'Suivi des activités du partenaire local', 'Développement de projets biodiversité locaux', 'Accueil des volontaires en mission courte'].map(item => (
+                  <li key={item} className="font-body text-sm text-primary/60">- {item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 flex flex-col gap-3 h-full">
+              <div className="flex items-center gap-6">
+                <IconGrow className="text-primary text-3xl shrink-0" />
+                <span className="font-heading font-bold text-primary text-2xl">3</span>
+                <div>
+                  <h4 className="font-heading font-bold text-primary text-base">Grandir et s'engager</h4>
+                  <p className="font-body text-sm text-primary/60">Développer ses compétences</p>
+                </div>
+              </div>
+              <p className="font-body text-sm text-primary/80 min-h-[80px]">
+                Partez avec des valeurs, revenez avec des compétences. Le Service Civique, c'est une expérience qui compte vraiment — pour vous, pour les autres, et pour votre avenir.
+              </p>
+              <ul className="flex flex-col gap-1">
+                {["Chargé(e) de projets et mission de terrain", 'Éducation au Développement Durable', 'Coopération territoriale et internationale', 'Communication et recherche de fonds'].map(item => (
+                  <li key={item} className="font-body text-sm text-primary/60">- {item}</li>
+                ))}
+              </ul>
+            </div>
+
+          </div>
+
+          {/* Liens vers les pages lieux — carousel LocationCard */}
+          <div className="mt-12">
+            <h3 className="font-heading font-bold text-primary text-base mb-2">En savoir plus sur nos lieux d'action</h3>
+            <p className="font-body text-sm text-primary/60 mb-8">Nos partenaires locaux sont au cœur de chaque mission. Engagés dans la protection de la biodiversité et le développement des communautés, ils accueillent les volontaires et les accompagnent tout au long de leur expérience sur le terrain.</p>
+            <Carousel
+              items={[
+                { slug: "lumo-kenya", name: "Sanctuaire LUMO", image_url: "/images/locations/LUMO-kenya.jpeg" },
+                { slug: "ttnp-kenya", name: "Taita Taveta National Polytechnic", image_url: "/images/locations/TTNP-kenya.jpeg" },
+                { slug: "agada-senegal", name: "ONG AGADA", image_url: "/images/locations/AGADA-senegal.jpg" },
+              ]}
+              slidesPerView={3}
+              spaceBetween={24}
+              showPagination={false}
+              color="primary"
+              renderSlide={(loc) => <LocationCard {...loc} />}
+            />
+          </div>
+        </section>
+      )}
 
       {/* ── Section Groupe jeune ── */}
+      {(activeFilter === null || activeFilter === 'groupe_jeunes') && (
         <section className="section-padding bg-surface">
           <SectionHero
             title="Partir en groupe"
@@ -248,7 +268,7 @@ function Missions() {
           {/* 3 colonnes */}
           <div className="flex gap-8 items-stretch">
 
-            {/* Bloc texte + CTA */}
+            {/* Bloc texte + CTA rapports */}
             <div className="flex flex-col justify-between gap-4 w-1/2">
               <div className="flex flex-col gap-4">
                 <p className="font-body text-sm text-primary/80 leading-relaxed">
@@ -265,7 +285,7 @@ function Missions() {
               </div>
             </div>
 
-            {/* Bloc PDF */}
+            {/* Bloc PDF téléchargement */}
             <div className="flex flex-col gap-4 w-1/4 bg-surface-mid rounded-xl p-6">
               <p className="font-heading font-bold text-primary text-base">Documents à télécharger</p>
               {[
@@ -298,49 +318,52 @@ function Missions() {
 
           </div>
         </section>
+      )}
 
       {/* ── Section Congé solidaire ── */}
-      <section className="section-padding bg-surface-mid">
-        <SectionHero
-          title="S'engager en entreprise"
-          audience="Pour les salariés et les entreprises"
-          description="Mettez vos compétences au service de projets solidaires tout en conciliant engagement citoyen et vie professionnelle."
-          image="/images/one-line-4.png"
-        />
+      {(activeFilter === null || activeFilter === 'conge_solidaire') && (
+        <section className="section-padding bg-surface-mid">
+          <SectionHero
+            title="S'engager en entreprise"
+            audience="Pour les salariés et les entreprises"
+            description="Mettez vos compétences au service de projets solidaires tout en conciliant engagement citoyen et vie professionnelle."
+            image="/images/one-line-4.png"
+          />
 
-        {/* 2 colonnes — texte + contact */}
-        <div className="flex gap-8 items-start">
+          {/* 2 colonnes — texte + contact */}
+          <div className="flex gap-8 items-start">
 
-          {/* Bloc texte */}
-          <div className="flex flex-col gap-4 flex-1">
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Le congé solidaire permet aux entreprises d'offrir à leurs collaborateurs une expérience humaine et professionnelle porteuse de sens, tout en soutenant des projets concrets au Kenya et au Sénégal. 
-            </p>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Depuis plus de 20 ans, Sens Solidaires accompagne des entreprises et leurs salariés dans la réalisation de missions de volontariat au Kenya et au Sénégal. Ces missions peuvent être réalisées individuellement ou en groupe, selon les objectifs de l'entreprise et les compétences mobilisées. 
-            </p>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Dans le cadre du mécénat de compétences, l'entreprise met un salarié à disposition sur son temps de travail tout en maintenant sa rémunération et sa protection sociale. Les volontaires interviennent aux côtés de nos partenaires locaux pour contribuer à des actions en faveur de l'environnement, de l'éducation et du développement des communautés.
-            </p>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Les frais de mission sont pris en charge par l'entreprise et ouvrent droit à une réduction d'impôt de 60 % conformément à l'article 238 bis du Code Général des Impôts. Sens Solidaires accompagne chaque projet et assure la mise en place des conventions nécessaires entre l'entreprise, le salarié et l'organisme bénéficiaire.
-            </p>
+            {/* Bloc texte */}
+            <div className="flex flex-col gap-4 flex-1">
+              <p className="font-body text-sm text-primary/80 leading-relaxed">
+                Le congé solidaire permet aux entreprises d'offrir à leurs collaborateurs une expérience humaine et professionnelle porteuse de sens, tout en soutenant des projets concrets au Kenya et au Sénégal.
+              </p>
+              <p className="font-body text-sm text-primary/80 leading-relaxed">
+                Depuis plus de 20 ans, Sens Solidaires accompagne des entreprises et leurs salariés dans la réalisation de missions de volontariat au Kenya et au Sénégal. Ces missions peuvent être réalisées individuellement ou en groupe, selon les objectifs de l'entreprise et les compétences mobilisées.
+              </p>
+              <p className="font-body text-sm text-primary/80 leading-relaxed">
+                Dans le cadre du mécénat de compétences, l'entreprise met un salarié à disposition sur son temps de travail tout en maintenant sa rémunération et sa protection sociale. Les volontaires interviennent aux côtés de nos partenaires locaux pour contribuer à des actions en faveur de l'environnement, de l'éducation et du développement des communautés.
+              </p>
+              <p className="font-body text-sm text-primary/80 leading-relaxed">
+                Les frais de mission sont pris en charge par l'entreprise et ouvrent droit à une réduction d'impôt de 60 % conformément à l'article 238 bis du Code Général des Impôts. Sens Solidaires accompagne chaque projet et assure la mise en place des conventions nécessaires entre l'entreprise, le salarié et l'organisme bénéficiaire.
+              </p>
+            </div>
+
+            {/* Bloc contact */}
+            <div className="flex flex-col gap-4 w-1/4 shrink-0 bg-surface rounded-xl p-6">
+              <p className="font-heading font-bold text-primary text-base">Construisons votre projet</p>
+              <p className="font-body text-sm text-primary/60">
+                Notre équipe vous accompagne dans la mise en place d'un congé solidaire sur mesure.
+              </p>
+              <Button label="Nous contacter →" variant="secondary" fullWidth />
+              <a href="https://france-volontaires.org/le-conge-de-solidarite-internationale/" target="_blank" rel="noopener noreferrer" className="block w-full">
+                <Button label="En savoir plus →" variant="secondary" fullWidth />
+              </a>
+            </div>
+
           </div>
-
-          {/* Bloc contact */}
-          <div className="flex flex-col gap-4 w-1/4 shrink-0 bg-surface rounded-xl p-6">
-            <p className="font-heading font-bold text-primary text-base">Construisons votre projet</p>
-            <p className="font-body text-sm text-primary/60">
-              Notre équipe vous accompagne dans la mise en place d'un congé solidaire sur mesure.
-            </p>
-            <Button label="Nous contacter →" variant="secondary" fullWidth />
-            <a href="https://france-volontaires.org/le-conge-de-solidarite-internationale/" target="_blank" rel="noopener noreferrer" className="block w-full">
-              <Button label="En savoir plus →" variant="secondary" fullWidth />
-            </a>
-          </div>
-
-        </div>
-      </section>
+        </section>
+      )}
 
     </div>
   )

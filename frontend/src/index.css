@@ -67,6 +67,10 @@
   li { margin-bottom: 0.4rem; }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .swiper {
   padding-bottom: 50px !important;
   width: 100% !important;
