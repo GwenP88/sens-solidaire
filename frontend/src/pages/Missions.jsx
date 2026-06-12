@@ -10,6 +10,7 @@ import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import SectionHero from '../components/ui/SectionHero'
 import LocationCard from '../components/locations/LocationCard'
+import FilterChips from '../components/navigation/FilterChips'
 import { IconPerson, IconClock, IconPin, IconMoney, IconFrance, IconAbroad, IconGrow } from '../utils/icons'
 
 // Filtres disponibles — correspond aux clés de section
@@ -60,20 +61,13 @@ function Missions() {
       />
 
       {/* ── Filtres par type de mission ── */}
-      <div className="py-6 px-24 bg-primary flex gap-3 flex-wrap">
-        {FILTERS.map((f) => (
-          <button
-            key={f.label}
-            onClick={() => setActiveFilter(f.value)}
-            className={`font-body text-sm px-4 py-2 rounded-full border transition-colors ${
-              activeFilter === f.value
-                ? 'bg-surface text-primary border-surface'
-                : 'bg-transparent text-surface border-surfacehover:bg-primary/10'
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
+      <div className="py-6 px-24 bg-primary">
+        <FilterChips
+          filters={FILTERS}
+          active={activeFilter}
+          onChange={setActiveFilter}
+          variant="dark"
+        />
       </div>
 
       {/* ── Section Volontariat individuel ── */}
