@@ -80,11 +80,11 @@
 
 | # | Dev | Tâche | Période | Statut |
 |---|---|---|---|---|
-| 25 | Gwen | Page /missions — liste avec vraies données API | 10 juin | ✅ Terminé (sections volontariat individuel + service civique) |
-| 26 | Gwen | Page /missions/:slug — détail mission | 11 juin | 🔵 À faire |
-| 27 | Alison | GET /api/missions (liste + filtres) | 12 juin | 🔵 À faire |
-| 28 | Alison | GET /api/missions/:slug + pricing | 12-13 juin | 🔵 À faire |
-| 29 | Alison | Service + Controller missions | 12-13 juin | 🔵 À faire |
+| 25 | Gwen | Page /missions — liste avec vraies données API | 10 juin | ✅ Terminé (sections volontariat individuel + service civique + filtres, accordéon, sections groupe jeune + congé solidaire) |
+| 26 | Gwen | Page /missions/:slug — détail mission | 11 juin | ✅ Terminé|
+| 27 | Alison | GET /api/missions (liste + filtres) | 12 juin | ✅ Terminé |
+| 28 | Alison | GET /api/missions/:slug + pricing | 12-13 juin | ✅ Terminé |
+| 29 | Alison | Service + Controller missions | 12-13 juin | ✅ Terminé |
 
 > 📅 RDV cliente à planifier — logo blanc, logos partenaires, validation types missions
 

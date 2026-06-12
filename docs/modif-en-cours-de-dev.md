@@ -46,7 +46,15 @@ Il sera mis à jour en continu et servira à actualiser la documentation officie
 | 30 | 10/06/26 | Composant — MissionCard.jsx | Ajout props optionnelles `ctaLabel` et `ctaUrl` — permet de personnaliser le bouton CTA selon le contexte (lien externe service civique) | Les missions service civique ne mènent pas vers une page détail interne mais vers le site officiel | ✅ Appliquée |
 | 31 | 10/06/26 | utils/missions.js | Création fichier utilitaires partagés : `COUNTRY_IMAGES`, `getDuration`, `TYPE_LABELS` | Évite les doublons entre Home.jsx et Missions.jsx | ✅ Appliquée |
 | 32 | 10/06/26 | index.css | Ajout utilities Tailwind v4 : `section-padding`, `section-header`, `section-title`, `section-subtitle` | Uniformisation des espacements et styles de section sur tout le site | ✅ Appliquée |
-| 33 | 12/06/26 | Composant — TestimonialCard.jsx | Témoignages limités à 280 caractères max (`maxLength={280}` à ajouter sur le textarea du formulaire de soumission). Hauteur fixe de la card : `h-[270px]` | Cohérence visuelle du carousel — card uniforme quelle que soit la longueur du témoignage | ✅ Appliquée |
+| 33 | 12/06/26 | TestimonialCard | Hauteur fixe h-[270px] — témoignages limités à 280 caractères (maxLength={280} à ajouter sur textarea du formulaire) | Cohérence visuelle carousel | ✅ Appliquée |
+| 34 | 12/06/26 | missionService.js | Formatage témoignages : content → quote, author_name → name, mission.title → mission | Cohérence props TestimonialCard | ✅ Appliquée |
+| 35 | 12/06/26 | Composant — LocationCard.jsx | Nouveau composant dans /components/locations/ — card lieu réutilisable sur MissionDetail et Missions | Évite la duplication de code | ✅ Appliquée |
+| 36 | 12/06/26 | Composant — FilterChips.jsx | Nouveau composant dans /components/navigation/ — props : filters, active, onChange, variant (light/dark) | Réutilisable sur toutes les pages avec filtres | ✅ Appliquée |
+| 37 | 12/06/26 | Composant — AnchorNav.jsx | Nouveau composant dans /components/navigation/ — props : sections, variant (light/dark) | Réutilisable sur pages longues : MissionDetail, LocationDetail | ✅ Appliquée |
+| 38 | 12/06/26 | BDD — schema.prisma | Ajout champ image_url (String?) sur table Location + migration | Carousel lieux partenaires avec photos | ✅ Appliquée |
+| 39 | 12/06/26 | Seed — toutes missions | Pattern xxxData appliqué sur toutes les missions (Sénégal, Pérou, Sri Lanka, Sumatra) — update: xxxData | Re-seed met tout à jour automatiquement | ✅ Appliquée |
+| 40 | 12/06/26 | Navbar | Dropdown "Nos missions" au survol — liste des 5 destinations | Accès direct aux pages détail mission | ✅ Appliquée |
+| 41 | 12/06/26 | Carousel | Navigation conditionnelle — chevrons et dots masqués si items ≤ slidesPerView | Évite les contrôles inutiles sur peu d'items | ✅ Appliquée |
 
 ---
 
