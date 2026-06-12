@@ -46,6 +46,7 @@ Il sera mis à jour en continu et servira à actualiser la documentation officie
 | 30 | 10/06/26 | Composant — MissionCard.jsx | Ajout props optionnelles `ctaLabel` et `ctaUrl` — permet de personnaliser le bouton CTA selon le contexte (lien externe service civique) | Les missions service civique ne mènent pas vers une page détail interne mais vers le site officiel | ✅ Appliquée |
 | 31 | 10/06/26 | utils/missions.js | Création fichier utilitaires partagés : `COUNTRY_IMAGES`, `getDuration`, `TYPE_LABELS` | Évite les doublons entre Home.jsx et Missions.jsx | ✅ Appliquée |
 | 32 | 10/06/26 | index.css | Ajout utilities Tailwind v4 : `section-padding`, `section-header`, `section-title`, `section-subtitle` | Uniformisation des espacements et styles de section sur tout le site | ✅ Appliquée |
+| 33 | 12/06/26 | Composant — TestimonialCard.jsx | Témoignages limités à 280 caractères max (`maxLength={280}` à ajouter sur le textarea du formulaire de soumission). Hauteur fixe de la card : `h-[270px]` | Cohérence visuelle du carousel — card uniforme quelle que soit la longueur du témoignage | ✅ Appliquée |
 
 ---
 

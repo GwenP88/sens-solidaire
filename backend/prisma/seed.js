@@ -441,7 +441,7 @@ const seed = async () => {
     name: "ONG AGADA",
     country: "Sénégal",
     description: "AGADA (Agir Autrement pour le Développement en Afrique), basée à Ziguinchor en Casamance, œuvre pour le développement d'activités économiques locales. Investie depuis plus de 30 ans, elle soutient le reboisement de la mangrove, l'agriculture durable et la protection d'espèces patrimoniales comme le lamantin.",
-    image_url: "/images/locations/agada-senegal.jpg",
+    image_url: "/images/locations/AGADA-senegal.jpg",
     is_active: true,
   }
   await prisma.location.upsert({
@@ -552,7 +552,7 @@ const seed = async () => {
       {
         mission_id: missionKenya.id,
         author_name: "Sophie M.",
-        content: "Une expérience qui a changé ma façon de voir le monde. Travailler avec les rangers du Kenya, observer les animaux à l'aube, comprendre les enjeux de conservation... Je reviendrai sans hésiter.",
+        content: "Travailler aux côtés des rangers du sanctuaire LUMO, observer la faune à l'aube et échanger avec les communautés locales m'a profondément changé. Chaque journée apportait son lot de découvertes inoubliables. Je repars avec des souvenirs plein le cœur et l'envie de repartir !",
         status: "approved",
         show_homepage: true,
         consent_given: true,

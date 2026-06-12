@@ -225,7 +225,7 @@ function Missions() {
             items={[
               { slug: "lumo-kenya", name: "Sanctuaire LUMO", image_url: "/images/locations/LUMO-kenya.jpeg" },
               { slug: "ttnp-kenya", name: "Taita Taveta National Polytechnic", image_url: "/images/locations/TTNP-kenya.jpeg" },
-              { slug: "agada-senegal", name: "ONG AGADA", image_url: "/images/locations/agada-senegal.jpg" },
+              { slug: "agada-senegal", name: "ONG AGADA", image_url: "/images/locations/AGADA-senegal.jpg" },
             ]}
             slidesPerView={3}
             spaceBetween={24}
@@ -261,7 +261,7 @@ function Missions() {
               <div className="bg-surface-mid rounded-xl p-6 flex flex-col gap-3">
                 <p className="font-heading font-bold text-primary text-base">Ils sont partis en missions jeunes</p>
                 <p className="font-body text-sm text-primary/60">Découvrez les retours d'expérience et les rapports de nos missions de groupe.</p>
-                <Button label="Voir les rapports →" variant="secondary" fullWidth />
+                <Button label="Voir les rapports de missions →" variant="secondary" fullWidth />
               </div>
             </div>
 
@@ -314,16 +314,16 @@ function Missions() {
           {/* Bloc texte */}
           <div className="flex flex-col gap-4 flex-1">
             <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Sens Solidaires propose aux entreprises des congés solidaires au Kenya et au Sénégal, pour partir individuellement ou en groupe.
+              Le congé solidaire permet aux entreprises d'offrir à leurs collaborateurs une expérience humaine et professionnelle porteuse de sens, tout en soutenant des projets concrets au Kenya et au Sénégal. 
             </p>
             <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Via le <span className="font-semibold text-primary">mécénat de compétences</span>, l'entreprise met son salarié à disposition sur son temps de travail, en maintenant intégralement sa rémunération et sa protection sociale. Les frais de mission (billet d'avion, visa, frais sur place) ont valeur de don et sont financés par l'entreprise.
+              Depuis plus de 20 ans, Sens Solidaires accompagne des entreprises et leurs salariés dans la réalisation de missions de volontariat au Kenya et au Sénégal. Ces missions peuvent être réalisées individuellement ou en groupe, selon les objectifs de l'entreprise et les compétences mobilisées. 
             </p>
             <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Sur le plan fiscal, <span className="font-semibold text-primary">le mécénat de compétences ouvre droit à une réduction d'impôt de 60 %</span> du montant du salaire du ou des salariés mis à disposition (article 238 bis du Code Général des Impôts). Ce dispositif est accessible à toutes les entreprises, sans montant minimum.
+              Dans le cadre du mécénat de compétences, l'entreprise met un salarié à disposition sur son temps de travail tout en maintenant sa rémunération et sa protection sociale. Les volontaires interviennent aux côtés de nos partenaires locaux pour contribuer à des actions en faveur de l'environnement, de l'éducation et du développement des communautés.
             </p>
-            <p className="font-body text-xs text-primary/40 italic">
-              Le congé solidaire nécessite une convention tripartite entre l'entreprise, le salarié et l'organisme bénéficiaire, ainsi qu'un avenant au contrat de travail.
+            <p className="font-body text-sm text-primary/80 leading-relaxed">
+              Les frais de mission sont pris en charge par l'entreprise et ouvrent droit à une réduction d'impôt de 60 % conformément à l'article 238 bis du Code Général des Impôts. Sens Solidaires accompagne chaque projet et assure la mise en place des conventions nécessaires entre l'entreprise, le salarié et l'organisme bénéficiaire.
             </p>
           </div>
 
