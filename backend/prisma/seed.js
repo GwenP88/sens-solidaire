@@ -6,66 +6,40 @@
 //
 // Données insérées :
 //   - 1  admin           (compte de connexion au dashboard)
-//   - 5  missions        (Kenya, Sénégal, Pérou, Sri Lanka, Sumatra)
-//   - 14 lignes pricing  (durées et tarifs par mission)
-//   - 5  locations       (villes de départ des missions)
+//   - 9  missions        (Kenya, Sénégal, Pérou, Sri Lanka, Sumatra,
+//                         SC Kenya, SC Sénégal, Groupe jeunes, Congé solidaire)
+//   - 20 lignes pricing  (durées et tarifs par mission)
+//   - 13 locations       (lieux partenaires par mission)
 //   - 7  témoignages     (6 approuvés, 1 en attente de modération)
 //
 // Exécution (depuis la racine du projet) :
 //   docker-compose exec backend node prisma/seed.js
 //
 // Comportement si relancé :
-//   - Admin, missions, locations → upsert (pas de doublon)
+//   - Admin, missions, locations → upsert (update: data = tout est mis à jour)
 //   - Pricing, témoignages       → deleteMany + recreate (pas de @unique)
 // ============================================================
 
-// Charge les variables d'environnement depuis .env — nécessaire pour DATABASE_URL
 import "dotenv/config"
-
-// bcrypt : librairie de hachage de mots de passe
-// On ne stocke JAMAIS un mot de passe en clair en base
 import bcrypt from "bcrypt"
-
-// prisma : notre instance Prisma configurée dans src/config/db.js
-// C'est via cet objet qu'on fait toutes les requêtes en base
 import prisma from "../src/config/db.js"
 
-// ============================================================
-// Fonction principale du seed
-// async car toutes les opérations Prisma sont asynchrones
-// (elles attendent une réponse de PostgreSQL)
-// ============================================================
 const seed = async () => {
   console.log("Démarrage du seed...")
 
   // ============================================================
   // ÉTAPE 1 — ADMIN
   // ============================================================
-  // But : créer le compte administrateur qui permettra de se
-  //       connecter au dashboard de modération.
-  //
-  // Pourquoi bcrypt.hash() ?
-  //   On ne stocke JAMAIS le mot de passe en clair.
-  //   bcrypt transforme "Admin1234!" en une chaîne illisible.
-  //   Le "10" est le "salt rounds" : plus c'est élevé, plus
-  //   c'est lent à craquer (10 = bon équilibre sécurité/perf).
-  //
-  // Pourquoi upsert et pas create() ?
-  //   upsert = "update or insert"
-  //   Si l'admin existe déjà (seed relancé) → on ne fait rien (update: {})
-  //   Si l'admin n'existe pas → on le crée
-  //   Sans ça, relancer le seed planterait avec une erreur "email déjà utilisé"
-  // ============================================================
 
   const password_hash = await bcrypt.hash("Admin1234!", 10)
 
   const admin = await prisma.admin.upsert({
-    where: { email: "admin@sensolidaire.org" }, // cherche par email (champ @unique)
-    update: {},                                  // s'il existe déjà → ne rien modifier
+    where: { email: "admin@sensolidaire.org" },
+    update: {},
     create: {
       email: "admin@sensolidaire.org",
-      password_hash,   // le hash bcrypt, jamais le mot de passe brut
-      role: "admin"    // rôle stocké en base — utilisé dans authMiddleware
+      password_hash,
+      role: "admin"
     }
   })
   console.log(`Admin : ${admin.email}`)
@@ -73,37 +47,11 @@ const seed = async () => {
   // ============================================================
   // ÉTAPE 2 — MISSIONS
   // ============================================================
-  // But : créer les 5 missions réelles de l'association.
-  //
-  // Structure d'une mission (cf. schema.prisma) :
-  //   title          → nom affiché sur le site
-  //   country        → pays (affiché sur la carte / filtre)
-  //   slug           → identifiant URL unique ex: "volontariat-kenya-faune-sauvage"
-  //                    → utilisé dans l'URL : /missions/volontariat-kenya-faune-sauvage
-  //   description    → texte long affiché sur la page détail
-  //   volunteer_role → ce que fait concrètement le bénévole
-  //   programme      → déroulé journalier (\n = saut de ligne)
-  //   included       → ce qui est compris dans le tarif
-  //   not_include    → ce qui n'est PAS compris (important pour éviter les surprises)
-  //   admin_info     → note interne / info pratique pour les candidats
-  //   health_info    → vaccins et précautions sanitaires
-  //   helloasso_url  → lien de paiement / inscription HelloAsso
-  //   is_active      → true = visible sur le site / false = archivée
-  //
-  // Pourquoi upsert sur le slug ?
-  //   Le slug est @unique dans le schéma.
-  //   upsert évite les doublons si le seed est relancé.
-  //   update: {} = si la mission existe déjà, on ne la modifie pas.
-  //
-  // Pourquoi récupérer le résultat dans une variable (missionKenya, etc.) ?
-  //   Prisma retourne l'objet créé/trouvé avec son id généré automatiquement.
-  //   On a besoin de cet id pour créer les pricing et locations liés.
-  // ============================================================
 
   // ── Mission 1 : Kenya ──────────────────────────────────────
   const kenyaData = {
     type: "volontariat_individuel",
-    title: "Volontariat au Kenya",
+    title: "Programme de volontariat au Kenya",
     country: "Kenya",
     image_url: "/images/kenya.jpg",
     short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans.",
@@ -111,7 +59,7 @@ const seed = async () => {
     volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Patrouilles avec les rangers et participation aux actions de conservation de la biodiversité.</li><li>Recensement de la faune sauvage et des espèces d'oiseaux.</li><li>Entretien des équipements et appui aux projets environnementaux.</li><li>Mise en place et suivi des correspondances scolaires entre la France et le Kenya.</li><li>Accompagnement des élèves et étudiants dans leurs projets éducatifs et interculturels.</li><li>Partage de compétences selon votre expérience : informatique, gestion de projet, tourisme solidaire, hôtellerie, restauration, communication, etc.</li><li>Soutien aux initiatives locales de développement durable, d'agroécologie et d'entrepreneuriat.</li></ul>",
     programme: "Jour 1 : Transfert depuis l'aéroport, déjeuner, installation, briefing et orientation avant le dîner.\nJour 2 : Formation sur l'observation de la faune, recommandations sécurité, rencontre avec le référent rangers et le chargé des projets biodiversité, présentation de la communauté locale.\nJours 3-6 : Programme des volontaires : 4 jours enrichissants en participant aux projets de développement.\nWeek-end : Quartier libre — visite des Sanctuaires, Parc Tsavo, Hell's Gate, Lac Naivasha, Parc Amboseli ou côte océanienne de Mombasa.\nJours 9-13 : Finalisation du programme de développement avec les communautés.\nJour 14 : Séparation avec la communauté et transfert vers l'aéroport.",
     included: "Les frais de mission comprennent l'hébergement, la restauration, les déplacements sur place ainsi que l'encadrement par nos équipes et partenaires locaux.",
-    not_include: "Les frais de mission ne comprennent pas l'adhésion à l'association (25 €), les billets d'avion (environ 700 €, avec option annulation fortement recommandée), l'assurance voyage, les frais de visa (32 €), ainsi que les éventuels vaccins et frais de pharmacie.",
+    not_include: "Les frais de mission ne comprennent pas l'adhésion à l'association (25 €), les billets d'avion (environ 700 €, avec option annulation fortement recommandée), l'assurance voyage, les frais de visa (32 €), ainsi que les éventuels vaccins et frais de pharmacie et les activités du week-end et les déplacements personnels hors programme.",
     how_to_go: JSON.stringify([
       "Vérifier les vols Paris › Mombasa ou Paris › Nairobi",
       "Nous contacter par mail à contact@sensolidaire.org",
@@ -121,9 +69,10 @@ const seed = async () => {
       "Recevoir les conseils pratiques de préparation",
       "Recevoir votre fiche mission à remplir à votre retour"
     ]),
-    admin_info: "Nous vous recommandons d'éviter les périodes de fortes pluies, généralement comprises entre mars et mai et entre novembre et décembre, afin de profiter pleinement de votre mission. Pour entrer au Kenya, vous devrez être muni d'un passeport valide au moins 6 mois après la date de retour ainsi que d'un visa obligatoire. Pour obtenir les meilleurs tarifs, nous vous conseillons de comparer les offres de plusieurs compagnies aériennes, notamment Kenya Airways, KLM, Ethiopian Airlines et Air France.",
-    health_info: "Une bonne condition physique est recommandée pour participer à cette mission. Un certificat médical d'aptitude délivré par votre médecin vous sera demandé avant le départ. Les vaccinations obligatoires doivent être à jour. La vaccination contre la fièvre jaune est requise, et un traitement antipaludéen devra être prescrit par votre médecin en fonction de votre situation et des recommandations sanitaires en vigueur.",
+    admin_info: "<ul><li>Évitez les périodes de fortes pluies, généralement entre mars-mai et novembre-décembre.</li><li>Un passeport valide au moins 6 mois après votre date de retour est requis.</li><li>L'obtention d'un visa est obligatoire pour entrer sur le territoire kenyan (32 €).</li><li>Comparez les offres de plusieurs compagnies : Kenya Airways, KLM, Ethiopian Airlines, Air France.</li></ul>",
+    health_info: "<ul><li>Une bonne condition physique est recommandée pour participer à cette mission.</li><li>Un certificat médical d'aptitude délivré par votre médecin vous sera demandé avant le départ.</li><li>Les vaccinations obligatoires doivent être à jour. La vaccination contre la fièvre jaune est requise.</li><li>Un traitement antipaludéen devra être prescrit par votre médecin en fonction de votre situation et des recommandations sanitaires en vigueur.</li></ul>",
     helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
+    ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/kenya/",
     is_active: true,
   }
 
@@ -134,191 +83,211 @@ const seed = async () => {
   })
 
   // ── Mission 2 : Sénégal ────────────────────────────────────
+  const senegalData = {
+    type: "volontariat_individuel",
+    title: "Volontariat au Sénégal",
+    country: "Sénégal",
+    image_url: "/images/senegal.jpg",
+    short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.",
+    description: "Rejoignez nos projets de développement en Casamance, dans la région de Ziguinchor. Entre correspondance scolaire, jardins potagers, filtres à eau et visites terrain, vous contribuerez directement à l'amélioration des conditions de vie des communautés locales.",
+    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Correspondance scolaire et échanges interculturels avec les élèves locaux.</li><li>Visites terrain et suivi des projets en cours.</li><li>Appui aux projets jardin potager, filtres à eau et puits.</li><li>Sensibilisation communautaire au développement durable.</li><li>Soutien aux groupements de femmes maraîchères.</li><li>Reboisement de la mangrove et actions environnementales.</li></ul>",
+    programme: "8h : Petit déjeuner.\n9h à 12h : Activités de la matinée — correspondance scolaire, visites terrain.\n12h : Déjeuner.\n14h à 17h : Visite de l'avancement des projets sur place — jardin potager, utilisation des filtres à eau et puits.\n19h : Dîner.",
+    included: "Hébergement chez l'habitant ou en gîte local, repas, encadrement sur place, transport local.",
+    not_include: "Billet d'avion, assurance voyage, vaccins, visa (ressortissants hors CEDEAO), dépenses personnelles.",
+    how_to_go: JSON.stringify([
+      "Vérifier les vols Paris › Ziguinchor ou Paris › Dakar",
+      "Nous contacter par mail à contact@sensolidaire.org",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission et adhérer à l'association (25 €)",
+      "Signer les termes d'engagement",
+      "Recevoir les conseils pratiques de préparation",
+      "Recevoir votre fiche mission à remplir à votre retour"
+    ]),
+    admin_info: "<ul><li>La nature exacte du travail dépendra des priorités sur place.</li><li>En tant que volontaire, il est important de rester flexible.</li><li>Aucun visa requis pour les ressortissants de l'espace CEDEAO.</li><li>Meilleure période : novembre à mai (saison sèche).</li></ul>",
+    health_info: "<ul><li>Vaccins recommandés : fièvre jaune (obligatoire pour certains pays de transit), hépatite A, typhoïde.</li><li>Traitement antipaludéen fortement conseillé.</li><li>Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
+    helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
+    ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/senegal/",
+    is_active: true,
+  }
+
   const missionSenegal = await prisma.mission.upsert({
     where: { slug: "senegal" },
-    update: { type: "volontariat_individuel", title: "Volontariat au Sénégal", short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.", image_url: "/images/senegal.jpg" },
-    create: {
-      type: "volontariat_individuel",
-      title: "Volontariat au Sénégal",
-      country: "Sénégal",
-      slug: "senegal",
-      image_url: "/images/senegal.jpg",
-      short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.",
-      description: "Rejoignez nos projets de développement en Casamance, dans la région de Ziguinchor. Entre correspondance scolaire, jardins potagers, filtres à eau et visites terrain, vous contribuerez directement à l'amélioration des conditions de vie des communautés locales.",
-      volunteer_role: "Correspondance scolaire, visites terrain, suivi des projets (jardin potager, filtres à eau, puits), sensibilisation communautaire.",
-      programme: "8h : Petit déjeuner.\n9h à 12h : Activités de la matinée — correspondance scolaire, visites terrain.\n12h : Déjeuner.\n14h à 17h : Visite de l'avancement des projets sur place — jardin potager, utilisation des filtres à eau et puits.\n19h : Dîner.",
-      included: "Hébergement chez l'habitant ou en gîte local, repas, encadrement sur place, transport local.",
-      not_include: "Billet d'avion, assurance voyage, vaccins, visa (ressortissants hors CEDEAO), dépenses personnelles.",
-      admin_info: "La nature exacte du travail dépendra des priorités sur place. En tant que volontaire, il est important de rester flexible.",
-      health_info: "Vaccins recommandés : fièvre jaune (obligatoire pour certains pays de transit), hépatite A, typhoïde. Traitement antipaludéen conseillé.",
-      helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
-      is_active: true,
-    }
+    update: senegalData,
+    create: { slug: "senegal", ...senegalData },
   })
 
   // ── Mission 3 : Pérou ──────────────────────────────────────
+  const perouData = {
+    type: "volontariat_individuel",
+    title: "Volontariat au Pérou",
+    country: "Pérou",
+    image_url: "/images/perou.jpg",
+    short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l'Amazonie.",
+    description: "Partez au cœur de l'Amazonie péruvienne, à Puerto Maldonado, pour participer à la protection de la biodiversité. Aux côtés des soigneurs locaux, vous prendrez soin des animaux du sanctuaire et participerez aux projets d'entretien et de conservation.",
+    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Préparation des régimes alimentaires adaptés à chaque espèce.</li><li>Nourrissage des animaux, dont les singes hurleurs.</li><li>Cueillette de feuilles sauvages pour les animaux du sanctuaire.</li><li>Entretien et réparation des structures et enclos.</li><li>Nettoyage des espaces de vie des animaux.</li><li>Sensibilisation des communautés locales à la protection de l'Amazonie.</li></ul>",
+    programme: "7h30 : Petit déjeuner pour les volontaires.\n8h00 : Préparation des régimes alimentaires pour les animaux.\n8h30 à 9h30 : Nourrir les animaux.\n10h00 : Cueillette de feuilles sauvages pour les singes hurleurs.\n11h00 à 13h00 : Projets spécifiques — entretien et réparation.\n13h00 : Déjeuner des volontaires.\n14h00 : Régime alimentaire de l'après-midi et alimentation des animaux.\n16h00 : Nettoyage des enclos et vaisselle.\n17h00 : Préparation de la soirée — couvertures et lait.\n18h00 : Temps de repos des bénévoles.\n19h00 : Dîner des bénévoles.",
+    included: "Hébergement sur site, repas, encadrement par les coordinateurs locaux, formation à l'arrivée.",
+    not_include: "Vols internationaux, assurance, visa, vaccins, équipement personnel.",
+    how_to_go: JSON.stringify([
+      "Vérifier les vols Paris › Lima puis Lima › Puerto Maldonado",
+      "Nous contacter par mail à contact@sensolidaire.org",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission et adhérer à l'association (25 €)",
+      "Signer les termes d'engagement",
+      "Recevoir les conseils pratiques de préparation",
+      "Recevoir votre fiche mission à remplir à votre retour"
+    ]),
+    admin_info: "<ul><li>Les activités varient selon les besoins du sanctuaire — flexibilité indispensable.</li><li>Un passeport valide est requis. Pas de visa pour les ressortissants français (séjour < 90 jours).</li><li>Prévoir des vêtements légers et imperméables adaptés au climat amazonien.</li></ul>",
+    health_info: "<ul><li>Vaccins recommandés : fièvre jaune (obligatoire), hépatite A et B, typhoïde, rage.</li><li>Traitement antipaludéen obligatoire pour la région amazonienne.</li><li>Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
+    helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
+    ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/perou/",
+    is_active: true,
+  }
+
   const missionPerou = await prisma.mission.upsert({
     where: { slug: "perou" },
-    update: { type: "volontariat_individuel", title: "Volontariat au Pérou", short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l'Amazonie.", image_url: "/images/perou.jpg" },
-    create: {
-      type: "volontariat_individuel",
-      title: "Volontariat au Pérou",
-      country: "Pérou",
-      slug: "perou",
-      image_url: "/images/perou.jpg",
-      short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l\'Amazonie.",
-      description: "Partez au cœur de l'Amazonie péruvienne, à Puerto Maldonado, pour participer à la protection de la biodiversité. Aux côtés des soigneurs locaux, vous prendrez soin des animaux du sanctuaire et participerez aux projets d'entretien et de conservation.",
-      volunteer_role: "Préparation des régimes alimentaires, nourrissage des animaux (dont singes hurleurs), cueillette de feuilles sauvages, entretien et réparation des structures, nettoyage des enclos.",
-      programme: "7h30 : Petit déjeuner pour les volontaires.\n8h00 : Préparation des régimes alimentaires pour les animaux.\n8h30-9h30 : Nourrir les animaux.\n10h00 : Cueillette de feuilles sauvages pour les singes hurleurs.\n11h00-13h00 : Projets spécifiques — entretien et réparation.\n13h00 : Déjeuner des volontaires.\n14h00 : Régime alimentaire de l'après-midi et alimentation des animaux.\n16h00 : Nettoyage des enclos et vaisselle.\n17h00 : Préparation de la soirée — couvertures et lait.\n18h00 : Temps de repos des bénévoles.\n19h00 : Dîner des bénévoles.\n20h00 : Activités bénévoles.",
-      included: "Hébergement sur site, repas, encadrement par les coordinateurs locaux, formation à l'arrivée.",
-      not_include: "Vols internationaux, assurance, visa, vaccins, équipement personnel.",
-      admin_info: "Les activités varient selon les besoins du sanctuaire. Flexibilité indispensable.",
-      health_info: "Vaccins recommandés : fièvre jaune (obligatoire), hépatite A et B, typhoïde, rage. Traitement antipaludéen obligatoire pour la région amazonienne.",
-      helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
-      is_active: true,
-    }
+    update: perouData,
+    create: { slug: "perou", ...perouData },
   })
 
   // ── Mission 4 : Sri Lanka ──────────────────────────────────
+  const sriLankaData = {
+    type: "volontariat_individuel",
+    title: "Volontariat au Sri Lanka",
+    country: "Sri Lanka",
+    image_url: "/images/srilanka.jpg",
+    short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.",
+    description: "Engagez-vous pour la protection des éléphants d'Asie dans le sanctuaire de Kegalle. Une expérience unique alliant soins vétérinaires, observation de la faune et découverte de la médecine Ayurveda au cœur du Sri Lanka.",
+    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Préparation des médicaments et vitamines pour les éléphants.</li><li>Nourrissage et examen vétérinaire quotidien.</li><li>Baignade des éléphants.</li><li>Nettoyage des enclos et litières.</li><li>Travaux de jardinage, peinture et recyclage dans le sanctuaire.</li><li>Initiation à la médecine Ayurveda et aux plantes locales.</li></ul>",
+    programme: "7h30 : Préparation des médicaments et vitamines des éléphants.\n8h00 : Nourrissage des éléphants et examen vétérinaire.\n8h30 : Nettoyage des enclos.\n9h00 : Petit déjeuner à la Colonial House.\n10h00 : Baignade des éléphants.\n11h00 : Nettoyage des litières.\n12h00 à 14h00 : Pause du midi.\n14h00 : Visite de la fabrique de papier Ecomaximus ou du jardin, apprentissage de la médecine Ayurveda.\n15h00 à 17h00 : Travaux dans le sanctuaire (jardinage, peinture, recyclage).\n17h00 à 18h00 : Temps libre.\n18h00 : Dîner.",
+    included: "Hébergement à la Colonial House, repas, encadrement vétérinaire, initiation à la médecine Ayurveda.",
+    not_include: "Vols internationaux, assurance, visa Sri Lanka, vaccins, dépenses personnelles.",
+    how_to_go: JSON.stringify([
+      "Vérifier les vols Paris › Colombo",
+      "Nous contacter par mail à contact@sensolidaire.org",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission et adhérer à l'association (25 €)",
+      "Signer les termes d'engagement",
+      "Recevoir les conseils pratiques de préparation",
+      "Recevoir votre fiche mission à remplir à votre retour"
+    ]),
+    admin_info: "<ul><li>Le programme peut varier selon les besoins des éléphants et du sanctuaire.</li><li>Un visa électronique (ETA) est obligatoire avant l'entrée au Sri Lanka.</li><li>Prévoir des vêtements légers et confortables adaptés au climat tropical.</li></ul>",
+    health_info: "<ul><li>Vaccins recommandés : hépatite A et B, typhoïde, rage.</li><li>Pas de risque paludéen majeur à Kegalle. Prévoir protection contre les moustiques.</li><li>Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
+    helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
+    ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/sri-lanka/",
+    is_active: true,
+  }
+
   const missionSriLanka = await prisma.mission.upsert({
     where: { slug: "sri-lanka" },
-    update: { type: "volontariat_individuel", title: "Volontariat au Sri Lanka", short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.", image_url: "/images/srilanka.jpg" },
-    create: {
-      type: "volontariat_individuel",
-      title: "Volontariat au Sri Lanka",
-      country: "Sri Lanka",
-      slug: "sri-lanka",
-      image_url: "/images/srilanka.jpg",
-      short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.",
-      description: "Engagez-vous pour la protection des éléphants d'Asie dans le sanctuaire de Kegalle. Une expérience unique alliant soins vétérinaires, observation de la faune et découverte de la médecine Ayurveda au cœur du Sri Lanka.",
-      volunteer_role: "Préparation des médicaments et vitamines, nourrissage et examen vétérinaire, baignade des éléphants, nettoyage des enclos et litières, travaux de jardinage, peinture et recyclage dans le sanctuaire.",
-      programme: "7h30 : Préparation des médicaments et vitamines des éléphants.\n8h00 : Nourrissage des éléphants et examen vétérinaire.\n8h30 : Nettoyage des enclos.\n9h00 : Petit déjeuner à la Colonial House.\n10h00 : Baignade des éléphants.\n11h00 : Nettoyage des litières.\n12h00-14h00 : Pause du midi.\n14h00 : Visite de la fabrique de papier Ecomaximus ou du jardin, apprentissage de la médecine Ayurveda et des plantes.\n15h00-17h00 : Travaux dans le sanctuaire (jardinage, peinture, recyclage).\n17h00-18h00 : Temps libre.\n18h00 : Dîner.",
-      included: "Hébergement à la Colonial House, repas, encadrement vétérinaire, initiation à la médecine Ayurveda.",
-      not_include: "Vols internationaux, assurance, visa Sri Lanka, vaccins, dépenses personnelles.",
-      admin_info: "Le programme peut varier selon les besoins des éléphants et du sanctuaire.",
-      health_info: "Vaccins recommandés : hépatite A et B, typhoïde, rage. Pas de risque paludéen majeur à Kegalle. Prévoir protection contre les moustiques.",
-      helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
-      is_active: true,
-    }
+    update: sriLankaData,
+    create: { slug: "sri-lanka", ...sriLankaData },
   })
 
   // ── Mission 5 : Sumatra ────────────────────────────────────
+  const sumatraData = {
+    type: "volontariat_individuel",
+    title: "Volontariat à Sumatra",
+    country: "Sumatra",
+    image_url: "/images/sumatra.jpg",
+    short_description: "Cartographie des habitats d'orang-outans et création de corridors forestiers pour protéger la biodiversité.",
+    description: "Partez à Bohorok, Sumatra, pour contribuer à la conservation des orang-outans et à la préservation de la forêt tropicale. Entre observation de la faune, reboisement, projets éco-construction et soutien à l'école locale, chaque journée est une immersion totale dans la conservation.",
+    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Observation de la faune (GPS, photos, notes de terrain).</li><li>Activités de conservation : surveillance, enquête et création de corridors pour la faune.</li><li>Projets plastique Eco-Brick et gestion des déchets.</li><li>Pépinières et reboisement de la forêt tropicale.</li><li>Entretien du jardin potager.</li><li>Soutien à l'école Selang Pangeran Jungle School (aide aux cours d'anglais, sensibilisation environnementale).</li></ul>",
+    programme: "6h30 : Observation de la faune — GPS, photos et notes d'observations.\n8h00 : Aide à la préparation du petit déjeuner.\n9h00 : Début des activités de conservation (surveillance, enquête et création de corridors pour la faune).\n12h00 : Aide à la préparation du déjeuner.\n13h00 à 17h00 : Selon les besoins du site — programme de conservation, projets plastique (Eco-Brick), pépinières et reboisement, entretien du jardin potager, projet école.\n17h30 : Aide à la préparation du dîner.\n18h30 : Dîner.\n19h30 à 22h30 : Promenade nocturne (repérage de civettes, léopards, porcs-épics), détente, feu de camp.",
+    included: "Hébergement en lodge dans la forêt, repas, encadrement par les coordinateurs locaux, équipement d'observation.",
+    not_include: "Vols internationaux, assurance, visa Indonésie, vaccins, équipement personnel de randonnée.",
+    how_to_go: JSON.stringify([
+      "Vérifier les vols Paris › Medan (Sumatra Nord)",
+      "Nous contacter par mail à contact@sensolidaire.org",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission et adhérer à l'association (25 €)",
+      "Signer les termes d'engagement",
+      "Recevoir les conseils pratiques de préparation",
+      "Recevoir votre fiche mission à remplir à votre retour"
+    ]),
+    admin_info: "<ul><li>La nature exacte du travail dépendra des priorités du sanctuaire — flexibilité indispensable.</li><li>Un visa à l'arrivée (Visa on Arrival) est disponible pour les ressortissants français.</li><li>Prévoir un équipement de randonnée adapté à la forêt tropicale humide.</li></ul>",
+    health_info: "<ul><li>Vaccins recommandés : hépatite A et B, typhoïde, rage, encéphalite japonaise.</li><li>Traitement antipaludéen recommandé. Prévoir répulsifs puissants.</li><li>Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
+    helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
+    ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/indonesie/",
+    is_active: true,
+  }
+
   const missionSumatra = await prisma.mission.upsert({
     where: { slug: "sumatra" },
-    update: { type: "volontariat_individuel", title: "Volontariat à Sumatra", country: "Sumatra", short_description: "Cartographie des habitats d'orang-outans et création de corridors forestiers pour protéger la biodiversité.", image_url: "/images/sumatra.jpg" },
-    create: {
-      type: "volontariat_individuel",
-      title: "Volontariat à Sumatra",
-      country: "Sumatra",
-      slug: "sumatra",
-      image_url: "/images/sumatra.jpg",
-      short_description: "Cartographie des habitats d\'orang-outans et création de corridors forestiers pour protéger la biodiversité.",
-      description: "Partez à Bohorok, Sumatra, pour contribuer à la conservation des orang-outans et à la préservation de la forêt tropicale. Entre observation de la faune, reboisement, projets éco-construction et soutien à l'école locale, chaque journée est une immersion totale dans la conservation.",
-      volunteer_role: "Observation de la faune (GPS, photos, notes), activités de conservation (surveillance, corridors faune), projets plastique (Eco-Brick), pépinières et reboisement, soutien à l'école Selang Pangeran Jungle School.",
-      programme: "6h30 : Observation de la faune — GPS, photos et notes d'observations.\n8h : Aide à la préparation du petit déjeuner.\n9h : Début des activités de conservation (surveillance, enquête et création de corridors pour la faune).\n12h : Aide à la préparation du déjeuner.\n13h à 17h : Selon les besoins du site — programme de conservation, projets plastique (Eco-Brick), pépinières et reboisement, entretien du jardin potager, projet école (aide aux cours d'anglais, sensibilisation environnementale).\n17h30 : Aide à la préparation du dîner.\n18h30 : Dîner.\n19h30-22h30 : Promenade nocturne (repérage de civettes, léopards, porcs-épics), détente, jeux de cartes, feu de camp et guitare.",
-      included: "Hébergement en lodge dans la forêt, repas, encadrement par les coordinateurs locaux, équipement d'observation.",
-      not_include: "Vols internationaux, assurance, visa Indonésie, vaccins, équipement personnel de randonnée.",
-      admin_info: "La nature exacte du travail dépendra des priorités du Sanctuaire. En tant que volontaire, il est important de rester flexible.",
-      health_info: "Vaccins recommandés : hépatite A et B, typhoïde, rage, encéphalite japonaise. Traitement antipaludéen recommandé. Prévoir répulsifs puissants.",
-      helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
-      is_active: true,
-    }
+    update: sumatraData,
+    create: { slug: "sumatra", ...sumatraData },
   })
 
   // ── Mission 6 : Service civique Kenya ──────────────────────
-  // Mission spécifique service civique — champs détail non nécessaires (pas de page détail)
+  const scKenyaData = {
+    type: "service_civique",
+    title: "Service civique au Kenya",
+    country: "Kenya",
+    image_url: "/images/service-civique-1.jpeg",
+    short_description: "Auprès de l'école polytechnique de Taita Taveta, appui aux étudiants en tourisme, potager agroécologique et correspondances scolaires.",
+    is_active: true,
+  }
+
   const missionScKenya = await prisma.mission.upsert({
     where: { slug: "service-civique-kenya" },
-    update: { type: "service_civique", title: "Service civique au Kenya", image_url: "/images/service-civique-1.jpeg", },
-    create: {
-      type: "service_civique",
-      title: "Service civique au Kenya",
-      country: "Kenya",
-      slug: "service-civique-kenya",
-      image_url: "/images/service-civique-1.jpeg",
-      short_description: "Auprès de l'école polytechnique de Taita Taveta, appui aux étudiants en tourisme, potager agroécologique et correspondances scolaires.",
-      is_active: true,
-    }
+    update: scKenyaData,
+    create: { slug: "service-civique-kenya", ...scKenyaData },
   })
 
   // ── Mission 7 : Service civique Sénégal ────────────────────
-  // Mission spécifique service civique — champs détail non nécessaires (pas de page détail)
+  const scSenegalData = {
+    type: "service_civique",
+    title: "Service civique au Sénégal",
+    country: "Sénégal",
+    image_url: "/images/service-civique-2.jpg",
+    short_description: "Auprès de l'association AGADA en Casamance, reboisement de la mangrove, agriculture durable et suivi des projets d'eau potable.",
+    is_active: true,
+  }
+
   const missionScSenegal = await prisma.mission.upsert({
     where: { slug: "service-civique-senegal" },
-    update: { type: "service_civique", title: "Service civique au Sénégal", image_url: "/images/service-civique-2.jpg" },
-    create: {
-      type: "service_civique",
-      title: "Service civique au Sénégal",
-      country: "Sénégal",
-      slug: "service-civique-senegal",
-      image_url: "/images/service-civique-2.jpg",
-      short_description: "Auprès de l'association AGADA en Casamance, reboisement de la mangrove, agriculture durable et suivi des projets d\'eau potable.",
-      is_active: true,
-    }
+    update: scSenegalData,
+    create: { slug: "service-civique-senegal", ...scSenegalData },
   })
 
   // ── Mission 8 : Groupe jeunes ──────────────────────────────
-  // Une seule card pour les deux destinations Kenya + Sénégal
+  const groupeJeunesData = {
+    type: "groupe_jeunes",
+    title: "Mission de groupe jeunes",
+    country: "Kenya & Sénégal",
+    image_url: "/images/groupe-jeune.jpg",
+    short_description: "Partez en groupe au Kenya ou au Sénégal pour des missions interculturelles et environnementales. Ouvert aux lycées, MJC et structures jeunesse.",
+    is_active: true,
+  }
+
   const missionGroupeJeunes = await prisma.mission.upsert({
     where: { slug: "groupe-jeunes" },
-    update: { type: "groupe_jeunes", title: "Mission de groupe jeunes", image_url: "/images/groupe-jeune.jpg" },
-    create: {
-      type: "groupe_jeunes",
-      title: "Mission de groupe jeunes",
-      country: "Kenya & Sénégal",
-      slug: "groupe-jeunes",
-      image_url: "/images/groupe-jeune.jpg",
-      short_description: "Partez en groupe au Kenya ou au Sénégal pour des missions interculturelles et environnementales. Ouvert aux lycées, MJC et structures jeunesse.",
-      is_active: true,
-    }
+    update: groupeJeunesData,
+    create: { slug: "groupe-jeunes", ...groupeJeunesData },
   })
 
   // ── Mission 9 : Congé solidaire ────────────────────────────
+  const congeSolidaireData = {
+    type: "conge_solidaire",
+    title: "Congé solidaire",
+    country: "Kenya & Sénégal",
+    image_url: "/images/conge-solidaire.jpg",
+    short_description: "Partez en mission individuelle ou en groupe avec votre entreprise au Kenya ou au Sénégal. Mécénat de compétence déductible des impôts.",
+    is_active: true,
+  }
+
   const missionCongeSolidaire = await prisma.mission.upsert({
     where: { slug: "conge-solidaire" },
-    update: { type: "conge_solidaire", title: "Congé solidaire", image_url: "/images/conge-solidaire.jpg" },
-    create: {
-      type: "conge_solidaire",
-      title: "Congé solidaire",
-      country: "Kenya & Sénégal",
-      slug: "conge-solidaire",
-      image_url: "/images/conge-solidaire.jpg",
-      short_description: "Partez en mission individuelle ou en groupe avec votre entreprise au Kenya ou au Sénégal. Mécénat de compétence déductible des impôts.",
-      is_active: true,
-    }
+    update: congeSolidaireData,
+    create: { slug: "conge-solidaire", ...congeSolidaireData },
   })
 
-  console.log(`Missions créées : Kenya, Sénégal, Pérou, Sri Lanka, Sumatra`)
+  console.log("Missions créées : Kenya, Sénégal, Pérou, Sri Lanka, Sumatra, SC Kenya, SC Sénégal, Groupe jeunes, Congé solidaire")
 
   // ============================================================
-  // ÉTAPE 3 — MISSION PRICING (tarifs par durée)
-  // ============================================================
-  // But : créer les lignes de tarif pour chaque mission.
-  //       Ex : Kenya → 10 jours = 1175€ / 2 semaines = 1500€ / etc.
-  //
-  // Structure d'un pricing (cf. schema.prisma) :
-  //   mission_id     → clé étrangère → lie ce tarif à une mission
-  //                    On utilise l'id retourné par upsert() ci-dessus
-  //   duration_label → texte affiché ("10 jours", "2 semaines"...)
-  //   price          → prix en euros (type Decimal dans Prisma)
-  //   display_order  → ordre d'affichage dans le tableau des prix
-  //                    1 = affiché en premier, 2 = deuxième, etc.
-  //
-  // Pourquoi deleteMany + createMany plutôt qu'upsert ?
-  //   MissionPricing n'a PAS de champ @unique dans le schéma.
-  //   upsert nécessite un champ unique pour savoir quoi mettre à jour.
-  //   Sans @unique → on ne peut pas upsert.
-  //   Solution : on supprime tous les pricing des missions concernées,
-  //   puis on les recrée proprement.
-  //   Ne jamais faire ça en production avec de vraies données client !
-  //   En dev c'est safe car ce sont des données de test.
-  //
-  // missionIds : tableau des ids pour cibler uniquement NOS missions
-  //   → évite de supprimer des pricing d'autres missions qui
-  //     auraient pu être créées manuellement dans le dashboard
+  // ÉTAPE 3 — MISSION PRICING
   // ============================================================
 
-  // Tableau des ids de nos 5 missions — utilisé dans les deleteMany
   const missionIds = [
     missionKenya.id,
     missionSenegal.id,
@@ -331,258 +300,238 @@ const seed = async () => {
     missionCongeSolidaire.id
   ]
 
-  // Supprime les anciens pricing pour ces missions (évite les doublons au re-seed)
   await prisma.missionPricing.deleteMany({
-    where: { mission_id: { in: missionIds } } // "in" = supprime pour tous les ids du tableau
+    where: { mission_id: { in: missionIds } }
   })
 
-  // Recrée tous les pricing en une seule requête (plus performant que plusieurs create())
   await prisma.missionPricing.createMany({
     data: [
-      // ── Kenya : 4 durées (10j / 2sem / 3sem / 4sem) ──
+      // ── Kenya : 4 durées ──
       { mission_id: missionKenya.id, duration_label: "10 jours",   price: 1175, display_order: 1 },
       { mission_id: missionKenya.id, duration_label: "2 semaines", price: 1500, display_order: 2 },
       { mission_id: missionKenya.id, duration_label: "3 semaines", price: 2000, display_order: 3 },
       { mission_id: missionKenya.id, duration_label: "4 semaines", price: 2500, display_order: 4 },
 
-      // ── Sénégal : 3 durées (10j / 2sem / 3sem) ──
+      // ── Sénégal : 3 durées ──
       { mission_id: missionSenegal.id, duration_label: "10 jours",   price: 1175, display_order: 1 },
       { mission_id: missionSenegal.id, duration_label: "2 semaines", price: 1500, display_order: 2 },
       { mission_id: missionSenegal.id, duration_label: "3 semaines", price: 2000, display_order: 3 },
 
-      // ── Pérou : 2 durées (2sem / 3sem) ──
+      // ── Pérou : 2 durées ──
       { mission_id: missionPerou.id, duration_label: "2 semaines", price: 1500, display_order: 1 },
       { mission_id: missionPerou.id, duration_label: "3 semaines", price: 2000, display_order: 2 },
 
-      // ── Sri Lanka : 2 durées (10j / 2sem) ──
+      // ── Sri Lanka : 2 durées ──
       { mission_id: missionSriLanka.id, duration_label: "10 jours",   price: 1175, display_order: 1 },
       { mission_id: missionSriLanka.id, duration_label: "2 semaines", price: 1500, display_order: 2 },
 
-      // ── Sumatra : 3 durées (10j / 2sem / 3sem) ──
+      // ── Sumatra : 3 durées ──
       { mission_id: missionSumatra.id, duration_label: "10 jours",   price: 1175, display_order: 1 },
       { mission_id: missionSumatra.id, duration_label: "2 semaines", price: 1500, display_order: 2 },
       { mission_id: missionSumatra.id, duration_label: "3 semaines", price: 2000, display_order: 3 },
 
       // ── Service civique Kenya ──
-      { mission_id: missionScKenya.id, duration_label: "3 mois", price: 0, display_order: 1 },
+      { mission_id: missionScKenya.id, duration_label: "3 mois",  price: 0, display_order: 1 },
       { mission_id: missionScKenya.id, duration_label: "12 mois", price: 0, display_order: 2 },
 
       // ── Service civique Sénégal ──
-      { mission_id: missionScSenegal.id, duration_label: "3 mois", price: 0, display_order: 1 },
+      { mission_id: missionScSenegal.id, duration_label: "3 mois",  price: 0, display_order: 1 },
       { mission_id: missionScSenegal.id, duration_label: "12 mois", price: 0, display_order: 2 },
 
-      // Groupe jeunes
+      // ── Groupe jeunes ──
       { mission_id: missionGroupeJeunes.id, duration_label: "10 jours", price: 0, display_order: 1 },
 
-      // Congé solidaire
+      // ── Congé solidaire ──
       { mission_id: missionCongeSolidaire.id, duration_label: "10 jours à 4 semaines", price: 0, display_order: 1 },
     ]
   })
 
-  console.log("Pricing créé (14 lignes)")
+  console.log("Pricing créé (20 lignes)")
 
-  // ============================================================
-  // ÉTAPE 4 — LOCATIONS (villes de départ des missions ou lieux partenaires)
-  // ============================================================
-  // But : créer la ville associée à chaque mission.
-  //       Affichée sur la page détail mission et sur la carte.
-  //
-  // Structure d'une location (cf. schema.prisma) :
-  //   mission_id  → clé étrangère → une location appartient à UNE mission
-  //   slug        → identifiant URL unique ex: "voi-kenya"
-  //                 → utilisé dans l'URL : /lieux/voi-kenya
-  //   name        → nom de la ville affiché sur le site
-  //   country     → pays (peut être différent du pays de la mission si besoin)
-  //   description → texte de présentation de la ville
-  //   is_active   → true = lieu visible sur le site
-  //
-  // Pourquoi upsert sur le slug ?
-  //   slug est @unique dans le schéma → upsert safe si seed relancé.
-  //   update: {} = si la location existe déjà, on ne la modifie pas.
+// ============================================================
+  // ÉTAPE 4 — LOCATIONS
   // ============================================================
 
-  // ── Location 1 : Voi (Kenya) ───────────────────────────────
+  // ── Voi (Kenya — ville principale) ─────────────────────────
+  const voiData = {
+    name: "Voi",
+    country: "Kenya",
+    description: "Voi est une ville située dans le comté de Taita-Taveta, aux portes du Parc national de Tsavo Est. C'est le point de départ de nos missions de protection de la faune sauvage au Kenya.",
+    image_url: "/images/locations/voi-kenya.jpeg",
+    is_active: true,
+  }
   await prisma.location.upsert({
     where: { slug: "voi-kenya" },
-    update: {},
-    create: {
-      mission_id: missionKenya.id, // liée à la mission Kenya créée juste au-dessus
-      slug: "voi-kenya",
-      name: "Voi",
-      country: "Kenya",
-      description: "Voi est une ville située dans le comté de Taita-Taveta, aux portes du Parc national de Tsavo Est. C'est le point de départ de nos missions de protection de la faune sauvage au Kenya. La région offre une biodiversité exceptionnelle avec lions, éléphants, girafes et une centaine d'espèces d'oiseaux.",
-      is_active: true,
-    }
+    update: voiData,
+    create: { slug: "voi-kenya", mission_id: missionKenya.id, ...voiData },
   })
 
-  // ── Location 2 : Ziguinchor (Sénégal) ─────────────────────
-  await prisma.location.upsert({
-    where: { slug: "ziguinchor-senegal" },
-    update: {},
-    create: {
-      mission_id: missionSenegal.id,
-      slug: "ziguinchor-senegal",
-      name: "Ziguinchor",
-      country: "Sénégal",
-      description: "Ziguinchor est la capitale de la Casamance, région au sud du Sénégal connue pour sa verdure exceptionnelle et sa culture rica. Nos missions de développement communautaire s'y déroulent dans un cadre chaleureux, au contact direct des familles locales.",
-      is_active: true,
-    }
-  })
-
-  // ── Location 3 : Puerto Maldonado (Pérou) ─────────────────
-  await prisma.location.upsert({
-    where: { slug: "puerto-maldonado-perou" },
-    update: {},
-    create: {
-      mission_id: missionPerou.id,
-      slug: "puerto-maldonado-perou",
-      name: "Puerto Maldonado",
-      country: "Pérou",
-      description: "Puerto Maldonado est la capitale de la région de Madre de Dios, aux portes de la Réserve nationale de Tambopata en Amazonie péruvienne. C'est l'un des points d'entrée les plus importants pour la biodiversité amazonienne. Nos missions de protection de la faune s'y déroulent dans un sanctuaire animalier.",
-      is_active: true,
-    }
-  })
-
-  // ── Location 4 : Kegalle (Sri Lanka) ──────────────────────
-  await prisma.location.upsert({
-    where: { slug: "kegalle-sri-lanka" },
-    update: {},
-    create: {
-      mission_id: missionSriLanka.id,
-      slug: "kegalle-sri-lanka",
-      name: "Kegalle",
-      country: "Sri Lanka",
-      description: "Kegalle est une ville de la province de Sabaragamuwa, dans les collines verdoyantes du centre du Sri Lanka. Notre sanctuaire d'éléphants y accueille des éléphants blessés ou orphelins dans un cadre naturel préservé, loin du tourisme de masse.",
-      is_active: true,
-    }
-  })
-
-  // ── Location 5 : Bohorok (Sumatra) ────────────────────────
-  await prisma.location.upsert({
-    where: { slug: "bohorok-sumatra" },
-    update: {},
-    create: {
-      mission_id: missionSumatra.id,
-      slug: "bohorok-sumatra",
-      name: "Bohorok",
-      country: "Indonésie",
-      description: "Bohorok est un village situé à l'orée du Parc national de Gunung Leuser, à Sumatra Nord. Ce parc est l'un des derniers endroits au monde où cohabitent orang-outans, tigres de Sumatra, rhinocéros et éléphants. Nos missions de conservation s'y déroulent en immersion totale dans la forêt tropicale.",
-      is_active: true,
-    }
-  })
-
-  // ── Kenya : 4 lieux partenaires ──────────────────────────────
-
+  // ── LUMO Community Wildlife Conservancy ────────────────────
+  const lumoData = {
+    name: "LUMO Community Wildlife Conservancy",
+    country: "Kenya",
+    description: "LUMO a vu le jour en 1997, d'un protocole d'entente entre trois ranchs de la zone des Taita Hills afin de lutter contre le braconnage et de protéger la diversité biologique kényane. Lumo fait partie du corridor historique de migration des éléphants reliant l'écosystème Tsavo aux collines de Shimba.",
+    image_url: "/images/locations/LUMO-kenya.jpeg",
+    is_active: true,
+  }
   await prisma.location.upsert({
     where: { slug: "lumo-kenya" },
-    update: {},
-    create: {
-      mission_id: missionKenya.id,
-      slug: "lumo-kenya",
-      name: "LUMO Community Wildlife Conservancy",
-      country: "Kenya",
-      description: "LUMO a vu le jour en 1997, d'un protocole d'entente entre trois ranchs de la zone des Taita Hills afin de lutter contre le braconnage et de protéger la diversité biologique kényane. Lumo fait partie du corridor historique de migration des éléphants reliant l'écosystème Tsavo aux collines de Shimba. Le sanctuaire aborde une démarche d'ensemble afin de protéger l'environnement et ses peuples : amélioration des conditions de vie des communautés locales, adaptation au changement climatique. Les rangers ainsi que l'administration sont issus de la communauté des villageois.",
-      is_active: true,
-    }
+    update: lumoData,
+    create: { slug: "lumo-kenya", mission_id: missionKenya.id, ...lumoData },
   })
 
+  // ── Taita Taveta National Polytechnic ──────────────────────
+  const ttnpData = {
+    name: "Taita Taveta National Polytechnic",
+    country: "Kenya",
+    description: "Établissement d'enseignement supérieur de la ville de Voi, aux portes du Parc Tsavo. Cette université possède un pôle dédié au tourisme avec lequel nous travaillons particulièrement. Le campus est très engagé pour la biodiversité et possède sa propre pépinière.",
+    image_url: "/images/locations/TTNP-kenya.jpeg",
+    is_active: true,
+  }
   await prisma.location.upsert({
     where: { slug: "ttnp-kenya" },
-    update: {},
-    create: {
-      mission_id: missionKenya.id,
-      slug: "ttnp-kenya",
-      name: "Taita Taveta National Polytechnic",
-      country: "Kenya",
-      description: "Établissement d'enseignement supérieur de la ville de Voi, aux portes du Parc Tsavo. Cette université possède un pôle dédié au tourisme avec lequel nous travaillons particulièrement. Le campus est très engagé pour la biodiversité, possède sa propre pépinière. Sens Solidaires, en partenariat avec le Ministère des affaires étrangères français, a mis en lien les étudiants avec le Sanctuaire de Lumo pour travailler sur un projet de préservation de la biodiversité.",
-      is_active: true,
-    }
+    update: ttnpData,
+    create: { slug: "ttnp-kenya", mission_id: missionKenya.id, ...ttnpData },
   })
 
+  // ── Elsa Conservation Trust ────────────────────────────────
+  const ectData = {
+    name: "Elsa Conservation Trust",
+    country: "Kenya",
+    description: "La Elsa Conservation Trust a fait don de millions de dollars à des projets de conservation de la vie sauvage, aidant à créer les parcs kenyans de Meru, Samburu, Shaba, Kora et Hells Gate. Le centre offre un environnement propice à la recherche ornithologique avec 450 espèces d'oiseaux recensées.",
+    image_url: "/images/locations/ECT-kenya.jpeg",
+    is_active: true,
+  }
   await prisma.location.upsert({
     where: { slug: "elsa-conservation-trust-kenya" },
-    update: {},
-    create: {
-      mission_id: missionKenya.id,
-      slug: "elsa-conservation-trust-kenya",
-      name: "Elsa Conservation Trust",
-      country: "Kenya",
-      description: "La Elsa Conservation Trust a fait don de millions de dollars à des projets de conservation de la vie sauvage, aidant à créer les parcs et réserves kenyans de Meru, Samburu, Shaba, Kora et Hells Gate. Ses activités principales sont le Birds Rescue Center, le monitoring des animaux sauvages et l'éducation auprès des jeunes. Le centre offre un environnement propice à la recherche ornithologique avec 450 espèces d'oiseaux recensées sur le lac Naivasha.",
-      is_active: true,
-    }
+    update: ectData,
+    create: { slug: "elsa-conservation-trust-kenya", mission_id: missionKenya.id, ...ectData },
   })
 
+  // ── Diani Turtle Watch ─────────────────────────────────────
+  const dtwData = {
+    name: "Diani Turtle Watch",
+    country: "Kenya",
+    description: "Diani Turtle Watch, créé en 2012, travaille avec une équipe de 14 observateurs couvrant 50 km sur la côte sud du Kenya. Les principales espèces suivies sont les tortues vertes et les tortues imbriquées. Il sensibilise les communautés locales, les écoles et les touristes aux espèces menacées.",
+    image_url: "/images/locations/DTW-kenya.jpg",
+    is_active: true,
+  }
   await prisma.location.upsert({
     where: { slug: "diani-turtle-watch-kenya" },
-    update: {},
-    create: {
-      mission_id: missionKenya.id,
-      slug: "diani-turtle-watch-kenya",
-      name: "Diani Turtle Watch",
-      country: "Kenya",
-      description: "Diani Turtle Watch, créé en 2012, travaille avec une équipe de 14 observateurs couvrant 50 km sur la côte sud du Kenya. Les principales espèces suivies sont les tortues vertes (Chelonia mydas) et les tortues imbriquées (Eretmochelys imbricata). Basé au Centre d'éducation marine du Sands at Nomad Resort, il sensibilise les communautés locales, les écoles et les touristes aux espèces menacées.",
-      is_active: true,
-    }
+    update: dtwData,
+    create: { slug: "diani-turtle-watch-kenya", mission_id: missionKenya.id, ...dtwData },
   })
 
-  // ── Sri Lanka : 1 lieu partenaire ────────────────────────────
-
+  // ── Ziguinchor (Sénégal) ───────────────────────────────────
+  const ziguinchorData = {
+    name: "Ziguinchor",
+    country: "Sénégal",
+    description: "Ziguinchor est la capitale de la Casamance, région au sud du Sénégal connue pour sa verdure exceptionnelle et sa culture riche. Nos missions de développement communautaire s'y déroulent dans un cadre chaleureux, au contact direct des familles locales.",
+    image_url: "/images/locations/ziguinchor-senegal.jpg",
+    is_active: true,
+  }
   await prisma.location.upsert({
-    where: { slug: "mef-sri-lanka" },
-    update: {},
-    create: {
-      mission_id: missionSriLanka.id,
-      slug: "mef-sri-lanka",
-      name: "Millenium Elephant Foundation",
-      country: "Sri Lanka",
-      description: "La Millenium Elephant Foundation (MEF) créée en 1999 à Kegalle a pour objectif la protection des éléphants sauvages et domestiques du Sri Lanka. Les éléphants malades et maltraités y sont accueillis. Plus de 60 éléphants ont pu y être hébergés. L'objectif du Sri Lanka est de laisser les éléphants domestiqués en liberté, réduisant progressivement leur nombre.",
-      is_active: true,
-    }
+    where: { slug: "ziguinchor-senegal" },
+    update: ziguinchorData,
+    create: { slug: "ziguinchor-senegal", mission_id: missionSenegal.id, ...ziguinchorData },
   })
 
-  // ── Pérou : 1 lieu partenaire ────────────────────────────────
-
-  await prisma.location.upsert({
-    where: { slug: "amazon-shelter-perou" },
-    update: {},
-    create: {
-      mission_id: missionPerou.id,
-      slug: "amazon-shelter-perou",
-      name: "Amazon Shelter",
-      country: "Pérou",
-      description: "Le centre de réhabilitation Amazon Shelter, proche de Puerto Maldonado, est axé sur la conservation des singes laineux et d'atèles. Les communautés locales sont sensibilisées à la préservation de la forêt primaire amazonienne. Amazon Shelter poursuit un travail de plantation d'espèces sauvages menacées sur 90 hectares : cèdres blancs, acajous, fruitiers sauvages et palmiers.",
-      is_active: true,
-    }
-  })
-
-  // ── Sumatra : 1 lieu partenaire  ──────────────────────────────
-
-  await prisma.location.upsert({
-    where: { slug: "batu-kapal-sumatra" },
-    update: {},
-    create: {
-      mission_id: missionSumatra.id,
-      slug: "batu-kapal-sumatra",
-      name: "Batu Kapal Conservation",
-      country: "Indonésie",
-      description: "Le sanctuaire de Batu Kapal se trouve au cœur de la forêt qui surplombe le parc national Gunung Leuser, classé au patrimoine mondial de l'UNESCO. Il accueille des visites fréquentes d'orangs-outans, espèce en danger critique dont la population a diminué de 86% en 100 ans. Sumatra est le dernier habitat naturel de l'orang-outan en Indonésie.",
-      is_active: true,
-    }
-  })
-
-  // ── Sénégal : 1 lieu partenaire  ──────────────────────────────
-
+  // ── ONG AGADA (Sénégal) ────────────────────────────────────
+  const agadaData = {
+    name: "ONG AGADA",
+    country: "Sénégal",
+    description: "AGADA (Agir Autrement pour le Développement en Afrique), basée à Ziguinchor en Casamance, œuvre pour le développement d'activités économiques locales. Investie depuis plus de 30 ans, elle soutient le reboisement de la mangrove, l'agriculture durable et la protection d'espèces patrimoniales comme le lamantin.",
+    image_url: "/images/locations/agada-senegal.jpg",
+    is_active: true,
+  }
   await prisma.location.upsert({
     where: { slug: "agada-senegal" },
-    update: {},
-    create: {
-      mission_id: missionSenegal.id,
-      slug: "agada-senegal",
-      name: "ONG AGADA",
-      country: "Sénégal",
-      description: "AGADA (Agir Autrement pour le Développement en Afrique), basée à Ziguinchor en Casamance, œuvre pour le développement d'activités économiques locales et la réduction de l'insécurité alimentaire. Investie depuis plus de 30 ans dans l'accompagnement des groupements de femmes par l'agroécologie, elle soutient le reboisement de la mangrove, l'agriculture durable et la protection d'espèces patrimoniales comme le lamantin.",
-      is_active: true,
-    }
+    update: agadaData,
+    create: { slug: "agada-senegal", mission_id: missionSenegal.id, ...agadaData },
+  })
+
+  // ── Puerto Maldonado (Pérou) ───────────────────────────────
+  const puertoData = {
+    name: "Puerto Maldonado",
+    country: "Pérou",
+    description: "Puerto Maldonado est la capitale de la région de Madre de Dios, aux portes de la Réserve nationale de Tambopata en Amazonie péruvienne. C'est l'un des points d'entrée les plus importants pour la biodiversité amazonienne.",
+    image_url: "/images/locations/puerto-maldonado-perou.jpg",
+    is_active: true,
+  }
+  await prisma.location.upsert({
+    where: { slug: "puerto-maldonado-perou" },
+    update: puertoData,
+    create: { slug: "puerto-maldonado-perou", mission_id: missionPerou.id, ...puertoData },
+  })
+
+  // ── Amazon Shelter (Pérou) ─────────────────────────────────
+  const amazonData = {
+    name: "Amazon Shelter",
+    country: "Pérou",
+    description: "Le centre de réhabilitation Amazon Shelter, proche de Puerto Maldonado, est axé sur la conservation des singes laineux et d'atèles. Amazon Shelter poursuit un travail de plantation d'espèces sauvages menacées sur 90 hectares : cèdres blancs, acajous, fruitiers sauvages et palmiers.",
+    image_url: "/images/locations/amazon-shelter-perou.jpg",
+    is_active: true,
+  }
+  await prisma.location.upsert({
+    where: { slug: "amazon-shelter-perou" },
+    update: amazonData,
+    create: { slug: "amazon-shelter-perou", mission_id: missionPerou.id, ...amazonData },
+  })
+
+  // ── Kegalle (Sri Lanka) ────────────────────────────────────
+  const kegalleData = {
+    name: "Kegalle",
+    country: "Sri Lanka",
+    description: "Kegalle est une ville de la province de Sabaragamuwa, dans les collines verdoyantes du centre du Sri Lanka. Notre sanctuaire d'éléphants y accueille des éléphants blessés ou orphelins dans un cadre naturel préservé, loin du tourisme de masse.",
+    image_url: "/images/locations/kegalle-sri-lanka.jpg",
+    is_active: true,
+  }
+  await prisma.location.upsert({
+    where: { slug: "kegalle-sri-lanka" },
+    update: kegalleData,
+    create: { slug: "kegalle-sri-lanka", mission_id: missionSriLanka.id, ...kegalleData },
+  })
+
+  // ── Millenium Elephant Foundation (Sri Lanka) ──────────────
+  const mefData = {
+    name: "Millenium Elephant Foundation",
+    country: "Sri Lanka",
+    description: "La Millenium Elephant Foundation (MEF) créée en 1999 à Kegalle a pour objectif la protection des éléphants sauvages et domestiques du Sri Lanka. Les éléphants malades et maltraités y sont accueillis. Plus de 60 éléphants ont pu y être hébergés.",
+    image_url: "/images/locations/mef-sri-lanka.jpg",
+    is_active: true,
+  }
+  await prisma.location.upsert({
+    where: { slug: "mef-sri-lanka" },
+    update: mefData,
+    create: { slug: "mef-sri-lanka", mission_id: missionSriLanka.id, ...mefData },
+  })
+
+  // ── Bohorok (Sumatra) ──────────────────────────────────────
+  const bohorokData = {
+    name: "Bohorok",
+    country: "Indonésie",
+    description: "Bohorok est un village situé à l'orée du Parc national de Gunung Leuser, à Sumatra Nord. Ce parc est l'un des derniers endroits au monde où cohabitent orang-outans, tigres de Sumatra, rhinocéros et éléphants.",
+    image_url: "/images/locations/bohorok-sumatra.jpg",
+    is_active: true,
+  }
+  await prisma.location.upsert({
+    where: { slug: "bohorok-sumatra" },
+    update: bohorokData,
+    create: { slug: "bohorok-sumatra", mission_id: missionSumatra.id, ...bohorokData },
+  })
+
+  // ── Batu Kapal Conservation (Sumatra) ─────────────────────
+  const batuKapalData = {
+    name: "Batu Kapal Conservation",
+    country: "Indonésie",
+    description: "Le sanctuaire de Batu Kapal se trouve au cœur de la forêt qui surplombe le parc national Gunung Leuser, classé au patrimoine mondial de l'UNESCO. Il accueille des visites fréquentes d'orangs-outans, espèce en danger critique dont la population a diminué de 86% en 100 ans.",
+    image_url: "/images/locations/batu-kapal-sumatra.jpg",
+    is_active: true,
+  }
+  await prisma.location.upsert({
+    where: { slug: "batu-kapal-sumatra" },
+    update: batuKapalData,
+    create: { slug: "batu-kapal-sumatra", mission_id: missionSumatra.id, ...batuKapalData },
   })
 
   console.log("Locations créées (13)")
@@ -590,62 +539,32 @@ const seed = async () => {
   // ============================================================
   // ÉTAPE 5 — TÉMOIGNAGES
   // ============================================================
-  // But : créer des témoignages réalistes pour tester :
-  //   - l'affichage sur la page /temoignages (status = "approved")
-  //   - le carousel de la page d'accueil (show_homepage = true)
-  //   - la modération dans le dashboard admin (status = "pending")
-  //
-  // Structure d'un témoignage (cf. schema.prisma) :
-  //   mission_id    → mission concernée (optionnel, peut être null)
-  //   author_name   → prénom + initiale du nom (anonymisation partielle)
-  //   content       → texte du témoignage
-  //   status        → "pending" = en attente de modération
-  //                   "approved" = validé, visible sur le site
-  //                   "rejected" = refusé, non affiché
-  //   show_homepage → true = apparaît dans le carousel de l'accueil
-  //                   Règle métier : ne peut être true que si status = "approved"
-  //   consent_given → true = le bénévole a coché la case RGPD
-  //                   Ne jamais afficher un témoignage sans consent_given = true
-  //
-  // Pourquoi deleteMany + createMany ?
-  //   Testimonial n'a pas de champ @unique → upsert impossible.
-  //   On supprime d'abord les témoignages liés à nos missions,
-  //   puis on les recrée. Safe en dev uniquement.
-  // ============================================================
 
-  // Supprime les témoignages liés à nos missions
   await prisma.testimonial.deleteMany({
     where: { mission_id: { in: missionIds } }
   })
-
-  // Supprime aussi le témoignage sans mission (le "pending" de test)
   await prisma.testimonial.deleteMany({
     where: { mission_id: null }
   })
 
   await prisma.testimonial.createMany({
     data: [
-      // ── Témoignage 1 : Kenya — approuvé, visible en accueil ──
       {
         mission_id: missionKenya.id,
         author_name: "Sophie M.",
         content: "Une expérience qui a changé ma façon de voir le monde. Travailler avec les rangers du Kenya, observer les animaux à l'aube, comprendre les enjeux de conservation... Je reviendrai sans hésiter.",
-        status: "approved",       // validé par l'admin → visible sur /temoignages
-        show_homepage: true,      // apparaît dans le carousel de l'accueil
-        consent_given: true,      // RGPD : consentement donné
+        status: "approved",
+        show_homepage: true,
+        consent_given: true,
       },
-
-      // ── Témoignage 2 : Kenya — approuvé, page témoignages seulement ──
       {
         mission_id: missionKenya.id,
         author_name: "Thomas R.",
         content: "Partir seul en Afrique pour la première fois, j'avais des appréhensions. L'équipe sur place a été incroyable. L'organisation était au top et je me suis senti utile dès le premier jour.",
         status: "approved",
-        show_homepage: false,     // visible sur /temoignages mais PAS sur l'accueil
+        show_homepage: false,
         consent_given: true,
       },
-
-      // ── Témoignage 3 : Sri Lanka — approuvé, visible en accueil ──
       {
         mission_id: missionSriLanka.id,
         author_name: "Léa D.",
@@ -654,8 +573,6 @@ const seed = async () => {
         show_homepage: true,
         consent_given: true,
       },
-
-      // ── Témoignage 4 : Sumatra — approuvé, visible en accueil ──
       {
         mission_id: missionSumatra.id,
         author_name: "Jules P.",
@@ -664,8 +581,6 @@ const seed = async () => {
         show_homepage: true,
         consent_given: true,
       },
-
-      // ── Témoignage 5 : Pérou — approuvé, visible en accueil ──
       {
         mission_id: missionPerou.id,
         author_name: "Camille V.",
@@ -674,8 +589,6 @@ const seed = async () => {
         show_homepage: true,
         consent_given: true,
       },
-
-      // ── Témoignage 6 : Sénégal — approuvé, page témoignages seulement ──
       {
         mission_id: missionSenegal.id,
         author_name: "Antoine B.",
@@ -684,18 +597,13 @@ const seed = async () => {
         show_homepage: false,
         consent_given: true,
       },
-
-      // ── Témoignage 7 : PENDING — pour tester la modération dashboard ──
-      // mission_id: null → témoignage soumis sans préciser la mission
-      // status: "pending" → apparaîtra dans la liste de modération du dashboard
-      // show_homepage: false → jamais affiché publiquement tant que pas approuvé
       {
         mission_id: null,
         author_name: "Marie C.",
         content: "Je reviens d'une mission de 2 semaines et je voulais partager mon expérience. L'organisation était très professionnelle et les familles d'accueil formidables. Je recommande à 100%.",
-        status: "pending",        // en attente → l'admin doit approuver ou rejeter
+        status: "pending",
         show_homepage: false,
-        consent_given: true,      // RGPD respecté même pour un pending
+        consent_given: true,
       },
     ]
   })
@@ -703,39 +611,25 @@ const seed = async () => {
   console.log("Témoignages créés (7 : 6 approved, 1 pending)")
 
   // ============================================================
-  // RÉCAP FINAL — affiché dans le terminal après le seed
+  // RÉCAP FINAL
   // ============================================================
   console.log("")
   console.log("Seed terminé avec succès !")
   console.log("─────────────────────────────────────────")
   console.log(`Admin      : admin@sensolidaire.org`)
   console.log(`Password   : Admin1234!`)
-  console.log(`Missions   : 9 (Kenya, Sénégal, Pérou, Sri Lanka, Sumatra, SC Kenya, SC Sénégal, Groupe jeunes, Congé solidaire)`)
+  console.log(`Missions   : 9`)
   console.log(`Pricing    : 20 lignes`)
-  console.log(`Locations  : 13 (Voi, Ziguinchor, Puerto Maldonado, Kegalle, Bohorok, LUMO, TTNP, Elsa, DTW, MEF, Amazon Shelter, Batu Kapal, AGADA)`)
+  console.log(`Locations  : 13`)
   console.log(`Témoignages: 7 (6 approved, 1 pending)`)
   console.log("─────────────────────────────────────────")
   console.log("Changer le mot de passe admin AVANT la mise en production !")
 }
 
-// ============================================================
-// EXÉCUTION DU SEED
-// ============================================================
-// On appelle seed() et on gère deux cas :
-//
-// .catch() → si une erreur Prisma survient (connexion échouée,
-//            contrainte violée, etc.), on l'affiche et on quitte
-//            avec le code 1 (= erreur) pour signaler l'échec
-//            au terminal / CI/CD
-//
-// .finally() → s'exécute TOUJOURS, qu'il y ait eu erreur ou non
-//              prisma.$disconnect() ferme la connexion à PostgreSQL
-//              Sans ça, le process Node reste ouvert indéfiniment
-// ============================================================
 seed()
   .catch((error) => {
     console.error("Erreur seed :", error)
-    process.exit(1) // code de sortie 1 = échec (0 = succès)
+    process.exit(1)
   })
   .finally(async () => {
     await prisma.$disconnect()

@@ -7,7 +7,7 @@ import { IoIosPin } from 'react-icons/io'
 import { FiClock } from 'react-icons/fi'
 import { BiCoinStack } from 'react-icons/bi'
 import { GiFrance } from 'react-icons/gi'
-import { FaPlaneDeparture, FaHandHoldingHeart, FaEnvelope, FaYoutube, FaLinkedin, FaInstagram, FaFacebook, FaMapMarkerAlt, FaCreditCard, FaFileContract, FaBook, FaFileAlt } from 'react-icons/fa'
+import { FaPlaneDeparture, FaHandHoldingHeart, FaEnvelope, FaYoutube, FaLinkedin, FaInstagram, FaFacebook, FaMapMarkerAlt, FaCreditCard, FaFileContract, FaBook, FaFileAlt, FaRegCheckCircle, FaRegTimesCircle} from 'react-icons/fa'
 
 // Icônes génériques — utilisées sur tout le site
 export const IconPerson = IoPerson       // âge, profil
@@ -35,3 +35,7 @@ export const IconPayment = FaCreditCard      // payer
 export const IconContract = FaFileContract  // signer la convention
 export const IconGuide = FaBook             // conseils pratiques
 export const IconFileMission = FaFileAlt    // fiche mission
+
+// Icônes Inclus / non inclus - page détail mission
+export const IconCheck = FaRegCheckCircle
+export const IconTimes = FaRegTimesCircle

@@ -105,7 +105,7 @@ function LoginAdmin() {
           {/* Se souvenir de moi */}
           <div className="flex items-center gap-2">
             <input type="checkbox" id="remember" className="accent-primary" />
-            <label htmlFor="remember" className="font-body text-sm text-primary/70">Se souvenir de moi</label>
+            <label htmlFor="remember" className="font-body text-sm text-primary/60">Se souvenir de moi</label>
           </div>
 
           {/* Bouton */}
@@ -125,7 +125,7 @@ function LoginAdmin() {
         </div>
 
         {/* Footer légal */}
-        <p className="font-body text-primary/50 text-xs mt-12">© Sens Solidaires</p>
+        <p className="font-body text-primary/60 text-xs mt-12">© Sens Solidaires</p>
 
       </div>
     </div>
