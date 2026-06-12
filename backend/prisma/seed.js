@@ -51,7 +51,7 @@ const seed = async () => {
   // ── Mission 1 : Kenya ──────────────────────────────────────
   const kenyaData = {
     type: "volontariat_individuel",
-    title: "Programme de volontariat au Kenya",
+    title: "Mission de volontariat au Kenya",
     country: "Kenya",
     image_url: "/images/kenya.jpg",
     short_description: "Patrouilles avec les rangers, recensement de la faune et échanges interculturels avec les élèves kényans.",
@@ -85,7 +85,7 @@ const seed = async () => {
   // ── Mission 2 : Sénégal ────────────────────────────────────
   const senegalData = {
     type: "volontariat_individuel",
-    title: "Programme de volontariat au Sénégal",
+    title: "Mission de volontariat au Sénégal",
     country: "Sénégal",
     image_url: "/images/senegal.jpg",
     short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.",
@@ -119,7 +119,7 @@ const seed = async () => {
   // ── Mission 3 : Pérou ──────────────────────────────────────
   const perouData = {
     type: "volontariat_individuel",
-    title: "Programme de volontariat au Pérou",
+    title: "Mission de volontariat au Pérou",
     country: "Pérou",
     image_url: "/images/perou.jpg",
     short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l'Amazonie.",
@@ -153,7 +153,7 @@ const seed = async () => {
   // ── Mission 4 : Sri Lanka ──────────────────────────────────
   const sriLankaData = {
     type: "volontariat_individuel",
-    title: "Programme de volontariat au Sri Lanka",
+    title: "Mission de volontariat au Sri Lanka",
     country: "Sri Lanka",
     image_url: "/images/srilanka.jpg",
     short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.",
@@ -187,7 +187,7 @@ const seed = async () => {
   // ── Mission 5 : Sumatra ────────────────────────────────────
   const sumatraData = {
     type: "volontariat_individuel",
-    title: "Programme de volontariat à Sumatra",
+    title: "Mission de volontariat à Sumatra",
     country: "Sumatra",
     image_url: "/images/sumatra.jpg",
     short_description: "Cartographie des habitats d'orang-outans et création de corridors forestiers pour protéger la biodiversité.",

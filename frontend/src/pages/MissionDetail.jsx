@@ -11,6 +11,7 @@ import Button from '../components/ui/Button'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import LocationCard from '../components/locations/LocationCard'
 import SectionHero from '../components/ui/SectionHero'
+import AnchorNav from '../components/navigation/AnchorNav'
 import { IconClock, IconPin, IconMoney, IconFlight, IconContact, IconBooking, IconPayment, IconContract, IconGuide, IconFileMission, IconCheck, IconTimes, } from '../utils/icons'
 
 // Icônes et labels fixes pour la section "Comment partir"
@@ -55,9 +56,23 @@ function MissionDetail() {
         price={mission.pricing?.sort((a, b) => a.display_order - b.display_order)[0]?.price || null}
       />
 
+      <AnchorNav
+        variant="dark"
+        sections={[
+          { label: "La mission", id: "description" },
+          { label: "Rôle & Programme", id: "role-programme" },
+          { label: "Lieux partenaires", id: "lieux" },
+          { label: "Impact terrain", id: "impact" },
+          { label: "Coût & durée", id: "cout" },
+          { label: "Comment partir", id: "comment-partir" },
+          { label: "Infos pratiques", id: "infos-pratiques" },
+          { label: "Témoignages", id: "temoignages" },
+          { label: "Galerie", id: "galerie" },
+        ]} />
+
       {/* ── Description + accroche + rôle + image ── */}
       {mission.description && (
-        <section className="section-padding bg-surface-mid">
+        <section id="description" className="section-padding bg-surface-mid">
           <h2 className="section-title text-primary mb-4">{mission.title}</h2>
           <div className="flex gap-12 items-start">
 
@@ -91,7 +106,7 @@ function MissionDetail() {
 
       {/* ── Rôle + Programme côte à côte ── */}
       {(mission.volunteer_role || mission.programme) && (
-        <section className="section-padding bg-surface">
+        <section id="role-programme" className="section-padding bg-surface">
           <div className="flex gap-12 items-start">
 
             {/* Rôle du volontaire — 2/5 */}
@@ -137,8 +152,9 @@ function MissionDetail() {
         </section>
       )}
 
+    {/* ── Lieux ── */}
     {mission.location?.length > 0 && (
-      <section className="section-padding bg-surface-mid">
+      <section id="lieux" className="section-padding bg-surface-mid">
         <div className="flex items-end justify-between gap-12 mb-6">
           <div>
             <h2 className="section-title text-primary mb-2">Nos lieux partenaires</h2>
@@ -160,7 +176,7 @@ function MissionDetail() {
     )}
 
       {/* ── Actions terrain ── */}
-      <section className="section-padding bg-surface">
+      <section id="impact" className="section-padding bg-surface">
 
         {/* En-tête */}
         <div className="flex items-start justify-between mb-8">
@@ -194,7 +210,7 @@ function MissionDetail() {
 
       {/* cout / durée */}
       {mission.pricing?.length > 0 && (
-        <section className="section-padding bg-surface-mid">
+        <section id="cout" className="section-padding bg-surface-mid">
           <h2 className="section-title text-primary mb-4">Durée du séjour & participation</h2>
           <p className="font-body text-sm text-primary/60 mb-8">
             Choisissez la durée de séjour qui correspond le mieux à vos disponibilités et à votre projet d'engagement. Les frais de mission contribuent directement à l'organisation du séjour, à l'encadrement des volontaires et au soutien des actions menées sur le terrain.
@@ -310,7 +326,7 @@ function MissionDetail() {
 
       {/* ── Comment partir ── */}
       {howToGoSteps.length > 0 && (
-        <section className="section-padding bg-surface">
+        <section id="comment-partir" className="section-padding bg-surface">
           <h2 className="section-title text-primary mb-4">Comment partir ?</h2>
           <p className="font-body text-sm text-primary/60 mb-8">
             Nous accueillons des volontaires toute l'année. Ensemble, nous définissons la période de départ la plus adaptée à votre projet, à vos disponibilités et aux besoins de nos partenaires sur le terrain.
@@ -346,7 +362,7 @@ function MissionDetail() {
 
       {/* ── Infos pratiques ── */}
       {(mission.health_info || mission.admin_info) && (
-        <section className="section-padding bg-surface-mid">
+        <section id="infos-pratiques" className="section-padding bg-surface-mid">
           <h2 className="section-title text-primary mb-4">Préparer votre départ</h2>
           <p className="font-body text-sm text-primary/60 mb-8">Pour vivre cette expérience dans les meilleures conditions, prenez le temps de préparer votre départ grâce à nos recommandations et informations pratiques</p>
           <div className="flex gap-8">
@@ -395,7 +411,7 @@ function MissionDetail() {
 
       {/* ── Témoignages ── */}
       {mission.testimonials?.length > 0 && (
-        <section className="section-padding bg-accent-2">
+        <section id="temoignages" className="section-padding bg-accent-2">
           <h2 className="section-title text-surface mb-4">Ils ont vécu l'aventure, découvrez leurs témoignages</h2>
           <p className="font-body text-sm text-surface/60 mb-8">Chaque mission est une expérience unique. Découvrez les récits de volontaires partis avant vous, leurs rencontres, leurs découvertes et l'impact de leur engagement sur le terrain.</p>
           <Carousel
@@ -410,7 +426,7 @@ function MissionDetail() {
       )}
 
       {/* ── Galerie photos ── */}
-      <section className="section-padding bg-surface-mid">
+      <section id="galerie" className="section-padding bg-surface-mid">
         <h2 className="section-title text-primary mb-4">Plongez dans l'aventure</h2>
         <p className="font-body text-sm text-primary/60 mb-8">Explorez la mission à travers les images de nos volontaires et découvrez l'environnement, les projets et les expériences qui vous attendent sur le terrain.</p>
         {/* TODO V2 : remplacer par GET /api/media?entity_type=mission&entity_id=:id&file_type=image */}
