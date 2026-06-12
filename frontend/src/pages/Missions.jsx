@@ -109,7 +109,7 @@ function Missions() {
       {/* ── Section Service Civique ── */}
       <section className="section-padding bg-surface-mid">
         <SectionHero
-          title="S'engager en Service Civique"
+          title="Effectuer un service civique"
           audience="Pour les 16 à 25 ans"
           description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
           image="/images/one-line-2.png"
@@ -302,7 +302,7 @@ function Missions() {
       {/* ── Section Congé solidaire ── */}
       <section className="section-padding bg-surface-mid">
         <SectionHero
-          title="Partir en Congé Solidaire"
+          title="S'engager en entreprise"
           audience="Pour les salariés et les entreprises"
           description="Mettez vos compétences au service de projets solidaires tout en conciliant engagement citoyen et vie professionnelle."
           image="/images/one-line-4.png"
