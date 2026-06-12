@@ -10,6 +10,7 @@ import Carousel from '../components/ui/Carousel'
 import Button from '../components/ui/Button'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import LocationCard from '../components/locations/LocationCard'
+import SectionHero from '../components/ui/SectionHero'
 import { IconClock, IconPin, IconMoney, IconFlight, IconContact, IconBooking, IconPayment, IconContract, IconGuide, IconFileMission, IconCheck, IconTimes, } from '../utils/icons'
 
 // Icônes et labels fixes pour la section "Comment partir"
@@ -57,7 +58,7 @@ function MissionDetail() {
       {/* ── Description + accroche + rôle + image ── */}
       {mission.description && (
         <section className="section-padding bg-surface-mid">
-          <h2 className="section-title text-primary mb-4">Une mission au cœur de la biodiversité kényane</h2>
+          <h2 className="section-title text-primary mb-4">{mission.title}</h2>
           <div className="flex gap-12 items-start">
 
             {/* 2/3 texte */}
@@ -136,11 +137,17 @@ function MissionDetail() {
         </section>
       )}
 
-      {/* Locations */}
-      {mission.location?.length > 0 && (
+    {mission.location?.length > 0 && (
       <section className="section-padding bg-surface-mid">
-        <h2 className="section-title text-primary mb-4">Nos lieux partenaires</h2>
-        <p className="font-body text-sm text-primary/60 mb-8">Nos partenaires locaux sont au cœur de chaque mission. Engagés dans la protection de la biodiversité et le développement des communautés, ils accueillent les volontaires et les accompagnent tout au long de leur expérience sur le terrain.</p>
+        <div className="flex items-end justify-between gap-12 mb-6">
+          <div>
+            <h2 className="section-title text-primary mb-2">Nos lieux partenaires</h2>
+            <p className="font-body text-sm text-primary/60 mb-8">Nos partenaires locaux sont au cœur de chaque mission. Engagés dans la protection de la biodiversité et le développement des communautés, ils accueillent les volontaires et les accompagnent tout au long de leur expérience sur le terrain.</p>
+          </div>
+          <div className="w-1/4 shrink-0">
+            <img src="/images/one-line-3.png" alt="" aria-hidden="true" className="w-full object-contain max-h-40" />
+          </div>
+        </div>
         <Carousel
           items={mission.location}
           slidesPerView={3}
@@ -306,7 +313,7 @@ function MissionDetail() {
         <section className="section-padding bg-surface">
           <h2 className="section-title text-primary mb-4">Comment partir ?</h2>
           <p className="font-body text-sm text-primary/60 mb-8">
-            Les départs sont ouverts toute l'année — vous choisissez vos dates.
+            Nous accueillons des volontaires toute l'année. Ensemble, nous définissons la période de départ la plus adaptée à votre projet, à vos disponibilités et aux besoins de nos partenaires sur le terrain.
           </p>
           <div className="flex items-start gap-2">
             {howToGoSteps.map((step, i) => {

@@ -59,7 +59,7 @@ const seed = async () => {
     volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Patrouilles avec les rangers et participation aux actions de conservation de la biodiversité.</li><li>Recensement de la faune sauvage et des espèces d'oiseaux.</li><li>Entretien des équipements et appui aux projets environnementaux.</li><li>Mise en place et suivi des correspondances scolaires entre la France et le Kenya.</li><li>Accompagnement des élèves et étudiants dans leurs projets éducatifs et interculturels.</li><li>Partage de compétences selon votre expérience : informatique, gestion de projet, tourisme solidaire, hôtellerie, restauration, communication, etc.</li><li>Soutien aux initiatives locales de développement durable, d'agroécologie et d'entrepreneuriat.</li></ul>",
     programme: "Jour 1 : Transfert depuis l'aéroport, déjeuner, installation, briefing et orientation avant le dîner.\nJour 2 : Formation sur l'observation de la faune, recommandations sécurité, rencontre avec le référent rangers et le chargé des projets biodiversité, présentation de la communauté locale.\nJours 3-6 : Programme des volontaires : 4 jours enrichissants en participant aux projets de développement.\nWeek-end : Quartier libre — visite des Sanctuaires, Parc Tsavo, Hell's Gate, Lac Naivasha, Parc Amboseli ou côte océanienne de Mombasa.\nJours 9-13 : Finalisation du programme de développement avec les communautés.\nJour 14 : Séparation avec la communauté et transfert vers l'aéroport.",
     included: "Les frais de mission comprennent l'hébergement, la restauration, les déplacements sur place ainsi que l'encadrement par nos équipes et partenaires locaux.",
-    not_include: "Les frais de mission ne comprennent pas l'adhésion à l'association (25 €), les billets d'avion (environ 700 €, avec option annulation fortement recommandée), l'assurance voyage, les frais de visa (32 €), ainsi que les éventuels vaccins et frais de pharmacie et les activités du week-end et les déplacements personnels hors programme.",
+    not_include: "Les frais de mission ne comprennent pas l'adhésion à l'association (25 €), les billets d'avion (~700 €, avec option annulation fortement recommandée), l'assurance voyage, les frais de visa (32 €), ainsi que les éventuels vaccins et frais de pharmacie et les activités du week-end et les déplacements personnels hors programme.",
     how_to_go: JSON.stringify([
       "Vérifier les vols Paris › Mombasa ou Paris › Nairobi",
       "Nous contacter par mail à contact@sensolidaire.org",
@@ -85,17 +85,17 @@ const seed = async () => {
   // ── Mission 2 : Sénégal ────────────────────────────────────
   const senegalData = {
     type: "volontariat_individuel",
-    title: "Volontariat au Sénégal",
+    title: "Programme de volontariat au Sénégal",
     country: "Sénégal",
     image_url: "/images/senegal.jpg",
     short_description: "Correspondances scolaires, jardins potagers, reboisement de la mangrove et appui aux femmes maraîchères.",
-    description: "Rejoignez nos projets de développement en Casamance, dans la région de Ziguinchor. Entre correspondance scolaire, jardins potagers, filtres à eau et visites terrain, vous contribuerez directement à l'amélioration des conditions de vie des communautés locales.",
-    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Correspondance scolaire et échanges interculturels avec les élèves locaux.</li><li>Visites terrain et suivi des projets en cours.</li><li>Appui aux projets jardin potager, filtres à eau et puits.</li><li>Sensibilisation communautaire au développement durable.</li><li>Soutien aux groupements de femmes maraîchères.</li><li>Reboisement de la mangrove et actions environnementales.</li></ul>",
+    description: "Partez à la découverte de la Casamance et engagez-vous aux côtés de nos partenaires locaux à Ziguinchor. Entre échanges avec les écoles, soutien aux jardins potagers, projets d'accès à l'eau et rencontres avec les communautés, vous contribuerez à des actions concrètes tout en vivant une expérience humaine authentique au cœur du Sénégal.",
+    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Correspondance scolaire et échanges interculturels avec les élèves locaux.</li><li>Visites terrain et suivi des projets en cours.</li><li>Appui aux projets jardin potager, filtres à eau et puits.</li><li>Sensibilisation communautaire au développement durable.</li><li>Soutien aux groupements de femmes maraîchères.</li><li>Reboisement de la mangrove et actions environnementales.</li><li>Coordination des visioconférences collèges entre Nice et le Sénégal.</li><li>Contribution au chantier de digue sur l'île d'Effrane.</li></ul>",
     programme: "8h : Petit déjeuner.\n9h à 12h : Activités de la matinée — correspondance scolaire, visites terrain.\n12h : Déjeuner.\n14h à 17h : Visite de l'avancement des projets sur place — jardin potager, utilisation des filtres à eau et puits.\n19h : Dîner.",
     included: "Hébergement chez l'habitant ou en gîte local, repas, encadrement sur place, transport local.",
-    not_include: "Billet d'avion, assurance voyage, vaccins, visa (ressortissants hors CEDEAO), dépenses personnelles.",
+    not_include: "Billet d'avion (~800€, avec option annulation fortement recommandée), assurance voyage, vaccins, visa (ressortissants hors CEDEAO), dépenses personnelles.",
     how_to_go: JSON.stringify([
-      "Vérifier les vols Paris › Ziguinchor ou Paris › Dakar",
+      "Vérifier les vols Paris › Cap Skirring puis prendre la navette jusqu’à Ziguinchor.",
       "Nous contacter par mail à contact@sensolidaire.org",
       "Réserver vos billets d'avion et nous les envoyer",
       "Payer les frais de mission et adhérer à l'association (25 €)",
@@ -103,8 +103,8 @@ const seed = async () => {
       "Recevoir les conseils pratiques de préparation",
       "Recevoir votre fiche mission à remplir à votre retour"
     ]),
-    admin_info: "<ul><li>La nature exacte du travail dépendra des priorités sur place.</li><li>En tant que volontaire, il est important de rester flexible.</li><li>Aucun visa requis pour les ressortissants de l'espace CEDEAO.</li><li>Meilleure période : novembre à mai (saison sèche).</li></ul>",
-    health_info: "<ul><li>Vaccins recommandés : fièvre jaune (obligatoire pour certains pays de transit), hépatite A, typhoïde.</li><li>Traitement antipaludéen fortement conseillé.</li><li>Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
+    admin_info: "<ul><li>La nature exacte du travail dépendra des priorités sur place.</li><li>En tant que volontaire, il est important de rester flexible.</li><li>Aucun visa requis pour les ressortissants de l'espace CEDEAO.</li><li>Compagnies recommandées : Cap Portugal, Air France, Royal Air Maroc.</li><li>Meilleure période : novembre à mai (saison sèche).</li></ul>",
+    health_info: "<ul><li>Vaccins obligatoires: fièvre jaune.</li><li>Traitement antipaludéen obligatoire.</li><li>Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
     helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
     ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/senegal/",
     is_active: true,
@@ -119,7 +119,7 @@ const seed = async () => {
   // ── Mission 3 : Pérou ──────────────────────────────────────
   const perouData = {
     type: "volontariat_individuel",
-    title: "Volontariat au Pérou",
+    title: "Programme de volontariat au Pérou",
     country: "Pérou",
     image_url: "/images/perou.jpg",
     short_description: "Soins aux animaux sauvages en réhabilitation et sensibilisation des communautés indigènes à la protection de l'Amazonie.",
@@ -153,7 +153,7 @@ const seed = async () => {
   // ── Mission 4 : Sri Lanka ──────────────────────────────────
   const sriLankaData = {
     type: "volontariat_individuel",
-    title: "Volontariat au Sri Lanka",
+    title: "Programme de volontariat au Sri Lanka",
     country: "Sri Lanka",
     image_url: "/images/srilanka.jpg",
     short_description: "Prenez soin des éléphants du sanctuaire MEF et participez à la préservation de la biodiversité sri lankaise.",
@@ -187,7 +187,7 @@ const seed = async () => {
   // ── Mission 5 : Sumatra ────────────────────────────────────
   const sumatraData = {
     type: "volontariat_individuel",
-    title: "Volontariat à Sumatra",
+    title: "Programme de volontariat à Sumatra",
     country: "Sumatra",
     image_url: "/images/sumatra.jpg",
     short_description: "Cartographie des habitats d'orang-outans et création de corridors forestiers pour protéger la biodiversité.",
