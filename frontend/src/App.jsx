@@ -5,6 +5,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/layout/Layout'
 import Home from './pages/Home'
+import Missions from './pages/Missions' //import rajouté d'Alison
 import LoginAdmin from './pages/admin/LoginAdmin'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         {/* Routes publiques — avec Navbar + Footer */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/missions" element={<Missions />} /> {/* Route ajouté pour mission Ali  */}
         </Route>
 
         {/* Routes admin — sans Navbar ni Footer */}

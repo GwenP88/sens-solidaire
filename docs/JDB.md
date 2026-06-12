@@ -683,4 +683,98 @@ frontend/src/
 
 ---
 
+---
+
+## Jour 9 · 10 juin 2026
+### S3/S4 — Intégration & débogage de la stack complète (front + back + Docker)
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Backend — `npx prisma generate` | ✅ Débloqué — Prisma Client v7.8.0 généré |
+| Backend — API missions | ✅ `GET /api/missions` retourne les 5 missions (JSON vérifié) |
+| Frontend — route `/missions` | ✅ Créée et branchée dans `App.jsx` (sous `<Layout />`) |
+| Frontend — placeholder `Missions.jsx` | ✅ Créé temporairement (en attente du travail front de Gwen) |
+| Docker — 3 conteneurs | ✅ postgres healthy + backend + frontend relancés |
+| Docker — dépendance `react-icons` | ✅ Réinstallée dans le conteneur après purge du volume |
+| BDD — migrations + seed | ✅ Régénérées après `down -v` (2 migrations + seed complet) |
+| Stack complète | ✅ Front (`:5173`) affiche correctement, back (`:3000`) répond |
+
+#### Ce qui a été fait
+
+**Backend — Alison**
+
+**Déblocage `npx prisma generate`**
+- Erreur au lancement : `Cannot find module 'dotenv/config'` chargé par `prisma.config.ts`
+- Cause : Prisma v7 ne charge plus le `.env` automatiquement — le package `dotenv` est requis explicitement mais n'était pas installé
+- Solution : `npm install dotenv` — Prisma Client v7.8.0 généré ensuite sans erreur
+- `prisma.config.ts` validé : structure correcte (`import "dotenv/config"` + `env("DATABASE_URL")`)
+
+**Vérification API**
+- `GET http://localhost:3000/api/missions` → JSON avec les 5 missions confirmé
+- `Cannot GET /` sur la racine = comportement normal (l'API n'a pas de route `/`, seulement `/api/...`)
+
+**Frontend — Alison (avec accord de Gwen sur le périmètre)**
+
+**Route `/missions` manquante**
+- Symptôme : page blanche sur `/missions`, console → `No routes matched location "/missions"`
+- Cause : aucune `<Route path="/missions">` déclarée dans `App.jsx` ; le fichier `Missions.jsx` n'existait pas
+- Coordination : message envoyé à Gwen avant toute modification — elle confirme ne pas avoir commencé la page → feu vert pour un placeholder temporaire
+- Solution : création de `frontend/src/pages/Missions.jsx` (placeholder) + import + `<Route path="/missions">` ajoutée **à l'intérieur** du bloc `<Layout />` (page publique → hérite de Navbar + Footer)
+
+**Docker — Alison**
+
+**Conflit de ports front (5173 vs 5174)**
+- Constat : `npm run dev` manuel basculait sur `:5174` car `:5173` déjà occupé
+- Cause : le conteneur `sensolidaire_frontend` tournait déjà sur `:5173` (front Docker) — deux fronts tournaient en parallèle sans le savoir
+- Solution : arrêt du `npm run dev` manuel, utilisation exclusive du front Docker sur `:5173` (aligné avec la config CORS du back qui autorise `:5173`)
+
+**Dépendance `react-icons` absente du conteneur**
+- Symptôme : `Failed to resolve import "react-icons/fa"` depuis `ActionCard.jsx`
+- Vérifications : `react-icons` bien présent dans `package.json` ✅ mais absent de `node_modules` du conteneur (`ls node_modules/react-icons` → No such file)
+- Cause : le volume anonyme `/app/node_modules` (créé 11 jours plus tôt) recouvrait le `node_modules` de l'image fraîche, même après `--build`
+- Solution : `docker-compose down -v` (purge des volumes) + `docker-compose up -d --build` → `node_modules` recréé proprement, `react-icons` installé (dossier `fa` présent)
+
+**BDD régénérée après purge**
+- `down -v` ayant supprimé le volume `postgres_data`, la base a été reconstruite :
+  - `docker-compose exec backend npx prisma migrate deploy` → 2 migrations appliquées (`init` + `add_mission_type`)
+  - `docker-compose exec backend node prisma/seed.js` → admin + 5 missions + 14 pricing + 5 locations + 7 témoignages réinjectés
+
+#### Erreurs rencontrées & solutions
+
+| Erreur | Solution appliquée |
+|---|---|
+| `Cannot find module 'dotenv/config'` (prisma.config.ts) | `npm install dotenv` — Prisma v7 ne charge plus le `.env` automatiquement |
+| `vite: not found` (frontend) | `npm install` — `node_modules` non versionné, absent après le merge |
+| `No routes matched location "/missions"` | Création de `Missions.jsx` + déclaration de la route dans `App.jsx` |
+| Page blanche après ajout de la route | Commentaire `/* */` non fermé dans `App.jsx` avalait tout le fichier — remplacé par `//` |
+| Page toujours blanche / route non prise en compte | `App.jsx` non sauvegardé (`Ctrl+S` oublié) — Vite recharge sur le fichier sauvegardé |
+| `Failed to resolve import "react-icons/fa"` | Volume anonyme `node_modules` périmé — `docker-compose down -v` + rebuild |
+| Port front sur `:5174` au lieu de `:5173` | Front Docker occupait déjà `:5173` — arrêt du `npm run dev` manuel |
+
+#### Notes & observations
+- Prisma v7 ne charge plus le `.env` tout seul : `dotenv` doit être installé et déclaré dans `dependencies` (sinon erreur de chargement de `prisma.config.ts`)
+- Après un `git merge`, réflexe systématique : `npm install` (front comme back) car `node_modules` n'est pas versionné
+- L'API back n'est pas un site web : tester sur `/api/...`, jamais sur `/` (qui renvoie `Cannot GET /`)
+- Le front du projet tourne **dans Docker sur `:5173`** — pas besoin de lancer `npm run dev` à la main (cela crée un doublon sur `:5174`)
+- Piège Docker : `--build` reconstruit l'image mais **ne purge pas les volumes anonymes** — pour rafraîchir `node_modules` dans le conteneur, il faut `down -v` puis rebuild
+- `down -v` supprime aussi le volume `postgres_data` (la BDD) → toujours re-`migrate deploy` + re-`seed` ensuite
+- Dans un conteneur, utiliser `migrate deploy` (non interactif) plutôt que `migrate dev`
+- Commentaires JS : préférer `//` pour une ligne — un `/*` non fermé casse tout le fichier
+- Réflexe de debug : toujours **vérifier** (console F12, `ls`, `package.json`) avant de supposer la cause
+
+#### Coordination équipe
+- Le placeholder `Missions.jsx` est **temporaire** — la vraie page Missions (hero, filtres type/pays/durée, carte, MissionCards) reste dans le périmètre de Gwen
+- La couche service front (`services/missionsService.js` + variable `VITE_API_URL`) n'existe pas encore → l'affichage réel des missions dans le front (test front↔API de bout en bout) est en attente de cette couche
+
+#### Points à surveiller (dette technique)
+- Conteneur back en `node:20-alpine` alors qu'un sous-package Prisma v7 (`@prisma/streams-local`) recommande Node ≥ 22 (warning `EBADENGINE`, non bloquant aujourd'hui)
+- `3 moderate severity vulnerabilities` signalées par npm — à inspecter via `npm audit` (sans `--force`)
+- Gestion de `node_modules` dans Docker avec hot-reload fragile (volume anonyme) — à revoir après la deadline
+
+#### Prévu — Jour 10
+- S4 — CRUD admin missions (routes protégées : create / update / delete)
+- S4 — CRUD admin témoignages (modération : approuver / refuser / toggle homepage)
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
