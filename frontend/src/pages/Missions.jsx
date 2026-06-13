@@ -134,30 +134,38 @@ function Missions() {
                 Le Service Civique, c'est l'opportunité de s'engager concrètement pour la société, sans condition de diplôme. Entre 16 et 25 ans (jusqu'à 30 ans en situation de handicap), partez en mission avec Sens Solidaire et vivez une expérience humaine unique de 6 à 12 mois à raison d'au moins 24h hebdomadaires, en France puis à l'étranger (3 mois minimum chacun).
               </p>
 
-              {/* Icônes infos clés */}
-              <div className="flex gap-12 justify-center">
-                <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
-                  <IconPerson className="text-primary text-xl" /><span>16-25 ans</span>
-                </span>
-                <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
-                  <IconClock className="text-primary text-xl" /><span>6 à 12 mois</span>
-                </span>
-                <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
-                  <IconPin className="text-primary text-xl" /><span>France & étranger</span>
-                </span>
-                <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
-                  <IconMoney className="text-primary text-xl" /><span>Indemnité mensuelle</span>
-                </span>
-              </div>
+              {/* Icônes infos clés + CTAs — même largeur */}
+              <div className="flex flex-col gap-4">
 
-              {/* CTAs pleine largeur */}
-              <div className="flex gap-4 w-full">
-                <a href="https://www.service-civique.gouv.fr/..." target="_blank" rel="noopener noreferrer" className="flex-1">
-                  <Button label="Candidater →" variant="primary" fullWidth />
-                </a>
-                <div className="flex-1">
-                  <Button label="Nous contacter →" variant="secondary" fullWidth />
+                {/* Icônes avec séparateurs */}
+                <div className="flex items-center justify-between px-6 py-4">
+                  <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+                    <IconPerson className="text-primary text-xl" /><span>16-25 ans</span>
+                  </span>
+                  <div className="w-[2px] h-12 bg-surface-dark" />
+                  <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+                    <IconClock className="text-primary text-xl" /><span>6 à 12 mois</span>
+                  </span>
+                  <div className="w-[2px] h-12 bg-surface-dark" />
+                  <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+                    <IconPin className="text-primary text-xl" /><span>France & étranger</span>
+                  </span>
+                  <div className="w-[2px] h-12 bg-surface-dark" />
+                  <span className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+                    <IconMoney className="text-primary text-xl" /><span>Indemnité mensuelle</span>
+                  </span>
                 </div>
+
+                {/* CTAs pleine largeur — même largeur que les icônes */}
+                <div className="flex gap-4">
+                  <a href="https://www.service-civique.gouv.fr/..." target="_blank" rel="noopener noreferrer" className="flex-1">
+                    <Button label="Candidater →" variant="primary" fullWidth />
+                  </a>
+                  <div className="flex-1">
+                    <Button label="Nous contacter →" variant="secondary" fullWidth />
+                  </div>
+                </div>
+
               </div>
 
             </div>
@@ -175,7 +183,7 @@ function Missions() {
                 <IconFrance className="text-primary text-3xl shrink-0" />
                 <span className="font-heading font-bold text-primary text-2xl">1</span>
                 <div>
-                  <h4 className="font-heading font-bold text-primary text-base">Mission en France</h4>
+                  <h4 className="font-heading font-bold text-primary text-base">Mission en France : Nice ou Ansemasse</h4>
                   <p className="font-body text-sm text-primary/60">Agir et sensibiliser</p>
                 </div>
               </div>
@@ -213,7 +221,7 @@ function Missions() {
                 <IconGrow className="text-primary text-3xl shrink-0" />
                 <span className="font-heading font-bold text-primary text-2xl">3</span>
                 <div>
-                  <h4 className="font-heading font-bold text-primary text-base">Grandir et s'engager</h4>
+                  <h4 className="font-heading font-bold text-primary text-base">Grandir et s'engager pour un monde plus solidaire</h4>
                   <p className="font-body text-sm text-primary/60">Développer ses compétences</p>
                 </div>
               </div>

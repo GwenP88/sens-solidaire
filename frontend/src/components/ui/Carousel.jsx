@@ -11,7 +11,7 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
   const hasNavigation = items.length > slidesPerView
 
   return (
-    <div className={`relative px-12 swiper-carousel-${color}`}>
+    <div className={`relative px-4 swiper-carousel-${color}`}>
       <button
         onClick={() => swiperRef.current?.slidePrev()}
         className={`absolute -left-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${

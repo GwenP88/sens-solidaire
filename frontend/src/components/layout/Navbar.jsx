@@ -1,6 +1,6 @@
 // Navbar.jsx
 // Barre de navigation principale — transparente sur le Hero
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Button from '../ui/Button'
 import { useLocation } from 'react-router-dom'
 import { GrHomeRounded } from "react-icons/gr"
@@ -24,6 +24,9 @@ function Navbar() {
   // Vérifie si le chemin courant correspond à une page mission
   const isOnMissions = location.pathname.startsWith('/missions')
 
+  // Timer de fermeture du dropdown — évite la fermeture intempestive au passage de la souris
+  const closeTimer = useRef(null)
+
   return (
     <nav className="w-full flex items-center justify-between px-16 h-20 bg-transparent absolute top-0 left-0 z-10">
 
@@ -46,8 +49,15 @@ function Navbar() {
         {/* Nos missions — dropdown au survol */}
         <div
           className="relative"
-          onMouseEnter={() => setMissionsOpen(true)}
-          onMouseLeave={() => setMissionsOpen(false)}
+          onMouseEnter={() => {
+            clearTimeout(closeTimer.current)
+            setMissionsOpen(true)
+          }}
+
+          // Ferme après 150ms — laisse le temps de passer sur le dropdown
+          onMouseLeave={() => {
+            closeTimer.current = setTimeout(() => setMissionsOpen(false), 150)
+          }}
         >
           <a
             href="/missions"
