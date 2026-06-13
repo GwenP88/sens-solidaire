@@ -77,9 +77,9 @@ const seed = async () => {
   }
 
   const missionKenya = await prisma.mission.upsert({
-    where: { slug: "kenya" },
+    where: { slug: "volontariat-kenya-environnement-biodiversite" },
     update: kenyaData,
-    create: { slug: "kenya", ...kenyaData },
+    create: { slug: "volontariat-kenya-environnement-biodiversite", ...kenyaData },
   })
 
   // ── Mission 2 : Sénégal ────────────────────────────────────
@@ -111,9 +111,9 @@ const seed = async () => {
   }
 
   const missionSenegal = await prisma.mission.upsert({
-    where: { slug: "senegal" },
+    where: { slug: "volontariat-senegal-casamance-agroecologie-mangrove" },
     update: senegalData,
-    create: { slug: "senegal", ...senegalData },
+    create: { slug: "volontariat-senegal-casamance-agroecologie-mangrove", ...senegalData },
   })
 
   // ── Mission 3 : Pérou ──────────────────────────────────────
@@ -145,9 +145,9 @@ const seed = async () => {
   }
 
   const missionPerou = await prisma.mission.upsert({
-    where: { slug: "perou" },
+    where: { slug: "volontariat-perou-amazonie-biodiversite" },
     update: perouData,
-    create: { slug: "perou", ...perouData },
+    create: { slug: "volontariat-perou-amazonie-biodiversite", ...perouData },
   })
 
   // ── Mission 4 : Sri Lanka ──────────────────────────────────
@@ -179,9 +179,9 @@ const seed = async () => {
   }
 
   const missionSriLanka = await prisma.mission.upsert({
-    where: { slug: "sri-lanka" },
+    where: { slug: "volontariat-sri-lanka-elephant-environnement" },
     update: sriLankaData,
-    create: { slug: "sri-lanka", ...sriLankaData },
+    create: { slug: "volontariat-sri-lanka-elephant-environnement", ...sriLankaData },
   })
 
   // ── Mission 5 : Sumatra ────────────────────────────────────
@@ -213,9 +213,9 @@ const seed = async () => {
   }
 
   const missionSumatra = await prisma.mission.upsert({
-    where: { slug: "sumatra" },
+    where: { slug: "volontariat-sumatra-biodiversite-orang-outan" },
     update: sumatraData,
-    create: { slug: "sumatra", ...sumatraData },
+    create: { slug: "volontariat-sumatra-biodiversite-orang-outan", ...sumatraData },
   })
 
   // ── Mission 6 : Service civique Kenya ──────────────────────

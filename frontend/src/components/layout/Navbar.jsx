@@ -8,11 +8,11 @@ import { IoChevronDownSharp } from "react-icons/io5"
 
 // Liste des missions pour le dropdown — à mettre à jour si nouvelles missions
 const MISSIONS = [
-  { label: "Kenya", slug: "kenya" },
-  { label: "Sénégal", slug: "senegal" },
-  { label: "Pérou", slug: "perou" },
-  { label: "Sri Lanka", slug: "sri-lanka" },
-  { label: "Sumatra", slug: "sumatra" },
+  { label: "Kenya", slug: "volontariat-kenya-environnement-biodiversite" },
+  { label: "Sénégal", slug: "volontariat-senegal-casamance-agroecologie-mangrove" },
+  { label: "Pérou", slug: "volontariat-perou-amazonie-biodiversite" },
+  { label: "Sri Lanka", slug: "volontariat-sri-lanka-elephant-environnement" },
+  { label: "Sumatra", slug: "volontariat-sumatra-biodiversite-orang-outan" },
 ]
 
 function Navbar() {
