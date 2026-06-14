@@ -98,7 +98,8 @@ app.use((err, req, res, next) => {
   res.status(status).json({
     error: true,
     message,
-    status
+    status,
+    ...(err.code && {code: err.code})
   })
 })
 
