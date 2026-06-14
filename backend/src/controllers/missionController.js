@@ -12,11 +12,10 @@ import { findAll, findBySlug } from "../services/missionService.js"
 // Liste exhaustive des types de missions acceptés
 // Si un nouveau type est créé → l'ajouter ici ET dans le seed
 const VALID_TYPES = [
-  "faune_sauvage",
-  "developpement_communautaire",
-  "sante",
-  "education",
-  "environnement"
+  "volontariat_individuel",
+  "service_civique",
+  "groupe_jeunes",
+  "conge_solidaire",
 ]
 
 // Regex pour valider un nom de pays
