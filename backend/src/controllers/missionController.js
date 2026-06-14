@@ -6,7 +6,6 @@
 
 // Import des fonctions du service missions
 import { findAll, findBySlug, create } from "../services/missionService.js"
-import { findAll, findBySlug } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
