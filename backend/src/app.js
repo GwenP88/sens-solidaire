@@ -67,7 +67,8 @@ app.get("/api/health", (req, res) => {
 // Routes d'authentification — préfixe /api/auth
 // Ex : POST /api/auth/login, GET /api/auth/verify...
 app.use("/api/auth", authRouter)
-
+// Routes missions — préfixe /api/missions
+// Ex : GET /api/missions, GET /api/missions/:slug
 app.use("/api/missions", missionsRouter)
 
 
