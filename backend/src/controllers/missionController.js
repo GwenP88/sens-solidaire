@@ -5,8 +5,8 @@
 // Ne contient AUCUNE logique métier — tout est délégué à missionService.js
 
 // Import des fonctions du service missions
+import { findAll, findBySlug, create } from "../services/missionService.js"
 import { findAll, findBySlug } from "../services/missionService.js"
-
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // Liste exhaustive des types de missions acceptés
@@ -143,6 +143,72 @@ export const getMissionBySlug = async (req, res, next) => {
 
   } catch (error) {
     // Gère le 404 throwé par le service si slug inconnu
+    next(error)
+  }
+}
+
+// ── CREATE MISSION (ADMIN) ────────────────────────────────────────────────────
+// POST /api/admin/missions
+// Route PROTÉGÉE : montée derrière authMiddleware (token valide + role admin)
+// Body JSON attendu : { title, country, slug, short_description, type, ... }
+export const createMission = async (req, res, next) => {
+  try {
+    // 1. Extraction des champs depuis le body
+    const { title, country, slug, short_description, type } = req.body
+    // 👉 ajoute ici tes champs optionnels si tu veux les accepter dès maintenant
+
+    // 2. Validation : champs OBLIGATOIRES présents
+    const missing = []
+    if (!title)  missing.push("title")
+    if (!country)  missing.push("country")
+    if (!slug)   missing.push("slug")
+    if (!short_description)  missing.push("short_description")
+    
+    if (missing.length > 0){
+      return res.status(400).json({
+        error : true, 
+        message : `Champ(s) obligatoire(s) manquant(s) : ${missing.join(", ")}`,
+      })
+    }
+
+    // 3. Validation des FORMATS
+    // 👉 VALID_TYPES.includes(type) ?     sinon → 400   (si type fourni)
+    // 👉 SLUG_REGEX.test(slug) ?          sinon → 400
+    // 👉 COUNTRY_REGEX.test(country) ?    sinon → 400
+    if (type !== undefined && !VALID_TYPES.includes(type)) {
+      return res.status(400).json({
+        error: true,
+        message: "Type non valide"
+      })
+    }
+
+    if (!SLUG_REGEX.test(slug)) {
+      return res.status(400).json({
+        error: true,
+        message: "Caractére non accepté dans le slug"
+      })
+    }
+
+    if (!COUNTRY_REGEX.test(country)) {
+      return res.status(400).json({
+        error: true,
+        message: "Pays non valide"
+      })
+    }
+
+    // 4. Appel du service avec un objet PROPRE (jamais req.body brut !)
+    // 👉 const mission = await create({ title, country, slug, short_description, type, ... })
+    const mission = await create({title, country, slug, short_description, type})
+
+    // 5. Réponse 201 Created (ressource créée, pas un simple 200)
+    // 👉 return res.status(201).json({ success: true, mission })
+    return res.status(201).json({
+      success: true,
+      mission
+    })
+
+  } catch (error) {
+    // Attrape le 409 (slug dupliqué) + autres erreurs Prisma
     next(error)
   }
 }
