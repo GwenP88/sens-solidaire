@@ -10,7 +10,7 @@ import { findAll, findBySlug } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // Liste exhaustive des types de missions acceptés
-// Si un nouveau type est créé → l'ajouter ici ET dans le seed
+// ⚠️ Doit rester synchronisée avec les valeurs réelles en base (voir seed.js).
 const VALID_TYPES = [
   "volontariat_individuel",
   "service_civique",
