@@ -9,8 +9,9 @@ import { findAll, findBySlug, create } from "../services/missionService.js"
 import { findAll, findBySlug } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
-// Liste exhaustive des types de missions acceptés
-// ⚠️ Doit rester synchronisée avec les valeurs réelles en base (voir seed.js).
+// ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
+//    Valeurs ACTUELLES en base (voir seed.js) — à confirmer/compléter :
+//      volontariat_individuel · service_civique · groupe_jeunes · conge_solidaire
 const VALID_TYPES = [
   "volontariat_individuel",
   "service_civique",
