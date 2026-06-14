@@ -18,7 +18,7 @@ function Home() {
 
   useEffect(() => {
     fetchMissions()
-      .then(data => setMissions(data))
+      .then(data => setMissions(data.filter(m => m.type === 'volontariat_individuel')))
       .catch(err => console.error(err))
   }, [])
 
@@ -99,10 +99,10 @@ function Home() {
       {/* Section Missions */}
       <section className="section-padding bg-surface">
         <div className="section-header">
-          <div>
+          <div className="max-w-4xl">
             <h2 className="section-title text-primary">Nos missions</h2>
             <p className="section-subtitle text-primary/80">
-              Engagez-vous avec nous et nos partenaires dans des missions variées, pour un but commun : la protection de la biodiversité.
+              Il existe mille façons de s'engager. Mission individuelle, service civique, séjour en groupe ou congé solidaire : découvrez des expériences adaptées à chaque parcours pour contribuer à des projets concrets de protection de la biodiversité.
             </p>
           </div>
           <Button label="Voir toutes les missions →" variant="secondary" />

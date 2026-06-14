@@ -7,7 +7,8 @@ function StatsBar() {
     { number: '120+', label: "Actions réalisées" },
     { number: '10 000+', label: "Bénéficiares" },
     { number: '20+', label: "Ans d'expérience"  },
-    { number: '12 000+', label: "Jeunes sensibilisés" }
+    { number: '12 000+', label: "Jeunes sensibilisés" },
+  { number: '1 800+', label: "Arbres plantés" }
   ]
 
   return (

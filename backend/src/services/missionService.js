@@ -47,21 +47,28 @@ export const findBySlug = async (slug) => {
   const mission = await prisma.mission.findUnique({
     where: { slug },
     include: {
-		pricing: true,
-		location: true,
+      pricing: true,
+      location: true,
       testimonials: {
-    where: { status: "approved" }
-  	}
+        where: { status: "approved" }
+      }
     }
   })
 
-  // Si aucune mission trouvée → erreur 404
-  // Même pattern que dans authService pour les erreurs
   if (!mission) {
     const error = new Error("Aucune mission trouvée")
-  error.status = 404
-  throw error
+    error.status = 404
+    throw error
   }
 
-  return mission
+  // Formatage des témoignages pour correspondre aux props de TestimonialCard
+  return {
+    ...mission,
+    testimonials: mission.testimonials.map(t => ({
+      ...t,
+      quote: t.content,
+      name: t.author_name,
+      mission: mission.title,
+    }))
+  }
 }

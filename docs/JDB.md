@@ -874,6 +874,56 @@ pour consulter et vérifier les données.
 
 ---
 
+## Jour 10 — 12 juin 2026
+
+### 🎯 Objectifs du jour
+- Finaliser MissionDetail.jsx toutes sections
+- Mettre à jour le seed de toutes les missions
+- Harmoniser les styles sur toutes les pages
+- Ajouter la navigation (AnchorNav, FilterChips, dropdown Navbar)
+
+### ✅ Réalisé
+
+#### MissionDetail.jsx
+- Toutes les sections finalisées : Description, Rôle & Programme, Lieux, Impact, Coût & durée, Comment partir, Infos pratiques, Témoignages, Galerie
+- AnchorNav intégrée avec variant dark
+- Système de grille 3 colonnes pour Coût & durée
+- Illustration one-line ajoutée sur section Lieux partenaires
+- Harmonisation complète des styles (typographie, opacités, espacements)
+
+#### Seed BDD
+- Pattern xxxData appliqué sur toutes les missions
+- Contenu supplémentaire du site actuel intégré : Sénégal, Pérou, Sri Lanka, Sumatra
+- Champ image_url ajouté sur table Location (migration)
+- Champ ministry_url ajouté sur toutes les missions volontariat
+
+#### Nouveaux composants
+- LocationCard.jsx — card lieu réutilisable (Missions + MissionDetail)
+- FilterChips.jsx — puces filtrantes avec variant light/dark
+- AnchorNav.jsx — barre d'ancrage sticky avec variant light/dark
+
+#### Navigation
+- Navbar — dropdown "Nos missions" au survol avec liens vers les 5 destinations
+- Page Missions — FilterChips par type de mission (variant dark)
+- MissionDetail — AnchorNav sticky sous le Hero
+
+#### Carousel
+- Navigation conditionnelle — chevrons et dots masqués si items ≤ slidesPerView
+
+#### Guide de style
+- guide-style.md créé dans /docs — référence complète du design system
+
+### 🔵 À faire
+- Dashboard admin (Sidebar, routes protégées, DashboardTable)
+- Page /lieux/:slug
+- Responsive mobile
+
+### ⚠️ Points d'attention
+- react-scroll incompatible React 19 — utiliser smoothScrollTo custom ou window.scrollTo behavior smooth
+- Couleurs dynamiques → toujours style={{}} inline en Tailwind v4
+
+---
+
 ---
 
 ## Jour 9 · 10 juin 2026

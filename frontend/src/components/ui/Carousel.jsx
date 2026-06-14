@@ -8,6 +8,7 @@ import 'swiper/css/pagination'
 
 function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, showPagination = false, color = 'primary'  }) {
   const swiperRef = useRef(null)
+  const hasNavigation = items.length > slidesPerView
 
   return (
     <div className={`relative px-12 swiper-carousel-${color}`}>
@@ -15,7 +16,7 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
         onClick={() => swiperRef.current?.slidePrev()}
         className={`absolute -left-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
           color === 'surface' ? 'text-surface/50 hover:text-surface' : 'text-primary/50 hover:text-primary'
-        }`}
+        } ${!hasNavigation ? 'invisible' : ''}`}
       >
         <FaChevronLeft />
       </button>
@@ -25,7 +26,7 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
         modules={[Pagination]}
         slidesPerView={slidesPerView}
         spaceBetween={spaceBetween}
-        pagination={showPagination ? { clickable: true } : false}
+        pagination={showPagination && hasNavigation ? { clickable: true } : false}
         style={{ width: '100%' }}
       >
         {items.map((item, i) => (
@@ -39,7 +40,7 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
         onClick={() => swiperRef.current?.slideNext()}
         className={`absolute -right-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
           color === 'surface' ? 'text-surface/50 hover:text-surface' : 'text-primary/50 hover:text-primary'
-        }`}
+        } ${!hasNavigation ? 'invisible' : ''}`}
       >
         <FaChevronRight />
       </button>
