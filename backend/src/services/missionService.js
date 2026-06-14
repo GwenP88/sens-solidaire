@@ -122,3 +122,35 @@ export const create = async (data) => {
     throw error // toute autre erreur → errorHandler global
   }
 }
+
+// ── UPDATE ───────────────────────────────────────────────────────────────────
+// Met à jour une mission existante (modification PARTIELLE - PATCH)
+// Paramètres : id (number), data (objet — uniquement les champs à modifier, déjà validés)
+// Retourne   : la mission mise à jour
+// Throw      : 404 si l'id n'existe pas · 409 si le nouveau slug est déjà pris
+export const update = async (id, data) => {
+  try {
+    const mission = await prisma.mission.update({
+      where: { id },   // on cible par l'id (stable), pas le slug
+      data,            // objet déjà filtré par le controller (whitelist + champs fournis only)
+    })
+    return mission
+
+  } catch (error) {
+    // P2025 = "record to update not found" → l'id n'existe pas
+    if (error.code === "P2025") {
+      const err = new Error("Mission introuvable")
+      err.status = 404
+      err.code = "MISSION_NOT_FOUND"
+      throw err
+    }
+    // P2002 = violation @unique → le nouveau slug est déjà pris par une autre mission
+    if (error.code === "P2002") {
+      const err = new Error("Une mission avec ce slug existe déjà")
+      err.status = 409
+      err.code = "SLUG_TAKEN"
+      throw err
+    }
+    throw error
+  }
+}

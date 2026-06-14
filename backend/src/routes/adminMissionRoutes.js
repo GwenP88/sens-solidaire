@@ -6,7 +6,7 @@
 import { Router } from "express"
 import  authMiddleware  from "../middlewares/authMiddleware.js"
 
-import { createMission } from "../controllers/missionController.js"
+import { createMission, updateMission } from "../controllers/missionController.js"
 
 const router = Router()
 
@@ -17,6 +17,6 @@ router.use(authMiddleware)
 // POST /api/admin/missions  → créer une mission
 router.post("/", createMission)
 
-// (les routes PUT /:id et DELETE /:id viendront ici pour le U et le D)
+router.patch("/:id", updateMission)
 
 export default router

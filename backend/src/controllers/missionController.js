@@ -5,7 +5,7 @@
 // Ne contient AUCUNE logique métier — tout est délégué à missionService.js
 
 // Import des fonctions du service missions
-import { findAll, findBySlug, create } from "../services/missionService.js"
+import { findAll, findBySlug, create, update } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
@@ -209,5 +209,60 @@ export const createMission = async (req, res, next) => {
   } catch (error) {
     // Attrape le 409 (slug dupliqué) + autres erreurs Prisma
     next(error)
+  }
+}
+
+// ── UPDATE MISSION (ADMIN) ────────────────────────────────────────────────────
+// PATCH /api/admin/missions/:id
+// Modification PARTIELLE : l'admin n'envoie QUE les champs à changer.
+// Route PROTÉGÉE (authMiddleware).
+export const updateMission = async (req, res, next) => {
+  try {
+    // 1. Récupérer et valider l'id depuis l'URL
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    // 2. WHITELIST + champs fournis uniquement
+    //    On construit "data" en n'ajoutant QUE les champs réellement envoyés.
+    //    → un champ absent ne sera pas touché (c'est tout l'intérêt du PATCH).
+    const data = {}
+    const allowed = [
+      "title", "country", "slug", "short_description", "type",
+      "description", "volunteer_role", "programme", "included", "not_include",
+      "admin_info", "ministry_url", "health_info", "helloasso_url",
+      "image_url", "how_to_go", "is_active",
+    ]
+    for (const champ of allowed) {
+      if (req.body[champ] !== undefined) {
+        data[champ] = req.body[champ]
+      }
+    }
+
+    // 3. Refuser une requête vide (aucun champ à modifier)
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ error: true, message: "Aucun champ à modifier" })
+    }
+
+    // 4. Valider les FORMATS — mais SEULEMENT pour les champs présents
+    if (data.type !== undefined && !VALID_TYPES.includes(data.type)) {
+      return res.status(400).json({ error: true, message: "Type non valide" })
+    }
+    if (data.slug !== undefined && !SLUG_REGEX.test(data.slug)) {
+      return res.status(400).json({ error: true, message: "Format de slug invalide" })
+    }
+    if (data.country !== undefined && !COUNTRY_REGEX.test(data.country)) {
+      return res.status(400).json({ error: true, message: "Pays non valide" })
+    }
+
+    // 5. Appel du service
+    const mission = await update(id, data)
+
+    // 6. Réponse 200 OK (modification réussie — pas 201, rien n'a été CRÉÉ)
+    return res.status(200).json({ success: true, mission })
+
+  } catch (error) {
+    next(error)   // attrape 404 (id absent) et 409 (slug pris) du service
   }
 }
