@@ -1018,4 +1018,65 @@ pour consulter et vérifier les données.
 - S4 — CRUD admin missions (routes protégées : create / update / delete)
 - S4 — CRUD admin témoignages (modération : approuver / refuser / toggle homepage)
 
+## Jour 13 · 14 juin 2026
+### S4 — CRUD admin missions (Create / Update / Delete) + incident base de données
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| `POST /api/admin/missions` (create) | ✅ Écrit + testé (201 / 401 / 400 / 409) |
+| `PATCH /api/admin/missions/:id` (update partiel) | ✅ Écrit + testé (200 / 404) |
+| `DELETE /api/admin/missions/:id` (soft delete) | ✅ Écrit + testé (200 / 404) |
+| `findBySlug` aligné sur `is_active` | ✅ Corrigé (`findUnique` → `findFirst`) |
+| `errorHandler` transmet `err.code` | ✅ Corrigé |
+| `VALID_TYPES` aligné sur la taxonomie réelle | ✅ (provisoire — à valider cliente) |
+| Migration bloquée `make_short_description_required` | ✅ Réparée (backfill + resolve) |
+| Doublons missions en base (anciens slugs) | ✅ Nettoyés (9 missions propres) |
+| Tests automatisés Jest + Supertest | ✅ Fichier créé (`tests/missions.admin.test.js`) |
+
+#### Ce qui a été fait
+
+**Backend — Alison**
+
+**CRUD admin missions complet**
+- `create` (service) + `createMission` (controller) : whitelist explicite anti mass-assignment, validation type/slug/country réutilisant les constantes existantes, message d'erreur précisant le champ manquant, code `SLUG_TAKEN` sur slug dupliqué (409).
+- `update` (service) + `updateMission` (controller) : choix **PATCH** (modification partielle) — seuls les champs fournis sont mis à jour, ciblage par `id`, 404 (`MISSION_NOT_FOUND`) si l'id n'existe pas.
+- `softDelete` (service) + `deleteMission` (controller) : **soft delete** (`is_active = false`) plutôt que suppression réelle → réversible, traçable, évite la gestion en cascade des relations.
+- Routeur admin : `router.post / patch / delete` montés derrière `authMiddleware` (porte gardée en amont).
+
+**Corrections transverses**
+- `errorHandler` : ajout de `...(err.code && { code: err.code })` pour transmettre le code métier au front.
+- `findBySlug` : passé de `findUnique` à `findFirst` + `is_active: true` → une mission soft-deletée disparaît aussi du détail public (et plus seulement de la liste).
+- `VALID_TYPES` : remplacé les anciens types périmés (`faune_sauvage`...) par la taxonomie réelle du seed (`volontariat_individuel`, `service_civique`, `groupe_jeunes`, `conge_solidaire`).
+- Seed enrichi : 9 missions (ajout service civique Kenya/Sénégal, groupe jeunes, congé solidaire).
+
+#### Erreurs rencontrées & solutions
+
+| Erreur | Cause | Solution |
+|---|---|---|
+| `P3018` migration bloquée | `short_description` passée en NOT NULL alors que des lignes existantes étaient `null` (étape backfill manquante) | `UPDATE` de backfill + `prisma migrate resolve --rolled-back` + `migrate deploy` |
+| Doublons de missions (id 1-5 vs 6-14) | `upsert` cherche par `slug` ; les anciens slugs différaient → branche `create` au lieu de `update` | Suppression ordonnée enfants → parents (pricing, location, testimonial puis mission) |
+| `SyntaxError: Identifier 'findAll' has already been declared` | Double ligne d'`import` dans `missionController.js` | Garder un seul import |
+| `ReferenceError: updateMission is not defined` | Route ajoutée mais fonction non importée dans le routeur | Ajouter l'import |
+| `does not provide an export named 'deleteMisson'` | Typo : `deleteMisson` au lieu de `deleteMission` | Corriger l'orthographe |
+| `socket hang up` / `connection reset` (Postman + curl) | Serveur crashé au démarrage (les erreurs ci-dessus) → rien n'écoute sur 3000 | Lire `docker-compose logs backend` → corriger → nodemon relance |
+
+#### Notes & observations
+- Réflexe clé acquis : devant un serveur qui « ne répond pas », **lire les logs Docker en premier** — ils donnent fichier + ligne + raison.
+- Soft delete déjà à moitié en place : `findAll` filtrait déjà `is_active = true`. Restait à créer la route qui bascule le flag + corriger `findBySlug`.
+- Sécurité : ne jamais partager un token JWT (clé d'accès temporaire). Un JWT est encodé, pas chiffré.
+
+#### Décisions techniques
+- **PATCH** retenu pour l'update (vs PUT) : plus adapté à un dashboard d'édition (modification champ par champ, pas de risque d'écraser un champ non renvoyé).
+- **Soft delete** retenu pour les missions (vs hard delete) : réversibilité + traçabilité, coût de stockage négligeable à cette échelle. (Note : pour les **témoignages**, prévoir un vrai hard delete possible — données personnelles, RGPD.)
+
+#### Dette technique notée (à traiter plus tard)
+- `authMiddleware` valide le token mais ne vérifie **pas** `role === 'admin'` (OK aujourd'hui car système admin-only, à durcir si d'autres rôles arrivent → 403).
+- `schema.prisma` : `type @default("faune_sauvage")` périmé → corriger par migration.
+- `VALID_TYPES` à confirmer avec la cliente (question C2 du doc cliente).
+
+#### Prochaines étapes
+- `GET /api/admin/missions` (l'admin doit voir TOUTES les missions, actives + inactives, pour les rééditer/réactiver).
+- CRUD admin témoignages (avec gestion RGPD du droit à l'oubli).
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
