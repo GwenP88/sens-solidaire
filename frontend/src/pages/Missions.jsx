@@ -1,7 +1,7 @@
 // Missions.jsx
 // Page liste des missions — Hero + 4 sections par type de mission
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { fetchMissions } from '../services/api'
 import MissionCard from '../components/missions/MissionCard'
 import HeroPage from '../components/layout/HeroPage'
@@ -29,6 +29,21 @@ function Missions() {
 
   // Filtre actif — null = toutes les sections visibles
   const [activeFilter, setActiveFilter] = useState(null)
+
+  // Ref sur la barre de filtres — pour scroll automatique au clic
+  const filtersRef = useRef(null)
+
+  // Gestion du filtre — scroll vers la barre de filtres au clic
+  const handleFilter = (value) => {
+    setActiveFilter(value)
+    setTimeout(() => {
+      const el = filtersRef.current
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 0
+        window.scrollTo({ top, behavior: 'smooth' })
+      }
+    }, 50)
+  }
 
   useEffect(() => {
     const loadMissions = async () => {
@@ -61,11 +76,11 @@ function Missions() {
       />
 
       {/* ── Filtres par type de mission ── */}
-      <div className="py-6 px-24 bg-primary">
+      <div ref={filtersRef} className="py-6 px-24 bg-primary">
         <FilterChips
           filters={FILTERS}
           active={activeFilter}
-          onChange={setActiveFilter}
+          onChange={handleFilter}
           variant="dark"
         />
       </div>
