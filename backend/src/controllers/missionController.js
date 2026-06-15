@@ -5,7 +5,7 @@
 // Ne contient AUCUNE logique métier — tout est délégué à missionService.js
 
 // Import des fonctions du service missions
-import { findAll, findBySlug, create, update } from "../services/missionService.js"
+import { findAll, findBySlug, create, update, softDelete } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
@@ -264,5 +264,33 @@ export const updateMission = async (req, res, next) => {
 
   } catch (error) {
     next(error)   // attrape 404 (id absent) et 409 (slug pris) du service
+  }
+}
+
+// ── DELETE MISSION (ADMIN) ────────────────────────────────────────────────────
+// DELETE /api/admin/missions/:id
+// SOFT DELETE : désactive la mission (is_active = false) au lieu de l'effacer.
+// Route PROTÉGÉE (authMiddleware).
+export const deleteMission = async (req, res, next) => {
+  try {
+    // 1. Valider l'id (même logique que le PATCH)
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    // 2. Désactivation via le service
+    const mission = await softDelete(id)
+
+    // 3. Réponse 200 + confirmation
+    //    On renvoie la mission désactivée pour que le front confirme l'action.
+    return res.status(200).json({
+      success: true,
+      message: "Mission désactivée",
+      mission,
+    })
+
+  } catch (error) {
+    next(error)   // attrape le 404 du service
   }
 }

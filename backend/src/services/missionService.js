@@ -44,8 +44,8 @@ export const findBySlug = async (slug) => {
 
   // Requête Prisma
   // findUnique → retourne null si aucun résultat
-  const mission = await prisma.mission.findUnique({
-    where: { slug },
+  const mission = await prisma.mission.findFirst({
+    where: { slug, is_active: true, },
     include: {
       pricing: true,
       location: true,
@@ -149,6 +149,33 @@ export const update = async (id, data) => {
       const err = new Error("Une mission avec ce slug existe déjà")
       err.status = 409
       err.code = "SLUG_TAKEN"
+      throw err
+    }
+    throw error
+  }
+}
+
+// ── SOFT DELETE ──────────────────────────────────────────────────────────────
+// "Supprime" une mission en la DÉSACTIVANT (is_active = false).
+// La ligne reste en base (réversible + traçabilité), mais disparaît du public
+// car findAll filtre déjà sur is_active = true.
+// Paramètre : id (number)
+// Retourne  : la mission désactivée
+// Throw     : 404 si l'id n'existe pas
+export const softDelete = async (id) => {
+  try {
+    const mission = await prisma.mission.update({
+      where: { id },
+      data: { is_active: false },   // le cœur du soft delete : on bascule le flag
+    })
+    return mission
+
+  } catch (error) {
+    // P2025 = "record to update not found" → l'id n'existe pas
+    if (error.code === "P2025") {
+      const err = new Error("Mission introuvable")
+      err.status = 404
+      err.code = "MISSION_NOT_FOUND"
       throw err
     }
     throw error
