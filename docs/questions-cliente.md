@@ -38,6 +38,7 @@
 | C9 | **Tags thématiques missions** | Ajouter des tags thématiques sur les missions (faune_sauvage, environnement, développement_communautaire...) pour filtrage avancé. À valider avec la cliente avant implémentation. | |
 | C10 | **Images missions** | Les images actuelles sont provisoires issues du site actuel. Fournir les photos définitives validées pour chaque mission et action terrain. | |
 | C11 | **Lien officiel Congé solidaire** | Souhaites-tu qu'on ajoute un bouton lien vers la page officielle service-public.fr sur le congé solidaire, pour rassurer les employeurs ? Si oui, on l'intègre dans le bloc contact de cette section. | |
+| C12 | **Intégration Buffer** | La cliente utilise déjà Buffer pour ses réseaux sociaux. Est-elle intéressée par une intégration dashboard → Buffer ? Au moment de la publication d'un article, un brouillon serait automatiquement créé dans Buffer avec le titre, l'image et le lien vers l'article. Elle n'aurait plus qu'à valider depuis Buffer pour publier sur tous ses réseaux → Si oui : récupérer la clé API Buffer dans son compte. | |
 
 ---
 

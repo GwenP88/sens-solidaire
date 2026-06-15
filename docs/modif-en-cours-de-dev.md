@@ -55,6 +55,8 @@ Il sera mis à jour en continu et servira à actualiser la documentation officie
 | 39 | 12/06/26 | Seed — toutes missions | Pattern xxxData appliqué sur toutes les missions (Sénégal, Pérou, Sri Lanka, Sumatra) — update: xxxData | Re-seed met tout à jour automatiquement | ✅ Appliquée |
 | 40 | 12/06/26 | Navbar | Dropdown "Nos missions" au survol — liste des 5 destinations | Accès direct aux pages détail mission | ✅ Appliquée |
 | 41 | 12/06/26 | Carousel | Navigation conditionnelle — chevrons et dots masqués si items ≤ slidesPerView | Évite les contrôles inutiles sur peu d'items | ✅ Appliquée |
+| 42 | 15/06/26 | Feature — Dashboard articles | Créer un modèle Article (title, content WYSIWYG, image_url, published_at, status draft/published) + page publique /medias-et-actualites | V2 | 🔵 À faire |
+| 43 | 15/06/26 | Feature — Intégration Buffer | Au moment de la publication d'un article dans le dashboard, appel API Buffer pour créer un brouillon de post automatiquement. Nécessite clé API Buffer de la cliente. | V2 | 🔵 À faire |
 
 ---
 
