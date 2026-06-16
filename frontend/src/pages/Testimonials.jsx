@@ -1,7 +1,8 @@
 // Testimonials.jsx
 // Page témoignages — témoignages courts + rapports de mission
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { fetchTestimonials } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import FilterSelect from '../components/ui/FilterSelect'
@@ -9,15 +10,6 @@ import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Modal from '../components/ui/Modal'
 import TestimonialForm from '../components/testimonials/TestimonialForm'
-
-// Données mockées — à remplacer par API GET /api/testimonials
-const MOCK_TESTIMONIALS = [
-  { id: 1, quote: "Ce séjour à Batu Kapal a été une aventure extraordinaire, très riche en enseignements, en rencontres et en découverte.", name: "Cathy & Laurent", mission: "Sumatra — Volontariat individuel",destination: 'sumatra', type: 'individuel', annee: 2024 },
-  { id: 2, quote: "Une expérience humaine incroyable. J'ai appris autant des rangers que des éléphants. Partir avec Sens Solidaire, c'est revenir transformé.", name: "Sophie L.", mission: "Kenya — Volontariat individuel", destination: 'kenya', type: 'individuel', annee: 2025 },
-  { id: 3, quote: "Prendre soin des éléphants du sanctuaire MEF a été le plus beau cadeau que je me sois offert.", name: "Thomas D.", mission: "Sri Lanka — Volontariat individuel", destination: 'sri-lanka', type: 'individuel', annee: 2025 },
-  { id: 4, quote: "Une immersion totale dans la forêt amazonienne. J'ai appris à voir le monde différemment.", name: "Marie P.", mission: "Pérou — Volontariat individuel", destination: 'perou', type: 'individuel', annee: 2023 },
-  { id: 5, quote: "Le reboisement de la mangrove avec les communautés locales, une expérience qui change la vie.", name: "Antoine R.", mission: "Sénégal — Volontariat individuel", destination: 'senegal', type: 'individuel', annee: 2023 },
-]
 
 // Données statiques rapports PDF
 const RAPPORTS = [
@@ -87,6 +79,17 @@ function Testimonials() {
   // Filtres — état unique partagé entre les deux onglets
   const [filters, setFilters] = useState({})
 
+  // Témoignages depuis l'API
+  const [testimonials, setTestimonials] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchTestimonials()
+      .then(data => setTestimonials(data))
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false))
+  }, [])
+
   const handleFilter = (key, value) => {
     setFilters(prev => {
       const next = { ...prev, [key]: value }
@@ -104,7 +107,7 @@ function Testimonials() {
     return true
   }
 
-  const filteredTestimonials = MOCK_TESTIMONIALS.filter(filterFn)
+  const filteredTestimonials = testimonials.filter(filterFn)
   const filteredRapports = RAPPORTS.filter(filterFn)
 
   // État modale
@@ -150,12 +153,20 @@ function Testimonials() {
       {/* ── Onglet Témoignages ── */}
       {activeTab === 'temoignages' && (
         <section className="section-padding bg-surface-mid">
-          {filteredTestimonials.length === 0 ? (
+          {loading ? (
+            <p className="font-body text-sm text-primary/50 italic">Chargement...</p>
+          ) : filteredTestimonials.length === 0 ? (
             <p className="font-body text-sm text-primary/50 italic">Aucun témoignage pour ces critères.</p>
           ) : (
             <div className="grid grid-cols-3 gap-6">
               {filteredTestimonials.map(t => (
-                <TestimonialCard key={t.id} {...t} />
+                <TestimonialCard
+                  key={t.id}
+                  quote={t.content}
+                  name={t.author_name}
+                  mission={t.mission?.title || ''}
+                  avatar={t.avatar_url || undefined}
+                />
               ))}
             </div>
           )}

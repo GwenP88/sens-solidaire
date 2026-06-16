@@ -26,3 +26,23 @@ export const fetchMissionBySlug = async (slug) => {
   const data = await response.json()
   return data.mission
 }
+
+// ── TÉMOIGNAGES ──────────────────────────────────────────────────────────────
+
+// Récupère tous les témoignages validés
+export const fetchTestimonials = async () => {
+  const response = await fetch(`${API_URL}/testimonials`)
+  if (!response.ok) throw new Error("Erreur lors de la récupération des témoignages")
+  return await response.json()
+}
+
+// Soumet un nouveau témoignage
+export const submitTestimonial = async (data) => {
+  const response = await fetch(`${API_URL}/testimonials`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  if (!response.ok) throw new Error("Erreur lors de l'envoi du témoignage")
+  return await response.json()
+}

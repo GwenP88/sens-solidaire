@@ -1,6 +1,7 @@
 // TestimonialForm.jsx
 // Formulaire de soumission de témoignage — utilisé dans une modale
 
+import { submitTestimonial } from '../../services/api'
 import { useState } from 'react'
 import Button from '../ui/Button'
 
@@ -28,11 +29,21 @@ function TestimonialForm({ onClose }) {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // TODO : POST /api/testimonials
-    console.log('Témoignage soumis :', form)
-    setSubmitted(true)
+    try {
+      await submitTestimonial({
+        author_name: `${form.prenom} ${form.nom}`,
+        content: form.quote,
+        mission_id: null,
+        annee: new Date().getFullYear(),
+        consent_given: form.rgpd,
+      })
+      setSubmitted(true)
+    } catch (err) {
+      console.error(err)
+      alert("Une erreur est survenue, veuillez réessayer.")
+    }
   }
 
   // Message de confirmation après soumission
