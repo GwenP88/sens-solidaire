@@ -8,7 +8,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 export const sendContactEmail = async ({ nom, prenom, email, sujet, message }) => {
   const { data, error } = await resend.emails.send({
     from: 'Contact Sens Solidaire <onboarding@resend.dev>',
-    to: 'contact@sensolidaire.org',
+    to: 'gwenpichot@gmail.com',
     replyTo: email,
     subject: `[Contact] ${sujet}`,
     html: `
