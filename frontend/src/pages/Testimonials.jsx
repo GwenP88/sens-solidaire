@@ -202,11 +202,11 @@ function Testimonials() {
       {/* ── CTA formulaire ── */}
       <section className="section-padding bg-accent-2">
         <div className="flex items-center justify-between">
-          <div>
+          <div className="max-w-2xl">
             <h2 className="section-title text-surface mb-2">Vous êtes partis en mission ?</h2>
-            <p className="font-body text-surface/80 text-sm">Partagez votre expérience et inspirez les futurs volontaires.</p>
+            <p className="font-body text-surface/80 text-sm">Vos rencontres, vos découvertes et les moments forts vécus sur le terrain peuvent donner à d'autres l'envie de s'engager et de vivre cette aventure à leur tour.</p>
           </div>
-          <Button label="Partager mon témoignage →" variant="primary" onClick={() => setModalOpen(true)} />
+          <Button label="Partager mon expérience →" variant="primary" onClick={() => setModalOpen(true)} />
         </div>
       </section>
 
