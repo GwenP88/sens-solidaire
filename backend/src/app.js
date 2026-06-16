@@ -24,6 +24,8 @@ import authRouter from "./routes/auth.js"
 import missionsRouter from "./routes/missions.js"
 // Import du router témoignages
 import testimonialRouter from "./routes/testimonialRoutes.js"
+// Import du router contact
+import contactRouter from "./routes/contactRoutes.js"
 // Import du router admin CUD(Create, update, delete)
 import adminMissionRoutes from "./routes/adminMissionRoutes.js"
 
@@ -68,15 +70,17 @@ app.get("/api/health", (req, res) => {
   })
 })
 
-// Routes d'authentification — préfixe /api/auth
+// Route d'authentification — préfixe /api/auth
 // Ex : POST /api/auth/login, GET /api/auth/verify...
 app.use("/api/auth", authRouter)
-// Routes missions — préfixe /api/missions
+// Route missions — préfixe /api/missions
 // Ex : GET /api/missions, GET /api/missions/:slug
 app.use("/api/missions", missionsRouter)
-// Dans la section routes
+// Route témoignages
 app.use("/api/testimonials", testimonialRouter)
-// Routes admin missions (écriture, protégées)
+// Route contact
+app.use("/api/contact", contactRouter)
+// Route admin missions (écriture, protégées)
 app.use("/api/admin/missions", adminMissionRoutes)
 
 
