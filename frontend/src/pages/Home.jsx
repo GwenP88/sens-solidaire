@@ -163,7 +163,9 @@ function Home() {
             <h2 className="section-title text-surface">Ils sont partis</h2>
             <p className="section-subtitle text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
           </div>
-          <Button label="Voir tous les témoignages →" variant="secondary" />
+            <a href="/temoignages">
+              <Button label="Voir tous les témoignages →" variant="secondary" />
+            </a>
         </div>
         <TestimonialCarousel testimonials={testimonials} />
       </section>
