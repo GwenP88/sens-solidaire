@@ -12,6 +12,7 @@ import SectionHero from '../components/ui/SectionHero'
 import LocationCard from '../components/locations/LocationCard'
 import FilterChips from '../components/navigation/FilterChips'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import { useSearchParams } from 'react-router-dom'
 import { IconPerson, IconClock, IconPin, IconMoney, IconFrance, IconAbroad, IconGrow } from '../utils/icons'
 
 // Filtres disponibles — correspond aux clés de section
@@ -29,7 +30,8 @@ function Missions() {
   const [error, setError] = useState(null)
 
   // Filtre actif — null = toutes les sections visibles
-  const [activeFilter, setActiveFilter] = useState(null)
+  const [searchParams] = useSearchParams()
+  const [activeFilter, setActiveFilter] = useState(searchParams.get('filter') || null)
 
   // Ref sur la barre de filtres — pour scroll automatique au clic
   const filtersRef = useRef(null)
@@ -58,6 +60,15 @@ function Missions() {
       }
     }
     loadMissions()
+  }, [])
+
+    // Scroll vers la section filtrée si filtre actif à l'arrivée
+  useEffect(() => {
+    if (activeFilter) {
+      setTimeout(() => {
+        filtersRef.current?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    }
   }, [])
 
   if (loading) return <p className="p-12 font-body text-primary">Chargement...</p>

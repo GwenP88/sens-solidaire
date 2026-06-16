@@ -20,7 +20,7 @@ function Home() {
       badge: 'Volontariat individuel',
       duration: '2 à 4 semaines',
       ctaLabel: 'Découvrir →',
-      ctaUrl: '/missions#individuel',
+      ctaUrl: '/missions?filter=individuel',
     },
     {
       slug: 'service-civique',
@@ -30,7 +30,7 @@ function Home() {
       badge: 'Service civique',
       duration: '3 à 12 mois',
       ctaLabel: 'Découvrir →',
-      ctaUrl: '/missions#service-civique',
+      ctaUrl: '/missions?filter=service_civique',
     },
     {
       slug: 'groupe-jeune',
@@ -40,7 +40,7 @@ function Home() {
       badge: 'Groupe jeunes',
       duration: '10 jours',
       ctaLabel: 'Découvrir →',
-      ctaUrl: '/missions#groupe-jeune',
+      ctaUrl: '/missions?filter=groupe_jeunes',
     },
     {
       slug: 'conge-solidaire',
@@ -50,7 +50,7 @@ function Home() {
       badge: 'Congé solidaire',
       duration: '1 à 3 semaines',
       ctaLabel: 'Découvrir →',
-      ctaUrl: '/missions#conge-solidaire',
+      ctaUrl: '/missions?filter=conge_solidaire',
     },
   ]
 
