@@ -12,11 +12,11 @@ import TestimonialForm from '../components/testimonials/TestimonialForm'
 
 // Données mockées — à remplacer par API GET /api/testimonials
 const MOCK_TESTIMONIALS = [
-  { id: 1, quote: "Ce séjour à Batu Kapal a été une aventure extraordinaire, très riche en enseignements, en rencontres et en découverte.", name: "Cathy & Laurent", mission: "Sumatra — Volontariat individuel", avatar: '/avatar-default.png', destination: 'sumatra', type: 'individuel', annee: 2024 },
-  { id: 2, quote: "Une expérience humaine incroyable. J'ai appris autant des rangers que des éléphants. Partir avec Sens Solidaire, c'est revenir transformé.", name: "Sophie L.", mission: "Kenya — Volontariat individuel", avatar: '/avatar-default.png', destination: 'kenya', type: 'individuel', annee: 2025 },
-  { id: 3, quote: "Prendre soin des éléphants du sanctuaire MEF a été le plus beau cadeau que je me sois offert.", name: "Thomas D.", mission: "Sri Lanka — Volontariat individuel", avatar: '/avatar-default.png', destination: 'sri-lanka', type: 'individuel', annee: 2025 },
-  { id: 4, quote: "Une immersion totale dans la forêt amazonienne. J'ai appris à voir le monde différemment.", name: "Marie P.", mission: "Pérou — Volontariat individuel", avatar: '/avatar-default.png', destination: 'perou', type: 'individuel', annee: 2023 },
-  { id: 5, quote: "Le reboisement de la mangrove avec les communautés locales, une expérience qui change la vie.", name: "Antoine R.", mission: "Sénégal — Volontariat individuel", avatar: '/avatar-default.png', destination: 'senegal', type: 'individuel', annee: 2023 },
+  { id: 1, quote: "Ce séjour à Batu Kapal a été une aventure extraordinaire, très riche en enseignements, en rencontres et en découverte.", name: "Cathy & Laurent", mission: "Sumatra — Volontariat individuel",destination: 'sumatra', type: 'individuel', annee: 2024 },
+  { id: 2, quote: "Une expérience humaine incroyable. J'ai appris autant des rangers que des éléphants. Partir avec Sens Solidaire, c'est revenir transformé.", name: "Sophie L.", mission: "Kenya — Volontariat individuel", destination: 'kenya', type: 'individuel', annee: 2025 },
+  { id: 3, quote: "Prendre soin des éléphants du sanctuaire MEF a été le plus beau cadeau que je me sois offert.", name: "Thomas D.", mission: "Sri Lanka — Volontariat individuel", destination: 'sri-lanka', type: 'individuel', annee: 2025 },
+  { id: 4, quote: "Une immersion totale dans la forêt amazonienne. J'ai appris à voir le monde différemment.", name: "Marie P.", mission: "Pérou — Volontariat individuel", destination: 'perou', type: 'individuel', annee: 2023 },
+  { id: 5, quote: "Le reboisement de la mangrove avec les communautés locales, une expérience qui change la vie.", name: "Antoine R.", mission: "Sénégal — Volontariat individuel", destination: 'senegal', type: 'individuel', annee: 2023 },
 ]
 
 // Données statiques rapports PDF
