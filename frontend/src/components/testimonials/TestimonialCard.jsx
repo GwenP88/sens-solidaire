@@ -2,7 +2,7 @@
 // Carte témoignage — citation, auteur, mission, avatar
 import { VscQuote } from "react-icons/vsc"
 
-function TestimonialCard({ quote, name, mission, avatar = '/avatar-default.png' }) {
+function TestimonialCard({ quote, name, mission, avatar = '/placeholder-testimonials.png' }) {
   return (
     <article className="bg-surface rounded-2xl p-6 h-[270px] w-full flex flex-col justify-between gap-4">
 
