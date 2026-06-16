@@ -6,7 +6,7 @@ import prisma from '../config/db.js'
 // Récupère tous les témoignages validés — avec la mission liée
 export const getValidatedTestimonials = async () => {
   return await prisma.testimonial.findMany({
-    where: { status: 'validated' },
+    where: { status: 'approved' },
     include: {
       mission: {
         select: { title: true, type: true, country: true, slug: true }
