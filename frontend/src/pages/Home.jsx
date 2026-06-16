@@ -8,19 +8,51 @@ import Button from '../components/ui/Button'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import TestimonialCarousel from '../components/testimonials/TestimonialCarousel'
 import ActionCard from '../components/actions/ActionCard'
-import { useState, useEffect } from 'react'
-import { fetchMissions } from '../services/api'
-import { getDuration, TYPE_LABELS } from '../utils/missions'
 
 function Home() {
 
-  const [missions, setMissions] = useState([])
-
-  useEffect(() => {
-    fetchMissions()
-      .then(data => setMissions(data.filter(m => m.type === 'volontariat_individuel')))
-      .catch(err => console.error(err))
-  }, [])
+  const missionTypes = [
+    {
+      slug: 'volontariat-individuel',
+      title: 'Partir en mission individuel',
+      description: 'Partez seul ou à deux et participez à des projets concrets de préservation de la biodiversité aux côtés des communautés locales et des acteurs de terrain.',
+      image: '/images/hero_missions.jpg',
+      badge: 'Volontariat individuel',
+      duration: '2 à 4 semaines',
+      ctaLabel: 'Découvrir →',
+      ctaUrl: '/missions#individuel',
+    },
+    {
+      slug: 'service-civique',
+      title: 'Effectuer un service civique',
+      description: 'Une expérience engagée pour les 16-25 ans qui permet de développer de nouvelles compétences tout en agissant pour l\'environnement et la solidarité internationale.',
+      image: '/images/service_civique.jpg',
+      badge: 'Service civique',
+      duration: '3 à 12 mois',
+      ctaLabel: 'Découvrir →',
+      ctaUrl: '/missions#service-civique',
+    },
+    {
+      slug: 'groupe-jeune',
+      title: 'Aventure Solidaire Jeunes',
+      description: 'Des séjours solidaires conçus pour les établissements scolaires, MJC et associations souhaitant vivre une aventure collective porteuse de sens.',
+      image: '/images/groupe-jeune-2.jpg',
+      badge: 'Groupe jeunes',
+      duration: '10 jours',
+      ctaLabel: 'Découvrir →',
+      ctaUrl: '/missions#groupe-jeune',
+    },
+    {
+      slug: 'conge-solidaire',
+      title: 'S\'engager en entreprise',
+      description: 'Mobilisez vos collaborateurs autour d\'une mission à impact et renforcez la cohésion de vos équipes grâce à une expérience humaine et solidaire.',
+      image: '/images/conge-solidaire-2.jpg',
+      badge: 'Congé solidaire',
+      duration: '1 à 3 semaines',
+      ctaLabel: 'Découvrir →',
+      ctaUrl: '/missions#conge-solidaire',
+    },
+  ]
 
   const testimonials = [
     { quote: "Ce séjour à Batu Kapal a été une aventure extraordinaire, très riche en enseignements, en rencontres et en découverte, tant animales qu'humaines.", name: "Cathy et Laurent", mission: "Sri Lanka" },
@@ -107,18 +139,18 @@ function Home() {
           </div>
           <Button label="Voir toutes les missions →" variant="secondary" />
         </div>
-        <div className="grid grid-cols-3 gap-6">
-          {missions.map((mission) => (
+        <div className="grid grid-cols-2 gap-6">
+          {missionTypes.map((type) => (
             <MissionCard
-              key={mission.slug}
-              slug={mission.slug}
-              title={mission.title}
-              description={mission.short_description}
-              image={mission.image_url}
-              badge={TYPE_LABELS[mission.type] || mission.type}
-              duration={getDuration(mission.pricing)}
-              ctaLabel="Partir en mission →"
-
+              key={type.slug}
+              slug={type.slug}
+              title={type.title}
+              description={type.description}
+              image={type.image}
+              badge={type.badge}
+              duration={type.duration}
+              ctaLabel={type.ctaLabel}
+              ctaUrl={type.ctaUrl}
             />
           ))}
         </div>

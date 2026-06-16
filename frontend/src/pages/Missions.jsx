@@ -87,7 +87,7 @@ function Missions() {
 
       {/* ── Section Volontariat individuel ── */}
       {(activeFilter === null || activeFilter === 'individuel') && (
-        <section className="section-padding bg-surface">
+        <section id="individuel" className="section-padding bg-surface">
           <SectionHero
             title="Partir en mission"
             audience="Pour les volontaires individuels"
@@ -134,7 +134,7 @@ function Missions() {
 
       {/* ── Section Service Civique ── */}
       {(activeFilter === null || activeFilter === 'service_civique') && (
-        <section className="section-padding bg-surface-mid">
+        <section id="service-civique" className="section-padding bg-surface-mid">
           <SectionHero
             title="Effectuer un service civique"
             audience="Pour les 16 à 25 ans"
@@ -274,7 +274,7 @@ function Missions() {
 
       {/* ── Section Groupe jeune ── */}
       {(activeFilter === null || activeFilter === 'groupe_jeunes') && (
-        <section className="section-padding bg-surface">
+        <section id="groupe-jeunes" className="section-padding bg-surface">
           <SectionHero
             title="Partir en groupe"
             audience="Pour les lycées, MJC et structures de jeunesse"
@@ -339,7 +339,7 @@ function Missions() {
 
       {/* ── Section Congé solidaire ── */}
       {(activeFilter === null || activeFilter === 'conge_solidaire') && (
-        <section className="section-padding bg-surface-mid">
+        <section id="conge-solidaire" className="section-padding bg-surface-mid">
           <SectionHero
             title="S'engager en entreprise"
             audience="Pour les salariés et les entreprises"
