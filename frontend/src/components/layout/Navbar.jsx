@@ -31,9 +31,11 @@ function Navbar() {
     <nav className="w-full flex items-center justify-between px-16 h-20 bg-transparent absolute top-0 left-0 z-10">
 
       {/* Logo */}
-      <div className="bg-white/40 rounded-full p-1">
-        <img src="/Logo.png" alt="Sens Solidaire" className="h-14" />
-      </div>
+      <a href="/">
+        <div className="bg-white/40 rounded-full p-1">
+          <img src="/Logo.png" alt="Sens Solidaire" className="h-14" />
+        </div>
+      </a>
 
       {/* Liens navigation */}
       <div className="flex items-center gap-8">

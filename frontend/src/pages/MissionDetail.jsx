@@ -12,6 +12,7 @@ import TestimonialCard from '../components/testimonials/TestimonialCard'
 import LocationCard from '../components/locations/LocationCard'
 import SectionHero from '../components/ui/SectionHero'
 import AnchorNav from '../components/navigation/AnchorNav'
+import ScrollToTop from '../components/ui/ScrollToTop'
 import { IconClock, IconPin, IconMoney, IconFlight, IconContact, IconBooking, IconPayment, IconContract, IconGuide, IconFileMission, IconCheck, IconTimes, } from '../utils/icons'
 
 // Icônes et labels fixes pour la section "Comment partir"
@@ -443,7 +444,7 @@ function MissionDetail() {
           )}
         />
       </section>
-
+      <ScrollToTop />
     </div>
   )
 }

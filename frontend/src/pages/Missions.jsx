@@ -11,6 +11,7 @@ import Carousel from '../components/ui/Carousel'
 import SectionHero from '../components/ui/SectionHero'
 import LocationCard from '../components/locations/LocationCard'
 import FilterChips from '../components/navigation/FilterChips'
+import ScrollToTop from '../components/ui/ScrollToTop'
 import { IconPerson, IconClock, IconPin, IconMoney, IconFrance, IconAbroad, IconGrow } from '../utils/icons'
 
 // Filtres disponibles — correspond aux clés de section
@@ -381,7 +382,7 @@ function Missions() {
           </div>
         </section>
       )}
-
+      <ScrollToTop />
     </div>
   )
 }
