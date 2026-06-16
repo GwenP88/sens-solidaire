@@ -1079,4 +1079,74 @@ pour consulter et vérifier les données.
 #### Prochaines étapes
 - `GET /api/admin/missions` (l'admin doit voir TOUTES les missions, actives + inactives, pour les rééditer/réactiver).
 - CRUD admin témoignages (avec gestion RGPD du droit à l'oubli).
+
+---
+
+## Jour 10 · 16 juin 2026
+
+### 🎯 Objectifs du jour
+- Finaliser la navigation cards home → /missions avec filtre actif
+- Page Témoignages complète (front + back)
+- Page Contact complète (front + back + Resend)
+
+---
+
+### ✅ Réalisé
+
+#### Home
+- 4 cards statiques par type d'engagement (grille 2x2) — données en dur, plus couplées à l'API
+- Navigation cards → `/missions?filter=xxx` avec filtre actif et scroll automatique
+- Lien logo navbar → `/`
+- Lien "Voir tous les témoignages →" → `/temoignages`
+
+#### Composants
+- `ScrollToTop.jsx` — bouton fixe bas droite avec `FiArrowUpCircle`
+- `Modal.jsx` — modale générique réutilisable (Échap, clic extérieur, scroll lock)
+- `FilterSelect.jsx` — groupe de filtres menus déroulants réutilisable
+- `ContactForm.jsx` — formulaire contact dans `components/forms/`
+
+#### Page Témoignages `/temoignages`
+- Onglets Témoignages / Rapports de mission sur fond primary
+- Filtres partagés (type de mission, destination conditionnelle, année) via `FilterSelect`
+- Grille 3 colonnes `TestimonialCard` connectée à `GET /api/testimonials`
+- Grille 3 colonnes rapports PDF avec placeholder image
+- Modale soumission témoignage — `TestimonialForm` connecté à `POST /api/testimonials`
+- CTA bas de page → ouvre la modale
+- Migration BDD : ajout `avatar_url` + `annee` sur table `Testimonial`
+
+#### Page Contact `/contact`
+- Layout maquette : texte intro + bloc Delphine Thibaut / photo gauche + formulaire droite
+- `ContactForm.jsx` avec RGPD obligatoire
+- Intégration Resend — email envoyé à `contact@sensolidaire.org`
+- Test flux complet validé ✅
+
+#### Backend
+- `GET /api/testimonials` — témoignages avec status `approved`
+- `POST /api/testimonials` — soumission publique (status `pending`)
+- `POST /api/contact` — envoi email via Resend
+- Fix : `status: 'validated'` → `status: 'approved'` dans `testimonialService.js`
+
+#### Design
+- Palette 2 : `color-dark` → `#0D2B30`
+- Palette 3 créée : bleu marine `#1A3A4A` + terracotta + bleu lagon `#2E86AB`
+
+#### Git
+- Merge `dev-back` (Alison) → résolution conflits `App.jsx` + `Missions.jsx`
+- Merge `dev-front` → `dev` en fin de journée
+
+---
+
+### ⚠️ Points d'attention
+- Migrations Docker : toujours utiliser `docker compose exec --user $(id -u):$(id -g) backend npx prisma migrate dev`
+- Resend en dev : envoyer vers email perso pour tester, remettre `contact@sensolidaire.org` avant prod
+- Rapports de mission : prévoir section dédiée dans le dashboard (séparée des témoignages courts)
+- Numéro Delphine Thibaut sur la page Contact : à valider avec la cliente
+
+---
+
+### 🔵 À faire demain
+- Dashboard admin — Alison prend le lead (front + back)
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
