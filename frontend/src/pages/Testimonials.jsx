@@ -7,6 +7,8 @@ import TestimonialCard from '../components/testimonials/TestimonialCard'
 import FilterSelect from '../components/ui/FilterSelect'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Modal from '../components/ui/Modal'
+import TestimonialForm from '../components/testimonials/TestimonialForm'
 
 // Données mockées — à remplacer par API GET /api/testimonials
 const MOCK_TESTIMONIALS = [
@@ -105,6 +107,9 @@ function Testimonials() {
   const filteredTestimonials = MOCK_TESTIMONIALS.filter(filterFn)
   const filteredRapports = RAPPORTS.filter(filterFn)
 
+  // État modale
+  const [modalOpen, setModalOpen] = useState(false)
+
   return (
     <div className="bg-surface min-h-screen">
 
@@ -201,11 +206,14 @@ function Testimonials() {
             <h2 className="section-title text-surface mb-2">Vous êtes partis en mission ?</h2>
             <p className="font-body text-surface/80 text-sm">Partagez votre expérience et inspirez les futurs volontaires.</p>
           </div>
-          <Button label="Partager mon témoignage →" variant="primary" />
+          <Button label="Partager mon témoignage →" variant="primary" onClick={() => setModalOpen(true)} />
         </div>
       </section>
 
       <ScrollToTop />
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Partager votre témoignage">
+        <TestimonialForm onClose={() => setModalOpen(false)} />
+      </Modal>
     </div>
   )
 }
