@@ -62,6 +62,8 @@ model Testimonial {
   mission_id    Int?
   author_name   String
   content       String
+  avatar_url    String?  // photo du volontaire
+  annee         Int?     // année de la mission
   status        String   @default("pending")
   show_homepage Boolean  @default(false)
   consent_given Boolean  @default(false)

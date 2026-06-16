@@ -22,6 +22,8 @@ import cookieParser from "cookie-parser"
 import authRouter from "./routes/auth.js"
 // Import du router de missions 
 import missionsRouter from "./routes/missions.js"
+// Import du router témoignages
+import testimonialRouter from "./routes/testimonialRoutes.js"
 // Import du router admin CUD(Create, update, delete)
 import adminMissionRoutes from "./routes/adminMissionRoutes.js"
 
@@ -72,6 +74,8 @@ app.use("/api/auth", authRouter)
 // Routes missions — préfixe /api/missions
 // Ex : GET /api/missions, GET /api/missions/:slug
 app.use("/api/missions", missionsRouter)
+// Dans la section routes
+app.use("/api/testimonials", testimonialRouter)
 // Routes admin missions (écriture, protégées)
 app.use("/api/admin/missions", adminMissionRoutes)
 
