@@ -44,8 +44,8 @@ export const findBySlug = async (slug) => {
 
   // Requête Prisma
   // findUnique → retourne null si aucun résultat
-  const mission = await prisma.mission.findUnique({
-    where: { slug },
+  const mission = await prisma.mission.findFirst({
+    where: { slug, is_active: true, },
     include: {
       pricing: true,
       location: true,
@@ -70,5 +70,114 @@ export const findBySlug = async (slug) => {
       name: t.author_name,
       mission: mission.title,
     }))
+  }
+}
+
+// ── CREATE ───────────────────────────────────────────────────────────────────
+// Crée une nouvelle mission en base
+// Paramètre : data (objet) — champs DÉJÀ validés par le controller
+// Retourne  : la mission créée
+// Throw     : 409 si le slug existe déjà (contrainte @unique violée)
+export const create = async (data) => {
+  try {
+    const mission = await prisma.mission.create({
+      data: {
+        // ⚠️ WHITELIST — chaque champ autorisé est listé UN PAR UN.
+        // Tout ce qui n'est pas ici est ignoré → bloque le mass assignment.
+        // Absents volontairement : id / created_at / updated_at (gérés par Prisma),
+        //                          is_active (default true), relations (location/pricing).
+
+        // — Champs OBLIGATOIRES —
+        title:             data.title,
+        country:           data.country,
+        slug:              data.slug,
+        short_description: data.short_description,
+        type:              data.type, // défaut en base, mais validé en amont
+
+        // — Champs OPTIONNELS —
+        description:       data.description,
+        volunteer_role:    data.volunteer_role,
+        programme:         data.programme,
+        included:          data.included,
+        not_include:       data.not_include,
+        admin_info:        data.admin_info,
+        ministry_url:      data.ministry_url,
+        health_info:       data.health_info,
+        helloasso_url:     data.helloasso_url,
+        image_url:         data.image_url,
+        how_to_go:         data.how_to_go,
+      },
+    })
+
+    return mission
+
+  } catch (error) {
+    // P2002 = violation de contrainte @unique (ici : slug déjà pris)
+    if (error.code === "P2002") {
+      const err = new Error("Une mission avec ce slug existe déjà")
+      err.status = 409
+      err.code = "SLUG_TAKEN" // 👈 clé stable pour le front
+      throw err
+    }
+    throw error // toute autre erreur → errorHandler global
+  }
+}
+
+// ── UPDATE ───────────────────────────────────────────────────────────────────
+// Met à jour une mission existante (modification PARTIELLE - PATCH)
+// Paramètres : id (number), data (objet — uniquement les champs à modifier, déjà validés)
+// Retourne   : la mission mise à jour
+// Throw      : 404 si l'id n'existe pas · 409 si le nouveau slug est déjà pris
+export const update = async (id, data) => {
+  try {
+    const mission = await prisma.mission.update({
+      where: { id },   // on cible par l'id (stable), pas le slug
+      data,            // objet déjà filtré par le controller (whitelist + champs fournis only)
+    })
+    return mission
+
+  } catch (error) {
+    // P2025 = "record to update not found" → l'id n'existe pas
+    if (error.code === "P2025") {
+      const err = new Error("Mission introuvable")
+      err.status = 404
+      err.code = "MISSION_NOT_FOUND"
+      throw err
+    }
+    // P2002 = violation @unique → le nouveau slug est déjà pris par une autre mission
+    if (error.code === "P2002") {
+      const err = new Error("Une mission avec ce slug existe déjà")
+      err.status = 409
+      err.code = "SLUG_TAKEN"
+      throw err
+    }
+    throw error
+  }
+}
+
+// ── SOFT DELETE ──────────────────────────────────────────────────────────────
+// "Supprime" une mission en la DÉSACTIVANT (is_active = false).
+// La ligne reste en base (réversible + traçabilité), mais disparaît du public
+// car findAll filtre déjà sur is_active = true.
+// Paramètre : id (number)
+// Retourne  : la mission désactivée
+// Throw     : 404 si l'id n'existe pas
+export const softDelete = async (id) => {
+  try {
+    const mission = await prisma.mission.update({
+      where: { id },
+      data: { is_active: false },   // le cœur du soft delete : on bascule le flag
+    })
+    return mission
+
+  } catch (error) {
+    // P2025 = "record to update not found" → l'id n'existe pas
+    if (error.code === "P2025") {
+      const err = new Error("Mission introuvable")
+      err.status = 404
+      err.code = "MISSION_NOT_FOUND"
+      throw err
+    }
+    throw error
   }
 }

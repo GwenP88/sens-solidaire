@@ -5,18 +5,17 @@
 // Ne contient AUCUNE logique métier — tout est délégué à missionService.js
 
 // Import des fonctions du service missions
-import { findAll, findBySlug } from "../services/missionService.js"
-
+import { findAll, findBySlug, create, update, softDelete } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
-// Liste exhaustive des types de missions acceptés
-// Si un nouveau type est créé → l'ajouter ici ET dans le seed
+// ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
+//    Valeurs ACTUELLES en base (voir seed.js) — à confirmer/compléter :
+//      volontariat_individuel · service_civique · groupe_jeunes · conge_solidaire
 const VALID_TYPES = [
-  "faune_sauvage",
-  "developpement_communautaire",
-  "sante",
-  "education",
-  "environnement"
+  "volontariat_individuel",
+  "service_civique",
+  "groupe_jeunes",
+  "conge_solidaire",
 ]
 
 // Regex pour valider un nom de pays
@@ -144,5 +143,154 @@ export const getMissionBySlug = async (req, res, next) => {
   } catch (error) {
     // Gère le 404 throwé par le service si slug inconnu
     next(error)
+  }
+}
+
+// ── CREATE MISSION (ADMIN) ────────────────────────────────────────────────────
+// POST /api/admin/missions
+// Route PROTÉGÉE : montée derrière authMiddleware (token valide + role admin)
+// Body JSON attendu : { title, country, slug, short_description, type, ... }
+export const createMission = async (req, res, next) => {
+  try {
+    // 1. Extraction des champs depuis le body
+    const { title, country, slug, short_description, type } = req.body
+    // 👉 ajoute ici tes champs optionnels si tu veux les accepter dès maintenant
+
+    // 2. Validation : champs OBLIGATOIRES présents
+    const missing = []
+    if (!title)  missing.push("title")
+    if (!country)  missing.push("country")
+    if (!slug)   missing.push("slug")
+    if (!short_description)  missing.push("short_description")
+    
+    if (missing.length > 0){
+      return res.status(400).json({
+        error : true, 
+        message : `Champ(s) obligatoire(s) manquant(s) : ${missing.join(", ")}`,
+      })
+    }
+
+    // 3. Validation des FORMATS
+    // 👉 VALID_TYPES.includes(type) ?     sinon → 400   (si type fourni)
+    // 👉 SLUG_REGEX.test(slug) ?          sinon → 400
+    // 👉 COUNTRY_REGEX.test(country) ?    sinon → 400
+    if (type !== undefined && !VALID_TYPES.includes(type)) {
+      return res.status(400).json({
+        error: true,
+        message: "Type non valide"
+      })
+    }
+
+    if (!SLUG_REGEX.test(slug)) {
+      return res.status(400).json({
+        error: true,
+        message: "Caractére non accepté dans le slug"
+      })
+    }
+
+    if (!COUNTRY_REGEX.test(country)) {
+      return res.status(400).json({
+        error: true,
+        message: "Pays non valide"
+      })
+    }
+
+    // 4. Appel du service avec un objet PROPRE (jamais req.body brut !)
+    // 👉 const mission = await create({ title, country, slug, short_description, type, ... })
+    const mission = await create({title, country, slug, short_description, type})
+
+    // 5. Réponse 201 Created (ressource créée, pas un simple 200)
+    // 👉 return res.status(201).json({ success: true, mission })
+    return res.status(201).json({
+      success: true,
+      mission
+    })
+
+  } catch (error) {
+    // Attrape le 409 (slug dupliqué) + autres erreurs Prisma
+    next(error)
+  }
+}
+
+// ── UPDATE MISSION (ADMIN) ────────────────────────────────────────────────────
+// PATCH /api/admin/missions/:id
+// Modification PARTIELLE : l'admin n'envoie QUE les champs à changer.
+// Route PROTÉGÉE (authMiddleware).
+export const updateMission = async (req, res, next) => {
+  try {
+    // 1. Récupérer et valider l'id depuis l'URL
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    // 2. WHITELIST + champs fournis uniquement
+    //    On construit "data" en n'ajoutant QUE les champs réellement envoyés.
+    //    → un champ absent ne sera pas touché (c'est tout l'intérêt du PATCH).
+    const data = {}
+    const allowed = [
+      "title", "country", "slug", "short_description", "type",
+      "description", "volunteer_role", "programme", "included", "not_include",
+      "admin_info", "ministry_url", "health_info", "helloasso_url",
+      "image_url", "how_to_go", "is_active",
+    ]
+    for (const champ of allowed) {
+      if (req.body[champ] !== undefined) {
+        data[champ] = req.body[champ]
+      }
+    }
+
+    // 3. Refuser une requête vide (aucun champ à modifier)
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ error: true, message: "Aucun champ à modifier" })
+    }
+
+    // 4. Valider les FORMATS — mais SEULEMENT pour les champs présents
+    if (data.type !== undefined && !VALID_TYPES.includes(data.type)) {
+      return res.status(400).json({ error: true, message: "Type non valide" })
+    }
+    if (data.slug !== undefined && !SLUG_REGEX.test(data.slug)) {
+      return res.status(400).json({ error: true, message: "Format de slug invalide" })
+    }
+    if (data.country !== undefined && !COUNTRY_REGEX.test(data.country)) {
+      return res.status(400).json({ error: true, message: "Pays non valide" })
+    }
+
+    // 5. Appel du service
+    const mission = await update(id, data)
+
+    // 6. Réponse 200 OK (modification réussie — pas 201, rien n'a été CRÉÉ)
+    return res.status(200).json({ success: true, mission })
+
+  } catch (error) {
+    next(error)   // attrape 404 (id absent) et 409 (slug pris) du service
+  }
+}
+
+// ── DELETE MISSION (ADMIN) ────────────────────────────────────────────────────
+// DELETE /api/admin/missions/:id
+// SOFT DELETE : désactive la mission (is_active = false) au lieu de l'effacer.
+// Route PROTÉGÉE (authMiddleware).
+export const deleteMission = async (req, res, next) => {
+  try {
+    // 1. Valider l'id (même logique que le PATCH)
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    // 2. Désactivation via le service
+    const mission = await softDelete(id)
+
+    // 3. Réponse 200 + confirmation
+    //    On renvoie la mission désactivée pour que le front confirme l'action.
+    return res.status(200).json({
+      success: true,
+      message: "Mission désactivée",
+      mission,
+    })
+
+  } catch (error) {
+    next(error)   // attrape le 404 du service
   }
 }

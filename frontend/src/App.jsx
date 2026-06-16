@@ -5,8 +5,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/layout/Layout'
 import Home from './pages/Home'
+<<<<<<< HEAD
+import Missions from './pages/Missions' //import rajouté d'Alison
+=======
 import Missions from './pages/Missions'
 import MissionDetail from './pages/MissionDetail'
+>>>>>>> dev
 import LoginAdmin from './pages/admin/LoginAdmin'
 import Dashboard from './pages/admin/Dashboard'
 
@@ -21,8 +25,12 @@ function App() {
         {/* Routes publiques — avec Navbar + Footer */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
+<<<<<<< HEAD
+          <Route path="/missions" element={<Missions />} /> {/* Route ajouté pour mission Ali  */}
+=======
           <Route path="/missions" element={<Missions />} />
           <Route path="/missions/:slug" element={<MissionDetail />} />
+>>>>>>> dev
         </Route>
 
         {/* Routes admin — sans Navbar ni Footer */}

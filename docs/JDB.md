@@ -924,4 +924,159 @@ pour consulter et vérifier les données.
 
 ---
 
+---
+
+## Jour 9 · 10 juin 2026
+### S3/S4 — Intégration & débogage de la stack complète (front + back + Docker)
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Backend — `npx prisma generate` | ✅ Débloqué — Prisma Client v7.8.0 généré |
+| Backend — API missions | ✅ `GET /api/missions` retourne les 5 missions (JSON vérifié) |
+| Frontend — route `/missions` | ✅ Créée et branchée dans `App.jsx` (sous `<Layout />`) |
+| Frontend — placeholder `Missions.jsx` | ✅ Créé temporairement (en attente du travail front de Gwen) |
+| Docker — 3 conteneurs | ✅ postgres healthy + backend + frontend relancés |
+| Docker — dépendance `react-icons` | ✅ Réinstallée dans le conteneur après purge du volume |
+| BDD — migrations + seed | ✅ Régénérées après `down -v` (2 migrations + seed complet) |
+| Stack complète | ✅ Front (`:5173`) affiche correctement, back (`:3000`) répond |
+
+#### Ce qui a été fait
+
+**Backend — Alison**
+
+**Déblocage `npx prisma generate`**
+- Erreur au lancement : `Cannot find module 'dotenv/config'` chargé par `prisma.config.ts`
+- Cause : Prisma v7 ne charge plus le `.env` automatiquement — le package `dotenv` est requis explicitement mais n'était pas installé
+- Solution : `npm install dotenv` — Prisma Client v7.8.0 généré ensuite sans erreur
+- `prisma.config.ts` validé : structure correcte (`import "dotenv/config"` + `env("DATABASE_URL")`)
+
+**Vérification API**
+- `GET http://localhost:3000/api/missions` → JSON avec les 5 missions confirmé
+- `Cannot GET /` sur la racine = comportement normal (l'API n'a pas de route `/`, seulement `/api/...`)
+
+**Frontend — Alison (avec accord de Gwen sur le périmètre)**
+
+**Route `/missions` manquante**
+- Symptôme : page blanche sur `/missions`, console → `No routes matched location "/missions"`
+- Cause : aucune `<Route path="/missions">` déclarée dans `App.jsx` ; le fichier `Missions.jsx` n'existait pas
+- Coordination : message envoyé à Gwen avant toute modification — elle confirme ne pas avoir commencé la page → feu vert pour un placeholder temporaire
+- Solution : création de `frontend/src/pages/Missions.jsx` (placeholder) + import + `<Route path="/missions">` ajoutée **à l'intérieur** du bloc `<Layout />` (page publique → hérite de Navbar + Footer)
+
+**Docker — Alison**
+
+**Conflit de ports front (5173 vs 5174)**
+- Constat : `npm run dev` manuel basculait sur `:5174` car `:5173` déjà occupé
+- Cause : le conteneur `sensolidaire_frontend` tournait déjà sur `:5173` (front Docker) — deux fronts tournaient en parallèle sans le savoir
+- Solution : arrêt du `npm run dev` manuel, utilisation exclusive du front Docker sur `:5173` (aligné avec la config CORS du back qui autorise `:5173`)
+
+**Dépendance `react-icons` absente du conteneur**
+- Symptôme : `Failed to resolve import "react-icons/fa"` depuis `ActionCard.jsx`
+- Vérifications : `react-icons` bien présent dans `package.json` ✅ mais absent de `node_modules` du conteneur (`ls node_modules/react-icons` → No such file)
+- Cause : le volume anonyme `/app/node_modules` (créé 11 jours plus tôt) recouvrait le `node_modules` de l'image fraîche, même après `--build`
+- Solution : `docker-compose down -v` (purge des volumes) + `docker-compose up -d --build` → `node_modules` recréé proprement, `react-icons` installé (dossier `fa` présent)
+
+**BDD régénérée après purge**
+- `down -v` ayant supprimé le volume `postgres_data`, la base a été reconstruite :
+  - `docker-compose exec backend npx prisma migrate deploy` → 2 migrations appliquées (`init` + `add_mission_type`)
+  - `docker-compose exec backend node prisma/seed.js` → admin + 5 missions + 14 pricing + 5 locations + 7 témoignages réinjectés
+
+#### Erreurs rencontrées & solutions
+
+| Erreur | Solution appliquée |
+|---|---|
+| `Cannot find module 'dotenv/config'` (prisma.config.ts) | `npm install dotenv` — Prisma v7 ne charge plus le `.env` automatiquement |
+| `vite: not found` (frontend) | `npm install` — `node_modules` non versionné, absent après le merge |
+| `No routes matched location "/missions"` | Création de `Missions.jsx` + déclaration de la route dans `App.jsx` |
+| Page blanche après ajout de la route | Commentaire `/* */` non fermé dans `App.jsx` avalait tout le fichier — remplacé par `//` |
+| Page toujours blanche / route non prise en compte | `App.jsx` non sauvegardé (`Ctrl+S` oublié) — Vite recharge sur le fichier sauvegardé |
+| `Failed to resolve import "react-icons/fa"` | Volume anonyme `node_modules` périmé — `docker-compose down -v` + rebuild |
+| Port front sur `:5174` au lieu de `:5173` | Front Docker occupait déjà `:5173` — arrêt du `npm run dev` manuel |
+
+#### Notes & observations
+- Prisma v7 ne charge plus le `.env` tout seul : `dotenv` doit être installé et déclaré dans `dependencies` (sinon erreur de chargement de `prisma.config.ts`)
+- Après un `git merge`, réflexe systématique : `npm install` (front comme back) car `node_modules` n'est pas versionné
+- L'API back n'est pas un site web : tester sur `/api/...`, jamais sur `/` (qui renvoie `Cannot GET /`)
+- Le front du projet tourne **dans Docker sur `:5173`** — pas besoin de lancer `npm run dev` à la main (cela crée un doublon sur `:5174`)
+- Piège Docker : `--build` reconstruit l'image mais **ne purge pas les volumes anonymes** — pour rafraîchir `node_modules` dans le conteneur, il faut `down -v` puis rebuild
+- `down -v` supprime aussi le volume `postgres_data` (la BDD) → toujours re-`migrate deploy` + re-`seed` ensuite
+- Dans un conteneur, utiliser `migrate deploy` (non interactif) plutôt que `migrate dev`
+- Commentaires JS : préférer `//` pour une ligne — un `/*` non fermé casse tout le fichier
+- Réflexe de debug : toujours **vérifier** (console F12, `ls`, `package.json`) avant de supposer la cause
+
+#### Coordination équipe
+- Le placeholder `Missions.jsx` est **temporaire** — la vraie page Missions (hero, filtres type/pays/durée, carte, MissionCards) reste dans le périmètre de Gwen
+- La couche service front (`services/missionsService.js` + variable `VITE_API_URL`) n'existe pas encore → l'affichage réel des missions dans le front (test front↔API de bout en bout) est en attente de cette couche
+
+#### Points à surveiller (dette technique)
+- Conteneur back en `node:20-alpine` alors qu'un sous-package Prisma v7 (`@prisma/streams-local`) recommande Node ≥ 22 (warning `EBADENGINE`, non bloquant aujourd'hui)
+- `3 moderate severity vulnerabilities` signalées par npm — à inspecter via `npm audit` (sans `--force`)
+- Gestion de `node_modules` dans Docker avec hot-reload fragile (volume anonyme) — à revoir après la deadline
+
+#### Prévu — Jour 10
+- S4 — CRUD admin missions (routes protégées : create / update / delete)
+- S4 — CRUD admin témoignages (modération : approuver / refuser / toggle homepage)
+
+## Jour 13 · 14 juin 2026
+### S4 — CRUD admin missions (Create / Update / Delete) + incident base de données
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| `POST /api/admin/missions` (create) | ✅ Écrit + testé (201 / 401 / 400 / 409) |
+| `PATCH /api/admin/missions/:id` (update partiel) | ✅ Écrit + testé (200 / 404) |
+| `DELETE /api/admin/missions/:id` (soft delete) | ✅ Écrit + testé (200 / 404) |
+| `findBySlug` aligné sur `is_active` | ✅ Corrigé (`findUnique` → `findFirst`) |
+| `errorHandler` transmet `err.code` | ✅ Corrigé |
+| `VALID_TYPES` aligné sur la taxonomie réelle | ✅ (provisoire — à valider cliente) |
+| Migration bloquée `make_short_description_required` | ✅ Réparée (backfill + resolve) |
+| Doublons missions en base (anciens slugs) | ✅ Nettoyés (9 missions propres) |
+| Tests automatisés Jest + Supertest | ✅ Fichier créé (`tests/missions.admin.test.js`) |
+
+#### Ce qui a été fait
+
+**Backend — Alison**
+
+**CRUD admin missions complet**
+- `create` (service) + `createMission` (controller) : whitelist explicite anti mass-assignment, validation type/slug/country réutilisant les constantes existantes, message d'erreur précisant le champ manquant, code `SLUG_TAKEN` sur slug dupliqué (409).
+- `update` (service) + `updateMission` (controller) : choix **PATCH** (modification partielle) — seuls les champs fournis sont mis à jour, ciblage par `id`, 404 (`MISSION_NOT_FOUND`) si l'id n'existe pas.
+- `softDelete` (service) + `deleteMission` (controller) : **soft delete** (`is_active = false`) plutôt que suppression réelle → réversible, traçable, évite la gestion en cascade des relations.
+- Routeur admin : `router.post / patch / delete` montés derrière `authMiddleware` (porte gardée en amont).
+
+**Corrections transverses**
+- `errorHandler` : ajout de `...(err.code && { code: err.code })` pour transmettre le code métier au front.
+- `findBySlug` : passé de `findUnique` à `findFirst` + `is_active: true` → une mission soft-deletée disparaît aussi du détail public (et plus seulement de la liste).
+- `VALID_TYPES` : remplacé les anciens types périmés (`faune_sauvage`...) par la taxonomie réelle du seed (`volontariat_individuel`, `service_civique`, `groupe_jeunes`, `conge_solidaire`).
+- Seed enrichi : 9 missions (ajout service civique Kenya/Sénégal, groupe jeunes, congé solidaire).
+
+#### Erreurs rencontrées & solutions
+
+| Erreur | Cause | Solution |
+|---|---|---|
+| `P3018` migration bloquée | `short_description` passée en NOT NULL alors que des lignes existantes étaient `null` (étape backfill manquante) | `UPDATE` de backfill + `prisma migrate resolve --rolled-back` + `migrate deploy` |
+| Doublons de missions (id 1-5 vs 6-14) | `upsert` cherche par `slug` ; les anciens slugs différaient → branche `create` au lieu de `update` | Suppression ordonnée enfants → parents (pricing, location, testimonial puis mission) |
+| `SyntaxError: Identifier 'findAll' has already been declared` | Double ligne d'`import` dans `missionController.js` | Garder un seul import |
+| `ReferenceError: updateMission is not defined` | Route ajoutée mais fonction non importée dans le routeur | Ajouter l'import |
+| `does not provide an export named 'deleteMisson'` | Typo : `deleteMisson` au lieu de `deleteMission` | Corriger l'orthographe |
+| `socket hang up` / `connection reset` (Postman + curl) | Serveur crashé au démarrage (les erreurs ci-dessus) → rien n'écoute sur 3000 | Lire `docker-compose logs backend` → corriger → nodemon relance |
+
+#### Notes & observations
+- Réflexe clé acquis : devant un serveur qui « ne répond pas », **lire les logs Docker en premier** — ils donnent fichier + ligne + raison.
+- Soft delete déjà à moitié en place : `findAll` filtrait déjà `is_active = true`. Restait à créer la route qui bascule le flag + corriger `findBySlug`.
+- Sécurité : ne jamais partager un token JWT (clé d'accès temporaire). Un JWT est encodé, pas chiffré.
+
+#### Décisions techniques
+- **PATCH** retenu pour l'update (vs PUT) : plus adapté à un dashboard d'édition (modification champ par champ, pas de risque d'écraser un champ non renvoyé).
+- **Soft delete** retenu pour les missions (vs hard delete) : réversibilité + traçabilité, coût de stockage négligeable à cette échelle. (Note : pour les **témoignages**, prévoir un vrai hard delete possible — données personnelles, RGPD.)
+
+#### Dette technique notée (à traiter plus tard)
+- `authMiddleware` valide le token mais ne vérifie **pas** `role === 'admin'` (OK aujourd'hui car système admin-only, à durcir si d'autres rôles arrivent → 403).
+- `schema.prisma` : `type @default("faune_sauvage")` périmé → corriger par migration.
+- `VALID_TYPES` à confirmer avec la cliente (question C2 du doc cliente).
+
+#### Prochaines étapes
+- `GET /api/admin/missions` (l'admin doit voir TOUTES les missions, actives + inactives, pour les rééditer/réactiver).
+- CRUD admin témoignages (avec gestion RGPD du droit à l'oubli).
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
