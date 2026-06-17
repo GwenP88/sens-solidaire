@@ -413,8 +413,15 @@ function MissionDetail() {
       {/* ── Témoignages ── */}
       {mission.testimonials?.length > 0 && (
         <section id="temoignages" className="section-padding bg-accent-2">
-          <h2 className="section-title text-surface mb-4">Ils ont vécu l'aventure, découvrez leurs témoignages</h2>
-          <p className="font-body text-sm text-surface/60 mb-8">Chaque mission est une expérience unique. Découvrez les récits de volontaires partis avant vous, leurs rencontres, leurs découvertes et l'impact de leur engagement sur le terrain.</p>
+          <div className="flex items-start justify-between mb-8">
+            <div>
+              <h2 className="section-title text-surface mb-4">Ils ont vécu l'aventure, découvrez leurs témoignages</h2>
+              <p className="font-body text-sm text-surface/60">Chaque mission est une expérience unique. Découvrez les récits de volontaires partis avant vous, leurs rencontres, leurs découvertes et l'impact de leur engagement sur le terrain.</p>
+            </div>
+            <a href="/temoignages">
+              <Button label="Voir tous les témoignages →" variant="secondary" />
+            </a>
+          </div>
           <Carousel
             items={mission.testimonials}
             renderSlide={(t) => <TestimonialCard {...t} />}

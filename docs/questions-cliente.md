@@ -69,9 +69,12 @@
 | C18 | **Congé solidaire** | Le congé solidaire au Kenya et au Sénégal suit-il la même organisation que les missions classiques — la seule différence étant que l'employeur finance pour plusieurs personnes ? | |
 | C19 | **Côte d'Ivoire** | Plus de missions en Côte d'Ivoire mais toujours des actions en cours ? Que faire du contenu existant sur le site ? | |
 | C20 | **Gestion des médias** | Qui aura accès pour gérer les médias dans le dashboard ? Quels types de médias (photos, vidéos, PDFs) ? | |
+| C20 | **Médias** | avoir accés a des photos libre de droit pour le site (assez tot car redimenssionement à faire) | |
 | C21 | **Logo & navbar** | Fournir le logo en version blanche + tous les éléments de la barre de navigation pour intégration finale. | |
 | C22 | **Droits à l'image** | Vérification des droits à l'image sur toutes les photos utilisées sur le site — confirmer que les autorisations sont en ordre.  elle doit fournir les autorisations avant le lancement*.| |
 | C23 | **Logos partenaires pages actions** | Des logos partenaires apparaissent en bas des pages "actions pour l'environnement" — faut-il les centraliser dans une seule section ou les garder par page ? | |
+| C24 | **Mentions légales** | fournir le numéro SIRET de l'association | |
+| C25 | **Logos partenaires pages actions** | fournir le nom et l'adresse de l'hébergeur choisi et du directeur de publication (Delphine?) | |
 
 
 ** *Atteinte au droit à l'image — toute personne reconnaissable sur une photo peut exiger le retrait et des dommages et intérêts

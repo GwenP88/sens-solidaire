@@ -4,27 +4,29 @@
 import { IconPin, IconMail, IconYoutube, IconLinkedin, IconInstagram, IconFacebook } from '../../utils/icons'
 import Button from '../ui/Button'
 
-function Footer() {
+function Footer({ hideCta = false }) {
   return (
     <footer>
 
-      {/* Zone 1 — CTA immersif */}
-      <div className="relative w-full h-96 flex items-end p-16" style={{ backgroundImage: `url(/images/hero_footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="relative flex flex-col gap-4">
-          <h2 className="font-heading font-bold text-surface text-3xl max-w-2xl">
-            Chaque action peut changer une vie.
-          </h2>
-          <p className="font-body text-surface text-base max-w-2xl">
-            Rejoignez-nous sur le terrain ou soutenez nos projets. <br /> Ensemble, construisons un avenir plus solidaire.
-          </p>
-          <div className="flex gap-4 mt-2">
-            <Button label="Je pars en mission →" variant="primary" />
-            <Button label="Je fais un don →" variant="secondary" />
+      {/* Zone 1 — CTA immersif — masqué si hideCta */}
+      {!hideCta && (
+        <div className="relative w-full h-96 flex items-end p-16" style={{ backgroundImage: `url(/images/hero_footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="relative flex flex-col gap-4">
+            <h2 className="font-heading font-bold text-surface text-3xl max-w-2xl">
+              Chaque action peut changer une vie.
+            </h2>
+            <p className="font-body text-surface text-base max-w-2xl">
+              Rejoignez-nous sur le terrain ou soutenez nos projets. <br /> Ensemble, construisons un avenir plus solidaire.
+            </p>
+            <div className="flex gap-4 mt-2">
+              <Button label="Je pars en mission →" variant="primary" />
+              <Button label="Je fais un don →" variant="secondary" />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Zone 2 — Navigation 4 colonnes */}
       <div className="bg-primary px-20 py-8 flex justify-between">

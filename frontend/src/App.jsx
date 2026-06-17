@@ -11,6 +11,7 @@ import LoginAdmin from './pages/admin/LoginAdmin'
 import Dashboard from './pages/admin/Dashboard'
 import Testimonials from './pages/Testimonials'
 import Contact from './pages/Contact'
+import MentionsLegales from './pages/MentionsLegales'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/missions/:slug" element={<MissionDetail />} />
           <Route path="/temoignages" element={<Testimonials />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/mentions-legales" element={<MentionsLegales />} />
         </Route>
 
         {/* Routes admin — sans Navbar ni Footer */}

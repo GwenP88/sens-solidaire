@@ -137,7 +137,9 @@ function Home() {
               Il existe mille façons de s'engager. Mission individuelle, service civique, séjour en groupe ou congé solidaire : découvrez des expériences adaptées à chaque parcours pour contribuer à des projets concrets de protection de la biodiversité.
             </p>
           </div>
-          <Button label="Voir toutes les missions →" variant="secondary" />
+            <a href="/missions">
+              <Button label="Voir toutes les missions →" variant="secondary" />
+            </a>
         </div>
         <div className="grid grid-cols-2 gap-6">
           {missionTypes.map((type) => (
