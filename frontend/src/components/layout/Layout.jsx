@@ -5,7 +5,7 @@ import Footer from './Footer'
 import CookieBanner from '../ui/CookieBanner'
 
 // Pages sans CTA footer
-const NO_CTA_PAGES = ['/mentions-legales', '/confidentialite', '/cookies']
+const NO_CTA_PAGES = ['/mentions-legales', '/confidentialite', '/cookies', '/rapports-activite']
 
 function Layout() {
   const location = useLocation()

@@ -21,8 +21,12 @@ function Footer({ hideCta = false }) {
               Rejoignez-nous sur le terrain ou soutenez nos projets. <br /> Ensemble, construisons un avenir plus solidaire.
             </p>
             <div className="flex gap-4 mt-2">
-              <Button label="Je pars en mission →" variant="primary" />
-              <Button label="Je fais un don →" variant="secondary" />
+              <a href="/missions">
+                <Button label="Je pars en mission →" variant="primary" />
+              </a>
+              <a href="/soutenir">
+                <Button label="Je fais un don →" variant="secondary" />
+              </a>
             </div>
           </div>
         </div>

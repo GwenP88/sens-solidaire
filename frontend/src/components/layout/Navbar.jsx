@@ -142,7 +142,9 @@ function Navbar() {
         <button className="font-bold text-surface hover:text-accent transition-colors inline-flex items-center gap-1">
           FR<IoChevronDownSharp className="text-xs" />
         </button>
-        <Button label="Faire un don" variant="primary" />
+        <a href="/soutenir">
+          <Button label="Faire un don" variant="primary" />
+        </a>
       </div>
 
     </nav>

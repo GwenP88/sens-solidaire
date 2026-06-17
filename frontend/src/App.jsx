@@ -14,6 +14,7 @@ import Contact from './pages/Contact'
 import MentionsLegales from './pages/MentionsLegales'
 import Confidentialite from './pages/Confidentialite'
 import Soutenir from './pages/Soutenir'
+import RapportsActivite from './pages/RapportsActivite'
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/mentions-legales" element={<MentionsLegales />} />
           <Route path="/confidentialite" element={<Confidentialite />} />
           <Route path="/soutenir" element={<Soutenir />} />
+          <Route path="/rapports-activite" element={<RapportsActivite />} />
         </Route>
 
         {/* Routes admin — sans Navbar ni Footer */}
