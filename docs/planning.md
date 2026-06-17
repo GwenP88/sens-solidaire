@@ -99,7 +99,7 @@
 | 41 | Alison | Dashboard : routage email contact | 24-25 juin | 🔵 À faire |
 | 42 | Alison | Upload fichiers Multer (images + PDFs) | 25-26 juin | 🔵 À faire |
 | 43 | Gwen | Responsive mobile-first — toutes pages MVP (375px / 768px) | 23-26 juin | 🔵 À faire |
-| 43bis | Gwen | Responsive mobile-first — toutes pages MVP (375px / 768px) | 23-26 juin | 🔵 À faire |
+| 43bis | Gwen | si temps dispo : page impact, éducation et sensibilisation, média et actualités | 23-26 juin | 🔵 À faire |
 
 ---
 
