@@ -146,10 +146,10 @@ function Navbar() {
 
         {/* Actions éducatives */}
         <a
-          href="/actions-educatives"
+          href="/education & sensibilisation"
           className={`font-body font-bold text-base text-surface hover:text-accent transition-colors ${location.pathname === '/actions-educatives' ? 'underline underline-offset-4' : ''}`}
         >
-          Actions éducatives
+          Éducation & Sensibilisation
         </a>
 
         {/* Médias & actualités */}

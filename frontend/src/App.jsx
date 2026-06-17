@@ -17,6 +17,9 @@ import Soutenir from './pages/Soutenir'
 import RapportsActivite from './pages/RapportsActivite'
 import APropos from './pages/APropos'
 import Equipe from './pages/Equipe'
+import Impact from './pages/Impact'
+// import ActionsEducatives from './pages/ActionsEducatives'
+// import MediasActualites from './pages/MediasActualites'
 
 function App() {
   return (
@@ -39,6 +42,10 @@ function App() {
           <Route path="/rapports-activite" element={<RapportsActivite />} />
           <Route path="/a-propos" element={<APropos />} />
           <Route path="/equipe" element={<Equipe />} />
+          {/* <Route path="/actions-educatives" element={<ActionsEducatives />} /> */}
+          <Route path="/notre-impact" element={<Impact />} />
+          {/* <Route path="/notre-impact/ :slug" element={<ActionDetails/>} /> */}
+          {/* <Route path="/emedias-actualite" element={<MediasActualites />} /> */}
         </Route>
 
         {/* Routes admin — sans Navbar ni Footer */}
