@@ -106,7 +106,7 @@
 
 | # | Dev | Tâche | Période | Statut |
 |---|---|---|---|---|
-| 37 | Gwen | Mentions légales + bannière cookies CNIL | 23-24 juin | 🔵 À faire |
+| 37 | Gwen | Mentions légales + bannière cookies CNIL | 23-24 juin | ✅ Terminé en avance |
 | 38 | Gwen | Responsive mobile-first — toutes pages MVP (375px / 768px) | 24-26 juin | 🔵 À faire |
 | 40 | Alison | Dashboard : paramètres routage email contact | 23-24 juin | 🔵 À faire |
 | 41 | Alison | Upload fichiers Multer (images + PDFs) | 24-25 juin | 🔵 À faire |
