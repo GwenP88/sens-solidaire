@@ -17,15 +17,19 @@ const MISSIONS = [
 
 function Navbar() {
   const location = useLocation()
-
   // État d'ouverture du dropdown missions
   const [missionsOpen, setMissionsOpen] = useState(false)
-
   // Vérifie si le chemin courant correspond à une page mission
   const isOnMissions = location.pathname.startsWith('/missions')
-
   // Timer de fermeture du dropdown — évite la fermeture intempestive au passage de la souris
   const closeTimer = useRef(null)
+
+  // État d'ouverture du dropdown à-propos
+  const [aproposOpen, setAproposOpen] = useState(false)
+  // Timer de fermeture du dropdown — évite la fermeture intempestive au passage de la souris
+  const closeTimerApropos = useRef(null)
+  // Vérifie si le chemin courant correspond à une page a-propos
+  const isOnApropos = location.pathname.startsWith('/a-propos') || location.pathname.startsWith('/equipe')
 
   return (
     <nav className="w-full flex items-center justify-between px-16 h-20 bg-transparent absolute top-0 left-0 z-10">
@@ -96,12 +100,41 @@ function Navbar() {
         </div>
 
         {/* À propos */}
-        <a
-          href="/a-propos"
-          className={`font-body font-bold text-base text-surface hover:text-accent transition-colors inline-flex items-center gap-1 ${location.pathname === '/a-propos' ? 'underline underline-offset-4' : ''}`}
+        {/* À propos — dropdown au survol */}
+        <div
+          className="relative"
+          onMouseEnter={() => {
+            clearTimeout(closeTimerApropos.current)
+            setAproposOpen(true)
+          }}
+          onMouseLeave={() => {
+            closeTimerApropos.current = setTimeout(() => setAproposOpen(false), 150)
+          }}
         >
-          À propos<IoChevronDownSharp className="text-xs" />
-        </a>
+          <a
+            href="/a-propos"
+            className={`font-body font-bold text-base text-surface hover:text-accent transition-colors inline-flex items-center gap-1 ${isOnApropos ? 'underline underline-offset-4' : ''}`}
+          >
+            À propos<IoChevronDownSharp className="text-xs" />
+          </a>
+
+          {aproposOpen && (
+            <div className="absolute top-full left-0 mt-2 bg-primary rounded-xl shadow-lg py-2 min-w-48 z-20">
+              <a
+                href="/a-propos"
+                className={`block px-5 py-2 font-body text-sm text-surface hover:text-accent transition-colors ${location.pathname === '/a-propos' ? 'text-accent' : ''}`}
+              >
+                Notre association
+              </a>
+              <a
+                href="/equipe"
+                className={`block px-5 py-2 font-body text-sm text-surface hover:text-accent transition-colors ${location.pathname === '/equipe' ? 'text-accent' : ''}`}
+              >
+                Notre équipe
+              </a>
+            </div>
+          )}
+        </div>
 
         {/* Notre impact */}
         <a
