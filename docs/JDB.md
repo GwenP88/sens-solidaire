@@ -1149,4 +1149,65 @@ pour consulter et vérifier les données.
 
 ---
 
+## Jour 11 · 17 juin 2026
+
+### 🎯 Objectifs du jour
+- Pages hors MVP initial : Soutenir, Rapports d'activité, À propos, Équipe
+- Pages légales : Mentions légales, Confidentialité, bannière cookies
+- Mise à jour documentation
+
+---
+
+### ✅ Réalisé
+
+#### Pages légales
+- `MentionsLegales.jsx` — layout encadré, 2 colonnes éditeur/hébergeur, fond primary navbar, sans CTA footer
+- `Confidentialite.jsx` — structure identique mentions légales, RGPD complet
+- `CookieBanner.jsx` — bannière fixe bas de page, consentement localStorage, boutons Accepter/Refuser
+- `Layout.jsx` — prop `hideCta` sur Footer, `NO_CTA_PAGES` array pour masquer le CTA sur pages légales
+
+#### Page Soutenir `/soutenir`
+- Sections : don HelloAsso + adhésion HelloAsso + pourquoi soutenir (5 colonnes icônes) + transparence
+- `AnchorNav` intégré pour navigation interne
+- Tarifs adhésion (particulier 25€ / asso 50€ / entreprise 250€)
+- CTA vers `/rapports-activite`
+
+#### Page Rapports d'activité `/rapports-activite`
+- Grille 3 colonnes de cards PDF téléchargeables
+- 13 rapports de 2012 à 2024 — données statiques (V2 BDD)
+- Image placeholder `rapport-placeholder.jpg` par card
+- Fond primary navbar, sans HeroPage
+
+#### Page À propos `/a-propos`
+- Sections : histoire + stats (15 ans, 40 pays, 10 000 jeunes) + valeurs (5) + champs d'activité (4 cards 2x2) + aperçu équipe + transparence + CTA contact
+- Dropdown navbar "À propos" avec sous-menu "Notre association" / "Notre équipe"
+
+#### Page Équipe `/equipe`
+- Sections : Direction (6 membres, cards horizontales) + Bureau (3 membres, même style) + Conseil d'administration (11 membres, cards compactes 4 colonnes) + Également à nos côtés (3) + Délégations (8 cards immersives)
+- Avatars genrés (`avatar-women.png` / `avatar-men.png`) en attente des vraies photos
+- Drapeaux via `flagcdn.com` — `react-world-flags` abandonné (incompatible)
+- Cards délégations : photo immersive + overlay + drapeau + pays + lieu + contacts
+- Dropdown navbar "À propos" → `/a-propos` + `/equipe`
+
+#### Navbar
+- Dropdown "À propos" ajouté avec `closeTimerApropos` (ref séparé de missions)
+
+---
+
+### 🔵 À faire / Notes pour la prochaine fois
+- Évaluer si créer des composants réutilisables pour les cards membres équipe (`TeamMemberCardLarge`, `TeamMemberCardSmall`) — utile si la BDD équipe est branchée plus tard
+- Brancher la page Équipe sur l'API quand Alison fait les routes `/api/team`
+- Brancher la page Rapports sur l'API quand table `ActivityReport` est créée
+- Ajouter `maxLength={280}` sur le textarea du formulaire de soumission témoignage
+- Logo blanc SVG/PNG encore manquant pour la navbar
+
+---
+
+### ⚠️ Points d'attention
+- `react-world-flags` incompatible avec le setup actuel — remplacé par `flagcdn.com`
+- Pages Équipe et À propos : données statiques en dur — prévoir migration BDD en Phase 2
+- voir si Card member utile?
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
