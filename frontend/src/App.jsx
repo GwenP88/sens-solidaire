@@ -12,6 +12,7 @@ import Dashboard from './pages/admin/Dashboard'
 import Testimonials from './pages/Testimonials'
 import Contact from './pages/Contact'
 import MentionsLegales from './pages/MentionsLegales'
+import Confidentialite from './pages/Confidentialite'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/temoignages" element={<Testimonials />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/mentions-legales" element={<MentionsLegales />} />
+          <Route path="/confidentialite" element={<Confidentialite />} />
         </Route>
 
         {/* Routes admin — sans Navbar ni Footer */}

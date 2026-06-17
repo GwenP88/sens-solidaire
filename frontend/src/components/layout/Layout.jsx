@@ -10,6 +10,7 @@ const NO_CTA_PAGES = ['/mentions-legales', '/confidentialite', '/cookies']
 function Layout() {
   const location = useLocation()
   const hideCta = NO_CTA_PAGES.includes(location.pathname)
+  
 
   return (
     <div>
