@@ -9,26 +9,8 @@ import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import { IconPin } from '../utils/icons'
+import { ODDS_LABELS } from '../utils/odds'
 
-const ODDS_LABELS = {
-  1: "Pas de pauvreté",
-  2: "Faim zéro",
-  3: "Bonne santé",
-  4: "Éducation de qualité",
-  5: "Égalité des sexes",
-  6: "Eau propre",
-  7: "Énergie propre",
-  8: "Travail décent",
-  9: "Industrie & innovation",
-  10: "Inégalités réduites",
-  11: "Villes durables",
-  12: "Consommation responsable",
-  13: "Lutte contre le climat",
-  14: "Vie aquatique",
-  15: "Vie terrestre",
-  16: "Paix & justice",
-  17: "Partenariats",
-}
 
 function ActionDetail() {
   const { slug } = useParams()

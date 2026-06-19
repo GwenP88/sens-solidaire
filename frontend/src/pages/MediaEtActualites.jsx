@@ -7,26 +7,7 @@ import FilterSelect from '../components/ui/FilterSelect'
 import MediaCard from '../components/media/MediaCard'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import { fetchMediaPosts } from '../services/api'
-
-const FILTER_CONFIG = [
-  {
-    key: 'theme',
-    placeholder: 'Tous les thèmes',
-    options: [
-      { value: 'Newsletter', label: 'Newsletter' },
-      { value: 'Revue de presse', label: 'Revue de presse' },
-      { value: 'Interview & radio', label: 'Interview & radio' },
-      { value: 'Vie de l\'association', label: 'Vie de l\'association' },
-      { value: 'Éducation & sensibilisation', label: 'Éducation & sensibilisation' },
-    ]
-  },
-  {
-    key: 'annee',
-    placeholder: 'Toutes les années',
-    options: [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2017, 2016, 2013]
-      .map(a => ({ value: String(a), label: String(a) }))
-  },
-]
+import { FILTERS_MEDIA_THEME } from '../utils/filters'
 
 function MediaEtActualites() {
   const [posts, setPosts] = useState([])

@@ -9,46 +9,8 @@ import FilterChips from '../components/navigation/FilterChips'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import { fetchFieldActions } from '../services/api'
-
-const FILTERS = [
-  { label: "Tous les filtres", value: null },
-  { label: "Environnement", value: "Environnement" },
-  { label: "Biodiversité", value: "Biodiversité" },
-  { label: "Agriculture", value: "Agriculture" },
-  { label: "Éducation", value: "Éducation" },
-  { label: "Échanges culturels", value: "Échanges culturels" },
-  { label: "Accès à l'eau", value: "Accès à l'eau" },
-  { label: "Sensibilisation", value: "Sensibilisation" },
-]
-
-const ODDS = [
-  { n: 1, label: "Pas de pauvreté" },
-  { n: 2, label: "Faim zéro" },
-  { n: 3, label: "Bonne santé" },
-  { n: 4, label: "Éducation de qualité" },
-  { n: 5, label: "Égalité des sexes" },
-  { n: 6, label: "Eau propre" },
-  { n: 7, label: "Énergie propre" },
-  { n: 8, label: "Travail décent" },
-  { n: 9, label: "Industrie & innovation" },
-  { n: 10, label: "Inégalités réduites" },
-  { n: 11, label: "Villes durables" },
-  { n: 12, label: "Consommation responsable" },
-  { n: 13, label: "Lutte contre le climat" },
-  { n: 14, label: "Vie aquatique" },
-  { n: 15, label: "Vie terrestre" },
-  { n: 16, label: "Paix & justice" },
-  { n: 17, label: "Partenariats" },
-]
-
-const FILTERS_COUNTRY = [
-  { label: "Tous", value: null },
-  { label: "Kenya", value: "Kenya" },
-  { label: "Sénégal", value: "Sénégal" },
-  { label: "Sri Lanka", value: "Sri Lanka" },
-  { label: "Pérou", value: "Pérou" },
-  { label: "Sumatra", value: "Sumatra" },
-]
+import { ODDS } from '../utils/odds'
+import { FILTERS_ACTION_TAGS, FILTERS_COUNTRY } from '../utils/filters'
 
 function NotreImpact() {
   const [actions, setActions] = useState([])

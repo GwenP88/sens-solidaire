@@ -7,13 +7,7 @@ import FilterChips from '../components/navigation/FilterChips'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import { fetchEducationItems } from '../services/api'
-
-const FILTERS = [
-  { label: "Tous", value: null },
-  { label: "Maternelle & Primaire", value: "primaire" },
-  { label: "Collège & Lycée", value: "college_lycee" },
-  { label: "Adultes & Étudiants", value: "adultes" },
-]
+import { FILTERS_EDUCATION_PUBLIC } from '../utils/filters'
 
 function ActionsEducatives() {
   const [items, setItems] = useState([])

@@ -14,15 +14,7 @@ import FilterChips from '../components/navigation/FilterChips'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import { useSearchParams } from 'react-router-dom'
 import { IconPerson, IconClock, IconPin, IconMoney, IconFrance, IconAbroad, IconGrow } from '../utils/icons'
-
-// Filtres disponibles — correspond aux clés de section
-const FILTERS = [
-  { label: "Toutes", value: null },
-  { label: "Volontariat individuel", value: "individuel" },
-  { label: "Service civique", value: "service_civique" },
-  { label: "Groupe jeunes", value: "groupe_jeunes" },
-  { label: "Congé solidaire", value: "conge_solidaire" },
-]
+import { FILTERS_MISSION_TYPE } from '../utils/filters'
 
 function Missions() {
   const [missions, setMissions] = useState([])
