@@ -6,6 +6,10 @@ datasource db {
   provider = "postgresql"
 }
 
+// ─────────────────────────────────────────
+// MISSION DETAILLEE
+// ─────────────────────────────────────────
+
 model Mission {
   id                Int              @id @default(autoincrement())
   title             String
@@ -32,6 +36,10 @@ model Mission {
   testimonials      Testimonial[]
 }
 
+// ─────────────────────────────────────────
+// MISSION / PRIX ET DUREE
+// ─────────────────────────────────────────
+
 model MissionPricing {
   id             Int      @id @default(autoincrement())
   mission_id     Int
@@ -42,6 +50,10 @@ model MissionPricing {
   updated_at     DateTime @updatedAt
   mission        Mission  @relation(fields: [mission_id], references: [id])
 }
+
+// ─────────────────────────────────────────
+// LIEUX DE MISSIONS
+// ─────────────────────────────────────────
 
 model Location {
   id          Int      @id @default(autoincrement())
@@ -56,6 +68,10 @@ model Location {
   updated_at  DateTime @updatedAt
   mission     Mission  @relation(fields: [mission_id], references: [id])
 }
+
+// ─────────────────────────────────────────
+// TEMOIGNAGES COURTS
+// ─────────────────────────────────────────
 
 model Testimonial {
   id            Int      @id @default(autoincrement())
@@ -72,6 +88,26 @@ model Testimonial {
   mission       Mission? @relation(fields: [mission_id], references: [id])
 }
 
+// ─────────────────────────────────────────
+// RAPPORT DE MISSIONS
+// ─────────────────────────────────────────
+
+model MissionReport {
+  id          Int      @id @default(autoincrement())
+  auteur      String
+  destination String?  // kenya, senegal, sri-lanka, perou, sumatra
+  type        String   // individuel, service_civique, groupe_jeune, conge_solidaire
+  annee       Int
+  pdf_url     String
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────
+// ADMINISTRATEUR
+// ─────────────────────────────────────────
+
 model Admin {
   id                 Int      @id @default(autoincrement())
   email              String   @unique
@@ -82,17 +118,25 @@ model Admin {
   updated_at         DateTime @updatedAt
 }
 
+// ─────────────────────────────────────────
+// TABLE MEDIA 
+// ─────────────────────────────────────────
+
 model Media {
   id            Int      @id @default(autoincrement())
   entity_type   String
   entity_id     Int
   file_url      String
   file_type     String
-  label  String?  // optionnel — utilisé pour les liens externes
+  label         String?  // optionnel — utilisé pour les liens externes
   display_order Int      @default(0)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 }
+
+// ─────────────────────────────────────────
+// ACTIONS SUR LE TERRAIN DETAILLEE
+// ─────────────────────────────────────────
 
 model FieldAction {
   id          Int      @id @default(autoincrement())
@@ -111,6 +155,10 @@ model FieldAction {
   odds        FieldActionODD[]
 }
 
+// ─────────────────────────────────────────
+// TAGS LIE A UNE ACTION SUR LE TERRAIN
+// ─────────────────────────────────────────
+
 model FieldActionTag {
   id            Int         @id @default(autoincrement())
   field_action  FieldAction @relation(fields: [action_id], references: [id])
@@ -118,12 +166,20 @@ model FieldActionTag {
   tag           String      // Environnement, Biodiversité, Agriculture...
 }
 
+// ─────────────────────────────────────────
+//ODD LIE A UNE ACTION SUR LE TERRAIN
+// ─────────────────────────────────────────
+
 model FieldActionODD {
   id            Int         @id @default(autoincrement())
   field_action  FieldAction @relation(fields: [action_id], references: [id])
   action_id     Int
   odd_number    Int         // 1 à 17
 }
+
+// ─────────────────────────────────────────
+// ARTICLES : MEDIAS ET ACTUALITES
+// ─────────────────────────────────────────
 
 model MediaPost {
   id           Int      @id @default(autoincrement())
@@ -139,6 +195,10 @@ model MediaPost {
   updated_at   DateTime @updatedAt
 }
 
+// ─────────────────────────────────────────
+// ARTICLE : EDUCATION ET SENSIBILISATION
+// ─────────────────────────────────────────
+
 model EducationItem {
   id           Int      @id @default(autoincrement())
   slug         String   @unique
@@ -152,4 +212,64 @@ model EducationItem {
   is_active    Boolean  @default(true)
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────
+// RAPPORT ACTIVITES
+// ─────────────────────────────────────────
+
+model ActivityReport {
+  id         Int      @id @default(autoincrement())
+  annee      Int      @unique
+  url        String
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────
+// MEMBRES DE L'ÉQUIPE
+// ─────────────────────────────────────────
+model TeamMember {
+  id            Int      @id @default(autoincrement())
+  nom           String
+  role          String
+  description   String?
+  avatar_url    String?
+  category      String   // direction, bureau, ca, egalement
+  display_order Int    @default(0)
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────
+// DÉLÉGATIONS INTERNATIONALES
+// ─────────────────────────────────────────
+
+model Delegation {
+  id              Int      @id @default(autoincrement())
+  pays            String
+  flag_code       String   // code ISO 3166-1 alpha-2 ex: KE, SN...
+  image_url       String
+  lieu            String
+  contacts        String
+  display_order   Int      @default(0)
+  is_active       Boolean  @default(true)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────
+// PARTENAIRES
+// ─────────────────────────────────────────
+model Partner {
+  id            Int      @id @default(autoincrement())
+  name          String
+  logo_url      String?
+  website_url   String?
+  display_order Int      @default(0)
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 }

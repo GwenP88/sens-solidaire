@@ -28,7 +28,7 @@ const seed = async () => {
   console.log("Démarrage du seed...")
 
   // ============================================================
-  // ÉTAPE 1 — ADMIN
+  // 1 — ADMIN
   // ============================================================
 
   const password_hash = await bcrypt.hash("Admin1234!", 10)
@@ -45,7 +45,7 @@ const seed = async () => {
   console.log(`Admin : ${admin.email}`)
 
   // ============================================================
-  // ÉTAPE 2 — MISSIONS
+  // 2 — MISSIONS
   // ============================================================
 
   // ── Mission 1 : Kenya ──────────────────────────────────────
@@ -285,7 +285,7 @@ const seed = async () => {
   console.log("Missions créées : Kenya, Sénégal, Pérou, Sri Lanka, Sumatra, SC Kenya, SC Sénégal, Groupe jeunes, Congé solidaire")
 
   // ============================================================
-  // ÉTAPE 3 — MISSION PRICING
+  // 3 — MISSION PRICING
   // ============================================================
 
   const missionIds = [
@@ -349,7 +349,7 @@ const seed = async () => {
   console.log("Pricing créé (20 lignes)")
 
 // ============================================================
-  // ÉTAPE 4 — LOCATIONS
+  // 4 — LIEUX DE MISSION
   // ============================================================
 
   // ── Voi (Kenya — ville principale) ─────────────────────────
@@ -537,7 +537,7 @@ const seed = async () => {
   console.log("Locations créées (13)")
 
   // ============================================================
-  // ÉTAPE 5 — TÉMOIGNAGES
+  // 5 — TÉMOIGNAGES
   // ============================================================
 
   await prisma.testimonial.deleteMany({
@@ -611,7 +611,7 @@ const seed = async () => {
   console.log("Témoignages créés (7 : 6 approved, 1 pending)")
 
   // ============================================================
-// ÉTAPE 6 — FIELD ACTIONS
+// 6 — ACTIONS SUR LE TERRAIN
 // ============================================================
 
 const FIELD_ACTIONS = [
@@ -619,110 +619,93 @@ const FIELD_ACTIONS = [
     slug: 'fabrique-papier-maktau-kenya',
     title: 'Fabrique de papier écologique de Maktau',
     description: 'Soutien au développement d\'une activité économique durable grâce au recyclage de la bouse d\'éléphant.',
-    content: `Afin de soutenir les communautés locales tout en préservant les richesses naturelles de leur territoire, nous avons accompagné le développement d'une fabrique de papier recyclé à partir de bouse d'éléphant.
-
-La fabrication de ce papier artisanal est entièrement naturelle. Elle repose sur des méthodes de production à faible impact environnemental, utilisant notamment l'énergie du soleil et du vent.
-
-Le processus de fabrication débute par le nettoyage des fibres contenues dans les déjections d'éléphants. Celles-ci sont ensuite bouillies pendant plusieurs heures pour être stérilisées et assouplies avant d'être transformées en pâte à papier.
-
-En choisissant ces créations, chacun contribue à soutenir les populations engagées dans la protection de leur environnement et à la préservation des éléphants et des forêts.`,
+    content: `Afin de soutenir les communautés locales tout en préservant les richesses naturelles de leur territoire, nous avons accompagné le développement d'une fabrique de papier recyclé à partir de bouse d'éléphant. La fabrication de ce papier artisanal est entièrement naturelle. Elle repose sur des méthodes de production à faible impact environnemental, utilisant notamment l'énergie du soleil et du vent. Le processus de fabrication débute par le nettoyage des fibres contenues dans les déjections d'éléphants. Celles-ci sont ensuite bouillies pendant plusieurs heures pour être stérilisées et assouplies avant d'être transformées en pâte à papier.
+    En choisissant ces créations, chacun contribue à soutenir les populations engagées dans la protection de leur environnement et à la préservation des éléphants et des forêts.`,
     country: 'Kenya',
     image_url: '/images/jardin_potager_kenya.jpg',
     tags: ['Environnement', 'Biodiversité'],
     odds: [8, 12, 15],
     gallery: ['/images/jardin_potager_kenya.jpg', '/images/locations/LUMO-kenya.jpeg', '/images/jardin_potager_senegal.jpg'],
   },
+
   {
     slug: 'patrouilles-rangers-lumo',
     title: 'Patrouilles avec les rangers du sanctuaire LUMO',
     description: 'Depuis plus de 10 ans, l\'association soutient les rangers du sanctuaire LUMO dans leur mission de lutte contre le braconnage.',
     content: `Depuis plus de 10 ans, l'association investit ses efforts au sanctuaire de LUMO, frontalier du Parc Tsavo, pour soutenir les rangers dans leur mission de lutte contre le braconnage.
-
-Soutien aux patrouilles, relevés de données sur la faune, entretien du matériel et du camp de base, nos volontaires ont régulièrement contribué à la vie du sanctuaire et à la protection de la vie animale.`,
+    Soutien aux patrouilles, relevés de données sur la faune, entretien du matériel et du camp de base, nos volontaires ont régulièrement contribué à la vie du sanctuaire et à la protection de la vie animale.`,
     country: 'Kenya',
     image_url: '/images/locations/LUMO-kenya.jpeg',
     tags: ['Environnement', 'Biodiversité'],
     odds: [15, 16],
     gallery: ['/images/locations/LUMO-kenya.jpeg', '/images/jardin_potager_kenya.jpg'],
   },
+
   {
     slug: 'potager-agro-ecologique-ttnp',
     title: 'Potager agro-écologique face à la sécheresse',
     description: 'Projet mené avec les élèves du TTNP de Voi pour améliorer la production durable et diffuser les connaissances sur l\'agroécologie.',
-    content: `Ce projet mené conjointement avec les élèves du TTNP de Voi vise à améliorer la production durable de cultures et de produits d'origine animale.
-
-Les objectifs spécifiques sont : utiliser la ferme pour diffuser les connaissances sur l'agriculture transformatrice en adoptant l'agroécologie, créer un environnement microclimatique pour atténuer les impacts climatiques, et adopter la diversification de la production.`,
+    content: `Ce projet mené conjointement avec les élèves du TTNP de Voi vise à améliorer la production durable de cultures et de produits d'origine animale. Les objectifs spécifiques sont : utiliser la ferme pour diffuser les connaissances sur l'agriculture transformatrice en adoptant l'agroécologie, créer un environnement microclimatique pour atténuer les impacts climatiques, et adopter la diversification de la production.`,
     country: 'Kenya',
     image_url: '/images/locations/TTNP-kenya.jpeg',
     tags: ['Agriculture', 'Éducation'],
     odds: [2, 13, 15],
     gallery: ['/images/locations/TTNP-kenya.jpeg', '/images/jardin_potager_kenya.jpg'],
   },
+
   {
     slug: 'jardins-potagers-senegal',
     title: 'Jardins potagers et consommation responsable',
     description: 'En partenariat avec l\'association AGADA, installation de potagers dans les établissements scolaires de Casamance.',
-    content: `Avec ce projet nous avons développé des échanges entre deux écoles primaires, quatre collèges et deux lycées de la Métropole de Nice et des établissements de la Casamance au Sénégal sur le thème de la consommation responsable.
-
-Nous avons installé, en partenariat avec l'association sénégalaise AGADA, des potagers dans les établissements dans le but de former les élèves à la production et à la consommation responsable.
-
-Les élèves de CEM Kénia ont mis en place un projet de jardin potager de 150m² dont la production abondante a permis d'ouvrir une boutique. Cette boutique est un moyen privilégié pour initier les élèves au monde de l'entrepreneuriat.`,
+    content: `Avec ce projet nous avons développé des échanges entre deux écoles primaires, quatre collèges et deux lycées de la Métropole de Nice et des établissements de la Casamance au Sénégal sur le thème de la consommation responsable. Nous avons installé, en partenariat avec l'association sénégalaise AGADA, des potagers dans les établissements dans le but de former les élèves à la production et à la consommation responsable. Les élèves de CEM Kénia ont mis en place un projet de jardin potager de 150m² dont la production abondante a permis d'ouvrir une boutique. Cette boutique est un moyen privilégié pour initier les élèves au monde de l'entrepreneuriat.`,
     country: 'Sénégal',
     image_url: '/images/jardin_potager_senegal.jpg',
     tags: ['Agriculture', 'Éducation'],
     odds: [3, 12, 15],
     gallery: ['/images/jardin_potager_senegal.jpg', '/images/locations/AGADA-senegal.jpg'],
   },
+
   {
     slug: 'correspondances-scolaires-senegal',
     title: 'Correspondances scolaires France — Sénégal',
     description: 'Échanges entre écoles de la Métropole de Nice et des établissements de Casamance sur le thème de la consommation responsable.',
-    content: `En parallèle des projets de jardins potagers, les élèves de France et du Sénégal ont pu se rencontrer et échanger grâce au don d'un ordinateur portable au collège de Ziguinchor.
-
-Les élèves ont ainsi pu discuter de leurs cultures, habitudes scolaires, alimentaires, musicales, sportives, de leurs traditions et de production et consommation responsable.
-
-Une correspondance épistolaire a également été réalisée entre les élèves de Nice et de Ziguinchor dans le but de promouvoir la solidarité internationale.`,
+    content: `En parallèle des projets de jardins potagers, les élèves de France et du Sénégal ont pu se rencontrer et échanger grâce au don d'un ordinateur portable au collège de Ziguinchor. Les élèves ont ainsi pu discuter de leurs cultures, habitudes scolaires, alimentaires, musicales, sportives, de leurs traditions et de production et consommation responsable. Une correspondance épistolaire a également été réalisée entre les élèves de Nice et de Ziguinchor dans le but de promouvoir la solidarité internationale.`,
     country: 'Sénégal / France',
     image_url: '/images/locations/AGADA-senegal.jpg',
     tags: ['Éducation', 'Échanges culturels'],
     odds: [4, 10, 17],
     gallery: ['/images/locations/AGADA-senegal.jpg', '/images/jardin_potager_senegal.jpg'],
   },
+
   {
     slug: 'correspondances-amazonie',
     title: 'Correspondances avec les écoles d\'Amazonie',
     description: 'Suite à la rencontre avec le Chef Raoni, mise en place d\'une correspondance entre des écoles françaises et le peuple Kukama kukamiria.',
-    content: `Notre organisation a reçu les 5ᵉ trophées de l'Environnement de la ville de Nice par le Cacique Raoni Metuktire, Chef du peuple Kayapo (Brésil) le 6 juin 2014.
-
-Lors de cet échange, nous avons promis au Grand Chef Raoni de présenter la culture du peuple Kayapo aux scolaires français et de mettre en place une correspondance avec une école d'Amazonie.
-
-Nous avons choisi le thème "Un jardin au cœur de la forêt". Dans la forêt tropicale vivent les Indiens qui savent tirer parti de leur environnement sans le détruire.`,
+    content: `Notre organisation a reçu les 5ᵉ trophées de l'Environnement de la ville de Nice par le Cacique Raoni Metuktire, Chef du peuple Kayapo (Brésil) le 6 juin 2014. Lors de cet échange, nous avons promis au Grand Chef Raoni de présenter la culture du peuple Kayapo aux scolaires français et de mettre en place une correspondance avec une école d'Amazonie. Nous avons choisi le thème "Un jardin au cœur de la forêt". Dans la forêt tropicale vivent les Indiens qui savent tirer parti de leur environnement sans le détruire.`,
     country: 'Pérou',
     image_url: '/images/jardin_potager_kenya.jpg',
     tags: ['Éducation', 'Échanges culturels'],
     odds: [4, 10, 15],
     gallery: ['/images/jardin_potager_kenya.jpg'],
   },
+
   {
     slug: 'projet-puits-sri-lanka',
     title: 'Accès à l\'eau potable dans les écoles',
     description: 'Financement de forages dans les écoles du Sri Lanka pour garantir un accès durable à l\'eau potable.',
-    content: `Nous finançons des forages dans les écoles du Sri Lanka pour garantir un accès durable à l'eau potable aux élèves et aux communautés locales.
-
-Ce projet contribue directement à l'amélioration des conditions de vie et de scolarisation des enfants, tout en renforçant la résilience des communautés face aux enjeux climatiques.`,
+    content: `Nous finançons des forages dans les écoles du Sri Lanka pour garantir un accès durable à l'eau potable aux élèves et aux communautés locales. ce projet contribue directement à l'amélioration des conditions de vie et de scolarisation des enfants, tout en renforçant la résilience des communautés face aux enjeux climatiques.`,
     country: 'Sri Lanka',
     image_url: '/images/puit-srilanka.jpg',
     tags: ['Accès à l\'eau', 'Éducation'],
     odds: [3, 6, 4],
     gallery: ['/images/puit-srilanka.jpg'],
   },
+
   {
     slug: 'fabrique-eco-maximus',
     title: 'Fabrique de papier Eco Maximus',
     description: 'Soutien à la fabrique Eco Maximus qui produit des objets artisanaux issus de bouse d\'éléphant au Sri Lanka.',
-    content: `Sens Solidaire soutient la fabrique Eco Maximus en promouvant ses objets artisanaux issus de bouse d'éléphant, contribuant à la protection de la biodiversité et à l'économie locale au Sri Lanka.
-
-Cette initiative permet aux artisans locaux de valoriser des ressources naturelles tout en sensibilisant les visiteurs à la protection des éléphants et de leur habitat.`,
+    content: `Sens Solidaire soutient la fabrique Eco Maximus en promouvant ses objets artisanaux issus de bouse d'éléphant, contribuant à la protection de la biodiversité et à l'économie locale au Sri Lanka. Cette initiative permet aux artisans locaux de valoriser des ressources naturelles tout en sensibilisant les visiteurs à la protection des éléphants et de leur habitat.`,
     country: 'Sri Lanka',
     image_url: '/images/fabrique_eco_maximus_srilanka.jpg',
     tags: ['Environnement', 'Biodiversité'],
@@ -761,7 +744,7 @@ console.log(`FieldActions créées (${FIELD_ACTIONS.length})`)
 console.log("FieldActions créées (8)")
 
 // ============================================================
-// ÉTAPE 7 — MEDIA POSTS
+// 7 — ARTICLES - MEDIAS ET ACTUALITES
 // ============================================================
 
 const MEDIA_POSTS = [
@@ -775,6 +758,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2026/05/NEWSLETTER-Juin-26-3.pdf',
   },
+
   {
     slug: 'newsletter-juin-2025',
     title: 'Newsletter Juin 2025',
@@ -784,6 +768,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/05/NEWSLETTER-JUIN-2025.pdf',
   },
+
   {
     slug: 'newsletter-mars-2025',
     title: 'Newsletter Mars 2025',
@@ -793,6 +778,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/03/NEWSLETTER-MARS-2025.pdf',
   },
+
   {
     slug: 'newsletter-decembre-2024',
     title: 'Newsletter Décembre 2024',
@@ -802,6 +788,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2024/12/NEWSLETTER-DECEMBRE-2024.pdf',
   },
+
   {
     slug: 'newsletter-juin-2024',
     title: 'Newsletter Juin 2024',
@@ -811,6 +798,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2024/07/NEWSLETTER-JUIN-2024.pdf',
   },
+
   {
     slug: 'newsletter-mars-2024',
     title: 'Newsletter Mars 2024',
@@ -820,6 +808,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2024/03/NEWSLETTER-MARS-2024.pdf',
   },
+
   {
     slug: 'newsletter-decembre-2023',
     title: 'Newsletter Décembre 2023',
@@ -829,6 +818,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/12/Newsletter-decembre-2023.pdf',
   },
+
   {
     slug: 'newsletter-juin-2023',
     title: 'Newsletter Juin 2023',
@@ -838,6 +828,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/06/Newsletter-Sens-Solidaires-JUIN-2023.pdf',
   },
+
   {
     slug: 'newsletter-mars-2023',
     title: 'Newsletter Mars 2023',
@@ -847,6 +838,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/03/Newsletter-MARS-2023.pdf',
   },
+
   {
     slug: 'newsletter-janvier-2023',
     title: 'Newsletter Janvier 2023',
@@ -856,6 +848,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/01/Newsletter-Janvier-2023.pdf',
   },
+
   {
     slug: 'newsletter-novembre-2022',
     title: 'Newsletter Novembre 2022',
@@ -876,6 +869,7 @@ const MEDIA_POSTS = [
     image_url: '/images/fabrique_eco_maximus_srilanka.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/06/lettre_nice_francophonie-_2013.pdf',
   },
+
   {
     slug: 'article-conge-solidarite-club-rh-genevois',
     title: 'Congé de solidarité à l\'international — Club RH Genevois',
@@ -885,6 +879,7 @@ const MEDIA_POSTS = [
     image_url: '/images/groupe-jeune-2.jpg',
     external_url: 'https://www.clubrh.click/ressources-rh/conge-de-solidarite-a-linternational-y-aviez-vous-deja-pense/',
   },
+
   {
     slug: 'article-nice-matin-festival-solidarites-2020',
     title: 'Festival des solidarités — Nice Matin 2020',
@@ -894,6 +889,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: null,
   },
+
   {
     slug: 'article-nice-matin-journee-environnement-2016',
     title: '1ère journée de l\'Environnement — Nice Matin 2016',
@@ -914,6 +910,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://soundcloud.com/user-534695513/quoi-dneuf-41-sens-solidaire-2024-01-12',
   },
+
   {
     slug: 'interview-france-bleu-personnalites-remarquables',
     title: 'Personnalités remarquables — France Bleu',
@@ -923,6 +920,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.francebleu.fr/emissions/18-19-personnalites-remarquables',
   },
+
   {
     slug: 'emission-planete-bleu-donner-du-sens',
     title: 'Planète Bleu — "Donner du sens" (France Bleu)',
@@ -932,6 +930,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.francebleu.fr/emissions/planete-bleu-le-mag-planete-bleu-s-engage/donner-du-sens-3695876',
   },
+
   {
     slug: 'interview-france-bleu-carnaval-nice-2023',
     title: 'Carnaval de Nice 2023 — France Bleu',
@@ -941,6 +940,7 @@ const MEDIA_POSTS = [
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.francebleu.fr/emissions/on-n-est-pas-a-l-abri-d-faire-une-bonne-emission/en-direct-du-carnaval-de-nice-6228875#MainContent',
   },
+
   {
     slug: 'interview-france-bleu-pays-savoie-2022',
     title: 'Interview France Bleu Pays de Savoie — Exposition Casamance',
@@ -961,6 +961,7 @@ const MEDIA_POSTS = [
     image_url: '/images/fabrique_eco_maximus_srilanka.jpg',
     external_url: null,
   },
+
   {
     slug: 'exposition-correspondances-maison-environnement-2017',
     title: 'Exposition des correspondances scolaires — Maison de l\'Environnement',
@@ -970,6 +971,7 @@ const MEDIA_POSTS = [
     image_url: '/images/jardin_potager_senegal.jpg',
     external_url: null,
   },
+
   {
     slug: 'jardiniere-college-roland-garros-2021',
     title: 'Installation d\'une jardinière au collège Roland-Garros',
@@ -979,6 +981,7 @@ const MEDIA_POSTS = [
     image_url: '/images/jardin_potager_senegal.jpg',
     external_url: null,
   },
+
   {
     slug: 'reprise-activites-grand-geneve-2020',
     title: 'Reprise des activités sur l\'antenne du Grand Genève',
@@ -997,7 +1000,7 @@ console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
 console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
 
 // ============================================================
-// ÉTAPE 8 — EDUCATION ITEMS
+// 8 — ARTICLES :  EDUCATION ET SENSIBILISATIONS
 // ============================================================
 
 const EDUCATION_ITEMS = [
@@ -1014,37 +1017,34 @@ Cet atelier permet aux élèves de découvrir le monde fascinant des éléphants
     image_url: '/images/fabrique_eco_maximus_srilanka.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/01/Plaquette-atelier-marque-page-elephant.pdf',
   },
+
   {
     slug: 'atelier-jeu-7-familles-mediterranee',
     title: 'Jeu de 7 familles : les écosystèmes de la mer Méditerranée',
     description: 'On estime qu\'environ 10% de la vie océanique est identifiée à ce jour. Avec le dérèglement climatique, des espèces que nous ne connaissons pas encore ont sûrement déjà disparu.',
-    content: `Le savais-tu ? On estime qu'environ 10% de la vie océanique est identifiée à ce jour. Avec le dérèglement climatique des espèces que nous ne connaissons pas encore ont sûrement déjà disparues.
-
-Ce jeu de 7 familles pédagogique permet aux élèves de découvrir les différents écosystèmes de la mer Méditerranée, leurs habitants et les menaces qui pèsent sur eux. Un outil ludique pour sensibiliser à la protection des océans.`,
+    content: `Le savais-tu ? On estime qu'environ 10% de la vie océanique est identifiée à ce jour. Avec le dérèglement climatique des espèces que nous ne connaissons pas encore ont sûrement déjà disparues. Ce jeu de 7 familles pédagogique permet aux élèves de découvrir les différents écosystèmes de la mer Méditerranée, leurs habitants et les menaces qui pèsent sur eux. Un outil ludique pour sensibiliser à la protection des océans.`,
     type: 'Atelier',
     public: 'primaire,college_lycee',
     image_url: '/images/hero_missions.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/01/plaquette-ATELIERS-jeu-de-7-familles.pdf',
   },
+
   {
     slug: 'atelier-forets-primaires',
     title: 'À la découverte des forêts primaires',
     description: 'Les forêts tropicales primaires abritent l\'essentiel de la biodiversité terrestre : 70% des espèces végétales et 80% des espèces vertébrées.',
-    content: `Le savais-tu ? Les forêts tropicales primaires abritent l'essentiel de la biodiversité terrestre : 70% des espèces végétales et 80% des espèces vertébrées.
-
-Cet atelier invite les élèves à explorer les forêts primaires du monde, comprendre leur importance pour la planète et découvrir les menaces qui pèsent sur ces écosystèmes uniques. Un voyage au cœur de la biodiversité.`,
+    content: `Le savais-tu ? Les forêts tropicales primaires abritent l'essentiel de la biodiversité terrestre : 70% des espèces végétales et 80% des espèces vertébrées. Cet atelier invite les élèves à explorer les forêts primaires du monde, comprendre leur importance pour la planète et découvrir les menaces qui pèsent sur ces écosystèmes uniques. Un voyage au cœur de la biodiversité.`,
     type: 'Atelier',
     public: 'primaire,college_lycee',
     image_url: '/images/locations/batu-kapal-sumatra.jpg',
     external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/01/Plaquette-atelier-forets-primaires.pdf',
   },
+
   {
     slug: 'atelier-ecsi-odd',
     title: 'Atelier d\'éducation à la citoyenneté et à la solidarité internationale (ECSI)',
     description: 'Découvrez les 17 ODD pour un monde plus juste, plus durable et plus solidaire. Grâce à des jeux pédagogiques, abordez les notions de vivre ensemble et de solidarité internationale.',
-    content: `Découvrez avec nous les 17 ODD pour un monde plus juste, plus durable et plus solidaire. Grâce à différents jeux pédagogiques nous aborderons les notions de vivre ensemble, de stéréotypes, mais aussi différents types d'inégalités à travers le monde.
-
-Nous intervenons dans vos locaux (avec notre matériel) ou nous pouvons vous réserver une salle appropriée dans nos bureaux.`,
+    content: `Découvrez avec nous les 17 ODD pour un monde plus juste, plus durable et plus solidaire. Grâce à différents jeux pédagogiques nous aborderons les notions de vivre ensemble, de stéréotypes, mais aussi différents types d'inégalités à travers le monde. Nous intervenons dans vos locaux (avec notre matériel) ou nous pouvons vous réserver une salle appropriée dans nos bureaux.`,
     type: 'Atelier',
     public: 'college_lycee,adultes',
     image_url: '/images/jardin_potager_senegal.jpg',
@@ -1056,15 +1056,7 @@ Nous intervenons dans vos locaux (avec notre matériel) ou nous pouvons vous ré
     slug: 'correspondances-scolaires',
     title: 'Correspondances scolaires internationales',
     description: 'Depuis 10 ans, nous organisons des échanges de lettres entre des écoles niçoises et celles de pays en développement sur le thème des 17 ODD.',
-    content: `Nous organisons depuis 10 ans des échanges de lettres entre des écoles niçoises et celles de pays en développement sur le thème des 17 objectifs du développement durable (ODD).
-
-À travers nos outils pédagogiques, les élèves pourront comprendre l'importance d'adapter nos comportements afin de préserver et de partager de manière plus équitable les ressources naturelles avec les pays en développement.
-
-Le saviez-vous ? Un rapport scientifique constate que les pays développés sont à la cause de plus de 30% de la perte de la biodiversité dans les pays du Sud.
-
-Apports éducatifs : favoriser l'expression à l'écrit, enrichissement du vocabulaire, favoriser la compréhension et l'expression en anglais, acculturation, développement des connaissances sur le développement durable ici et à l'international. Projet transversal au programme pédagogique de l'année : français, anglais, géographie, sciences.
-
-Tarif pour l'ensemble du projet : 500€`,
+    content: `Nous organisons depuis 10 ans des échanges de lettres entre des écoles niçoises et celles de pays en développement sur le thème des 17 objectifs du développement durable (ODD). À travers nos outils pédagogiques, les élèves pourront comprendre l'importance d'adapter nos comportements afin de préserver et de partager de manière plus équitable les ressources naturelles avec les pays en développement. Le saviez-vous ? Un rapport scientifique constate que les pays développés sont à la cause de plus de 30% de la perte de la biodiversité dans les pays du Sud. Apports éducatifs : favoriser l'expression à l'écrit, enrichissement du vocabulaire, favoriser la compréhension et l'expression en anglais, acculturation, développement des connaissances sur le développement durable ici et à l'international. Projet transversal au programme pédagogique de l'année : français, anglais, géographie, sciences. Tarif pour l'ensemble du projet : 500€`,
     type: 'Correspondance',
     public: 'primaire,college_lycee',
     image_url: '/images/jardin_potager_senegal.jpg',
@@ -1076,13 +1068,7 @@ Tarif pour l'ensemble du projet : 500€`,
     slug: 'programme-eco-ecole',
     title: 'Relais local Éco-École',
     description: 'Nous sommes Relais local du label Éco-École pour les établissements scolaires de l\'agglomération d\'Annemasse. Un programme international présent dans 73 pays.',
-    content: `Nous sommes dorénavant Relais local du label Éco-École pour les établissements scolaires de l'agglomération d'Annemasse.
-
-Si vous souhaitez mettre en place un projet d'éducation au développement durable dans votre établissement scolaire, inscrivez-vous au programme Éco-École. Présent dans 73 pays, c'est un programme international d'éducation au développement durable, développé en France depuis 2005 par l'association Teragir. Il est ouvert à tous les établissements scolaires, publics et privés, de la maternelle au lycée et la participation au programme est gratuite.
-
-Notre rôle en tant que Relais local Éco-École est d'accompagner les Éco-Écoles, Éco-Collèges et Éco-Lycées inscrits au programme sur notre périmètre, les renseigner sur les ressources du territoire utiles pour la mise en œuvre de leur démarche de développement durable.
-
-Le programme Éco-École propose une méthodologie en sept points, simple et participative, pour guider les établissements scolaires dans leur projet d'éducation au développement durable en s'appuyant sur 8 thématiques : alimentation, biodiversité, climat, déchets, eau, énergie, santé ou solidarités.`,
+    content: `Nous sommes dorénavant Relais local du label Éco-École pour les établissements scolaires de l'agglomération d'Annemasse. Si vous souhaitez mettre en place un projet d'éducation au développement durable dans votre établissement scolaire, inscrivez-vous au programme Éco-École. Présent dans 73 pays, c'est un programme international d'éducation au développement durable, développé en France depuis 2005 par l'association Teragir. Il est ouvert à tous les établissements scolaires, publics et privés, de la maternelle au lycée et la participation au programme est gratuite. Notre rôle en tant que Relais local Éco-École est d'accompagner les Éco-Écoles, Éco-Collèges et Éco-Lycées inscrits au programme sur notre périmètre, les renseigner sur les ressources du territoire utiles pour la mise en œuvre de leur démarche de développement durable. Le programme Éco-École propose une méthodologie en sept points, simple et participative, pour guider les établissements scolaires dans leur projet d'éducation au développement durable en s'appuyant sur 8 thématiques : alimentation, biodiversité, climat, déchets, eau, énergie, santé ou solidarités.`,
     type: 'Éco-École',
     public: 'primaire,college_lycee',
     image_url: '/images/jardin_potager_kenya.jpg',
@@ -1120,9 +1106,134 @@ await prisma.media.createMany({
 
 console.log('Médias EducationItems créés')
 
-  // ============================================================
-  // RÉCAP FINAL
-  // ============================================================
+// ============================================================
+// 9 — ACTIVITY REPORTS
+// ============================================================
+
+await prisma.activityReport.deleteMany({})
+await prisma.activityReport.createMany({
+  data: [
+    { annee: 2024, url: "https://www.sensolidaire.org/wp-content/uploads/2025/06/Rapport-dactivites-2024-1.pdf" },
+    { annee: 2023, url: "https://www.sensolidaire.org/wp-content/uploads/2024/07/Rapport-des-activites-2023.pdf" },
+    { annee: 2022, url: "https://www.sensolidaire.org/wp-content/uploads/2023/11/Rapport-dactivites-2022.pdf" },
+    { annee: 2021, url: "https://www.sensolidaire.org/wp-content/uploads/2023/04/rapport-annuel-2021.pdf" },
+    { annee: 2020, url: "https://www.sensolidaire.org/wp-content/uploads/2021/05/rapportmoral-2020.pdf" },
+    { annee: 2019, url: "https://www.sensolidaire.org/wp-content/uploads/2020/05/rapportannuel19-compress%C3%A9-1.pdf" },
+    { annee: 2018, url: "https://www.sensolidaire.org/wp-content/uploads/2020/02/rapportactivit%C3%A9s18.pdf" },
+    { annee: 2017, url: "https://www.sensolidaire.org/wp-content/uploads/2019/10/rapportactivit%C3%A9s17.pdf" },
+    { annee: 2016, url: "https://www.sensolidaire.org/wp-content/uploads/2025/01/rapportannuel16.pdf" },
+    { annee: 2015, url: "https://www.sensolidaire.org/wp-content/uploads/2018/07/rapportdactivit%C3%A92015.pdf" },
+    { annee: 2014, url: "https://www.sensolidaire.org/wp-content/uploads/2018/07/rapportactivit%C3%A914.pdf" },
+    { annee: 2013, url: "https://www.sensolidaire.org/wp-content/uploads/2018/07/rapportannuel13.pdf" },
+    { annee: 2012, url: "https://www.sensolidaire.org/wp-content/uploads/2018/07/rapportmoral2012.pdf" },
+  ]
+})
+console.log('ActivityReports créés (13)')
+
+// ============================================================
+// 10 — DELEGATIONS
+// ============================================================
+
+await prisma.delegation.deleteMany({})
+await prisma.delegation.createMany({
+  data: [
+    { pays: "Kenya", flag_code: "ke", image_url: "/images/locations/LUMO-kenya.jpeg", lieu: "LUMO Community Wildlife Sanctuary", contacts: "Denis (coordinateur), Ernest (chargé des projets biodiversité) et les 22 Rangers", display_order: 1 },
+    { pays: "Kenya", flag_code: "ke", image_url: "/images/locations/TTNP-kenya.jpeg", lieu: "Taita Taveta National Polytechnic", contacts: "Kefa Okari (Coordinateur des missions, professeur de français), Madeline Nabwire (directrice du département de tourisme)", display_order: 2 },
+    { pays: "Kenya", flag_code: "ke", image_url: "/images/locations/ECT-kenya.jpeg", lieu: "Elsa Conservation Trust", contacts: "Antony — Coordinateur des missions", display_order: 3 },
+    { pays: "Sénégal", flag_code: "sn", image_url: "/images/locations/AGADA-senegal.jpg", lieu: "Association AGADA", contacts: "François Bassene et Penda Diémé", display_order: 4 },
+    { pays: "Sénégal", flag_code: "sn", image_url: "/images/locations/campement-senegal.jpg", lieu: "Campement de l'Ile d'Effrane", contacts: "Mamadou Ndiaye", display_order: 5 },
+    { pays: "Sri Lanka", flag_code: "lk", image_url: "/images/locations/mef-sri-lanka.jpg", lieu: "Millenium Elephant Foundation", contacts: "Nalaka — Chargé des volontaires, Sara — Coordinatrice des missions", display_order: 6 },
+    { pays: "Pérou amazonien", flag_code: "pe", image_url: "/images/locations/amazon-shelter-perou.jpg", lieu: "Amazon Shelter", contacts: "Magali, Kim et Latam", display_order: 7 },
+    { pays: "Sumatra", flag_code: "id", image_url: "/images/locations/batu-kapal-sumatra.jpg", lieu: "Batu Kapal Conservation", contacts: "L'équipe Batu Kapal Conservation", display_order: 8 },
+  ]
+})
+console.log('Délégations créées (8)')
+
+// ============================================================
+// 11 — RAPPORT DE MISSION
+// ============================================================
+
+await prisma.missionReport.deleteMany({})
+await prisma.missionReport.createMany({
+  data: [
+    { auteur: "Joelle", destination: "kenya", type: "individuel", annee: 2025, pdf_url: "/pdfs/rapports/joelle-kenya-2025.pdf" },
+    { auteur: "Armand", destination: "kenya", type: "individuel", annee: 2024, pdf_url: "/pdfs/rapports/armand-kenya-2024.pdf" },
+    { auteur: "Amna", destination: "senegal", type: "individuel", annee: 2025, pdf_url: "/pdfs/rapports/amna-senegal-2025.pdf" },
+    { auteur: "Tilla", destination: "senegal", type: "individuel", annee: 2024, pdf_url: "/pdfs/rapports/tilla-senegal-2024.pdf" },
+    { auteur: "Bérénice & Frédéric", destination: "sri-lanka", type: "individuel", annee: 2024, pdf_url: "/pdfs/rapports/berenice-frederic-srilanka-2024.pdf" },
+    { auteur: "Clélia", destination: "sri-lanka", type: "individuel", annee: 2023, pdf_url: "/pdfs/rapports/clelia-srilanka-2023.pdf" },
+    { auteur: "Andréa & Tristan", destination: "perou", type: "individuel", annee: 2023, pdf_url: "/pdfs/rapports/andrea-tristan-perou-2023.pdf" },
+    { auteur: "Christine & Adèle", destination: "perou", type: "individuel", annee: 2022, pdf_url: "/pdfs/rapports/christine-adele-perou-2022.pdf" },
+    { auteur: "Lucile", destination: "sumatra", type: "individuel", annee: 2026, pdf_url: "/pdfs/rapports/lucile-sumatra-2026.pdf" },
+    { auteur: "Cathy & Laurent", destination: "sumatra", type: "individuel", annee: 2024, pdf_url: "/pdfs/rapports/cathy-laurent-sumatra-2024.pdf" },
+    { auteur: "Kimberley", destination: null, type: "service_civique", annee: 2025, pdf_url: "/pdfs/rapports/kimberley-service-civique-2025.pdf" },
+    { auteur: "Cyril", destination: null, type: "service_civique", annee: 2024, pdf_url: "/pdfs/rapports/cyril-service-civique-2024.pdf" },
+    { auteur: "École Internationale de Fuveau", destination: null, type: "groupe_jeune", annee: 2018, pdf_url: "/pdfs/rapports/ecole-fuveau-srilanka-2018.pdf" },
+    { auteur: "École Internationale de Nice", destination: null, type: "groupe_jeune", annee: 2017, pdf_url: "/pdfs/rapports/ecole-nice-srilanka-2017.pdf" },
+    { auteur: "Jean-Yves, Loïc & Christian", destination: null, type: "conge_solidaire", annee: 2016, pdf_url: "/pdfs/rapports/jeanyves-loic-christian-perou-2016.pdf" },
+    { auteur: "Édith & Thierry", destination: null, type: "conge_solidaire", annee: 2020, pdf_url: "/pdfs/rapports/edith-thierry-sumatra-2020.pdf" },
+    { auteur: "Équipe Décathlon Nice", destination: null, type: "conge_solidaire", annee: 2023, pdf_url: "/pdfs/rapports/decathlon-nice-conge-solidaire-2023.pdf" },
+  ]
+})
+console.log('MissionReports créés (17)')
+
+// ============================================================
+// 12 — MEMBRES DE L'EQUIPE
+// ============================================================
+
+await prisma.teamMember.deleteMany({})
+await prisma.teamMember.createMany({
+  data: [
+    // Direction
+    { nom: "Delphine Thibaut", role: "Fondatrice et Chargée des Programmes", description: "Master administratrice S.I. Institut Bioforce — Ancienne guide spécialisée Afrique", avatar_url: "/avatar-women.png", category: "direction", display_order: 1 },
+    { nom: "Arya Monchauzou", role: "Chargée des projets des Alpes-Maritimes", description: "Master Risques et Environnement", avatar_url: "/avatar-women.png", category: "direction", display_order: 2 },
+    { nom: "Amna Labidi", role: "Chargée de mission Service Civique", description: "Licence Sciences de la vie — Master biologie (en cours)", avatar_url: "/avatar-women.png", category: "direction", display_order: 3 },
+    { nom: "Emile Augsburger", role: "Chargé de mission Service Civique", description: "Ingénieur écologue HES-SO", avatar_url: "/avatar-men.png", category: "direction", display_order: 4 },
+    { nom: "Clémence Armanet", role: "Chargée de mission Service Civique", description: "Master Ecologie de l'anthropocène", avatar_url: "/avatar-women.png", category: "direction", display_order: 5 },
+    { nom: "Eymeric Coffi", role: "Chargé de mission Service Civique", description: "Master en science de Gestion et Marketing", avatar_url: "/avatar-men.png", category: "direction", display_order: 6 },
+    // Bureau
+    { nom: "Elodie Tisserand", role: "Présidente", description: "Management de projets culturels et innovation — Chargée des projets d'éducation populaire.", avatar_url: "/avatar-women.png", category: "bureau", display_order: 1 },
+    { nom: "Hervé Caffin", role: "Trésorier", description: "Responsable affaires transition énergétique Paris — Ancien chargé de mission pour Energie Solidaire au Burkina Faso.", avatar_url: "/avatar-men.png", category: "bureau", display_order: 2 },
+    { nom: "Lynda Tabet", role: "Secrétaire", description: "Coach professionnel — Professeur de Yoga — Coordinatrice projets Transition Bien-être.", avatar_url: "/avatar-women.png", category: "bureau", display_order: 3 },
+    // CA
+    { nom: "Ingrid von Anthoni", role: "Chargée des plaidoyers sur le massacre des éléphants", avatar_url: "/avatar-women.png", category: "ca", display_order: 1 },
+    { nom: "Virginie Blumet", role: "Manager International Business Finance WWF", avatar_url: "/avatar-women.png", category: "ca", display_order: 2 },
+    { nom: "Emilie della-guardia", role: "Professeure de Science et Vie de la Terre", avatar_url: "/avatar-women.png", category: "ca", display_order: 3 },
+    { nom: "Crystel Cantariti", role: "Professeure des écoles", avatar_url: "/avatar-women.png", category: "ca", display_order: 4 },
+    { nom: "Marc Olivier", role: "Consultant, professeur en ethnobotanique", avatar_url: "/avatar-men.png", category: "ca", display_order: 5 },
+    { nom: "Coralie Pinchart", role: "Master 2 économie de développement à l'International", avatar_url: "/avatar-women.png", category: "ca", display_order: 6 },
+    { nom: "John Rebmann", role: "Ancien directeur financier de Parcs Hôteliers", avatar_url: "/avatar-men.png", category: "ca", display_order: 7 },
+    { nom: "Brigitte Schwarz", role: "Chargée de communication", avatar_url: "/avatar-women.png", category: "ca", display_order: 8 },
+    { nom: "Patricia Valensi", role: "Docteur en Préhistoire, paléontologue", avatar_url: "/avatar-women.png", category: "ca", display_order: 9 },
+    { nom: "Eduardo Widakowich", role: "Consultant en gestion de projet développement durable", avatar_url: "/avatar-men.png", category: "ca", display_order: 10 },
+    { nom: "Johanna Zerbib", role: "Responsable Opérations Thompson Africa", avatar_url: "/avatar-women.png", category: "ca", display_order: 11 },
+    // Également à nos côtés
+    { nom: "Bertrand D.", role: "Infographiste", avatar_url: "/avatar-men.png", category: "egalement", display_order: 1 },
+    { nom: "Thierry Montalban", role: "Agence de communication", avatar_url: "/avatar-men.png", category: "egalement", display_order: 2 },
+    { nom: "Sabine Jerome", role: "Comptabilité", avatar_url: "/avatar-women.png", category: "egalement", display_order: 3 },
+  ]
+})
+console.log('TeamMembers créés (23)')
+
+// ============================================================
+// 13 — LOGOS PARTENAIRES
+// ============================================================
+
+await prisma.partner.deleteMany({})
+await prisma.partner.createMany({
+  data: [
+    { name: "Ministère de l'Éducation", logo_url: "/images/partners/ministere-education.png", display_order: 1 },
+    { name: "PNUE", logo_url: "/images/partners/pnue.png", display_order: 2 },
+    { name: "Service Civique", logo_url: "/images/partners/service-civique.png", display_order: 3 },
+    { name: "Territoires Solidaires", logo_url: "/images/partners/territoires-solidaires.png", display_order: 4 },
+    { name: "Ville de Nice", logo_url: "/images/partners/ville-nice.png", display_order: 5 },
+  ]
+})
+console.log('Partners créés (5)')
+
+// ============================================================
+// RÉCAP FINAL
+// ============================================================
   console.log("")
   console.log("Seed terminé avec succès !")
   console.log("─────────────────────────────────────────")
@@ -1137,6 +1248,11 @@ console.log('Médias EducationItems créés')
   console.log(`FieldActions: 8`)
   console.log(`MediaPosts : ${MEDIA_POSTS.length}`)
   console.log(`EducationItems créés (${EDUCATION_ITEMS.length})`)
+  console.log('ActivityReports : 13')
+  console.log('Délégations     : 8')
+  console.log('MissionReports  : 17')
+  console.log('TeamMembers     : 23')
+  console.log('Partners        : 5')
 }
 
 seed()
