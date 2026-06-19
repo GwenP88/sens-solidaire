@@ -30,6 +30,8 @@ import contactRouter from "./routes/contactRoutes.js"
 import adminMissionRoutes from "./routes/adminMissionRoutes.js"
 // Import du router actions/impact
 import fieldActionRouter from './routes/fieldActionRoutes.js'
+// Import médias/actualités
+import mediaPostRouter from './routes/mediaPostRoutes.js'
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -86,6 +88,8 @@ app.use("/api/contact", contactRouter)
 app.use("/api/admin/missions", adminMissionRoutes)
 // Route actions/impact
 app.use('/api/field-actions', fieldActionRouter)
+// Route médias/actualités
+app.use('/api/media-posts', mediaPostRouter)
 
 
 // ── MIDDLEWARE ERREURS ───────────────────────────────────────────────────────

@@ -123,3 +123,17 @@ model FieldActionODD {
   action_id     Int
   odd_number    Int         // 1 à 17
 }
+
+model MediaPost {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique
+  title        String
+  content      String?
+  theme        String
+  date         DateTime
+  image_url    String?
+  external_url String?
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}

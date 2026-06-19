@@ -766,6 +766,247 @@ for (const action of FIELD_ACTIONS) {
 
 console.log("FieldActions créées (8)")
 
+// ============================================================
+// ÉTAPE 7 — MEDIA POSTS
+// ============================================================
+
+const MEDIA_POSTS = [
+  // ── Newsletters ──
+  {
+    slug: 'newsletter-juin-2026',
+    title: 'Newsletter Juin 2026',
+    content: 'Découvrez les dernières nouvelles de Sens Solidaire : nos missions en cours, les témoignages de volontaires et les actions menées sur le terrain au Kenya, Sénégal, Sri Lanka, Pérou et Sumatra.',
+    theme: 'Newsletter',
+    date: new Date('2026-05-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2026/05/NEWSLETTER-Juin-26-3.pdf',
+  },
+  {
+    slug: 'newsletter-juin-2025',
+    title: 'Newsletter Juin 2025',
+    content: 'Au sommaire : retour sur nos missions de printemps, portrait de volontaires et actualités de l\'association.',
+    theme: 'Newsletter',
+    date: new Date('2025-06-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/05/NEWSLETTER-JUIN-2025.pdf',
+  },
+  {
+    slug: 'newsletter-mars-2025',
+    title: 'Newsletter Mars 2025',
+    content: 'Actualités de l\'association, nouvelles des missions et agenda des prochains événements.',
+    theme: 'Newsletter',
+    date: new Date('2025-03-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/03/NEWSLETTER-MARS-2025.pdf',
+  },
+  {
+    slug: 'newsletter-decembre-2024',
+    title: 'Newsletter Décembre 2024',
+    content: 'Bilan de l\'année 2024 : missions, actions éducatives, témoignages et perspectives pour 2025.',
+    theme: 'Newsletter',
+    date: new Date('2024-12-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2024/12/NEWSLETTER-DECEMBRE-2024.pdf',
+  },
+  {
+    slug: 'newsletter-juin-2024',
+    title: 'Newsletter Juin 2024',
+    content: 'Retour sur le printemps solidaire : missions au Kenya et au Sénégal, ateliers scolaires et nouvelles de nos partenaires.',
+    theme: 'Newsletter',
+    date: new Date('2024-06-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2024/07/NEWSLETTER-JUIN-2024.pdf',
+  },
+  {
+    slug: 'newsletter-mars-2024',
+    title: 'Newsletter Mars 2024',
+    content: 'Ouverture de la saison des missions 2024, nouveaux partenariats et agenda des événements à venir.',
+    theme: 'Newsletter',
+    date: new Date('2024-03-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2024/03/NEWSLETTER-MARS-2024.pdf',
+  },
+  {
+    slug: 'newsletter-decembre-2023',
+    title: 'Newsletter Décembre 2023',
+    content: 'Bilan 2023 : une année riche en missions, en rencontres et en projets solidaires sur tous nos terrains d\'action.',
+    theme: 'Newsletter',
+    date: new Date('2023-12-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/12/Newsletter-decembre-2023.pdf',
+  },
+  {
+    slug: 'newsletter-juin-2023',
+    title: 'Newsletter Juin 2023',
+    content: 'Spécial été : missions, témoignages et actions éducatives menées dans les écoles partenaires.',
+    theme: 'Newsletter',
+    date: new Date('2023-06-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/06/Newsletter-Sens-Solidaires-JUIN-2023.pdf',
+  },
+  {
+    slug: 'newsletter-mars-2023',
+    title: 'Newsletter Mars 2023',
+    content: 'Rentrée solidaire : nouvelles missions, nouveaux partenaires et retours d\'expérience de nos volontaires.',
+    theme: 'Newsletter',
+    date: new Date('2023-03-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/03/Newsletter-MARS-2023.pdf',
+  },
+  {
+    slug: 'newsletter-janvier-2023',
+    title: 'Newsletter Janvier 2023',
+    content: 'Bonne année 2023 ! Découvrez nos projets pour cette nouvelle année et les missions déjà planifiées.',
+    theme: 'Newsletter',
+    date: new Date('2023-01-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/01/Newsletter-Janvier-2023.pdf',
+  },
+  {
+    slug: 'newsletter-novembre-2022',
+    title: 'Newsletter Novembre 2022',
+    content: 'Actualités de fin d\'année : bilan des missions, exposition "De la Haute Savoie à la Casamance" et agenda de décembre.',
+    theme: 'Newsletter',
+    date: new Date('2022-11-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2022/12/Newsletter-NOVEMBRE-2022.pdf',
+  },
+
+  // ── Revue de presse ──
+  {
+    slug: 'article-papier-bouse-elephant-francophonie-2013',
+    title: 'Le papier en bouse d\'éléphant — Jeux de la Francophonie 2013',
+    content: 'Article sur le papier en bouse d\'éléphant issu de la lettre d\'information des jeux de la francophonie 2013. Sens Solidaire nommé pour représenter la France dans la discipline du développement durable.',
+    theme: 'Revue de presse',
+    date: new Date('2013-06-01'),
+    image_url: '/images/fabrique_eco_maximus_srilanka.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2023/06/lettre_nice_francophonie-_2013.pdf',
+  },
+  {
+    slug: 'article-conge-solidarite-club-rh-genevois',
+    title: 'Congé de solidarité à l\'international — Club RH Genevois',
+    content: 'Article du Club RH Genevois Français : Congé de solidarité à l\'international, être au cœur des actions d\'une ONG et augmenter votre impact social.',
+    theme: 'Revue de presse',
+    date: new Date('2022-01-01'),
+    image_url: '/images/groupe-jeune-2.jpg',
+    external_url: 'https://www.clubrh.click/ressources-rh/conge-de-solidarite-a-linternational-y-aviez-vous-deja-pense/',
+  },
+  {
+    slug: 'article-nice-matin-festival-solidarites-2020',
+    title: 'Festival des solidarités — Nice Matin 2020',
+    content: 'Article de Nice-matin du 28 novembre 2020 sur le festival des solidarités et les interventions de Sens Solidaires dans les écoles élémentaires niçoises.',
+    theme: 'Revue de presse',
+    date: new Date('2020-11-28'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: null,
+  },
+  {
+    slug: 'article-nice-matin-journee-environnement-2016',
+    title: '1ère journée de l\'Environnement — Nice Matin 2016',
+    content: 'Article Nice Matin du 3 juin 2016 sur la 1ère journée de l\'Environnement organisée avec Sens Solidaire à Nice.',
+    theme: 'Revue de presse',
+    date: new Date('2016-06-03'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: null,
+  },
+
+  // ── Interviews & Radio ──
+  {
+    slug: 'interview-quoi-dneuf-radio-magny-2024',
+    title: 'Interview Radio — Quoi D\'Neuf (Radio Magny)',
+    content: 'Présentation des activités de l\'association sur Annemasse (74). Découvrez en audio les missions et projets de Sens Solidaire sur le territoire du Grand Genève.',
+    theme: 'Interview & radio',
+    date: new Date('2024-01-12'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://soundcloud.com/user-534695513/quoi-dneuf-41-sens-solidaire-2024-01-12',
+  },
+  {
+    slug: 'interview-france-bleu-personnalites-remarquables',
+    title: 'Personnalités remarquables — France Bleu',
+    content: 'Intervention de Delphine Thibaut au micro de Ségolène Alunni dans son émission Personnalités remarquables sur France Bleu, afin de promouvoir les départs en congé de solidarité et les projets de l\'association au Kenya.',
+    theme: 'Interview & radio',
+    date: new Date('2022-01-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.francebleu.fr/emissions/18-19-personnalites-remarquables',
+  },
+  {
+    slug: 'emission-planete-bleu-donner-du-sens',
+    title: 'Planète Bleu — "Donner du sens" (France Bleu)',
+    content: 'Lors de l\'émission de Radio Planète Bleu de Benoît Prospero, Delphine Thibaut, fondatrice de l\'association explique ce qu\'est un congé de solidarité et Willy Rovelli partage son expérience au Kenya.',
+    theme: 'Interview & radio',
+    date: new Date('2022-06-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.francebleu.fr/emissions/planete-bleu-le-mag-planete-bleu-s-engage/donner-du-sens-3695876',
+  },
+  {
+    slug: 'interview-france-bleu-carnaval-nice-2023',
+    title: 'Carnaval de Nice 2023 — France Bleu',
+    content: 'À l\'occasion du Carnaval de Nice 2023, Delphine Thibaut était au micro de Willy Rovelli afin de présenter les congés de solidarité de Sens Solidaires à l\'international, notamment au Kenya.',
+    theme: 'Interview & radio',
+    date: new Date('2023-02-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.francebleu.fr/emissions/on-n-est-pas-a-l-abri-d-faire-une-bonne-emission/en-direct-du-carnaval-de-nice-6228875#MainContent',
+  },
+  {
+    slug: 'interview-france-bleu-pays-savoie-2022',
+    title: 'Interview France Bleu Pays de Savoie — Exposition Casamance',
+    content: 'Interview réalisé par Laurent Pascal de France Bleu Pays de Savoie dans sa chronique Plus vertes mes savoie, afin de promouvoir l\'exposition "De la Haute Savoie à la Casamance : comprendre la crise climatique".',
+    theme: 'Interview & radio',
+    date: new Date('2022-11-11'),
+    image_url: '/images/locations/AGADA-senegal.jpg',
+    external_url: null,
+  },
+
+  // ── Vie de l'association ──
+  {
+    slug: 'exposition-linogravures-felix-richard-2016',
+    title: 'Exposition — Linogravures de Felix Richard',
+    content: 'Novembre 2016 : Exposition des linogravures de Felix Richard sur le papier en bouse d\'éléphant du Sri Lanka. 25 euros le tableau encadré, l\'argent retourne directement à la Fabrique du papier pour maintenir son développement.',
+    theme: 'Vie de l\'association',
+    date: new Date('2016-11-01'),
+    image_url: '/images/fabrique_eco_maximus_srilanka.jpg',
+    external_url: null,
+  },
+  {
+    slug: 'exposition-correspondances-maison-environnement-2017',
+    title: 'Exposition des correspondances scolaires — Maison de l\'Environnement',
+    content: 'Du 24 mai au 27 juin 2017, exposition des travaux des correspondances des élèves sur le développement durable à la Maison de l\'Environnement de Nice.',
+    theme: 'Vie de l\'association',
+    date: new Date('2017-05-24'),
+    image_url: '/images/jardin_potager_senegal.jpg',
+    external_url: null,
+  },
+  {
+    slug: 'jardiniere-college-roland-garros-2021',
+    title: 'Installation d\'une jardinière au collège Roland-Garros',
+    content: '2021 : Installation d\'une jardinière au collège Roland-Garros de Nice dans le cadre de notre programme d\'éducation au développement durable.',
+    theme: 'Éducation & sensibilisation',
+    date: new Date('2021-01-01'),
+    image_url: '/images/jardin_potager_senegal.jpg',
+    external_url: null,
+  },
+  {
+    slug: 'reprise-activites-grand-geneve-2020',
+    title: 'Reprise des activités sur l\'antenne du Grand Genève',
+    content: '2020 : Reprise des activités sur l\'antenne du Grand Genève après la crise sanitaire. Nouvelles animations et projets éducatifs pour les établissements scolaires de la région.',
+    theme: 'Vie de l\'association',
+    date: new Date('2020-09-01'),
+    image_url: '/images/hero_missions.jpg',
+    external_url: null,
+  },
+]
+
+for (const post of MEDIA_POSTS) {
+  await prisma.mediaPost.upsert({
+    where: { slug: post.slug },
+    update: post,
+    create: post,
+  })
+  console.log(`✅ MediaPost : ${post.title}`)
+}
+
+console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
+
   // ============================================================
   // RÉCAP FINAL
   // ============================================================
@@ -781,6 +1022,7 @@ console.log("FieldActions créées (8)")
   console.log("─────────────────────────────────────────")
   console.log("Changer le mot de passe admin AVANT la mise en production !")
   console.log(`FieldActions: 8`)
+  console.log(`MediaPosts : ${MEDIA_POSTS.length}`)
 }
 
 seed()
