@@ -23,14 +23,6 @@ const ACTIVITES = [
   { titre: "Information", description: "Nous suivons avec attention les questions environnementales et le respect des réglementations afin d’informer, sensibiliser et encourager chacun à devenir acteur de la protection de notre planète." },
 ]
 
-// Aperçu équipe direction
-const DIRECTION = [
-  { nom: "Delphine Thibaut", role: "Fondatrice et Chargée des Programmes", avatar: '/placeholder-testimonials.png' },
-  { nom: "Elodie Tisserand", role: "Présidente", avatar: '/placeholder-testimonials.png' },
-  { nom: "Hervé Caffin", role: "Trésorier", avatar: '/placeholder-testimonials.png' },
-  { nom: "Lynda Tabet", role: "Secrétaire", avatar: '/placeholder-testimonials.png' },
-]
-
 function APropos() {
   return (
     <div className="bg-surface min-h-screen">

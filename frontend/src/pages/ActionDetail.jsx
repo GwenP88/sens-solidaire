@@ -11,7 +11,6 @@ import ScrollToTop from '../components/ui/ScrollToTop'
 import { IconPin } from '../utils/icons'
 import { ODDS_LABELS } from '../utils/odds'
 
-
 function ActionDetail() {
   const { slug } = useParams()
   const [action, setAction] = useState(null)
