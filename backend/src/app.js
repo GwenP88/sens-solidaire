@@ -28,6 +28,8 @@ import testimonialRouter from "./routes/testimonialRoutes.js"
 import contactRouter from "./routes/contactRoutes.js"
 // Import du router admin CUD(Create, update, delete)
 import adminMissionRoutes from "./routes/adminMissionRoutes.js"
+// Import du router actions/impact
+import fieldActionRouter from './routes/fieldActionRoutes.js'
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -82,6 +84,8 @@ app.use("/api/testimonials", testimonialRouter)
 app.use("/api/contact", contactRouter)
 // Route admin missions (écriture, protégées)
 app.use("/api/admin/missions", adminMissionRoutes)
+// Route actions/impact
+app.use('/api/field-actions', fieldActionRouter)
 
 
 // ── MIDDLEWARE ERREURS ───────────────────────────────────────────────────────

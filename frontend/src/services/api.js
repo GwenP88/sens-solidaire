@@ -46,3 +46,17 @@ export const submitTestimonial = async (data) => {
   if (!response.ok) throw new Error("Erreur lors de l'envoi du témoignage")
   return await response.json()
 }
+
+// ── FIELD ACTIONS ─────────────────────────────────────────────
+
+export const fetchFieldActions = async () => {
+  const response = await fetch(`${API_URL}/field-actions`)
+  if (!response.ok) throw new Error('Erreur lors de la récupération des actions')
+  return await response.json()
+}
+
+export const fetchFieldActionBySlug = async (slug) => {
+  const response = await fetch(`${API_URL}/field-actions/${slug}`)
+  if (!response.ok) throw new Error('Action introuvable')
+  return await response.json()
+}
