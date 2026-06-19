@@ -82,7 +82,7 @@ function NotreImpact() {
       <section className="section-padding">
 
         {/* Intro */}
-        <p className="font-body text-sm text-primary/80 leading-relaxed mb-10 max-w-3xl">
+        <p className="font-body text-sm text-primary/80 leading-relaxed mb-10">
           Sens Solidaire s'investit sur tous les continents afin de collaborer sur des projets tournés vers la sauvegarde de la biodiversité, le bien-être des populations locales et un développement durable. Nos actions combinent éducation, échanges interculturels et projets environnementaux concrets.
         </p>
 

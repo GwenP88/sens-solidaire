@@ -60,3 +60,17 @@ export const fetchFieldActionBySlug = async (slug) => {
   if (!response.ok) throw new Error('Action introuvable')
   return await response.json()
 }
+
+// ── MEDIA POSTS ───────────────────────────────────────────────
+
+export const fetchMediaPosts = async () => {
+  const response = await fetch(`${API_URL}/media-posts`)
+  if (!response.ok) throw new Error('Erreur lors de la récupération des médias')
+  return await response.json()
+}
+
+export const fetchMediaPostBySlug = async (slug) => {
+  const response = await fetch(`${API_URL}/media-posts/${slug}`)
+  if (!response.ok) throw new Error('Article introuvable')
+  return await response.json()
+}
