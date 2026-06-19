@@ -43,6 +43,7 @@ export const FILTERS_MEDIA_THEME = [
   { label: "Interview & radio", value: "Interview & radio" },
   { label: "Vie de l'association", value: "Vie de l'association" },
   { label: "Éducation & sensibilisation", value: "Éducation & sensibilisation" },
+  { value: 'Événement', label: 'Événement' },
 ]
 
 export const FILTER_CONFIG_TEMOIGNAGES = [
@@ -61,5 +62,19 @@ export const FILTER_CONFIG_TEMOIGNAGES = [
     key: 'annee',
     placeholder: 'Toutes les années',
     options: [2026, 2025, 2024, 2023, 2022, 2021, 2020].map(a => ({ value: String(a), label: String(a) })),
+  },
+]
+
+export const FILTER_CONFIG_MEDIAS = [
+  {
+    key: 'theme',
+    placeholder: 'Tous les thèmes',
+    options: FILTERS_MEDIA_THEME.filter(f => f.value !== null).map(f => ({ value: f.value, label: f.label })),
+  },
+  {
+    key: 'annee',
+    placeholder: 'Toutes les années',
+    options: [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2017, 2016, 2013]
+      .map(a => ({ value: String(a), label: String(a) })),
   },
 ]

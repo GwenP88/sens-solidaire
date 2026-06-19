@@ -7,7 +7,7 @@ import FilterSelect from '../components/ui/FilterSelect'
 import MediaCard from '../components/media/MediaCard'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import { fetchMediaPosts } from '../services/api'
-import { FILTERS_MEDIA_THEME } from '../utils/filters'
+import { FILTER_CONFIG_MEDIAS } from '../utils/filters'
 
 function MediaEtActualites() {
   const [posts, setPosts] = useState([])
@@ -43,7 +43,7 @@ function MediaEtActualites() {
     {/* Filtres — collés au hero */}
     <div className="bg-primary px-24 py-6">
       <FilterSelect
-        filters={FILTER_CONFIG}
+        filters={FILTER_CONFIG_MEDIAS}
         values={filters}
         onChange={handleFilter}
       />
