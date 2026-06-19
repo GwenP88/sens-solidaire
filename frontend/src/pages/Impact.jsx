@@ -2,6 +2,7 @@
 // Page Notre Impact — actions terrain connectées à l'API
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import HeroPage from '../components/layout/HeroPage'
 import ActionCard from '../components/actions/ActionCard'
 import FilterChips from '../components/navigation/FilterChips'
@@ -53,7 +54,8 @@ function NotreImpact() {
   const [actions, setActions] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeFilter, setActiveFilter] = useState(null)
-  const [activeCountry, setActiveCountry] = useState(null)
+  const [searchParams] = useSearchParams()
+  const [activeCountry, setActiveCountry] = useState(searchParams.get('pays') || null)
 
   useEffect(() => {
     fetchFieldActions()
