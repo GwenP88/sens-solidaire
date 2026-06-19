@@ -23,7 +23,7 @@ function ActionCard({ title, description, tags, slug, country, image, odds }) {
           {tags.map(tag => <span key={tag}>• {tag}</span>)}
         </div>
         <div className="flex items-center justify-between">
-          <a href={`/actions/${slug}`}>
+          <a href={`/notre-impact/${slug}`}>
             <Button variant="primary" label="Découvrir →" />
           </a>
           <span className="flex items-center gap-1 text-xs opacity-70">

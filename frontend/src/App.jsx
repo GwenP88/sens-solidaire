@@ -18,6 +18,7 @@ import RapportsActivite from './pages/RapportsActivite'
 import APropos from './pages/APropos'
 import Equipe from './pages/Equipe'
 import Impact from './pages/Impact'
+import ActionDetail from './pages/ActionDetail'
 // import ActionsEducatives from './pages/ActionsEducatives'
 // import MediasActualites from './pages/MediasActualites'
 
@@ -44,7 +45,7 @@ function App() {
           <Route path="/equipe" element={<Equipe />} />
           {/* <Route path="/actions-educatives" element={<ActionsEducatives />} /> */}
           <Route path="/notre-impact" element={<Impact />} />
-          {/* <Route path="/notre-impact/ :slug" element={<ActionDetails/>} /> */}
+          <Route path="/notre-impact/:slug" element={<ActionDetail/>} />
           {/* <Route path="/emedias-actualite" element={<MediasActualites />} /> */}
         </Route>
 
