@@ -1,6 +1,7 @@
 // MentionsLegales.jsx
 // Page mentions légales — obligatoire LCEN 2004
 
+// ── Composants UI
 import ScrollToTop from '../components/ui/ScrollToTop'
 
 function MentionsLegales() {
@@ -43,7 +44,6 @@ function MentionsLegales() {
                 <span className="italic text-primary/40">[Adresse à compléter]</span>
               </p>
             </div>
-
           </div>
 
           {/* Propriété intellectuelle */}
@@ -77,7 +77,6 @@ function MentionsLegales() {
               Site développé par Gwen Pichot & Alison Amblard — Holberton School Thonon-les-Bains — 2026.
             </p>
           </div>
-
         </div>
       </section>
 

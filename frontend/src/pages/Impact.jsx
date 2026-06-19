@@ -1,24 +1,41 @@
 // NotreImpact.jsx
 // Page Notre Impact — actions terrain connectées à l'API
 
+// ── React
 import { useState, useEffect } from 'react'
+
+// ── Router
 import { useSearchParams } from 'react-router-dom'
+
+// ── API
+import { fetchFieldActions } from '../services/api'
+
+// ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
-import ActionCard from '../components/actions/ActionCard'
-import FilterChips from '../components/navigation/FilterChips'
+
+// ── Composants UI
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
-import { fetchFieldActions } from '../services/api'
+import FilterChips from '../components/navigation/FilterChips'
+
+// ── Composants métier
+import ActionCard from '../components/actions/ActionCard'
+
+// ── Utils
 import { ODDS } from '../utils/odds'
-import { FILTERS_ACTION_TAGS, FILTERS_COUNTRY } from '../utils/filters'
+import { FILTERS_ACTION_TAGS } from '../utils/filters'
 
 function NotreImpact() {
+  // ── État local — actions + chargement + filtres
   const [actions, setActions] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeFilter, setActiveFilter] = useState(null)
+
+  // ── Initialisation du filtre pays depuis l'URL (?pays=Kenya)
   const [searchParams] = useSearchParams()
   const [activeCountry, setActiveCountry] = useState(searchParams.get('pays') || null)
 
+  // ── Chargement des actions depuis l'API au montage
   useEffect(() => {
     fetchFieldActions()
       .then(data => setActions(data))
@@ -26,6 +43,7 @@ function NotreImpact() {
       .finally(() => setLoading(false))
   }, [])
 
+  // ── Filtrage combiné — par tag thématique ET par pays
   const filteredActions = actions.filter(a => {
     if (activeFilter && !a.tags.some(t => t.tag === activeFilter)) return false
     if (activeCountry && !a.country.includes(activeCountry)) return false
@@ -35,6 +53,7 @@ function NotreImpact() {
   return (
     <div className="bg-surface min-h-screen">
 
+      {/* ── Hero immersif ── */}
       <HeroPage
         image="/images/hero_missions.jpg"
         title="Notre impact"
@@ -43,15 +62,15 @@ function NotreImpact() {
 
       <section className="section-padding">
 
-        {/* Intro */}
+        {/* ── Texte d'introduction ── */}
         <p className="font-body text-sm text-primary/80 leading-relaxed mb-10">
           Sens Solidaire s'investit sur tous les continents afin de collaborer sur des projets tournés vers la sauvegarde de la biodiversité, le bien-être des populations locales et un développement durable. Nos actions combinent éducation, échanges interculturels et projets environnementaux concrets.
         </p>
 
-        {/* Filtres — pays + thèmes */}
+        {/* ── Filtres — select pays à gauche + chips thèmes à droite ── */}
         <div className="flex items-center gap-12 mb-8">
 
-          {/* Select pays */}
+          {/* Menu déroulant pays */}
           <select
             value={activeCountry || ''}
             onChange={e => setActiveCountry(e.target.value || null)}
@@ -65,9 +84,9 @@ function NotreImpact() {
             <option value="Sumatra">Sumatra</option>
           </select>
 
-          {/* Chips thèmes */}
+          {/* Chips de filtrage par thème */}
           <FilterChips
-            filters={FILTERS_ACTION_TAGS, FILTERS_COUNTRY}
+            filters={FILTERS_ACTION_TAGS}
             active={activeFilter}
             onChange={setActiveFilter}
             variant="light"
@@ -75,7 +94,7 @@ function NotreImpact() {
 
         </div>
 
-        {/* Grille actions */}
+        {/* ── Grille des actions — 2 colonnes ── */}
         {loading ? (
           <p className="font-body text-sm text-primary/50 italic">Chargement...</p>
         ) : filteredActions.length === 0 ? (
@@ -99,7 +118,7 @@ function NotreImpact() {
 
       </section>
 
-      {/* ── Section ODD détaillée ── */}
+      {/* ── Section ODD — icônes officielles ONU avec labels français ── */}
       <section className="section-padding bg-surface-mid">
         <div className="section-header">
           <div className="max-w-5xl">
@@ -114,6 +133,7 @@ function NotreImpact() {
           </a>
         </div>
 
+        {/* Grille ODD — flex wrap centré */}
         <div className="flex flex-wrap gap-3 justify-center mt-8">
           {ODDS.map(odd => (
             <div key={odd.n} className="flex flex-col items-center gap-2 w-20 text-center">

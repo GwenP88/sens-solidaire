@@ -1,18 +1,31 @@
 // EducationDetail.jsx
-import { useParams } from 'react-router-dom'
+// Page détail d'un atelier éducatif — hero, contenu, ressources, galerie, CTA
+
+// ── React
 import { useState, useEffect } from 'react'
+
+// ── Router
+import { useParams } from 'react-router-dom'
+
+// ── API
 import { fetchEducationItemBySlug } from '../services/api'
+
+// ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
+
+// ── Composants UI
 import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
 function EducationDetail() {
+  // ── État local — item + chargement + erreur
   const { slug } = useParams()
   const [item, setItem] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  // ── Chargement de l'atelier depuis l'API au montage
   useEffect(() => {
     fetchEducationItemBySlug(slug)
       .then(data => setItem(data))
@@ -20,6 +33,7 @@ function EducationDetail() {
       .finally(() => setLoading(false))
   }, [slug])
 
+  // ── États de chargement et d'erreur
   if (loading) return <p className="p-12 font-body text-primary">Chargement...</p>
   if (error || !item) return (
     <div className="p-12 text-center">
@@ -28,6 +42,7 @@ function EducationDetail() {
     </div>
   )
 
+  // ── Formatage des labels public cible
   const publicLabels = item.public.split(',').map(p => {
     if (p === 'primaire') return 'Maternelle & Primaire'
     if (p === 'college_lycee') return 'Collège & Lycée'
@@ -35,55 +50,69 @@ function EducationDetail() {
     return p
   }).join(' · ')
 
+  // ── Séparation des médias par type
   const images = item.media?.filter(m => m.file_type === 'image') || []
   const links = item.media?.filter(m => m.file_type === 'link') || []
   const videos = item.media?.filter(m => m.file_type === 'video') || []
   const audios = item.media?.filter(m => m.file_type === 'audio') || []
   const pdfs = item.media?.filter(m => m.file_type === 'pdf') || []
 
+  // ── Première image = sidebar, reste = galerie
   const mainImage = images[0]
   const extraImages = images.slice(1)
   const hasResources = links.length > 0 || videos.length > 0 || audios.length > 0 || pdfs.length > 0
 
+  // ── Label dynamique selon le type de média
+  const getMediaLabel = (m) => {
+    if (m.label) return m.label + ' →'
+    if (m.file_type === 'pdf') return 'Télécharger ↓'
+    if (m.file_type === 'video') return 'Voir la vidéo →'
+    if (m.file_type === 'audio') return 'Écouter →'
+    return 'Voir le lien →'
+  }
+
   return (
     <div className="bg-surface min-h-screen">
 
+      {/* ── Hero immersif ── */}
       <HeroPage
         image={item.image_url || '/images/hero_missions.jpg'}
         title={item.title}
       />
 
-      {/* ── Contenu principal ── */}
+      {/* ── Contenu principal — texte 2/3 + sidebar 1/3 ── */}
       <section className="section-padding bg-surface">
         <div className="flex flex-col gap-6">
 
-          {/* Lien retour */}
+          {/* Lien retour vers la liste des ateliers */}
           <a href="/actions-educatives" className="font-body text-sm text-primary/50 hover:text-primary transition-colors">
             ← Retour aux ateliers
           </a>
 
-          {/* Type + public */}
+          {/* Type et public cible */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-body text-xs font-bold text-accent-2">{item.type}</span>
             <span className="font-body text-xs text-primary/30">—</span>
             <span className="font-body text-xs text-primary/50">{publicLabels}</span>
           </div>
 
-          {/* H2 pleine largeur */}
+          {/* Description courte — affichée en H2 pleine largeur */}
           <h2 className="section-title text-primary">{item.description}</h2>
 
-          {/* 2/3 texte + 1/3 sidebar */}
+          {/* Layout 2 colonnes — texte + sidebar */}
           <div className="flex gap-12 items-start">
 
-            {/* Texte — 2/3 */}
+            {/* Colonne texte — 2/3 */}
             <div className="flex-1 flex flex-col gap-4">
+
+              {/* Contenu long — paragraphes séparés par double saut de ligne */}
               {item.content && item.content.split('\n\n').map((para, i) => (
                 <p key={i} className="font-body text-sm text-primary/80 leading-relaxed">
                   {para}
                 </p>
               ))}
 
-              {/* CTA PDF plaquette */}
+              {/* CTA téléchargement plaquette PDF si disponible */}
               {item.external_url && (
                 <div className="mt-2">
                   <a href={item.external_url} target="_blank" rel="noopener noreferrer">
@@ -93,37 +122,24 @@ function EducationDetail() {
               )}
             </div>
 
-            {/* Sidebar — 1/3 */}
+            {/* Colonne sidebar — 1/3 */}
             <div className="w-1/3 shrink-0 flex flex-col gap-6">
 
-              {/* Image principale */}
+              {/* Image principale depuis les médias attachés */}
               {mainImage && (
                 <div className="w-full overflow-hidden rounded-2xl">
                   <img src={mainImage.file_url} alt={item.title} className="w-full h-56 object-cover" />
                 </div>
               )}
 
-              {/* Ressources */}
+              {/* Bloc ressources — liens, vidéos, audios, PDFs */}
               {hasResources && (
                 <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-4">
                   <p className="font-body text-xs font-bold text-primary/40 uppercase tracking-widest">Ressources</p>
-
                   {[...links, ...videos, ...audios, ...pdfs].map((m, i) => (
-                    <div key={i} className="flex flex-col gap-1">
-                      <a href={m.file_url} target="_blank" rel="noopener noreferrer">
-                        <Button
-                          label={
-                            m.label ? m.label + ' →' :
-                            m.file_type === 'pdf' ? 'Télécharger ↓' :
-                            m.file_type === 'video' ? 'Voir la vidéo →' :
-                            m.file_type === 'audio' ? 'Écouter →' :
-                            'Voir le lien →'
-                          }
-                          variant="secondary"
-                          fullWidth
-                        />
-                      </a>
-                    </div>
+                    <a key={i} href={m.file_url} target="_blank" rel="noopener noreferrer">
+                      <Button label={getMediaLabel(m)} variant="secondary" fullWidth />
+                    </a>
                   ))}
                 </div>
               )}
@@ -133,7 +149,7 @@ function EducationDetail() {
         </div>
       </section>
 
-      {/* ── Photos supplémentaires ── */}
+      {/* ── Galerie photos supplémentaires — grille ou carousel ── */}
       {extraImages.length > 0 && (
         <section className="section-padding bg-surface-mid">
           <h2 className="section-title text-primary mb-8">Photos</h2>
@@ -162,7 +178,7 @@ function EducationDetail() {
         </section>
       )}
 
-      {/* ── CTA contact ── */}
+      {/* ── CTA contact — invitation à accueillir une intervention ── */}
       <section className="section-padding bg-accent-2">
         <div className="flex items-center justify-between">
           <div>

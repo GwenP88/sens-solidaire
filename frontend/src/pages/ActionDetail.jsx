@@ -1,22 +1,35 @@
 // ActionDetail.jsx
 // Page détail d'une action terrain — hero, description, ODD, galerie, CTA
 
-import { useParams } from 'react-router-dom'
+// ── React
 import { useState, useEffect } from 'react'
+
+// ── Router
+import { useParams } from 'react-router-dom'
+
+// ── API
 import { fetchFieldActionBySlug } from '../services/api'
+
+// ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
+
+// ── Composants UI
 import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
+
+// ── Utils
 import { IconPin } from '../utils/icons'
 import { ODDS_LABELS } from '../utils/odds'
 
 function ActionDetail() {
+  // ── État local — données de l'action + chargement
   const { slug } = useParams()
   const [action, setAction] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  // ── Chargement de l'action depuis l'API au montage
   useEffect(() => {
     fetchFieldActionBySlug(slug)
       .then(data => setAction(data))
@@ -24,6 +37,7 @@ function ActionDetail() {
       .finally(() => setLoading(false))
   }, [slug])
 
+  // ── États de chargement et d'erreur
   if (loading) return <p className="p-12 font-body text-primary">Chargement...</p>
   if (error || !action) return (
     <div className="p-12 text-center">
@@ -35,21 +49,22 @@ function ActionDetail() {
   return (
     <div className="bg-surface min-h-screen">
 
+      {/* ── Hero immersif ── */}
       <HeroPage
         image={action.image_url}
         title={action.title}
       />
 
-      {/* ── Contenu principal ── */}
+      {/* ── Contenu principal — texte 2/3 + sidebar 1/3 ── */}
       <section className="section-padding bg-surface">
         <div className="flex flex-col gap-6">
 
-          {/* Lien retour */}
+          {/* Lien retour vers la liste des actions */}
           <a href="/notre-impact" className="font-body text-sm text-primary/50 hover:text-primary transition-colors">
             ← Retour aux actions
           </a>
 
-          {/* Tags */}
+          {/* Tags thématiques */}
           <div className="flex gap-3 flex-wrap">
             {action.tags.map(t => (
               <span key={t.tag} className="font-body text-xs text-primary/70 border border-primary/20 rounded-full px-3 py-1">
@@ -58,21 +73,23 @@ function ActionDetail() {
             ))}
           </div>
 
-          {/* H2 pleine largeur */}
+          {/* Description courte — affichée en H2 pleine largeur */}
           <h2 className="section-title text-primary">{action.description}</h2>
 
-          {/* 2/3 texte + 1/3 sidebar */}
+          {/* Layout 2 colonnes — texte + sidebar */}
           <div className="flex gap-12 items-start">
 
-            {/* Texte — 2/3 */}
+            {/* Colonne texte — 2/3 */}
             <div className="flex-1 flex flex-col gap-4">
+
+              {/* Contenu long — paragraphes séparés par double saut de ligne */}
               {action.content.split('\n\n').map((para, i) => (
                 <p key={i} className="font-body text-sm text-primary/80 leading-relaxed">
                   {para}
                 </p>
               ))}
 
-              {/* CTA + pays */}
+              {/* CTA pays — lien vers toutes les actions du même pays */}
               <div className="flex items-center justify-center gap-8 mt-4">
                 <p className="font-heading font-bold text-primary flex items-center gap-2 shrink-0">
                   <IconPin className="text-accent-2" /> {action.country}
@@ -83,22 +100,22 @@ function ActionDetail() {
               </div>
             </div>
 
-            {/* Sidebar — 1/3 */}
+            {/* Colonne sidebar — 1/3 */}
             <div className="w-1/3 shrink-0 flex flex-col gap-6">
 
-              {/* Image */}
+              {/* Image principale de l'action */}
               <div className="w-full h-56 overflow-hidden rounded-2xl">
                 <img src={action.image_url} alt={action.title} className="w-full h-full object-cover" />
               </div>
 
-              {/* ODD */}
+              {/* Bloc ODD — icônes officielles ONU + labels français */}
               <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-3">
                 <p className="font-body text-xs font-bold text-primary/40 uppercase tracking-widest">ODD associés</p>
                 <div className="grid grid-cols-3 gap-3 justify-items-center">
                   {action.odds.map(o => (
                     <div key={o.odd_number} className="flex flex-col items-center gap-1">
                       <img
-                        src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(o.odd_number).padStart(2, '0')}.jpg`}
+                        src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(o.odd_number).padStart(2, '00')}.jpg`}
                         alt={`ODD ${o.odd_number}`}
                         className="w-full rounded-lg"
                       />
@@ -115,7 +132,7 @@ function ActionDetail() {
         </div>
       </section>
 
-      {/* ── Galerie ── */}
+      {/* ── Galerie photos — carousel si médias disponibles ── */}
       {action.gallery?.length > 0 && (
         <section className="section-padding bg-surface-mid">
           <h2 className="section-title text-primary mb-8">Galerie photos</h2>
@@ -134,7 +151,7 @@ function ActionDetail() {
         </section>
       )}
 
-      {/* ── CTA bas de page ── */}
+      {/* ── CTA bas de page — invitation à s'engager ── */}
       <section className="section-padding bg-accent-2">
         <div className="flex items-center justify-between">
           <div>

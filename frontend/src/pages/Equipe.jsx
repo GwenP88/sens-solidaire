@@ -1,22 +1,33 @@
 // Equipe.jsx
 // Page équipe — direction, bureau, conseil d'administration, délégations
 
+// ── React
 import { useState, useEffect } from 'react'
+
+// ── API
+import { fetchTeamMembers, fetchDelegations } from '../services/api'
+
+// ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
+
+// ── Composants UI
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
+
+// ── Composants métier
 import TeamMemberCardLarge from '../components/team/TeamMemberCardLarge'
 import TeamMemberCardSmall from '../components/team/TeamMemberCardSmall'
 import DelegationCard from '../components/team/DelegationCard'
-import { fetchTeamMembers, fetchDelegations } from '../services/api'
 
 function Equipe() {
+  // ── État local — membres par catégorie + délégations
   const [direction, setDirection] = useState([])
   const [bureau, setBureau] = useState([])
   const [ca, setCa] = useState([])
   const [egalement, setEgalement] = useState([])
   const [delegations, setDelegations] = useState([])
 
+  // ── Chargement de toutes les données en parallèle au montage
   useEffect(() => {
     fetchTeamMembers('direction').then(setDirection).catch(console.error)
     fetchTeamMembers('bureau').then(setBureau).catch(console.error)
@@ -28,13 +39,14 @@ function Equipe() {
   return (
     <div className="bg-surface min-h-screen">
 
+      {/* ── Hero immersif ── */}
       <HeroPage
         image="/images/hero_missions.jpg"
         title="Notre équipe"
         subtitle="Des femmes et des hommes engagés, en France et à l'international, pour un monde plus juste et la protection de la biodiversité."
       />
 
-      {/* ── Direction ── */}
+      {/* ── Direction — cards larges 3 colonnes ── */}
       <section className="section-padding bg-surface">
         <h2 className="section-title text-primary mb-8">Direction</h2>
         <div className="grid grid-cols-3 gap-6">
@@ -50,7 +62,7 @@ function Equipe() {
         </div>
       </section>
 
-      {/* ── Bureau ── */}
+      {/* ── Bureau — cards larges 3 colonnes, fond inversé ── */}
       <section className="section-padding bg-surface-mid">
         <h2 className="section-title text-primary mb-8">Membres du bureau</h2>
         <div className="grid grid-cols-3 gap-6">
@@ -67,7 +79,7 @@ function Equipe() {
         </div>
       </section>
 
-      {/* ── Conseil d'administration ── */}
+      {/* ── Conseil d'administration — cards compactes 4 colonnes ── */}
       <section className="section-padding bg-surface">
         <h2 className="section-title text-primary mb-8">Conseil d'administration</h2>
         <div className="grid grid-cols-4 gap-6">
@@ -82,7 +94,7 @@ function Equipe() {
         </div>
       </section>
 
-      {/* ── Également à nos côtés ── */}
+      {/* ── Également à nos côtés — cards compactes 3 colonnes ── */}
       <section className="section-padding bg-surface-mid">
         <h2 className="section-title text-primary mb-8">Également à nos côtés</h2>
         <div className="grid grid-cols-3 gap-6">
@@ -98,7 +110,7 @@ function Equipe() {
         </div>
       </section>
 
-      {/* ── Délégations internationales ── */}
+      {/* ── Délégations internationales — cards immersives 3 colonnes ── */}
       <section className="section-padding bg-surface">
         <h2 className="section-title text-primary mb-8">Nos délégations et partenaires terrain</h2>
         <div className="grid grid-cols-3 gap-6">
@@ -115,7 +127,7 @@ function Equipe() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
+      {/* ── CTA contact ── */}
       <section className="section-padding bg-accent-2">
         <div className="flex items-center justify-between">
           <div>

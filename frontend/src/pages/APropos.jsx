@@ -1,14 +1,23 @@
 // APropos.jsx
 // Page à propos — histoire, valeurs, champs d'activité, engagements, équipe, transparence
 
+// ── React
 import { useState, useEffect } from 'react'
-import HeroPage from '../components/layout/HeroPage'
-import Button from '../components/ui/Button'
-import ScrollToTop from '../components/ui/ScrollToTop'
-import { IconHeart, IconGlobe, IconPeople, IconLeaf, IconGuide } from '../utils/icons'
+
+// ── API
 import { fetchTeamMembers } from '../services/api'
 
-// Valeurs
+// ── Composants layout
+import HeroPage from '../components/layout/HeroPage'
+
+// ── Composants UI
+import Button from '../components/ui/Button'
+import ScrollToTop from '../components/ui/ScrollToTop'
+
+// ── Utils
+import { IconHeart, IconGlobe, IconPeople, IconLeaf, IconGuide } from '../utils/icons'
+
+// ── Données statiques — valeurs de l'association (contenu fixe)
 const VALEURS = [
   { icon: IconHeart, titre: "Solidarité", description: "Placer l'humain au cœur de chaque action." },
   { icon: IconLeaf, titre: "Respect", description: "Respecter les cultures, les individus et l'environnement." },
@@ -17,7 +26,7 @@ const VALEURS = [
   { icon: IconGlobe, titre: "Responsabilité", description: "Agir durablement pour un impact positif et responsable." },
 ]
 
-// Champs d'activité
+// ── Données statiques — champs d'activité (contenu fixe)
 const ACTIVITES = [
   { titre: "Projets environnementaux", description: "Nous agissons aux côtés de nos partenaires en France et à l'international pour construire des projets concrets en faveur de l'environnement : agriculture durable, accès à l'eau, reforestation et préservation des écosystèmes." },
   { titre: "Éducation", description: "Nous accompagnons les jeunes dans la découverte des enjeux environnementaux grâce à des activités ludiques et participatives : ateliers pédagogiques, jeux, projets de correspondance et actions de sensibilisation adaptées à chaque âge." },
@@ -26,8 +35,10 @@ const ACTIVITES = [
 ]
 
 function APropos() {
+  // ── État local — 4 membres de la direction pour l'aperçu équipe
   const [direction, setDirection] = useState([])
 
+  // ── Chargement des membres direction depuis l'API au montage
   useEffect(() => {
     fetchTeamMembers('direction', 4)
       .then(data => setDirection(data))
@@ -37,13 +48,14 @@ function APropos() {
   return (
     <div className="bg-surface min-h-screen">
 
+      {/* ── Hero immersif ── */}
       <HeroPage
         image="/images/hero_missions.jpg"
         title="À propos de Sens Solidaire"
         subtitle="Voyager, rencontrer, partager et agir pour un monde plus solidaire."
       />
 
-      {/* ── Notre histoire ── */}
+      {/* ── Notre histoire — texte + image ── */}
       <section className="section-padding bg-surface">
         <div className="flex gap-12 items-center">
           <div className="flex flex-col gap-6 flex-1">
@@ -71,7 +83,7 @@ function APropos() {
         </div>
       </section>
 
-      {/* ── Nos valeurs ── */}
+      {/* ── Nos valeurs — grille 5 colonnes avec icônes ── */}
       <section className="section-padding bg-surface-mid">
         <h2 className="section-title text-primary text-center mb-10">Nos valeurs</h2>
         <div className="grid grid-cols-5 gap-6">
@@ -85,7 +97,7 @@ function APropos() {
         </div>
       </section>
 
-      {/* ── Champs d'activité ── */}
+      {/* ── Champs d'activité — grille 2 colonnes ── */}
       <section className="section-padding bg-surface">
         <h2 className="section-title text-primary mb-2">Nos champs d'activité</h2>
         <p className="font-body text-sm text-primary/60 mb-10">Nous accompagnons les communautés locales dans la planification et l'exécution de leurs projets, en répondant à leurs besoins et en s'adaptant à leur culture.</p>
@@ -99,7 +111,7 @@ function APropos() {
         </div>
       </section>
 
-      {/* ── Aperçu équipe ── */}
+      {/* ── Aperçu équipe — 4 membres direction depuis l'API ── */}
       <section className="section-padding bg-surface-mid">
         <div className="flex items-end justify-between mb-10">
           <div>
@@ -122,7 +134,7 @@ function APropos() {
         </div>
       </section>
 
-      {/* ── Transparence ── */}
+      {/* ── Transparence — texte + image + lien rapports ── */}
       <section className="section-padding bg-surface">
         <div className="flex gap-12 items-center">
           <div className="flex flex-col gap-4 flex-1">
@@ -145,7 +157,7 @@ function APropos() {
         </div>
       </section>
 
-      {/* ── CTA Contact ── */}
+      {/* ── CTA contact ── */}
       <section className="section-padding bg-accent-2">
         <div className="flex items-center justify-between">
           <div>

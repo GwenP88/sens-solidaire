@@ -1,86 +1,100 @@
 // Home.jsx
 // Page d'accueil — Hero + StatsBar + Sections
 
-import Hero from '../components/layout/Hero'
-import StatsBar from '../components/layout/StatsBar'
-import MissionCard from '../components/missions/MissionCard'
-import Button from '../components/ui/Button'
-import TestimonialCard from '../components/testimonials/TestimonialCard'
-import TestimonialCarousel from '../components/testimonials/TestimonialCarousel'
-import ActionCard from '../components/actions/ActionCard'
+// ── React
 import { useState, useEffect } from 'react'
+
+// ── API
 import { fetchTestimonials, fetchFieldActions, fetchPartners } from '../services/api'
 
+// ── Composants layout
+import Hero from '../components/layout/Hero'
+import StatsBar from '../components/layout/StatsBar'
+
+// ── Composants UI
+import Button from '../components/ui/Button'
+
+// ── Composants métier
+import MissionCard from '../components/missions/MissionCard'
+import TestimonialCarousel from '../components/testimonials/TestimonialCarousel'
+import ActionCard from '../components/actions/ActionCard'
+
+// ── Données statiques — 4 types de missions (contenu fixe, non géré en BDD)
+const MISSION_TYPES = [
+  {
+    slug: 'volontariat-individuel',
+    title: 'Partir en mission individuel',
+    description: 'Partez seul ou à deux et participez à des projets concrets de préservation de la biodiversité aux côtés des communautés locales et des acteurs de terrain.',
+    image: '/images/hero_missions.jpg',
+    badge: 'Volontariat individuel',
+    duration: '2 à 4 semaines',
+    ctaLabel: 'Découvrir →',
+    ctaUrl: '/missions?filter=individuel',
+  },
+  {
+    slug: 'service-civique',
+    title: 'Effectuer un service civique',
+    description: 'Une expérience engagée pour les 16-25 ans qui permet de développer de nouvelles compétences tout en agissant pour l\'environnement et la solidarité internationale.',
+    image: '/images/service_civique.jpg',
+    badge: 'Service civique',
+    duration: '3 à 12 mois',
+    ctaLabel: 'Découvrir →',
+    ctaUrl: '/missions?filter=service_civique',
+  },
+  {
+    slug: 'groupe-jeune',
+    title: 'Aventure Solidaire Jeunes',
+    description: 'Des séjours solidaires conçus pour les établissements scolaires, MJC et associations souhaitant vivre une aventure collective porteuse de sens.',
+    image: '/images/groupe-jeune-2.jpg',
+    badge: 'Groupe jeunes',
+    duration: '10 jours',
+    ctaLabel: 'Découvrir →',
+    ctaUrl: '/missions?filter=groupe_jeunes',
+  },
+  {
+    slug: 'conge-solidaire',
+    title: 'S\'engager en entreprise',
+    description: 'Mobilisez vos collaborateurs autour d\'une mission à impact et renforcez la cohésion de vos équipes grâce à une expérience humaine et solidaire.',
+    image: '/images/conge-solidaire-2.jpg',
+    badge: 'Congé solidaire',
+    duration: '1 à 3 semaines',
+    ctaLabel: 'Découvrir →',
+    ctaUrl: '/missions?filter=conge_solidaire',
+  },
+]
+
 function Home() {
+  // ── État local — données dynamiques depuis l'API
+  const [testimonials, setTestimonials] = useState([])
+  const [actions, setActions] = useState([])
+  const [partners, setPartners] = useState([])
 
-  const missionTypes = [
-    {
-      slug: 'volontariat-individuel',
-      title: 'Partir en mission individuel',
-      description: 'Partez seul ou à deux et participez à des projets concrets de préservation de la biodiversité aux côtés des communautés locales et des acteurs de terrain.',
-      image: '/images/hero_missions.jpg',
-      badge: 'Volontariat individuel',
-      duration: '2 à 4 semaines',
-      ctaLabel: 'Découvrir →',
-      ctaUrl: '/missions?filter=individuel',
-    },
-    {
-      slug: 'service-civique',
-      title: 'Effectuer un service civique',
-      description: 'Une expérience engagée pour les 16-25 ans qui permet de développer de nouvelles compétences tout en agissant pour l\'environnement et la solidarité internationale.',
-      image: '/images/service_civique.jpg',
-      badge: 'Service civique',
-      duration: '3 à 12 mois',
-      ctaLabel: 'Découvrir →',
-      ctaUrl: '/missions?filter=service_civique',
-    },
-    {
-      slug: 'groupe-jeune',
-      title: 'Aventure Solidaire Jeunes',
-      description: 'Des séjours solidaires conçus pour les établissements scolaires, MJC et associations souhaitant vivre une aventure collective porteuse de sens.',
-      image: '/images/groupe-jeune-2.jpg',
-      badge: 'Groupe jeunes',
-      duration: '10 jours',
-      ctaLabel: 'Découvrir →',
-      ctaUrl: '/missions?filter=groupe_jeunes',
-    },
-    {
-      slug: 'conge-solidaire',
-      title: 'S\'engager en entreprise',
-      description: 'Mobilisez vos collaborateurs autour d\'une mission à impact et renforcez la cohésion de vos équipes grâce à une expérience humaine et solidaire.',
-      image: '/images/conge-solidaire-2.jpg',
-      badge: 'Congé solidaire',
-      duration: '1 à 3 semaines',
-      ctaLabel: 'Découvrir →',
-      ctaUrl: '/missions?filter=conge_solidaire',
-    },
-  ]
+  // ── Chargement en parallèle au montage
+  useEffect(() => {
+    // Témoignages filtrés sur show_homepage = true
+    fetchTestimonials()
+      .then(data => setTestimonials(data.filter(t => t.show_homepage)))
+      .catch(console.error)
 
-    const [testimonials, setTestimonials] = useState([])
-    const [actions, setActions] = useState([])
-    const [partners, setPartners] = useState([])
+    // 4 premières actions terrain
+    fetchFieldActions()
+      .then(data => setActions(data.slice(0, 4)))
+      .catch(console.error)
 
-    useEffect(() => {
-      fetchTestimonials()
-        .then(data => setTestimonials(data.filter(t => t.show_homepage)))
-        .catch(console.error)
-
-      fetchFieldActions()
-        .then(data => setActions(data.slice(0, 4)))
-        .catch(console.error)
-
-      fetchPartners()
-        .then(setPartners)
-        .catch(console.error)
-    }, [])
+    // Tous les partenaires
+    fetchPartners()
+      .then(setPartners)
+      .catch(console.error)
+  }, [])
 
   return (
     <div>
-      {/* Hero + StatsBar */}
+
+      {/* ── Hero immersif + barre de statistiques ── */}
       <Hero />
       <StatsBar />
 
-      {/* Section Missions */}
+      {/* ── Section types de missions — 4 cards 2x2 ── */}
       <section className="section-padding bg-surface">
         <div className="section-header">
           <div className="max-w-4xl">
@@ -89,12 +103,12 @@ function Home() {
               Il existe mille façons de s'engager. Mission individuelle, service civique, séjour en groupe ou congé solidaire : découvrez des expériences adaptées à chaque parcours pour contribuer à des projets concrets de protection de la biodiversité.
             </p>
           </div>
-            <a href="/missions">
-              <Button label="Voir toutes les missions →" variant="secondary" />
-            </a>
+          <a href="/missions">
+            <Button label="Voir toutes les missions →" variant="secondary" />
+          </a>
         </div>
         <div className="grid grid-cols-2 gap-6">
-          {missionTypes.map((type) => (
+          {MISSION_TYPES.map(type => (
             <MissionCard
               key={type.slug}
               slug={type.slug}
@@ -110,16 +124,16 @@ function Home() {
         </div>
       </section>
 
-      {/* Section Témoignages */}
+      {/* ── Section témoignages — carousel depuis l'API (show_homepage) ── */}
       <section className="section-padding bg-accent-2">
         <div className="section-header">
           <div>
             <h2 className="section-title text-surface">Ils sont partis</h2>
             <p className="section-subtitle text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
           </div>
-            <a href="/temoignages">
-              <Button label="Voir tous les témoignages →" variant="secondary" />
-            </a>
+          <a href="/temoignages">
+            <Button label="Voir tous les témoignages →" variant="secondary" />
+          </a>
         </div>
         <TestimonialCarousel
           testimonials={testimonials.map(t => ({
@@ -130,16 +144,16 @@ function Home() {
         />
       </section>
 
-      {/* Section Actions terrain */}
+      {/* ── Section actions terrain — 4 premières actions depuis l'API ── */}
       <section className="section-padding bg-surface">
         <div className="section-header">
           <div>
             <h2 className="section-title text-primary">Nos actions sur le terrain</h2>
             <p className="section-subtitle text-primary/80">Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable.</p>
           </div>
-            <a href="/notre-impact">
-              <Button label="Voir toutes les actions →" variant="secondary" />
-            </a>
+          <a href="/notre-impact">
+            <Button label="Voir toutes les actions →" variant="secondary" />
+          </a>
         </div>
         <div className="grid grid-cols-2 gap-12">
           {actions.map(action => (
@@ -157,16 +171,16 @@ function Home() {
         </div>
       </section>
 
-      {/* Section Partenaires */}
+      {/* ── Section partenaires — logos depuis l'API ── */}
       <section className="section-padding bg-accent-2">
         <div className="section-header">
           <div>
             <h2 className="section-title text-surface">Ils nous font confiance</h2>
             <p className="section-subtitle text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
           </div>
-            <a href="/a-propos">
-              <Button label="En savoir plus sur nous →" variant="secondary" />
-            </a>
+          <a href="/a-propos">
+            <Button label="En savoir plus sur nous →" variant="secondary" />
+          </a>
         </div>
         <div className="grid grid-cols-6 gap-8 items-center">
           {partners.map(partner => (
@@ -176,6 +190,7 @@ function Home() {
           ))}
         </div>
       </section>
+
     </div>
   )
 }

@@ -1,6 +1,7 @@
 // Confidentialite.jsx
 // Page politique de confidentialité — obligatoire RGPD
 
+// ── Composants UI
 import ScrollToTop from '../components/ui/ScrollToTop'
 
 function Confidentialite() {

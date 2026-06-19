@@ -1,6 +1,7 @@
 // Cookies.jsx
 // Page politique de cookies — CNIL
 
+// ── Composants UI
 import ScrollToTop from '../components/ui/ScrollToTop'
 
 function Cookies() {

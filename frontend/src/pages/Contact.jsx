@@ -1,12 +1,20 @@
 // Contact.jsx
+// Page contact — formulaire + coordonnées référente + photo
+
+// ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
-import ContactForm from '../components/forms/ContactForm'
+
+// ── Composants UI
 import ScrollToTop from '../components/ui/ScrollToTop'
+
+// ── Composants formulaire
+import ContactForm from '../components/forms/ContactForm'
 
 function Contact() {
   return (
     <div className="bg-surface min-h-screen">
 
+      {/* ── Hero immersif ── */}
       <HeroPage
         image="/images/contact-hero.png"
         title="Parlons de votre projet"
@@ -14,20 +22,21 @@ function Contact() {
       />
 
       <section className="section-padding">
+
+        {/* ── Titre de section ── */}
         <h2 className="section-title text-primary pb-4">Une question, un projet ou simplement l'envie d'en savoir plus ?</h2>
 
-        {/* Intro + Contact référente */}
+        {/* ── Intro + carte référente ── */}
         <div className="flex gap-8 items-start mb-10">
-          
 
-          {/* Texte intro — 2/3 */}
+          {/* Texte d'introduction — 2/3 */}
           <p className="font-body text-sm text-primary/80 flex-1">
             <br />
             Notre équipe est à votre écoute. Contactez-nous via le formulaire ci-dessous ou par téléphone : nous prendrons le temps de répondre à vos questions et de vous accompagner dans votre démarche.<br /><br />
             <span className='italic'>Notre équipe s'engage à vous répondre dans les meilleurs délais.</span>
           </p>
 
-          {/* Référente — 1/3 */}
+          {/* Carte référente — 1/3 */}
           <div className="w-1/3 shrink-0 flex flex-col items-center gap-1 p-6 bg-surface-mid rounded-2xl text-center">
             <p className="font-heading font-bold text-primary text-base">Delphine Thibaut</p>
             <p className="font-body font-bold text-primary/70 text-sm">Fondatrice et Chargée des Programmes</p>
@@ -41,10 +50,10 @@ function Contact() {
 
         </div>
 
-        {/* Layout 2 colonnes */}
-        <div className="flex gap-8 items-strech">
+        {/* ── Layout 2 colonnes — photo + formulaire ── */}
+        <div className="flex gap-8 items-stretch">
 
-          {/* Photo gauche */}
+          {/* Photo gauche — 1/3 */}
           <div className="w-1/3 shrink-0">
             <img
               src="/images/contact.jpg"
@@ -53,7 +62,7 @@ function Contact() {
             />
           </div>
 
-          {/* Formulaire droite — card blanche */}
+          {/* Formulaire de contact — 2/3 */}
           <div className="flex-1 bg-white rounded-2xl shadow-sm p-8">
             <ContactForm />
           </div>

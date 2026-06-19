@@ -1171,10 +1171,8 @@ await prisma.media.deleteMany({ where: { entity_type: 'education_item', entity_i
 await prisma.media.createMany({
   data: [
     { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: 'https://www.eco-ecole.org/', file_type: 'link', label: 'Site officiel Éco-École', display_order: 0 },
-    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: 'http://espace-etablissement.eco-ecole.org/signup', file_type: 'link', label: 'S\'inscrire au programme (gratuit)', display_order: 1 },
-    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: 'https://www.eco-ecole.org/webinaires-eco-ecole/', file_type: 'link', label: 'Modules de formation mensuels', display_order: 2 },
-    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: 'https://www.eco-ecole.org/qui-sommes-nous/', file_type: 'link', label: 'Contacter l\'équipe Éco-École', display_order: 3 },
-    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: '/images/jardin_potager_kenya.jpg', file_type: 'image', display_order: 4 },
+    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: 'http://espace-etablissement.eco-ecole.org/signup', file_type: 'link', label: 'S\'inscrire au programme', display_order: 1 },
+    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: '/images/jardin_potager_kenya.jpg', file_type: 'image', display_order: 3 },
   ]
 })
 

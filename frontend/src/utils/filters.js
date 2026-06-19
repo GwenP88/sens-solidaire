@@ -48,6 +48,14 @@ export const FILTERS_MEDIA_THEME = [
 
 export const FILTER_CONFIG_TEMOIGNAGES = [
   {
+    key: 'vue',
+    placeholder: 'Tous les types',
+    options: [
+      { value: 'temoignages', label: 'Témoignages' },
+      { value: 'rapports', label: 'Rapports de mission' },
+    ]
+  },
+  {
     key: 'type',
     placeholder: 'Toutes les missions',
     options: FILTERS_MISSION_TYPE.filter(f => f.value !== null).map(f => ({ value: f.value, label: f.label })),
