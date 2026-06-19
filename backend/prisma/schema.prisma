@@ -88,6 +88,7 @@ model Media {
   entity_id     Int
   file_url      String
   file_type     String
+  label  String?  // optionnel — utilisé pour les liens externes
   display_order Int      @default(0)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt

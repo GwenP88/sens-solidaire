@@ -1094,6 +1094,32 @@ await prisma.educationItem.deleteMany({})
 await prisma.educationItem.createMany({ data: EDUCATION_ITEMS })
 console.log(`EducationItems créés (${EDUCATION_ITEMS.length})`)
 
+// Médias — correspondances scolaires
+const correspondances = await prisma.educationItem.findUnique({ where: { slug: 'correspondances-scolaires' } })
+await prisma.media.deleteMany({ where: { entity_type: 'education_item', entity_id: correspondances.id } })
+await prisma.media.createMany({
+  data: [
+    { entity_type: 'education_item', entity_id: correspondances.id, file_url: 'https://webmedias.ac-nice.fr/africa2020/', file_type: 'link', label: 'Plateforme du Rectorat de Nice', display_order: 0 },
+    { entity_type: 'education_item', entity_id: correspondances.id, file_url: '/images/jardin_potager_senegal.jpg', file_type: 'image', display_order: 1 },
+    { entity_type: 'education_item', entity_id: correspondances.id, file_url: '/images/locations/AGADA-senegal.jpg', file_type: 'image', display_order: 2 },
+  ]
+})
+
+// Médias — éco-école
+const ecoEcole = await prisma.educationItem.findUnique({ where: { slug: 'programme-eco-ecole' } })
+await prisma.media.deleteMany({ where: { entity_type: 'education_item', entity_id: ecoEcole.id } })
+await prisma.media.createMany({
+  data: [
+    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: 'https://www.eco-ecole.org/', file_type: 'link', label: 'Site officiel Éco-École', display_order: 0 },
+    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: 'http://espace-etablissement.eco-ecole.org/signup', file_type: 'link', label: 'S\'inscrire au programme (gratuit)', display_order: 1 },
+    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: 'https://www.eco-ecole.org/webinaires-eco-ecole/', file_type: 'link', label: 'Modules de formation mensuels', display_order: 2 },
+    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: 'https://www.eco-ecole.org/qui-sommes-nous/', file_type: 'link', label: 'Contacter l\'équipe Éco-École', display_order: 3 },
+    { entity_type: 'education_item', entity_id: ecoEcole.id, file_url: '/images/jardin_potager_kenya.jpg', file_type: 'image', display_order: 4 },
+  ]
+})
+
+console.log('Médias EducationItems créés')
+
   // ============================================================
   // RÉCAP FINAL
   // ============================================================
