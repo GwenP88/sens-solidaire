@@ -137,3 +137,18 @@ model MediaPost {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 }
+
+model EducationItem {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique
+  title        String
+  description  String
+  content      String?
+  type         String   // Atelier, Correspondance, Éco-École
+  public       String   // primaire, college_lycee, adultes — séparés par virgule
+  image_url    String?
+  external_url String?  // PDF ou lien externe
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}

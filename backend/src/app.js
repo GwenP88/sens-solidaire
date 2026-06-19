@@ -32,6 +32,8 @@ import adminMissionRoutes from "./routes/adminMissionRoutes.js"
 import fieldActionRouter from './routes/fieldActionRoutes.js'
 // Import médias/actualités
 import mediaPostRouter from './routes/mediaPostRoutes.js'
+// Import éducation et sensibilisations
+import educationItemRouter from './routes/educationItemRoutes.js'
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -90,6 +92,8 @@ app.use("/api/admin/missions", adminMissionRoutes)
 app.use('/api/field-actions', fieldActionRouter)
 // Route médias/actualités
 app.use('/api/media-posts', mediaPostRouter)
+// Route éducation et sensibilisations
+app.use('/api/education-items', educationItemRouter)
 
 
 // ── MIDDLEWARE ERREURS ───────────────────────────────────────────────────────

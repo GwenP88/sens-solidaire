@@ -74,3 +74,17 @@ export const fetchMediaPostBySlug = async (slug) => {
   if (!response.ok) throw new Error('Article introuvable')
   return await response.json()
 }
+
+// ── EDUCATION ITEMS ───────────────────────────────────────────
+
+export const fetchEducationItems = async () => {
+  const response = await fetch(`${API_URL}/education-items`)
+  if (!response.ok) throw new Error('Erreur lors de la récupération des ateliers')
+  return await response.json()
+}
+
+export const fetchEducationItemBySlug = async (slug) => {
+  const response = await fetch(`${API_URL}/education-items/${slug}`)
+  if (!response.ok) throw new Error('Atelier introuvable')
+  return await response.json()
+}

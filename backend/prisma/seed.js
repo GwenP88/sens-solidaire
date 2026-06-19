@@ -731,38 +731,32 @@ Cette initiative permet aux artisans locaux de valoriser des ressources naturell
   },
 ]
 
+// FieldActions
+await prisma.fieldActionTag.deleteMany({})
+await prisma.fieldActionODD.deleteMany({})
+await prisma.fieldAction.deleteMany({})
+
 for (const action of FIELD_ACTIONS) {
   const { tags, odds, gallery, ...actionData } = action
-
-  const upserted = await prisma.fieldAction.upsert({
-    where: { slug: actionData.slug },
-    update: {
-      ...actionData,
-      tags: { deleteMany: {}, create: tags.map(tag => ({ tag })) },
-      odds: { deleteMany: {}, create: odds.map(n => ({ odd_number: n })) },
-    },
-    create: {
+  const created = await prisma.fieldAction.create({
+    data: {
       ...actionData,
       tags: { create: tags.map(tag => ({ tag })) },
       odds: { create: odds.map(n => ({ odd_number: n })) },
     },
   })
-
-  await prisma.media.deleteMany({
-    where: { entity_type: 'field_action', entity_id: upserted.id }
-  })
+  await prisma.media.deleteMany({ where: { entity_type: 'field_action', entity_id: created.id } })
   await prisma.media.createMany({
     data: gallery.map((url, i) => ({
       entity_type: 'field_action',
-      entity_id: upserted.id,
+      entity_id: created.id,
       file_url: url,
       file_type: 'image',
       display_order: i,
     }))
   })
-
-  console.log(`✅ FieldAction : ${actionData.title}`)
 }
+console.log(`FieldActions créées (${FIELD_ACTIONS.length})`)
 
 console.log("FieldActions créées (8)")
 
@@ -996,16 +990,109 @@ const MEDIA_POSTS = [
   },
 ]
 
-for (const post of MEDIA_POSTS) {
-  await prisma.mediaPost.upsert({
-    where: { slug: post.slug },
-    update: post,
-    create: post,
-  })
-  console.log(`✅ MediaPost : ${post.title}`)
-}
+await prisma.mediaPost.deleteMany({})
+await prisma.mediaPost.createMany({ data: MEDIA_POSTS })
+console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
 
 console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
+
+// ============================================================
+// ÉTAPE 8 — EDUCATION ITEMS
+// ============================================================
+
+const EDUCATION_ITEMS = [
+  // ── Ateliers ──
+  {
+    slug: 'atelier-elephant',
+    title: 'Explorer le monde animal : l\'éléphant',
+    description: 'Le plus grand mammifère terrestre est menacé d\'extinction (plus de 25 000 individus tués en 2019). Pourtant cet animal joue un rôle clé dans l\'écosystème.',
+    content: `Le savais-tu ? Le plus grand mammifère terrestre est menacé d'extinction avec plus de 25 000 individus tués en 2019. Pourtant cet animal joue un rôle clé dans l'écosystème.
+
+Cet atelier permet aux élèves de découvrir le monde fascinant des éléphants, leur rôle dans la biodiversité et les menaces qui pèsent sur leur survie. À travers des jeux pédagogiques et des supports visuels, les élèves développent leur sens de la solidarité et leur conscience environnementale.`,
+    type: 'Atelier',
+    public: 'primaire,college_lycee',
+    image_url: '/images/fabrique_eco_maximus_srilanka.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/01/Plaquette-atelier-marque-page-elephant.pdf',
+  },
+  {
+    slug: 'atelier-jeu-7-familles-mediterranee',
+    title: 'Jeu de 7 familles : les écosystèmes de la mer Méditerranée',
+    description: 'On estime qu\'environ 10% de la vie océanique est identifiée à ce jour. Avec le dérèglement climatique, des espèces que nous ne connaissons pas encore ont sûrement déjà disparu.',
+    content: `Le savais-tu ? On estime qu'environ 10% de la vie océanique est identifiée à ce jour. Avec le dérèglement climatique des espèces que nous ne connaissons pas encore ont sûrement déjà disparues.
+
+Ce jeu de 7 familles pédagogique permet aux élèves de découvrir les différents écosystèmes de la mer Méditerranée, leurs habitants et les menaces qui pèsent sur eux. Un outil ludique pour sensibiliser à la protection des océans.`,
+    type: 'Atelier',
+    public: 'primaire,college_lycee',
+    image_url: '/images/hero_missions.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/01/plaquette-ATELIERS-jeu-de-7-familles.pdf',
+  },
+  {
+    slug: 'atelier-forets-primaires',
+    title: 'À la découverte des forêts primaires',
+    description: 'Les forêts tropicales primaires abritent l\'essentiel de la biodiversité terrestre : 70% des espèces végétales et 80% des espèces vertébrées.',
+    content: `Le savais-tu ? Les forêts tropicales primaires abritent l'essentiel de la biodiversité terrestre : 70% des espèces végétales et 80% des espèces vertébrées.
+
+Cet atelier invite les élèves à explorer les forêts primaires du monde, comprendre leur importance pour la planète et découvrir les menaces qui pèsent sur ces écosystèmes uniques. Un voyage au cœur de la biodiversité.`,
+    type: 'Atelier',
+    public: 'primaire,college_lycee',
+    image_url: '/images/locations/batu-kapal-sumatra.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/01/Plaquette-atelier-forets-primaires.pdf',
+  },
+  {
+    slug: 'atelier-ecsi-odd',
+    title: 'Atelier d\'éducation à la citoyenneté et à la solidarité internationale (ECSI)',
+    description: 'Découvrez les 17 ODD pour un monde plus juste, plus durable et plus solidaire. Grâce à des jeux pédagogiques, abordez les notions de vivre ensemble et de solidarité internationale.',
+    content: `Découvrez avec nous les 17 ODD pour un monde plus juste, plus durable et plus solidaire. Grâce à différents jeux pédagogiques nous aborderons les notions de vivre ensemble, de stéréotypes, mais aussi différents types d'inégalités à travers le monde.
+
+Nous intervenons dans vos locaux (avec notre matériel) ou nous pouvons vous réserver une salle appropriée dans nos bureaux.`,
+    type: 'Atelier',
+    public: 'college_lycee,adultes',
+    image_url: '/images/jardin_potager_senegal.jpg',
+    external_url: 'https://www.sensolidaire.org/wp-content/uploads/2018/06/sengagerdanslasolidarit%C3%A9.pdf',
+  },
+
+  // ── Correspondances scolaires ──
+  {
+    slug: 'correspondances-scolaires',
+    title: 'Correspondances scolaires internationales',
+    description: 'Depuis 10 ans, nous organisons des échanges de lettres entre des écoles niçoises et celles de pays en développement sur le thème des 17 ODD.',
+    content: `Nous organisons depuis 10 ans des échanges de lettres entre des écoles niçoises et celles de pays en développement sur le thème des 17 objectifs du développement durable (ODD).
+
+À travers nos outils pédagogiques, les élèves pourront comprendre l'importance d'adapter nos comportements afin de préserver et de partager de manière plus équitable les ressources naturelles avec les pays en développement.
+
+Le saviez-vous ? Un rapport scientifique constate que les pays développés sont à la cause de plus de 30% de la perte de la biodiversité dans les pays du Sud.
+
+Apports éducatifs : favoriser l'expression à l'écrit, enrichissement du vocabulaire, favoriser la compréhension et l'expression en anglais, acculturation, développement des connaissances sur le développement durable ici et à l'international. Projet transversal au programme pédagogique de l'année : français, anglais, géographie, sciences.
+
+Tarif pour l'ensemble du projet : 500€`,
+    type: 'Correspondance',
+    public: 'primaire,college_lycee',
+    image_url: '/images/jardin_potager_senegal.jpg',
+    external_url: null,
+  },
+
+  // ── Éco-École ──
+  {
+    slug: 'programme-eco-ecole',
+    title: 'Relais local Éco-École',
+    description: 'Nous sommes Relais local du label Éco-École pour les établissements scolaires de l\'agglomération d\'Annemasse. Un programme international présent dans 73 pays.',
+    content: `Nous sommes dorénavant Relais local du label Éco-École pour les établissements scolaires de l'agglomération d'Annemasse.
+
+Si vous souhaitez mettre en place un projet d'éducation au développement durable dans votre établissement scolaire, inscrivez-vous au programme Éco-École. Présent dans 73 pays, c'est un programme international d'éducation au développement durable, développé en France depuis 2005 par l'association Teragir. Il est ouvert à tous les établissements scolaires, publics et privés, de la maternelle au lycée et la participation au programme est gratuite.
+
+Notre rôle en tant que Relais local Éco-École est d'accompagner les Éco-Écoles, Éco-Collèges et Éco-Lycées inscrits au programme sur notre périmètre, les renseigner sur les ressources du territoire utiles pour la mise en œuvre de leur démarche de développement durable.
+
+Le programme Éco-École propose une méthodologie en sept points, simple et participative, pour guider les établissements scolaires dans leur projet d'éducation au développement durable en s'appuyant sur 8 thématiques : alimentation, biodiversité, climat, déchets, eau, énergie, santé ou solidarités.`,
+    type: 'Éco-École',
+    public: 'primaire,college_lycee',
+    image_url: '/images/jardin_potager_kenya.jpg',
+    external_url: null,
+  },
+]
+
+await prisma.educationItem.deleteMany({})
+await prisma.educationItem.createMany({ data: EDUCATION_ITEMS })
+console.log(`EducationItems créés (${EDUCATION_ITEMS.length})`)
 
   // ============================================================
   // RÉCAP FINAL
@@ -1023,6 +1110,7 @@ console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
   console.log("Changer le mot de passe admin AVANT la mise en production !")
   console.log(`FieldActions: 8`)
   console.log(`MediaPosts : ${MEDIA_POSTS.length}`)
+  console.log(`EducationItems créés (${EDUCATION_ITEMS.length})`)
 }
 
 seed()

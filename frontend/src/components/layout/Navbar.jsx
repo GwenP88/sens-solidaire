@@ -146,7 +146,7 @@ function Navbar() {
 
         {/* Actions éducatives */}
         <a
-          href="/education & sensibilisation"
+          href="/actions-educatives"
           className={`font-body font-bold text-base text-surface hover:text-accent transition-colors ${location.pathname === '/actions-educatives' ? 'underline underline-offset-4' : ''}`}
         >
           Éducation & Sensibilisation
