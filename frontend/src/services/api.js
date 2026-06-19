@@ -47,7 +47,7 @@ export const submitTestimonial = async (data) => {
   return await response.json()
 }
 
-// ── FIELD ACTIONS ─────────────────────────────────────────────
+// ── ACTIONS SUR LE TERRAIN ─────────────────────────────────────────────
 
 export const fetchFieldActions = async () => {
   const response = await fetch(`${API_URL}/field-actions`)
@@ -61,7 +61,7 @@ export const fetchFieldActionBySlug = async (slug) => {
   return await response.json()
 }
 
-// ── MEDIA POSTS ───────────────────────────────────────────────
+// ── ARTICLES : MEDIAS ET ACTUALITES ───────────────────────────────────────────────
 
 export const fetchMediaPosts = async () => {
   const response = await fetch(`${API_URL}/media-posts`)
@@ -75,7 +75,7 @@ export const fetchMediaPostBySlug = async (slug) => {
   return await response.json()
 }
 
-// ── EDUCATION ITEMS ───────────────────────────────────────────
+// ── ARTICLES : EDUCATION ET SENSIBILISATION ───────────────────────────────────────────
 
 export const fetchEducationItems = async () => {
   const response = await fetch(`${API_URL}/education-items`)
@@ -86,5 +86,44 @@ export const fetchEducationItems = async () => {
 export const fetchEducationItemBySlug = async (slug) => {
   const response = await fetch(`${API_URL}/education-items/${slug}`)
   if (!response.ok) throw new Error('Atelier introuvable')
+  return await response.json()
+}
+
+// ── MEMBRES ─────────────────────────────────────────────
+export const fetchTeamMembers = async (category = null, limit = null) => {
+  const params = new URLSearchParams()
+  if (category) params.append('category', category)
+  if (limit) params.append('limit', limit)
+  const response = await fetch(`${API_URL}/team-members?${params}`)
+  if (!response.ok) throw new Error('Erreur team members')
+  return await response.json()
+}
+
+// ── RAPPORTS D'ACTIVITE ──────────────────────────────────────────
+export const fetchActivityReports = async () => {
+  const response = await fetch(`${API_URL}/activity-reports`)
+  if (!response.ok) throw new Error('Erreur activity reports')
+  return await response.json()
+}
+
+// ── DELEGATIONS ───────────────────────────────────────────────
+export const fetchDelegations = async () => {
+  const response = await fetch(`${API_URL}/delegations`)
+  if (!response.ok) throw new Error('Erreur délégations')
+  return await response.json()
+}
+
+// ── RAPPORTS DE MISSIONS ───────────────────────────────────────────
+export const fetchMissionReports = async (filters = {}) => {
+  const params = new URLSearchParams(filters)
+  const response = await fetch(`${API_URL}/mission-reports?${params}`)
+  if (!response.ok) throw new Error('Erreur mission reports')
+  return await response.json()
+}
+
+// ── PARTENAIRES ──────────────────────────────────────────────────
+export const fetchPartners = async () => {
+  const response = await fetch(`${API_URL}/partners`)
+  if (!response.ok) throw new Error('Erreur partenaires')
   return await response.json()
 }

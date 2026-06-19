@@ -1,25 +1,19 @@
 // RapportsActivite.jsx
 // Page rapports d'activité — PDFs téléchargeables par année
 
+import { useState, useEffect } from 'react'
 import ScrollToTop from '../components/ui/ScrollToTop'
-
-const RAPPORTS = [
-  { annee: 2024, url: "https://www.sensolidaire.org/wp-content/uploads/2025/06/Rapport-dactivites-2024-1.pdf" },
-  { annee: 2023, url: "https://www.sensolidaire.org/wp-content/uploads/2024/07/Rapport-des-activites-2023.pdf" },
-  { annee: 2022, url: "https://www.sensolidaire.org/wp-content/uploads/2023/11/Rapport-dactivites-2022.pdf" },
-  { annee: 2021, url: "https://www.sensolidaire.org/wp-content/uploads/2023/04/rapport-annuel-2021.pdf" },
-  { annee: 2020, url: "https://www.sensolidaire.org/wp-content/uploads/2021/05/rapportmoral-2020.pdf" },
-  { annee: 2019, url: "https://www.sensolidaire.org/wp-content/uploads/2020/05/rapportannuel19-compress%C3%A9-1.pdf" },
-  { annee: 2018, url: "https://www.sensolidaire.org/wp-content/uploads/2020/02/rapportactivit%C3%A9s18.pdf" },
-  { annee: 2017, url: "https://www.sensolidaire.org/wp-content/uploads/2019/10/rapportactivit%C3%A9s17.pdf" },
-  { annee: 2016, url: "https://www.sensolidaire.org/wp-content/uploads/2025/01/rapportannuel16.pdf" },
-  { annee: 2015, url: "https://www.sensolidaire.org/wp-content/uploads/2018/07/rapportdactivit%C3%A92015.pdf" },
-  { annee: 2014, url: "https://www.sensolidaire.org/wp-content/uploads/2018/07/rapportactivit%C3%A914.pdf" },
-  { annee: 2013, url: "https://www.sensolidaire.org/wp-content/uploads/2018/07/rapportannuel13.pdf" },
-  { annee: 2012, url: "https://www.sensolidaire.org/wp-content/uploads/2018/07/rapportmoral2012.pdf" },
-]
+import { fetchActivityReports } from '../services/api'
 
 function RapportsActivite() {
+  const [rapports, setRapports] = useState([])
+
+  useEffect(() => {
+    fetchActivityReports()
+      .then(setRapports)
+      .catch(console.error)
+  }, [])
+
   return (
     <div className="bg-surface min-h-screen">
 

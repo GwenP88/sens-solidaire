@@ -8,6 +8,8 @@ import Button from '../components/ui/Button'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import TestimonialCarousel from '../components/testimonials/TestimonialCarousel'
 import ActionCard from '../components/actions/ActionCard'
+import { useState, useEffect } from 'react'
+import { fetchTestimonials, fetchFieldActions, fetchPartners } from '../services/api'
 
 function Home() {
 
@@ -54,73 +56,23 @@ function Home() {
     },
   ]
 
-  const testimonials = [
-    { quote: "Ce séjour à Batu Kapal a été une aventure extraordinaire, très riche en enseignements, en rencontres et en découverte, tant animales qu'humaines.", name: "Cathy et Laurent", mission: "Sri Lanka" },
-    { quote: "Une expérience humaine incroyable. J'ai appris autant des rangers que des éléphants. Partir avec Sens Solidaire, c'est revenir transformé.", name: "Sophie L.", mission: "Kenya" },
-    { quote: "Prendre soin des éléphants du sanctuaire MEF a été le plus beau cadeau que je me sois offert. Une aventure qui donne vraiment du sens.", name: "Thomas D.", mission: "Sri Lanka" },
-    { quote: "Une immersion totale dans la forêt amazonienne. J'ai appris à voir le monde différemment.", name: "Marie P.", mission: "Pérou" },
-    { quote: "Le reboisement de la mangrove avec les communautés locales, une expérience qui change la vie.", name: "Antoine R.", mission: "Sénégal" },
-  ]
+    const [testimonials, setTestimonials] = useState([])
+    const [actions, setActions] = useState([])
+    const [partners, setPartners] = useState([])
 
-  const actions = [
-    {
-      slug: 'fabrique-eco-maximus',
-      title: 'Fabrique de papier Eco Maximus',
-      description: 'Sens Solidaire soutient la fabrique Eco Maximus en promouvant ses objets artisanaux issus de bouse d\'éléphant, contribuant à la protection de la biodiversité et à l\'économie locale au Sri Lanka.',
-      tags: ['Environnement', 'Biodiversité', 'Artisanat'],
-      country: 'Sri Lanka',
-      image: '/images/fabrique_eco_maximus_srilanka.jpg',
-      odds: [8, 12, 15]
-    },
-    {
-      slug: 'projet-puits',
-      title: 'Projet puits — accès à l\'eau potable',
-      description: 'Nous finançons des forages dans les écoles du Sri Lanka pour garantir un accès durable à l\'eau potable aux élèves et aux communautés locales.',
-      tags: ['Eau', 'Éducation', 'Solidarité'],
-      country: 'Sri Lanka',
-      image: '/images/puit-srilanka.jpg',
-      odds: [3, 6, 4]
-    },
-    {
-      slug: 'jardins-senegal',
-      title: 'Jardins potagers au Sénégal',
-      description: 'En partenariat avec l\'association AGADA, nous installons des potagers dans les écoles sénégalaises pour former les élèves à une consommation responsable.',
-      tags: ['Agriculture', 'Éducation', 'Environnement'],
-      country: 'Sénégal',
-      image: '/images/jardin_potager_senegal.jpg',
-      odds: [3, 12, 15]
-    },
-    {
-      slug: 'potager-agro-ecologique',
-      title: 'Potager agro-écologique',
-      description: 'Avec les étudiants du TTNP de Voi, nous développons une ferme agro-écologique pour une agriculture durable face aux défis climatiques.',
-      tags: ['Agriculture', 'Biodiversité', 'Éducation'],
-      country: 'Kenya',
-      image: '/images/jardin_potager_kenya.jpg',
-      odds: [2, 13, 15]
-    },
-  ]
+    useEffect(() => {
+      fetchTestimonials()
+        .then(data => setTestimonials(data.filter(t => t.show_homepage)))
+        .catch(console.error)
 
-  const partners = [
-    { name: 'AFD', logo: '/images/partners/afd.png' },
-    { name: 'Alpes-Maritimes', logo: '/images/partners/alpes-maritimes.png' },
-    { name: 'Annemasse', logo: '/images/partners/annemasse.png' },
-    { name: 'Eco-Ecole', logo: '/images/partners/eco-ecole.png' },
-    { name: 'Festival des Solidarités', logo: '/images/partners/festival-solidarites.png' },
-    { name: 'Fonds Jacques Martel', logo: '/images/partners/fonds-jacques-martel.png' },
-    { name: 'FONJEP', logo: '/images/partners/fonjep.png' },
-    { name: 'France Volontaires', logo: '/images/partners/france-volontaires.png' },
-    { name: 'Haute-Savoie', logo: '/images/partners/haute-savoie.png' },
-    { name: 'IUCN', logo: '/images/partners/iucn.png' },
-    { name: 'Jeunesse et Sport', logo: '/images/partners/jeunesse-sport.jpg' },
-    { name: 'Métropole Nice Côte d\'Azur', logo: '/images/partners/metropole-nice.png' },
-    { name: 'Ministère des Affaires Étrangères', logo: '/images/partners/ministere-affaires-etrangeres.png' },
-    { name: 'Ministère de l\'Éducation', logo: '/images/partners/ministere-education.png' },
-    { name: 'PNUE', logo: '/images/partners/pnue.png' },
-    { name: 'Service Civique', logo: '/images/partners/service-civique.png' },
-    { name: 'Territoires Solidaires', logo: '/images/partners/territoires-solidaires.png' },
-    { name: 'Ville de Nice', logo: '/images/partners/ville-nice.png' },
-  ]
+      fetchFieldActions()
+        .then(data => setActions(data.slice(0, 4)))
+        .catch(console.error)
+
+      fetchPartners()
+        .then(setPartners)
+        .catch(console.error)
+    }, [])
 
   return (
     <div>
@@ -169,7 +121,13 @@ function Home() {
               <Button label="Voir tous les témoignages →" variant="secondary" />
             </a>
         </div>
-        <TestimonialCarousel testimonials={testimonials} />
+        <TestimonialCarousel
+          testimonials={testimonials.map(t => ({
+            quote: t.content,
+            name: t.author_name,
+            mission: t.mission?.title || '',
+          }))}
+        />
       </section>
 
       {/* Section Actions terrain */}
@@ -182,8 +140,17 @@ function Home() {
           <Button label="Voir toutes les actions →" variant="secondary" />
         </div>
         <div className="grid grid-cols-2 gap-12">
-          {actions.map((action) => (
-            <ActionCard key={action.slug} {...action} />
+          {actions.map(action => (
+            <ActionCard
+              key={action.slug}
+              slug={action.slug}
+              title={action.title}
+              description={action.description}
+              image={action.image_url}
+              tags={action.tags.map(t => t.tag)}
+              odds={action.odds.map(o => o.odd_number)}
+              country={action.country}
+            />
           ))}
         </div>
       </section>
@@ -198,9 +165,9 @@ function Home() {
           <Button label="En savoir plus sur nous →" variant="secondary" />
         </div>
         <div className="grid grid-cols-6 gap-8 items-center">
-          {partners.map((partner) => (
-            <div key={partner.name} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24">
-              <img src={partner.logo} alt={partner.name} className="max-h-14 max-w-full object-contain" />
+          {partners.map(partner => (
+            <div key={partner.id} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24">
+              <img src={partner.logo_url} alt={partner.name} className="max-h-14 max-w-full object-contain" />
             </div>
           ))}
         </div>

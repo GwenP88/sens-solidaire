@@ -44,3 +44,22 @@ export const FILTERS_MEDIA_THEME = [
   { label: "Vie de l'association", value: "Vie de l'association" },
   { label: "Éducation & sensibilisation", value: "Éducation & sensibilisation" },
 ]
+
+export const FILTER_CONFIG_TEMOIGNAGES = [
+  {
+    key: 'type',
+    placeholder: 'Toutes les missions',
+    options: FILTERS_MISSION_TYPE.filter(f => f.value !== null).map(f => ({ value: f.value, label: f.label })),
+  },
+  {
+    key: 'destination',
+    placeholder: 'Toutes les destinations',
+    condition: (values) => !values.type || values.type === 'individuel',
+    options: FILTERS_COUNTRY.filter(f => f.value !== null).map(f => ({ value: f.value?.toLowerCase(), label: f.label })),
+  },
+  {
+    key: 'annee',
+    placeholder: 'Toutes les années',
+    options: [2026, 2025, 2024, 2023, 2022, 2021, 2020].map(a => ({ value: String(a), label: String(a) })),
+  },
+]

@@ -1222,14 +1222,27 @@ console.log('TeamMembers créés (23)')
 await prisma.partner.deleteMany({})
 await prisma.partner.createMany({
   data: [
-    { name: "Ministère de l'Éducation", logo_url: "/images/partners/ministere-education.png", display_order: 1 },
-    { name: "PNUE", logo_url: "/images/partners/pnue.png", display_order: 2 },
-    { name: "Service Civique", logo_url: "/images/partners/service-civique.png", display_order: 3 },
-    { name: "Territoires Solidaires", logo_url: "/images/partners/territoires-solidaires.png", display_order: 4 },
-    { name: "Ville de Nice", logo_url: "/images/partners/ville-nice.png", display_order: 5 },
+    { name: "AFD", logo_url: "/images/partners/afd.png", display_order: 1 },
+    { name: "Alpes-Maritimes", logo_url: "/images/partners/alpes-maritimes.png", display_order: 2 },
+    { name: "Annemasse", logo_url: "/images/partners/annemasse.png", display_order: 3 },
+    { name: "Eco-Ecole", logo_url: "/images/partners/eco-ecole.png", display_order: 4 },
+    { name: "Festival des Solidarités", logo_url: "/images/partners/festival-solidarites.png", display_order: 5 },
+    { name: "Fonds Jacques Martel", logo_url: "/images/partners/fonds-jacques-martel.png", display_order: 6 },
+    { name: "FONJEP", logo_url: "/images/partners/fonjep.png", display_order: 7 },
+    { name: "France Volontaires", logo_url: "/images/partners/france-volontaires.png", display_order: 8 },
+    { name: "Haute-Savoie", logo_url: "/images/partners/haute-savoie.png", display_order: 9 },
+    { name: "IUCN", logo_url: "/images/partners/iucn.png", display_order: 10 },
+    { name: "Jeunesse et Sport", logo_url: "/images/partners/jeunesse-sport.jpg", display_order: 11 },
+    { name: "Métropole Nice Côte d'Azur", logo_url: "/images/partners/metropole-nice.png", display_order: 12 },
+    { name: "Ministère des Affaires Étrangères", logo_url: "/images/partners/ministere-affaires-etrangeres.png", display_order: 13 },
+    { name: "Ministère de l'Éducation", logo_url: "/images/partners/ministere-education.png", display_order: 14 },
+    { name: "PNUE", logo_url: "/images/partners/pnue.png", display_order: 15 },
+    { name: "Service Civique", logo_url: "/images/partners/service-civique.png", display_order: 16 },
+    { name: "Territoires Solidaires", logo_url: "/images/partners/territoires-solidaires.png", display_order: 17 },
+    { name: "Ville de Nice", logo_url: "/images/partners/ville-nice.png", display_order: 18 },
   ]
 })
-console.log('Partners créés (5)')
+console.log('Partners créés (18)')
 
 // ============================================================
 // RÉCAP FINAL
