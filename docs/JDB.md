@@ -1210,4 +1210,73 @@ pour consulter et vérifier les données.
 
 ---
 
+## Jour 12 · 20 juin 2026
+
+### 🎯 Objectifs du jour
+- Connecter toutes les pages statiques à l'API
+- Créer les nouvelles tables BDD et leurs seeds
+- Refactoriser les imports et commenter tous les fichiers pages
+
+---
+
+### ✅ Réalisé
+
+#### Nouvelles tables BDD + migrations
+- `ActivityReport` — rapports d'activité annuels (13 entrées seedées)
+- `Delegation` — délégations internationales (8 entrées seedées)
+- `MissionReport` — rapports de mission volontaires (17 entrées seedées)
+- `TeamMember` — membres équipe avec champ `category` (23 entrées seedées)
+- `Partner` — partenaires avec logo (18 entrées seedées)
+- `Media.label` — champ label ajouté pour les liens externes
+
+#### Backend — nouvelles routes API
+- `GET /api/team-members` (filtre par `category` + `limit`)
+- `GET /api/activity-reports`
+- `GET /api/delegations`
+- `GET /api/mission-reports` (filtre par `type`, `destination`, `annee`)
+- `GET /api/partners`
+
+#### Frontend — pages connectées à l'API
+- `Home.jsx` — témoignages (show_homepage), actions terrain (×4), partenaires
+- `APropos.jsx` — 4 membres direction
+- `Equipe.jsx` — tous les membres par catégorie + délégations
+- `RapportsActivite.jsx` — rapports annuels PDF
+- `Testimonials.jsx` — témoignages + rapports de mission
+
+#### Seed complété
+- Seed unifié `seed.js` — 13 étapes numérotées, deleteMany + createMany harmonisé
+- Ajout 8 événements dans MediaPost
+- Partenaires complétés — 18 logos
+
+#### Nouvelles pages
+- `/cookies` — politique cookies CNIL avec reset consentement localStorage
+
+#### Refactorisation
+- `utils/odds.js` — `ODDS_LABELS` et `ODDS` extraits et partagés
+- `utils/filters.js` — tous les filtres partagés centralisés (`FILTER_CONFIG_TEMOIGNAGES`, `FILTER_CONFIG_MEDIAS`, `FILTERS_MISSION_TYPE`, `FILTERS_COUNTRY`, `FILTERS_ACTION_TAGS`, `FILTERS_EDUCATION_PUBLIC`)
+- Imports groupés par catégorie sur tous les fichiers pages
+- Commentaires français ajoutés sur tous les blocs de code
+
+#### UX
+- Page Témoignages — abandon des onglets → filtre `vue` dans `FilterSelect`
+- Page Témoignages — filtre `type` pré-sélectionné depuis URL (`?type=service_civique`)
+- Page Missions — bouton "Voir les témoignages →" avec filtre URL sur chaque section
+
+---
+
+### 🔵 À faire / Notes pour la prochaine fois
+- Responsive mobile-first — toutes les pages (S5)
+- Dashboard Alison — sidebar + CRUD missions + modération témoignages
+- Brancher `Equipe.jsx` sur l'API équipe quand les photos réelles seront fournies
+- Ajouter `maxLength={280}` sur le textarea du formulaire témoignage
+
+---
+
+### ⚠️ Points d'attention
+- `resend` doit être installé avec `--save` — disparaît après rebuild Docker
+- Seed FieldActions : `deleteMany` dans l'ordre `tags → odds → media → fieldAction` pour respecter les contraintes FK
+- `FILTER_CONFIG_TEMOIGNAGES` — le filtre `vue` doit être ajouté dans `filters.js`
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

@@ -99,7 +99,7 @@
 | 41 | Alison | Dashboard : routage email contact | 24-25 juin | 🔵 À faire |
 | 42 | Alison | Upload fichiers Multer (images + PDFs) | 25-26 juin | 🔵 À faire |
 | 43 | Gwen | Responsive mobile-first — toutes pages MVP (375px / 768px) | 23-26 juin | 🔵 À faire |
-| 43bis | Gwen | si temps dispo : page impact, éducation et sensibilisation, média et actualités | 23-26 juin | 🔵 À faire |
+| 43bis | Gwen | si temps dispo : page impact, éducation et sensibilisation, média et actualités | 23-26 juin | ✅ Terminé  |
 
 ---
 
@@ -109,7 +109,7 @@
 |---|---|---|---|---|
 | 44 | Ensemble | Tests complets pages publiques | 30 juin | 🔵 À faire |
 | 45 | Ensemble | Tests dashboard : CRUD, modération, contact | 1 juillet | 🔵 À faire |
-| 46 | Ensemble | Seed BDD avec données proches du réel | 1 juillet | 🔵 À faire |
+| 46 | Ensemble | Seed BDD avec données proches du réel | 1 juillet | ✅ Terminé |
 | 47 | Ensemble | Audit Lighthouse — corrections prioritaires | 2 juillet | 🔵 À faire |
 | 48 | Ensemble | Accessibilité de base : labels, alt, focus | 2 juillet | 🔵 À faire |
 | 49 | Ensemble | Préparation soutenance / démo MVP | 2-3 juillet | 🔵 À faire |
@@ -124,8 +124,8 @@
 | # | Dev | Tâche | Période | Statut |
 |---|---|---|---|---|
 | 51 | Alison | Dashboard : gestion médias + équipe + rapports d'activité | 3-7 juillet | 🔵 À faire |
-| 52 | Gwen | Responsive dashboard | 7-8 juillet | 🔵 À faire |
-| 53 | Alison | APIs : médias, équipe, rapports | 3-7 juillet | 🔵 À faire |
+| 52 | Alison | Responsive dashboard | 7-8 juillet | 🔵 À faire |
+| 53 | Alison | APIs : médias, équipe, rapports | 3-7 juillet | ✅ Terminé  |
 | 54 | Alison | CRUD actions terrain + tags | 7-8 juillet | 🔵 À faire |
 | 55 | Alison | Tests d'intégration | 8-10 juillet | 🔵 À faire |
 
@@ -146,11 +146,11 @@
 
 | # | Dev | Tâche | Période | Statut |
 |---|---|---|---|---|
-| 60 | Gwen | Page Actions terrain + détail (badges ODD) | Sept. S1 | 🔵 À faire |
-| 61 | Gwen | Page Actions éducatives | Sept. S1 | 🔵 À faire |
-| 62 | Gwen | Page Médias & Actualités (filtres) | Sept. S1 | 🔵 À faire |
-| 63 | Alison | APIs : actions terrain, actions éducatives, médias | Sept. S1 | 🔵 À faire |
-| 64 | Alison | Seed BDD avec contenus réels | Sept. S1 | 🔵 À faire |
+| 60 | Gwen | Page Actions terrain + détail (badges ODD) | Sept. S1 | ✅ Terminé  |
+| 61 | Gwen | Page Actions éducatives | Sept. S1 | ✅ Terminé  |
+| 62 | Gwen | Page Médias & Actualités (filtres) | Sept. S1 | ✅ Terminé  |
+| 63 | Gwen | APIs : actions terrain, actions éducatives, médias | Sept. S1 | ✅ Terminé |
+| 64 | Gwen | Seed BDD avec contenus réels | Sept. S1 | ⚠️ Partiel |
 
 ### Sept. S2 · Polishing + SEO + Bilingue
 
@@ -159,8 +159,8 @@
 | 65 | Gwen | Compteurs d'impact animés | Sept. S2 | 🔵 À faire |
 | 66 | Gwen | Bilingue FR/EN — react-i18next | Sept. S2 | 🔵 À faire |
 | 67 | Gwen | Accessibilité WCAG 2.1 AA | Sept. S2 | 🔵 À faire |
-| 68 | Alison | SEO : méta, Open Graph, sitemap, robots.txt | Sept. S2 | 🔵 À faire |
-| 69 | Alison | Audit Lighthouse final — objectif > 90 | Sept. S2 | 🔵 À faire |
+| 68 | Gwen | SEO : méta, Open Graph, sitemap, robots.txt | Sept. S2 | 🔵 À faire |
+| 69 | Gwen | Audit Lighthouse final — objectif > 90 | Sept. S2 | 🔵 À faire |
 | 70 | Gwen | Optimisations : WebP, lazy loading | Sept. S2 | 🔵 À faire |
 
 ### Sept. S3 · Déploiement
