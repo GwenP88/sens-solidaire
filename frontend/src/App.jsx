@@ -13,6 +13,7 @@ import Testimonials from './pages/Testimonials'
 import Contact from './pages/Contact'
 import MentionsLegales from './pages/MentionsLegales'
 import Confidentialite from './pages/Confidentialite'
+import Cookies from './pages/Cookies'
 import Soutenir from './pages/Soutenir'
 import RapportsActivite from './pages/RapportsActivite'
 import APropos from './pages/APropos'
@@ -41,6 +42,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/mentions-legales" element={<MentionsLegales />} />
           <Route path="/confidentialite" element={<Confidentialite />} />
+          <Route path="/cookies" element={<Cookies />} />
           <Route path="/soutenir" element={<Soutenir />} />
           <Route path="/rapports-activite" element={<RapportsActivite />} />
           <Route path="/a-propos" element={<APropos />} />

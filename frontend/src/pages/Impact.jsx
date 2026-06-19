@@ -67,7 +67,7 @@ function NotreImpact() {
 
           {/* Chips thèmes */}
           <FilterChips
-            filters={FILTERS}
+            filters={FILTERS_ACTION_TAGS, FILTERS_COUNTRY}
             active={activeFilter}
             onChange={setActiveFilter}
             variant="light"

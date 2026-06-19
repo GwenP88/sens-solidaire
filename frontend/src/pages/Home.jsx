@@ -137,7 +137,9 @@ function Home() {
             <h2 className="section-title text-primary">Nos actions sur le terrain</h2>
             <p className="section-subtitle text-primary/80">Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable.</p>
           </div>
-          <Button label="Voir toutes les actions →" variant="secondary" />
+            <a href="/notre-impact">
+              <Button label="Voir toutes les actions →" variant="secondary" />
+            </a>
         </div>
         <div className="grid grid-cols-2 gap-12">
           {actions.map(action => (
@@ -162,7 +164,9 @@ function Home() {
             <h2 className="section-title text-surface">Ils nous font confiance</h2>
             <p className="section-subtitle text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
           </div>
-          <Button label="En savoir plus sur nous →" variant="secondary" />
+            <a href="/a-propos">
+              <Button label="En savoir plus sur nous →" variant="secondary" />
+            </a>
         </div>
         <div className="grid grid-cols-6 gap-8 items-center">
           {partners.map(partner => (

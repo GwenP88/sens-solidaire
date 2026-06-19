@@ -82,7 +82,7 @@ function Missions() {
       {/* ── Filtres par type de mission ── */}
       <div ref={filtersRef} className="py-6 px-24 bg-primary">
         <FilterChips
-          filters={FILTERS}
+          filters={FILTERS_MISSION_TYPE}
           active={activeFilter}
           onChange={handleFilter}
           variant="dark"

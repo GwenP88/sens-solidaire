@@ -75,7 +75,7 @@ function Testimonials() {
           </button>
         </div>
         <FilterSelect
-          filters={FILTER_CONFIG}
+          filters={FILTER_CONFIG_TEMOIGNAGES}
           values={filters}
           onChange={handleFilter}
         />
