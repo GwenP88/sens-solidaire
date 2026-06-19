@@ -9,7 +9,16 @@ export const getAllEducationItems = async () => {
 }
 
 export const getEducationItemBySlug = async (slug) => {
-  return await prisma.educationItem.findUnique({
+  const item = await prisma.educationItem.findUnique({
     where: { slug },
   })
+
+  if (!item) return null
+
+  const media = await prisma.media.findMany({
+    where: { entity_type: 'education_item', entity_id: item.id },
+    orderBy: { display_order: 'asc' },
+  })
+
+  return { ...item, media }
 }

@@ -69,6 +69,38 @@ function EducationDetail() {
             </p>
           ))}
 
+          {/* Médias attachés */}
+          {item.media?.length > 0 && (
+            <div className="flex flex-col gap-6 mt-4">
+              {item.media.map((m, i) => {
+                if (m.file_type === 'image') return (
+                  <img key={i} src={m.file_url} alt="" className="w-full rounded-2xl object-cover" />
+                )
+                if (m.file_type === 'video') return (
+                  <div key={i} className="aspect-video w-full rounded-2xl overflow-hidden">
+                    <iframe src={m.file_url} className="w-full h-full" allowFullScreen />
+                  </div>
+                )
+                if (m.file_type === 'audio') return (
+                  <audio key={i} controls className="w-full">
+                    <source src={m.file_url} />
+                  </audio>
+                )
+                if (m.file_type === 'pdf') return (
+                  <a key={i} href={m.file_url} target="_blank" rel="noopener noreferrer">
+                    <Button label="Télécharger le PDF ↓" variant="secondary" />
+                  </a>
+                )
+                if (m.file_type === 'link') return (
+                  <a key={i} href={m.file_url} target="_blank" rel="noopener noreferrer">
+                    <Button label="Voir le lien →" variant="secondary" />
+                  </a>
+                )
+                return null
+              })}
+            </div>
+          )}
+
           {/* CTA PDF si disponible */}
           {item.external_url && (
             <a href={item.external_url} target="_blank" rel="noopener noreferrer">
