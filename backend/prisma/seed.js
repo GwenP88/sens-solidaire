@@ -611,6 +611,162 @@ const seed = async () => {
   console.log("Témoignages créés (7 : 6 approved, 1 pending)")
 
   // ============================================================
+// ÉTAPE 6 — FIELD ACTIONS
+// ============================================================
+
+const FIELD_ACTIONS = [
+  {
+    slug: 'fabrique-papier-maktau-kenya',
+    title: 'Fabrique de papier écologique de Maktau',
+    description: 'Soutien au développement d\'une activité économique durable grâce au recyclage de la bouse d\'éléphant.',
+    content: `Afin de soutenir les communautés locales tout en préservant les richesses naturelles de leur territoire, nous avons accompagné le développement d'une fabrique de papier recyclé à partir de bouse d'éléphant.
+
+La fabrication de ce papier artisanal est entièrement naturelle. Elle repose sur des méthodes de production à faible impact environnemental, utilisant notamment l'énergie du soleil et du vent.
+
+Le processus de fabrication débute par le nettoyage des fibres contenues dans les déjections d'éléphants. Celles-ci sont ensuite bouillies pendant plusieurs heures pour être stérilisées et assouplies avant d'être transformées en pâte à papier.
+
+En choisissant ces créations, chacun contribue à soutenir les populations engagées dans la protection de leur environnement et à la préservation des éléphants et des forêts.`,
+    country: 'Kenya',
+    image_url: '/images/jardin_potager_kenya.jpg',
+    tags: ['Environnement', 'Biodiversité'],
+    odds: [8, 12, 15],
+    gallery: ['/images/jardin_potager_kenya.jpg', '/images/locations/LUMO-kenya.jpeg', '/images/jardin_potager_senegal.jpg'],
+  },
+  {
+    slug: 'patrouilles-rangers-lumo',
+    title: 'Patrouilles avec les rangers du sanctuaire LUMO',
+    description: 'Depuis plus de 10 ans, l\'association soutient les rangers du sanctuaire LUMO dans leur mission de lutte contre le braconnage.',
+    content: `Depuis plus de 10 ans, l'association investit ses efforts au sanctuaire de LUMO, frontalier du Parc Tsavo, pour soutenir les rangers dans leur mission de lutte contre le braconnage.
+
+Soutien aux patrouilles, relevés de données sur la faune, entretien du matériel et du camp de base, nos volontaires ont régulièrement contribué à la vie du sanctuaire et à la protection de la vie animale.`,
+    country: 'Kenya',
+    image_url: '/images/locations/LUMO-kenya.jpeg',
+    tags: ['Environnement', 'Biodiversité'],
+    odds: [15, 16],
+    gallery: ['/images/locations/LUMO-kenya.jpeg', '/images/jardin_potager_kenya.jpg'],
+  },
+  {
+    slug: 'potager-agro-ecologique-ttnp',
+    title: 'Potager agro-écologique face à la sécheresse',
+    description: 'Projet mené avec les élèves du TTNP de Voi pour améliorer la production durable et diffuser les connaissances sur l\'agroécologie.',
+    content: `Ce projet mené conjointement avec les élèves du TTNP de Voi vise à améliorer la production durable de cultures et de produits d'origine animale.
+
+Les objectifs spécifiques sont : utiliser la ferme pour diffuser les connaissances sur l'agriculture transformatrice en adoptant l'agroécologie, créer un environnement microclimatique pour atténuer les impacts climatiques, et adopter la diversification de la production.`,
+    country: 'Kenya',
+    image_url: '/images/locations/TTNP-kenya.jpeg',
+    tags: ['Agriculture', 'Éducation'],
+    odds: [2, 13, 15],
+    gallery: ['/images/locations/TTNP-kenya.jpeg', '/images/jardin_potager_kenya.jpg'],
+  },
+  {
+    slug: 'jardins-potagers-senegal',
+    title: 'Jardins potagers et consommation responsable',
+    description: 'En partenariat avec l\'association AGADA, installation de potagers dans les établissements scolaires de Casamance.',
+    content: `Avec ce projet nous avons développé des échanges entre deux écoles primaires, quatre collèges et deux lycées de la Métropole de Nice et des établissements de la Casamance au Sénégal sur le thème de la consommation responsable.
+
+Nous avons installé, en partenariat avec l'association sénégalaise AGADA, des potagers dans les établissements dans le but de former les élèves à la production et à la consommation responsable.
+
+Les élèves de CEM Kénia ont mis en place un projet de jardin potager de 150m² dont la production abondante a permis d'ouvrir une boutique. Cette boutique est un moyen privilégié pour initier les élèves au monde de l'entrepreneuriat.`,
+    country: 'Sénégal',
+    image_url: '/images/jardin_potager_senegal.jpg',
+    tags: ['Agriculture', 'Éducation'],
+    odds: [3, 12, 15],
+    gallery: ['/images/jardin_potager_senegal.jpg', '/images/locations/AGADA-senegal.jpg'],
+  },
+  {
+    slug: 'correspondances-scolaires-senegal',
+    title: 'Correspondances scolaires France — Sénégal',
+    description: 'Échanges entre écoles de la Métropole de Nice et des établissements de Casamance sur le thème de la consommation responsable.',
+    content: `En parallèle des projets de jardins potagers, les élèves de France et du Sénégal ont pu se rencontrer et échanger grâce au don d'un ordinateur portable au collège de Ziguinchor.
+
+Les élèves ont ainsi pu discuter de leurs cultures, habitudes scolaires, alimentaires, musicales, sportives, de leurs traditions et de production et consommation responsable.
+
+Une correspondance épistolaire a également été réalisée entre les élèves de Nice et de Ziguinchor dans le but de promouvoir la solidarité internationale.`,
+    country: 'Sénégal / France',
+    image_url: '/images/locations/AGADA-senegal.jpg',
+    tags: ['Éducation', 'Échanges culturels'],
+    odds: [4, 10, 17],
+    gallery: ['/images/locations/AGADA-senegal.jpg', '/images/jardin_potager_senegal.jpg'],
+  },
+  {
+    slug: 'correspondances-amazonie',
+    title: 'Correspondances avec les écoles d\'Amazonie',
+    description: 'Suite à la rencontre avec le Chef Raoni, mise en place d\'une correspondance entre des écoles françaises et le peuple Kukama kukamiria.',
+    content: `Notre organisation a reçu les 5ᵉ trophées de l'Environnement de la ville de Nice par le Cacique Raoni Metuktire, Chef du peuple Kayapo (Brésil) le 6 juin 2014.
+
+Lors de cet échange, nous avons promis au Grand Chef Raoni de présenter la culture du peuple Kayapo aux scolaires français et de mettre en place une correspondance avec une école d'Amazonie.
+
+Nous avons choisi le thème "Un jardin au cœur de la forêt". Dans la forêt tropicale vivent les Indiens qui savent tirer parti de leur environnement sans le détruire.`,
+    country: 'Pérou',
+    image_url: '/images/jardin_potager_kenya.jpg',
+    tags: ['Éducation', 'Échanges culturels'],
+    odds: [4, 10, 15],
+    gallery: ['/images/jardin_potager_kenya.jpg'],
+  },
+  {
+    slug: 'projet-puits-sri-lanka',
+    title: 'Accès à l\'eau potable dans les écoles',
+    description: 'Financement de forages dans les écoles du Sri Lanka pour garantir un accès durable à l\'eau potable.',
+    content: `Nous finançons des forages dans les écoles du Sri Lanka pour garantir un accès durable à l'eau potable aux élèves et aux communautés locales.
+
+Ce projet contribue directement à l'amélioration des conditions de vie et de scolarisation des enfants, tout en renforçant la résilience des communautés face aux enjeux climatiques.`,
+    country: 'Sri Lanka',
+    image_url: '/images/puit-srilanka.jpg',
+    tags: ['Accès à l\'eau', 'Éducation'],
+    odds: [3, 6, 4],
+    gallery: ['/images/puit-srilanka.jpg'],
+  },
+  {
+    slug: 'fabrique-eco-maximus',
+    title: 'Fabrique de papier Eco Maximus',
+    description: 'Soutien à la fabrique Eco Maximus qui produit des objets artisanaux issus de bouse d\'éléphant au Sri Lanka.',
+    content: `Sens Solidaire soutient la fabrique Eco Maximus en promouvant ses objets artisanaux issus de bouse d'éléphant, contribuant à la protection de la biodiversité et à l'économie locale au Sri Lanka.
+
+Cette initiative permet aux artisans locaux de valoriser des ressources naturelles tout en sensibilisant les visiteurs à la protection des éléphants et de leur habitat.`,
+    country: 'Sri Lanka',
+    image_url: '/images/fabrique_eco_maximus_srilanka.jpg',
+    tags: ['Environnement', 'Biodiversité'],
+    odds: [8, 12, 15],
+    gallery: ['/images/fabrique_eco_maximus_srilanka.jpg'],
+  },
+]
+
+for (const action of FIELD_ACTIONS) {
+  const { tags, odds, gallery, ...actionData } = action
+
+  const upserted = await prisma.fieldAction.upsert({
+    where: { slug: actionData.slug },
+    update: {
+      ...actionData,
+      tags: { deleteMany: {}, create: tags.map(tag => ({ tag })) },
+      odds: { deleteMany: {}, create: odds.map(n => ({ odd_number: n })) },
+    },
+    create: {
+      ...actionData,
+      tags: { create: tags.map(tag => ({ tag })) },
+      odds: { create: odds.map(n => ({ odd_number: n })) },
+    },
+  })
+
+  await prisma.media.deleteMany({
+    where: { entity_type: 'field_action', entity_id: upserted.id }
+  })
+  await prisma.media.createMany({
+    data: gallery.map((url, i) => ({
+      entity_type: 'field_action',
+      entity_id: upserted.id,
+      file_url: url,
+      file_type: 'image',
+      display_order: i,
+    }))
+  })
+
+  console.log(`✅ FieldAction : ${actionData.title}`)
+}
+
+console.log("FieldActions créées (8)")
+
+  // ============================================================
   // RÉCAP FINAL
   // ============================================================
   console.log("")
@@ -624,6 +780,7 @@ const seed = async () => {
   console.log(`Témoignages: 7 (6 approved, 1 pending)`)
   console.log("─────────────────────────────────────────")
   console.log("Changer le mot de passe admin AVANT la mise en production !")
+  console.log(`FieldActions: 8`)
 }
 
 seed()
@@ -634,3 +791,5 @@ seed()
   .finally(async () => {
     await prisma.$disconnect()
   })
+
+  

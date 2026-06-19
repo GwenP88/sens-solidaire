@@ -92,3 +92,34 @@ model Media {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 }
+
+model FieldAction {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  title       String
+  description String   // court — utilisé comme H2 sur la page détail
+  content     String   // texte long — paragraphes séparés par \n\n
+  country     String   // Kenya, Sénégal, Sri Lanka...
+  image_url   String?  // image principale
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // Relations
+  tags        FieldActionTag[]
+  odds        FieldActionODD[]
+}
+
+model FieldActionTag {
+  id            Int         @id @default(autoincrement())
+  field_action  FieldAction @relation(fields: [action_id], references: [id])
+  action_id     Int
+  tag           String      // Environnement, Biodiversité, Agriculture...
+}
+
+model FieldActionODD {
+  id            Int         @id @default(autoincrement())
+  field_action  FieldAction @relation(fields: [action_id], references: [id])
+  action_id     Int
+  odd_number    Int         // 1 à 17
+}
