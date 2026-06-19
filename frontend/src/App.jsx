@@ -20,6 +20,7 @@ import Equipe from './pages/Equipe'
 import Impact from './pages/Impact'
 import ActionDetail from './pages/ActionDetail'
 import MediaEtActualites from './pages/MediaEtActualites'
+import MediaDetail from './pages/MediaDetail'
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/notre-impact" element={<Impact />} />
           <Route path="/notre-impact/:slug" element={<ActionDetail/>} />
           <Route path="/medias-et-actualites" element={<MediaEtActualites />} />
+          <Route path="/medias/:slug" element={<MediaDetail />} />
         </Route>
 
         {/* Routes admin — sans Navbar ni Footer */}
