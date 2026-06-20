@@ -133,7 +133,7 @@
 
 | # | Dev | Tâche | Période | Statut |
 |---|---|---|---|---|
-| 56 | Gwen | Page /lieux/:slug (LocationDetail.jsx) | 10-12 juillet | 🔵 À faire |
+| 56 | Gwen | Page /lieux/:slug (LocationDetail.jsx) | 10-12 juillet | ✅ Terminé |
 | 57 | Alison | APIs restantes : locations, équipe, rapports | 10-14 juillet | 🔵 À faire |
 | 58 | Alison | Corrections bugs post-recette | 14-17 juillet | 🔵 À faire |
 | 59 | Ensemble | 🧊 Code freezé — pause estivale | 17 juillet | 🔵 À faire |

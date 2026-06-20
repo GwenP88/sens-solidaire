@@ -1279,4 +1279,81 @@ pour consulter et vérifier les données.
 
 ---
 
+## Jour 13 · 21 juin 2026
+
+### 🎯 Objectifs du jour
+- Refactorisation complète imports + commentaires français sur tous les fichiers
+- Lier missions ↔ actions terrain
+- Créer la page LocationDetail
+- Diverses corrections et améliorations UX
+
+---
+
+### ✅ Réalisé
+
+#### Refactorisation complète
+- Imports groupés par catégorie sur tous les fichiers pages et composants
+- Commentaires français ajoutés sur chaque bloc de code
+
+#### MissionDetail — actions terrain
+- `fetchFieldActions(country)` appelé après chargement de la mission
+- Section impact remplacée — affiche jusqu'à 4 `ActionCard` filtrées par pays
+- Lien "Voir toutes les actions →" pointe vers `/notre-impact?pays=:country`
+- Placeholder affiché si aucune action disponible pour ce pays
+
+#### Backend — fieldAction
+- `getAllFieldActions` mise à jour avec filtre `country` optionnel (`contains`)
+- `fieldActionController` unifié — plus de double déclaration
+- `fetchFieldActions(country)` mis à jour dans `api.js`
+
+#### Page LocationDetail — nouvelle page
+- Création `src/pages/LocationDetail.jsx`
+- Hero + description longue + sidebar image + infos pratiques
+- Galerie photos — grille si ≤ 2 images, carousel sinon
+- Lien retour vers la mission parente (`/missions/:slug`)
+- Fallback image sidebar — galerie > image_url > placeholder
+- Route `GET /api/locations/:slug` créée (service + controller + route)
+- `fetchLocationBySlug` ajouté dans `api.js`
+- Route `/lieux/:slug` ajoutée dans `App.jsx`
+
+---
+
+### 🏗️ Architecture images — décisions prises
+- Structure `/public/images/` par contexte métier (hero, missions, locations, actions, partners, team, rapports, ui)
+- Uploads clients dans `/public/uploads/` séparé (missions, actions, medias, education, team)
+- Format recommandé : WebP, PNG pour logos, SVG pour illustrations
+- **Sharp** (redimensionnement auto WebP à l'upload) → planifié Sept. S2
+- **Lazy loading** (`loading="lazy"` sur toutes les cards/grilles) → planifié Sept. S2
+- Consignes à transmettre à la cliente : WebP/JPG · heroes 1920×1080px · cards 800×600px · avatars 400×400px · 500 Ko max
+
+---
+
+### 🔵 À faire
+
+#### Contenu & données
+- Seed actions terrain — compléter les actions manquantes
+- Revoir les textes d'erreur dans `api.js` — messages plus explicites et cohérents
+- Uniformiser les sections groupe jeune, service civique et congé solidaire sur la page Missions
+
+#### Images & médias
+- Organiser les photos fixes par dossier (`/images/hero/`, `/images/missions/`, `/images/locations/`, etc.)
+- Consignes images à transmettre à la cliente (WebP/JPG, dimensions, poids max)
+
+#### Frontend
+- Responsive mobile-first toutes les pages MVP — 375px / 768px (S5)
+- Accessibilité basique — labels, alt, focus visible
+- SEO basique — balises meta, title par page, Open Graph
+
+#### Évolutions dashboard (à confirmer avec la cliente)
+- Voir pour que la cliente puisse ajouter un type de mission depuis le dashboard (section Home)
+- Voir pour que la cliente puisse modifier les chiffres de la StatsBar depuis le dashboard
+
+#### Dashboard Alison
+- Sidebar + CRUD missions front
+- Modération témoignages
+- Routage email contact
+- Upload Multer images + PDFs
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
