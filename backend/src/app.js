@@ -34,11 +34,18 @@ import fieldActionRouter from './routes/fieldActionRoutes.js'
 import mediaPostRouter from './routes/mediaPostRoutes.js'
 // Import éducation et sensibilisations
 import educationItemRouter from './routes/educationItemRoutes.js'
+// Import équipe
 import teamMemberRouter from './routes/teamMemberRoutes.js'
+// Import rapports d'activités
 import activityReportRouter from './routes/activityReportRoutes.js'
+// Import délégation
 import delegationRouter from './routes/delegationRoutes.js'
+// Import rapports de missions
 import missionReportRouter from './routes/missionReportRoutes.js'
+// Import logos partenaires
 import partnerRouter from './routes/partnerRoutes.js'
+// Import lieux des missions
+import locationRouter from './routes/locationRoutes.js'
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -99,11 +106,18 @@ app.use('/api/field-actions', fieldActionRouter)
 app.use('/api/media-posts', mediaPostRouter)
 // Route éducation et sensibilisations
 app.use('/api/education-items', educationItemRouter)
+// Route équipe
 app.use('/api/team-members', teamMemberRouter)
+// Route rapports d'activité
 app.use('/api/activity-reports', activityReportRouter)
+// Route délégation
 app.use('/api/delegations', delegationRouter)
+// Route rapports de mission
 app.use('/api/mission-reports', missionReportRouter)
+// Routelogos partenaires
 app.use('/api/partners', partnerRouter)
+// Route lieux des missions 
+app.use('/api/locations', locationRouter)
 
 
 // ── MIDDLEWARE ERREURS ───────────────────────────────────────────────────────

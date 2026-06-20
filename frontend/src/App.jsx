@@ -40,6 +40,9 @@ import EducationDetail from './pages/EducationDetail'
 import LoginAdmin from './pages/admin/LoginAdmin'
 import Dashboard from './pages/admin/Dashboard'
 
+//  ── Pages lieux
+import LocationDetail from './pages/LocationDetail'
+
 function App() {
   return (
     // ── BrowserRouter — active la gestion des URLs dans toute l'application
@@ -56,6 +59,7 @@ function App() {
           {/* Missions */}
           <Route path="/missions" element={<Missions />} />
           <Route path="/missions/:slug" element={<MissionDetail />} />
+          <Route path="/lieux/:slug" element={<LocationDetail />} />
 
           {/* Témoignages & rapports */}
           <Route path="/temoignages" element={<Testimonials />} />

@@ -128,3 +128,10 @@ export const fetchPartners = async () => {
   if (!response.ok) throw new Error('Erreur partenaires')
   return await response.json()
 }
+
+// ── LIEUX LIES AUX MISSIONS ────────────────────────────────────────────────── 
+export const fetchLocationBySlug = async (slug) => {
+  const response = await fetch(`${API_URL}/locations/${slug}`)
+  if (!response.ok) throw new Error('Lieu introuvable')
+  return await response.json()
+}
