@@ -49,8 +49,9 @@ export const submitTestimonial = async (data) => {
 
 // ── ACTIONS SUR LE TERRAIN ─────────────────────────────────────────────
 
-export const fetchFieldActions = async () => {
-  const response = await fetch(`${API_URL}/field-actions`)
+export const fetchFieldActions = async (country = null) => {
+  const params = country ? `?country=${encodeURIComponent(country)}` : ''
+  const response = await fetch(`${API_URL}/field-actions${params}`)
   if (!response.ok) throw new Error('Erreur lors de la récupération des actions')
   return await response.json()
 }

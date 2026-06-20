@@ -60,39 +60,39 @@ function NotreImpact() {
         subtitle="Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable."
       />
 
+      {/* ── Barre de filtres — collée au hero ── */}
+      <div className="bg-primary px-24 py-6 flex items-center gap-12">
+
+        {/* Menu déroulant pays */}
+        <select
+          value={activeCountry || ''}
+          onChange={e => setActiveCountry(e.target.value || null)}
+          className="font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary shrink-0"
+        >
+          <option value="">Tous les pays</option>
+          <option value="Kenya">Kenya</option>
+          <option value="Sénégal">Sénégal</option>
+          <option value="Sri Lanka">Sri Lanka</option>
+          <option value="Pérou">Pérou</option>
+          <option value="Sumatra">Sumatra</option>
+        </select>
+
+        {/* Chips de filtrage par thème */}
+        <FilterChips
+          filters={FILTERS_ACTION_TAGS}
+          active={activeFilter}
+          onChange={setActiveFilter}
+          variant="dark"
+        />
+
+      </div>
+
       <section className="section-padding">
 
         {/* ── Texte d'introduction ── */}
         <p className="font-body text-sm text-primary/80 leading-relaxed mb-10">
           Sens Solidaire s'investit sur tous les continents afin de collaborer sur des projets tournés vers la sauvegarde de la biodiversité, le bien-être des populations locales et un développement durable. Nos actions combinent éducation, échanges interculturels et projets environnementaux concrets.
         </p>
-
-        {/* ── Filtres — select pays à gauche + chips thèmes à droite ── */}
-        <div className="flex items-center gap-12 mb-8">
-
-          {/* Menu déroulant pays */}
-          <select
-            value={activeCountry || ''}
-            onChange={e => setActiveCountry(e.target.value || null)}
-            className="font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary shrink-0"
-          >
-            <option value="">Tous les pays</option>
-            <option value="Kenya">Kenya</option>
-            <option value="Sénégal">Sénégal</option>
-            <option value="Sri Lanka">Sri Lanka</option>
-            <option value="Pérou">Pérou</option>
-            <option value="Sumatra">Sumatra</option>
-          </select>
-
-          {/* Chips de filtrage par thème */}
-          <FilterChips
-            filters={FILTERS_ACTION_TAGS}
-            active={activeFilter}
-            onChange={setActiveFilter}
-            variant="light"
-          />
-
-        </div>
 
         {/* ── Grille des actions — 2 colonnes ── */}
         {loading ? (

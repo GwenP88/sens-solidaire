@@ -162,6 +162,8 @@
 | 68 | Gwen | SEO : méta, Open Graph, sitemap, robots.txt | Sept. S2 | 🔵 À faire |
 | 69 | Gwen | Audit Lighthouse final — objectif > 90 | Sept. S2 | 🔵 À faire |
 | 70 | Gwen | Optimisations : WebP, lazy loading | Sept. S2 | 🔵 À faire |
+| 70bis | Alison | Upload images — redimensionnement automatique avec Sharp (WebP, dimensions par contexte) | Sept. S2 | 🔵 À faire |
+| 70ter | Gwen | Lazy loading — attribut loading="lazy" sur toutes les images cards et grilles | Sept. S2 | 🔵 À faire |
 
 ### Sept. S3 · Déploiement
 

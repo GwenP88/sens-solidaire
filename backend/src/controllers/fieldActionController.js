@@ -5,7 +5,8 @@ import { getAllFieldActions, getFieldActionBySlugService } from '../services/fie
 
 export const getFieldActions = async (req, res) => {
   try {
-    const actions = await getAllFieldActions()
+    const { country } = req.query
+    const actions = await getAllFieldActions(country || null)
     res.json(actions)
   } catch (err) {
     console.error('[ERROR]', err.message)

@@ -2,7 +2,7 @@
 // Pied de page — 3 zones : CTA immersif, Navigation 4 colonnes, Barre légale
 
 // ── Composants UI
-import { IconPin, IconMail, IconYoutube, IconLinkedin, IconInstagram, IconFacebook } from '../../utils/icons'
+import { IconPin, IconMail, IconYoutube, IconLinkedin, IconInstagram, IconFacebook, IconTikTok } from '../../utils/icons'
 import Button from '../ui/Button'
 
 function Footer({ hideCta = false }) {
@@ -48,10 +48,21 @@ function Footer({ hideCta = false }) {
             Sur le terrain, nous agissons aux côtés des communautés locales pour un impact positif et durable.
           </p>
           <div className="flex gap-4">
-            <IconYoutube className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            <IconLinkedin className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            <IconInstagram className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            <IconFacebook className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            <a href="https://www.youtube.com/channel/UC4lhQB-8zXiZJvD-kQS-q4A/featured">
+              <IconYoutube className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            </a>
+            <a href="https://www.linkedin.com/company/sens-solidaires/">
+              <IconLinkedin className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            </a>
+            <a href="https://www.instagram.com/sens_solidaires/">
+              <IconInstagram className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            </a>
+            <a href="https://www.facebook.com/Sensolidaires">
+              <IconFacebook className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            </a>
+            <a href="https://www.tiktok.com/@sensolidaires?lang=fr&is_copy_url=1&is_from_webapp=v1">
+              <IconTikTok className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+            </a>
           </div>
         </div>
 

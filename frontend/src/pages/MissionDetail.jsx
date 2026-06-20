@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 // ── API
-import { fetchMissionBySlug } from '../services/api'
+import { fetchMissionBySlug, fetchFieldActions } from '../services/api'
 
 // ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
@@ -23,6 +23,7 @@ import ScrollToTop from '../components/ui/ScrollToTop'
 // ── Composants métier
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import LocationCard from '../components/locations/LocationCard'
+import ActionCard from '../components/actions/ActionCard'
 
 // ── Utils
 import { getDuration } from '../utils/missions'
@@ -59,12 +60,18 @@ function MissionDetail() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  // ── État local — actions terrain du même pays
+  const [actions, setActions] = useState([])
+
   // ── Chargement de la mission depuis l'API au montage
   useEffect(() => {
     const loadMission = async () => {
       try {
         const data = await fetchMissionBySlug(slug)
         setMission(data)
+        fetchFieldActions(data.country)
+        .then(setActions)
+        .catch(console.error)
       } catch (err) {
         setError(err.message)
       } finally {
@@ -203,7 +210,7 @@ function MissionDetail() {
         </section>
       )}
 
-      {/* ── Impact terrain — placeholder V2 ── */}
+      {/* ── Impact terrain — actions du même pays ── */}
       <section id="impact" className="section-padding bg-surface">
         <div className="flex items-start justify-between mb-8">
           <div className="flex flex-col gap-2 max-w-4xl">
@@ -212,21 +219,33 @@ function MissionDetail() {
               Depuis plus de 20 ans, des centaines de volontaires mettent leur temps, leur énergie et leurs compétences au service de projets portés par nos partenaires locaux.
             </p>
           </div>
-          {/* TODO V2 — lien vers /actions?country=:country */}
-          <Button label="Voir toutes les actions →" variant="secondary" />
+          <a href={`/notre-impact?pays=${mission.country}`}>
+            <Button label="Voir toutes les actions →" variant="secondary" />
+          </a>
         </div>
 
-        {/* TODO V2 — remplacer par GET /api/actions?mission_id=:id&limit=6 */}
-        <div className="flex gap-12 items-center">
-          <div className="w-1/2 shrink-0">
-            <img src={mission.image_url} alt={mission.country} className="w-full h-64 object-cover rounded-xl" />
-          </div>
-          <div className="w-1/2 flex items-center justify-center bg-surface-mid rounded-xl h-64">
+        {actions.length === 0 ? (
+          <div className="flex items-center justify-center bg-surface-mid rounded-xl h-64">
             <p className="font-body text-sm text-primary/40 italic text-center px-8">
               Nous préparons actuellement la présentation des actions menées avec nos partenaires au {mission.country}. Revenez bientôt pour les découvrir.
             </p>
           </div>
-        </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-8">
+            {actions.slice(0, 4).map(action => (
+              <ActionCard
+                key={action.slug}
+                slug={action.slug}
+                title={action.title}
+                description={action.description}
+                image={action.image_url}
+                tags={action.tags.map(t => t.tag)}
+                odds={action.odds.map(o => o.odd_number)}
+                country={action.country}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* ── Coût & durée — tableau tarifs + inclus/non inclus + CTAs ── */}

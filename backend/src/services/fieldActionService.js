@@ -3,9 +3,12 @@
 
 import prisma from '../config/db.js'
 
-export const getAllFieldActions = async () => {
+export const getAllFieldActions = async (country = null) => {
+  const where = { is_active: true }
+  if (country) where.country = { contains: country }
+
   return await prisma.fieldAction.findMany({
-    where: { is_active: true },
+    where,
     include: {
       tags: true,
       odds: { orderBy: { odd_number: 'asc' } },
