@@ -1,7 +1,10 @@
 // Modal.jsx
 // Modale générique réutilisable — s'ouvre/ferme via prop isOpen + onClose
 
+// ── React
 import { useEffect } from 'react'
+
+// ── Composants UI
 import { IoCloseOutline } from 'react-icons/io5'
 
 function Modal({ isOpen, onClose, title, children }) {

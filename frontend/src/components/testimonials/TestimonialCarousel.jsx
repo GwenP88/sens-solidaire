@@ -1,6 +1,7 @@
 // TestimonialCarousel.jsx
 // Carrousel de témoignages — utilise le composant Carousel générique
 
+// ── Composants layout
 import Carousel from '../ui/Carousel'
 import TestimonialCard from './TestimonialCard'
 

@@ -1,20 +1,22 @@
 /* index.css */
 /* Point d'entrée des styles globaux de l'application */
 
-/* Importe toutes les classes utilitaires Tailwind CSS */
+/* ── Import Tailwind CSS ── */
 @import "tailwindcss";
 
+/* ── Design system — variables CSS globales ── */
 @theme {
-  /* Couleurs - palette 1 */
-  --color-primary:      #143601;
-  --color-accent:       #a44a2f;
-  --color-accent-2:     #2f8a3a;
-  --color-dark:         #0A1F00;
-  --color-surface:      #f8f6f1;
-  --color-surface-mid:  #e8dfd1;
-  --color-surface-dark: #d9cbb8;
 
-  /* Couleurs - palette 2
+  /* Palette active — Vert forêt / Terracotta / Beige */
+  --color-primary:      #143601;  /* Vert forêt — fonds, navbar, boutons secondary */
+  --color-accent:       #a44a2f;  /* Terracotta — boutons primary, CTA */
+  --color-accent-2:     #2f8a3a;  /* Vert principal — accents, icônes, badges */
+  --color-dark:         #0A1F00;  /* Vert très foncé — hover, ombres */
+  --color-surface:      #f8f6f1;  /* Beige clair — fond principal */
+  --color-surface-mid:  #e8dfd1;  /* Beige moyen — fond sections alternées */
+  --color-surface-dark: #d9cbb8;  /* Beige foncé — bordures, séparateurs */
+
+  /* Palette 2 — Bleu-vert / Doré (non active)
   --color-primary:      #2F5D62;
   --color-accent:       #C49A48;
   --color-accent-2:     #1F4D3A;
@@ -23,7 +25,7 @@
   --color-surface-mid:  #e8dfd1;
   --color-surface-dark: #d9cbb8; */
 
-    /* Couleurs - palette 3
+  /* Palette 3 — Bleu marine / Terracotta / Lagon (non active)
   --color-primary:      #1A3A4A;
   --color-accent:       #A44A2F;
   --color-accent-2:     #2E86AB;
@@ -32,16 +34,19 @@
   --color-surface-mid:  #e8dfd1;
   --color-surface-dark: #d9cbb8; */
 
-
-  /* Typographie */
+  /* Typographie — Lora pour les titres, Source Sans 3 pour le corps */
   --font-heading: 'Lora', serif;
   --font-body:    'Source Sans 3', sans-serif;
 }
 
+/* ── Utilities Tailwind v4 — classes réutilisables sur tout le site ── */
+
+/* Padding standard des sections */
 @utility section-padding {
   padding: 4rem 6rem;
 }
 
+/* En-tête de section — titre à gauche + CTA à droite */
 @utility section-header {
   display: flex;
   justify-content: space-between;
@@ -49,6 +54,7 @@
   margin-bottom: 2.5rem;
 }
 
+/* Titre de section — Lora bold 2xl */
 @utility section-title {
   font-family: var(--font-heading);
   font-weight: 700;
@@ -56,27 +62,35 @@
   margin-bottom: 0.5rem;
 }
 
+/* Sous-titre de section — Source Sans 3 base */
 @utility section-subtitle {
   font-family: var(--font-body);
   font-size: 1rem;
 }
 
+/* Contenu HTML riche — utilisé pour volunteer_role et health_info */
 @utility rich-text {
-  p { margin-bottom: 0.75rem; }
+  p  { margin-bottom: 0.75rem; }
   ul { list-style: disc; padding-left: 1.5rem; }
   li { margin-bottom: 0.4rem; }
 }
 
+/* ── Styles globaux ── */
+
+/* Scroll doux sur toute la page */
 html {
   scroll-behavior: smooth;
 }
 
+/* ── Swiper — styles globaux du carousel ── */
+
+/* Espace pour les dots de pagination */
 .swiper {
   padding-bottom: 50px !important;
   width: 100% !important;
 }
 
-/* Dots — fond vert (témoignages) */
+/* Dots — variante surface (fond vert foncé — témoignages) */
 .swiper-carousel-surface .swiper-pagination-bullet {
   background-color: #F8F6F1 !important;
   opacity: 0.4;
@@ -86,7 +100,7 @@ html {
   opacity: 1;
 }
 
-/* Dots — fond beige (missions) */
+/* Dots — variante primary (fond beige — missions, lieux) */
 .swiper-carousel-primary .swiper-pagination-bullet {
   background-color: #143601 !important;
   opacity: 0.4;

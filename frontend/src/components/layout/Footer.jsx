@@ -1,6 +1,7 @@
 // Footer.jsx
 // Pied de page — 3 zones : CTA immersif, Navigation 4 colonnes, Barre légale
 
+// ── Composants UI
 import { IconPin, IconMail, IconYoutube, IconLinkedin, IconInstagram, IconFacebook } from '../../utils/icons'
 import Button from '../ui/Button'
 

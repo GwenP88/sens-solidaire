@@ -3,6 +3,7 @@
 // Plus compact que le Hero home — pas de CTA, juste titre + sous-titre
 // Props optionnelles : duration, price — affichées uniquement sur les pages mission détail
 
+// ── Composants UI
 import { IconClock, IconMoney } from '../../utils/icons'
 
 function HeroPage({ image, title, subtitle, duration, price }) {

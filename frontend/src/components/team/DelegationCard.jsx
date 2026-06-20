@@ -1,23 +1,40 @@
 // DelegationCard.jsx
-// Card délégation — immersive avec drapeau, pays, lieu, contacts
+// Card délégation internationale — photo immersive avec overlay, drapeau, lieu et contacts
+// Props :
+//   pays     : nom du pays affiché
+//   flag     : URL du drapeau (flagcdn.com)
+//   image    : URL de la photo de fond
+//   lieu     : nom du lieu partenaire
+//   contacts : noms et rôles des contacts locaux
 
 function DelegationCard({ pays, flag, image, lieu, contacts }) {
   return (
-    <div className="relative h-56 rounded-2xl overflow-hidden">
-      {/* Image immersive */}
+    // ── Conteneur relatif — permet le positionnement absolu de l'overlay et du contenu
+    <div className="relative h-36 rounded-2xl overflow-hidden">
+
+      {/* Photo de fond immersive */}
       <img src={image} alt={lieu} className="w-full h-full object-cover" />
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50" />
-      {/* Contenu */}
+
+      {/* Overlay sombre — améliore la lisibilité du texte */}
+      <div className="absolute inset-0 bg-black/40" />
+
+      {/* Contenu superposé — drapeau + pays + lieu + contacts */}
       <div className="absolute inset-0 p-6 flex flex-col justify-start gap-2">
+
+        {/* Ligne drapeau + nom du pays */}
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-full overflow-hidden shadow-sm shrink-0">
             <img src={flag} alt={pays} className="w-full h-full object-cover" />
           </div>
           <p className="font-heading font-bold text-surface text-base">Délégation nationale au {pays}</p>
         </div>
-        <p className="font-body font-bold text-surface/80 text-sm">{lieu}</p>
-        <p className="font-body text-xs text-surface/60 leading-relaxed">{contacts}</p>
+
+        {/* Nom du lieu partenaire */}
+        <p className="font-body font-bold text-surface text-sm">{lieu}</p>
+
+        {/* Contacts locaux */}
+        <p className="font-body italic text-xs text-surface/90 leading-relaxed">{contacts}</p>
+
       </div>
     </div>
   )

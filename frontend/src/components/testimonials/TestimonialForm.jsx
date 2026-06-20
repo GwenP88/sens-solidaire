@@ -1,12 +1,19 @@
 // TestimonialForm.jsx
 // Formulaire de soumission de témoignage — utilisé dans une modale
+// Le témoignage est soumis avec status "pending" et validé par l'admin avant publication
 
-import { submitTestimonial } from '../../services/api'
+// ── React
 import { useState } from 'react'
+
+// ── API
+import { submitTestimonial } from '../../services/api'
+
+// ── Composants UI
 import Button from '../ui/Button'
 
 function TestimonialForm({ onClose }) {
 
+  // ── État local — champs du formulaire
   const [form, setForm] = useState({
     prenom: '',
     nom: '',
@@ -17,18 +24,21 @@ function TestimonialForm({ onClose }) {
     rgpd: false,
   })
 
+  // ── État de soumission — false | true
   const [submitted, setSubmitted] = useState(false)
 
+  // ── Mise à jour d'un champ — gère texte, checkbox, fichier et reset destination
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target
     setForm(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : type === 'file' ? files[0] : value,
-      // Reset destination si on change de type
+      // Reset destination si changement de type de mission
       ...(name === 'type' ? { destination: '' } : {})
     }))
   }
 
+  // ── Soumission — envoi vers l'API avec status pending
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -46,7 +56,7 @@ function TestimonialForm({ onClose }) {
     }
   }
 
-  // Message de confirmation après soumission
+  // ── Message de confirmation après soumission réussie
   if (submitted) return (
     <div className="flex flex-col items-center gap-4 py-8 text-center">
       <p className="font-heading font-bold text-primary text-lg">Merci pour votre témoignage !</p>
@@ -58,7 +68,7 @@ function TestimonialForm({ onClose }) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-      {/* Prénom + Nom */}
+      {/* Champs prénom + nom côte à côte */}
       <div className="flex gap-4">
         <div className="flex flex-col gap-1 flex-1">
           <label className="font-body text-xs font-bold text-primary/60">Prénom *</label>
@@ -82,7 +92,7 @@ function TestimonialForm({ onClose }) {
         </div>
       </div>
 
-      {/* Type de mission */}
+      {/* Menu déroulant type de mission */}
       <div className="flex flex-col gap-1">
         <label className="font-body text-xs font-bold text-primary/60">Type de mission *</label>
         <select
@@ -100,7 +110,7 @@ function TestimonialForm({ onClose }) {
         </select>
       </div>
 
-      {/* Destination — visible si type individuel */}
+      {/* Menu déroulant destination — affiché uniquement pour le volontariat individuel */}
       {form.type === 'individuel' && (
         <div className="flex flex-col gap-1">
           <label className="font-body text-xs font-bold text-primary/60">Destination *</label>
@@ -121,7 +131,7 @@ function TestimonialForm({ onClose }) {
         </div>
       )}
 
-      {/* Témoignage */}
+      {/* Zone de texte témoignage — limité à 280 caractères */}
       <div className="flex flex-col gap-1">
         <label className="font-body text-xs font-bold text-primary/60">
           Votre témoignage * — {form.quote.length}/280 caractères
@@ -137,7 +147,7 @@ function TestimonialForm({ onClose }) {
         />
       </div>
 
-      {/* Photo — optionnel */}
+      {/* Champ photo — optionnel */}
       <div className="flex flex-col gap-1">
         <label className="font-body text-xs font-bold text-primary/60">Photo (optionnel)</label>
         <input
@@ -149,7 +159,7 @@ function TestimonialForm({ onClose }) {
         />
       </div>
 
-      {/* RGPD */}
+      {/* Case à cocher RGPD — obligatoire avant soumission */}
       <label className="flex items-start gap-3 cursor-pointer">
         <input
           name="rgpd"
@@ -164,7 +174,7 @@ function TestimonialForm({ onClose }) {
         </span>
       </label>
 
-      {/* Boutons */}
+      {/* Boutons — annuler ou soumettre (désactivé si RGPD non coché) */}
       <div className="flex gap-4 mt-2">
         <Button label="Annuler" variant="secondary" onClick={onClose} />
         <Button label="Envoyer mon témoignage →" variant="primary" type="submit" disabled={!form.rgpd} />

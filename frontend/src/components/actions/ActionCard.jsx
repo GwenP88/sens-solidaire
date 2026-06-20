@@ -1,4 +1,6 @@
 // ActionCard.jsx
+
+// ── Composants UI
 import Badge from '../ui/BadgeODD'
 import Button from '../ui/Button'
 import { IconPin } from '../../utils/icons'

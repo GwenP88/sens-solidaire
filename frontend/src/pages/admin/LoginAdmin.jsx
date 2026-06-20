@@ -1,6 +1,7 @@
 // LoginAdmin.jsx
 // Page de connexion admin — split layout : image gauche, formulaire droite, sans Navbar ni Footer
 
+// ── React
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 

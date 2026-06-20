@@ -1,11 +1,15 @@
 // ContactForm.jsx
-// Formulaire de contact — composant réutilisable
+// Formulaire de contact — prénom, nom, email, sujet, message, RGPD
 
+// ── React
 import { useState } from 'react'
+
+// ── Composants UI
 import Button from '../ui/Button'
 
 function ContactForm() {
 
+  // ── État local — champs du formulaire
   const [form, setForm] = useState({
     prenom: '',
     nom: '',
@@ -15,13 +19,16 @@ function ContactForm() {
     rgpd: false,
   })
 
+  // ── État d'envoi — null | loading | success | error
   const [status, setStatus] = useState(null)
 
+  // ── Mise à jour d'un champ — gère texte et checkbox
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
   }
 
+  // ── Soumission du formulaire — envoi vers l'API contact
   const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus('loading')
@@ -39,8 +46,10 @@ function ContactForm() {
     }
   }
 
+  // ── Classe CSS commune pour tous les champs
   const inputClass = "font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-3 bg-surface focus:outline-none focus:border-primary w-full"
 
+  // ── Message de succès après envoi
   if (status === 'success') return (
     <div className="bg-accent-2/10 rounded-xl p-8 text-center">
       <p className="font-heading font-bold text-primary text-lg mb-2">Message envoyé ✓</p>
@@ -54,7 +63,7 @@ function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-      {/* Prénom + Nom */}
+      {/* Champs prénom + nom côte à côte */}
       <div className="flex gap-4">
         <div className="flex flex-col gap-1 flex-1">
           <label className="font-body text-xs font-bold text-primary/60">Prénom *</label>
@@ -66,13 +75,13 @@ function ContactForm() {
         </div>
       </div>
 
-      {/* Email */}
+      {/* Champ email */}
       <div className="flex flex-col gap-1">
         <label className="font-body text-xs font-bold text-primary/60">Email *</label>
         <input name="email" type="email" value={form.email} onChange={handleChange} required className={inputClass} />
       </div>
 
-      {/* Sujet */}
+      {/* Menu déroulant sujet */}
       <div className="flex flex-col gap-1">
         <label className="font-body text-xs font-bold text-primary/60">Sujet *</label>
         <select name="sujet" value={form.sujet} onChange={handleChange} required className={inputClass}>
@@ -87,13 +96,13 @@ function ContactForm() {
         </select>
       </div>
 
-      {/* Message */}
+      {/* Zone de message libre */}
       <div className="flex flex-col gap-1">
         <label className="font-body text-xs font-bold text-primary/60">Message *</label>
         <textarea name="message" value={form.message} onChange={handleChange} required rows={6} className={`${inputClass} resize-none`} />
       </div>
 
-      {/* RGPD */}
+      {/* Case à cocher RGPD — obligatoire */}
       <label className="flex items-start gap-3 cursor-pointer">
         <input
           name="rgpd"
@@ -108,12 +117,12 @@ function ContactForm() {
         </span>
       </label>
 
-      {/* Erreur */}
+      {/* Message d'erreur si l'envoi échoue */}
       {status === 'error' && (
         <p className="font-body text-sm text-accent">Une erreur est survenue. Veuillez réessayer.</p>
       )}
 
-      {/* Submit */}
+      {/* Bouton de soumission — désactivé si RGPD non coché ou envoi en cours */}
       <Button
         label={status === 'loading' ? 'Envoi en cours...' : 'Envoyer le message →'}
         variant="primary"

@@ -1,14 +1,29 @@
 // TeamMemberCardSmall.jsx
+// Card membre équipe compacte — conseil d'administration et "également à nos côtés"
+// Props :
+//   nom    : nom complet du membre
+//   role   : intitulé du poste
+//   avatar : URL de la photo (avatar neutre par défaut)
+//   bg     : classe Tailwind de fond — "bg-surface-mid" (défaut) | "bg-surface"
+
 function TeamMemberCardSmall({ nom, role, avatar, bg = 'bg-surface-mid' }) {
   return (
+    // ── Card centrée — avatar rond + nom + rôle
     <div className={`flex flex-col items-center gap-3 ${bg} rounded-2xl p-4 text-center`}>
+
+      {/* Photo du membre — avatar neutre si absente */}
       <img
         src={avatar || '/avatar-women.png'}
         alt={nom}
         className="w-16 h-16 rounded-full object-cover"
       />
+
+      {/* Nom */}
       <p className="font-heading font-bold text-primary text-sm">{nom}</p>
+
+      {/* Rôle */}
       <p className="font-body text-xs text-primary/60 leading-relaxed">{role}</p>
+
     </div>
   )
 }

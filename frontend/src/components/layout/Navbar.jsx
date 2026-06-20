@@ -1,8 +1,12 @@
 // Navbar.jsx
 // Barre de navigation principale — transparente sur le Hero
+
+// ── React
 import { useState, useRef } from 'react'
-import Button from '../ui/Button'
 import { useLocation } from 'react-router-dom'
+
+// ── Composants UI
+import Button from '../ui/Button'
 import { GrHomeRounded } from "react-icons/gr"
 import { IoChevronDownSharp } from "react-icons/io5"
 

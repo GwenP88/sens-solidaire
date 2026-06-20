@@ -1,5 +1,7 @@
 // MissionCard.jsx
 // Carte mission — image immersive, badge, titre, description, durée, CTA
+
+// ── Composants UI
 import Button from '../ui/Button'
 import { IconClock } from '../../utils/icons'
 

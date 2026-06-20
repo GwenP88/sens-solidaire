@@ -1,11 +1,17 @@
 // FilterSelect.jsx
-// Groupe de filtres par menus déroulants — réutilisable
+// Groupe de filtres par menus déroulants — réutilisable sur plusieurs pages
+// Props :
+//   filters  : [{ key, placeholder, options: [{ value, label }], condition? }]
+//   values   : objet des valeurs actives { [key]: value }
+//   onChange : fonction appelée avec (key, value) au changement
 
 function FilterSelect({ filters, values, onChange }) {
   return (
+    // ── Conteneur flex — un select par filtre
     <div className="flex gap-6">
-      {filters.map((filter) => {
-        // Filtre conditionnel — n'affiche pas si la condition n'est pas remplie
+      {filters.map(filter => {
+
+        // ── Filtre conditionnel — masqué si la condition n'est pas remplie
         if (filter.condition && !filter.condition(values)) return null
 
         return (
@@ -15,7 +21,10 @@ function FilterSelect({ filters, values, onChange }) {
             onChange={e => onChange(filter.key, e.target.value || null)}
             className="font-body text-sm text-primary bg-surface border border-surface-dark rounded-xl px-4 py-1 cursor-pointer"
           >
+            {/* Option par défaut — remet le filtre à null */}
             <option value="">{filter.placeholder}</option>
+
+            {/* Options disponibles */}
             {filter.options.map(opt => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}

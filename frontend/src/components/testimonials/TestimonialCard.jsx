@@ -1,5 +1,7 @@
 // TestimonialCard.jsx
 // Carte témoignage — citation, auteur, mission, avatar
+
+// ── React
 import { VscQuote } from "react-icons/vsc"
 
 function TestimonialCard({ quote, name, mission, avatar = '/placeholder-testimonials.png' }) {

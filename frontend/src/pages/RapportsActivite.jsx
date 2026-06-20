@@ -32,7 +32,7 @@ function RapportsActivite() {
         {/* ── Titre de page ── */}
         <div className="flex flex-col gap-2">
           <h1 className="font-heading font-bold text-primary text-4xl">Rapports d'activité</h1>
-          <p className="font-body text-sm text-primary/60">Retrouvez l'ensemble de nos rapports d'activité annuels, téléchargeables librement.</p>
+          <p className="font-body text-sm text-primary/60">Retrouvez l'ensemble de nos rapports d'activité annuels, consultables librement.</p>
         </div>
 
         {/* ── Grille des rapports — 3 colonnes ── */}
@@ -58,7 +58,7 @@ function RapportsActivite() {
               <div className="flex flex-col items-center gap-2 p-4">
                 <p className="font-heading font-bold text-primary text-lg">{r.annee}</p>
                 <p className="font-body text-xs text-primary/60">Rapport d'activité</p>
-                <p className="font-body text-xs text-accent group-hover:underline">Télécharger ↓</p>
+                <p className="font-body text-xs text-accent group-hover:underline">Consulter ↓</p>
               </div>
             </a>
           ))}

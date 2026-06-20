@@ -1,6 +1,7 @@
 // Hero.jsx
 // Section Hero — image immersive pleine largeur avec titre, accroche et CTA
 
+// ── Composants UI
 import Button from '../ui/Button'
 
 function Hero() {
