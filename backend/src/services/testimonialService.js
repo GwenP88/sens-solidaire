@@ -38,3 +38,41 @@ export const findAllForAdmin = async (filters = {}) => {
 
   return testimonials
 }
+
+// ── UPDATE STATUS (ADMIN) ─────────────────────────────────────────────────────
+// Change le statut d'un témoignage : modération approve / reject.
+// Fonction générique : le STATUT est décidé par le controller (valeur en dur),
+// JAMAIS par le client.
+// Règle métier : un témoignage REFUSÉ ne peut pas rester sur la homepage
+//                → on force show_homepage = false dans ce cas.
+// Paramètres : id (number), status (string déjà figé : "approved" | "rejected")
+// Retourne   : le témoignage mis à jour
+// Throw      : 404 si l'id n'existe pas
+export const updateStatus = async (id, status) => {
+  try {
+    // On part du changement de statut...
+    const data = { status }
+
+    // ...et si on refuse, on retire d'office le témoignage de la homepage.
+    // (cohérence : impossible qu'un témoignage "rejected" reste affiché).
+    if (status === "rejected") {
+      data.show_homepage = false
+    }
+
+    const testimonial = await prisma.testimonial.update({
+      where: { id },   // on cible par l'id (stable)
+      data,            // { status } ou { status, show_homepage: false }
+    })
+    return testimonial
+
+  } catch (error) {
+    // P2025 = "record to update not found" → l'id n'existe pas
+    if (error.code === "P2025") {
+      const err = new Error("Témoignage introuvable")
+      err.status = 404
+      err.code = "TESTIMONIAL_NOT_FOUND"   // clé stable pour le front
+      throw err
+    }
+    throw error
+  }
+}
