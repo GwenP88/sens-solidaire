@@ -11,7 +11,7 @@ function ActionCard({ title, description, tags, slug, country, image, odds }) {
 
       {/* Zone image */}
       <div className="relative w-1/3 shrink-0">
-        <img src={image} alt={title} className="w-full h-full object-cover" />
+        <img src={image || '/images/placeholders/placeholder-action-1.png'}  alt={title} className="w-full h-full object-cover" />
         <div className="absolute top-4 left-4 flex gap-4">
           {odds.map(n => <Badge key={n} number={n} />)}
         </div>

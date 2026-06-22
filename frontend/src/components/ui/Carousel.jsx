@@ -54,7 +54,7 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
         {items.map((item, i) => (
           // ── Clé prioritaire : slug > id > index
           <SwiperSlide key={item.slug ?? item.id ?? i}>
-            {renderSlide(item)}
+            {renderSlide(item, i)}
           </SwiperSlide>
         ))}
       </Swiper>

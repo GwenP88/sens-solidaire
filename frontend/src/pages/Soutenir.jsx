@@ -35,7 +35,7 @@ function Soutenir() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero_missions.jpg"
+        image="/images/hero/hero-home.jpg"
         title="Soutenir Sens Solidaire"
         subtitle="Chaque geste compte pour construire un monde plus juste et plus durable."
       />
@@ -50,7 +50,7 @@ function Soutenir() {
           {/* Photo illustration don */}
           <div className="w-2/5 shrink-0">
             <img
-              src="/images/jardin_potager_kenya.jpg"
+              src="/images/actions-terrain/jardin-potager-kenya.jpg"
               alt="Faire un don"
               className="w-full h-80 object-cover rounded-2xl"
             />
@@ -140,7 +140,7 @@ function Soutenir() {
           {/* Photo illustration adhésion */}
           <div className="w-2/5 shrink-0">
             <img
-              src="/images/groupe-jeune-2.jpg"
+              src="/images/missions/groupe-jeune-2.jpg"
               alt="Adhérer à l'association"
               className="w-full h-80 object-cover rounded-2xl"
             />
@@ -183,7 +183,7 @@ function Soutenir() {
           {/* Image rapport */}
           <div className="w-2/5 shrink-0">
             <img
-              src="/images/rapport-activite.png"
+              src="/images/equipe-et-rapports-activites/rapport-activite.png"
               alt="Rapport d'activité"
               className="w-full h-64 object-cover rounded-2xl"
             />

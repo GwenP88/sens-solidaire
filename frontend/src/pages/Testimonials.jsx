@@ -80,7 +80,7 @@ function Testimonials() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/groupe-jeune-2.jpg"
+        image="/images/missions/groupe-jeune-2.jpg"
         title="Paroles de volontaires"
         subtitle="Ils sont partis, ils ont vécu l'aventure. Découvrez leurs récits et rapports de mission."
       />

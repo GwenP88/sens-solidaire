@@ -15,7 +15,7 @@ function LocationCard({ slug, name, image_url }) {
         {/* Image du lieu — zoom au survol */}
         <div className="h-40 overflow-hidden">
           <img
-            src={image_url || '/images/placeholder.jpg'}
+            src={image_url || '/images/placeholders/placeholder-action-1.png'}
             alt={name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />

@@ -15,6 +15,9 @@ import FilterChips from '../components/navigation/FilterChips'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
+// ── Composants métier
+import EducationCard from '../components/education/EducationCard'
+
 // ── Utils
 import { FILTERS_EDUCATION_PUBLIC } from '../utils/filters'
 
@@ -48,20 +51,12 @@ function ActionsEducatives() {
     ? items.filter(item => item.public.split(',').includes(activeFilter))
     : items
 
-  // ── Helper — traduit les codes public en labels lisibles
-  const formatPublic = (pub) => pub.split(',').map(p => {
-    if (p === 'primaire') return 'Maternelle & Primaire'
-    if (p === 'college_lycee') return 'Collège & Lycée'
-    if (p === 'adultes') return 'Adultes & Étudiants'
-    return p
-  }).join(' · ')
-
   return (
     <div className="bg-surface min-h-screen">
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero_missions.jpg"
+        image="/images/hero/hero-education.jpg"
         title="Éducation & Sensibilisation"
         subtitle="Nous intervenons dans les écoles, collèges et lycées pour sensibiliser les jeunes à la biodiversité et au développement durable."
       />
@@ -85,56 +80,7 @@ function ActionsEducatives() {
         ) : (
           <div className="grid grid-cols-3 gap-6">
             {filteredItems.map(item => (
-              <article key={item.slug} className="flex flex-col bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-
-                {/* Image de couverture */}
-                <div className="w-full h-48 overflow-hidden">
-                  <img
-                    src={item.image_url || '/images/hero_missions.jpg'}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Contenu de la card */}
-                <div className="flex flex-col gap-3 p-6 flex-1">
-
-                  {/* Type et public cible */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-body text-xs font-bold text-accent-2">{item.type}</span>
-                    <span className="font-body text-xs text-primary/30">—</span>
-                    <span className="font-body text-xs text-primary/50">{formatPublic(item.public)}</span>
-                  </div>
-
-                  {/* Titre */}
-                  <h3 className="font-heading font-bold text-primary text-base leading-snug">{item.title}</h3>
-
-                  {/* Description courte */}
-                  <p className="font-body text-sm text-primary/60 leading-relaxed flex-1">{item.description}</p>
-
-                  {/* CTA — PDF externe ou page détail interne */}
-                  <div className="mt-2">
-                    {item.external_url ? (
-                      <a
-                        href={item.external_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-body text-sm font-bold text-accent hover:text-accent/80 transition-colors"
-                      >
-                        Découvrir l'atelier →
-                      </a>
-                    ) : (
-                      <a
-                        href={`/actions-educatives/${item.slug}`}
-                        className="font-body text-sm font-bold text-accent hover:text-accent/80 transition-colors"
-                      >
-                        En savoir plus →
-                      </a>
-                    )}
-                  </div>
-
-                </div>
-              </article>
+              <EducationCard key={item.slug} item={item} />
             ))}
           </div>
         )}

@@ -50,7 +50,7 @@ function APropos() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero_missions.jpg"
+        image="/images/hero/hero-home.jpg"
         title="À propos de Sens Solidaire"
         subtitle="Voyager, rencontrer, partager et agir pour un monde plus solidaire."
       />
@@ -75,7 +75,7 @@ function APropos() {
           </div>
           <div className="w-2/5 shrink-0">
             <img
-              src="/images/groupe-jeune-2.jpg"
+              src="/images/missions/groupe-jeune-2.jpg"
               alt="Sens Solidaire sur le terrain"
               className="w-full h-96 object-cover rounded-2xl"
             />
@@ -149,7 +149,7 @@ function APropos() {
           </div>
           <div className="w-2/5 shrink-0">
             <img
-              src="/images/rapport-activite.png"
+              src="/images/equipe-et-rapports-activites/rapport-activite.png"
               alt="Rapport d'activité"
               className="w-full h-64 object-cover rounded-2xl"
             />

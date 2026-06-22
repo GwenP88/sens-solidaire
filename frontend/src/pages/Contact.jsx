@@ -16,7 +16,7 @@ function Contact() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/contact-hero.png"
+        image="/images/hero/contact-hero.png"
         title="Parlons de votre projet"
         subtitle="Une équipe à votre écoute pour vous accompagner dans votre projet."
       />
@@ -56,7 +56,7 @@ function Contact() {
           {/* Photo gauche — 1/3 */}
           <div className="w-1/3 shrink-0">
             <img
-              src="/images/contact.jpg"
+              src="/images/contact/contact.jpg"
               alt="Équipe Sens Solidaire"
               className="w-full h-full object-cover rounded-2xl"
             />

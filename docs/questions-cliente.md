@@ -13,6 +13,7 @@
 | D3 | **Logos partenaires** | Fournir les 18 logos en SVG ou PNG fond transparent. Les centraliser ou les garder par page d'action ? | |
 | D4 | **Photos missions** | Fournir des photos libres de droits pour chaque mission. Format recommandé : paysage, sujet centré, lumière naturelle | |
 | D5 | **Droits à l'image** | Confirmer que les autorisations sont en ordre pour toutes les photos utilisées sur le site actuel (*) | |
+| D6 | **Image** | Avez-vous un dossier Google Drive ou autre avec vos photos originales (terrain, équipe, lieux) en haute qualité ? Les images compressées du site actuel ne sont pas optimales pour la refonte. | |
 
 (*) Toute personne reconnaissable peut exiger le retrait et des dommages et intérêts. Le photographe peut poursuivre pour utilisation non autorisée.
 

@@ -23,7 +23,7 @@ function MediaCard({ title, content, theme, date, image_url, slug, external_url 
       {/* Image */}
       <div className="w-full h-48 overflow-hidden">
         <img
-          src={image_url || '/images/hero_missions.jpg'}
+          src={image_url || '/images/hero/hero-missions.jpg'}
           alt={title}
           className="w-full h-full object-cover"
         />

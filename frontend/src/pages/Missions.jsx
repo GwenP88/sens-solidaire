@@ -93,7 +93,7 @@ function Missions() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero_missions.jpg"
+        image="/images/hero/hero-missions.jpg"
         title="Nos missions"
         subtitle="Agissez concrètement pour la protection de la biodiversité et le soutien des communautés locales."
       />
@@ -115,7 +115,7 @@ function Missions() {
             title="Partir en mission"
             audience="Pour les volontaires individuels"
             description="Agissez concrètement pour la protection de la biodiversité et le soutien des communautés locales."
-            image="/images/one-line-1.png"
+            image="/images/ui/one-line-1.png"
           />
 
           {/* Texte d'introduction */}
@@ -163,7 +163,7 @@ function Missions() {
             title="Effectuer un service civique"
             audience="Pour les 16 à 25 ans"
             description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
-            image="/images/one-line-2.png"
+            image="/images/ui/one-line-2.png"
           />
 
           {/* Texte + icônes clés + CTAs + image */}
@@ -211,7 +211,7 @@ function Missions() {
 
             {/* Image service civique */}
             <div className="w-2/5 shrink-0">
-              <img src="/images/service_civique.jpg" alt="Service civique" className="w-full h-72 object-cover rounded-xl" />
+              <img src="/images/missions/service-civique.jpg" alt="Service civique" className="w-full h-72 object-cover rounded-xl" />
             </div>
           </div>
 
@@ -305,9 +305,9 @@ function Missions() {
             </p>
             <Carousel
               items={[
-                { slug: "lumo-kenya", name: "Sanctuaire LUMO", image_url: "/images/locations/LUMO-kenya.jpeg" },
-                { slug: "ttnp-kenya", name: "Taita Taveta National Polytechnic", image_url: "/images/locations/TTNP-kenya.jpeg" },
-                { slug: "agada-senegal", name: "ONG AGADA", image_url: "/images/locations/AGADA-senegal.jpg" },
+                { slug: "lumo-kenya", name: "Sanctuaire LUMO", image_url: "/images/lieux-missions/lumo-kenya.jpeg" },
+                { slug: "ttnp-kenya", name: "Taita Taveta National Polytechnic", image_url: "/images/lieux-missions/ttnp-kenya.jpeg" },
+                { slug: "agada-senegal", name: "ONG AGADA", image_url: "/images/lieux-missions/agada-senegal.jpg" },
               ]}
               slidesPerView={3}
               spaceBetween={24}
@@ -326,7 +326,7 @@ function Missions() {
             title="Partir en groupe"
             audience="Pour les lycées, MJC et structures de jeunesse"
             description="Organisez une mission solidaire au Kenya ou au Sénégal et faites vivre à votre groupe une expérience éducative et interculturelle unique."
-            image="/images/one-line-3.png"
+            image="/images/ui/one-line-3.png"
           />
 
           {/* 3 colonnes — texte + PDFs + contact */}
@@ -394,7 +394,7 @@ function Missions() {
             title="S'engager en entreprise"
             audience="Pour les salariés et les entreprises"
             description="Mettez vos compétences au service de projets solidaires tout en conciliant engagement citoyen et vie professionnelle."
-            image="/images/one-line-4.png"
+            image="/images/ui/one-line-4.png"
           />
 
           {/* 2 colonnes — texte + contact */}

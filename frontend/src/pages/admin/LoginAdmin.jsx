@@ -53,7 +53,7 @@ function LoginAdmin() {
 
       {/* Côté gauche — image immersive avec overlay */}
       <div className="relative w-1/2 hidden lg:block">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(/images/hero_home.jpg)` }}></div>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(/images/hero/hero-home.jpg)` }}></div>
         <div className="absolute inset-0 bg-black/50"></div>
       </div>
 

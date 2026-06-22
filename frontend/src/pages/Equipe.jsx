@@ -41,7 +41,7 @@ function Equipe() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero_missions.jpg"
+        image="/images/hero/hero-missions.jpg"
         title="Notre équipe"
         subtitle="Des femmes et des hommes engagés, en France et à l'international, pour un monde plus juste et la protection de la biodiversité."
       />

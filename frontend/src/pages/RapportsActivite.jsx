@@ -48,7 +48,7 @@ function RapportsActivite() {
               {/* Image de couverture du rapport */}
               <div className="w-full h-40 overflow-hidden">
                 <img
-                  src="/images/rapport-activite.png"
+                  src="/images/equipe-et-rapports-activites/rapport-activite.png"
                   alt={`Rapport d'activité ${r.annee}`}
                   className="w-full h-full object-cover"
                 />

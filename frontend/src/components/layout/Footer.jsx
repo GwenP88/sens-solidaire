@@ -11,7 +11,7 @@ function Footer({ hideCta = false }) {
 
       {/* Zone 1 — CTA immersif — masqué si hideCta */}
       {!hideCta && (
-        <div className="relative w-full h-96 flex items-end p-16" style={{ backgroundImage: `url(/images/hero_footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="relative w-full h-96 flex items-end p-16" style={{ backgroundImage: `url(/images/hero/hero-footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="relative flex flex-col gap-4">
@@ -39,7 +39,7 @@ function Footer({ hideCta = false }) {
         {/* Col 1 — Logo + Tagline + Réseaux */}
         <div className="flex flex-col gap-4 w-72">
           <div className="bg-white/40 rounded-full p-1 w-fit">
-            <img src="/Logo.png" alt="Sens Solidaire" className="h-12" />
+            <img src="/logo.png" alt="Sens Solidaire" className="h-12" />
           </div>
           <p className="font-body text-surface text-sm">
             Une association engagée pour un monde plus solidaire et durable.

@@ -196,7 +196,7 @@ function MissionDetail() {
               </p>
             </div>
             <div className="w-1/4 shrink-0">
-              <img src="/images/one-line-3.png" alt="" aria-hidden="true" className="w-full object-contain max-h-40" />
+              <img src="/images/ui/one-line-3.png" alt="" aria-hidden="true" className="w-full object-contain max-h-40" />
             </div>
           </div>
           <Carousel
@@ -471,19 +471,24 @@ function MissionDetail() {
       <section id="galerie" className="section-padding bg-surface-mid">
         <h2 className="section-title text-primary mb-4">Plongez dans l'aventure</h2>
         <p className="font-body text-sm text-primary/60 mb-8">
-          Explorez la mission à travers les images de nos volontaires et découvrez l'environnement, les projets et les expériences qui vous attendent sur le terrain.
+          Explorez la mission à travers les images de nos volontaires et découvrez
+          l'environnement, les projets et les expériences qui vous attendent sur le terrain.
         </p>
+
         {/* TODO V2 — remplacer par GET /api/media?entity_type=mission&entity_id=:id&file_type=image */}
         <Carousel
-          items={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+          items={[1, 2, 3, 4]}
           slidesPerView={3}
           spaceBetween={16}
           showPagination={true}
           color="primary"
-          renderSlide={() => (
-            <div className="w-full h-56 bg-surface rounded-xl flex items-center justify-center">
-              <p className="font-body text-xs text-primary/40 italic">Photo à venir</p>
-            </div>
+          renderSlide={(_, i) => (
+            <img
+              src={`/images/placeholders/placeholder-galerie-${i + 1}.png`}
+              alt=""
+              aria-hidden="true"
+              className="w-full h-56 object-cover rounded-xl"
+            />
           )}
         />
       </section>

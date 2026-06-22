@@ -55,7 +55,7 @@ function NotreImpact() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero_missions.jpg"
+        image="/images/hero/hero-missions.jpg"
         title="Notre impact"
         subtitle="Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable."
       />

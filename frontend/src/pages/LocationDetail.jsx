@@ -52,7 +52,7 @@ function LocationDetail() {
 
       {/* ── Hero immersif — nom du lieu ── */}
       <HeroPage
-        image={location.image_url || '/images/hero_missions.jpg'}
+        image={location.image_url || '/images/hero/hero-missions.jpg'}
         title={location.name}
       />
 
@@ -105,7 +105,7 @@ function LocationDetail() {
               {/* Image principale — galerie ou image de couverture */}
               <div className="w-full overflow-hidden rounded-2xl">
                 <img
-                  src={mainImage?.file_url || location.image_url || '/images/hero_missions.jpg'}
+                  src={mainImage?.file_url || location.image_url || '/images/hero/hero-missions.jpg'}
                   alt={location.name}
                   className="w-full h-56 object-cover"
                 />

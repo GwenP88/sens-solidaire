@@ -51,7 +51,7 @@ function MediaEtActualites() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero_missions.jpg"
+        image="/images/hero/hero-home.jpg"
         title="Médias & Actualités"
         subtitle="Restez informés des dernières nouvelles de l'association, de nos missions et de nos actions sur le terrain."
       />

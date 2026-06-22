@@ -41,7 +41,7 @@ function Navbar() {
       {/* Logo */}
       <a href="/">
         <div className="bg-white/40 rounded-full p-1">
-          <img src="/Logo.png" alt="Sens Solidaire" className="h-14" />
+          <img src="/logo.png" alt="Sens Solidaire" className="h-14" />
         </div>
       </a>
 

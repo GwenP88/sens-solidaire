@@ -79,7 +79,7 @@ function MediaDetail() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image={post.image_url || '/images/hero_missions.jpg'}
+        image={post.image_url || '/images/hero/hero-missions.jpg'}
         title={post.title}
       />
 

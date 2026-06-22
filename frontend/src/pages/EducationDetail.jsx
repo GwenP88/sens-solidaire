@@ -76,7 +76,7 @@ function EducationDetail() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image={item.image_url || '/images/hero_missions.jpg'}
+        image={item.image_url || '/images/hero/hero-missions.jpg'}
         title={item.title}
       />
 
