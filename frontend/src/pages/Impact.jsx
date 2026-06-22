@@ -75,6 +75,8 @@ function NotreImpact() {
           <option value="Sri Lanka">Sri Lanka</option>
           <option value="Pérou">Pérou</option>
           <option value="Sumatra">Sumatra</option>
+          <option value="France">France</option>
+          <option value="Côte d'Ivoire">Côte d'Ivoire</option>
         </select>
 
         {/* Chips de filtrage par thème */}

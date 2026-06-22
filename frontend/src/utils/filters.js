@@ -33,7 +33,6 @@ export const FILTERS_ACTION_TAGS = [
   { label: "Éducation", value: "Éducation" },
   { label: "Échanges culturels", value: "Échanges culturels" },
   { label: "Accès à l'eau", value: "Accès à l'eau" },
-  { label: "Sensibilisation", value: "Sensibilisation" },
 ]
 
 export const FILTERS_MEDIA_THEME = [

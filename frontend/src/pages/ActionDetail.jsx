@@ -64,15 +64,6 @@ function ActionDetail() {
             ← Retour aux actions
           </a>
 
-          {/* Tags thématiques */}
-          <div className="flex gap-3 flex-wrap">
-            {action.tags.map(t => (
-              <span key={t.tag} className="font-body text-xs text-primary/70 border border-primary/20 rounded-full px-3 py-1">
-                {t.tag}
-              </span>
-            ))}
-          </div>
-
           {/* Description courte — affichée en H2 pleine largeur */}
           <h2 className="section-title text-primary">{action.description}</h2>
 
@@ -88,25 +79,10 @@ function ActionDetail() {
                   {para}
                 </p>
               ))}
-
-              {/* CTA pays — lien vers toutes les actions du même pays */}
-              <div className="flex items-center justify-center gap-8 mt-4">
-                <p className="font-heading font-bold text-primary flex items-center gap-2 shrink-0">
-                  <IconPin className="text-accent-2" /> {action.country}
-                </p>
-                <a href={`/notre-impact?pays=${action.country}`}>
-                  <Button label={`Voir toutes les actions au ${action.country} →`} variant="secondary" />
-                </a>
-              </div>
             </div>
 
             {/* Colonne sidebar — 1/3 */}
             <div className="w-1/3 shrink-0 flex flex-col gap-6">
-
-              {/* Image principale de l'action */}
-              <div className="w-full h-56 overflow-hidden rounded-2xl">
-                <img src={action.image_url} alt={action.title} className="w-full h-full object-cover" />
-              </div>
 
               {/* Bloc ODD — icônes officielles ONU + labels français */}
               <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-3">

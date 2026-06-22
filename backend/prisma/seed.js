@@ -630,7 +630,7 @@ const seed = async () => {
       content: `Afin de soutenir les communautés locales tout en préservant les richesses naturelles de leur territoire, nous avons accompagné le développement d'une fabrique de papier recyclé à partir de bouse d'éléphant. La fabrication de ce papier artisanal est entièrement naturelle. Elle repose sur des méthodes de production à faible impact environnemental, utilisant notamment l'énergie du soleil et du vent. Le processus de fabrication débute par le nettoyage des fibres contenues dans les déjections d'éléphants. Celles-ci sont ensuite bouillies pendant plusieurs heures pour être stérilisées et assouplies avant d'être transformées en pâte à papier.
       En choisissant ces créations, chacun contribue à soutenir les populations engagées dans la protection de leur environnement et à la préservation des éléphants et des forêts.`,
       country: 'Kenya',
-      image_url: null,
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
       tags: ['Environnement', 'Biodiversité'],
       odds: [8, 12, 15],
       gallery: GALLERY_PLACEHOLDERS,
@@ -675,7 +675,7 @@ const seed = async () => {
       description: 'Échanges entre écoles de la Métropole de Nice et des établissements de Casamance sur le thème de la consommation responsable.',
       content: `En parallèle des projets de jardins potagers, les élèves de France et du Sénégal ont pu se rencontrer et échanger grâce au don d'un ordinateur portable au collège de Ziguinchor. Les élèves ont ainsi pu discuter de leurs cultures, habitudes scolaires, alimentaires, musicales, sportives, de leurs traditions et de production et consommation responsable. Une correspondance épistolaire a également été réalisée entre les élèves de Nice et de Ziguinchor dans le but de promouvoir la solidarité internationale.`,
       country: 'Sénégal / France',
-      image_url: null,
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
       tags: ['Éducation', 'Échanges culturels'],
       odds: [4, 10, 17],
       gallery: GALLERY_PLACEHOLDERS,
@@ -686,7 +686,7 @@ const seed = async () => {
       description: 'Suite à la rencontre avec le Chef Raoni, mise en place d\'une correspondance entre des écoles françaises et le peuple Kukama kukamiria.',
       content: `Notre organisation a reçu les 5ᵉ trophées de l'Environnement de la ville de Nice par le Cacique Raoni Metuktire, Chef du peuple Kayapo (Brésil) le 6 juin 2014. Lors de cet échange, nous avons promis au Grand Chef Raoni de présenter la culture du peuple Kayapo aux scolaires français et de mettre en place une correspondance avec une école d'Amazonie. Nous avons choisi le thème "Un jardin au cœur de la forêt". Dans la forêt tropicale vivent les Indiens qui savent tirer parti de leur environnement sans le détruire.`,
       country: 'Pérou',
-      image_url: null,
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
       tags: ['Éducation', 'Échanges culturels'],
       odds: [4, 10, 15],
       gallery: GALLERY_PLACEHOLDERS,
@@ -697,7 +697,7 @@ const seed = async () => {
       description: 'Financement de forages dans les écoles du Sri Lanka pour garantir un accès durable à l\'eau potable.',
       content: `Nous finançons des forages dans les écoles du Sri Lanka pour garantir un accès durable à l'eau potable aux élèves et aux communautés locales. Ce projet contribue directement à l'amélioration des conditions de vie et de scolarisation des enfants, tout en renforçant la résilience des communautés face aux enjeux climatiques.`,
       country: 'Sri Lanka',
-      image_url: null,
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
       tags: ['Accès à l\'eau', 'Éducation'],
       odds: [3, 6, 4],
       gallery: GALLERY_PLACEHOLDERS,
@@ -711,6 +711,330 @@ const seed = async () => {
       image_url: '/images/actions-terrain/fabrique-eco-maximus-sri-lanka.jpg',
       tags: ['Environnement', 'Biodiversité'],
       odds: [8, 12, 15],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    // ── Nouvelles actions Kenya ────────────────────────────────
+
+    {
+      slug: 'fresque-camp-rangers-lumo',
+      title: 'Réalisation d\'une fresque au camp des rangers',
+      description: 'Les lycéens de l\'école Steiner ont embelli le camp de base des rangers de LUMO par la réalisation d\'une fresque mettant en avant les animaux emblématiques du sanctuaire.',
+      content: `Les élèves ont mis à contribution leur talent artistique afin d'embellir le camp de base des rangers et des volontaires à LUMO Conservancy par la réalisation d'une fresque mettant en avant des animaux emblématiques du sanctuaire.
+
+    La fresque permet également de sensibiliser le public à la diversité de la faune locale et à l'importance de sa préservation. Elle a immédiatement attiré l'attention des visiteurs et des résidents locaux.
+
+    Au total 7 demi-journées de travail ! Les élèves Steiner ont également pris de nouveau leurs pinceaux au CIT afin d'embellir la salle de français.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Environnement', 'Biodiversité', 'Groupe jeunes'],
+      odds: [15, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'rehabilitation-camp-base-lumo',
+      title: 'Réhabilitation du camp de base — mobilier de récupération',
+      description: 'Les lycéens de l\'école Steiner ont construit une table avec du matériel de récupération pour créer un espace convivial pour les rangers et les volontaires.',
+      content: `Les élèves ont construit une table avec du matériel de récupération trouvé sur le camp de base : quelques rondins de bois éparpillés, un peu de fil de fer, et quelques heures de travail pour rendre plus confortable la vie au camp.
+
+    Cette table servira aux volontaires et aux rangers pour créer un espace convivial pour les repas en plein air. Un beau travail d'équipe qui illustre parfaitement les valeurs de débrouillardise et de solidarité de nos missions.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Environnement', 'Groupe jeunes'],
+      odds: [15, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'peinture-signaletique-lumo',
+      title: 'Peinture de la signalétique du sanctuaire LUMO',
+      description: 'Sur deux demi-journées, les élèves et les rangers ont rafraîchi la signalétique de l\'entrée du sanctuaire, améliorant l\'accueil des visiteurs.',
+      content: `Sur deux demi-journées, les élèves et les rangers ont donné un coup de frais à la signalétique de l'entrée du sanctuaire, améliorant ainsi l'accueil des visiteurs et en évitant qu'ils ne s'aventurent dans des zones sensibles.
+
+    La signalétique repeinte donne une image positive du sanctuaire, reflétant son engagement envers la qualité et la sécurité. Un projet concret à fort impact visuel, réalisé en collaboration directe avec les équipes locales.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Environnement', 'Groupe jeunes'],
+      odds: [15, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'renovation-route-lumo',
+      title: 'Rénovation de la route du sanctuaire LUMO',
+      description: 'Pendant trois jours, les lycéens de l\'école Steiner ont rénové 2 km de route en terre pour faciliter les déplacements des habitants et des visiteurs.',
+      content: `En discutant avec les rangers, l'équipe du LUMO mentionna la nécessité de réparer la route en terre depuis la "main gate" jusqu'à la route goudronnée, sur 2 km. Lorsqu'il pleut, cette route est très glissante et presque impraticable.
+
+    Pendant trois jours sur des créneaux de 2h30, le groupe s'est armé d'outils pour remplir des remorques entières de terre afin de l'étaler sur la route, comblant les nids de poule et remettant la surface à niveau.
+
+    Ce projet illustre comment la force collective des jeunes peut avoir un impact direct et durable sur les conditions de vie des communautés locales.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Environnement', 'Groupe jeunes'],
+      odds: [11, 15, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'sentier-botanique-lumo',
+      title: 'Création d\'un sentier botanique au sanctuaire LUMO',
+      description: '44 espèces de plantes identifiées, 80 recettes créées — les lycéens ont conçu un sentier botanique pour enrichir la connaissance de la biodiversité locale.',
+      content: `Les élèves ont accompagné un de nos volontaires ethnobotaniste français afin de créer un sentier botanique pour le sanctuaire. Sur place, les rangers spécialistes de la flore, le groupe d'élèves et notre volontaire ont identifié 44 espèces de plantes et créé 80 recettes à partir de celles-ci.
+
+    Le projet visait à enrichir la connaissance de la biodiversité locale et à faire découvrir la flore autant que la faune aux visiteurs. Des pancartes réalisées par les élèves répertorient les plantes identifiées et fournissent des informations éducatives sur les espèces.
+
+    Une seconde mission est prévue pour poursuivre les recherches et renforcer l'impact positif sur la biodiversité locale.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Biodiversité', 'Éducation', 'Groupe jeunes'],
+      odds: [4, 15, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'distribution-fournitures-scolaires-kenya',
+      title: 'Distribution de fournitures scolaires dans les écoles primaires',
+      description: 'Les lycéens de l\'école Steiner ont distribué des fournitures scolaires dans les écoles primaires du Kenya et échangé avec les élèves locaux.',
+      content: `Le groupe est intervenu deux après-midis dans les écoles primaires du Kenya pour réaliser le projet de correspondance entre les écoliers français et kényans et faire don de fournitures scolaires.
+
+    Ces échanges ont permis aux enfants de découvrir à travers les lettres reçues et la rencontre avec les lycéens d'autres traditions et modes de vie, développant la tolérance et l'ouverture d'esprit.
+
+    Les échanges permettent également aux élèves de discuter des impacts locaux du changement climatique et de partager des idées et des solutions en mettant la coopération internationale au cœur du défi.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Éducation', 'Échanges culturels', 'Groupe jeunes'],
+      odds: [4, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'reboisement-ttnp-kenya',
+      title: 'Action de reboisement au TTNP — 186 arbres plantés',
+      description: 'Lors de la journée nationale du "Tree Planting Day", les lycéens ont planté plus de 186 arbres au TTNP aux côtés des étudiants kényans.',
+      content: `Grâce à l'aide de notre volontaire ethnobotaniste et des rangers, les élèves ont planté 70 arbres à LUMO dont des Neem, Flamboyants, Jacarandas, Lauriers roses, Acacias niloticas et Cassia siema.
+
+    Au TTNP, lors de la journée nationale du "Tree Planting Day", les élèves ont planté plus de 186 arbres, dont East Africa Yellow Wood, Sycamore Fig, Brachylaena huillensis, Croton megalicarpus et African Cherry.
+
+    Ce reboisement contribue directement à la restauration des écosystèmes locaux et à la lutte contre la sécheresse qui frappe sévèrement la région.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Environnement', 'Biodiversité', 'Groupe jeunes'],
+      odds: [13, 15, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'construction-serre-ttnp',
+      title: 'Construction d\'une serre en bouteilles plastiques recyclées',
+      description: 'Les lycéens et les étudiants du TTNP ont construit ensemble une serre avec des bouteilles en plastique ramassées et nettoyées par une association locale.',
+      content: `Pendant trois matinées, les élèves et les étudiants du TTNP ont construit une serre avec des bouteilles en plastique ramassées et nettoyées par une association locale.
+
+    La construction de cette serre sensibilise la communauté aux problèmes environnementaux liés aux déchets plastiques et à l'importance du recyclage, une problématique importante dans la région dont le TTNP se saisit ces dernières années.
+
+    Ce projet présente de nombreux intérêts : réduction des déchets plastiques, promotion de l'agriculture durable et engagement communautaire. La serre servira au stockage des plans de pépinières de l'établissement dans l'attente de leur plantation.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Environnement', 'Agriculture', 'Groupe jeunes'],
+      odds: [12, 13, 15, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'ferme-agro-ecologique-ttnp',
+      title: 'Développement d\'une ferme agro-écologique au TTNP',
+      description: 'En collaboration avec les étudiants kényans du Biodiversity Club, lancement d\'un projet de ferme agro-écologique sur 3 hectares au sein du campus universitaire.',
+      content: `En collaboration avec les étudiants kényans du "Biodiversity Club", les prémices d'un projet de ferme agro-écologique ont été lancées. Fort de son expérience et de ses compétences, nos volontaires ont contribué à la mise en place de ce projet ambitieux visant à cultiver des fruits et légumes sur une parcelle de 3 hectares au sein du campus universitaire.
+
+    Le projet se déroule en trois étapes : la première, déjà commencée par les élèves Steiner, couvre un demi-hectare. La deuxième étape verra une extension d'un hectare, suivie d'un agrandissement de 1,5 hectare pour atteindre la taille finale de 3 hectares.
+
+    Un lombricompost sera installé pour produire un engrais naturel, garantissant l'utilisation exclusive de procédés naturels. L'élevage de poules et poulets sera également intégré à la parcelle pour compléter l'écosystème agro-écologique.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Agriculture', 'Environnement', 'Groupe jeunes'],
+      odds: [2, 13, 15, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'correspondances-scolaires-france-kenya',
+      title: 'Correspondances scolaires France — Kenya',
+      description: 'Échanges épistolaires et rencontres interculturelles entre des écoles primaires françaises et kényanes sur les thèmes de la biodiversité et du développement durable.',
+      content: `Depuis plusieurs années, Sens Solidaire organise des correspondances entre des écoles primaires françaises et kényanes. Ces échanges permettent aux enfants de découvrir d'autres traditions et modes de vie, développant la tolérance et l'ouverture d'esprit.
+
+    Les élèves échangent sur leurs cultures, habitudes scolaires, alimentaires, musicales et sportives, mais aussi sur les impacts locaux du changement climatique et les solutions possibles à leur échelle.
+
+    Le partenariat avec le TTNP a également permis de lancer des visioconférences entre étudiants français et kényans en tourisme, avec des échanges sur la biodiversité, la cuisine traditionnelle et la culture de chaque pays.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Éducation', 'Échanges culturels'],
+      odds: [4, 10, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'partenariat-etudiants-ttnp',
+      title: 'Partenariat étudiants français — TTNP (tourisme durable)',
+      description: 'Dans le cadre du dispositif ISI du FONJEP, mise en lien d\'étudiants en tourisme avec leurs homologues kényans du TTNP de Voi via visioconférences et voyages.',
+      content: `Dans le cadre du dispositif Initiative pour la Solidarité Internationale (ISI) du FONJEP, Sens Solidaire travaille à la mise en place d'un projet de mobilité internationale en partenariat avec le ministère des affaires étrangères et l'ambassade de France à Nairobi.
+
+    Ce projet met en lien des étudiants dans le secteur du tourisme avec leurs homologues kényans du Taita Taveta National Polytechnic (TTNP) de Voi. Débuté en janvier 2023 par des échanges interculturels par visioconférence, il porte sur la solidarité internationale, l'interculturalité, la culture et le patrimoine naturel de chaque pays.
+
+    Les étudiants travaillent ensemble à un projet mêlant tourisme et protection de la biodiversité, dans l'objectif de promouvoir le sanctuaire de LUMO et d'y développer un tourisme durable, apportant ainsi les fonds nécessaires aux rangers pour la sauvegarde du sanctuaire.`,
+      country: 'Kenya',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Éducation', 'Échanges culturels'],
+      odds: [4, 8, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    // ── Nouvelles actions Sénégal ──────────────────────────────
+
+    {
+      slug: 'reboisement-mangrove-senegal',
+      title: 'Reboisement de la mangrove en Casamance',
+      description: 'Chaque saison des pluies, Sens Solidaire et AGADA s\'engagent dans des campagnes de reboisement de la mangrove pour protéger les côtes et préserver la biodiversité.',
+      content: `La mangrove joue un rôle clé dans la protection des côtes. Elle agit comme un rempart naturel contre la montée des eaux, offre un habitat à une grande diversité d'espèces, limite l'érosion côtière et la salinisation des sols. Sa préservation est donc essentielle.
+
+    Depuis plusieurs années, Sens Solidaire et AGADA s'engagent chaque saison des pluies dans des campagnes de reboisement. Ce processus est relativement simple : il suffit de planter des propagules, les graines rigides et allongées du palétuvier.
+
+    Une sensibilisation accrue de la population est également indispensable. La mangrove est souvent détruite pour la production de bois de chauffe ou la fabrication de meubles. Il est crucial de réguler ces pratiques en limitant la coupe aux arbres âgés et en mettant en place des solutions durables alternatives. Les élèves du CEM Kénia participent activement au reboisement dans le village de Niambalang.`,
+      country: 'Sénégal',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Environnement', 'Biodiversité'],
+      odds: [13, 14, 15],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'filtres-eau-ecole-djibelor',
+      title: 'Installation de filtres à eau — école Djibélor',
+      description: 'Installation de kits de filtration dans l\'école Djibélor de Ziguinchor pour garantir un accès à l\'eau potable à 1 700 élèves.',
+      content: `Au Sénégal, seulement 40% des écoles environ ont accès à l'eau potable. L'école Djibélor est un établissement qui accueille 1 700 élèves de niveau maternelle et primaire. Les enfants en bas âge représentent l'une des populations les plus fragiles et sensibles aux maladies liées à l'eau.
+
+    L'installation de filtres à eau permet aux enfants mais aussi au personnel de boire en toute sécurité l'eau de l'école. Les kits ORISA, fournis par Fonte de Vivo, sont très faciles à installer et purifient l'eau grâce à une série de filtres.
+
+    L'acquisition de ces kits permet à l'école de Djibélor de prévenir les maladies transmises par l'eau pour l'ensemble des personnes présentes dans l'établissement.`,
+      country: 'Sénégal',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Accès à l\'eau', 'Éducation'],
+      odds: [3, 4, 6],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'refection-puits-cem-kenia',
+      title: 'Réfection du puits et forage électrique — CEM Kénia',
+      description: 'Curage du puits, installation d\'un forage électrique et d\'une cuve de 1000L pour améliorer l\'accès à l\'eau de 2 000 élèves au CEM Kénia de Ziguinchor.',
+      content: `Le CEM Kénia est un collège d'enseignement moyen situé à Ziguinchor en Casamance. Cet établissement accueille environ 2 000 élèves et ne possédait que trois robinets à débit très faible, quasi inexistant à partir de midi, ainsi qu'un puits hors d'usage.
+
+    Dans le cadre du projet CONCERTO 3, plusieurs actions ont été menées : curage du puits pour augmenter la profondeur et toucher la nappe, mise en place d'un forage électrique pour pomper l'eau, et installation d'une cuve de 1000L pour réguler le débit de sortie.
+
+    Ces travaux ont permis de faciliter l'accès à l'eau des élèves pendant la période la plus chaude de l'année, améliorant directement les conditions de scolarisation et de santé de l'ensemble de la communauté scolaire.`,
+      country: 'Sénégal',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Accès à l\'eau', 'Éducation'],
+      odds: [3, 4, 6],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'digue-ile-efrane',
+      title: 'Construction d\'une digue sur l\'île d\'Éfrane',
+      description: 'Face à la montée des eaux due au dérèglement climatique, construction d\'une digue sur l\'île d\'Éfrane avec reboisement de cocotiers et de mangroves.',
+      content: `Sur l'île d'Éfrane, le dérèglement climatique et la montée des eaux mettent en danger ce campement villageois. Avec notre partenaire sur place Mamadou Ndiaye, une digue a été mise en place, accompagnée d'un reboisement de cocotiers et de mangroves.
+
+    La réhabilitation des maisons sur pilotis est également primordiale : ce système de "maisons hors d'eau" permet, en cas d'inondation, de protéger les habitants. Ce projet permet également de créer de l'emploi pour les jeunes du village.
+
+    La MJC AGORA de Nice Est a organisé un voyage solidaire au Sénégal et les jeunes ont apporté leur main d'œuvre nécessaire à ce projet. À venir : installation d'épis maltais Savard pour lutter contre l'érosion du littoral de la Casamance.`,
+      country: 'Sénégal',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Environnement', 'Accès à l\'eau'],
+      odds: [11, 13, 14, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'projet-concerto-eau-senegal',
+      title: 'Projet CONCERTO 3 — Eau et solidarité internationale',
+      description: 'Projet de sensibilisation à la préservation de l\'eau entre trois établissements niçois et des écoles de Casamance, avec animations pédagogiques et échanges interculturels.',
+      content: `Dans le cadre du projet CONCERTO 3, trois établissements niçois — le collège Raoul Dufy, le collège Roland Garros et le lycée les Palmiers — ont travaillé sur la préservation de la ressource en eau à travers différentes thématiques : pollution des eaux marines, risques naturels, et accès à l'eau et assainissement.
+
+    Des animations pédagogiques ont été organisées : jeu "Habiter la terre en 2030" au lycée les Palmiers, jeu de rôle "Gare à l'eau !" au collège Raoul Dufy, et "Ma bouteille d'eau est vide" au collège Roland Garros. Des professionnels de la Régie Eau d'Azur et un hydrogéologue sont intervenus auprès des élèves.
+
+    En parallèle, des actions concrètes ont été menées au Sénégal : installation de filtres à eau à l'école Djibélor et réfection du puits du CEM Kénia. Les élèves des deux pays ont pu échanger sur les différences d'accès à l'eau dans leurs pays respectifs.`,
+      country: 'Sénégal / France',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Accès à l\'eau', 'Éducation', 'Échanges culturels'],
+      odds: [3, 4, 6, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'exposition-casamance-annemasse',
+      title: 'Exposition "De la Haute-Savoie à la Casamance"',
+      description: 'Exposition itinérante présentant le travail de 60 éco-délégués sur la montée des eaux et le changement climatique, ayant sensibilisé 3 400 élèves.',
+      content: `Dans le cadre du programme Éco-École, les éco-délégués du collège Michel Servet d'Annemasse ont travaillé sur la fonte des glaces et la montée des eaux. Ils ont réalisé des exposés et une exposition sur le sujet afin de sensibiliser leurs camarades à ces thématiques.
+
+    Les éco-délégués se sont rendus à la Mer de Glace de Chamonix et ont constaté les conséquences du réchauffement climatique sur le glacier. En parallèle, les élèves de Ziguinchor ont mis en place un jardin potager et participé à la replantation de la mangrove avec AGADA.
+
+    L'exposition a fait le tour de la ville : collège Michel Servet, mairie d'Annemasse, Cité de la solidarité internationale et bibliothèque de la ville. Au total, 3 400 élèves ont été sensibilisés au développement durable par les divers projets menés sur l'année scolaire 2021-2022.`,
+      country: 'Sénégal / France',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Éducation', 'Échanges culturels', 'Environnement'],
+      odds: [4, 13, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    // ── Sri Lanka ──────────────────────────────────────────────
+
+    {
+      slug: 'barrieres-vegetales-sri-lanka',
+      title: 'Barrières végétales — réduction des conflits Hommes/Éléphants',
+      description: 'Mise en place de barrières végétales dans la région d\'Habarana pour protéger les cultures des fermiers des incursions d\'éléphants sauvages.',
+      content: `Dans la région d'Habarana, les villages sont situés entre quatre parcs nationaux, entièrement entourés par la jungle, en plein milieu d'un corridor de migration des éléphants. Les éléphants sauvages traversent la région à la recherche de nourriture et d'eau, détruisant en quelques heures les seuls moyens de subsistance des fermiers démunis.
+
+    Pour répondre à cette problématique, nous avons mis en place des barrières végétales permettant aux familles cultivatrices d'obtenir un meilleur rendement tout en préservant la cohabitation avec les éléphants sauvages.
+
+    Cette approche naturelle et non invasive protège à la fois les moyens de subsistance des communautés locales et les corridors de migration essentiels à la survie des éléphants d'Asie.`,
+      country: 'Sri Lanka',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Biodiversité', 'Agriculture'],
+      odds: [1, 2, 15],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    // ── France / Côte d'Ivoire ─────────────────────────────────
+
+    {
+      slug: 'nettoyage-plages-nice-abidjan',
+      title: 'Nettoyage des plages Nice & lagune d\'Abidjan',
+      description: 'Dans le cadre du jumelage Nice-Abidjan, les élèves ont nettoyé le front de mer niçois et la lagune Ébrié d\'Abidjan pour sensibiliser à la pollution des littoraux.',
+      content: `Dans le cadre du jumelage entre Nice et Abidjan, les élèves de primaires de Nice et de l'Institut International George Aristide (IIGA) ont mené un projet commun sur l'ODD 11 "Villes et communautés durables" en mettant l'accent sur la pollution des littoraux.
+
+    En France, les élèves ont participé au nettoyage du front de mer niçois, avec un atelier de tri sélectif et une sensibilisation à la pollution aux mégots et ses conséquences pour les écosystèmes. À Abidjan, le nettoyage de la lagune Ébrié dans le village de Niangon-Lokoua a permis d'aménager une aire de jeux pour les enfants.
+
+    Ce nettoyage effectué en février 2024 a permis d'éduquer au développement durable à travers des animations sur les ODD, en particulier à la protection de la biodiversité (ODD 14) et à l'importance d'un environnement sain (ODD 11). L'objectif a également été d'impliquer les riverains à adopter un comportement responsable.`,
+      country: 'France / Côte d\'Ivoire',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Environnement', 'Éducation', 'Échanges culturels'],
+      odds: [4, 11, 14, 17],
+      gallery: GALLERY_PLACEHOLDERS,
+    },
+
+    {
+      slug: 'correspondances-nice-abidjan',
+      title: 'Correspondances scolaires Nice — Abidjan',
+      description: 'Dans le cadre du jumelage Nice-Abidjan, échanges épistolaires entre élèves de primaire sur les thèmes de la santé par le sport et la pollution des littoraux.',
+      content: `Dans le cadre du jumelage entre Nice et Abidjan, les élèves de primaires de Nice et de l'Institut International George Aristide (IIGA) ont débuté leur projet par une correspondance écrite apportée directement d'Abidjan par Gisèle Folarin, directrice de l'IIGA, avec le soutien de la ville de Nice.
+
+    Dans leurs lettres, les élèves ont abordé le sujet des sources de pollution dans la ville de Nice et de la Mer Méditerranée, ainsi que des actions éco-responsables qu'ils réalisent au quotidien : usage des transports doux, ramassage et tri des déchets.
+
+    Ces échanges ont permis aux enfants de découvrir d'autres cultures et traditions, de partager leurs expériences autour du thème de la santé par le sport et l'environnement propre, et de développer leur sens de la solidarité internationale.`,
+      country: 'France / Côte d\'Ivoire',
+      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      tags: ['Éducation', 'Échanges culturels'],
+      odds: [4, 11, 17],
       gallery: GALLERY_PLACEHOLDERS,
     },
   ]
