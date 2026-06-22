@@ -5,7 +5,7 @@
 // Ne contient AUCUNE logique métier — tout est délégué à testimonialService.js
 
 // Import des fonctions du service témoignages
-import { findAllForAdmin } from "../services/testimonialService.js"
+import { findAllForAdmin, updateStatus } from "../services/testimonialService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // Whitelist des statuts autorisés — mêmes valeurs que la doc BDD.
@@ -52,6 +52,44 @@ export const getTestimonials = async (req, res, next) => {
       success: true,
       testimonials,
     })
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ── APPROVE TESTIMONIAL (ADMIN) ───────────────────────────────────────────────
+// PATCH /api/admin/testimonials/:id/approve
+// Statut "approved" codé EN DUR → le client ne décide jamais de la valeur.
+export const approveTestimonial = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    const testimonial = await updateStatus(id, "approved")
+
+    return res.status(200).json({ success: true, testimonial })
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ── REJECT TESTIMONIAL (ADMIN) ────────────────────────────────────────────────
+// PATCH /api/admin/testimonials/:id/reject
+// Statut "rejected" en dur (+ le service retire le homepage).
+export const rejectTestimonial = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    const testimonial = await updateStatus(id, "rejected")
+
+    return res.status(200).json({ success: true, testimonial })
 
   } catch (error) {
     next(error)
