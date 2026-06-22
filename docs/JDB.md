@@ -1080,3 +1080,66 @@ pour consulter et vérifier les données.
 - `GET /api/admin/missions` (l'admin doit voir TOUTES les missions, actives + inactives, pour les rééditer/réactiver).
 - CRUD admin témoignages (avec gestion RGPD du droit à l'oubli).
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
+
+## Jour 14 · 22 juin 2026
+### S4 — Modération des témoignages (back) : lecture + approve / reject
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| `GET /api/admin/testimonials` (+ filtre `?status=`) | ✅ Écrit + testé (200 / 400 / 401) |
+| `PATCH /api/admin/testimonials/:id/approve` | ✅ Écrit + testé (200 / 404 / 400) |
+| `PATCH /api/admin/testimonials/:id/reject` | ✅ Écrit + testé (200 / 404 / 400) |
+| Règle métier RGPD : refus → `show_homepage = false` | ✅ Implémentée + vérifiée |
+| Routeur témoignages monté derrière `authMiddleware` | ✅ (porte gardée en amont) |
+| Branchement dans `app.js` (`/api/admin/testimonials`) | ✅ |
+| Runbook de tests Postman autonome | ✅ Créé |
+| Test 401 (sans token) sur route de modération | ⏳ À reconfirmer |
+
+#### Ce qui a été fait
+
+**Backend — Alison**
+
+**Lecture admin des témoignages**
+- `findAllForAdmin` (service) + `getTestimonials` (controller) : renvoie **tous** les statuts (l'admin doit voir pending/approved/rejected pour modérer), filtre `?status=` optionnel validé contre une **whitelist** (`pending` / `approved` / `rejected`), `include` de la mission (`id` + `title` uniquement), tri `created_at asc` (file FIFO).
+
+**Modération (approve / reject)**
+- `updateStatus(id, status)` (service) : fonction **générique** unique pour les deux actions ; catch du `P2025` → 404 `TESTIMONIAL_NOT_FOUND` (même pattern que `missionService`). Règle métier : si `status === "rejected"`, force `show_homepage = false`.
+- `approveTestimonial` / `rejectTestimonial` (controller) : statut codé **EN DUR** (`"approved"` / `"rejected"`) — le client choisit la route, jamais la valeur. `req.body` n'est jamais lu. Validation d'id reprise de `updateMission` (`Number.isInteger`).
+- Routeur `adminTestimonialRoutes.js` séparé (un fichier par ressource), `router.use(authMiddleware)`.
+
+#### Erreurs rencontrées & solutions
+
+| Erreur | Cause | Solution |
+|---|---|---|
+| `socket hang up` (Postman) | Serveur crashé au démarrage → rien n'écoute sur 3000 | Lire `docker-compose logs backend` en premier |
+| `does not provide an export named 'approveTestimonial'` | Fonctions non collées dans le controller **+** import au pluriel (`approveTestimonialS`) dans le routeur | Coller les fonctions + aligner les noms au caractère près (singulier) |
+| `Cannot GET /.../approve` (404) | Mauvais **verbe HTTP** dans Postman (GET au lieu de PATCH) | Lire le verbe dans le message d'erreur, le corriger |
+| `updateStatus is not defined` (500) | Import du service incomplet dans le controller | Ajouter `updateStatus` à l'import |
+
+#### Notes & observations
+- Réflexe consolidé : `X is not defined` = import oublié **ou** faute de frappe sur le nom ; `Cannot GET/POST` = vérifier le **verbe** ou l'**URL** avant de douter du code.
+- La file `?status=pending` qui se vide après un approve est la **preuve** que l'écriture en base a bien eu lieu (et non un simple succès de façade).
+- Un témoignage peut avoir `mission_id = null` (cas valide) → `mission` revient `null` ; à gérer au front (« Mission non précisée »).
+
+#### Décisions techniques
+- **Statut en dur** côté controller (vs `req.body.status`) : verrouille la valeur, empêche l'injection d'un statut arbitraire en base.
+- **`consent_given` jamais modifié** lors d'une modération : c'est le consentement RGPD de la personne, pas une décision admin.
+- **`updateStatus` générique** (DRY) plutôt que deux fonctions de service dupliquées.
+- **Catch `P2025`** plutôt que `findUnique` préalable : une seule requête, pas de race condition (cohérent avec `softDelete` des missions).
+- **Un fichier de routes par ressource** (`adminTestimonialRoutes` distinct de `adminMissionRoutes`).
+
+#### Dette technique notée (à traiter plus tard)
+- `authMiddleware` ne vérifie toujours pas `role === 'admin'` (OK en admin-only, à durcir → 403 si d'autres rôles arrivent).
+- `schema.prisma` : `type @default("faune_sauvage")` périmé → migration.
+- `VALID_TYPES` à confirmer avec la cliente.
+- Tests Jest + Supertest (témoignages compris) : setup ESM + vraie DB encore à faire.
+
+#### Prochaines étapes
+- `GET /api/admin/missions` (lister toutes les missions, actives + inactives, pour la table du dashboard).
+- `POST /api/testimonials` **public** (formulaire visiteur) : création en `pending`, refus 400 si `consent_given` absent/false (RGPD).
+- **Front du dashboard** minimaliste (route protégée, layout, page modération, page missions) — **à coordonner avec Gwen** (branche `dev-front`).
+- Reconfirmer le test 401 sur une route de modération ; re-seed avant démo (état propre).
+
+*Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
