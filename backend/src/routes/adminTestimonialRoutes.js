@@ -8,7 +8,7 @@
 import { Router } from "express"
 import authMiddleware from "../middlewares/authMiddleware.js"
 
-import { getTestimonials } from "../controllers/testimonialController.js"
+import { getTestimonials, approveTestimonial, rejectTestimonial, } from "../controllers/testimonialController.js"
 
 const router = Router()
 
@@ -22,8 +22,10 @@ router.use(authMiddleware)
 // Retourne la liste des témoignages (tous statuts, ou filtrés).
 router.get("/", getTestimonials)
 
-// 👉 Les routes de modération viendront ICI à la prochaine étape :
-//    router.patch("/:id/approve", approveTestimonial)
-//    router.patch("/:id/reject",  rejectTestimonial)
+// PATCH /api/admin/testimonials/:id/approve  → passe le statut à "approved"
+router.patch("/:id/approve", approveTestimonial)
+
+// PATCH /api/admin/testimonials/:id/reject   → passe le statut à "rejected" (+ retire homepage)
+router.patch("/:id/reject", rejectTestimonial)
 
 export default router
