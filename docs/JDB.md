@@ -1356,4 +1356,59 @@ pour consulter et vérifier les données.
 
 ---
 
+## Jour 14 · 22 juin 2026
+### S5 — Réorganisation images + Seed complet + Refacto page Missions
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Réorganisation dossiers `/public/images/` | ✅ Terminé |
+| Mise à jour chemins images JSX + seed | ✅ Terminé |
+| Seed — 20 nouvelles actions terrain | ✅ Terminé |
+| Seed — galeries placeholders sur toutes les entités | ✅ Terminé |
+| `EducationCard.jsx` — nouveau composant | ✅ Terminé |
+| Page Missions — 4 nouveaux composants | ✅ Terminé |
+| Bloc orientation "Quelle mission est faite pour moi ?" | ✅ Terminé |
+| Filtres pays France + Côte d'Ivoire sur `/notre-impact` | ✅ Terminé |
+| Suppression image sidebar `ActionDetail.jsx` | ✅ Terminé |
+| Uniformisation messages d'erreur `api.js` | ✅ Terminé |
+
+---
+
+#### Ce qui a été fait
+
+**Réorganisation images**
+- 10 dossiers thématiques créés dans `/public/images/` — tous les fichiers renommés en kebab-case minuscules et déplacés
+- Chemins mis à jour dans tous les JSX via `sed` en une seule passe
+- Nouveaux placeholders : `placeholder-galerie-1/2/3/4`, `placeholder-photo`, `placeholder-newsletter`
+
+**Seed**
+- Constante `GALLERY_PLACEHOLDERS` centralisée — utilisée sur toutes les entités
+- 20 nouvelles actions terrain ajoutées (Kenya, Sénégal, Sri Lanka, France/Côte d'Ivoire) avec tag `Groupe jeunes` sur les actions lycée Steiner
+- Tous les chemins images, avatars et logos corrigés vers la nouvelle structure
+
+**Composants**
+- `EducationCard.jsx` — logique PDF vs page détail centralisée (`isPdf = external_url && !content`)
+- `MissionInfoBar.jsx`, `MissionCTA.jsx`, `MissionSteps.jsx`, `MissionSection.jsx` — refacto complète de la page Missions, structure identique pour les 4 types
+- Bloc orientation "Quelle mission est faite pour moi ?" ajouté entre hero et filtres
+- 2 nouvelles icônes : `IconBuilding` + `IconHand`
+
+**Corrections**
+- `Carousel.jsx` — `renderSlide(item, i)` — index passé pour les rendus dynamiques
+- `ActionDetail.jsx` — image sidebar supprimée (déjà dans le hero)
+- `api.js` — messages d'erreur uniformisés sur toutes les fonctions
+
+---
+
+#### À faire — S5
+
+| Tâche | Priorité |
+|---|---|
+| SEO basique — meta, title, Open Graph | 🔴 Mardi |
+| Responsive mobile-first 375px / 768px | 🔴 Mercredi→Jeudi |
+| Accessibilité basique — alt, labels, focus | 🔴 Vendredi |
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
