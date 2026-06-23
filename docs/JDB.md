@@ -1411,4 +1411,72 @@ pour consulter et vérifier les données.
 
 ---
 
+## Jour 15 · 23 juin 2026
+### S5 — RDV cliente + Ajustements suite retours + Seed Côte d'Ivoire
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Mission Service Civique Côte d'Ivoire | ✅ Ajoutée au seed |
+| Carousel Service Civique — 3 missions | ✅ Kenya + Sénégal + Côte d'Ivoire |
+| Ligne ODD sur la section Actions Home | ✅ Ajoutée — icônes officielles ONU |
+| Filtres pays France + Côte d'Ivoire `/notre-impact` | ✅ Fonctionnels |
+| RDV cliente | ✅ Effectué |
+
+---
+
+#### Ce qui a été fait
+
+**Seed**
+- Ajout mission `service-civique-cote-d-ivoire` — Côte d'Ivoire, actions pollution plastique + EDD
+- Filtre `missionServiceCivique` ajouté dans `Missions.jsx`
+- Carousel Service Civique branché sur les missions BDD (3 missions)
+
+**Home — section Actions terrain**
+- Ligne ODD ajoutée entre le paragraphe d'intro et la grille des ActionCards
+- 17 icônes officielles ONU réparties sur toute la largeur (`justify-between`)
+
+---
+
+#### Retours cliente — à traiter
+
+| Tâche | Priorité |
+|---|---|
+| Congé solidaire — ajouter Sumatra comme destination | 🔴 |
+| Modifier photo section congé solidaire (voir screen shot) | 🔴 |
+| Bilan logos partenaires — envoyer screen à la cliente | 🔴 |
+| Revoir tous les "Sens Solidaires" avec S majuscule partout | 🔴 |
+| Revoir tous les liens HelloAsso | 🔴 |
+| Voir pour les termes d'engagement via HelloAsso ou apparition sur le site | 🟠 |
+| API Google Maps à intégrer | 🟠 |
+| Ajout accréditations ONU / UICN / ODD sur la page À propos | 🟠 |
+| Willy Rovelli — voir pour récupèrer son post à mettre sur le site? | 🟠 |
+| Voir partie éducation sensibilisation en Suisse + bureau Suisse vs France | 🟠 |
+| Ajouter les steps dans les fiches missions détail | 🟠 |
+| Accès cliente au site avant déploiement ?? | 🟠 |
+| Revoir tous les textes/contenus de toutes les pages | 🔴 |
+| Faire comparatif api english pour la version bilingue | 🔴 |
+
+---
+
+#### À faire — fin S5
+
+| Tâche | Priorité | Jour |
+|---|---|---|
+| SEO basique — meta, title, Open Graph par page | 🔴 | Mardi |
+| Responsive mobile-first 375px / 768px | 🔴 | Mercredi→Jeudi |
+| Accessibilité basique — alt, labels, focus visible | 🔴 | Vendredi |
+| Dashboard Alison — sidebar + CRUD + modération + Multer | 🔴 | Semaine |
+
+---
+
+#### Notes & observations
+- La cliente souhaite accéder au site avant le déploiement — prévoir une solution (ngrok, tunnel, ou déploiement staging)
+- "Sens Solidaires" avec S majuscule à vérifier sur toutes les pages via grep
+- Tous les liens HelloAsso pointent vers une URL générique — à mettre à jour par mission
+- Les contenus textes sont encore largement provisoires : tout relirer — prévoir une session de relecture complète avec la cliente (prévue la semaine du 29/06)
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
