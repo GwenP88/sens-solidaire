@@ -12,7 +12,7 @@ function Hero() {
       <div className="relative px-16 pb-24 flex flex-col gap-6">
         {/* Surtitre */}
         <p className="font-body font-bold text-surface text-lg uppercase tracking-widest">
-          Sens Solidaire
+          Sens Solidaires
         </p>
 
         {/* Titre */}
@@ -21,8 +21,8 @@ function Hero() {
         </h1>
 
         {/* Accroche */}
-        <p className="font-body font-semibold text-surface text-lg max-w-xl">
-          Sens Solidaire agit en France et à l'international pour l'éducation, l'environnement et la solidarité.
+        <p className="font-body font-semibold text-surface text-lg max-w-4xl">
+          Nous sommes une association d’intérêt général composée de professionnels qualifiés et diplomés qui agissent pour la préservation de l’environnement et le développement territorial à travers des actions de solidarité internationale.
         </p>
 
         {/* Boutons CTA */}

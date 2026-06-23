@@ -10,12 +10,11 @@
 |---|---|---|---|
 | D1 | **Logo navbar** | Fournir le logo en version blanche (SVG ou PNG fond transparent) pour la navbar transparente sur le Hero | |
 | D2 | **Badges types de mission** | Valider les couleurs des badges : Volontariat (vert), Service Civique (bleu #1D6FA4), Groupe jeune (marron), Congé solidaire (doré). Tu valides ? | |
-| D3 | **Logos partenaires** | Fournir les 18 logos en SVG ou PNG fond transparent. Les centraliser ou les garder par page d'action ? | |
+| D3 | **Logos partenaires** | Les centraliser ou les garder par page d'action ? | |
 | D4 | **Photos missions** | Fournir des photos libres de droits pour chaque mission. Format recommandé : paysage, sujet centré, lumière naturelle | |
-| D5 | **Droits à l'image** | Confirmer que les autorisations sont en ordre pour toutes les photos utilisées sur le site actuel (*) | |
-| D6 | **Image** | Avez-vous un dossier Google Drive ou autre avec vos photos originales (terrain, équipe, lieux) en haute qualité ? Les images compressées du site actuel ne sont pas optimales pour la refonte. | |
-
-(*) Toute personne reconnaissable peut exiger le retrait et des dommages et intérêts. Le photographe peut poursuivre pour utilisation non autorisée.
+| D5 | **Droits à l'image** | Confirmer que les autorisations sont en ordre pour toutes les photos utilisées sur le site actuel | |
+| D6 | **Contenu et médias** | accès administrateur WordPress temporaire pour qu'on puisse récupérer les médias et contenus existants | |
+| D7 | **Image** | Avez-vous un dossier Google Drive ou autre avec vos photos originales (terrain, équipe, lieux) en haute qualité ?  | |
 
 ---
 
@@ -28,8 +27,7 @@
 | C3 | **Service Civique** | La page officielle mentionne encore la Côte d'Ivoire. Est-ce d'actualité ? Faut-il l'intégrer ou le retirer ? | |
 | C4 | **Missions groupe jeunes** | Valider destinations et contenu. PDFs programme Kenya/Sénégal à fournir pour téléchargement | |
 | C5 | **Congé solidaire** | Le congé solidaire au Kenya/Sénégal suit-il la même organisation que les missions classiques, financée par l'employeur ? Y a-t-il un email dédié entreprises ? | |
-| C6 | **Textes définitifs** | Fournir les textes définitifs pour : Accueil, À propos, Missions, Contact | |
-| C7 | **Crop images galerie** | V1 : crop automatique au centre. V2 : outil recadrage dashboard. La V1 te convient pour le lancement ? | |
+| C6 | **Textes définitifs** | Quels textes définitifs pour les pages principales | |
 
 ---
 
@@ -61,7 +59,7 @@
 |---|---|---|---|
 | F1 | **Accès dashboard** | Qui crée et modifie les missions dans le dashboard ? Une seule personne ou plusieurs admins ? | |
 | F2 | **Langue du site** | Bilingue FR/EN pour le MVP ou uniquement français ? | |
-| F3 | **Notifications admin** | Souhaites-tu recevoir un email quand un témoignage est soumis ou un formulaire de contact rempli ? | |
+| F3 | **Notifications admin** | Souhaites-tu recevoir un email quand un témoignage est soumis ? | |
 | F4 | **Gestion partenaires** | Les logos partenaires doivent-ils être gérables depuis le dashboard ou contenu fixe ? | |
 | F5 | **Gestion médias** | Qui gère les médias dans le dashboard ? Quels types (photos, vidéos, PDFs) ? | |
 | F6 | **Photos libres de droits** | Avoir accès à des photos libres de droits pour le site (assez tôt car redimensionnement à faire) | |

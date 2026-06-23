@@ -21,7 +21,7 @@ function HeroPage({ image, title, subtitle, duration, price }) {
       <div className="relative flex flex-col gap-2">
         {/* Eyebrow */}
         <span className="font-body font-bold text-surface text-lg uppercase tracking-widest">
-          Sens Solidaire
+          Sens Solidaires
         </span>
         {/* Titre */}
         <h1 className="font-heading font-bold text-surface text-6xl max-w-3xl leading-tight">{title}</h1>

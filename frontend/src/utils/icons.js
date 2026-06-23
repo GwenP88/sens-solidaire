@@ -36,13 +36,13 @@ export const IconFacebook = FaFacebook
 export const IconTikTok = FaTiktok
 
 // Icônes Comment partir — page détail mission
-export const IconFlight = FaPlaneDeparture   // déjà importé
-export const IconContact = FaEnvelope        // déjà importé
-export const IconBooking = FaMapMarkerAlt    // réserver la mission
-export const IconPayment = FaCreditCard      // payer
-export const IconContract = FaFileContract  // signer la convention
-export const IconGuide = FaBook             // conseils pratiques
-export const IconFileMission = FaFileAlt    // fiche mission
+export const IconFlight = FaPlaneDeparture  
+export const IconContact = FaEnvelope        
+export const IconBooking = FaMapMarkerAlt 
+export const IconPayment = FaCreditCard 
+export const IconContract = FaFileContract 
+export const IconGuide = FaBook 
+export const IconFileMission = FaFileAlt 
 
 // Icônes soutenir
 export const IconLeaf = FaLeaf

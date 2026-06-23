@@ -7,25 +7,25 @@
 /* ── Design system — variables CSS globales ── */
 @theme {
 
-  /* Palette active — Vert forêt / Terracotta / Beige */
-  --color-primary:      #143601;  /* Vert forêt — fonds, navbar, boutons secondary */
-  --color-accent:       #a44a2f;  /* Terracotta — boutons primary, CTA */
-  --color-accent-2:     #2f8a3a;  /* Vert principal — accents, icônes, badges */
-  --color-dark:         #0A1F00;  /* Vert très foncé — hover, ombres */
-  --color-surface:      #f8f6f1;  /* Beige clair — fond principal */
-  --color-surface-mid:  #e8dfd1;  /* Beige moyen — fond sections alternées */
-  --color-surface-dark: #d9cbb8;  /* Beige foncé — bordures, séparateurs */
+  /* Palette active — Vert forêt / Terracotta / Beige 
+  --color-primary:      #143601;
+  --color-accent:       #a44a2f;  
+  --color-accent-2:     #2f8a3a; 
+  --color-dark:         #0A1F00; 
+  --color-surface:      #f8f6f1; 
+  --color-surface-mid:  #e8dfd1;  
+  --color-surface-dark: #d9cbb8;  */
 
-  /* Palette 2 — Bleu-vert / Doré (non active)
+  /* Palette 2 — Bleu-vert / Doré (non active) */ 
   --color-primary:      #2F5D62;
-  --color-accent:       #C49A48;
+  --color-accent:       #a44a2f;
   --color-accent-2:     #1F4D3A;
   --color-dark:         #0D2B30;
   --color-surface:      #f8f6f1;
   --color-surface-mid:  #e8dfd1;
-  --color-surface-dark: #d9cbb8; */
+  --color-surface-dark: #d9cbb8; 
 
-  /* Palette 3 — Bleu marine / Terracotta / Lagon (non active)
+  /* Palette 3 — Bleu marine / Terracotta / Lagon (non active) 
   --color-primary:      #1A3A4A;
   --color-accent:       #A44A2F;
   --color-accent-2:     #2E86AB;

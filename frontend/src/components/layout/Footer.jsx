@@ -97,7 +97,7 @@ function Footer({ hideCta = false }) {
           <div className="flex gap-3">
             <IconPin className="text-surface text-lg mt-1 shrink-0" />
             <p className="font-body text-surface/70 text-sm">
-              Maison des associations<br />3bis rue de Guigonis, 06300 Nice
+              Antenne en France - Maison des associations<br />3bis rue de Guigonis, 06300 Nice
             </p>
           </div>
           <div className="flex gap-3">
@@ -109,7 +109,7 @@ function Footer({ hideCta = false }) {
           <div className="flex gap-3">
             <IconPin className="text-surface text-lg mt-1 shrink-0" />
             <p className="font-body text-surface/70 text-sm">
-              Antenne Suisse<br />14 Chemin de la Rochette, 1202 Genève
+              Antenne en Suisse - Maison Internationale des associations<br />15 rue des Savoises, 1205 Genève
             </p>
           </div>
           <div className="flex gap-3">

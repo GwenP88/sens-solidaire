@@ -258,7 +258,25 @@ const seed = async () => {
     create: { slug: "service-civique-senegal", ...scSenegalData },
   })
 
-  // ── Mission 8 : Groupe jeunes ──────────────────────────────
+ // ── Mission 9 : Service civique Cote d'Ivoire ───────────────
+
+  const scCotedIvoireData = {
+    type: "service_civique",
+    title: "Service civique en Côte d'Ivoire",
+    country: "Côte d'Ivoire",
+    image_url: "/images/missions/service-civique-1.jpg",
+    short_description:
+      "À Abidjan, participation aux actions de lutte contre la pollution plastique, aux ateliers d'éducation au développement durable et au suivi des projets environnementaux menés avec les partenaires locaux.",
+    is_active: true,
+  }
+
+    const missionScCotedIvoire = await prisma.mission.upsert({
+    where: { slug: "service-civique-cote-d-ivoire" },
+    update: scCotedIvoireData,
+    create: { slug: "service-civique-cote-d-ivoire", ...scCotedIvoireData },
+  })
+
+  // ── Mission 9 : Groupe jeunes ──────────────────────────────
   const groupeJeunesData = {
     type: "groupe_jeunes",
     title: "Mission de groupe jeunes",
@@ -274,7 +292,7 @@ const seed = async () => {
     create: { slug: "groupe-jeunes", ...groupeJeunesData },
   })
 
-  // ── Mission 9 : Congé solidaire ────────────────────────────
+  // ── Mission 10 : Congé solidaire ────────────────────────────
   const congeSolidaireData = {
     type: "conge_solidaire",
     title: "Congé solidaire",
@@ -304,6 +322,7 @@ const seed = async () => {
     missionSumatra.id,
     missionScKenya.id,
     missionScSenegal.id,
+    missionScCotedIvoire.id,
     missionGroupeJeunes.id,
     missionCongeSolidaire.id
   ]
@@ -339,15 +358,16 @@ const seed = async () => {
       { mission_id: missionSumatra.id, duration_label: "3 semaines", price: 2000, display_order: 3 },
 
       // ── Service civique Kenya ──
-      { mission_id: missionScKenya.id, duration_label: "3 mois",  price: 0, display_order: 1 },
-      { mission_id: missionScKenya.id, duration_label: "12 mois", price: 0, display_order: 2 },
+      { mission_id: missionScKenya.id, duration_label: "3 à 12 mois",  price: 0, display_order: 1 },
 
       // ── Service civique Sénégal ──
-      { mission_id: missionScSenegal.id, duration_label: "3 mois",  price: 0, display_order: 1 },
-      { mission_id: missionScSenegal.id, duration_label: "12 mois", price: 0, display_order: 2 },
+      { mission_id: missionScSenegal.id, duration_label: "3 mois à 12 mois",  price: 0, display_order: 1 },
+
+      // ── Service civique Cote d'Ivoire ──
+      { mission_id: missionScCotedIvoire.id, duration_label: "3 mois à 12 mois",  price: 0, display_order: 1 },
 
       // ── Groupe jeunes ──
-      { mission_id: missionGroupeJeunes.id, duration_label: "10 jours", price: 0, display_order: 1 },
+      { mission_id: missionGroupeJeunes.id, duration_label: "10 jours à 3 semaines", price: 0, display_order: 1 },
 
       // ── Congé solidaire ──
       { mission_id: missionCongeSolidaire.id, duration_label: "10 jours à 4 semaines", price: 0, display_order: 1 },

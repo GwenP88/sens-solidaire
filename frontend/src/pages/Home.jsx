@@ -13,6 +13,7 @@ import StatsBar from '../components/layout/StatsBar'
 
 // ── Composants UI
 import Button from '../components/ui/Button'
+import { ODDS } from '../utils/odds'
 
 // ── Composants métier
 import MissionCard from '../components/missions/MissionCard'
@@ -24,16 +25,16 @@ const MISSION_TYPES = [
   {
     slug: 'volontariat-individuel',
     title: 'Partir en mission individuel',
-    description: 'Partez seul ou à deux et participez à des projets concrets de préservation de la biodiversité aux côtés des communautés locales et des acteurs de terrain.',
+    description: 'Partez seul, à deux ou à plusieurs et participez à des projets concrets de préservation de la biodiversité aux côtés des communautés locales et des acteurs de terrain.',
     image: '/images/hero/hero-missions.jpg',
     badge: 'Volontariat individuel',
-    duration: '2 à 4 semaines',
+    duration: '10 jours à 4 semaines',
     ctaLabel: 'Découvrir →',
     ctaUrl: '/missions?filter=individuel',
   },
   {
     slug: 'service-civique',
-    title: 'Effectuer un service civique',
+    title: 'Effectuer un service civique à l\'internationnal',
     description: 'Une expérience engagée pour les 16-25 ans qui permet de développer de nouvelles compétences tout en agissant pour l\'environnement et la solidarité internationale.',
     image: '/images/missions/service-civique.jpg',
     badge: 'Service civique',
@@ -43,21 +44,21 @@ const MISSION_TYPES = [
   },
   {
     slug: 'groupe-jeune',
-    title: 'Aventure Solidaire Jeunes',
-    description: 'Des séjours solidaires conçus pour les établissements scolaires, MJC et associations souhaitant vivre une aventure collective porteuse de sens.',
+    title: 'Rejoindre un chantier solidaire jeunes',
+    description: 'Des missions solidaires conçus pour les établissements scolaires, MJC et associations souhaitant vivre une aventure collective porteuse de sens.',
     image: '/images/missions/groupe-jeune-2.jpg',
     badge: 'Groupe jeunes',
-    duration: '10 jours',
+    duration: '10 jours à 3 semaines',
     ctaLabel: 'Découvrir →',
     ctaUrl: '/missions?filter=groupe_jeunes',
   },
   {
     slug: 'conge-solidaire',
-    title: 'S\'engager en entreprise',
-    description: 'Mobilisez vos collaborateurs autour d\'une mission à impact et renforcez la cohésion de vos équipes grâce à une expérience humaine et solidaire.',
+    title: 'Partir en congé solidaire',
+    description: 'Donnez du sens à vos congés en vivant une expérience solidaire unique, au service de la biodiversité et des communautés locales.',
     image: '/images/missions/conge-solidaire-2.jpg',
     badge: 'Congé solidaire',
-    duration: '1 à 3 semaines',
+    duration: '10 jours à 4 semaines',
     ctaLabel: 'Découvrir →',
     ctaUrl: '/missions?filter=conge_solidaire',
   },
@@ -100,7 +101,7 @@ function Home() {
           <div className="max-w-4xl">
             <h2 className="section-title text-primary">Nos missions</h2>
             <p className="section-subtitle text-primary/80">
-              Il existe mille façons de s'engager. Mission individuelle, service civique, séjour en groupe ou congé solidaire : découvrez des expériences adaptées à chaque parcours pour contribuer à des projets concrets de protection de la biodiversité.
+              Parce que chaque parcours est unique, nous proposons différentes formes d'engagement adaptées à vos envies et à vos disponibilités. Mission individuelle, service civique, mission de groupe ou congé solidaire : rejoignez des projets concrets au service de la biodiversité et vivez une expérience humaine riche en rencontres et en découvertes
             </p>
           </div>
           <a href="/missions">
@@ -127,12 +128,12 @@ function Home() {
       {/* ── Section témoignages — carousel depuis l'API (show_homepage) ── */}
       <section className="section-padding bg-accent-2">
         <div className="section-header">
-          <div>
-            <h2 className="section-title text-surface">Ils sont partis</h2>
+          <div className="max-w-4xl">
+            <h2 className="section-title text-surface">Ils ont franchi le pas et vécu l'aventure. Découvrez leurs témoignages.</h2>
             <p className="section-subtitle text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
           </div>
           <a href="/temoignages">
-            <Button label="Voir tous les témoignages →" variant="secondary" />
+            <Button label="Voir tous les témoignages →" variant="primary" />
           </a>
         </div>
         <TestimonialCarousel
@@ -147,14 +148,27 @@ function Home() {
       {/* ── Section actions terrain — 4 premières actions depuis l'API ── */}
       <section className="section-padding bg-surface">
         <div className="section-header">
-          <div>
-            <h2 className="section-title text-primary">Nos actions sur le terrain</h2>
-            <p className="section-subtitle text-primary/80">Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable.</p>
+          <div className="max-w-4xl">
+            <h2 className="section-title text-primary">Des actions concrètes au cœur des territoires</h2>
+            <p className="section-subtitle text-primary/80">Depuis plus de 20 ans, nous accompagnons les communautés locales dans la réalisation de projets concrets en faveur de la biodiversité et du développement des territoires.</p>
           </div>
           <a href="/notre-impact">
             <Button label="Voir toutes les actions →" variant="secondary" />
           </a>
         </div>
+
+        {/* ── Ligne ODD — icônes officielles ONU ── */}
+        <div className="flex justify-between items-center my-8">
+          {ODDS.map(odd => (
+            <img
+              key={odd.n}
+              src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
+              alt={`ODD ${odd.n}`}
+              className="w-16 h-16 rounded object-cover"
+            />
+          ))}
+        </div>
+
         <div className="grid grid-cols-2 gap-12">
           {actions.map(action => (
             <ActionCard
@@ -179,7 +193,7 @@ function Home() {
             <p className="section-subtitle text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
           </div>
           <a href="/a-propos">
-            <Button label="En savoir plus sur nous →" variant="secondary" />
+            <Button label="En savoir plus sur nous →" variant="primary" />
           </a>
         </div>
         <div className="grid grid-cols-6 gap-8 items-center">

@@ -90,34 +90,10 @@ function NotreImpact() {
       </div>
 
       <section className="section-padding">
-
         {/* ── Texte d'introduction ── */}
-        <p className="font-body text-sm text-primary/80 leading-relaxed mb-10">
+        <p className="font-body text-sm text-primary/80 leading-relaxed">
           Sens Solidaire s'investit sur tous les continents afin de collaborer sur des projets tournés vers la sauvegarde de la biodiversité, le bien-être des populations locales et un développement durable. Nos actions combinent éducation, échanges interculturels et projets environnementaux concrets.
         </p>
-
-        {/* ── Grille des actions — 2 colonnes ── */}
-        {loading ? (
-          <p className="font-body text-sm text-primary/50 italic">Chargement...</p>
-        ) : filteredActions.length === 0 ? (
-          <p className="font-body text-sm text-primary/50 italic">Aucune action pour ce filtre.</p>
-        ) : (
-          <div className="grid grid-cols-2 gap-8">
-            {filteredActions.map(action => (
-              <ActionCard
-                key={action.slug}
-                slug={action.slug}
-                title={action.title}
-                description={action.description}
-                image={action.image_url}
-                tags={action.tags.map(t => t.tag)}
-                odds={action.odds.map(o => o.odd_number)}
-                country={action.country}
-              />
-            ))}
-          </div>
-        )}
-
       </section>
 
       {/* ── Section ODD — icônes officielles ONU avec labels français ── */}
@@ -148,6 +124,31 @@ function NotreImpact() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="section-padding">
+        {/* ── Grille des actions — 2 colonnes ── */}
+        {loading ? (
+          <p className="font-body text-sm text-primary/50 italic">Chargement...</p>
+        ) : filteredActions.length === 0 ? (
+          <p className="font-body text-sm text-primary/50 italic">Aucune action pour ce filtre.</p>
+        ) : (
+          <div className="grid grid-cols-2 gap-8">
+            {filteredActions.map(action => (
+              <ActionCard
+                key={action.slug}
+                slug={action.slug}
+                title={action.title}
+                description={action.description}
+                image={action.image_url}
+                tags={action.tags.map(t => t.tag)}
+                odds={action.odds.map(o => o.odd_number)}
+                country={action.country}
+              />
+            ))}
+          </div>
+        )}
+
       </section>
 
       {/* ── CTA missions ── */}

@@ -28,9 +28,7 @@ import MissionSection from '../components/missions/MissionSection'
 import { getDuration, TYPE_LABELS } from '../utils/missions'
 import { FILTERS_MISSION_TYPE } from '../utils/filters'
 import {
-  IconPerson, IconClock, IconPin, IconMoney,
-  IconFrance, IconAbroad, IconGrow,
-  IconBuilding, IconHand, IconPeople, IconHeart, IconLeaf,
+  IconPerson, IconClock, IconPin, IconMoney, IconFrance, IconAbroad, IconGrow, IconBuilding, IconHand, IconPeople, IconHeart, IconLeaf, IconPayment
 } from '../utils/icons'
 
 function Missions() {
@@ -88,44 +86,44 @@ function Missions() {
 
   // ── Missions filtrées par type
   const missionVolontariat = missions.filter(m => m.type === 'volontariat_individuel')
+  const missionServiceCivique = missions.filter(m => m.type === 'service_civique')
 
   // ── Steps — Service civique
   const stepsServiceCivique = [
     {
       icon: IconFrance,
       title: 'Mission en France : Nice ou Annemasse',
-      subtitle: 'Agir et sensibiliser',
-      description: 'Basé(e) à Nice ou Annemasse, vous intervenez auprès des scolaires pour leur faire découvrir le monde et les enjeux du développement durable.',
+      description: 'Pendant la première partie de votre Service Civique, vous intervenez auprès de scolaires et du grand public pour sensibiliser aux enjeux du développement durable.',
       list: [
-        'Animations pédagogiques sur les 17 ODD',
-        'Interventions scolaires — correspondances étrangères',
-        'Communication et promotion sur les réseaux',
-        'Démarchage de nouveaux partenaires',
-        'Aide à la recherche de fonds',
+        'L\'animation d\'ateliers autour des 17 Objectifs de Développement Durable',
+        'La coordination de correspondances scolaires avec nos partenaires étrangers',
+        'La promotion de nos actions et projets',
+        'La recherche de nouveaux partenaires',
+        'La communication et la recherche de financements',
       ],
     },
     {
       icon: IconAbroad,
-      title: 'Mission à l\'étranger : Kenya ou Sénégal',
-      subtitle: 'Découvrir et contribuer',
-      description: 'Cap sur le Kenya ou le Sénégal pour 3 mois minimum. Au Kenya, au cœur du sanctuaire LUMO et du campus de Taita Taveta. Au Sénégal, aux côtés de l\'association AGADA en Casamance.',
+      title: 'Une immersion à l\'international',
+      description: 'Après cette première expérience en France, vous rejoignez pendant au moins trois mois l\'un de nos partenaires au Kenya, au Sénégal ou en Côte d\'Ivoire.',
       list: [
-        'Coordination des correspondances scolaires France-étranger',
-        'Suivi des activités du partenaire local',
-        'Développement de projets biodiversité locaux',
-        'Accueil des volontaires en mission courte',
+        'La préservation de la biodiversité',
+        'L\'éducation et les échanges interculturels',
+        'L\'agriculture durable',
+        'La sensibilisation à l\'environnement',
+        'Le développement de nouveaux projets locaux',
       ],
     },
     {
       icon: IconGrow,
-      title: 'Grandir et s\'engager pour un monde plus solidaire',
-      subtitle: 'Une expérience qui vous transforme',
-      description: 'Partez avec des valeurs, revenez avec des compétences. Le Service Civique, c\'est une expérience qui compte vraiment — pour vous, pour les autres, et pour votre avenir.',
+      title: 'Une expérience qui vous fait grandir',
+      description: 'Le Service Civique est bien plus qu\'une mission. C\'est l\'occasion de prendre confiance en vous, de découvrir d\'autres réalités de vie, d\'apprendre à travailler en équipe et de développer des compétences recherchées dans de nombreux domaines.Vous pourrez notamment acquérir de l\'expérience en :',
       list: [
-        'Chargé(e) de projets et mission de terrain',
-        'Éducation au Développement Durable',
-        'Coopération territoriale et internationale',
-        'Communication et recherche de fonds',
+        'Gestion de projet',
+        'Education au développement durable',
+        'Animation et sensibilisation',
+        'Coopération internationale',
+        'Travail sur le terrain',
       ],
     },
   ]
@@ -135,7 +133,6 @@ function Missions() {
     {
       icon: IconFrance,
       title: 'Préparer la mission ensemble',
-      subtitle: 'En amont du départ',
       description: 'Avant le départ, notre équipe accompagne le groupe dans la préparation interculturelle et logistique pour aborder la mission dans les meilleures conditions.',
       list: [
         'Réunion de préparation avec les encadrants',
@@ -147,7 +144,6 @@ function Missions() {
     {
       icon: IconAbroad,
       title: '10 jours de terrain au Kenya ou au Sénégal',
-      subtitle: 'L\'expérience au cœur de l\'action',
       description: 'Sur place, les jeunes participent à des projets concrets : réhabilitation d\'espaces naturels, ateliers éducatifs, rencontres avec les communautés et les rangers.',
       list: [
         'Projets environnementaux avec les partenaires',
@@ -159,7 +155,6 @@ function Missions() {
     {
       icon: IconGrow,
       title: 'Valoriser et transmettre l\'expérience',
-      subtitle: 'Après le retour',
       description: 'De retour en France, les jeunes partagent leur vécu et deviennent à leur tour ambassadeurs de la solidarité internationale dans leur établissement.',
       list: [
         'Restitution auprès de l\'établissement',
@@ -175,7 +170,6 @@ function Missions() {
     {
       icon: IconBuilding,
       title: 'Construire une mission adaptée',
-      subtitle: 'Cadrage et personnalisation',
       description: 'Nous échangeons avec l\'entreprise afin de comprendre ses objectifs, identifier les compétences mobilisables et construire une mission cohérente avec les besoins du terrain.',
       list: [
         'Diagnostic des compétences disponibles',
@@ -187,7 +181,6 @@ function Missions() {
     {
       icon: IconLeaf,
       title: 'Vivre l\'expérience sur le terrain',
-      subtitle: 'L\'engagement en action',
       description: 'Les participants rejoignent nos partenaires locaux pour partager leurs compétences, découvrir d\'autres réalités et contribuer à des projets concrets.',
       list: [
         'Immersion complète avec les équipes locales',
@@ -199,7 +192,6 @@ function Missions() {
     {
       icon: IconHand,
       title: 'Donner du sens à l\'engagement',
-      subtitle: 'Impact et communication RSE',
       description: 'De retour en France, nous accompagnons l\'entreprise dans la valorisation de son engagement RSE et la restitution auprès des équipes.',
       list: [
         'Rapport de mission détaillé',
@@ -217,38 +209,38 @@ function Missions() {
       <HeroPage
         image="/images/hero/hero-missions.jpg"
         title="Partez en mission et agissez concrètement"
-        subtitle="Seul, en groupe ou avec votre entreprise, vivez une expérience humaine unique au service de la biodiversité et des communautés locales"
+        subtitle="Parce que l’engagement est ouvert à tous, nos missions s’adaptent à chaque profil : seul, à deux, en groupe, en famille ou avec votre entreprise, vivez une expérience humaine et solidaire au service de la biodiversité."
       />
 
       {/* ── Bloc orientation — Quelle mission est faite pour moi ? ── */}
       <section className="section-padding bg-surface-mid">
-        <h2 className="section-title text-primary mb-8">Quelle mission est faite pour moi ?</h2>
+        <h2 className="section-title text-primary mb-8">Quelle mission est faite pour vous ?</h2>
         <div className="grid grid-cols-4 gap-4">
           {[
             {
               icon: IconPerson,
-              situation: 'Vous souhaitez partir seul ou en petit groupe',
+              situation: 'Vous souhaitez partir seul, à deux ou en petit groupe pour participer concrètement à un projet solidaire ?',
               label: 'Volontariat individuel',
               anchor: '#individuel',
               filter: 'individuel',
             },
             {
               icon: IconClock,
-              situation: 'Vous avez entre 16 et 25 ans',
+              situation: 'Vous avez entre 16 et 25 ans et recherchez une expérience citoyenne riche de sens ?',
               label: 'Service Civique',
               anchor: '#service-civique',
               filter: 'service_civique',
             },
             {
               icon: IconPeople,
-              situation: 'Vous représentez un lycée ou une structure jeunesse',
+              situation: 'Vous représentez un lycée ou une structure jeunesse et souhaitez organiser un projet collectif ?',
               label: 'Mission de groupe',
               anchor: '#groupe-jeunes',
               filter: 'groupe_jeunes',
             },
             {
               icon: IconBuilding,
-              situation: 'Vous êtes salarié ou responsable d\'entreprise',
+              situation: 'Vous êtes salarié et souhaitez donner du sens à vos congés en vous engageant dans un projet solidaire à impact positif ?',
               label: 'Congé solidaire',
               anchor: '#conge-solidaire',
               filter: 'conge_solidaire',
@@ -291,7 +283,7 @@ function Missions() {
         <MissionSection
           id="individuel"
           bg="bg-surface"
-          title="Je pars en mission"
+          title="Je pars en mission individuelle"
           audience="Pour les volontaires individuels"
           description="Vivez une expérience utile, authentique et accessible à tous."
           decorImage="/images/ui/one-line-1.png"
@@ -303,19 +295,19 @@ function Missions() {
                 Partir en mission avec Sens Solidaires, c'est rejoindre des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka ou à Sumatra.
               </p>
               <p className="font-body text-sm text-primary/80 leading-relaxed">
-                Pendant 10 jours à 4 semaines, vous découvrez une autre culture tout en participant à des actions concrètes : préservation de la biodiversité, soutien aux populations locales, éducation à l'environnement ou agriculture durable. Vous pouvez partir seul(e), en couple, entre amis ou en famille.
+                Pendant 10 jours à 4 semaines, vous découvrez une autre culture tout en participant à des actions concrètes : préservation de la biodiversité, soutien aux populations locales, éducation à l'environnement ou agriculture durable. Vous pouvez partir seul(e), en couple, entre amis ou en famille, avec des dates de départ au choix tout au long de l'année.
                 <span className="font-bold text-primary/70"> Aucune compétence particulière n'est demandée. Nous recherchons avant tout des personnes curieuses, respectueuses et motivées à vivre une expérience de solidarité internationale.</span>
               </p>
               <p className="font-body text-sm text-primary/60 leading-relaxed italic">
-                Les frais de mission peuvent ouvrir droit à une réduction fiscale de 66 % selon la législation en vigueur.
+                En tant que particulier, vous pouvez bénéficier d'une réduction d'impôt de 66 % sur les frais de mission engagés, dans la limite de 20 % de votre revenu imposable, conformément à la réglementation en vigueur.
               </p>
             </>
           }
           infoBarItems={[
             { icon: IconPerson, label: 'Individuel ou groupe' },
             { icon: IconClock,  label: '10 jours à 4 semaines' },
-            { icon: IconPin,    label: 'à l\'étranger' },
-            { icon: IconMoney,  label: 'à partir de 1175€' },
+            { icon: IconPayment,  label: 'à partir de 1175€' },
+            { icon: IconMoney,    label: 'Réduction d\'impôt 66 %' },
           ]}
           testimonialsUrl="/temoignages"
           carouselItems={missionVolontariat}
@@ -341,7 +333,7 @@ function Missions() {
         <MissionSection
           id="service-civique"
           bg="bg-surface-mid"
-          title="Je m'engage en Service Civique"
+          title="Je m'engage en Service Civique à l'internationnal"
           audience="Pour les 16 à 25 ans"
           description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
           decorImage="/images/ui/one-line-2.png"
@@ -349,7 +341,7 @@ function Missions() {
           imageAlt="Service civique"
           introSlot={
             <p className="section-subtitle text-primary/80">
-              Vous avez entre 16 et 25 ans (jusqu'à 30 ans en situation de handicap) et vous souhaitez vivre une expérience qui a du sens ? <br /><br />Le Service Civique vous permet de consacrer plusieurs mois à une mission d'intérêt général tout en percevant une indemnité mensuelle. <br />Avec Sens Solidaires, vous participez à des actions d'éducation au développement durable en France avant de rejoindre nos partenaires au Kenya ou au Sénégal pour plusieurs mois. C'est l'occasion de développer votre autonomie, découvrir d'autres réalités de vie et acquérir de nouvelles compétences utiles pour votre avenir personnel et professionnel.
+              Vous avez entre 16 et 25 ans (jusqu'à 30 ans en situation de handicap) et souhaitez vous engager dans une mission utile, enrichissante et porteuse de sens ? Le Service Civique vous permet de consacrer plusieurs mois à une mission d'intérêt général tout en bénéficiant d'une indemnité mensuelle. <br /><br /> Avec Sens Solidaires, vous participez à des actions d'éducation au développement durable en France avant de rejoindre nos partenaires au Kenya, au Sénégal ou en Côte d'Ivoire pour une immersion de plusieurs mois. Une expérience unique pour gagner en autonomie, découvrir d'autres cultures, développer de nouvelles compétences et contribuer concrètement à des projets utiles pour l'environnement et les populations locales.
             </p>
           }
           infoBarItems={[
@@ -363,16 +355,22 @@ function Missions() {
           stepsTitle="Comment ça fonctionne ?"
           steps={stepsServiceCivique}
           bgCard="bg-white"
-          carouselItems={[
-            { slug: "lumo-kenya", name: "Sanctuaire LUMO", image_url: "/images/lieux-missions/lumo-kenya.jpeg" },
-            { slug: "ttnp-kenya", name: "Taita Taveta National Polytechnic", image_url: "/images/lieux-missions/ttnp-kenya.jpeg" },
-            { slug: "agada-senegal", name: "ONG AGADA", image_url: "/images/lieux-missions/agada-senegal.jpg" },
-          ]}
-          carouselTitle="En savoir plus sur nos lieux d'action"
-          carouselSubtitle="Nos partenaires locaux sont au cœur de chaque mission. Engagés dans la protection de la biodiversité et le développement des communautés, ils accueillent les volontaires et les accompagnent tout au long de leur expérience."
+          carouselItems={missionServiceCivique}
+          carouselTitle="Nos missions de service civique"
+          carouselSubtitle="Partez en France puis à l'international pour une expérience unique de 6 à 12 mois."
           carouselSlidesPerView={3}
-          renderSlide={(loc) => <LocationCard {...loc} />}
-        />
+          renderSlide={(mission) => (
+            <MissionCard
+              slug={mission.slug}
+              title={mission.title}
+              description={mission.short_description}
+              image={mission.image_url}
+              badge={TYPE_LABELS[mission.type]}
+              duration={getDuration(mission.pricing)}
+              ctaLabel="En savoir plus →"
+            />
+          )}
+        />  
       )}
 
       {/* ══════════════════════════════════════════════════════
