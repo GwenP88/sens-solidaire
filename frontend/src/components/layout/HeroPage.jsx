@@ -8,7 +8,7 @@ import { IconClock, IconMoney } from '../../utils/icons'
 
 function HeroPage({ image, title, subtitle, duration, price }) {
   return (
-    <div className="relative w-full h-120 flex items-end pb-12 px-24">
+    <div className="relative w-full h-64 md:h-120 flex items-end pb-6 px-6 md:pb-12 md:px-24">
       {/* Image de fond */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -24,10 +24,10 @@ function HeroPage({ image, title, subtitle, duration, price }) {
           Sens Solidaires
         </span>
         {/* Titre */}
-        <h1 className="font-heading font-bold text-surface text-6xl max-w-3xl leading-tight">{title}</h1>
+        <h1 className="font-heading font-bold text-surface text-3xl md:text-6xl max-w-3xl leading-tight">{title}</h1>
         {/* Sous-titre */}
         {subtitle && (
-          <p className="font-body font-semibold text-surface text-lg max-w-2xl">{subtitle}</p>
+          <p className="font-body font-semibold text-surface text-base md:text-lg max-w-2xl">{subtitle}</p>
         )}
         {/* Infos rapides — durée + prix — optionnelles */}
         {(duration || price) && (
