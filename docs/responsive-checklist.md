@@ -62,7 +62,7 @@
 - [X] `EducationDetail.jsx`
 - [X] `MediaEtActualites.jsx`
 - [X] `MediaDetail.jsx`
-- [ ] `LocationDetail.jsx`
+- [X] `LocationDetail.jsx`
 - [ ] `APropos.jsx`
 - [ ] `Equipe.jsx`
 - [ ] `Soutenir.jsx`

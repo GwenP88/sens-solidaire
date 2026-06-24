@@ -86,7 +86,7 @@ function LocationDetail() {
           <h2 className="section-title text-primary">{location.title}</h2>
 
           {/* Layout 2 colonnes — texte + sidebar */}
-          <div className="flex gap-12 items-start">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
 
             {/* Colonne texte — 2/3 */}
             <div className="flex-1 flex flex-col gap-4">
@@ -100,7 +100,7 @@ function LocationDetail() {
             </div>
 
             {/* Colonne sidebar — 1/3 */}
-            <div className="w-1/3 shrink-0 flex flex-col gap-6">
+            <div className="w-full md:w-1/3 shrink-0 flex flex-col gap-6">
 
               {/* Image principale — galerie ou image de couverture */}
               <div className="w-full overflow-hidden rounded-2xl">
@@ -120,7 +120,7 @@ function LocationDetail() {
         <section className="section-padding bg-surface-mid">
           <h2 className="section-title text-primary mb-8">Photos</h2>
           {extraImages.length <= 2 ? (
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {extraImages.map((m, i) => (
                 <div key={i} className="overflow-hidden rounded-xl">
                   <img src={m.file_url} alt="" className="w-full h-56 object-cover" />
