@@ -86,7 +86,7 @@ function Testimonials() {
       />
 
       {/* ── Barre de filtres — collée au hero ── */}
-      <div className="bg-primary px-24 py-4">
+      <div className="bg-primary px-4 md:px-24 py-4">
         <FilterSelect
           filters={FILTER_CONFIG_TEMOIGNAGES}
           values={filters}
@@ -103,7 +103,7 @@ function Testimonials() {
           ) : filteredTestimonials.length === 0 ? (
             <p className="font-body text-sm text-primary/50 italic">Aucun témoignage pour ces critères.</p>
           ) : (
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {filteredTestimonials.map(t => (
                 <TestimonialCard
                   key={t.id}
@@ -125,7 +125,7 @@ function Testimonials() {
           {filteredRapports.length === 0 ? (
             <p className="font-body text-sm text-primary/50 italic">Aucun rapport pour ces critères.</p>
           ) : (
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {filteredRapports.map(r => (
                 <div key={r.id} className="flex flex-col justify-between gap-0 bg-surface rounded-xl overflow-hidden">
 
@@ -157,7 +157,7 @@ function Testimonials() {
 
       {/* ── CTA soumission témoignage — ouvre la modale ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="max-w-2xl">
             <h2 className="section-title text-surface mb-2">Vous êtes partis en mission ?</h2>
             <p className="font-body text-surface/80 text-sm">Vos rencontres, vos découvertes et les moments forts vécus sur le terrain peuvent donner à d'autres l'envie de s'engager et de vivre cette aventure à leur tour.</p>
