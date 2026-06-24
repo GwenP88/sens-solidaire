@@ -57,7 +57,7 @@ function MediaEtActualites() {
       />
 
       {/* ── Barre de filtres — collée au hero ── */}
-      <div className="bg-primary px-24 py-6">
+      <div className="bg-primary px-4 md:px-24 py-4 md:py-6">
         <FilterSelect
           filters={FILTER_CONFIG_MEDIAS}
           values={filters}
@@ -72,7 +72,7 @@ function MediaEtActualites() {
         ) : filteredPosts.length === 0 ? (
           <p className="font-body text-sm text-primary/50 italic">Aucun article pour ces critères.</p>
         ) : (
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {filteredPosts.map(post => (
               <MediaCard key={post.slug} {...post} />
             ))}

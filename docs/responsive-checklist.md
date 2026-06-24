@@ -60,7 +60,7 @@
 - [X] `Contact.jsx`
 - [X] `ActionsEducatives.jsx`
 - [X] `EducationDetail.jsx`
-- [ ] `MediaEtActualites.jsx`
+- [X] `MediaEtActualites.jsx`
 - [ ] `MediaDetail.jsx`
 - [ ] `LocationDetail.jsx`
 - [ ] `APropos.jsx`
