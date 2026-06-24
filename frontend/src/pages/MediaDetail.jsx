@@ -118,7 +118,7 @@ function MediaDetail() {
 
       {/* ── CTA bas de page ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="section-title text-surface mb-2">Envie de vous engager à nos côtés ?</h2>
             <p className="font-body text-surface/80 text-sm">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
