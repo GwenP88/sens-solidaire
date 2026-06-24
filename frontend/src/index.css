@@ -43,7 +43,13 @@
 
 /* Padding standard des sections */
 @utility section-padding {
-  padding: 4rem 6rem;
+  padding: 2rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: 4rem 6rem;
+  }
 }
 
 /* En-tête de section — titre à gauche + CTA à droite */

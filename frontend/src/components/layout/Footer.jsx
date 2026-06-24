@@ -11,7 +11,7 @@ function Footer({ hideCta = false }) {
 
       {/* Zone 1 — CTA immersif — masqué si hideCta */}
       {!hideCta && (
-        <div className="relative w-full h-96 flex items-end p-16" style={{ backgroundImage: `url(/images/hero/hero-footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="relative w-full h-auto min-h-64 md:h-96 flex items-end p-6 md:p-16" style={{ backgroundImage: `url(/images/hero/hero-footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="relative flex flex-col gap-4">
@@ -21,7 +21,7 @@ function Footer({ hideCta = false }) {
             <p className="font-body text-surface text-base max-w-2xl">
               Rejoignez-nous sur le terrain ou soutenez nos projets. <br /> Ensemble, construisons un avenir plus solidaire.
             </p>
-            <div className="flex gap-4 mt-2">
+            <div className="flex flex-col sm:flex-row gap-4 mt-2">
               <a href="/missions">
                 <Button label="Je pars en mission →" variant="primary" />
               </a>
@@ -34,10 +34,10 @@ function Footer({ hideCta = false }) {
       )}
 
       {/* Zone 2 — Navigation 4 colonnes */}
-      <div className="bg-primary px-20 py-8 flex justify-between">
+      <div className="bg-primary px-6 md:px-20 py-8 flex flex-col md:flex-row gap-8 md:gap-0 md:justify-between">
 
         {/* Col 1 — Logo + Tagline + Réseaux */}
-        <div className="flex flex-col gap-4 w-72">
+        <div className="flex flex-col gap-4 w-full md:w-72">
           <div className="bg-white/40 rounded-full p-1 w-fit">
             <img src="/logo.png" alt="Sens Solidaire" className="h-12" />
           </div>
@@ -123,7 +123,7 @@ function Footer({ hideCta = false }) {
       </div>
 
       {/* Zone 3 — Barre légale */}
-      <div className="bg-dark px-20 py-4 flex justify-between items-center border-t border-surface/15">
+      <div className="bg-dark px-6 md:px-20 py-4 flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center border-t border-surface/15">
         <p className="font-body text-surface/50 text-sm">
           © 2026 Sens Solidaire. Tous droits réservés.
         </p>
