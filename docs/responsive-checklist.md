@@ -69,7 +69,7 @@
 - [X] `RapportsActivite.jsx`
 - [X] `MentionsLegales.jsx`
 - [X] `Confidentialite.jsx`
-- [ ] `Cookies.jsx`
+- [X] `Cookies.jsx`
 
 ## 📄 Admin
 - [ ] `LoginAdlin.jsx.jsx`

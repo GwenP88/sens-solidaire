@@ -14,7 +14,7 @@ function Cookies() {
       <section className="section-padding max-w-4xl mx-auto flex flex-col gap-8">
 
         <div className="flex flex-col gap-2">
-          <h1 className="font-heading font-bold text-primary text-4xl">Politique de cookies</h1>
+          <h1 className="font-heading font-bold text-primary text-2xl md:text-4xl">Politique de cookies</h1>
           <p className="font-body text-sm text-primary/60">Dernière mise à jour : juin 2026</p>
         </div>
 
