@@ -4,7 +4,7 @@
 ---
 
 ## 🏗️ Layout de base
-- [ ] `Navbar.jsx`
+- [X] `Navbar.jsx`
 - [ ] `Footer.jsx`
 - [ ] `Layout.jsx`
 
