@@ -18,11 +18,11 @@
 - [X] `Hero.jsx`
 - [X] `HeroPage.jsx`
 - [X] `SectionHero.jsx`
-- [ ] `StatsBar.jsx`
+- [X] `StatsBar.jsx`
 
 ## 🧭 Navigation
-- [ ] `FilterChips.jsx`
-- [ ] `FilterSelect.jsx`
+- [X] `FilterChips.jsx`
+- [X] `FilterSelect.jsx`
 - [ ] `AnchorNav.jsx`
 
 ## 🃏 Cards

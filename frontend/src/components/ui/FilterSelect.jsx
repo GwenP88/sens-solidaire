@@ -8,7 +8,7 @@
 function FilterSelect({ filters, values, onChange }) {
   return (
     // ── Conteneur flex — un select par filtre
-    <div className="flex gap-6">
+    <div className="flex flex-wrap gap-3 md:gap-6">
       {filters.map(filter => {
 
         // ── Filtre conditionnel — masqué si la condition n'est pas remplie
