@@ -15,7 +15,7 @@ function MentionsLegales() {
 
         {/* Titre — hors cadre */}
         <div className="flex flex-col gap-2">
-          <h1 className="font-heading font-bold text-primary text-4xl">Mentions légales</h1>
+          <h1 className="font-heading font-bold text-primary text-2xl md:text-4xl">Mentions légales</h1>
           <p className="font-body text-sm text-primary/60">Informations juridiques relatives au site sensolidaire.org</p>
         </div>
 
@@ -23,7 +23,7 @@ function MentionsLegales() {
         <div className="border border-primary/30 rounded-2xl p-8 flex flex-col gap-10">
 
           {/* Éditeur + Hébergeur — 2 colonnes */}
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             <div className="flex flex-col gap-3 bg-surface-mid rounded-xl p-6">
               <h2 className="font-heading font-bold text-primary text-xl">Éditeur du site</h2>

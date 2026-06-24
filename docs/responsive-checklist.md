@@ -67,7 +67,7 @@
 - [X] `Equipe.jsx`
 - [X] `Soutenir.jsx`
 - [X] `RapportsActivite.jsx`
-- [ ] `MentionsLegales.jsx`
+- [X] `MentionsLegales.jsx`
 - [ ] `Confidentialite.jsx`
 - [ ] `Cookies.jsx`
 
