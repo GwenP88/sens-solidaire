@@ -59,7 +59,7 @@
 - [X] `Testimonials.jsx`
 - [X] `Contact.jsx`
 - [X] `ActionsEducatives.jsx`
-- [ ] `EducationDetail.jsx`
+- [X] `EducationDetail.jsx`
 - [ ] `MediaEtActualites.jsx`
 - [ ] `MediaDetail.jsx`
 - [ ] `LocationDetail.jsx`

@@ -100,7 +100,7 @@ function EducationDetail() {
           <h2 className="section-title text-primary">{item.description}</h2>
 
           {/* Layout 2 colonnes — texte + sidebar */}
-          <div className="flex gap-12 items-start">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
 
             {/* Colonne texte — 2/3 */}
             <div className="flex-1 flex flex-col gap-4">
@@ -123,7 +123,7 @@ function EducationDetail() {
             </div>
 
             {/* Colonne sidebar — 1/3 */}
-            <div className="w-1/3 shrink-0 flex flex-col gap-6">
+            <div className="w-full md:w-1/3 shrink-0 flex flex-col gap-">
 
               {/* Image principale depuis les médias attachés */}
               {mainImage && (
@@ -154,7 +154,7 @@ function EducationDetail() {
         <section className="section-padding bg-surface-mid">
           <h2 className="section-title text-primary mb-8">Photos</h2>
           {extraImages.length <= 2 ? (
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {extraImages.map((m, i) => (
                 <div key={i} className="overflow-hidden rounded-xl">
                   <img src={m.file_url} alt="" className="w-full h-56 object-cover" />
@@ -180,7 +180,7 @@ function EducationDetail() {
 
       {/* ── CTA contact — invitation à accueillir une intervention ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="section-title text-surface mb-2">Vous souhaitez accueillir une intervention ?</h2>
             <p className="font-body text-surface/80 text-sm">Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux.</p>
