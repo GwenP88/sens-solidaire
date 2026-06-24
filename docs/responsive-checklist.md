@@ -58,7 +58,7 @@
 - [X] `ActionDetail.jsx`
 - [X] `Testimonials.jsx`
 - [X] `Contact.jsx`
-- [ ] `ActionsEducatives.jsx`
+- [X] `ActionsEducatives.jsx`
 - [ ] `EducationDetail.jsx`
 - [ ] `MediaEtActualites.jsx`
 - [ ] `MediaDetail.jsx`
