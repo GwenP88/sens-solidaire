@@ -35,7 +35,7 @@ function CookieBanner() {
 
   return (
     // ── Bannière fixe en bas de page — z-index élevé pour passer au-dessus du contenu
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-primary px-16 py-6 flex items-center justify-between gap-8 shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-primary px-6 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-8 shadow-lg">
 
       {/* Message d'information + lien politique cookies */}
       <p className="font-body text-sm text-surface/80 max-w-2xl">
@@ -46,7 +46,7 @@ function CookieBanner() {
       </p>
 
       {/* Boutons refuser / accepter */}
-      <div className="flex gap-4 shrink-0">
+      <div className="flex gap-4 shrink-0 w-full md:w-auto">
         <Button label="Refuser" variant="secondary" onClick={handleRefuse} />
         <Button label="Accepter" variant="primary" onClick={handleAccept} />
       </div>

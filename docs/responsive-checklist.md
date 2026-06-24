@@ -5,14 +5,14 @@
 
 ## 🏗️ Layout de base
 - [X] `Navbar.jsx`
-- [ ] `Footer.jsx`
-- [ ] `Layout.jsx`
+- [X] `Footer.jsx`
+- [X] `Layout.jsx`
 
 ## 🎨 Composants UI atomiques
-- [ ] `Button.jsx`
-- [ ] `BadgeODD.jsx`
-- [ ] `ScrollToTop.jsx`
-- [ ] `CookieBanner.jsx`
+- [X] `Button.jsx`
+- [X] `BadgeODD.jsx`
+- [X] `ScrollToTop.jsx`
+- [X] `CookieBanner.jsx`
 
 ## 🖼️ Composants Hero
 - [ ] `Hero.jsx`
