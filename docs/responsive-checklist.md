@@ -15,9 +15,9 @@
 - [X] `CookieBanner.jsx`
 
 ## 🖼️ Composants Hero
-- [ ] `Hero.jsx`
-- [ ] `HeroPage.jsx`
-- [ ] `SectionHero.jsx`
+- [X] `Hero.jsx`
+- [X] `HeroPage.jsx`
+- [X] `SectionHero.jsx`
 - [ ] `StatsBar.jsx`
 
 ## 🧭 Navigation

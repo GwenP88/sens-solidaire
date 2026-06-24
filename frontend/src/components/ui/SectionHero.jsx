@@ -11,7 +11,7 @@ function SectionHero({ title, audience, description, image }) {
   return (
     <>
       {/* ── En-tête — titre + public + description + illustration ── */}
-      <div className="flex items-center justify-between gap-12 mb-6">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-12 mb-6">
         <div className="flex-1">
 
           {/* Titre de section */}
@@ -30,7 +30,7 @@ function SectionHero({ title, audience, description, image }) {
 
         {/* Illustration décorative — optionnelle */}
         {image && (
-          <div className="w-1/3 shrink-0">
+          <div className="w-full md:w-1/3 shrink-0">
             <img src={image} alt="" aria-hidden="true" className="w-full object-contain max-h-40" />
           </div>
         )}
