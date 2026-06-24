@@ -31,12 +31,12 @@ function RapportsActivite() {
 
         {/* ── Titre de page ── */}
         <div className="flex flex-col gap-2">
-          <h1 className="font-heading font-bold text-primary text-4xl">Rapports d'activité</h1>
+          <h1 className="font-heading font-bold text-primary text-2xl md:text-4xl">Rapports d'activité</h1>
           <p className="font-body text-sm text-primary/60">Retrouvez l'ensemble de nos rapports d'activité annuels, consultables librement.</p>
         </div>
 
         {/* ── Grille des rapports — 3 colonnes ── */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {rapports.map(r => (
             <a
               key={r.annee}
