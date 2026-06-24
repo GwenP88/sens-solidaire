@@ -15,7 +15,7 @@ function Confidentialite() {
 
         {/* Titre — hors cadre */}
         <div className="flex flex-col gap-2">
-          <h1 className="font-heading font-bold text-primary text-4xl">Politique de confidentialité</h1>
+          <h1 className="font-heading font-bold text-primary text-2xl md:text-4xl">Politique de confidentialité</h1>
           <p className="font-body text-sm text-primary/60">Dernière mise à jour : juin 2026</p>
         </div>
 
