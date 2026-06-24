@@ -65,7 +65,7 @@
 - [X] `LocationDetail.jsx`
 - [X] `APropos.jsx`
 - [X] `Equipe.jsx`
-- [ ] `Soutenir.jsx`
+- [X] `Soutenir.jsx`
 - [ ] `RapportsActivite.jsx`
 - [ ] `MentionsLegales.jsx`
 - [ ] `Confidentialite.jsx`

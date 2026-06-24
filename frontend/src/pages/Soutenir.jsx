@@ -45,10 +45,10 @@ function Soutenir() {
 
       {/* ── Section Don — photo + texte + CTA HelloAsso ── */}
       <section id="don" className="section-padding bg-surface">
-        <div className="flex gap-12 items-center">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
 
           {/* Photo illustration don */}
-          <div className="w-2/5 shrink-0">
+          <div className="w-full md:w-2/5 shrink-0">
             <img
               src="/images/actions-terrain/jardin-potager-kenya.jpg"
               alt="Faire un don"
@@ -65,7 +65,7 @@ function Soutenir() {
             </p>
 
             {/* 3 arguments clés */}
-            <div className="flex gap-6">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
               {[
                 { titre: "Action concrète", desc: "Des projets utiles et durables" },
                 { titre: "Impact humain", desc: "Auprès des populations et des écosystèmes" },
@@ -92,7 +92,7 @@ function Soutenir() {
 
       {/* ── Section Adhésion — texte + tarifs + CTA + photo ── */}
       <section id="adhesion" className="section-padding bg-surface-mid">
-        <div className="flex gap-12 items-center">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
 
           {/* Contenu texte + bénéfices + tarifs + CTA */}
           <div className="flex flex-col gap-6 flex-1">
@@ -103,7 +103,7 @@ function Soutenir() {
             </p>
 
             {/* 4 bénéfices de l'adhésion */}
-            <div className="flex gap-6">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
               {[
                 "Participez à la vie associative",
                 "Recevez nos informations",
@@ -115,7 +115,7 @@ function Soutenir() {
             </div>
 
             {/* Grille des tarifs d'adhésion */}
-            <div className="bg-surface rounded-xl p-4 flex gap-6">
+            <div className="bg-surface rounded-xl p-4 flex flex-col md:flex-row gap-4 md:gap-6">
               {[
                 { type: "Particulier", prix: "25 €" },
                 { type: "Association / Collectivité", prix: "50 €" },
@@ -138,7 +138,7 @@ function Soutenir() {
           </div>
 
           {/* Photo illustration adhésion */}
-          <div className="w-2/5 shrink-0">
+          <div className="w-full md:w-2/5 shrink-0">
             <img
               src="/images/missions/groupe-jeune-2.jpg"
               alt="Adhérer à l'association"
@@ -153,7 +153,7 @@ function Soutenir() {
       <section id="pourquoi" className="section-padding bg-surface">
         <p className="font-body text-xs font-bold text-accent-2 uppercase tracking-widest text-center mb-2">Pourquoi nous soutenir ?</p>
         <h2 className="section-title text-primary text-center mb-10">Ensemble, agissons pour un impact durable</h2>
-        <div className="grid grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
           {RAISONS.map(r => (
             <div key={r.titre} className="flex flex-col items-center gap-3 text-center">
               <r.icon className="text-accent-2 text-3xl" />
@@ -166,7 +166,7 @@ function Soutenir() {
 
       {/* ── Transparence + lien rapports d'activité ── */}
       <section id="rapports" className="section-padding bg-surface-mid">
-        <div className="flex gap-12 items-center">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
 
           {/* Texte engagement transparence */}
           <div className="flex flex-col gap-4 flex-1">
@@ -181,7 +181,7 @@ function Soutenir() {
           </div>
 
           {/* Image rapport */}
-          <div className="w-2/5 shrink-0">
+          <div className="w-full md:w-2/5 shrink-0">
             <img
               src="/images/equipe-et-rapports-activites/rapport-activite.png"
               alt="Rapport d'activité"
@@ -194,7 +194,7 @@ function Soutenir() {
 
       {/* ── CTA contact ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="section-title text-surface mb-2">Une question ? Envie de vous engager autrement ?</h2>
             <p className="font-body text-surface/80 text-sm">Notre équipe est à votre écoute pour vous accompagner dans votre engagement.</p>
