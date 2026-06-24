@@ -38,10 +38,10 @@
 
 ## 🎠 Carousel & Modal
 - [X] `Carousel.jsx`
-- [ ] `Modal.jsx`
+- [X] `Modal.jsx`
 
 ## 📝 Formulaires
-- [ ] `ContactForm.jsx`
+- [X] `ContactForm.jsx`
 - [ ] `TestimonialForm.jsx`
 
 ## 🏛️ Composants Mission

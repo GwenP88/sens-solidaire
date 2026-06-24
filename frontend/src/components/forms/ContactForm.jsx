@@ -63,8 +63,8 @@ function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-      {/* Champs prénom + nom côte à côte */}
-      <div className="flex gap-4">
+      {/* Champs prénom + nom côte à côte -> emplilés sur mobile */}
+      <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-1 flex-1">
           <label className="font-body text-xs font-bold text-primary/60">Prénom *</label>
           <input name="prenom" value={form.prenom} onChange={handleChange} required className={inputClass} />
