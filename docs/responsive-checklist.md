@@ -45,7 +45,7 @@
 - [X] `TestimonialForm.jsx`
 
 ## 🏛️ Composants Mission
-- [ ] `MissionInfoBar.jsx`
+- [X] `MissionInfoBar.jsx`
 - [ ] `MissionCTA.jsx`
 - [ ] `MissionSteps.jsx`
 - [ ] `MissionSection.jsx`
