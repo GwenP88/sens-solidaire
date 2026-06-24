@@ -63,7 +63,7 @@
 - [X] `MediaEtActualites.jsx`
 - [X] `MediaDetail.jsx`
 - [X] `LocationDetail.jsx`
-- [ ] `APropos.jsx`
+- [X] `APropos.jsx`
 - [ ] `Equipe.jsx`
 - [ ] `Soutenir.jsx`
 - [ ] `RapportsActivite.jsx`
