@@ -13,11 +13,11 @@ const STATS = [
 function StatsBar() {
   return (
     // ── Bande verte foncée avec les compteurs répartis sur toute la largeur
-    <div className="bg-primary flex justify-around items-center px-16 py-8">
+    <div className="bg-primary lex flex-wrap justify-around items-center px-6 md:px-16 py-6 md:py-8 gap-6 md:gap-0">
       {STATS.map(stat => (
         <div key={stat.number}>
           {/* Chiffre principal */}
-          <p className="font-heading font-bold text-surface text-4xl">{stat.number}</p>
+          <p className="font-heading font-bold text-surface text-2xl md:text-4xl">{stat.number}</p>
           {/* Label descriptif */}
           <p className="font-body text-surface-dark text-sm uppercase tracking-widest">{stat.label}</p>
         </div>
