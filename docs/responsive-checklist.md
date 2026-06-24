@@ -55,7 +55,7 @@
 - [X] `Missions.jsx`
 - [X] `MissionDetail.jsx`
 - [X] `NotreImpact.jsx`
-- [ ] `ActionDetail.jsx`
+- [X] `ActionDetail.jsx`
 - [ ] `Testimonials.jsx`
 - [ ] `Contact.jsx`
 - [ ] `ActionsEducatives.jsx`

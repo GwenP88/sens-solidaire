@@ -68,7 +68,7 @@ function ActionDetail() {
           <h2 className="section-title text-primary">{action.description}</h2>
 
           {/* Layout 2 colonnes — texte + sidebar */}
-          <div className="flex gap-12 items-start">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
 
             {/* Colonne texte — 2/3 */}
             <div className="flex-1 flex flex-col gap-4">
@@ -82,7 +82,7 @@ function ActionDetail() {
             </div>
 
             {/* Colonne sidebar — 1/3 */}
-            <div className="w-1/3 shrink-0 flex flex-col gap-6">
+            <div className="w-full md:w-1/3 shrink-0 flex flex-col gap-6">
 
               {/* Bloc ODD — icônes officielles ONU + labels français */}
               <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-3">
@@ -129,7 +129,7 @@ function ActionDetail() {
 
       {/* ── CTA bas de page — invitation à s'engager ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="section-title text-surface mb-2">Envie de vous engager à nos côtés ?</h2>
             <p className="font-body text-surface/80 text-sm">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
