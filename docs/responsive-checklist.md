@@ -28,16 +28,16 @@
 ## 🃏 Cards
 - [X] `MissionCard.jsx`
 - [X] `ActionCard.jsx`
-- [ ] `LocationCard.jsx`
-- [ ] `EducationCard.jsx`
-- [ ] `MediaCard.jsx`
-- [ ] `TestimonialCard.jsx`
-- [ ] `DelegationCard.jsx`
-- [ ] `TeamMemberCardLarge.jsx`
-- [ ] `TeamMemberCardSmall.jsx`
+- [X] `LocationCard.jsx`
+- [X] `EducationCard.jsx`
+- [X] `MediaCard.jsx`
+- [X] `TestimonialCard.jsx`
+- [X] `DelegationCard.jsx`
+- [X] `TeamMemberCardLarge.jsx`
+- [X] `TeamMemberCardSmall.jsx`
 
 ## 🎠 Carousel & Modal
-- [ ] `Carousel.jsx`
+- [X] `Carousel.jsx`
 - [ ] `Modal.jsx`
 
 ## 📝 Formulaires

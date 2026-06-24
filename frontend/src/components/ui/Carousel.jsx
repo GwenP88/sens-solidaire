@@ -46,8 +46,11 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
       <Swiper
         onSwiper={(swiper) => { swiperRef.current = swiper }}
         modules={[Pagination]}
-        slidesPerView={slidesPerView}
-        spaceBetween={spaceBetween}
+        breakpoints={{
+          0:   { slidesPerView: 1, spaceBetween: 16 },
+          640: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: slidesPerView, spaceBetween: spaceBetween },
+        }}
         pagination={showPagination && hasNavigation ? { clickable: true } : false}
         style={{ width: '100%' }}
       >
