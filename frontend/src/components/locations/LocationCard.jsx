@@ -23,8 +23,8 @@ function LocationCard({ slug, name, image_url }) {
 
         {/* Nom du lieu + lien "En savoir plus" */}
         <div className="p-4 flex flex-col gap-2">
-          <p className="font-heading font-bold text-primary text-sm">{name}</p>
-          <span className="font-body text-xs font-semibold text-accent group-hover:text-primary transition-colors">
+          <p className="h3-style text-primary">{name}</p>
+          <span className="link-cta text-accent group-hover:text-primary transition-colors">
             En savoir plus →
           </span>
         </div>

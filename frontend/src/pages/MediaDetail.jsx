@@ -33,11 +33,11 @@ function MediaDetail() {
   }, [slug])
 
   // ── États de chargement et d'erreur
-  if (loading) return <p className="p-12 font-body text-primary">Chargement...</p>
+  if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (error || !post) return (
     <div className="p-12 text-center">
-      <p className="font-body text-primary/60">Article introuvable.</p>
-      <a href="/medias-et-actualites" className="text-accent underline text-sm">← Retour aux médias</a>
+      <p className="text-body text-primary/50 italic">Article introuvable.</p>
+      <a href="/medias-et-actualites" className="link-inline text-accent">← Retour aux médias</a>
     </div>
   )
 
@@ -87,26 +87,24 @@ function MediaDetail() {
       <section className="section-padding bg-surface">
         <div className="flex flex-col gap-6 max-w-3xl">
 
-          {/* Lien retour vers la liste des médias */}
-          <a href="/medias-et-actualites" className="font-body text-sm text-primary/50 hover:text-primary transition-colors">
+          {/* Lien retour */}
+          <a href="/medias-et-actualites" className="link-nav text-primary/50 hover:text-primary">
             ← Retour aux médias
           </a>
 
-          {/* Date de publication + thème */}
+          {/* Date + thème */}
           <div className="flex items-center gap-2">
-            <span className="font-body text-xs text-primary/50">{formattedDate}</span>
-            <span className="font-body text-xs text-primary/30">—</span>
-            <span className="font-body text-xs font-bold text-accent-2">{post.theme}</span>
+            <span className="text-caption text-primary/50">{formattedDate}</span>
+            <span className="text-caption text-primary/30">—</span>
+            <span className="text-eyebrow text-accent-2">{post.theme}</span>
           </div>
 
-          {/* Contenu long — paragraphes séparés par double saut de ligne */}
+          {/* Contenu long */}
           {post.content && post.content.split('\n\n').map((para, i) => (
-            <p key={i} className="font-body text-sm text-primary/80 leading-relaxed">
-              {para}
-            </p>
+            <p key={i} className="text-body text-primary/80">{para}</p>
           ))}
 
-          {/* Médias attachés — images, vidéos, audios, PDFs, liens */}
+          {/* Médias attachés */}
           {post.media?.length > 0 && (
             <div className="flex flex-col gap-6 mt-4">
               {post.media.map((m, i) => renderMedia(m, i))}
@@ -120,8 +118,8 @@ function MediaDetail() {
       <section className="section-padding bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h2 className="section-title text-surface mb-2">Envie de vous engager à nos côtés ?</h2>
-            <p className="font-body text-surface/80 text-sm">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
+            <h2 className="h2-style text-surface">Envie de vous engager à nos côtés ?</h2>
+            <p className="text-body text-surface/80">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
           </div>
           <a href="/missions">
             <Button label="Voir nos missions →" variant="primary" />

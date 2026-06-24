@@ -48,7 +48,7 @@ function Equipe() {
 
       {/* ── Direction — cards larges 3 colonnes ── */}
       <section className="section-padding bg-surface">
-        <h2 className="section-title text-primary mb-8">Direction</h2>
+        <h2 className="h2-style text-primary mb-8">Direction</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {direction.map(m => (
             <TeamMemberCardLarge
@@ -64,7 +64,7 @@ function Equipe() {
 
       {/* ── Bureau — cards larges 3 colonnes, fond inversé ── */}
       <section className="section-padding bg-surface-mid">
-        <h2 className="section-title text-primary mb-8">Membres du bureau</h2>
+        <h2 className="h2-style text-primary mb-8">Membres du bureau</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {bureau.map(m => (
             <TeamMemberCardLarge
@@ -81,7 +81,7 @@ function Equipe() {
 
       {/* ── Conseil d'administration — cards compactes 4 colonnes ── */}
       <section className="section-padding bg-surface">
-        <h2 className="section-title text-primary mb-8">Conseil d'administration</h2>
+        <h2 className="h2-style text-primary mb-8">Conseil d'administration</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {ca.map(m => (
             <TeamMemberCardSmall
@@ -96,7 +96,7 @@ function Equipe() {
 
       {/* ── Également à nos côtés — cards compactes 3 colonnes ── */}
       <section className="section-padding bg-surface-mid">
-        <h2 className="section-title text-primary mb-8">Également à nos côtés</h2>
+        <h2 className="h2-style text-primary mb-8">Également à nos côtés</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {egalement.map(m => (
             <TeamMemberCardSmall
@@ -112,7 +112,7 @@ function Equipe() {
 
       {/* ── Délégations internationales — cards immersives 3 colonnes ── */}
       <section className="section-padding bg-surface">
-        <h2 className="section-title text-primary mb-8">Nos délégations et partenaires terrain</h2>
+        <h2 className="h2-style text-primary mb-8">Nos délégations et partenaires terrain</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {delegations.map(d => (
             <DelegationCard
@@ -131,8 +131,8 @@ function Equipe() {
       <section className="section-padding bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h2 className="section-title text-surface mb-2">Envie de rejoindre l'aventure ?</h2>
-            <p className="font-body text-surface/80 text-sm">Bénévole, volontaire, enseignant, partenaire... Il existe mille façons d'agir avec nous.</p>
+            <h2 className="h2-style text-surface">Envie de rejoindre l'aventure ?</h2>
+            <p className="text-body text-surface/80">Bénévole, volontaire, enseignant, partenaire... Il existe mille façons d'agir avec nous.</p>
           </div>
           <a href="/contact">
             <Button label="Nous contacter →" variant="primary" />

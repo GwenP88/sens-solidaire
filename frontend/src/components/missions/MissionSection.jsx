@@ -53,7 +53,7 @@ function MissionSection({
         image={decorImage}
       />
 
-      {/* ── Bloc intro — contenu riche + infobar + CTA + image ── empilés sur mobile */}
+      {/* ── Bloc intro — contenu riche + infobar + CTA + image — empilés sur mobile ── */}
       <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-center mb-10 md:mb-16">
         <div className="flex flex-col gap-6 flex-1">
 
@@ -91,10 +91,10 @@ function MissionSection({
       {carouselItems && (
         <div className="mt-16">
           {carouselTitle && (
-            <h3 className="font-heading font-bold text-primary text-base mb-2">{carouselTitle}</h3>
+            <h3 className="h3-style text-primary mb-2">{carouselTitle}</h3>
           )}
           {carouselSubtitle && (
-            <p className="font-body text-sm text-primary/60 mb-8">{carouselSubtitle}</p>
+            <p className="text-body text-primary/60 mb-8">{carouselSubtitle}</p>
           )}
           <Carousel
             items={carouselItems}

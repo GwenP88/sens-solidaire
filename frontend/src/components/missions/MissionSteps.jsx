@@ -6,11 +6,11 @@ function MissionSteps({ title = 'Comment ça fonctionne ?', steps, bgCard = 'bg-
     <div>
 
       {/* Titre de la section */}
-      <h3 className="font-heading font-bold text-primary text-base text-center mb-6">
+      <h3 className="h3-style text-primary text-center mb-6">
         {title}
       </h3>
 
-      {/* Grille 3 colonnes */}
+      {/* Grille 3 colonnes — 1 colonne sur mobile */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
         {steps.map((step, i) => {
           // ── Icône dynamique — majuscule requise pour JSX
@@ -21,22 +21,22 @@ function MissionSteps({ title = 'Comment ça fonctionne ?', steps, bgCard = 'bg-
               {/* En-tête — icône + numéro + titre */}
               <div className="flex items-center gap-4">
                 <Icon className="text-primary text-3xl shrink-0" />
-                <span className="font-heading font-bold text-primary text-2xl">{i + 1}</span>
+                <span className="text-stat text-primary">{i + 1}</span>
                 <div>
-                  <h4 className="font-heading font-bold text-primary text-base leading-snug">{step.title}</h4>
-                  <p className="font-body text-sm text-primary/60">{step.subtitle}</p>
+                  <h4 className="h3-style text-primary">{step.title}</h4>
+                  <p className="text-caption text-primary/60">{step.subtitle}</p>
                 </div>
               </div>
 
               {/* Description */}
-              <p className="font-body text-sm text-primary/80 min-h-[80px]">
+              <p className="text-body text-primary/80 min-h-[80px]">
                 {step.description}
               </p>
 
               {/* Liste de points */}
               <ul className="flex flex-col gap-1">
                 {step.list.map(item => (
-                  <li key={item} className="font-body text-sm text-primary/60">- {item}</li>
+                  <li key={item} className="text-body text-primary/60">- {item}</li>
                 ))}
               </ul>
 

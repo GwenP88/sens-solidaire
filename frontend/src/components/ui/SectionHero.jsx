@@ -15,17 +15,14 @@ function SectionHero({ title, audience, description, image }) {
         <div className="flex-1">
 
           {/* Titre de section */}
-          <h2 className="section-title text-primary">{title}</h2>
+          <h2 className="h2-style text-primary">{title}</h2>
 
           {/* Public cible */}
-          <p className="font-body text-sm font-semibold text-accent uppercase tracking-widest mt-1 mb-2">
-            {audience}
-          </p>
+          <p className="text-eyebrow text-accent mt-1 mb-2">{audience}</p>
 
           {/* Description courte */}
-          <p className="font-body text-base text-primary/70">
-            {description}
-          </p>
+          <p className="text-body text-primary/70">{description}</p>
+
         </div>
 
         {/* Illustration décorative — optionnelle */}

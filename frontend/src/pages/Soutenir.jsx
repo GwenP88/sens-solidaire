@@ -43,24 +43,18 @@ function Soutenir() {
       {/* ── Navigation ancres ── */}
       <AnchorNav variant="dark" sections={ANCHOR_SECTIONS} />
 
-      {/* ── Section Don — photo + texte + CTA HelloAsso ── */}
+      {/* ── Section Don ── */}
       <section id="don" className="section-padding bg-surface">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
 
-          {/* Photo illustration don */}
           <div className="w-full md:w-2/5 shrink-0">
-            <img
-              src="/images/actions-terrain/jardin-potager-kenya.jpg"
-              alt="Faire un don"
-              className="w-full h-80 object-cover rounded-2xl"
-            />
+            <img src="/images/actions-terrain/jardin-potager-kenya.jpg" alt="Faire un don" className="w-full h-80 object-cover rounded-2xl" />
           </div>
 
-          {/* Contenu texte + arguments + CTA */}
           <div className="flex flex-col gap-6 flex-1">
-            <p className="font-body text-xs font-bold text-accent-2 uppercase tracking-widest">Faire un don</p>
-            <h2 className="section-title text-primary">Soutenez nos actions sur le terrain</h2>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
+            <p className="text-eyebrow text-accent-2">Faire un don</p>
+            <h2 className="h2-style text-primary">Soutenez nos actions sur le terrain</h2>
+            <p className="text-body text-primary/80">
               Votre don permet de financer nos projets de solidarité internationale, nos actions éducatives et environnementales, et d'accompagner les populations locales dans la durée.
             </p>
 
@@ -72,37 +66,35 @@ function Soutenir() {
                 { titre: "Déduction fiscale", desc: "66% de votre don déductible d'impôts" },
               ].map(a => (
                 <div key={a.titre} className="flex flex-col gap-1 flex-1">
-                  <p className="font-body font-bold text-primary text-sm">{a.titre}</p>
-                  <p className="font-body text-xs text-primary/60">{a.desc}</p>
+                  <p className="h3-style text-primary">{a.titre}</p>
+                  <p className="text-caption text-primary/60">{a.desc}</p>
                 </div>
               ))}
             </div>
 
-            {/* CTA don via HelloAsso */}
             <div className="flex flex-col gap-2">
               <a href="https://www.helloasso.com/associations/sens-solidaires/formulaires/1/widget" target="_blank" rel="noopener noreferrer">
                 <Button label="Je fais un don →" variant="primary" />
               </a>
-              <p className="font-body text-xs text-primary/40 italic">Paiement 100% sécurisé via HelloAsso</p>
+              <p className="text-mention text-primary/40">Paiement 100% sécurisé via HelloAsso</p>
             </div>
           </div>
 
         </div>
       </section>
 
-      {/* ── Section Adhésion — texte + tarifs + CTA + photo ── */}
+      {/* ── Section Adhésion ── */}
       <section id="adhesion" className="section-padding bg-surface-mid">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
 
-          {/* Contenu texte + bénéfices + tarifs + CTA */}
           <div className="flex flex-col gap-6 flex-1">
-            <p className="font-body text-xs font-bold text-accent-2 uppercase tracking-widest">Adhérer à l'association</p>
-            <h2 className="section-title text-primary">Devenez membre de Sens Solidaire</h2>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
+            <p className="text-eyebrow text-accent-2">Adhérer à l'association</p>
+            <h2 className="h2-style text-primary">Devenez membre de Sens Solidaire</h2>
+            <p className="text-body text-primary/80">
               En adhérant à l'association, vous rejoignez une communauté engagée et vous soutenez nos actions tout au long de l'année. Votre voix compte dans la vie de l'association !
             </p>
 
-            {/* 4 bénéfices de l'adhésion */}
+            {/* 4 bénéfices */}
             <div className="flex flex-col md:flex-row gap-4 md:gap-6">
               {[
                 "Participez à la vie associative",
@@ -110,11 +102,11 @@ function Soutenir() {
                 "Soutenez nos projets",
                 "Faites partie d'un réseau engagé",
               ].map(b => (
-                <p key={b} className="font-body text-xs text-primary/70 text-center flex-1">{b}</p>
+                <p key={b} className="text-caption text-primary/70 text-center flex-1">{b}</p>
               ))}
             </div>
 
-            {/* Grille des tarifs d'adhésion */}
+            {/* Tarifs */}
             <div className="bg-surface rounded-xl p-4 flex flex-col md:flex-row gap-4 md:gap-6">
               {[
                 { type: "Particulier", prix: "25 €" },
@@ -122,73 +114,58 @@ function Soutenir() {
                 { type: "Entreprise", prix: "250 €" },
               ].map(t => (
                 <div key={t.type} className="flex flex-col gap-1 flex-1 text-center">
-                  <p className="font-heading font-bold text-primary text-xl">{t.prix}</p>
-                  <p className="font-body text-xs text-primary/60">{t.type}</p>
+                  <p className="text-stat text-primary">{t.prix}</p>
+                  <p className="text-caption text-primary/60">{t.type}</p>
                 </div>
               ))}
             </div>
 
-            {/* CTA adhésion via HelloAsso */}
             <div className="flex flex-col gap-2">
               <a href="https://www.helloasso.com/associations/sens-solidaires/adhesions/adhesion-a-l-association-sens-solidaires" target="_blank" rel="noopener noreferrer">
                 <Button label="J'adhère à l'association →" variant="secondary" />
               </a>
-              <p className="font-body text-xs text-primary/40 italic">Adhésion en ligne via HelloAsso</p>
+              <p className="text-mention text-primary/40">Adhésion en ligne via HelloAsso</p>
             </div>
           </div>
 
-          {/* Photo illustration adhésion */}
           <div className="w-full md:w-2/5 shrink-0">
-            <img
-              src="/images/missions/groupe-jeune-2.jpg"
-              alt="Adhérer à l'association"
-              className="w-full h-80 object-cover rounded-2xl"
-            />
+            <img src="/images/missions/groupe-jeune-2.jpg" alt="Adhérer à l'association" className="w-full h-80 object-cover rounded-2xl" />
           </div>
 
         </div>
       </section>
 
-      {/* ── Pourquoi nous soutenir — grille 5 colonnes avec icônes ── */}
+      {/* ── Pourquoi nous soutenir ── */}
       <section id="pourquoi" className="section-padding bg-surface">
-        <p className="font-body text-xs font-bold text-accent-2 uppercase tracking-widest text-center mb-2">Pourquoi nous soutenir ?</p>
-        <h2 className="section-title text-primary text-center mb-10">Ensemble, agissons pour un impact durable</h2>
+        <p className="text-eyebrow text-accent-2 text-center mb-2">Pourquoi nous soutenir ?</p>
+        <h2 className="h2-style text-primary text-center mb-10">Ensemble, agissons pour un impact durable</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
           {RAISONS.map(r => (
             <div key={r.titre} className="flex flex-col items-center gap-3 text-center">
               <r.icon className="text-accent-2 text-3xl" />
-              <p className="font-heading font-bold text-primary text-sm">{r.titre}</p>
-              <p className="font-body text-xs text-primary/60 leading-relaxed">{r.description}</p>
+              <h3 className="h3-style text-primary">{r.titre}</h3>
+              <p className="text-body text-primary/60">{r.description}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── Transparence + lien rapports d'activité ── */}
+      {/* ── Transparence ── */}
       <section id="rapports" className="section-padding bg-surface-mid">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
-
-          {/* Texte engagement transparence */}
           <div className="flex flex-col gap-4 flex-1">
-            <p className="font-body text-xs font-bold text-accent-2 uppercase tracking-widest">Notre engagement</p>
-            <h2 className="section-title text-primary">Transparence et confiance</h2>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
+            <p className="text-eyebrow text-accent-2">Notre engagement</p>
+            <h2 className="h2-style text-primary">Transparence et confiance</h2>
+            <p className="text-body text-primary/80">
               Sens Solidaire agit en toute transparence. Nos comptes sont contrôlés et nos rapports d'activité sont publiés chaque année.
             </p>
             <a href="/rapports-activite">
               <Button label="Consulter nos rapports d'activité →" variant="secondary" />
             </a>
           </div>
-
-          {/* Image rapport */}
           <div className="w-full md:w-2/5 shrink-0">
-            <img
-              src="/images/equipe-et-rapports-activites/rapport-activite.png"
-              alt="Rapport d'activité"
-              className="w-full h-64 object-cover rounded-2xl"
-            />
+            <img src="/images/equipe-et-rapports-activites/rapport-activite.png" alt="Rapport d'activité" className="w-full h-64 object-cover rounded-2xl" />
           </div>
-
         </div>
       </section>
 
@@ -196,8 +173,8 @@ function Soutenir() {
       <section className="section-padding bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h2 className="section-title text-surface mb-2">Une question ? Envie de vous engager autrement ?</h2>
-            <p className="font-body text-surface/80 text-sm">Notre équipe est à votre écoute pour vous accompagner dans votre engagement.</p>
+            <h2 className="h2-style text-surface">Une question ? Envie de vous engager autrement ?</h2>
+            <p className="text-body text-surface/80">Notre équipe est à votre écoute pour vous accompagner dans votre engagement.</p>
           </div>
           <a href="/contact">
             <Button label="Nous contacter →" variant="primary" />

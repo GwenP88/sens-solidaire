@@ -13,6 +13,7 @@ import StatsBar from '../components/layout/StatsBar'
 
 // ── Composants UI
 import Button from '../components/ui/Button'
+import ScrollToTop from '../components/ui/ScrollToTop'
 import { ODDS } from '../utils/odds'
 
 // ── Composants métier
@@ -34,7 +35,7 @@ const MISSION_TYPES = [
   },
   {
     slug: 'service-civique',
-    title: 'Effectuer un service civique à l\'internationnal',
+    title: 'Effectuer un service civique à l\'international',
     description: 'Une expérience engagée pour les 16-25 ans qui permet de développer de nouvelles compétences tout en agissant pour l\'environnement et la solidarité internationale.',
     image: '/images/missions/service-civique.jpg',
     badge: 'Service civique',
@@ -45,7 +46,7 @@ const MISSION_TYPES = [
   {
     slug: 'groupe-jeune',
     title: 'Rejoindre un chantier solidaire jeunes',
-    description: 'Des missions solidaires conçus pour les établissements scolaires, MJC et associations souhaitant vivre une aventure collective porteuse de sens.',
+    description: 'Des missions solidaires conçues pour les établissements scolaires, MJC et associations souhaitant vivre une aventure collective porteuse de sens.',
     image: '/images/missions/groupe-jeune-2.jpg',
     badge: 'Groupe jeunes',
     duration: '10 jours à 3 semaines',
@@ -72,17 +73,14 @@ function Home() {
 
   // ── Chargement en parallèle au montage
   useEffect(() => {
-    // Témoignages filtrés sur show_homepage = true
     fetchTestimonials()
       .then(data => setTestimonials(data.filter(t => t.show_homepage)))
       .catch(console.error)
 
-    // 4 premières actions terrain
     fetchFieldActions()
       .then(data => setActions(data.slice(0, 4)))
       .catch(console.error)
 
-    // Tous les partenaires
     fetchPartners()
       .then(setPartners)
       .catch(console.error)
@@ -99,9 +97,9 @@ function Home() {
       <section className="section-padding bg-surface">
         <div className="section-header flex-col md:flex-row">
           <div className="max-w-4xl">
-            <h2 className="section-title text-primary">Nos missions</h2>
-            <p className="section-subtitle text-primary/80">
-              Parce que chaque parcours est unique, nous proposons différentes formes d'engagement adaptées à vos envies et à vos disponibilités. Mission individuelle, service civique, mission de groupe ou congé solidaire : rejoignez des projets concrets au service de la biodiversité et vivez une expérience humaine riche en rencontres et en découvertes
+            <h2 className="h2-style text-primary">Nos missions</h2>
+            <p className="text-body text-primary/80">
+              Parce que chaque parcours est unique, nous proposons différentes formes d'engagement adaptées à vos envies et à vos disponibilités. Mission individuelle, service civique, mission de groupe ou congé solidaire : rejoignez des projets concrets au service de la biodiversité et vivez une expérience humaine riche en rencontres et en découvertes.
             </p>
           </div>
           <a href="/missions">
@@ -129,8 +127,8 @@ function Home() {
       <section className="section-padding bg-accent-2">
         <div className="section-header flex-col md:flex-row">
           <div className="max-w-4xl">
-            <h2 className="section-title text-surface">Ils ont franchi le pas et vécu l'aventure. Découvrez leurs témoignages.</h2>
-            <p className="section-subtitle text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
+            <h2 className="h2-style text-surface">Ils ont franchi le pas et vécu l'aventure. Découvrez leurs témoignages.</h2>
+            <p className="text-body text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
           </div>
           <a href="/temoignages">
             <Button label="Voir tous les témoignages →" variant="primary" />
@@ -149,8 +147,8 @@ function Home() {
       <section className="section-padding bg-surface">
         <div className="section-header flex-col md:flex-row">
           <div className="max-w-4xl">
-            <h2 className="section-title text-primary">Des actions concrètes au cœur des territoires</h2>
-            <p className="section-subtitle text-primary/80">Depuis plus de 20 ans, nous accompagnons les communautés locales dans la réalisation de projets concrets en faveur de la biodiversité et du développement des territoires.</p>
+            <h2 className="h2-style text-primary">Des actions concrètes au cœur des territoires</h2>
+            <p className="text-body text-primary/80">Depuis plus de 20 ans, nous accompagnons les communautés locales dans la réalisation de projets concrets en faveur de la biodiversité et du développement des territoires.</p>
           </div>
           <a href="/notre-impact">
             <Button label="Voir toutes les actions →" variant="secondary" />
@@ -189,8 +187,8 @@ function Home() {
       <section className="section-padding bg-accent-2">
         <div className="section-header flex-col md:flex-row">
           <div>
-            <h2 className="section-title text-surface">Ils nous font confiance</h2>
-            <p className="section-subtitle text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
+            <h2 className="h2-style text-surface">Ils nous font confiance</h2>
+            <p className="text-body text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
           </div>
           <a href="/a-propos">
             <Button label="En savoir plus sur nous →" variant="primary" />
@@ -205,6 +203,7 @@ function Home() {
         </div>
       </section>
 
+      <ScrollToTop />
     </div>
   )
 }

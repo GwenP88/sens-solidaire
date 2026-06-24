@@ -34,11 +34,11 @@ function EducationDetail() {
   }, [slug])
 
   // ── États de chargement et d'erreur
-  if (loading) return <p className="p-12 font-body text-primary">Chargement...</p>
+  if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (error || !item) return (
     <div className="p-12 text-center">
-      <p className="font-body text-primary/60">Atelier introuvable.</p>
-      <a href="/actions-educatives" className="text-accent underline text-sm">← Retour aux ateliers</a>
+      <p className="text-body text-primary/60">Atelier introuvable.</p>
+      <a href="/actions-educatives" className="link-inline text-accent">← Retour aux ateliers</a>
     </div>
   )
 
@@ -85,19 +85,19 @@ function EducationDetail() {
         <div className="flex flex-col gap-6">
 
           {/* Lien retour vers la liste des ateliers */}
-          <a href="/actions-educatives" className="font-body text-sm text-primary/50 hover:text-primary transition-colors">
+          <a href="/actions-educatives" className="link-nav text-primary/50 hover:text-primary">
             ← Retour aux ateliers
           </a>
 
           {/* Type et public cible */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-body text-xs font-bold text-accent-2">{item.type}</span>
-            <span className="font-body text-xs text-primary/30">—</span>
-            <span className="font-body text-xs text-primary/50">{publicLabels}</span>
+            <span className="text-eyebrow text-accent-2">{item.type}</span>
+            <span className="text-caption text-primary/30">—</span>
+            <span className="text-caption text-primary/50">{publicLabels}</span>
           </div>
 
           {/* Description courte — affichée en H2 pleine largeur */}
-          <h2 className="section-title text-primary">{item.description}</h2>
+          <h2 className="h2-style text-primary">{item.description}</h2>
 
           {/* Layout 2 colonnes — texte + sidebar */}
           <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
@@ -107,7 +107,7 @@ function EducationDetail() {
 
               {/* Contenu long — paragraphes séparés par double saut de ligne */}
               {item.content && item.content.split('\n\n').map((para, i) => (
-                <p key={i} className="font-body text-sm text-primary/80 leading-relaxed">
+                <p key={i} className="text-body text-primary/80">
                   {para}
                 </p>
               ))}
@@ -123,7 +123,7 @@ function EducationDetail() {
             </div>
 
             {/* Colonne sidebar — 1/3 */}
-            <div className="w-full md:w-1/3 shrink-0 flex flex-col gap-">
+            <div className="w-full md:w-1/3 shrink-0 flex flex-col gap-6">
 
               {/* Image principale depuis les médias attachés */}
               {mainImage && (
@@ -135,7 +135,7 @@ function EducationDetail() {
               {/* Bloc ressources — liens, vidéos, audios, PDFs */}
               {hasResources && (
                 <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-4">
-                  <p className="font-body text-xs font-bold text-primary/40 uppercase tracking-widest">Ressources</p>
+                  <p className="text-eyebrow text-primary/40">Ressources</p>
                   {[...links, ...videos, ...audios, ...pdfs].map((m, i) => (
                     <a key={i} href={m.file_url} target="_blank" rel="noopener noreferrer">
                       <Button label={getMediaLabel(m)} variant="secondary" fullWidth />
@@ -152,7 +152,7 @@ function EducationDetail() {
       {/* ── Galerie photos supplémentaires — grille ou carousel ── */}
       {extraImages.length > 0 && (
         <section className="section-padding bg-surface-mid">
-          <h2 className="section-title text-primary mb-8">Photos</h2>
+          <h2 className="h2-style text-primary mb-8">Photos</h2>
           {extraImages.length <= 2 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {extraImages.map((m, i) => (
@@ -182,8 +182,8 @@ function EducationDetail() {
       <section className="section-padding bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h2 className="section-title text-surface mb-2">Vous souhaitez accueillir une intervention ?</h2>
-            <p className="font-body text-surface/80 text-sm">Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux.</p>
+            <h2 className="h2-style text-surface">Vous souhaitez accueillir une intervention ?</h2>
+            <p className="text-body text-surface/80">Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux.</p>
           </div>
           <a href="/contact">
             <Button label="Nous contacter →" variant="primary" />

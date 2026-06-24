@@ -61,13 +61,13 @@ function NotreImpact() {
       />
 
       {/* ── Barre de filtres — collée au hero ── */}
-      <div className="px-4 md:px-24 py-4 md:py-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-12">
+      <div className="bg-primary px-4 md:px-24 py-4 md:py-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-12">
 
         {/* Menu déroulant pays */}
         <select
           value={activeCountry || ''}
           onChange={e => setActiveCountry(e.target.value || null)}
-          className="font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary shrink-0"
+          className="text-body text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary shrink-0"
         >
           <option value="">Tous les pays</option>
           <option value="Kenya">Kenya</option>
@@ -89,9 +89,9 @@ function NotreImpact() {
 
       </div>
 
+      {/* ── Texte d'introduction ── */}
       <section className="section-padding">
-        {/* ── Texte d'introduction ── */}
-        <p className="font-body text-sm text-primary/80 leading-relaxed">
+        <p className="text-body text-primary/80">
           Sens Solidaire s'investit sur tous les continents afin de collaborer sur des projets tournés vers la sauvegarde de la biodiversité, le bien-être des populations locales et un développement durable. Nos actions combinent éducation, échanges interculturels et projets environnementaux concrets.
         </p>
       </section>
@@ -100,8 +100,8 @@ function NotreImpact() {
       <section className="section-padding bg-surface-mid">
         <div className="section-header">
           <div className="max-w-5xl">
-            <h2 className="section-title text-primary mb-2">Nos actions et les Objectifs de Développement Durable</h2>
-            <p className="font-body text-sm text-primary/60">
+            <h2 className="h2-style text-primary mb-2">Nos actions et les Objectifs de Développement Durable</h2>
+            <p className="text-body text-primary/60">
               Les Objectifs de Développement Durable (ODD) sont 17 grands objectifs définis par l'ONU pour relever les défis sociaux, environnementaux et économiques de notre époque.<br /><br />
               À notre échelle, chacun de nos projets s'inscrit dans cette dynamique. Qu'il s'agisse de protéger la biodiversité, favoriser l'accès à l'éducation, soutenir les communautés locales ou sensibiliser les jeunes aux enjeux environnementaux, nous contribuons concrètement à bâtir un monde plus juste, plus solidaire et plus respectueux du vivant.
             </p>
@@ -120,18 +120,18 @@ function NotreImpact() {
                 alt={`ODD ${odd.n}`}
                 className="w-full rounded-lg object-cover"
               />
-              <p className="font-body text-xs text-primary/60 leading-tight">{odd.label}</p>
+              <p className="text-caption text-primary/60 leading-tight">{odd.label}</p>
             </div>
           ))}
         </div>
       </section>
 
+      {/* ── Grille des actions ── */}
       <section className="section-padding">
-        {/* ── Grille des actions — 2 colonnes ── */}
         {loading ? (
-          <p className="font-body text-sm text-primary/50 italic">Chargement...</p>
+          <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredActions.length === 0 ? (
-          <p className="font-body text-sm text-primary/50 italic">Aucune action pour ce filtre.</p>
+          <p className="text-body text-primary/50 italic">Aucune action pour ce filtre.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {filteredActions.map(action => (
@@ -148,15 +148,14 @@ function NotreImpact() {
             ))}
           </div>
         )}
-
       </section>
 
       {/* ── CTA missions ── */}
       <section className="section-padding bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h2 className="section-title text-surface mb-2">Envie de vous engager à nos côtés ?</h2>
-            <p className="font-body text-surface/80 text-sm">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
+            <h2 className="h2-style text-surface">Envie de vous engager à nos côtés ?</h2>
+            <p className="text-body text-surface/80">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
           </div>
           <a href="/missions">
             <Button label="Voir nos missions →" variant="primary" />

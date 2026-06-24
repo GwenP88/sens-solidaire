@@ -30,7 +30,7 @@ function AnchorNav({ sections, variant = 'light' }) {
           <button
             key={s.id}
             onClick={() => scrollToSection(s.id)}
-            className={`font-body text-sm px-4 py-4 whitespace-nowrap border-b-2 border-transparent transition-colors ${
+            className={`link-nav px-4 py-4 whitespace-nowrap border-b-2 border-transparent transition-colors ${
               variant === 'dark'
                 ? 'text-surface/60 hover:text-surface hover:border-surface'
                 : 'text-primary/60 hover:text-primary hover:border-accent'

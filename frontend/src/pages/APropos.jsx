@@ -59,17 +59,17 @@ function APropos() {
       <section className="section-padding bg-surface">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
           <div className="flex flex-col gap-6 flex-1">
-            <p className="font-body text-xs font-bold text-accent-2 uppercase tracking-widest">Notre histoire</p>
-            <h2 className="section-title text-primary">
+            <p className="text-eyebrow text-accent-2">Notre histoire</p>
+            <h2 className="h2-style text-primary">
               Une aventure humaine et solidaire <span className="text-accent-2">depuis 2007</span>
             </h2>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
+            <p className="text-body text-primary/80">
               Sens Solidaire est une association d'intérêt général régie par la loi 1901. Née d'une conviction simple : le voyage peut être un formidable vecteur de rencontres, d'échanges et de transformation, à condition d'être vécu dans le respect des populations et de l'environnement.
             </p>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
+            <p className="text-body text-primary/80">
               Depuis plus de 15 ans, nous œuvrons aux côtés des communautés locales à travers des missions de terrain, des projets solidaires et des actions d'éducation à la citoyenneté mondiale.
             </p>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
+            <p className="text-body text-primary/80">
               Sens Solidaire est <strong>multiculturelle, indépendante, apolitique et à vocation internationale.</strong> Nous contribuons à la préservation de l'environnement par des actions de solidarité internationale.
             </p>
           </div>
@@ -85,13 +85,13 @@ function APropos() {
 
       {/* ── Nos valeurs — grille 5 colonnes avec icônes ── */}
       <section className="section-padding bg-surface-mid">
-        <h2 className="section-title text-primary text-center mb-10">Nos valeurs</h2>
+        <h2 className="h2-style text-primary text-center mb-10">Nos valeurs</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
           {VALEURS.map(v => (
             <div key={v.titre} className="flex flex-col items-center gap-3 text-center">
               <v.icon className="text-accent-2 text-3xl" />
-              <p className="font-heading font-bold text-primary text-sm">{v.titre}</p>
-              <p className="font-body text-xs text-primary/60 leading-relaxed">{v.description}</p>
+              <h3 className="h3-style text-primary">{v.titre}</h3>
+              <p className="text-body text-primary/60">{v.description}</p>
             </div>
           ))}
         </div>
@@ -99,13 +99,13 @@ function APropos() {
 
       {/* ── Champs d'activité — grille 2 colonnes ── */}
       <section className="section-padding bg-surface">
-        <h2 className="section-title text-primary mb-2">Nos champs d'activité</h2>
-        <p className="font-body text-sm text-primary/60 mb-10">Nous accompagnons les communautés locales dans la planification et l'exécution de leurs projets, en répondant à leurs besoins et en s'adaptant à leur culture.</p>
+        <h2 className="h2-style text-primary mb-2">Nos champs d'activité</h2>
+        <p className="text-body text-primary/60 mb-10">Nous accompagnons les communautés locales dans la planification et l'exécution de leurs projets, en répondant à leurs besoins et en s'adaptant à leur culture.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {ACTIVITES.map(a => (
             <div key={a.titre} className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-3">
-              <h3 className="font-heading font-bold text-primary text-base">{a.titre}</h3>
-              <p className="font-body text-sm text-primary/70 leading-relaxed">{a.description}</p>
+              <h3 className="h3-style text-primary">{a.titre}</h3>
+              <p className="text-body text-primary/70">{a.description}</p>
             </div>
           ))}
         </div>
@@ -115,9 +115,9 @@ function APropos() {
       <section className="section-padding bg-surface-mid">
         <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-10">
           <div>
-            <p className="font-body text-xs font-bold text-accent-2 uppercase tracking-widest mb-2">L'équipe engagée</p>
-            <h2 className="section-title text-primary">Celles et ceux qui font vivre <span className="text-accent-2">Sens Solidaire</span></h2>
-            <p className="font-body text-sm text-primary/60 mt-2">Une équipe passionnée et engagée sur le terrain comme au quotidien.</p>
+            <p className="text-eyebrow text-accent-2 mb-2">L'équipe engagée</p>
+            <h2 className="h2-style text-primary">Celles et ceux qui font vivre <span className="text-accent-2">Sens Solidaire</span></h2>
+            <p className="text-body text-primary/60 mt-2">Une équipe passionnée et engagée sur le terrain comme au quotidien.</p>
           </div>
           <a href="/equipe">
             <Button label="Découvrir toute l'équipe →" variant="secondary" />
@@ -127,8 +127,8 @@ function APropos() {
           {direction.map(m => (
             <div key={m.id} className="flex flex-col items-center gap-3 bg-surface rounded-2xl p-6 text-center">
               <img src={m.avatar_url || '/placeholder-testimonials.png'} alt={m.nom} className="w-20 h-20 rounded-full object-cover" />
-              <p className="font-heading font-bold text-primary text-sm">{m.nom}</p>
-              <p className="font-body text-xs text-primary/60">{m.role}</p>
+              <p className="h3-style text-primary">{m.nom}</p>
+              <p className="text-caption text-primary/60">{m.role}</p>
             </div>
           ))}
         </div>
@@ -138,9 +138,9 @@ function APropos() {
       <section className="section-padding bg-surface">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
           <div className="flex flex-col gap-4 flex-1">
-            <p className="font-body text-xs font-bold text-accent-2 uppercase tracking-widest">Notre engagement</p>
-            <h2 className="section-title text-primary">Transparence et confiance</h2>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
+            <p className="text-eyebrow text-accent-2">Notre engagement</p>
+            <h2 className="h2-style text-primary">Transparence et confiance</h2>
+            <p className="text-body text-primary/80">
               Sens Solidaire agit en toute transparence. Nos comptes sont contrôlés et nos rapports d'activité sont publiés chaque année.
             </p>
             <a href="/rapports-activite">
@@ -161,8 +161,8 @@ function APropos() {
       <section className="section-padding bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h2 className="section-title text-surface mb-2">Une question, une envie de collaborer avec nous ?</h2>
-            <p className="font-body text-surface/80 text-sm">Notre équipe est à votre écoute.</p>
+            <h2 className="h2-style text-surface">Une question, une envie de collaborer avec nous ?</h2>
+            <p className="text-body text-surface/80">Notre équipe est à votre écoute.</p>
           </div>
           <a href="/contact">
             <Button label="Nous contacter →" variant="primary" />

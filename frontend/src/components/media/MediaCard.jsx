@@ -3,17 +3,17 @@
 
 function MediaCard({ title, content, theme, date, image_url, slug, external_url }) {
 
-  // Formate la date
+  // ── Formate la date en français
   const formattedDate = new Date(date).toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   })
 
-  // Tronque le contenu à 150 caractères
+  // ── Tronque le contenu à 150 caractères
   const excerpt = content?.length > 150 ? content.slice(0, 150) + '...' : content
 
-  // Lien : PDF/externe direct ou page détail
+  // ── Lien : PDF/externe direct ou page détail
   const href = external_url || `/medias/${slug}`
   const isExternal = !!external_url
 
@@ -34,23 +34,23 @@ function MediaCard({ title, content, theme, date, image_url, slug, external_url 
 
         {/* Date + thème */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-body text-xs text-primary/50">{formattedDate}</span>
-          <span className="font-body text-xs text-primary/30">—</span>
-          <span className="font-body text-xs font-bold text-accent-2">{theme}</span>
+          <span className="text-caption text-primary/50">{formattedDate}</span>
+          <span className="text-caption text-primary/30">—</span>
+          <span className="text-eyebrow text-accent-2">{theme}</span>
         </div>
 
         {/* Titre */}
-        <h3 className="font-heading font-bold text-primary text-base leading-snug">{title}</h3>
+        <h3 className="h3-style text-primary">{title}</h3>
 
         {/* Extrait */}
-        <p className="font-body text-sm text-primary/60 leading-relaxed flex-1">{excerpt}</p>
+        <p className="text-body text-primary/60 flex-1">{excerpt}</p>
 
         {/* CTA */}
         <a
           href={href}
           target={isExternal ? '_blank' : '_self'}
           rel={isExternal ? 'noopener noreferrer' : undefined}
-          className="font-body text-sm font-bold text-accent hover:text-accent/80 transition-colors mt-2"
+          className="link-cta text-accent hover:text-accent/80 mt-2"
         >
           {isExternal ? 'Consulter →' : 'Lire la suite →'}
         </a>

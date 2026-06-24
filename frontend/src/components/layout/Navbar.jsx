@@ -72,7 +72,7 @@ function Navbar() {
           {/* Accueil */}
           <Link
             to="/"
-            className={`font-body font-bold text-base text-surface hover:text-accent transition-colors ${location.pathname === '/' ? 'underline underline-offset-4' : ''}`}
+            className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/' ? 'underline underline-offset-4' : ''}`}
           >
             <GrHomeRounded />
           </Link>
@@ -85,20 +85,20 @@ function Navbar() {
           >
             <Link
               to="/missions"
-              className={`font-body font-bold text-base text-surface hover:text-accent transition-colors inline-flex items-center gap-1 ${isOnMissions ? 'underline underline-offset-4' : ''}`}
+              className={`link-nav text-surface hover:text-accent font-bold inline-flex items-center gap-1 ${isOnMissions ? 'underline underline-offset-4' : ''}`}
             >
               Nos missions<IoChevronDownSharp className="text-xs" />
             </Link>
             {missionsOpen && (
               <div className="absolute top-full left-0 mt-2 bg-primary rounded-xl shadow-lg py-2 min-w-48 z-20">
-                <Link to="/missions" className="block px-5 py-2 font-body text-sm text-surface hover:text-accent transition-colors border-b border-surface/10">
+                <Link to="/missions" className="block px-5 py-2 link-nav text-surface hover:text-accent border-b border-surface/10">
                   Toutes les missions
                 </Link>
                 {MISSIONS.map(m => (
                   <Link
                     key={m.slug}
                     to={`/missions/${m.slug}`}
-                    className={`block px-5 py-2 font-body text-sm text-surface hover:text-accent transition-colors ${location.pathname === `/missions/${m.slug}` ? 'text-accent' : ''}`}
+                    className={`block px-5 py-2 link-nav text-surface hover:text-accent ${location.pathname === `/missions/${m.slug}` ? 'text-accent' : ''}`}
                   >
                     {m.label}
                   </Link>
@@ -115,7 +115,7 @@ function Navbar() {
           >
             <Link
               to="/a-propos"
-              className={`font-body font-bold text-base text-surface hover:text-accent transition-colors inline-flex items-center gap-1 ${isOnApropos ? 'underline underline-offset-4' : ''}`}
+              className={`link-nav text-surface hover:text-accent font-bold inline-flex items-center gap-1 ${isOnApropos ? 'underline underline-offset-4' : ''}`}
             >
               À propos<IoChevronDownSharp className="text-xs" />
             </Link>
@@ -125,7 +125,7 @@ function Navbar() {
                   <Link
                     key={item.href}
                     to={item.href}
-                    className={`block px-5 py-2 font-body text-sm text-surface hover:text-accent transition-colors ${location.pathname === item.href ? 'text-accent' : ''}`}
+                    className={`block px-5 py-2 link-nav text-surface hover:text-accent ${location.pathname === item.href ? 'text-accent' : ''}`}
                   >
                     {item.label}
                   </Link>
@@ -135,22 +135,22 @@ function Navbar() {
           </div>
 
           {/* Notre impact */}
-          <Link to="/notre-impact" className={`font-body font-bold text-base text-surface hover:text-accent transition-colors ${location.pathname === '/notre-impact' ? 'underline underline-offset-4' : ''}`}>
+          <Link to="/notre-impact" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/notre-impact' ? 'underline underline-offset-4' : ''}`}>
             Notre impact
           </Link>
 
           {/* Éducation */}
-          <Link to="/actions-educatives" className={`font-body font-bold text-base text-surface hover:text-accent transition-colors ${location.pathname === '/actions-educatives' ? 'underline underline-offset-4' : ''}`}>
+          <Link to="/actions-educatives" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/actions-educatives' ? 'underline underline-offset-4' : ''}`}>
             Éducation & sensibilisation
           </Link>
 
           {/* Médias */}
-          <Link to="/medias-et-actualites" className={`font-body font-bold text-base text-surface hover:text-accent transition-colors ${location.pathname === '/medias-et-actualites' ? 'underline underline-offset-4' : ''}`}>
+          <Link to="/medias-et-actualites" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/medias-et-actualites' ? 'underline underline-offset-4' : ''}`}>
             Médias & actualités
           </Link>
 
           {/* Contact */}
-          <Link to="/contact" className={`font-body font-bold text-base text-surface hover:text-accent transition-colors ${location.pathname === '/contact' ? 'underline underline-offset-4' : ''}`}>
+          <Link to="/contact" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/contact' ? 'underline underline-offset-4' : ''}`}>
             Contact
           </Link>
 
@@ -160,7 +160,7 @@ function Navbar() {
         <div className="flex items-center gap-4">
 
           {/* Langue — desktop uniquement */}
-          <button className="hidden lg:inline-flex font-bold text-surface hover:text-accent transition-colors items-center gap-1">
+          <button className="hidden lg:inline-flex link-nav text-surface hover:text-accent font-bold items-center gap-1">
             FR<IoChevronDownSharp className="text-xs" />
           </button>
 
@@ -186,7 +186,7 @@ function Navbar() {
         <div className="fixed top-20 left-0 w-full bg-primary z-40 flex flex-col py-6 px-6 gap-1 lg:hidden overflow-y-auto max-h-[calc(100vh-5rem)]">
 
           {/* Accueil */}
-          <Link to="/" onClick={handleMobileNav} className="font-body font-bold text-surface py-3 border-b border-surface/10">
+          <Link to="/" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
             Accueil
           </Link>
 
@@ -194,14 +194,14 @@ function Navbar() {
           <div>
             <button
               onClick={() => setMobileMissionsOpen(!mobileMissionsOpen)}
-              className="w-full flex items-center justify-between font-body font-bold text-surface py-3 border-b border-surface/10"
+              className="w-full flex items-center justify-between link-nav text-surface font-bold py-3 border-b border-surface/10"
             >
               Nos missions
               <IoChevronDownSharp className={`transition-transform ${mobileMissionsOpen ? 'rotate-180' : ''}`} />
             </button>
             {mobileMissionsOpen && (
               <div className="flex flex-col pl-4 py-2 gap-1">
-                <Link to="/missions" onClick={handleMobileNav} className="font-body text-sm text-surface/80 hover:text-accent py-2">
+                <Link to="/missions" onClick={handleMobileNav} className="link-nav text-surface/80 hover:text-accent py-2">
                   Toutes les missions
                 </Link>
                 {MISSIONS.map(m => (
@@ -209,7 +209,7 @@ function Navbar() {
                     key={m.slug}
                     to={`/missions/${m.slug}`}
                     onClick={handleMobileNav}
-                    className="font-body text-sm text-surface/80 hover:text-accent py-2"
+                    className="link-nav text-surface/80 hover:text-accent py-2"
                   >
                     {m.label}
                   </Link>
@@ -222,7 +222,7 @@ function Navbar() {
           <div>
             <button
               onClick={() => setMobileAproposOpen(!mobileAproposOpen)}
-              className="w-full flex items-center justify-between font-body font-bold text-surface py-3 border-b border-surface/10"
+              className="w-full flex items-center justify-between link-nav text-surface font-bold py-3 border-b border-surface/10"
             >
               À propos
               <IoChevronDownSharp className={`transition-transform ${mobileAproposOpen ? 'rotate-180' : ''}`} />
@@ -234,7 +234,7 @@ function Navbar() {
                     key={item.href}
                     to={item.href}
                     onClick={handleMobileNav}
-                    className="font-body text-sm text-surface/80 hover:text-accent py-2"
+                    className="link-nav text-surface/80 hover:text-accent py-2"
                   >
                     {item.label}
                   </Link>
@@ -244,27 +244,27 @@ function Navbar() {
           </div>
 
           {/* Notre impact */}
-          <Link to="/notre-impact" onClick={handleMobileNav} className="font-body font-bold text-surface py-3 border-b border-surface/10">
+          <Link to="/notre-impact" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
             Notre impact
           </Link>
 
           {/* Éducation */}
-          <Link to="/actions-educatives" onClick={handleMobileNav} className="font-body font-bold text-surface py-3 border-b border-surface/10">
+          <Link to="/actions-educatives" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
             Éducation & sensibilisation
           </Link>
 
           {/* Médias */}
-          <Link to="/medias-et-actualites" onClick={handleMobileNav} className="font-body font-bold text-surface py-3 border-b border-surface/10">
+          <Link to="/medias-et-actualites" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
             Médias & actualités
           </Link>
 
           {/* Contact */}
-          <Link to="/contact" onClick={handleMobileNav} className="font-body font-bold text-surface py-3 border-b border-surface/10">
+          <Link to="/contact" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
             Contact
           </Link>
 
           {/* Langue */}
-          <button className="font-body font-bold text-surface py-3 text-left">
+          <button className="link-nav text-surface font-bold py-3 text-left">
             FR / EN
           </button>
 

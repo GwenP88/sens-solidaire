@@ -35,16 +35,16 @@ function EducationCard({ item }) {
 
         {/* Type et public cible */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-body text-xs font-bold text-accent-2">{item.type}</span>
-          <span className="font-body text-xs text-primary/30">—</span>
-          <span className="font-body text-xs text-primary/50">{formatPublic(item.public)}</span>
+          <span className="text-eyebrow text-accent-2">{item.type}</span>
+          <span className="text-caption text-primary/30">—</span>
+          <span className="text-caption text-primary/50">{formatPublic(item.public)}</span>
         </div>
 
         {/* Titre */}
-        <h3 className="font-heading font-bold text-primary text-base leading-snug">{item.title}</h3>
+        <h3 className="h3-style text-primary">{item.title}</h3>
 
         {/* Description courte */}
-        <p className="font-body text-sm text-primary/60 leading-relaxed flex-1 line-clamp-3">
+        <p className="text-body text-primary/60 flex-1 line-clamp-3">
           {item.description}
         </p>
 
@@ -55,14 +55,14 @@ function EducationCard({ item }) {
               href={item.external_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-body text-sm font-bold text-accent hover:text-accent/80 transition-colors"
+              className="link-cta text-accent hover:text-accent/80"
             >
               {ctaLabel}
             </a>
           ) : (
             <Link
               to={`/actions-educatives/${item.slug}`}
-              className="font-body text-sm font-bold text-accent hover:text-accent/80 transition-colors"
+              className="link-cta text-accent hover:text-accent/80"
             >
               {ctaLabel}
             </Link>

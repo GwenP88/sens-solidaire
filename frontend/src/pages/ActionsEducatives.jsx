@@ -46,7 +46,7 @@ function ActionsEducatives() {
     }, 50)
   }
 
-  // ── Filtrage par public cible — le champ public est une chaîne CSV (ex: "primaire,college_lycee")
+  // ── Filtrage par public cible — champ public en chaîne CSV (ex: "primaire,college_lycee")
   const filteredItems = activeFilter
     ? items.filter(item => item.public.split(',').includes(activeFilter))
     : items
@@ -74,9 +74,9 @@ function ActionsEducatives() {
       {/* ── Grille des ateliers ── */}
       <section className="section-padding">
         {loading ? (
-          <p className="font-body text-sm text-primary/50 italic">Chargement...</p>
+          <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredItems.length === 0 ? (
-          <p className="font-body text-sm text-primary/50 italic">Aucun atelier pour ce public.</p>
+          <p className="text-body text-primary/50 italic">Aucun atelier pour ce public.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {filteredItems.map(item => (
@@ -90,8 +90,8 @@ function ActionsEducatives() {
       <section className="section-padding bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h2 className="section-title text-surface mb-2">Vous souhaitez accueillir une intervention ?</h2>
-            <p className="font-body text-surface/80 text-sm">Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux.</p>
+            <h2 className="h2-style text-surface">Vous souhaitez accueillir une intervention ?</h2>
+            <p className="text-body text-surface/80">Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux.</p>
           </div>
           <a href="/contact">
             <Button label="Nous contacter →" variant="primary" />

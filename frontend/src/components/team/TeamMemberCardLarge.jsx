@@ -21,12 +21,12 @@ function TeamMemberCardLarge({ nom, role, description, avatar, bg = 'bg-surface-
 
       {/* Infos texte — nom, rôle, description */}
       <div className="flex flex-col gap-1">
-        <p className="font-heading font-bold text-primary text-sm">{nom}</p>
-        <p className="font-body font-bold text-accent-2 text-xs">{role}</p>
+        <p className="h3-style text-primary">{nom}</p>
+        <p className="text-eyebrow text-accent-2">{role}</p>
 
         {/* Description optionnelle — formation ou expérience */}
         {description && (
-          <p className="font-body text-xs text-primary/60 leading-relaxed">{description}</p>
+          <p className="text-caption text-primary/60">{description}</p>
         )}
       </div>
 

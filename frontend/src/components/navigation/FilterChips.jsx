@@ -16,14 +16,14 @@ function FilterChips({ filters, active, onChange, variant = 'light' }) {
         <button
           key={f.label}
           onClick={() => onChange(f.value)}
-          className={`font-body text-sm px-4 py-2 rounded-full border transition-colors ${
+          className={`link-nav px-4 py-2 rounded-full border transition-colors ${
             variant === 'dark'
               ? active === f.value
-                ? 'bg-surface text-primary border-surface'           // actif sur fond sombre
-                : 'bg-transparent text-surface border-surface hover:bg-surface/10' // inactif sur fond sombre
+                ? 'bg-surface text-primary border-surface'
+                : 'bg-transparent text-surface border-surface hover:bg-surface/10'
               : active === f.value
-                ? 'bg-primary text-surface border-primary'           // actif sur fond clair
-                : 'bg-transparent text-primary border-primary hover:bg-primary/10' // inactif sur fond clair
+                ? 'bg-primary text-surface border-primary'
+                : 'bg-transparent text-primary border-primary hover:bg-primary/10'
           }`}
         >
           {f.label}

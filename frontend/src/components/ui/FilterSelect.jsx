@@ -19,7 +19,7 @@ function FilterSelect({ filters, values, onChange }) {
             key={filter.key}
             value={values[filter.key] || ''}
             onChange={e => onChange(filter.key, e.target.value || null)}
-            className="font-body text-sm text-primary bg-surface border border-surface-dark rounded-xl px-4 py-1 cursor-pointer"
+            className="text-body text-primary bg-surface border border-surface-dark rounded-xl px-4 py-1 cursor-pointer"
           >
             {/* Option par défaut — remet le filtre à null */}
             <option value="">{filter.placeholder}</option>

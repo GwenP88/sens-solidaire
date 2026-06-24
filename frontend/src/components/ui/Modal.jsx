@@ -40,7 +40,7 @@ function Modal({ isOpen, onClose, title, children }) {
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-heading font-bold text-primary text-xl">{title}</h2>
+          <h2 className="h2-style text-primary">{title}</h2>
           <button
             onClick={onClose}
             className="text-primary/40 hover:text-primary transition-colors"

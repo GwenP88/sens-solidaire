@@ -11,7 +11,7 @@ function TestimonialCard({ quote, name, mission, avatar = '/images/placeholders/
       {/* Guillemets + Citation */}
       <div className="flex gap-3 overflow-hidden">
         <span className="font-heading text-4xl text-surface-dark/70 leading-none shrink-0"><VscQuote /></span>
-        <p className="font-heading text-sm text-primary">
+        <p className="text-body text-primary/80 italic">
           {quote}
         </p>
       </div>
@@ -20,10 +20,11 @@ function TestimonialCard({ quote, name, mission, avatar = '/images/placeholders/
       <div className="flex items-center gap-3 mt-2">
         <img src={avatar} alt={name} className="w-14 h-14 rounded-full object-cover" />
         <div>
-          <p className="font-body font-bold text-primary/70 text-sm">{name}</p>
-          <p className="font-body italic font-bold text-surface-dark text-xs">{mission}</p>
+          <p className="h3-style text-primary">{name}</p>
+          <p className="text-caption text-primary/60">{mission}</p>
         </div>
       </div>
+
     </article>
   )
 }

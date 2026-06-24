@@ -19,10 +19,10 @@ function TeamMemberCardSmall({ nom, role, avatar, bg = 'bg-surface-mid' }) {
       />
 
       {/* Nom */}
-      <p className="font-heading font-bold text-primary text-sm">{nom}</p>
+      <p className="h3-style text-primary">{nom}</p>
 
       {/* Rôle */}
-      <p className="font-body text-xs text-primary/60 leading-relaxed">{role}</p>
+      <p className="text-caption text-primary/60">{role}</p>
 
     </div>
   )

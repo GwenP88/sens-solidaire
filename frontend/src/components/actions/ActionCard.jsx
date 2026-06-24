@@ -10,8 +10,8 @@ function ActionCard({ title, description, tags, slug, country, image, odds }) {
     <article className="flex flex-col sm:flex-row rounded-xl overflow-hidden bg-primary text-surface h-auto sm:h-[240px]">
 
       {/* Zone image */}
-      <div className="w-full h-40 sm:w-1/3 sm:h-auto shrink-0">
-        <img src={image || '/images/placeholders/placeholder-action-1.png'}  alt={title} className="w-full h-full object-cover" />
+      <div className="relative w-full h-40 sm:w-1/3 sm:h-auto shrink-0">
+        <img src={image || '/images/placeholders/placeholder-action-1.png'} alt={title} className="w-full h-full object-cover" />
         <div className="absolute top-4 left-4 flex gap-4">
           {odds.map(n => <Badge key={n} number={n} />)}
         </div>
@@ -19,16 +19,16 @@ function ActionCard({ title, description, tags, slug, country, image, odds }) {
 
       {/* Zone contenu */}
       <div className="flex flex-col justify-between p-5 gap-3">
-        <h3 className="font-heading text-xl font-bold">{title}</h3>
-        <p className="font-body text-sm opacity-80">{description}</p>
-        <div className="flex gap-3 italic text-xs opacity-70">
+        <h3 className="h3-style text-surface">{title}</h3>
+        <p className="text-body text-surface">{description}</p>
+        <div className="text-caption text-surface/70 flex gap-3 italic">
           {tags.map(tag => <span key={tag}>• {tag}</span>)}
         </div>
         <div className="flex items-center justify-between">
           <a href={`/notre-impact/${slug}`}>
             <Button variant="primary" label="Découvrir →" />
           </a>
-          <span className="flex items-center gap-1 text-xs opacity-70">
+          <span className="text-caption text-surface/70 flex items-center gap-1">
             <IconPin /> {country}
           </span>
         </div>

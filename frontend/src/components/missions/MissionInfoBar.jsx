@@ -6,7 +6,7 @@ function MissionInfoBar({ items }) {
     <div className="flex flex-wrap items-center justify-around gap-4 px-2 md:px-6 py-4">
       {items.map((item, i) => (
         <>
-          <span key={item.label} className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+          <span key={item.label} className="text-caption text-primary/60 flex flex-col items-center gap-1">
             <item.icon className="text-primary text-xl" />
             <span>{item.label}</span>
           </span>

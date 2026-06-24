@@ -65,12 +65,12 @@ function MediaEtActualites() {
         />
       </div>
 
-      {/* ── Grille des articles — 3 colonnes ── */}
+      {/* ── Grille des articles ── */}
       <section className="section-padding">
         {loading ? (
-          <p className="font-body text-sm text-primary/50 italic">Chargement...</p>
+          <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredPosts.length === 0 ? (
-          <p className="font-body text-sm text-primary/50 italic">Aucun article pour ces critères.</p>
+          <p className="text-body text-primary/50 italic">Aucun article pour ces critères.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {filteredPosts.map(post => (

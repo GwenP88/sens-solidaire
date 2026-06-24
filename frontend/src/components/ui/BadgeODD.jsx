@@ -1,8 +1,9 @@
 // BadgeODD.jsx
-// Composant réutilisable — 17 variants avec chiffre et couleur différentes
+// Composant réutilisable — 17 variants avec chiffre et couleur officielle ONU
 
-function Badge({number = 1}) {
+function Badge({ number = 1 }) {
 
+  // ── Couleurs officielles ONU par numéro d'ODD
   const colors = {
     1: '#E5243B',
     2: '#DDA63A',
@@ -24,7 +25,10 @@ function Badge({number = 1}) {
   }
 
   return (
-    <div className={`w-7 h-7 rounded flex items-center justify-center text-surface font-body font-bold text-sm`} style={{ backgroundColor: colors[number] }}>
+    <div
+      className="w-7 h-7 rounded flex items-center justify-center text-surface text-eyebrow"
+      style={{ backgroundColor: colors[number] }}
+    >
       {number}
     </div>
   )

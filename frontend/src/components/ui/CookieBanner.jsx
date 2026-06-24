@@ -38,9 +38,9 @@ function CookieBanner() {
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-primary px-6 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-8 shadow-lg">
 
       {/* Message d'information + lien politique cookies */}
-      <p className="font-body text-sm text-surface/80 max-w-2xl">
+      <p className="text-body text-surface/80 max-w-2xl">
         Ce site utilise des cookies strictement nécessaires à son fonctionnement. Aucun cookie publicitaire ou de tracking n'est utilisé.{' '}
-        <a href="/cookies" className="text-surface underline hover:text-accent transition-colors">
+        <a href="/cookies" className="link-inline text-surface hover:text-accent">
           En savoir plus
         </a>
       </p>
