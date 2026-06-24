@@ -25,7 +25,7 @@ function AnchorNav({ sections, variant = 'light' }) {
     }`}>
 
       {/* ── Liste des liens d'ancrage — scroll horizontal si débordement ── */}
-      <div className="flex gap-1 px-16 overflow-x-auto">
+      <div className="flex gap-1 px-4 md:px-16 overflow-x-auto">
         {sections.map(s => (
           <button
             key={s.id}

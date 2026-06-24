@@ -23,7 +23,7 @@
 ## 🧭 Navigation
 - [X] `FilterChips.jsx`
 - [X] `FilterSelect.jsx`
-- [ ] `AnchorNav.jsx`
+- [X] `AnchorNav.jsx`
 
 ## 🃏 Cards
 - [ ] `MissionCard.jsx`
