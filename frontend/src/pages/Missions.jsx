@@ -215,7 +215,7 @@ function Missions() {
       {/* ── Bloc orientation — Quelle mission est faite pour moi ? ── */}
       <section className="section-padding bg-surface-mid">
         <h2 className="section-title text-primary mb-8">Quelle mission est faite pour vous ?</h2>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             {
               icon: IconPerson,
@@ -267,7 +267,7 @@ function Missions() {
       </section>
 
       {/* ── Barre de filtres par type de mission — collée au hero ── */}
-      <div ref={filtersRef} className="py-6 px-24 bg-primary">
+      <div ref={filtersRef} className="py-4 px-4 md:px-24 bg-primary">
         <FilterChips
           filters={FILTERS_MISSION_TYPE}
           active={activeFilter}
@@ -409,7 +409,7 @@ function Missions() {
               <p className="font-body text-sm text-primary/60 mb-8">
                 Retrouvez les dossiers de présentation détaillés pour découvrir les objectifs pédagogiques, le déroulement des missions, les conditions de participation et les informations pratiques.
               </p>
-            <div className="flex gap-6">
+            <div className="flex flex-col sm:flex-row gap-6">
               {[
                 { title: "Mission groupe — Kenya", size: "1,2 Mo" },
                 { title: "Mission groupe — Sénégal", size: "1,2 Mo" },
