@@ -27,7 +27,7 @@ function Contact() {
         <h2 className="section-title text-primary pb-4">Une question, un projet ou simplement l'envie d'en savoir plus ?</h2>
 
         {/* ── Intro + carte référente ── */}
-        <div className="flex gap-8 items-start mb-10">
+        <div className="flex flex-col md:flex-row gap-8 items-start mb-10">
 
           {/* Texte d'introduction — 2/3 */}
           <p className="font-body text-sm text-primary/80 flex-1">
@@ -37,7 +37,7 @@ function Contact() {
           </p>
 
           {/* Carte référente — 1/3 */}
-          <div className="w-1/3 shrink-0 flex flex-col items-center gap-1 p-6 bg-surface-mid rounded-2xl text-center">
+          <div className="w-full md:w-1/3 shrink-0 flex flex-col items-center gap-1 p-6 bg-surface-mid rounded-2xl text-center">
             <p className="font-heading font-bold text-primary text-base">Delphine Thibaut</p>
             <p className="font-body font-bold text-primary/70 text-sm">Fondatrice et Chargée des Programmes</p>
             <a href="mailto:contact@sensolidaire.org" className="font-body text-sm text-primary/60 hover:text-accent transition-colors">
@@ -51,10 +51,10 @@ function Contact() {
         </div>
 
         {/* ── Layout 2 colonnes — photo + formulaire ── */}
-        <div className="flex gap-8 items-stretch">
+        <div className="flex flex-col md:flex-row gap-8 items-stretch">
 
           {/* Photo gauche — 1/3 */}
-          <div className="w-1/3 shrink-0">
+          <div className="hidden md:block w-1/3 shrink-0">
             <img
               src="/images/contact/contact.jpg"
               alt="Équipe Sens Solidaire"

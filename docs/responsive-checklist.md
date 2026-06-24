@@ -57,7 +57,7 @@
 - [X] `NotreImpact.jsx`
 - [X] `ActionDetail.jsx`
 - [X] `Testimonials.jsx`
-- [ ] `Contact.jsx`
+- [X] `Contact.jsx`
 - [ ] `ActionsEducatives.jsx`
 - [ ] `EducationDetail.jsx`
 - [ ] `MediaEtActualites.jsx`
