@@ -64,8 +64,14 @@
 @utility section-title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 2.25rem;
+  font-size: 1.5rem;
   margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-title {
+    font-size: 2.25rem;
+  }
 }
 
 /* Sous-titre de section — Source Sans 3 base */

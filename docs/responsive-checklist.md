@@ -52,8 +52,8 @@
 
 ## 📄 Pages
 - [X] `Home.jsx`
-- [ ] `Missions.jsx`
-- [ ] `MissionDetail.jsx`
+- [X] `Missions.jsx`
+- [X] `MissionDetail.jsx`
 - [ ] `NotreImpact.jsx`
 - [ ] `ActionDetail.jsx`
 - [ ] `Testimonials.jsx`
