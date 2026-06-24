@@ -42,7 +42,7 @@
 
 ## 📝 Formulaires
 - [X] `ContactForm.jsx`
-- [ ] `TestimonialForm.jsx`
+- [X] `TestimonialForm.jsx`
 
 ## 🏛️ Composants Mission
 - [ ] `MissionInfoBar.jsx`

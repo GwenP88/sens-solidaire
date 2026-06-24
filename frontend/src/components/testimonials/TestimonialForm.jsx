@@ -68,8 +68,8 @@ function TestimonialForm({ onClose }) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-      {/* Champs prénom + nom côte à côte */}
-      <div className="flex gap-4">
+      {/* Champs prénom + nom côte à côte -> empliés sur mobile */}
+      <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-1 flex-1">
           <label className="font-body text-xs font-bold text-primary/60">Prénom *</label>
           <input
@@ -174,8 +174,8 @@ function TestimonialForm({ onClose }) {
         </span>
       </label>
 
-      {/* Boutons — annuler ou soumettre (désactivé si RGPD non coché) */}
-      <div className="flex gap-4 mt-2">
+      {/* Boutons — annuler ou soumettre (désactivé si RGPD non coché) -> empilés sur mobile */}
+      <div className="flex flex-col sm:flex-row gap-4 mt-2">
         <Button label="Annuler" variant="secondary" onClick={onClose} />
         <Button label="Envoyer mon témoignage →" variant="primary" type="submit" disabled={!form.rgpd} />
       </div>
