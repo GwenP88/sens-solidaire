@@ -11,7 +11,7 @@ function MissionSteps({ title = 'Comment ça fonctionne ?', steps, bgCard = 'bg-
       </h3>
 
       {/* Grille 3 colonnes */}
-      <div className="grid grid-cols-3 gap-6 items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
         {steps.map((step, i) => {
           // ── Icône dynamique — majuscule requise pour JSX
           const Icon = step.icon

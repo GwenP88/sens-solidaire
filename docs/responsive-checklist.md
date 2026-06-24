@@ -47,7 +47,7 @@
 ## 🏛️ Composants Mission
 - [X] `MissionInfoBar.jsx`
 - [X] `MissionCTA.jsx`
-- [ ] `MissionSteps.jsx`
+- [X] `MissionSteps.jsx`
 - [ ] `MissionSection.jsx`
 
 ## 📄 Pages
