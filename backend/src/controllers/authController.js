@@ -6,6 +6,7 @@
 
 // Import des fonctions du service d'authentification
 import { login, logout, refresh } from "../services/authService.js"
+import { findAllForAdmin, updateStatus } from "../services/testimonialService.js"
 
 
 // ── LOGIN ────────────────────────────────────────────────────────────────────
@@ -127,4 +128,51 @@ export const verifyToken = async (req, res) => {
     success: true,
     admin: req.user // { id, role } injecté par authMiddleware
   })
+}
+
+// ── APPROVE TESTIMONIAL (ADMIN) ───────────────────────────────────────────────
+// PATCH /api/admin/testimonials/:id/approve
+// Route PROTÉGÉE (authMiddleware).
+// Le statut "approved" est codé EN DUR ici → le client ne décide jamais
+// de la valeur, il choisit seulement la route. C'est la clé de la sécurité.
+export const approveTestimonial = async (req, res, next) => {
+  try {
+    // 1. Récupérer et valider l'id depuis l'URL (même logique que updateMission)
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0 ) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    // 2. Appel du service avec le statut EN DUR (jamais req.body !)
+    const testimonial = await updateStatus(id, "approved")
+
+    // 3. Réponse 200 (modification réussie, rien n'a été créé)
+    return res.status(200).json({ success: true, testimonial })
+
+  } catch (error) {
+    next(error)   // attrape le 404 (TESTIMONIAL_NOT_FOUND) du service
+  }
+}
+
+
+// ── REJECT TESTIMONIAL (ADMIN) ────────────────────────────────────────────────
+// PATCH /api/admin/testimonials/:id/reject
+// Route PROTÉGÉE. Statut "rejected" en dur (+ le service retire le homepage).
+export const rejectTestimonial = async (req, res, next) => {
+  try {
+    // 1. Même validation d'id
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    // 2. Appel du service avec "rejected" en dur
+    const testimonial = await updateStatus(id, "rejected")
+
+    // 3. Réponse 200
+    return res.status(200).json({ success: true, testimonial })
+
+  } catch (error) {
+    next(error)
+  }
 }
