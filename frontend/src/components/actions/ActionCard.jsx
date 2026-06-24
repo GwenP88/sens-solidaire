@@ -7,10 +7,10 @@ import { IconPin } from '../../utils/icons'
 
 function ActionCard({ title, description, tags, slug, country, image, odds }) {
   return (
-    <article className="flex rounded-xl overflow-hidden bg-primary text-surface h-[240px]">
+    <article className="flex flex-col sm:flex-row rounded-xl overflow-hidden bg-primary text-surface h-auto sm:h-[240px]">
 
       {/* Zone image */}
-      <div className="relative w-1/3 shrink-0">
+      <div className="w-full h-40 sm:w-1/3 sm:h-auto shrink-0">
         <img src={image || '/images/placeholders/placeholder-action-1.png'}  alt={title} className="w-full h-full object-cover" />
         <div className="absolute top-4 left-4 flex gap-4">
           {odds.map(n => <Badge key={n} number={n} />)}

@@ -26,8 +26,8 @@
 - [X] `AnchorNav.jsx`
 
 ## 🃏 Cards
-- [ ] `MissionCard.jsx`
-- [ ] `ActionCard.jsx`
+- [X] `MissionCard.jsx`
+- [X] `ActionCard.jsx`
 - [ ] `LocationCard.jsx`
 - [ ] `EducationCard.jsx`
 - [ ] `MediaCard.jsx`
