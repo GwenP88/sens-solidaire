@@ -61,7 +61,7 @@ function NotreImpact() {
       />
 
       {/* ── Barre de filtres — collée au hero ── */}
-      <div className="bg-primary px-24 py-6 flex items-center gap-12">
+      <div className="px-4 md:px-24 py-4 md:py-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-12">
 
         {/* Menu déroulant pays */}
         <select
@@ -133,7 +133,7 @@ function NotreImpact() {
         ) : filteredActions.length === 0 ? (
           <p className="font-body text-sm text-primary/50 italic">Aucune action pour ce filtre.</p>
         ) : (
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {filteredActions.map(action => (
               <ActionCard
                 key={action.slug}
@@ -153,7 +153,7 @@ function NotreImpact() {
 
       {/* ── CTA missions ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="section-title text-surface mb-2">Envie de vous engager à nos côtés ?</h2>
             <p className="font-body text-surface/80 text-sm">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
