@@ -1456,7 +1456,7 @@ pour consulter et vérifier les données.
 | Ajouter les steps dans les fiches missions détail | 🟠 |
 | Accès cliente au site avant déploiement ?? | 🟠 |
 | Revoir tous les textes/contenus de toutes les pages | 🔴 |
-| Faire comparatif api english pour la version bilingue | 🔴 |
+| Faire comparatif de ce qui est possible pour la version bilingue | 🔴 |
 
 ---
 
