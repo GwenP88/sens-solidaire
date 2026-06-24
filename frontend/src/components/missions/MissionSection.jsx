@@ -53,8 +53,8 @@ function MissionSection({
         image={decorImage}
       />
 
-      {/* ── Bloc intro — contenu riche + infobar + CTA + image ── */}
-      <div className="flex gap-16 items-center mb-16">
+      {/* ── Bloc intro — contenu riche + infobar + CTA + image ── empilés sur mobile */}
+      <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-center mb-10 md:mb-16">
         <div className="flex flex-col gap-6 flex-1">
 
           {/* Contenu riche — texte, listes, paragraphes... */}
@@ -72,7 +72,7 @@ function MissionSection({
 
         {/* Image illustrative */}
         {image && (
-          <div className="w-2/5 shrink-0">
+          <div className="w-full md:w-2/5 shrink-0">
             <img src={image} alt={imageAlt} className="w-full h-72 object-cover rounded-xl" />
           </div>
         )}

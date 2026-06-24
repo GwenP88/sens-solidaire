@@ -48,7 +48,7 @@
 - [X] `MissionInfoBar.jsx`
 - [X] `MissionCTA.jsx`
 - [X] `MissionSteps.jsx`
-- [ ] `MissionSection.jsx`
+- [X] `MissionSection.jsx`
 
 ## 📄 Pages
 - [ ] `Home.jsx`
