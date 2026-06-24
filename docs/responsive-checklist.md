@@ -72,5 +72,5 @@
 - [X] `Cookies.jsx`
 
 ## 📄 Admin
-- [ ] `LoginAdlin.jsx.jsx`
+- [X] `LoginAdlin.jsx.jsx`
 - [ ] `Dashboard.jsx`
