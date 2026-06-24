@@ -97,7 +97,7 @@ function Home() {
 
       {/* ── Section types de missions — 4 cards 2x2 ── */}
       <section className="section-padding bg-surface">
-        <div className="section-header">
+        <div className="section-header flex-col md:flex-row">
           <div className="max-w-4xl">
             <h2 className="section-title text-primary">Nos missions</h2>
             <p className="section-subtitle text-primary/80">
@@ -108,7 +108,7 @@ function Home() {
             <Button label="Voir toutes les missions →" variant="secondary" />
           </a>
         </div>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {MISSION_TYPES.map(type => (
             <MissionCard
               key={type.slug}
@@ -127,7 +127,7 @@ function Home() {
 
       {/* ── Section témoignages — carousel depuis l'API (show_homepage) ── */}
       <section className="section-padding bg-accent-2">
-        <div className="section-header">
+        <div className="section-header flex-col md:flex-row">
           <div className="max-w-4xl">
             <h2 className="section-title text-surface">Ils ont franchi le pas et vécu l'aventure. Découvrez leurs témoignages.</h2>
             <p className="section-subtitle text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
@@ -147,7 +147,7 @@ function Home() {
 
       {/* ── Section actions terrain — 4 premières actions depuis l'API ── */}
       <section className="section-padding bg-surface">
-        <div className="section-header">
+        <div className="section-header flex-col md:flex-row">
           <div className="max-w-4xl">
             <h2 className="section-title text-primary">Des actions concrètes au cœur des territoires</h2>
             <p className="section-subtitle text-primary/80">Depuis plus de 20 ans, nous accompagnons les communautés locales dans la réalisation de projets concrets en faveur de la biodiversité et du développement des territoires.</p>
@@ -164,12 +164,12 @@ function Home() {
               key={odd.n}
               src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
               alt={`ODD ${odd.n}`}
-              className="w-16 h-16 rounded object-cover"
+              className="w-8 h-8 md:w-16 md:h-16 rounded object-cover"
             />
           ))}
         </div>
 
-        <div className="grid grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           {actions.map(action => (
             <ActionCard
               key={action.slug}
@@ -187,7 +187,7 @@ function Home() {
 
       {/* ── Section partenaires — logos depuis l'API ── */}
       <section className="section-padding bg-accent-2">
-        <div className="section-header">
+        <div className="section-header flex-col md:flex-row">
           <div>
             <h2 className="section-title text-surface">Ils nous font confiance</h2>
             <p className="section-subtitle text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
@@ -196,7 +196,7 @@ function Home() {
             <Button label="En savoir plus sur nous →" variant="primary" />
           </a>
         </div>
-        <div className="grid grid-cols-6 gap-8 items-center">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 md:gap-8 items-center">
           {partners.map(partner => (
             <div key={partner.id} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24">
               <img src={partner.logo_url} alt={partner.name} className="max-h-14 max-w-full object-contain" />
