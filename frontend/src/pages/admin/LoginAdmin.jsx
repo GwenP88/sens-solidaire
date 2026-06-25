@@ -40,7 +40,7 @@ function LoginAdmin() {
       // Redirection vers le dashboard
       navigate('/admin')
 
-    } catch (err) {
+    } catch {
       // Erreur réseau (serveur injoignable)
       setError('Impossible de contacter le serveur. Vérifie que le backend est démarré.')
     } finally {
