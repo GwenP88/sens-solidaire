@@ -35,13 +35,14 @@ function LoginAdmin() {
       }
 
       // Stockage du token JWT en localStorage
-      localStorage.setItem('admin_token', data.token)
+      localStorage.setItem('admin_token', data.accesToken)
 
       // Redirection vers le dashboard
       navigate('/admin')
 
-    } catch {
+    } catch (err) {
       // Erreur réseau (serveur injoignable)
+      console.error("Erreur login:", err)
       setError('Impossible de contacter le serveur. Vérifie que le backend est démarré.')
     } finally {
       setLoading(false)
