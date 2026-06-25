@@ -13,5 +13,15 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    // Autorise les hosts externes — nécessaire pour ngrok
+    allowedHosts: ['couch-stray-twistable.ngrok-free.dev'],
+    // Proxy — redirige les appels /api vers le backend local
+    // Permet d'accéder au backend depuis ngrok sans second tunnel
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      }
+    }
   },
 })
