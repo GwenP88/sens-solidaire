@@ -76,3 +76,30 @@ export const updateStatus = async (id, status) => {
     throw error
   }
 }
+
+// ── HARD DELETE (RGPD) ────────────────────────────────────────────────────────
+// Supprime DÉFINITIVEMENT un témoignage de la base (droit à l'effacement, RGPD art. 17).
+// Contrairement aux missions (soft delete), ici la ligne disparaît vraiment :
+// le témoignage contient des données personnelles (author_name, content).
+// Aucun enfant ne dépend du témoignage → suppression directe, pas d'ordre à gérer.
+// Paramètre : id (number)
+// Retourne  : le témoignage supprimé (Prisma renvoie la ligne effacée)
+// Throw     : 404 si l'id n'existe pas
+export const remove = async (id) => {
+  try {
+    const testimonial = await prisma.testimonial.delete({
+      where: { id },
+    })
+    return testimonial
+
+  } catch (error) {
+    // 👉 quel code Prisma on attrape ? quel status HTTP on met ?
+    if (error.code === "P2025") {
+      const err = new Error("Témoignage introuvable")
+      err.status = 404
+      err.code = "TESTIMONIAL_NOT_FOUND"   // clé stable pour le front
+      throw err
+    }
+    throw error
+  }
+}

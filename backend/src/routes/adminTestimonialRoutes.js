@@ -8,7 +8,7 @@
 import { Router } from "express"
 import authMiddleware from "../middlewares/authMiddleware.js"
 
-import { getTestimonials, approveTestimonial, rejectTestimonial, } from "../controllers/testimonialController.js"
+import { getTestimonials, approveTestimonial, rejectTestimonial, deleteTestimonial } from "../controllers/testimonialController.js"
 
 const router = Router()
 
@@ -27,5 +27,10 @@ router.patch("/:id/approve", approveTestimonial)
 
 // PATCH /api/admin/testimonials/:id/reject   → passe le statut à "rejected" (+ retire homepage)
 router.patch("/:id/reject", rejectTestimonial)
+
+// DELETE /api/admin/testimonials/:id
+// HARD DELETE — effacement définitif (droit à l'oubli RGPD art. 17).
+// ⚠️ Irréversible : la ligne disparaît vraiment de la base (≠ soft delete missions).
+router.delete("/:id", deleteTestimonial)
 
 export default router
