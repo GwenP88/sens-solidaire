@@ -5,6 +5,30 @@
 // URL de base de l'API — pointe vers le backend Express
 const API_URL = "http://localhost:3000/api"
 
+// ── AUTH ADMIN ───────────────────────────────────────────────────────────────
+
+// Connexion admin : envoie email + password, récupère l'access token.
+// credentials: "include" → indispensable pour que le navigateur accepte
+// le cookie HTTP-Only (refresh token) renvoyé par le back.
+export const loginAdmin = async (email, password) => {
+  const response = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",                       // 👈 pour le cookie refresh
+    body: JSON.stringify({ email, password }),
+  })
+
+  if (!response.ok) {
+    // Le back renvoie { error, message } en cas de 400/401
+    const data = await response.json()
+    throw new Error(data.message || "Email ou mot de passe incorrect.")
+  }
+
+  const data = await response.json()
+  return data.accessToken
+}
+
+
 // ── MISSIONS ─────────────────────────────────────────────────────────────────
 
 // Récupère toutes les missions actives
