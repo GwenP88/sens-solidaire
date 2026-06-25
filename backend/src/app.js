@@ -66,12 +66,13 @@ app.use(helmet())
 // origin : seul localhost:5173 (Vite) est autorisé en développement
 // credentials : true → autorise l'envoi des cookies (refresh token)
 app.use(cors({
-  // Accepte localhost en dev + toute URL ngrok pour les tests mobile
+  // Accepte localhost, ngrok et IP locale pour les tests mobile
   origin: (origin, callback) => {
     const allowed = [
       process.env.FRONTEND_URL || "http://localhost:5173",
       /\.ngrok-free\.app$/,
       /\.ngrok\.io$/,
+      /^http:\/\/192\.168\./,
     ]
     if (!origin || allowed.some(p => typeof p === 'string' ? p === origin : p.test(origin))) {
       callback(null, true)

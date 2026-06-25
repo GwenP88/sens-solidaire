@@ -9,7 +9,7 @@ function Hero() {
     <section className="relative w-full h-screen flex items-end" style={{ backgroundImage: `url(/images/hero/hero-home.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       {/* Overlay sombre */}
       <div className="absolute inset-0 bg-black/50"></div>
-      <div className="relative px-6 pb-12 md:px-16 md:pb-24 flex flex-col gap-6">
+      <div className="relative px-6 pb-24 md:px-16 md:pb-24 flex flex-col gap-6 w-full md:w-auto text-center md:text-left items-center md:items-start">
 
         {/* Surtitre */}
         <p className="text-eyebrow text-surface">

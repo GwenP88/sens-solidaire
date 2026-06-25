@@ -50,7 +50,7 @@
 @utility h1-style {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 1.8rem;
   line-height: 1.1;
 }
 @media (min-width: 768px) {
@@ -99,7 +99,7 @@
 @utility text-lead {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.6;
 }
 @media (min-width: 768px) {

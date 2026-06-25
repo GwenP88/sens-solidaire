@@ -19,8 +19,9 @@ export default defineConfig({
     // Permet d'accéder au backend depuis ngrok sans second tunnel
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://backend:3000',
         changeOrigin: true,
+        secure: false,
       }
     }
   },

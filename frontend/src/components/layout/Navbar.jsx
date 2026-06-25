@@ -183,7 +183,7 @@ function Navbar() {
 
       {/* ── Menu mobile — pleine largeur, s'ouvre vers le bas ── */}
       {mobileOpen && (
-        <div className="fixed top-20 left-0 w-full bg-primary z-40 flex flex-col py-6 px-6 gap-1 lg:hidden overflow-y-auto max-h-[calc(100vh-5rem)]">
+        <div className="fixed top-20 left-0 w-screen overflow-x-hidden bg-primary z-40 flex flex-col py-6 px-6 gap-1 lg:hidden overflow-y-auto max-h-[calc(100vh-5rem)]">
 
           {/* Accueil */}
           <Link to="/" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">

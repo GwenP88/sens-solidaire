@@ -3,7 +3,7 @@
 // Toutes les fonctions retournent les données directement ou lèvent une erreur
 
 // URL de base de l'API — variable d'env Vite en priorité, fallback localhost
-const API_URL = (import.meta.env.VITE_API_URL ?? "http://localhost:3000") + "/api"
+const API_URL = "/api"
 
 // ── MISSIONS ─────────────────────────────────────────────────────────────────
 
