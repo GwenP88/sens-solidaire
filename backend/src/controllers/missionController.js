@@ -5,7 +5,7 @@
 // Ne contient AUCUNE logique métier — tout est délégué à missionService.js
 
 // Import des fonctions du service missions
-import { findAll, findBySlug, create, update, softDelete } from "../services/missionService.js"
+import { findAll, findAllForAdmin, findBySlug, create, update, softDelete } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
@@ -142,6 +142,28 @@ export const getMissionBySlug = async (req, res, next) => {
 
   } catch (error) {
     // Gère le 404 throwé par le service si slug inconnu
+    next(error)
+  }
+}
+
+// ── GET ALL MISSIONS FOR ADMIN ────────────────────────────────────────────────
+// GET /api/admin/missions
+// Route PROTÉGÉE (authMiddleware) : réservée au dashboard.
+// Différence avec getMissions : AUCUN filtre → renvoie actives ET inactives.
+// Aucune query à valider, donc pas de validation ici.
+export const getMissionsForAdmin = async (req, res, next) => {
+  try {
+
+    // 👉 appelle le bon service (celui qui ne filtre pas is_active)
+    const missions = await findAllForAdmin()
+
+    // 👉 renvoie la MÊME enveloppe que getMissions (status + format)
+    return res.status(200).json({
+      success: true,
+      missions
+    })
+
+  } catch (error) {
     next(error)
   }
 }

@@ -34,6 +34,24 @@ export const findAll = async (filters = {}) => {
   return missions
 }
 
+// ── FIND ALL FOR ADMIN ───────────────────────────────────────────────────────
+// Récupère TOUTES les missions (actives ET inactives) pour le dashboard admin.
+// Différence avec findAll : AUCUN filtre is_active → les soft-deleted sont visibles.
+// Retourne : tableau de missions (vide si aucune, jamais null)
+
+export const findAllForAdmin = async () => {
+
+  const missions = await prisma.mission.findMany({
+
+    include: {
+      pricing: true,
+  	  location: true,
+    },
+    orderBy: { created_at: "asc" },
+  })
+
+  return missions
+}
 
 // ── FIND BY SLUG ─────────────────────────────────────────────────────────────
 // Récupère une mission complète par son slug
