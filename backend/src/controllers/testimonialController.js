@@ -4,13 +4,13 @@
 //        appeler le service, formater et renvoyer la réponse JSON
 // Ne contient AUCUNE logique métier — tout est délégué à testimonialService.js
 
-// Import unique regroupant les fonctions des deux branches
 import {
-  getValidatedTestimonials,
-  submitTestimonial,
-  findAllForAdmin,
-  updateStatus,
-} from '../services/testimonialService.js'
+  getValidatedTestimonials,  // public — liste des témoignages validés
+  submitTestimonial,         // public — soumission d'un témoignage
+  findAllForAdmin,           // admin  — liste complète (modération)
+  updateStatus,              // admin  — approve / reject
+  remove,                    // admin  — hard delete RGPD
+} from "../services/testimonialService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // Whitelist des statuts autorisés — mêmes valeurs que la doc BDD.
@@ -123,5 +123,32 @@ export const rejectTestimonial = async (req, res, next) => {
     return res.status(200).json({ success: true, testimonial })
   } catch (error) {
     next(error)
+  }
+}
+
+// ── DELETE TESTIMONIAL (ADMIN — RGPD) ─────────────────────────────────────────
+// DELETE /api/admin/testimonials/:id
+// HARD DELETE : effacement définitif (droit à l'oubli RGPD).
+// Route PROTÉGÉE (authMiddleware).
+export const deleteTestimonial = async (req, res, next) => {
+  try {
+    // 1. Valider l'id depuis l'URL (même logique que deleteMission)
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    // 2. Suppression via le service (lève 404 si l'id n'existe pas)
+    const testimonial = await remove(id)
+
+    // 3. Réponse 200 + confirmation
+    return res.status(200).json({
+      success: true,
+      message: "Témoignage supprimé définitivement",
+      testimonial,
+    })
+
+  } catch (error) {
+    next(error)   // attrape le 404 (P2025) renvoyé par le service
   }
 }
