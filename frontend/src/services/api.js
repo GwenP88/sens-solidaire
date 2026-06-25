@@ -163,3 +163,28 @@ export const fetchLocationBySlug = async (slug) => {
   if (!response.ok) throw new Error(`Lieu introuvable (slug : ${slug})`)
   return await response.json()
 }
+
+// ── ADMIN — TÉMOIGNAGES ──────────────────────────────────────────────────────
+
+// Récupère TOUS les témoignages pour la modération (tous statuts).
+// Route protégée → on doit envoyer le token dans le header Authorization.
+export const fetchAdminTestimonials = async () => {
+  // 1. On récupère le token stocké au login
+  const token = localStorage.getItem("admin_token")
+
+  const response = await fetch(`${API_URL}/admin/testimonials`, {
+    headers: {
+      // 2. Le header qui authentifie la requête.
+      //    Format exact attendu par ton back : "Bearer <token>"
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error("Impossible de charger les témoignages (admin).")
+  }
+
+  const data = await response.json()
+  // 👉 ton back renvoie quoi ? regarde getTestimonials dans ton controller
+  return data.testimonials
+}
