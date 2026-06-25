@@ -6,13 +6,16 @@
 import { Router } from "express"
 import  authMiddleware  from "../middlewares/authMiddleware.js"
 
-import { createMission, updateMission, deleteMission } from "../controllers/missionController.js"
+import { createMission, updateMission, deleteMission, getMissionsForAdmin } from "../controllers/missionController.js"
 
 const router = Router()
 
 // Le middleware s'applique à TOUT le routeur d'un coup.
 // → impossible d'oublier de protéger une route : la porte est gardée en amont.
 router.use(authMiddleware)
+
+// GET /api/admin/missions → liste complète (admin)
+router.get("/", getMissionsForAdmin)
 
 // POST /api/admin/missions  → créer une mission
 router.post("/", createMission)

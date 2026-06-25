@@ -46,6 +46,8 @@ import missionReportRouter from './routes/missionReportRoutes.js'
 import partnerRouter from './routes/partnerRoutes.js'
 // Import lieux des missions
 import locationRouter from './routes/locationRoutes.js'
+// ── Import du router testimonials ──
+import adminTestimonialRoutes from "./routes/adminTestimonialRoutes.js"
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -118,6 +120,9 @@ app.use('/api/mission-reports', missionReportRouter)
 app.use('/api/partners', partnerRouter)
 // Route lieux des missions 
 app.use('/api/locations', locationRouter)
+// Le préfixe /api/admin/testimonials est ajouté ICI.
+// → dans le fichier de routes, router.get("/") devient GET /api/admin/testimonials
+app.use("/api/admin/testimonials", adminTestimonialRoutes)
 
 
 // ── MIDDLEWARE ERREURS ───────────────────────────────────────────────────────
