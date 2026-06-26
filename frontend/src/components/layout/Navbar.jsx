@@ -57,7 +57,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="w-full flex items-center justify-between px-6 md:px-16 h-20 bg-transparent absolute top-0 left-0 z-10">
+      <nav className="w-full flex items-center justify-between px-4 lg:px-8 xl:px-16 h-20 bg-transparent absolute top-0 left-0 z-10">
 
         {/* ── Logo ── */}
         <Link to="/">
@@ -67,7 +67,7 @@ function Navbar() {
         </Link>
 
         {/* ── Liens desktop — masqués sur mobile ── */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-5 xl:gap-10">
 
           {/* Accueil */}
           <Link
@@ -79,7 +79,7 @@ function Navbar() {
 
           {/* Nos missions — dropdown hover */}
           <div
-            className="relative"
+            className="relative flex items-center"
             onMouseEnter={() => { clearTimeout(closeTimer.current); setMissionsOpen(true) }}
             onMouseLeave={() => { closeTimer.current = setTimeout(() => setMissionsOpen(false), 150) }}
           >
@@ -109,7 +109,7 @@ function Navbar() {
 
           {/* À propos — dropdown hover */}
           <div
-            className="relative"
+            className="relative flex items-center"
             onMouseEnter={() => { clearTimeout(closeTimerApropos.current); setAproposOpen(true) }}
             onMouseLeave={() => { closeTimerApropos.current = setTimeout(() => setAproposOpen(false), 150) }}
           >

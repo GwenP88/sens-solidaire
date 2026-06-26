@@ -102,7 +102,7 @@ function Home() {
 
       {/* ── Section types de missions — 4 cards 2x2 ── */}
       <section className="section-padding bg-surface">
-        <div className="section-header flex-col md:flex-row">
+        <div className="section-header flex-col xl:flex-row">
           <div className="max-w-4xl">
             <h2 className="h2-style text-primary">Nos missions</h2>
             <p className="text-body text-primary/80">
@@ -113,7 +113,7 @@ function Home() {
             <Button label="Voir toutes les missions →" variant="primary" />
           </a>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {MISSION_TYPES.map(type => (
             <MissionCard
               key={type.slug}
@@ -132,7 +132,7 @@ function Home() {
 
       {/* ── Section témoignages — carousel depuis l'API (show_homepage) ── */}
       <section className="section-padding bg-accent-2">
-        <div className="section-header flex-col md:flex-row">
+        <div className="section-header flex-col xl:flex-row">
           <div className="max-w-4xl">
             <h2 className="h2-style text-surface">Ils racontent leur aventure</h2>
             <p className="text-body text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
@@ -152,7 +152,7 @@ function Home() {
 
       {/* ── Section actions terrain — 4 premières actions depuis l'API ── */}
       <section className="section-padding bg-surface">
-        <div className="section-header flex-col md:flex-row">
+        <div className="section-header flex-col xl:flex-row">
           <div className="max-w-4xl">
             <h2 className="h2-style text-primary">Des actions concrètes au cœur des territoires</h2>
             <p className="text-body text-primary/80">Depuis plus de 20 ans, nous menons des projets en faveur des Objectifs de Développement Durable (ODD), un cadre international regroupant 17 objectifs fixés par les Nations Unies pour préserver la planète, réduire les inégalités et améliorer les conditions de vie de tous.</p>
@@ -163,24 +163,49 @@ function Home() {
         </div>
 
         {/* ── Ligne ODD — icônes officielles ONU ── */}
-        <div className="flex flex-wrap justify-center gap-3 my-8">
-
-          {ODDS.map(odd => (
-            <img
-              key={odd.n}
-              src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
-              alt={`ODD ${odd.n}`}
-              className="w-12 h-12 md:w-16 md:h-16 rounded object-cover"
-            />
-          ))}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <a href="https://sdgs.un.org/goals" target="_blank" rel="noopener noreferrer">
-              <Button label="En savoir plus sur les ODD →" variant="secondary" />
-            </a>
+        <div className="flex flex-col items-center gap-6 my-8">
+          <div className="flex flex-wrap justify-center gap-2">
+            {ODDS.map(odd => (
+              <img
+                key={odd.n}
+                src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
+                alt={`ODD ${odd.n}`}
+                className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded object-cover"
+              />
+            ))}
           </div>
+          <a href="https://sdgs.un.org/goals" target="_blank" rel="noopener noreferrer">
+            <Button variant="secondary" label="En savoir plus sur les ODD →" />
+          </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        {/* ── Grille desktop 1024+ / Carousel mobile+768 ── */}
+
+        {/* ── Mobile + 768 — carousel ── */}
+        <div className="lg:hidden">
+          <Carousel
+            items={actions}
+            renderSlide={(action) => (
+              <ActionCard
+                key={action.slug}
+                slug={action.slug}
+                title={action.title}
+                description={action.description}
+                image={action.image_url}
+                tags={action.tags.map(t => t.tag)}
+                odds={action.odds.map(o => o.odd_number)}
+                country={action.country}
+              />
+            )}
+            slidesPerView={1}
+            spaceBetween={16}
+            showPagination={true}
+            color="primary"
+          />
+        </div>
+
+        {/* ── Desktop 1024+ — 1 colonne ── */}
+        <div className="hidden lg:grid grid-cols-1 xl:grid-cols-2 gap-8">
           {actions.map(action => (
             <ActionCard
               key={action.slug}
@@ -199,7 +224,7 @@ function Home() {
       {/* ── Section Actualités ── */}
       {mediaPosts.length > 0 && (
         <section className="section-padding bg-surface-mid">
-          <div className="section-header flex-col md:flex-row">
+          <div className="section-header flex-col xl:flex-row">
             <div className="max-w-4xl">
               <h2 className="h2-style text-primary">Actualités & Médias</h2>
               <p className="text-body text-primary/80">Suivez la vie de Sens Solidaires à travers nos événements, nos projets, nos interventions dans les médias et nos actions de sensibilisation. Découvrez les temps forts de notre engagement qui font vivre l'association, en France comme à l'international.</p>
@@ -221,7 +246,7 @@ function Home() {
 
       {/* ── Section partenaires — logos depuis l'API ── */}
       <section className="section-padding bg-accent-2">
-        <div className="section-header flex-col md:flex-row">
+        <div className="section-header flex-col xl:flex-row">
           <div>
             <h2 className="h2-style text-surface">Ils nous font confiance</h2>
             <p className="text-body text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
@@ -230,7 +255,7 @@ function Home() {
             <Button label="En savoir plus sur nous →" variant="primary" />
           </a>
         </div>
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-8 items-center">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 items-center">
           {partners.map(partner => (
             <div key={partner.id} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24 p-1">
               <img src={partner.logo_url} alt={partner.name} className="max-h-14 max-w-full object-contain" />

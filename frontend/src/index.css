@@ -116,10 +116,13 @@
 /* Surtitre — au-dessus des h2, catégories */
 @utility text-eyebrow {
   font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+}
+@media (min-width: 768px) {
+  .text-eyebrow { font-size: 0.85rem; }
 }
 
 /* Label — colonnes footer, stats, navigation */
@@ -158,8 +161,12 @@
 /* Lien de navigation — navbar, footer */
 @utility link-nav {
   font-family: var(--font-body);
-  font-size: 0.875rem;
-  transition: color 0.2s;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+@media (min-width: 1280px) {
+  .link-nav { font-size: 0.9rem; }
 }
 
 /* Lien inline — dans un texte courant */
@@ -199,7 +206,7 @@
   margin-bottom: 2.5rem;
   gap: 1rem;
 }
-@media (min-width: 768px) {
+@media (min-width: 1280px) {
   .section-header {
     flex-direction: row;
     align-items: flex-start;

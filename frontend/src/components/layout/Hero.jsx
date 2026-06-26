@@ -13,7 +13,7 @@ function Hero() {
 
         {/* Surtitre */}
         <p className="text-eyebrow text-surface">
-          Sens Solidaire
+          Sens Solidaires
         </p>
 
         {/* Titre */}
