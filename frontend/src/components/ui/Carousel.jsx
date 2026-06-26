@@ -25,7 +25,7 @@ import 'swiper/css/pagination'
 // ── Icônes
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
-function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, showPagination = false, color = 'primary' }) {
+function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, showPagination = false, color = 'primary', customBreakpoints = null }) {
   // ── Référence vers l'instance Swiper
   const swiperRef = useRef(null)
 
@@ -54,6 +54,11 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
         breakpoints={{
           0:    { slidesPerView: 1,            spaceBetween: 16 },
           1024: { slidesPerView: 2,            spaceBetween: 20 },
+          1280: { slidesPerView: slidesPerView, spaceBetween: spaceBetween },
+        }}
+        breakpoints={customBreakpoints ?? {
+          0:    { slidesPerView: 1, spaceBetween: 16 },
+          1024: { slidesPerView: 2, spaceBetween: 20 },
           1280: { slidesPerView: slidesPerView, spaceBetween: spaceBetween },
         }}
         pagination={showPagination ? { clickable: true } : false}

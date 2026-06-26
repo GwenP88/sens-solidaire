@@ -10,7 +10,7 @@
 function DelegationCard({ pays, flag, image, lieu, contacts }) {
   return (
     // ── Conteneur relatif — permet le positionnement absolu de l'overlay et du contenu
-    <div className="relative h-36 rounded-2xl overflow-hidden">
+    <div className="relative h-44 md:h-52 xl:h-44 rounded-2xl overflow-hidden">
 
       {/* Photo de fond immersive */}
       <img src={image} alt={lieu} className="w-full h-full object-cover" />
@@ -30,10 +30,10 @@ function DelegationCard({ pays, flag, image, lieu, contacts }) {
         </div>
 
         {/* Nom du lieu partenaire */}
-        <p className="text-body text-surface/90">{lieu}</p>
+        <p className="text-body text-surface">{lieu}</p>
 
         {/* Contacts locaux */}
-        <p className="text-mention text-surface/80">{contacts}</p>
+        <p className="text-mention text-surface">{contacts}</p>
 
       </div>
     </div>

@@ -8,12 +8,11 @@
 
 function TeamMemberCardSmall({ nom, role, avatar, bg = 'bg-surface-mid' }) {
   return (
-    // ── Card centrée — avatar rond + nom + rôle
     <div className={`flex flex-col items-center gap-3 ${bg} rounded-2xl p-4 text-center`}>
 
-      {/* Photo du membre — avatar neutre si absente */}
+      {/* Photo du membre */}
       <img
-        src={avatar || '/avatar-women.png'}
+        src={avatar || '/images/placeholders/avatar-women.png'}
         alt={nom}
         className="w-16 h-16 rounded-full object-cover"
       />

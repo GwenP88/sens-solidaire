@@ -12,6 +12,7 @@ import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
 import Button from '../components/ui/Button'
+import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
 // ── Composants métier
@@ -20,14 +21,12 @@ import TeamMemberCardSmall from '../components/team/TeamMemberCardSmall'
 import DelegationCard from '../components/team/DelegationCard'
 
 function Equipe() {
-  // ── État local — membres par catégorie + délégations
   const [direction, setDirection] = useState([])
   const [bureau, setBureau] = useState([])
   const [ca, setCa] = useState([])
   const [egalement, setEgalement] = useState([])
   const [delegations, setDelegations] = useState([])
 
-  // ── Chargement de toutes les données en parallèle au montage
   useEffect(() => {
     fetchTeamMembers('direction').then(setDirection).catch(console.error)
     fetchTeamMembers('bureau').then(setBureau).catch(console.error)
@@ -39,17 +38,16 @@ function Equipe() {
   return (
     <div className="bg-surface min-h-screen">
 
-      {/* ── Hero immersif ── */}
       <HeroPage
         image="/images/hero/hero-missions.jpg"
         title="Notre équipe"
         subtitle="Des femmes et des hommes engagés, en France et à l'international, pour un monde plus juste et la protection de la biodiversité."
       />
 
-      {/* ── Direction — cards larges 3 colonnes ── */}
+      {/* ── Direction — grille responsive ── */}
       <section className="section-padding bg-surface">
         <h2 className="h2-style text-primary mb-8">Direction</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {direction.map(m => (
             <TeamMemberCardLarge
               key={m.id}
@@ -62,10 +60,10 @@ function Equipe() {
         </div>
       </section>
 
-      {/* ── Bureau — cards larges 3 colonnes, fond inversé ── */}
+      {/* ── Bureau — grille responsive ── */}
       <section className="section-padding bg-surface-mid">
         <h2 className="h2-style text-primary mb-8">Membres du bureau</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bureau.map(m => (
             <TeamMemberCardLarge
               key={m.id}
@@ -79,25 +77,29 @@ function Equipe() {
         </div>
       </section>
 
-      {/* ── Conseil d'administration — cards compactes 4 colonnes ── */}
+      {/* ── Conseil d'administration — carousel toutes tailles ── */}
       <section className="section-padding bg-surface">
         <h2 className="h2-style text-primary mb-8">Conseil d'administration</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {ca.map(m => (
+        <Carousel
+          items={ca}
+          renderSlide={(m) => (
             <TeamMemberCardSmall
-              key={m.id}
               nom={m.nom}
               role={m.role}
               avatar={m.avatar_url}
             />
-          ))}
-        </div>
+          )}
+          slidesPerView={3}
+          spaceBetween={24}
+          showPagination={true}
+          color="primary"
+        />
       </section>
 
-      {/* ── Également à nos côtés — cards compactes 3 colonnes ── */}
+      {/* ── Également à nos côtés — grille responsive ── */}
       <section className="section-padding bg-surface-mid">
         <h2 className="h2-style text-primary mb-8">Également à nos côtés</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {egalement.map(m => (
             <TeamMemberCardSmall
               key={m.id}
@@ -110,26 +112,30 @@ function Equipe() {
         </div>
       </section>
 
-      {/* ── Délégations internationales — cards immersives 3 colonnes ── */}
+      {/* ── Délégations — carousel toutes tailles ── */}
       <section className="section-padding bg-surface">
         <h2 className="h2-style text-primary mb-8">Nos délégations et partenaires terrain</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {delegations.map(d => (
+        <Carousel
+          items={delegations}
+          renderSlide={(d) => (
             <DelegationCard
-              key={d.id}
               pays={d.pays}
               flag={`https://flagcdn.com/w40/${d.flag_code}.png`}
               image={d.image_url}
               lieu={d.lieu}
               contacts={d.contacts}
             />
-          ))}
-        </div>
+          )}
+          slidesPerView={3}
+          spaceBetween={24}
+          showPagination={true}
+          color="primary"
+        />
       </section>
 
       {/* ── CTA contact ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Envie de rejoindre l'aventure ?</h2>
             <p className="text-body text-surface/80">Bénévole, volontaire, enseignant, partenaire... Il existe mille façons d'agir avec nous.</p>
