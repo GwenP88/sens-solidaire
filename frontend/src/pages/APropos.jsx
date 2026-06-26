@@ -57,7 +57,7 @@ function APropos() {
 
       {/* ── Notre histoire — texte + image ── */}
       <section className="section-padding bg-surface">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
+        <div className="flex flex-col xl:flex-row gap-8 xl:gap-12 items-center">
           <div className="flex flex-col gap-6 flex-1">
             <p className="text-eyebrow text-accent-2">Notre histoire</p>
             <h2 className="h2-style text-primary">
@@ -73,7 +73,7 @@ function APropos() {
               Sens Solidaire est <strong>multiculturelle, indépendante, apolitique et à vocation internationale.</strong> Nous contribuons à la préservation de l'environnement par des actions de solidarité internationale.
             </p>
           </div>
-          <div className="w-full md:w-2/5 shrink-0">
+          <div className="w-full xl:w-2/5 shrink-0">
             <img
               src="/images/missions/groupe-jeune-2.jpg"
               alt="Sens Solidaire sur le terrain"
@@ -83,25 +83,41 @@ function APropos() {
         </div>
       </section>
 
-      {/* ── Nos valeurs — grille 5 colonnes avec icônes ── */}
+      {/* ── Nos valeurs ── */}
       <section className="section-padding bg-surface-mid">
         <h2 className="h2-style text-primary text-center mb-10">Nos valeurs</h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-          {VALEURS.map(v => (
-            <div key={v.titre} className="flex flex-col items-center gap-3 text-center">
-              <v.icon className="text-accent-2 text-3xl" />
-              <h3 className="h3-style text-primary">{v.titre}</h3>
-              <p className="text-body text-primary/60">{v.description}</p>
-            </div>
-          ))}
+
+        {/* ── Mobile + 768 + 1024 — scroll horizontal avec dégradé ── */}
+        <div className="relative xl:hidden">
+          <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-surface-mid to-transparent z-10 pointer-events-none" />
+          <div className="flex flex-row gap-8 overflow-x-auto pb-3">
+            {VALEURS.map(v => (
+              <div key={v.titre} className="flex flex-col items-center gap-3 text-center shrink-0 w-[160px]">
+                <v.icon className="text-accent-2 text-3xl" />
+                <h3 className="h3-style text-primary">{v.titre}</h3>
+                <p className="text-body text-primary/60">{v.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
+
+          {/* ── Desktop 1280+ — grille 5 colonnes ── */}
+          <div className="hidden xl:flex flex-wrap justify-center gap-6">
+            {VALEURS.map(v => (
+              <div key={v.titre} className="flex flex-col items-center gap-3 text-center w-[18%]">
+                <v.icon className="text-accent-2 text-3xl" />
+                <h3 className="h3-style text-primary">{v.titre}</h3>
+                <p className="text-body text-primary/60">{v.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
       {/* ── Champs d'activité — grille 2 colonnes ── */}
       <section className="section-padding bg-surface">
         <h2 className="h2-style text-primary mb-2">Nos champs d'activité</h2>
         <p className="text-body text-primary/60 mb-10">Nous accompagnons les communautés locales dans la planification et l'exécution de leurs projets, en répondant à leurs besoins et en s'adaptant à leur culture.</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {ACTIVITES.map(a => (
             <div key={a.titre} className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-3">
               <h3 className="h3-style text-primary">{a.titre}</h3>
@@ -113,7 +129,7 @@ function APropos() {
 
       {/* ── Aperçu équipe — 4 membres direction depuis l'API ── */}
       <section className="section-padding bg-surface-mid">
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-10">
+        <div className="flex flex-col xl:flex-row items-start xl:items-end justify-between gap-4 mb-10">
           <div>
             <p className="text-eyebrow text-accent-2 mb-2">L'équipe engagée</p>
             <h2 className="h2-style text-primary">Celles et ceux qui font vivre <span className="text-accent-2">Sens Solidaire</span></h2>
@@ -123,7 +139,7 @@ function APropos() {
             <Button label="Découvrir toute l'équipe →" variant="secondary" />
           </a>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {direction.map(m => (
             <div key={m.id} className="flex flex-col items-center gap-3 bg-surface rounded-2xl p-6 text-center">
               <img src={m.avatar_url || '/placeholder-testimonials.png'} alt={m.nom} className="w-20 h-20 rounded-full object-cover" />
@@ -159,7 +175,7 @@ function APropos() {
 
       {/* ── CTA contact ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Une question, une envie de collaborer avec nous ?</h2>
             <p className="text-body text-surface/80">Notre équipe est à votre écoute.</p>
