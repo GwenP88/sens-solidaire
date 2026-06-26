@@ -50,18 +50,18 @@ function Contact() {
         </div>
 
         {/* ── Layout 2 colonnes — photo + formulaire ── */}
-        <div className="flex flex-col md:flex-row gap-8 items-stretch">
+        <div className="flex flex-col-reverse xl:flex-row gap-8 items-stretch">
 
-          {/* Photo gauche — masquée sur mobile */}
-          <div className="hidden md:block w-1/3 shrink-0">
+          {/* Photo — cachée mobile, pleine largeur 768+1024, 1/3 desktop */}
+          <div className="hidden md:block xl:w-1/3 xl:shrink-0">
             <img
               src="/images/contact/contact.jpg"
               alt="Équipe Sens Solidaire"
-              className="w-full h-full object-cover rounded-2xl"
+              className="w-full h-64 xl:h-full object-cover rounded-2xl"
             />
           </div>
 
-          {/* Formulaire de contact — 2/3 */}
+          {/* Formulaire */}
           <div className="flex-1 bg-white rounded-2xl shadow-sm p-8">
             <ContactForm />
           </div>

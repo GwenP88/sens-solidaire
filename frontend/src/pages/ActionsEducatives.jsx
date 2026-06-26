@@ -78,7 +78,7 @@ function ActionsEducatives() {
         ) : filteredItems.length === 0 ? (
           <p className="text-body text-primary/50 italic">Aucun atelier pour ce public.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredItems.map(item => (
               <EducationCard key={item.slug} item={item} />
             ))}
@@ -88,7 +88,7 @@ function ActionsEducatives() {
 
       {/* ── CTA contact — invitation à accueillir une intervention ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Vous souhaitez accueillir une intervention ?</h2>
             <p className="text-body text-surface/80">Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux.</p>

@@ -152,7 +152,7 @@ function NotreImpact() {
 
       {/* ── CTA missions ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Envie de vous engager à nos côtés ?</h2>
             <p className="text-body text-surface/80">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
