@@ -1,5 +1,5 @@
 // FilterChips.jsx
-// Puces filtrantes réutilisables — puce active = couleur unie / inactive = contour
+// Puces filtrantes réutilisables — scroll horizontal sur mobile, wrap sur desktop
 // Props :
 //   filters  : [{ label: string, value: any }]
 //   active   : valeur active (null = toutes)
@@ -8,15 +8,13 @@
 
 function FilterChips({ filters, active, onChange, variant = 'light' }) {
   return (
-    // ── Conteneur flex — les puces passent à la ligne si débordement
-    <div className="flex gap-3 flex-wrap">
+    // ── Scroll horizontal mobile — wrap à partir de md
+    <div className="flex gap-3 overflow-x-auto lg:flex-wrap pb-4 lg:pb-0 scrollbar-hide">
       {filters.map(f => (
-
-        // ── Puce individuelle — style adapté selon variant et état actif
         <button
           key={f.label}
           onClick={() => onChange(f.value)}
-          className={`link-nav px-4 py-2 rounded-full border transition-colors ${
+          className={`link-nav px-4 py-2 rounded-full border transition-colors shrink-0 lg:shrink ${
             variant === 'dark'
               ? active === f.value
                 ? 'bg-surface text-primary border-surface'

@@ -10,8 +10,8 @@ function MissionSteps({ title = 'Comment ça fonctionne ?', steps, bgCard = 'bg-
         {title}
       </h3>
 
-      {/* Grille 3 colonnes — 1 colonne sur mobile */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+      {/* Grille 3 colonnes desktop — 1 colonne autres */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-stretch">
         {steps.map((step, i) => {
           // ── Icône dynamique — majuscule requise pour JSX
           const Icon = step.icon

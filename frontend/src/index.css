@@ -50,10 +50,16 @@
 @utility h1-style {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   line-height: 1.3;
 }
 @media (min-width: 768px) {
+  .h1-style { font-size: 2rem; }
+}
+@media (min-width: 1024px) {
+  .h1-style { font-size: 2.75rem; }
+}
+@media (min-width: 1280px) {
   .h1-style { font-size: 3.75rem; }
 }
 
@@ -61,11 +67,17 @@
 @utility h2-style {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   line-height: 1.2;
   margin-bottom: 0.5rem;
 }
 @media (min-width: 768px) {
+  .h2-style { font-size: 1.6rem; }
+}
+@media (min-width: 1024px) {
+  .h2-style { font-size: 1.875rem; }
+}
+@media (min-width: 1280px) {
   .h2-style { font-size: 2.25rem; }
 }
 
@@ -73,10 +85,16 @@
 @utility h3-style {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.3;
 }
 @media (min-width: 768px) {
+  .h3-style { font-size: 1rem; }
+}
+@media (min-width: 1024px) {
+  .h3-style { font-size: 1.125rem; }
+}
+@media (min-width: 1280px) {
   .h3-style { font-size: 1.25rem; }
 }
 
@@ -88,10 +106,16 @@
 /* Corps standard — texte courant */
 @utility text-body {
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   line-height: 1.6;
 }
 @media (min-width: 768px) {
+  .text-body { font-size: 0.875rem; }
+}
+@media (min-width: 1024px) {
+  .text-body { font-size: 0.9rem; }
+}
+@media (min-width: 1280px) {
   .text-body { font-size: 1rem; }
 }
 
@@ -99,57 +123,102 @@
 @utility text-lead {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.6;
 }
 @media (min-width: 768px) {
+  .text-lead { font-size: 1rem; }
+}
+@media (min-width: 1024px) {
+  .text-lead { font-size: 1.0625rem; }
+}
+@media (min-width: 1280px) {
   .text-lead { font-size: 1.125rem; }
 }
 
 /* Petit texte — captions, métadonnées, dates */
 @utility text-caption {
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   line-height: 1.5;
+}
+@media (min-width: 768px) {
+  .text-caption { font-size: 0.7rem; }
+}
+@media (min-width: 1024px) {
+  .text-caption { font-size: 0.725rem; }
+}
+@media (min-width: 1280px) {
+  .text-caption { font-size: 0.75rem; }
 }
 
 /* Surtitre — au-dessus des h2, catégories */
 @utility text-eyebrow {
   font-family: var(--font-body);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
 @media (min-width: 768px) {
+  .text-eyebrow { font-size: 0.7rem; }
+}
+@media (min-width: 1024px) {
+  .text-eyebrow { font-size: 0.75rem; }
+}
+@media (min-width: 1280px) {
   .text-eyebrow { font-size: 0.85rem; }
 }
 
 /* Label — colonnes footer, stats, navigation */
 @utility text-label {
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+@media (min-width: 768px) {
+  .text-label { font-size: 0.7rem; }
+}
+@media (min-width: 1024px) {
+  .text-label { font-size: 0.725rem; }
+}
+@media (min-width: 1280px) {
+  .text-label { font-size: 0.75rem; }
 }
 
 /* Mention — légal, italic, notes de bas de page */
 @utility text-mention {
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-style: italic;
   line-height: 1.5;
+}
+@media (min-width: 768px) {
+  .text-mention { font-size: 0.7rem; }
+}
+@media (min-width: 1024px) {
+  .text-mention { font-size: 0.725rem; }
+}
+@media (min-width: 1280px) {
+  .text-mention { font-size: 0.75rem; }
 }
 
 /* Chiffres stats — StatsBar */
 @utility text-stat {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   line-height: 1.1;
 }
 @media (min-width: 768px) {
+  .text-stat { font-size: 1.5rem; }
+}
+@media (min-width: 1024px) {
+  .text-stat { font-size: 1.875rem; }
+}
+@media (min-width: 1280px) {
   .text-stat { font-size: 2.25rem; }
 }
 

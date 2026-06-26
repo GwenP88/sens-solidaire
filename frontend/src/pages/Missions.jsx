@@ -153,7 +153,7 @@ function Missions() {
       {/* ── Bloc orientation ── */}
       <section className="section-padding bg-surface-mid">
         <h2 className="h2-style text-primary mb-8">Quelle mission est faite pour vous ?</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {[
             { icon: IconPerson, situation: 'Vous souhaitez partir seul, à deux ou en petit groupe pour participer concrètement à un projet solidaire ?', label: 'Volontariat individuel', filter: 'individuel' },
             { icon: IconClock, situation: 'Vous avez entre 16 et 25 ans et recherchez une expérience citoyenne riche de sens ?', label: 'Service Civique', filter: 'service_civique' },
@@ -177,7 +177,7 @@ function Missions() {
       </section>
 
       {/* ── Barre de filtres ── */}
-      <div ref={filtersRef} className="py-4 px-4 md:px-24 bg-primary">
+      <div ref={filtersRef} className="py-4 px-4 lg:px-24 bg-primary flex justify-center lg:justify-start">
         <FilterChips filters={FILTERS_MISSION_TYPE} active={activeFilter} onChange={handleFilter} variant="dark" />
       </div>
 
@@ -258,7 +258,7 @@ function Missions() {
           carouselItems={missionServiceCivique}
           carouselTitle="Nos missions de service civique"
           carouselSubtitle="Partez en France puis à l'international pour une expérience unique de 6 à 12 mois."
-          carouselSlidesPerView={3}
+          carouselSlidesPerView={2}
           renderSlide={(mission) => (
             <MissionCard
               slug={mission.slug}

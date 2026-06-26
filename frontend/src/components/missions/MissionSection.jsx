@@ -53,8 +53,15 @@ function MissionSection({
         image={decorImage}
       />
 
+      {/* Image mobile+768+1024 — pleine largeur ── */}
+      {image && (
+        <div className="block xl:hidden w-full mb-6">
+          <img src={image} alt={imageAlt} className="w-full h-72 object-cover rounded-xl" />
+        </div>
+      )}
+
       {/* ── Bloc intro — contenu riche + infobar + CTA + image — empilés sur mobile ── */}
-      <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-center mb-10 md:mb-16">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start lg:items-center mb-10 lg:mb-16">
         <div className="flex flex-col gap-6 flex-1">
 
           {/* Contenu riche — texte, listes, paragraphes... */}
@@ -70,9 +77,9 @@ function MissionSection({
           />
         </div>
 
-        {/* Image illustrative */}
+        {/* Image — visible uniquement sur desktop ── */}
         {image && (
-          <div className="w-full md:w-2/5 shrink-0">
+          <div className="hidden xl:block xl:w-2/5 shrink-0">
             <img src={image} alt={imageAlt} className="w-full h-72 object-cover rounded-xl" />
           </div>
         )}

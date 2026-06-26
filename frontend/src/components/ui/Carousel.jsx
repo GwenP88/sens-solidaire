@@ -29,7 +29,7 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
       {/* Chevrons — desktop uniquement */}
       <button
         onClick={() => swiperRef.current?.slidePrev()}
-        className={`hidden md:block absolute -left-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
+        className={`hidden lg:block absolute -left-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
           color === 'surface' ? 'text-surface/50 hover:text-surface' : 'text-primary/50 hover:text-primary'
         } ${!hasNavigation ? 'invisible' : ''}`}
       >
@@ -59,7 +59,7 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
       {/* Chevron droit — desktop uniquement */}
       <button
         onClick={() => swiperRef.current?.slideNext()}
-        className={`hidden md:block absolute -right-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
+        className={`hidden lg:block absolute -right-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
           color === 'surface' ? 'text-surface/50 hover:text-surface' : 'text-primary/50 hover:text-primary'
         } ${!hasNavigation ? 'invisible' : ''}`}
       >

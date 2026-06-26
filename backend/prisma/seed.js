@@ -264,7 +264,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     type: "service_civique",
     title: "Service civique en Côte d'Ivoire",
     country: "Côte d'Ivoire",
-    image_url: "/images/missions/service-civique-1.jpg",
+    image_url: "/images/missions/service-civique-1.jpeg",
     short_description:
       "À Abidjan, participation aux actions de lutte contre la pollution plastique, aux ateliers d'éducation au développement durable et au suivi des projets environnementaux menés avec les partenaires locaux.",
     is_active: true,

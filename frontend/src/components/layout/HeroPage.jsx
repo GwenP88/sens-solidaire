@@ -8,7 +8,7 @@ import { IconClock, IconMoney } from '../../utils/icons'
 
 function HeroPage({ image, title, subtitle, duration, price }) {
   return (
-    <div className="relative w-full h-64 md:h-120 flex items-end pb-6 px-6 md:pb-12 md:px-24">
+    <div className="relative w-full h-96 md:h-120 flex items-end pb-6 px-6 md:pb-12 md:px-24">
 
       {/* Image de fond */}
       <div
