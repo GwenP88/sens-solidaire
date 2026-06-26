@@ -309,6 +309,18 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ── Scrollbar horizontale — AnchorNav et FilterChips ── */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 3px;
+}
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background-color: var(--color-surface);
+  border-radius: 999px;
+}
+
 /* ══════════════════════════════════════════════════════
    SWIPER — CAROUSEL
 ══════════════════════════════════════════════════════ */

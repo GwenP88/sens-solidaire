@@ -19,9 +19,9 @@ import Carousel from '../components/ui/Carousel'
 
 // ── Composants métier
 import MissionCard from '../components/missions/MissionCard'
-import TestimonialCarousel from '../components/testimonials/TestimonialCarousel'
 import ActionCard from '../components/actions/ActionCard'
 import MediaCard from '../components/media/MediaCard'
+import TestimonialCard from '../components/testimonials/TestimonialCard'
 
 // ── Données statiques — 4 types de missions (contenu fixe, non géré en BDD)
 const MISSION_TYPES = [
@@ -141,12 +141,19 @@ function Home() {
             <Button label="Voir tous les témoignages →" variant="primary" />
           </a>
         </div>
-        <TestimonialCarousel
-          testimonials={testimonials.map(t => ({
-            quote: t.content,
-            name: t.author_name,
-            mission: t.mission?.title || '',
-          }))}
+        <Carousel
+          color="surface"
+          items={testimonials}
+          renderSlide={(t) => (
+            <TestimonialCard
+              quote={t.content}
+              name={t.author_name}
+              mission={t.mission?.title || ''}
+            />
+          )}
+          slidesPerView={3}
+          spaceBetween={24}
+          showPagination={true}
         />
       </section>
 

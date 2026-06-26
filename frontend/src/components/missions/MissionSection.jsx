@@ -107,7 +107,7 @@ function MissionSection({
             items={carouselItems}
             slidesPerView={carouselSlidesPerView}
             spaceBetween={24}
-            showPagination={carouselItems.length > carouselSlidesPerView}
+            showPagination={true}
             color="primary"
             renderSlide={renderSlide}
           />
