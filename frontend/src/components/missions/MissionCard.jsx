@@ -20,7 +20,7 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
 
   return (
     <a href={href}>
-      <article className="w-full h-[240px] rounded-[20px] relative overflow-hidden cursor-pointer">
+      <article className="w-full h-auto min-h-[240px] md:h-[240px] rounded-[20px] relative overflow-hidden cursor-pointer">
 
         {/* Image de fond */}
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }}></div>
@@ -29,11 +29,11 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
         <div className="absolute inset-0 bg-black/45"></div>
 
         {/* Contenu */}
-        <div className="relative h-full flex flex-col justify-between p-6">
+        <div className="relative h-full flex flex-col justify-between p-6 gap-4">
 
           {/* Badge type de mission */}
           <div className="w-fit">
-            <span className="text-eyebrow text-surface px-2 py-1 rounded" style={{ backgroundColor: badgeColors[badge] }}>
+            <span className="text-eyebrow text-surface px-2 py-1 rounded text-[0.6rem] md:text-[0.75rem]" style={{ backgroundColor: badgeColors[badge] }}>
               {badge}
             </span>
           </div>
@@ -41,7 +41,7 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
           {/* Bas de carte — titre + description + durée + bouton */}
           <div className="flex flex-col gap-1">
             <h3 className="h3-style text-surface">{title}</h3>
-            <p className="text-body text-surface line-clamp-2">{description}</p>
+            <p className="text-body text-surface">{description}</p>
             <div className="flex items-center justify-between mt-2">
               <span className="text-caption text-surface flex items-center gap-2">
                 <IconClock /> {duration}

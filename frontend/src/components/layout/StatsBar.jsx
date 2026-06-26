@@ -1,5 +1,10 @@
 // StatsBar.jsx
-// Barre de statistiques d'impact — chiffres clés de l'association
+// Barre de statistiques d'impact — carousel horizontal sur mobile, ligne sur desktop
+
+// ── Swiper
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay } from 'swiper/modules'
+import 'swiper/css'
 
 // ── Données statiques — chiffres clés (contenu fixe, mis à jour manuellement)
 const STATS = [
@@ -12,16 +17,46 @@ const STATS = [
 
 function StatsBar() {
   return (
-    // ── Bande verte foncée avec les compteurs répartis sur toute la largeur
-    <div className="bg-primary flex flex-wrap justify-around items-center px-6 md:px-16 py-6 md:py-8 gap-6 md:gap-0">
-      {STATS.map(stat => (
-        <div key={stat.number}>
-          {/* Chiffre principal */}
-          <p className="text-stat text-surface">{stat.number}</p>
-          {/* Label descriptif */}
-          <p className="text-label text-surface-dark">{stat.label}</p>
-        </div>
-      ))}
+    <div className="bg-primary py-6 px-6">
+
+      {/* ── Mobile — carousel autoplay ── */}
+      <div className="md:hidden flex items-center justify-center">
+        <Swiper
+          className="stats-swiper"
+          modules={[Autoplay]}
+          slidesPerView={2}
+          spaceBetween={16}
+          autoplay={{ delay: 2000, disableOnInteraction: false }}
+          speed={800}
+          loop={true}
+          style={{ height: 'auto' }}
+        >
+          {STATS.map(stat => (
+            <SwiperSlide key={stat.number}>
+              <div className="flex flex-col items-center justify-center text-center">
+                <p className="text-stat text-surface">{stat.number}</p>
+                <p className="text-label text-surface-dark">{stat.label}</p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+
+      {/* ── Desktop — ligne horizontale ── */}
+      <div className="hidden md:flex justify-around items-center">
+        {STATS.map((stat, i) => (
+          <>
+            <div key={stat.number} className="flex flex-col items-center text-center">
+              <p className="text-stat text-surface">{stat.number}</p>
+              <p className="text-label text-surface-dark">{stat.label}</p>
+            </div>
+            {i < STATS.length - 1 && (
+              <div key={`sep-${i}`} className="w-px h-12 bg-surface/20" />
+            )}
+          </>
+        ))}
+      </div>
+
     </div>
   )
 }

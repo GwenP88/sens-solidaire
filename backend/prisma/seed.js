@@ -39,7 +39,7 @@ const seed = async () => {
   // 1 — ADMIN
   // ============================================================
 
-  const password_hash = await bcrypt.hash("Admin1234!", 10)
+const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
 
   const admin = await prisma.admin.upsert({
     where: { email: "admin@sensolidaire.org" },
@@ -626,7 +626,7 @@ const seed = async () => {
         consent_given: true,
       },
       {
-        mission_id: null,
+        mission_id: missionSenegal.id,
         author_name: "Marie C.",
         content: "Je reviens d'une mission de 2 semaines et je voulais partager mon expérience. L'organisation était très professionnelle et les familles d'accueil formidables. Je recommande à 100%.",
         status: "pending",

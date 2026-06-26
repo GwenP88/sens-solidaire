@@ -103,7 +103,7 @@ function Home() {
             </p>
           </div>
           <a href="/missions">
-            <Button label="Voir toutes les missions →" variant="secondary" />
+            <Button label="Voir toutes les missions →" variant="primary" />
           </a>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -127,7 +127,7 @@ function Home() {
       <section className="section-padding bg-accent-2">
         <div className="section-header flex-col md:flex-row">
           <div className="max-w-4xl">
-            <h2 className="h2-style text-surface">Ils ont franchi le pas et vécu l'aventure. Découvrez leurs témoignages.</h2>
+            <h2 className="h2-style text-surface">Ils racontent leur aventure</h2>
             <p className="text-body text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
           </div>
           <a href="/temoignages">

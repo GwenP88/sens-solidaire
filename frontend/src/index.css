@@ -50,8 +50,8 @@
 @utility h1-style {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.8rem;
-  line-height: 1.1;
+  font-size: 1.6rem;
+  line-height: 1.3;
 }
 @media (min-width: 768px) {
   .h1-style { font-size: 3.75rem; }
@@ -99,7 +99,7 @@
 @utility text-lead {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 @media (min-width: 768px) {
@@ -261,4 +261,10 @@ html {
 .swiper-carousel-primary .swiper-pagination-bullet-active {
   background-color: #143601 !important;
   opacity: 1;
+}
+
+/* ── Correction hauteur Swiper dans StatsBar ── */
+.stats-swiper {
+  height: auto !important;
+  padding-bottom: 0 !important;
 }
