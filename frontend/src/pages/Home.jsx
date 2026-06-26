@@ -200,9 +200,9 @@ function Home() {
             <Button label="En savoir plus sur nous →" variant="primary" />
           </a>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 md:gap-8 items-center">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-8 items-center">
           {partners.map(partner => (
-            <div key={partner.id} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24">
+            <div key={partner.id} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24 p-1">
               <img src={partner.logo_url} alt={partner.name} className="max-h-14 max-w-full object-contain" />
             </div>
           ))}
