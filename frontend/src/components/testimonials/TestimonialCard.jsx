@@ -6,7 +6,7 @@ import { VscQuote } from "react-icons/vsc"
 
 function TestimonialCard({ quote, name, mission, avatar = '/images/placeholders/placeholder-testimonials.png' }) {
   return (
-    <article className="bg-surface rounded-2xl p-6 h-[310px] w-full flex flex-col justify-between gap-4">
+    <article className="bg-surface rounded-2xl p-6 h-[310px] md:h-[210px] lg:h-[280px] xl:h-[300px] w-full flex flex-col justify-between gap-4">
 
       {/* Guillemets + Citation */}
       <div className="flex gap-3 overflow-hidden">
