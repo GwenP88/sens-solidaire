@@ -1,6 +1,9 @@
 // StatsBar.jsx
 // Barre de statistiques d'impact — carousel horizontal sur mobile, ligne sur desktop
 
+// ── React
+import React from 'react'
+
 // ── Swiper
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules'
@@ -45,7 +48,7 @@ function StatsBar() {
       {/* ── Desktop — ligne horizontale ── */}
       <div className="hidden md:flex justify-around items-center">
         {STATS.map((stat, i) => (
-          <>
+           <React.Fragment key={stat.number}>
             <div key={stat.number} className="flex flex-col items-center text-center">
               <p className="text-stat text-surface">{stat.number}</p>
               <p className="text-label text-surface-dark">{stat.label}</p>
@@ -53,7 +56,7 @@ function StatsBar() {
             {i < STATS.length - 1 && (
               <div key={`sep-${i}`} className="w-px h-12 bg-surface/20" />
             )}
-          </>
+          </React.Fragment>
         ))}
       </div>
 

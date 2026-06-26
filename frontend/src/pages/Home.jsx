@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react'
 
 // ── API
-import { fetchTestimonials, fetchFieldActions, fetchPartners } from '../services/api'
+import { fetchTestimonials, fetchFieldActions, fetchPartners, fetchMediaPosts } from '../services/api'
 
 // ── Composants layout
 import Hero from '../components/layout/Hero'
@@ -15,11 +15,13 @@ import StatsBar from '../components/layout/StatsBar'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import { ODDS } from '../utils/odds'
+import Carousel from '../components/ui/Carousel'
 
 // ── Composants métier
 import MissionCard from '../components/missions/MissionCard'
 import TestimonialCarousel from '../components/testimonials/TestimonialCarousel'
 import ActionCard from '../components/actions/ActionCard'
+import MediaCard from '../components/media/MediaCard'
 
 // ── Données statiques — 4 types de missions (contenu fixe, non géré en BDD)
 const MISSION_TYPES = [
@@ -70,6 +72,7 @@ function Home() {
   const [testimonials, setTestimonials] = useState([])
   const [actions, setActions] = useState([])
   const [partners, setPartners] = useState([])
+  const [mediaPosts, setMediaPosts] = useState([])
 
   // ── Chargement en parallèle au montage
   useEffect(() => {
@@ -83,6 +86,10 @@ function Home() {
 
     fetchPartners()
       .then(setPartners)
+      .catch(console.error)
+
+    fetchMediaPosts()
+      .then(data => setMediaPosts(data.slice(0, 6)))
       .catch(console.error)
   }, [])
 
@@ -188,6 +195,29 @@ function Home() {
           ))}
         </div>
       </section>
+
+      {/* ── Section Actualités ── */}
+      {mediaPosts.length > 0 && (
+        <section className="section-padding bg-surface-mid">
+          <div className="section-header flex-col md:flex-row">
+            <div className="max-w-4xl">
+              <h2 className="h2-style text-primary">Actualités & Médias</h2>
+              <p className="text-body text-primary/80">Suivez la vie de Sens Solidaires à travers nos événements, nos projets, nos interventions dans les médias et nos actions de sensibilisation. Découvrez les temps forts de notre engagement qui font vivre l'association, en France comme à l'international.</p>
+            </div>
+            <a href="/medias-et-actualites">
+              <Button label="Voir toutes les actualités →" variant="primary" />
+            </a>
+          </div>
+          <Carousel
+            items={mediaPosts}
+            renderSlide={(post) => <MediaCard key={post.slug} {...post} />}
+            slidesPerView={3}
+            spaceBetween={24}
+            showPagination={true}
+            color="primary"
+          />
+        </section>
+      )}
 
       {/* ── Section partenaires — logos depuis l'API ── */}
       <section className="section-padding bg-accent-2">

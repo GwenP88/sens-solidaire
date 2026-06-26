@@ -18,7 +18,7 @@ function MediaCard({ title, content, theme, date, image_url, slug, external_url 
   const isExternal = !!external_url
 
   return (
-    <article className="flex flex-col bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <article className="flex flex-col bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow h-[420px]">
 
       {/* Image */}
       <div className="w-full h-48 overflow-hidden">
@@ -43,7 +43,7 @@ function MediaCard({ title, content, theme, date, image_url, slug, external_url 
         <h3 className="h3-style text-primary">{title}</h3>
 
         {/* Extrait */}
-        <p className="text-body text-primary/60 flex-1">{excerpt}</p>
+        <p className="text-body text-primary/60 flex-1 line-clamp-3">{excerpt}</p>
 
         {/* CTA */}
         <a
