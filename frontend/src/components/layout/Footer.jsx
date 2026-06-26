@@ -21,7 +21,7 @@ function Footer({ hideCta = false }) {
             <p className="text-lead text-surface">
               Rejoignez-nous sur le terrain ou soutenez nos projets. <br /> Ensemble, construisons un avenir plus solidaire.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 mt-2">
+            <div className="flex flex-row gap-4 mt-2">
               <a href="/missions">
                 <Button label="Je pars en mission →" variant="primary" />
               </a>
@@ -37,17 +37,21 @@ function Footer({ hideCta = false }) {
       <div className="bg-primary px-6 md:px-20 py-8 flex flex-col md:flex-row gap-8 md:gap-0 md:justify-between">
 
         {/* Col 1 — Logo + Tagline + Réseaux */}
-        <div className="flex flex-col gap-4 w-full md:w-72">
-          <div className="bg-white/40 rounded-full p-1 w-fit">
-            <img src="/logo.png" alt="Sens Solidaire" className="h-12" />
+        <div className="flex flex-col gap-4 w-full md:w-84 md:justify-between">
+          <div className="flex items-center gap-6">
+            <div className="bg-white/50 rounded-full p-1 w-fit">
+              <img src="/logo.png" alt="Sens Solidaire" className="h-18" />
+            </div>
+            <span className="text-surface font-heading font-bold text-lg uppercase">Sens Solidaires</span>
           </div>
+          
           <p className="text-body text-surface">
             Une association engagée pour un monde plus solidaire et durable.
           </p>
-          <p className="text-body text-surface">
+          <p className="text-body text-surface/80">
             Sur le terrain, nous agissons aux côtés des communautés locales pour un impact positif et durable.
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-6">
             <a href="https://www.youtube.com/channel/UC4lhQB-8zXiZJvD-kQS-q4A/featured">
               <IconYoutube className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
             </a>
@@ -66,46 +70,80 @@ function Footer({ hideCta = false }) {
           </div>
         </div>
 
-        {/* Col 2 — Découvrir */}
-        <div className="flex flex-col gap-2">
-          <h3 className="text-label text-surface mb-3">Découvrir</h3>
-          <a href="/" className="link-nav text-surface/70 hover:text-surface">Accueil</a>
-          <a href="/missions" className="link-nav text-surface/70 hover:text-surface">Nos missions</a>
-          <a href="/notre-impact" className="link-nav text-surface/70 hover:text-surface">Notre impact</a>
-          <a href="/actions-educatives" className="link-nav text-surface/70 hover:text-surface">Actions éducatives</a>
-          <a href="/medias-et-actualites" className="link-nav text-surface/70 hover:text-surface">Médias & actualités</a>
-          <a href="/a-propos" className="link-nav text-surface/70 hover:text-surface">À propos</a>
+        {/* Séparateur — horizontal mobile, vertical desktop */}
+        <div className="block md:hidden h-px bg-surface/20" />
+        <div className="hidden md:block w-px bg-surface/20 mx-8 self-center h-64" />
+
+        {/* Col 2 + Col 3 — côte à côte sur mobile */}
+        <div className="flex flex-row gap-0 md:contents">
+
+          {/* Col 2 — Découvrir */}
+          <div className="flex flex-col gap-2 flex-1 md:flex-none md:w-40">
+            <h3 className="text-label text-surface mb-6 text-base">Découvrir</h3>
+            <a href="/" className="link-nav text-surface/70 hover:text-surface pt-4">Accueil</a>
+            <a href="/missions" className="link-nav text-surface/70 hover:text-surface">Nos missions</a>
+            <a href="/notre-impact" className="link-nav text-surface/70 hover:text-surface">Notre impact</a>
+            <a href="/actions-educatives" className="link-nav text-surface/70 hover:text-surface">Actions éducatives</a>
+            <a href="/medias-et-actualites" className="link-nav text-surface/70 hover:text-surface">Médias & actualités</a>
+            <a href="/a-propos" className="link-nav text-surface/70 hover:text-surface">À propos</a>
+          </div>
+
+          {/* Séparateur vertical — entre Col 2 et Col 3 sur mobile uniquement */}
+          <div className="w-px bg-surface/20 mx-4 md:hidden" />
+          <div className="hidden md:block w-px bg-surface/20 mx-8 self-center h-64" />
+
+          {/* Col 3 — S'engager */}
+          <div className="flex flex-col gap-2 flex-1 md:flex-none md:w-40">
+            <h3 className="text-label text-surface mb-6 text-base">S'engager</h3>
+            <a href="/missions" className="link-nav text-surface/70 hover:text-surface pt-4">Partir en mission</a>
+            <a href="/don" className="link-nav text-surface/70 hover:text-surface">Faire un don</a>
+            <a href="/adhesion" className="link-nav text-surface/70 hover:text-surface">Adhérer à l'association</a>
+          </div>
+
         </div>
 
-        {/* Col 3 — S'engager */}
-        <div className="flex flex-col gap-2">
-          <h3 className="text-label text-surface mb-3">S'engager</h3>
-          <a href="/missions" className="link-nav text-surface/70 hover:text-surface">Partir en mission</a>
-          <a href="/don" className="link-nav text-surface/70 hover:text-surface">Faire un don</a>
-          <a href="/adhesion" className="link-nav text-surface/70 hover:text-surface">Adhérer à l'association</a>
-        </div>
+        {/* Séparateur — horizontal mobile, vertical desktop */}
+        <div className="block md:hidden h-px bg-surface/20" />
+        <div className="hidden md:block w-px bg-surface/20 mx-8 self-center h-64" />
 
         {/* Col 4 — Nous contacter */}
-        <div className="flex flex-col gap-3">
-          <h3 className="text-label text-surface mb-3">Nous contacter</h3>
+        <div className="flex flex-col gap-4 w-full md:w-84">
+          <h3 className="text-label text-surface mb-6 text-base">Nous contacter</h3>
+
           <div className="flex gap-3">
             <IconPin className="text-surface text-lg mt-1 shrink-0" />
-            <p className="text-body text-surface/70">
+            <a 
+              href="https://maps.google.com/?q=3bis+rue+de+Guigonis+06300+Nice" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="link-inline text-surface/70 hover:text-surface"
+            >
               Antenne en France - Maison des associations<br />3bis rue de Guigonis, 06300 Nice
-            </p>
+            </a>
           </div>
           <div className="flex gap-3">
             <IconPin className="text-surface text-lg mt-1 shrink-0" />
-            <p className="text-body text-surface/70">
-              Annexe<br />Cité de la Solidarité Internationale, 74100 Annemasse
-            </p>
+            <a 
+              href="https://maps.google.com/?q=3bis+rue+de+Guigonis+06300+Nice" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="link-inline text-surface/70 hover:text-surface"
+            >
+              Annexe Française<br />Cité de la Solidarité Internationale, 74100 Annemasse
+            </a>
           </div>
           <div className="flex gap-3">
             <IconPin className="text-surface text-lg mt-1 shrink-0" />
-            <p className="text-body text-surface/70">
-              Antenne en Suisse - Maison Internationale des associations<br />15 rue des Savoises, 1205 Genève
-            </p>
+            <a 
+              href="https://maps.google.com/?q=3bis+rue+de+Guigonis+06300+Nice" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="link-inline text-surface/70 hover:text-surface"
+            >
+              Antenne Suisse - Maison Internationale des associations<br />15 rue des Savoises, 1205 Genève
+            </a>
           </div>
+          
           <div className="flex gap-3">
             <IconMail className="text-surface text-lg mt-1 shrink-0" />
             <a href="mailto:contact@sensolidaire.org" className="link-inline text-surface/70 hover:text-surface">
@@ -118,7 +156,7 @@ function Footer({ hideCta = false }) {
 
       {/* Zone 3 — Barre légale */}
       <div className="bg-dark px-6 md:px-20 py-4 flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center border-t border-surface/15">
-        <p className="text-caption text-surface/50">
+        <p className="text-caption text-surface/50 italic">
           © 2026 Sens Solidaire. Tous droits réservés.
         </p>
         <div className="flex gap-6">
