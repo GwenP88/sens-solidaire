@@ -7,7 +7,7 @@ import { IconPin } from '../../utils/icons'
 
 function ActionCard({ title, description, tags, slug, country, image, odds }) {
   return (
-    <article className="flex flex-col sm:flex-row rounded-xl overflow-hidden bg-primary text-surface h-auto sm:h-[240px]">
+    <article className="flex flex-col sm:flex-row rounded-xl overflow-hidden bg-accent-2 text-surface h-auto sm:h-[280px]">
 
       {/* Zone image */}
       <div className="relative w-full h-40 sm:w-1/3 sm:h-auto shrink-0">

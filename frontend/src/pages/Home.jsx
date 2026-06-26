@@ -148,23 +148,29 @@ function Home() {
         <div className="section-header flex-col md:flex-row">
           <div className="max-w-4xl">
             <h2 className="h2-style text-primary">Des actions concrètes au cœur des territoires</h2>
-            <p className="text-body text-primary/80">Depuis plus de 20 ans, nous accompagnons les communautés locales dans la réalisation de projets concrets en faveur de la biodiversité et du développement des territoires.</p>
+            <p className="text-body text-primary/80">Depuis plus de 20 ans, nous menons des projets en faveur des Objectifs de Développement Durable (ODD), un cadre international regroupant 17 objectifs fixés par les Nations Unies pour préserver la planète, réduire les inégalités et améliorer les conditions de vie de tous.</p>
           </div>
-          <a href="/notre-impact">
-            <Button label="Voir toutes les actions →" variant="secondary" />
-          </a>
+            <a href="/notre-impact">
+              <Button label="Voir toutes les actions →" variant="primary" />
+            </a>
         </div>
 
         {/* ── Ligne ODD — icônes officielles ONU ── */}
-        <div className="flex justify-between items-center my-8">
+        <div className="flex flex-wrap justify-center gap-3 my-8">
+
           {ODDS.map(odd => (
             <img
               key={odd.n}
               src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
               alt={`ODD ${odd.n}`}
-              className="w-8 h-8 md:w-16 md:h-16 rounded object-cover"
+              className="w-12 h-12 md:w-16 md:h-16 rounded object-cover"
             />
           ))}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a href="https://sdgs.un.org/goals" target="_blank" rel="noopener noreferrer">
+              <Button label="En savoir plus sur les ODD →" variant="secondary" />
+            </a>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">

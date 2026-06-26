@@ -564,9 +564,13 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
 
   console.log("Locations créées (13)")
 
-  // ============================================================
-  // 5 — TÉMOIGNAGES
-  // ============================================================
+// ============================================================
+// X — TÉMOIGNAGES
+// ============================================================
+// ⚠️ LIMITE : content max 280 caractères
+// maxLength={280} déjà appliqué sur le formulaire public (TestimonialForm.jsx)
+// À appliquer aussi dans le dashboard (maxLength={280} sur le textarea)
+// ============================================================
 
   await prisma.testimonial.deleteMany({
     where: { mission_id: { in: missionIds } }
@@ -638,9 +642,12 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
 
   console.log("Témoignages créés (7 : 6 approved, 1 pending)")
 
-  // ============================================================
-  // 6 — ACTIONS SUR LE TERRAIN
-  // ============================================================
+// ============================================================
+// 6 — ACTIONS SUR LE TERRAIN
+// ============================================================
+// ⚠️ LIMITE : description max 180 caractères
+// À appliquer aussi dans le dashboard (maxLength={180} sur le textarea)
+// 
 
   const FIELD_ACTIONS = [
     {
