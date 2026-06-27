@@ -85,7 +85,7 @@
 | 34 | Gwen | Page Équipe — direction, bureau, CA, délégations | 17 juin | ✅ Terminé |
 | 35 | Alison | CRUD /api/admin/missions (back) | 13 juin | ✅ Terminé |
 | 36 | Alison | Dashboard admin — Sidebar + layout + routes protégées | 16-20 juin | 🔵 À faire |
-| 37 | Alison | PATCH /api/admin/testimonials/:id — modération | 19-20 juin | 🔵 À faire |
+| 37 | Alison | PATCH /api/admin/testimonials/:id — modération | 19-20 juin | ✅ Terminé  |
 | 38 | Ensemble | Flux complet : soumission → modération → affichage | 20 juin | 🔵 À faire |
 
 ---
@@ -98,7 +98,7 @@
 | 40 | Alison | Dashboard : modération témoignages | 23-24 juin | 🔵 À faire |
 | 41 | Alison | Dashboard : routage email contact | 24-25 juin | 🔵 À faire |
 | 42 | Alison | Upload fichiers Multer (images + PDFs) | 25-26 juin | 🔵 À faire |
-| 43 | Gwen | Responsive mobile-first — toutes pages MVP (375px / 768px) | 23-26 juin | 🔵 À faire |
+| 43 | Gwen | Responsive mobile-first — toutes pages MVP (375px / 768px) | 23-26 juin | ⚠️ Partiel|
 | 43bis | Gwen | si temps dispo : page impact, éducation et sensibilisation, média et actualités | 23-26 juin | ✅ Terminé  |
 
 ---
@@ -109,7 +109,7 @@
 |---|---|---|---|---|
 | 44 | Ensemble | Tests complets pages publiques | 30 juin | 🔵 À faire |
 | 45 | Ensemble | Tests dashboard : CRUD, modération, contact | 1 juillet | 🔵 À faire |
-| 46 | Ensemble | Seed BDD avec données proches du réel | 1 juillet | ✅ Terminé |
+| 46 | Ensemble | Seed BDD avec données proches du réel | 1 juillet | ⚠️ Partiel |
 | 47 | Ensemble | Audit Lighthouse — corrections prioritaires | 2 juillet | 🔵 À faire |
 | 48 | Ensemble | Accessibilité de base : labels, alt, focus | 2 juillet | 🔵 À faire |
 | 49 | Ensemble | Préparation soutenance / démo MVP | 2-3 juillet | 🔵 À faire |
