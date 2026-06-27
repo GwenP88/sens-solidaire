@@ -15,30 +15,25 @@ function Dashboard() {
   // Stocke un message d'erreur éventuel
   const [error, setError] = useState(null)
 
-  // ── CHARGEMENT AU MONTAGE ──
-  // useEffect avec [] = s'exécute UNE fois, quand la page s'affiche
-  useEffect(() => {
-    // On définit une fonction async (useEffect n'accepte pas async directement)
-    const loadTestimonials = async () => {
-      try {
-        // 👉 appelle la fonction API et récupère les données
-        const data = await fetchAdminTestimonials()
-
-        // 👉 range les données dans l'état testimonials
-        setTestimonials(data)
-
-      } catch (err) {
-        console.error("Erreur chargement témoignages:", err)
-        setError("Impossible de charger les témoignages.")
-      } finally {
-        // Dans tous les cas (succès ou échec), le chargement est fini
-        setLoading(false)
-      }
+  // ── CHARGEMENT ──
+  // Fonction réutilisable : appelée au montage ET après chaque action.
+  const loadTestimonials = async () => {
+    try {
+      const data = await fetchAdminTestimonials()
+      setTestimonials(data)
+    } catch (err) {
+      console.error("Erreur chargement témoignages:", err)
+      setError("Impossible de charger les témoignages.")
+    } finally {
+      setLoading(false)
     }
+  }
 
+  // useEffect ne fait QU'appeler la fonction, une fois, au montage.
+  useEffect(() => {
     loadTestimonials()
-  }, []) // 👈 le tableau vide = "une seule fois au montage"
-
+  }, [])
+  
   // ── RENDU ──
 
   // Cas 1 : en cours de chargement

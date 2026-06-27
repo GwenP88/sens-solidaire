@@ -185,6 +185,41 @@ export const fetchAdminTestimonials = async () => {
   }
 
   const data = await response.json()
-  // 👉 ton back renvoie quoi ? regarde getTestimonials dans ton controller
   return data.testimonials
+}
+
+// Approuve un témoignage (statut → "approved", figé côté back).
+export const approveTestimonial = async (id) => {
+  const token = localStorage.getItem("admin_token")
+
+  const response = await fetch(`${API_URL}/admin/testimonials/${id}/approve`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error("Échec de l'approbation du témoignage.")
+  }
+
+  return await response.json()
+}
+
+// Refuse un témoignage (statut → "rejected" + retire de l'accueil, figé côté back).
+export const rejectTestimonial = async (id) => {
+  const token = localStorage.getItem("admin_token")
+
+  const response = await fetch(`${API_URL}/admin/testimonials/${id}/reject`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error("Échec du refus du témoignage.")
+  }
+
+  return await response.json()
 }
