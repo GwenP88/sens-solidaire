@@ -3,7 +3,8 @@
 
 // 1. On importe les hooks React et notre fonction API
 import { useState, useEffect } from 'react'
-import { fetchAdminTestimonials } from '../../services/api'
+import { fetchAdminTestimonials, approveTestimonial, rejectTestimonial } from '../../services/api'
+import ModerationCard from '../../components/admin/ModerationCard'
 
 function Dashboard() {
 
@@ -33,7 +34,31 @@ function Dashboard() {
   useEffect(() => {
     loadTestimonials()
   }, [])
-  
+
+  // ── ACTIONS DE MODÉRATION ──
+
+  // Valider un témoignage
+  const handleApprove = async (id) => {
+    try {
+      // 1. on demande au backend de passer le statut à "approved"
+      await approveTestimonial(id)
+      // 2. on recharge la liste pour voir le changement à l'écran
+      await loadTestimonials()
+    } catch (err) {
+      console.error("Erreur lors de l'approbation:", err)
+    }
+  }
+
+  // Refuser un témoignage
+  const handleReject = async (id) => {
+    try {
+      await rejectTestimonial(id)
+      await loadTestimonials()
+    } catch (err) {
+      console.error("Erreur lors du refus:", err)
+    }
+  }
+
   // ── RENDU ──
 
   // Cas 1 : en cours de chargement
@@ -46,7 +71,7 @@ function Dashboard() {
     return <div className="p-12 font-body text-red-600">{error}</div>
   }
 
-  // Cas 3 : données chargées → on affiche
+   // Cas 3 : données chargées → on affiche
   return (
     <div className="p-12 font-body text-primary">
       <h1 className="font-heading font-bold text-2xl mb-4">Dashboard admin</h1>
@@ -55,11 +80,12 @@ function Dashboard() {
       {/* On parcourt la liste : une carte par témoignage */}
       <div className="flex flex-col gap-4">
         {testimonials.map((t) => (
-          <div key={t.id} className="border border-surface-dark rounded p-4">
-            <p className="font-semibold">{t.author_name}</p>
-            <p className="text-sm text-primary/70 mb-2">Statut : {t.status}</p>
-            <p className="italic">"{t.content}"</p>
-          </div>
+          <ModerationCard
+            key={t.id}
+            testimonial={t}
+            onApprove={handleApprove}
+            onReject={handleReject}
+          />
         ))}
       </div>
     </div>

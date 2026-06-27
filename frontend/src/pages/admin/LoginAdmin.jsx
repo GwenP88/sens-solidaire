@@ -35,7 +35,7 @@ function LoginAdmin() {
       }
 
       // Stockage du token JWT en localStorage
-      localStorage.setItem('admin_token', data.accesToken)
+      localStorage.setItem('admin_token', data.accessToken)
 
       // Redirection vers le dashboard
       navigate('/admin')
