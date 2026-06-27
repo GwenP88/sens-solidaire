@@ -21,7 +21,7 @@ function ModerationCard({ testimonial, onApprove, onReject }) {
         <div className="flex-1">
           <p className="font-semibold">{testimonial.author_name}</p>
           <p className="text-sm text-gray-500">
-            {testimonial.mission.title} — {testimonial.mission.country}
+            {testimonial.mission?.title} — {testimonial.mission.country}
           </p>
         </div>
 
