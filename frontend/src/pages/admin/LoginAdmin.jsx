@@ -33,11 +33,23 @@ function LoginAdmin() {
         return
       }
 
+<<<<<<< HEAD
       // ── Stockage du token JWT et redirection
       localStorage.setItem('admin_token', data.token)
       navigate('/admin')
 
     } catch (err) {
+=======
+      // Stockage du token JWT en localStorage
+      localStorage.setItem('admin_token', data.accessToken)
+
+      // Redirection vers le dashboard
+      navigate('/admin')
+
+    } catch (err) {
+      // Erreur réseau (serveur injoignable)
+      console.error("Erreur login:", err)
+>>>>>>> dev-back
       setError('Impossible de contacter le serveur. Vérifie que le backend est démarré.')
     } finally {
       setLoading(false)
