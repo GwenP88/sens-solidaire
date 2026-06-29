@@ -52,56 +52,60 @@ function ActionDetail() {
       <HeroPage
         image={action.image_url}
         title={action.title}
+        country={action.country}
+        tags={action.tags?.map(t => t.tag)}
       />
 
-      {/* ── Contenu principal — texte 2/3 + sidebar 1/3 ── */}
+      {/* ── Contenu principal — texte 2/3 + sidebar ODD sticky 1/3 ── */}
       <section className="section-padding bg-surface">
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 mb-8">
 
-          {/* Lien retour vers la liste des actions */}
+          {/* Lien retour */}
           <a href="/notre-impact" className="link-nav text-primary/50 hover:text-primary">
             ← Retour aux actions
           </a>
 
-          {/* Description courte — affichée en H2 pleine largeur */}
+          {/* Description courte — H2 pleine largeur */}
           <h2 className="h2-style text-primary">{action.description}</h2>
 
-          {/* Layout 2 colonnes — texte + sidebar */}
-          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+        </div>
 
-            {/* Colonne texte — 2/3 */}
-            <div className="flex-1 flex flex-col gap-4">
-              {action.content.split('\n\n').map((para, i) => (
-                <p key={i} className="text-body text-primary/80">
-                  {para}
-                </p>
+        {/* Grid texte + aside sticky */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+
+          {/* Colonne texte — 2/3 */}
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            {action.content.split('\n\n').map((para, i) => (
+              <p key={i} className="text-body text-primary/80">{para}</p>
+            ))}
+          </div>
+
+          {/* Aside ODD — sticky 1/3 */}
+          <aside className="sticky top-24 self-start bg-surface-mid rounded-2xl p-6 flex flex-col gap-4">
+            <p className="text-eyebrow text-primary/40">ODD associés</p>
+
+            {/* Liste ODD compacte */}
+            <div className="flex flex-col gap-3">
+              {action.odds.map(o => (
+                <div key={o.odd_number} className="flex items-center gap-3">
+                  {/* Icône officielle ONU */}
+                  <img
+                    src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(o.odd_number).padStart(2, '0')}.jpg`}
+                    alt={`ODD ${o.odd_number}`}
+                    className="w-16 h-16 rounded shrink-0 object-cover"
+                  />
+                  {/* Label ODD */}
+                  <p className="text-body text-primary/70">{ODDS_LABELS[o.odd_number]}</p>
+                </div>
               ))}
             </div>
 
-            {/* Colonne sidebar — 1/3 */}
-            <div className="w-full md:w-1/3 shrink-0 flex flex-col gap-6">
+            {/* CTA vers la page ODD ONU */}
+            <a href="https://www.un.org/sustainabledevelopment/fr/" target="_blank" rel="noopener noreferrer">
+              <Button label="En savoir plus sur les 17 ODD →" variant="primary" />
+            </a>
+          </aside>
 
-              {/* Bloc ODD — icônes officielles ONU + labels français */}
-              <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-3">
-                <p className="text-eyebrow text-primary/40">ODD associés</p>
-                <div className="grid grid-cols-3 gap-3 justify-items-center">
-                  {action.odds.map(o => (
-                    <div key={o.odd_number} className="flex flex-col items-center gap-1">
-                      <img
-                        src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(o.odd_number).padStart(2, '00')}.jpg`}
-                        alt={`ODD ${o.odd_number}`}
-                        className="w-full rounded-lg"
-                      />
-                      <p className="text-caption text-primary/60 text-center leading-tight">
-                        {ODDS_LABELS[o.odd_number]}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-          </div>
         </div>
       </section>
 

@@ -1612,7 +1612,7 @@ pour consulter et vérifier les données.
 
 ---
 
-## Jour 16 — Dashboard admin : module de modération des témoignages
+## Jour 23 · 28 juin 2026 — Dashboard admin : module de modération des témoignages
 
 ### Réalisé
 - Création du composant `ModerationCard.jsx` (présentationnel pur : reçoit données + actions par props, aucun appel API)
@@ -1642,6 +1642,107 @@ Ne pas deviner → lire la console (`console.error` + code de statut), remonter 
 - Filtre `?status=pending` (les témoignages traités sortent de la file)
 - Module missions (CRUD) + layout/sidebar
 - Dette : toggle "à la une" (V2), warning ESLint setState-in-effect (inoffensif)
+
 --- 
+
+## Jour 24 · 27 juin 2026
+### S5 — Responsive NotreImpact + ActionDetail + Corrections diverses
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Résolution bug Docker Desktop / WSL2 | ✅ |
+| ngrok relancé + routine_quotidienne.md mis à jour | ✅ |
+| Merge dev-front → dev + pull Alison | ✅ |
+| Responsive NotreImpact.jsx — filtres select/chips | ✅ |
+| Filtres ActionCard — nouvelles catégories ODD | ✅ |
+| `ODD_TO_CATEGORY` mapping dans `utils/odds.js` | ✅ |
+| `FILTERS_ACTION_TAGS` mis à jour — 6 catégories | ✅ |
+| ActionDetail.jsx — bloc ODD compact + sticky aside | ✅ |
+| ActionDetail.jsx — pays + tags dans le hero | ✅ |
+| `HeroPage.jsx` — props `country` + `tags` ajoutées | ✅ |
+| Navbar mobile — reset accordéons à la fermeture | ✅ |
+
+#### Ce qui a été fait
+
+**Résolution bug Docker Desktop / WSL2**
+- Symptôme : `error getting credentials` + `WSL ERROR: UtilAcceptVsock` au `docker compose up --build`
+- Cause : `~/.docker/config.json` contenait `"credsStore": "desktop.exe"` — plus compatible après mise à jour Docker Desktop
+- Solution :
+```bash
+cp ~/.docker/config.json ~/.docker/config.json.backup
+echo '{}' > ~/.docker/config.json
+docker compose up -d --build
+```
+
+**ngrok**
+- Relancé après redémarrage PC
+- URL frontend : `https://couch-stray-twistable.ngrok-free.dev` → inchangée ✅
+- Section ajoutée dans `routine_quotidienne.md` — commandes ngrok + procédure
+
+**Responsive NotreImpact.jsx — barre de filtres**
+- Mobile + 768 → deux `<select>` empilés pleine largeur (375) / côte à côte (768)
+- Desktop 1024+ → select pays + `FilterChips` scrollable sur une ligne (`nowrap`)
+- Prop `nowrap` ajoutée dans `FilterChips.jsx`
+- Select pays — `min-w-[180px]` sur desktop
+
+**Filtres ActionCard — nouvelles catégories ODD**
+- `FILTERS_ACTION_TAGS` remplacé — 6 nouvelles catégories :
+  - 🌳 Biodiversité (ODD 14, 15)
+  - 👥 Solidarité (ODD 1, 2, 3, 5, 10)
+  - 🎓 Éducation et sensibilisation (ODD 4)
+  - 🌍 Développement local (ODD 8, 9, 11)
+  - 🤝 Coopération (ODD 16, 17)
+  - 🌱 Climat & Ressources (ODD 6, 7, 12, 13)
+- `ODD_TO_CATEGORY` ajouté dans `utils/odds.js` — mapping numéro ODD → catégorie
+- Logique filtrage mise à jour dans `NotreImpact.jsx` — filtre via ODD de l'action
+
+**ActionDetail.jsx — refonte mise en page**
+- Bloc ODD remplacé — liste compacte avec icône ONU + label + CTA "Voir tous les ODD →"
+- Layout grid `lg:grid-cols-3` — texte sur 2 colonnes, aside ODD sur 1 colonne
+- Aside ODD en `sticky top-24 self-start` — reste visible pendant le scroll du contenu
+- Galerie dans section séparée après le grid — non concernée par le sticky
+
+**HeroPage.jsx — pays + tags**
+- Props `country` et `tags` ajoutées
+- Affichage sous le titre : icône pin + pays | tags en pills
+- Séparateur `|` entre le pays et le bloc tags
+- Utilisé dans `ActionDetail.jsx`
+
+**Navbar mobile**
+- Reset `mobileMissionsOpen` et `mobileAproposOpen` à `false` à la fermeture du burger
+- Évite que le sous-menu soit déjà ouvert à la réouverture du menu
+
+#### Points d'attention
+- `dangerouslySetInnerHTML` à prévoir dans `ActionDetail.jsx` pour la migration vers TipTap (Phase 2)
+- `FILTERS_ACTION_TAGS` — les anciens tags en BDD (`Environnement`, `Biodiversité`, etc.) ne sont plus utilisés pour le filtrage — le filtrage se fait désormais via les ODD de l'action
+
+#### 🔵 À faire cette semaine
+
+| Tâche | Priorité |
+|---|---|
+| Responsive pages restantes : `Testimonials`, `MediaEtActualites`, `Soutenir`, `RapportsActivite` | 🔴 |
+| SEO basique — composant `SEOHead` | 🔴 |
+| Accessibilité basique — `alt`, `aria-label`, `focus-visible` | 🔴 |
+| Préparer tous les composants affichant du contenu BDD pour HTML riche — TipTap Phase 2 (`ActionDetail`, `LocationDetail`, `MissionDetail`, `EducationDetail` ...) | 🟠 |
+| Témoignages de Marine — récupérer + intégrer au seed | 🔴 |
+| Logos partenaires manquants| 🔴 |
+| Images placeholder témoignages + pays | 🟠 |
+| Textes de toutes les pages — relecture et corrections par la cliente | 🔴 |
+| Compteur action — contenu à fournir | 🟠 |
+| HelloAsso — remplacer les liens génériques par les liens par mission | 🔴 |
+| Google Maps — intégration iframes embed sur page Contact + À propos | 🟠 |
+| Accréditations ONU / UICN — ajouter bloc sur page À propos | 🟠 |
+| Steps missions — ajouter au seed pour toutes les missions | 🟠 |
+| Sumatra — ajouter comme destination congé solidaire | 🔴 |
+| "Sens Solidaires" — grep + sed sur tout le projet pour vérifier le S majuscule | 🔴 |
+| Page Éducation & Sensibilisation — revoir entièrement la mise en page et le contenu | 🔴 |
+| Lien école Steiner — ajouter sur la page éco-école | 🟠 |
+| Bandeau ODD — ajouter sur la page Éducation & Sensibilisation | 🟠 |
+| Contenu actions terrain — revoir et corriger tous les textes | 🔴 |
+| Compteur actions — compter toutes les actions + mettre à jour la StatsBar | 🟠 |
+| Images UI — revoir les images placeholder de l'interface | 🟠 |
+| Préparer tous les composants affichant du contenu BDD pour HTML riche — TipTap (`ActionDetail`, `LocationDetail`, `MissionDetail`, `EducationDetail`) | 🟠 |
 
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
