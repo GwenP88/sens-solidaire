@@ -1620,7 +1620,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
   await prisma.partner.deleteMany({})
   await prisma.partner.createMany({
     data: [
-      { name: "AFD", logo_url: "/images/logo-partners/afd.png", display_order: 1 },
+      { name: "AFD", logo_url: "/images/logo-partners/afd.png", display_order: 18 },
       { name: "Alpes-Maritimes", logo_url: "/images/logo-partners/alpes-maritimes.png", display_order: 2 },
       { name: "Annemasse", logo_url: "/images/logo-partners/annemasse.png", display_order: 3 },
       { name: "Eco-Ecole", logo_url: "/images/logo-partners/eco-ecole.png", display_order: 4 },
@@ -1637,7 +1637,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
       { name: "PNUE", logo_url: "/images/logo-partners/pnue.png", display_order: 15 },
       { name: "Service Civique", logo_url: "/images/logo-partners/service-civique.png", display_order: 16 },
       { name: "Territoires Solidaires", logo_url: "/images/logo-partners/territoires-solidaires.png", display_order: 17 },
-      { name: "Ville de Nice", logo_url: "/images/logo-partners/ville-nice.png", display_order: 18 },
+      { name: "Ville de Nice", logo_url: "/images/logo-partners/ville-nice.png", display_order: 1 },
     ]
   })
   console.log('Partners créés (18)')

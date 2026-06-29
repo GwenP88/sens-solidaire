@@ -18,20 +18,33 @@ function ActionCard({ title, description, tags, slug, country, image, odds }) {
       </div>
 
       {/* Zone contenu */}
-      <div className="flex flex-col justify-between p-5 gap-3">
+      <div className="flex flex-col justify-between flex-1 p-6 gap-4">
+
+        {/* Titre — haut */}
         <h3 className="h3-style text-surface">{title}</h3>
-        <p className="text-body text-surface">{description}</p>
-        <div className="text-caption text-surface/70 flex gap-3 italic">
-          {tags.map(tag => <span key={tag}>• {tag}</span>)}
+
+        {/* Description — milieu */}
+        <p className="text-body text-surface/80 flex-1 line-clamp-3">{description}</p>
+
+        {/* Bas — tags + CTA + pays */}
+        <div className="flex flex-col gap-3">
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2">
+            {tags.map(tag => (
+              <span key={tag} className="text-caption text-surface/70 italic">• {tag}</span>
+            ))}
+          </div>
+          {/* CTA + pays */}
+          <div className="flex items-center justify-between">
+            <a href={`/notre-impact/${slug}`}>
+              <Button label="Découvrir →" variant="primary" />
+            </a>
+            <span className="text-caption text-surface/60 flex items-center gap-1">
+              <IconPin className="text-xs" />{country}
+            </span>
+          </div>
         </div>
-        <div className="flex items-center justify-between">
-          <a href={`/notre-impact/${slug}`}>
-            <Button variant="primary" label="Découvrir →" />
-          </a>
-          <span className="text-caption text-surface/70 flex items-center gap-1">
-            <IconPin /> {country}
-          </span>
-        </div>
+
       </div>
 
     </article>

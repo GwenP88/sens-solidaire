@@ -1,20 +1,19 @@
 // FilterChips.jsx
-// Puces filtrantes réutilisables — scroll horizontal sur mobile, wrap sur desktop
+// Puces filtrantes réutilisables — scroll horizontal sur mobile, wrap à partir de lg
 // Props :
 //   filters  : [{ label: string, value: any }]
 //   active   : valeur active (null = toutes)
 //   onChange : fonction appelée au clic avec la nouvelle valeur
-//   variant  : "light" (défaut, fond clair) | "dark" (fond foncé bg-primary)
+//   variant  : "light" (défaut) | "dark"
 
-function FilterChips({ filters, active, onChange, variant = 'light' }) {
+function FilterChips({ filters, active, onChange, variant = 'light', nowrap = false }) {
   return (
-    // ── Scroll horizontal mobile — wrap à partir de md
-    <div className="flex gap-3 overflow-x-auto lg:flex-wrap pb-4 lg:pb-0 scrollbar-hide">
+    <div className={`flex gap-3 overflow-x-auto pb-3 scrollbar-hide ${nowrap ? 'flex-nowrap' : 'lg:flex-wrap'}`}>
       {filters.map(f => (
         <button
           key={f.label}
           onClick={() => onChange(f.value)}
-          className={`link-nav px-4 py-2 rounded-full border transition-colors shrink-0 lg:shrink ${
+          className={`link-nav px-4 py-2 rounded-full border transition-colors shrink-0 ${
             variant === 'dark'
               ? active === f.value
                 ? 'bg-surface text-primary border-surface'

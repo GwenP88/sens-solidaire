@@ -53,7 +53,11 @@ function Navbar() {
   const isOnApropos = location.pathname.startsWith('/a-propos') || location.pathname.startsWith('/equipe')
 
   // ── Ferme le menu mobile au clic sur un lien
-  const handleMobileNav = () => setMobileOpen(false)
+  const handleMobileNav = () => {
+    setMobileOpen(false)
+    setMobileMissionsOpen(false)
+    setMobileAproposOpen(false)
+  }
 
   return (
     <>
@@ -172,7 +176,13 @@ function Navbar() {
           {/* Burger — mobile uniquement */}
           <button
             className="lg:hidden text-surface text-2xl"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            onClick={() => {
+              if (mobileOpen) {
+                setMobileMissionsOpen(false)
+                setMobileAproposOpen(false)
+              }
+              setMobileOpen(!mobileOpen)
+            }}
             aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
           >
             {mobileOpen ? <IoCloseSharp /> : <IoMenuSharp />}
