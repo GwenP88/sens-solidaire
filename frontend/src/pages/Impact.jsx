@@ -22,7 +22,7 @@ import FilterChips from '../components/navigation/FilterChips'
 import ActionCard from '../components/actions/ActionCard'
 
 // ── Utils
-import { ODDS } from '../utils/odds'
+import { ODDS, ODD_TO_CATEGORY } from '../utils/odds'
 import { FILTERS_ACTION_TAGS } from '../utils/filters'
 
 function NotreImpact() {
@@ -45,7 +45,10 @@ function NotreImpact() {
 
   // ── Filtrage combiné — par tag thématique ET par pays
   const filteredActions = actions.filter(a => {
-    if (activeFilter && !a.tags.some(t => t.tag === activeFilter)) return false
+    if (activeFilter) {
+      const categories = a.odds.map(o => ODD_TO_CATEGORY[o.odd_number])
+      if (!categories.includes(activeFilter)) return false
+    }
     if (activeCountry && !a.country.includes(activeCountry)) return false
     return true
   })
@@ -60,7 +63,36 @@ function NotreImpact() {
         subtitle="Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable."
       />
 
-      {/* ── Barre de filtres — collée au hero ── */}
+      {/* ── Section ODD — icônes officielles ONU avec labels français ── */}
+      <section className="section-padding bg-surface-mid">
+        <div className="section-header">
+          <div className="max-w-5xl">
+            <h2 className="h2-style text-primary mb-2">Nos actions au service des Objectifs de Développement Durable</h2>
+            <p className="text-body text-primary/60">
+              Sens Solidaire s'engage en France et à l'international à travers des projets dédiés à la préservation de la biodiversité, au soutien des populations locales et à la promotion d'un développement durable. Nos actions allient éducation, échanges interculturels et initiatives environnementales concrètes, tout en s'inscrivant dans les <span className='font-black text-primary/80'> 17 Objectifs de Développement Durable (ODD) définis par l'ONU</span>. Ces 17 objectifs, adoptés par 193 pays en 2015, constituent un cadre universel pour répondre aux grands défis de notre planète d'ici 2030.<br /> <br /> À notre échelle, chaque projet contribue à relever les défis sociaux, environnementaux et économiques de notre époque, en protégeant le vivant, en favorisant l'accès à l'éducation, en accompagnant les communautés locales et en sensibilisant les jeunes. Ensemble, nous œuvrons pour construire un monde plus juste, plus solidaire et plus durable.
+            </p>
+          </div>
+          <a href="https://www.un.org/sustainabledevelopment/fr/" target="_blank" rel="noopener noreferrer">
+            <Button label="En savoir plus sur les 17 ODD →" variant="primary" />
+          </a>
+        </div>
+
+        {/* Grille ODD — flex wrap centré */}
+        <div className="flex flex-wrap gap-3 justify-center mt-8">
+          {ODDS.map(odd => (
+            <div key={odd.n} className="flex flex-col items-center gap-2 w-20 text-center">
+              <img
+                src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
+                alt={`ODD ${odd.n}`}
+                className="w-full rounded-lg object-cover"
+              />
+              <p className="text-caption text-primary/60 leading-tight">{odd.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+            {/* ── Barre de filtres — collée au hero ── */}
       <div className="bg-primary px-4 lg:px-24 py-4 lg:py-6">
 
         {/* ── Mobile + 768 — deux selects ── */}
@@ -124,35 +156,6 @@ function NotreImpact() {
         </div>
 
       </div>
-
-      {/* ── Section ODD — icônes officielles ONU avec labels français ── */}
-      <section className="section-padding bg-surface-mid">
-        <div className="section-header">
-          <div className="max-w-5xl">
-            <h2 className="h2-style text-primary mb-2">Nos actions au service des Objectifs de Développement Durable</h2>
-            <p className="text-body text-primary/60">
-              Sens Solidaire s'engage en France et à l'international à travers des projets dédiés à la préservation de la biodiversité, au soutien des populations locales et à la promotion d'un développement durable. Nos actions allient éducation, échanges interculturels et initiatives environnementales concrètes, tout en s'inscrivant dans les <span className='font-black text-primary/80'> 17 Objectifs de Développement Durable (ODD) définis par l'ONU</span>. Ces 17 objectifs, adoptés par 193 pays en 2015, constituent un cadre universel pour répondre aux grands défis de notre planète d'ici 2030.<br /> <br /> À notre échelle, chaque projet contribue à relever les défis sociaux, environnementaux et économiques de notre époque, en protégeant le vivant, en favorisant l'accès à l'éducation, en accompagnant les communautés locales et en sensibilisant les jeunes. Ensemble, nous œuvrons pour construire un monde plus juste, plus solidaire et plus durable.
-            </p>
-          </div>
-          <a href="https://www.un.org/sustainabledevelopment/fr/" target="_blank" rel="noopener noreferrer">
-            <Button label="En savoir plus sur les 17 ODD →" variant="primary" />
-          </a>
-        </div>
-
-        {/* Grille ODD — flex wrap centré */}
-        <div className="flex flex-wrap gap-3 justify-center mt-8">
-          {ODDS.map(odd => (
-            <div key={odd.n} className="flex flex-col items-center gap-2 w-20 text-center">
-              <img
-                src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
-                alt={`ODD ${odd.n}`}
-                className="w-full rounded-lg object-cover"
-              />
-              <p className="text-caption text-primary/60 leading-tight">{odd.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ── Grille des actions ── */}
       <section className="section-padding">

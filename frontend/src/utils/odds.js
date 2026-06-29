@@ -25,3 +25,24 @@ export const ODDS = Object.entries(ODDS_LABELS).map(([n, label]) => ({
   n: Number(n),
   label,
 }))
+
+// Mapping ODD → catégorie thématique
+export const ODD_TO_CATEGORY = {
+  14: 'Biodiversité',
+  15: 'Biodiversité',
+  1:  'Solidarité',
+  2:  'Solidarité',
+  3:  'Solidarité',
+  5:  'Solidarité',
+  10: 'Solidarité',
+  4:  'Éducation et sensibilisation',
+  8:  'Développement local',
+  9:  'Développement local',
+  11: 'Développement local',
+  16: 'Coopération',
+  17: 'Coopération',
+  6:  'Climat & Ressources',
+  7:  'Climat & Ressources',
+  12: 'Climat & Ressources',
+  13: 'Climat & Ressources',
+}

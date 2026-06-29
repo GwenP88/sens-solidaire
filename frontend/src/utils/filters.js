@@ -27,12 +27,12 @@ export const FILTERS_EDUCATION_PUBLIC = [
 
 export const FILTERS_ACTION_TAGS = [
   { label: "Tous les thèmes", value: null },
-  { label: "Environnement", value: "Environnement" },
   { label: "Biodiversité", value: "Biodiversité" },
-  { label: "Agriculture", value: "Agriculture" },
-  { label: "Éducation", value: "Éducation" },
-  { label: "Échanges culturels", value: "Échanges culturels" },
-  { label: "Accès à l'eau", value: "Accès à l'eau" },
+  { label: "Solidarité", value: "Solidarité" },
+  { label: "Éducation", value: "Éducation et sensibilisation" },
+  { label: "Développement local", value: "Développement local" },
+  { label: "Coopération", value: "Coopération" },
+  { label: "Climat & Ressources", value: "Climat & Ressources" },
 ]
 
 export const FILTERS_MEDIA_THEME = [
