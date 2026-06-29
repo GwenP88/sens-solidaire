@@ -73,11 +73,6 @@ function Dashboard() {
 
    // Cas 3 : données chargées → on affiche
   return (
-<<<<<<< HEAD
-    <div className="p-12">
-      <h1 className="h1-style text-primary">Dashboard admin</h1>
-      <p className="text-body text-primary/60">Connexion réussie</p>
-=======
     <div className="p-12 font-body text-primary">
       <h1 className="font-heading font-bold text-2xl mb-4">Dashboard admin</h1>
       <p className="mb-6">Témoignages à modérer : {testimonials.length}</p>
@@ -93,7 +88,6 @@ function Dashboard() {
           />
         ))}
       </div>
->>>>>>> dev-back
     </div>
   )
 }
