@@ -108,7 +108,7 @@ function Testimonials() {
               {filteredRapports.map(r => (
                 <div key={r.id} className="flex flex-col bg-surface rounded-xl overflow-hidden">
                   <div className="w-full h-40 overflow-hidden">
-                    <img src="/placeholder-rapport.png" alt={`Rapport ${r.auteur}`} className="w-full h-full object-cover" />
+                    <img src="images/placeholders/placeholder-rapport-mission.png" alt={`Rapport ${r.auteur}`} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex flex-col justify-between gap-4 p-6 flex-1">
                     <div className="flex flex-col gap-1">
