@@ -5,6 +5,30 @@
 // URL de base de l'API — variable d'env Vite en priorité, fallback localhost
 const API_URL = "/api"
 
+// ── AUTH ADMIN ───────────────────────────────────────────────────────────────
+
+// Connexion admin : envoie email + password, récupère l'access token.
+// credentials: "include" → indispensable pour que le navigateur accepte
+// le cookie HTTP-Only (refresh token) renvoyé par le back.
+export const loginAdmin = async (email, password) => {
+  const response = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",                       // 👈 pour le cookie refresh
+    body: JSON.stringify({ email, password }),
+  })
+
+  if (!response.ok) {
+    // Le back renvoie { error, message } en cas de 400/401
+    const data = await response.json()
+    throw new Error(data.message || "Email ou mot de passe incorrect.")
+  }
+
+  const data = await response.json()
+  return data.accessToken
+}
+
+
 // ── MISSIONS ─────────────────────────────────────────────────────────────────
 
 // Récupère toutes les missions actives
@@ -137,5 +161,65 @@ export const fetchPartners = async () => {
 export const fetchLocationBySlug = async (slug) => {
   const response = await fetch(`${API_URL}/locations/${slug}`)
   if (!response.ok) throw new Error(`Lieu introuvable (slug : ${slug})`)
+  return await response.json()
+}
+
+// ── ADMIN — TÉMOIGNAGES ──────────────────────────────────────────────────────
+
+// Récupère TOUS les témoignages pour la modération (tous statuts).
+// Route protégée → on doit envoyer le token dans le header Authorization.
+export const fetchAdminTestimonials = async () => {
+  // 1. On récupère le token stocké au login
+  const token = localStorage.getItem("admin_token")
+
+  const response = await fetch(`${API_URL}/admin/testimonials`, {
+    headers: {
+      // 2. Le header qui authentifie la requête.
+      //    Format exact attendu par ton back : "Bearer <token>"
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error("Impossible de charger les témoignages (admin).")
+  }
+
+  const data = await response.json()
+  return data.testimonials
+}
+
+// Approuve un témoignage (statut → "approved", figé côté back).
+export const approveTestimonial = async (id) => {
+  const token = localStorage.getItem("admin_token")
+
+  const response = await fetch(`${API_URL}/admin/testimonials/${id}/approve`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error("Échec de l'approbation du témoignage.")
+  }
+
+  return await response.json()
+}
+
+// Refuse un témoignage (statut → "rejected" + retire de l'accueil, figé côté back).
+export const rejectTestimonial = async (id) => {
+  const token = localStorage.getItem("admin_token")
+
+  const response = await fetch(`${API_URL}/admin/testimonials/${id}/reject`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error("Échec du refus du témoignage.")
+  }
+
   return await response.json()
 }

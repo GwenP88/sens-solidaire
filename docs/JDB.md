@@ -1610,6 +1610,38 @@ pour consulter et vérifier les données.
 - Accessibilité basique — `alt`, `aria-label`, `focus-visible`
 - Backlog cliente — textes, HelloAsso, Maps, ODD page À propos
 
+---
+
+## Jour 16 — Dashboard admin : module de modération des témoignages
+
+### Réalisé
+- Création du composant `ModerationCard.jsx` (présentationnel pur : reçoit données + actions par props, aucun appel API)
+- Ajout des fonctions `approveTestimonial` / `rejectTestimonial` dans `api.js` (PATCH protégés)
+- Câblage complet dans `Dashboard.jsx` : fetch au montage, états (loading/error), handlers, refresh après action
+- Affichage fonctionnel : 7 témoignages, avatars, boutons Valider/Refuser opérationnels
+
+### Décisions d'architecture
+| Décision | Justification |
+|---|---|
+| Composant présentationnel pur (carte) vs container (Dashboard) | Séparer "afficher" de "gérer la logique" — même logique que controller/service au back |
+| Nouveau dossier `components/admin/` | Ne pas toucher aux composants publics de Gwen (`testimonials/`) |
+| Bouton "À la une" retiré du MVP | Aucune route backend pour toggle `show_homepage` → dette V2 |
+| Fallback avatar via `||` placeholder | Champ `avatar_url` nullable côté BDD |
+
+### Bugs rencontrés et compris
+| Bug | Cause | Leçon |
+|---|---|---|
+| 401 sur l'API alors que connectée | Faute de frappe `accesToken` (1 "s") → `localStorage` stockait `"undefined"` | Une typo sur un champ JS ne plante pas : renvoie `undefined` silencieusement, le bug surgit ailleurs |
+| `Cannot read properties of null (reading 'title')` | Un témoignage sans mission liée (`mission = null`) | Toujours se méfier des relations nullables → optional chaining `?.` |
+| Route GET admin câblée sur controller public | (corrigé) `getTestimonials` au lieu de `getAdminTestimonials` | La forme de la réponse (tableau brut vs enveloppe) prouve quel controller tourne |
+
+### Méthode de debug retenue
+Ne pas deviner → lire la console (`console.error` + code de statut), remonter du symptôme à la cause. Le système qui tourne (test réel) est la seule source de vérité, pas un fichier lu de mémoire.
+
+### Reste à faire
+- Filtre `?status=pending` (les témoignages traités sortent de la file)
+- Module missions (CRUD) + layout/sidebar
+- Dette : toggle "à la une" (V2), warning ESLint setState-in-effect (inoffensif)
 --- 
 
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

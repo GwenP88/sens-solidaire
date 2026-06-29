@@ -100,3 +100,4 @@ export const remove = async (id) => {
     throw error
   }
 }
+

@@ -39,6 +39,7 @@ import EducationDetail from './pages/EducationDetail'
 // ── Pages admin — sans Navbar ni Footer
 import LoginAdmin from './pages/admin/LoginAdmin'
 import Dashboard from './pages/admin/Dashboard'
+import ProtectedRoute from './components/navigation/ProtectedRoute'
 
 //  ── Pages lieux
 import LocationDetail from './pages/LocationDetail'
@@ -96,7 +97,11 @@ function App() {
 
         {/* ── Routes admin — sans Navbar ni Footer ── */}
         <Route path="/admin/login" element={<LoginAdmin />} />
-        <Route path="/admin" element={<Dashboard />} />
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
 
       </Routes>
 

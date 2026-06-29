@@ -8,7 +8,7 @@
 import { Router } from "express"
 import authMiddleware from "../middlewares/authMiddleware.js"
 
-import { getTestimonials, approveTestimonial, rejectTestimonial, deleteTestimonial } from "../controllers/testimonialController.js"
+import { getAdminTestimonials, approveTestimonial, rejectTestimonial, deleteTestimonial } from "../controllers/testimonialController.js"
 
 const router = Router()
 
@@ -20,7 +20,7 @@ router.use(authMiddleware)
 // GET /api/admin/testimonials
 // Query param optionnel : ?status=pending
 // Retourne la liste des témoignages (tous statuts, ou filtrés).
-router.get("/", getTestimonials)
+router.get("/", getAdminTestimonials)
 
 // PATCH /api/admin/testimonials/:id/approve  → passe le statut à "approved"
 router.patch("/:id/approve", approveTestimonial)
