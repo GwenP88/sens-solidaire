@@ -173,19 +173,19 @@
 /* Label — colonnes footer, stats, navigation */
 @utility text-label {
   font-family: var(--font-body);
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 @media (min-width: 768px) {
-  .text-label { font-size: 0.7rem; }
+  .text-label { font-size: 0.85rem; }
 }
 @media (min-width: 1024px) {
-  .text-label { font-size: 0.725rem; }
+  .text-label { font-size: 0.875rem; }
 }
 @media (min-width: 1280px) {
-  .text-label { font-size: 0.75rem; }
+  .text-label { font-size: 0.9rem; }
 }
 
 /* Mention — légal, italic, notes de bas de page */
@@ -222,6 +222,23 @@
   .text-stat { font-size: 2.25rem; }
 }
 
+/* Nom de marque — "Sens Solidaires" dans le footer */
+@utility text-brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+@media (min-width: 768px) {
+  .text-brand { font-size: 1.2rem; }
+}
+@media (min-width: 1024px) {
+  .text-brand { font-size: 1.3rem; }
+}
+@media (min-width: 1280px) {
+  .text-brand { font-size: 1.4rem; }
+}
+
 /* ══════════════════════════════════════════════════════
    LIENS — a
    Couleur toujours définie via text-[couleur] Tailwind
@@ -230,28 +247,67 @@
 /* Lien de navigation — navbar, footer */
 @utility link-nav {
   font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+@media (min-width: 768px) {
+  .link-nav { font-size: 0.925rem; }
+}
+@media (min-width: 1024px) {
+  .link-nav { font-size: 0.95rem; }
 }
 @media (min-width: 1280px) {
-  .link-nav { font-size: 0.9rem; }
+  .link-nav { font-size: 1rem; }
+}
+
+/* Lien de navigation — footer uniquement (plus petit que link-nav) */
+@utility link-footer {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  transition: color 0.2s;
+}
+@media (min-width: 768px) {
+  .link-footer { font-size: 0.775rem; }
+}
+@media (min-width: 1024px) {
+  .link-footer { font-size: 0.8rem; }
+}
+@media (min-width: 1280px) {
+  .link-footer { font-size: 0.825rem; }
 }
 
 /* Lien inline — dans un texte courant */
 @utility link-inline {
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   text-decoration: underline;
   transition: color 0.2s;
+}
+@media (min-width: 768px) {
+  .link-inline { font-size: 0.85rem; }
+}
+@media (min-width: 1024px) {
+  .link-inline { font-size: 0.875rem; }
+}
+@media (min-width: 1280px) {
+  .link-inline { font-size: 0.925rem; }
 }
 
 /* Lien CTA — "En savoir plus →" dans les cards */
 @utility link-cta {
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 700;
   transition: color 0.2s;
+}
+@media (min-width: 768px) {
+  .link-cta { font-size: 0.85rem; }
+}
+@media (min-width: 1024px) {
+  .link-cta { font-size: 0.875rem; }
+}
+@media (min-width: 1280px) {
+  .link-cta { font-size: 0.925rem; }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -289,10 +345,15 @@
   margin-bottom: 2.5rem;
   gap: 1rem;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .section-header {
     flex-direction: row;
     align-items: flex-start;
+    gap: 1rem;
+  }
+}
+@media (min-width: 1280px) {
+  .section-header {
     gap: 0;
   }
 }
@@ -300,11 +361,17 @@
 /* Sous-titre de section — accroche sous le h2 */
 @utility section-subtitle {
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   line-height: 1.6;
 }
 @media (min-width: 768px) {
-  .section-subtitle { font-size: 1rem; }
+  .section-subtitle { font-size: 0.925rem; }
+}
+@media (min-width: 1024px) {
+  .section-subtitle { font-size: 0.975rem; }
+}
+@media (min-width: 1280px) {
+  .section-subtitle { font-size: 1.05rem; }
 }
 
 /* Contenu HTML riche — volunteer_role, health_info */

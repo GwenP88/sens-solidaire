@@ -43,11 +43,11 @@ function Footer({ hideCta = false }) {
 
         {/* Col 1 */}
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-6">
+          <div className="flex items-start gap-6">
             <div className="bg-white/50 rounded-full p-1 w-fit">
-              <img src="/logo.png" alt="Sens Solidaire" className="h-18" />
+              <img src="/logo.png" alt="Sens Solidaire" className="h-10" />
             </div>
-            <span className="text-surface font-heading font-bold text-lg uppercase">Sens Solidaires</span>
+            <span className="text-brand text-surface">Sens Solidaires</span>
           </div>
           <p className="text-body text-surface">Une association engagée pour un monde plus solidaire et durable.</p>
           <p className="text-body text-surface/80">Sur le terrain, nous agissons aux côtés des communautés locales pour un impact positif et durable.</p>
@@ -65,20 +65,20 @@ function Footer({ hideCta = false }) {
         {/* Col 2 + Col 3 côte à côte */}
         <div className="flex flex-row gap-0">
           <div className="flex flex-col gap-2 flex-1">
-            <h3 className="text-label text-surface mb-6 text-base">Découvrir</h3>
-            <a href="/" className="link-nav text-surface/70 hover:text-surface pt-4">Accueil</a>
-            <a href="/missions" className="link-nav text-surface/70 hover:text-surface">Nos missions</a>
-            <a href="/notre-impact" className="link-nav text-surface/70 hover:text-surface">Notre impact</a>
-            <a href="/actions-educatives" className="link-nav text-surface/70 hover:text-surface">Actions éducatives</a>
-            <a href="/medias-et-actualites" className="link-nav text-surface/70 hover:text-surface">Médias & actualités</a>
-            <a href="/a-propos" className="link-nav text-surface/70 hover:text-surface">À propos</a>
+            <h3 className="text-label text-surface mb-6">Découvrir</h3>
+            <a href="/" className="link-footer text-surface/70 hover:text-surface pt-4">Accueil</a>
+            <a href="/missions" className="link-footer text-surface/70 hover:text-surface">Nos missions</a>
+            <a href="/notre-impact" className="link-footer text-surface/70 hover:text-surface">Notre impact</a>
+            <a href="/actions-educatives" className="link-footer text-surface/70 hover:text-surface">Actions éducatives</a>
+            <a href="/medias-et-actualites" className="link-footer text-surface/70 hover:text-surface">Médias & actualités</a>
+            <a href="/a-propos" className="link-footer text-surface/70 hover:text-surface">À propos</a>
           </div>
           <div className="w-px bg-surface/20 mx-4" />
           <div className="flex flex-col gap-2 flex-1">
-            <h3 className="text-label text-surface mb-6 text-base">S'engager</h3>
-            <a href="/missions" className="link-nav text-surface/70 hover:text-surface pt-4">Partir en mission</a>
-            <a href="/don" className="link-nav text-surface/70 hover:text-surface">Faire un don</a>
-            <a href="/adhesion" className="link-nav text-surface/70 hover:text-surface">Adhérer à l'association</a>
+            <h3 className="text-label text-surface mb-6">S'engager</h3>
+            <a href="/missions" className="link-footer text-surface/70 hover:text-surface pt-4">Partir en mission</a>
+            <a href="/don" className="link-footer text-surface/70 hover:text-surface">Faire un don</a>
+            <a href="/adhesion" className="link-footer text-surface/70 hover:text-surface">Adhérer à l'association</a>
           </div>
         </div>
 
@@ -86,7 +86,7 @@ function Footer({ hideCta = false }) {
 
         {/* Col 4 */}
         <div className="flex flex-col gap-4">
-          <h3 className="text-label text-surface mb-6 text-base">Nous contacter</h3>
+          <h3 className="text-label text-surface mb-6">Nous contacter</h3>
           <div className="flex gap-3">
             <IconPin className="text-surface text-lg mt-1 shrink-0" />
             <a href="https://maps.google.com/?q=3bis+rue+de+Guigonis+06300+Nice" target="_blank" rel="noopener noreferrer" className="link-inline text-surface/70 hover:text-surface">
@@ -119,11 +119,11 @@ function Footer({ hideCta = false }) {
         {/* Ligne 1 — Col1 (2/3) + Col2 (1/3) */}
         <div className="flex flex-row gap-8">
           <div className="flex flex-col gap-4 w-2/3">
-            <div className="flex items-center gap-6">
+            <div className="flex items-start gap-6">
               <div className="bg-white/50 rounded-full p-1 w-fit">
-                <img src="/logo.png" alt="Sens Solidaire" className="h-18" />
+                <img src="/logo.png" alt="Sens Solidaire" className="h-12" />
               </div>
-              <span className="text-surface font-heading font-bold text-lg uppercase">Sens Solidaires</span>
+              <span className="text-brand text-surface">Sens Solidaires</span>
             </div>
             <p className="text-body text-surface">Une association engagée pour un monde plus solidaire et durable.</p>
             <p className="text-body text-surface/80">Sur le terrain, nous agissons aux côtés des communautés locales pour un impact positif et durable.</p>
@@ -137,13 +137,13 @@ function Footer({ hideCta = false }) {
           </div>
           <div className="w-px bg-surface/20 self-stretch" />
           <div className="flex flex-col gap-2 w-1/3">
-            <h3 className="text-label text-surface mb-6 text-base">Découvrir</h3>
-            <a href="/" className="link-nav text-surface/70 hover:text-surface pt-4">Accueil</a>
-            <a href="/missions" className="link-nav text-surface/70 hover:text-surface">Nos missions</a>
-            <a href="/notre-impact" className="link-nav text-surface/70 hover:text-surface">Notre impact</a>
-            <a href="/actions-educatives" className="link-nav text-surface/70 hover:text-surface">Actions éducatives</a>
-            <a href="/medias-et-actualites" className="link-nav text-surface/70 hover:text-surface">Médias & actualités</a>
-            <a href="/a-propos" className="link-nav text-surface/70 hover:text-surface">À propos</a>
+            <h3 className="text-label text-surface mb-6">Découvrir</h3>
+            <a href="/" className="link-footer text-surface/70 hover:text-surface pt-4">Accueil</a>
+            <a href="/missions" className="link-footer text-surface/70 hover:text-surface">Nos missions</a>
+            <a href="/notre-impact" className="link-footer text-surface/70 hover:text-surface">Notre impact</a>
+            <a href="/actions-educatives" className="link-footer text-surface/70 hover:text-surface">Actions éducatives</a>
+            <a href="/medias-et-actualites" className="link-footer text-surface/70 hover:text-surface">Médias & actualités</a>
+            <a href="/a-propos" className="link-footer text-surface/70 hover:text-surface">À propos</a>
           </div>
         </div>
 
@@ -153,14 +153,14 @@ function Footer({ hideCta = false }) {
         {/* Ligne 2 — Col3 (1/3) + Col4 (2/3) */}
         <div className="flex flex-row gap-8">
           <div className="flex flex-col gap-2 w-1/3">
-            <h3 className="text-label text-surface mb-6 text-base">S'engager</h3>
-            <a href="/missions" className="link-nav text-surface/70 hover:text-surface pt-4">Partir en mission</a>
-            <a href="/don" className="link-nav text-surface/70 hover:text-surface">Faire un don</a>
-            <a href="/adhesion" className="link-nav text-surface/70 hover:text-surface">Adhérer à l'association</a>
+            <h3 className="text-label text-surface mb-6">S'engager</h3>
+            <a href="/missions" className="link-footer text-surface/70 hover:text-surface pt-4">Partir en mission</a>
+            <a href="/don" className="link-footer text-surface/70 hover:text-surface">Faire un don</a>
+            <a href="/adhesion" className="link-footer text-surface/70 hover:text-surface">Adhérer à l'association</a>
           </div>
           <div className="w-px bg-surface/20 self-stretch" />
           <div className="flex flex-col gap-4 w-2/3">
-            <h3 className="text-label text-surface mb-6 text-base">Nous contacter</h3>
+            <h3 className="text-label text-surface mb-6">Nous contacter</h3>
             <div className="flex gap-3">
               <IconPin className="text-surface text-lg mt-1 shrink-0" />
               <a href="https://maps.google.com/?q=3bis+rue+de+Guigonis+06300+Nice" target="_blank" rel="noopener noreferrer" className="link-inline text-surface/70 hover:text-surface">
@@ -193,11 +193,11 @@ function Footer({ hideCta = false }) {
 
         {/* Col 1 */}
         <div className="flex flex-col gap-4 w-84 justify-between">
-          <div className="flex items-center gap-6">
+          <div className="flex items-start gap-6">
             <div className="bg-white/50 rounded-full p-1 w-fit">
-              <img src="/logo.png" alt="Sens Solidaire" className="h-18" />
+              <img src="/logo.png" alt="Sens Solidaire" className="h-14" />
             </div>
-            <span className="text-surface font-heading font-bold text-lg uppercase">Sens Solidaires</span>
+            <span className="text-brand text-surface">Sens Solidaires</span>
           </div>
           <p className="text-body text-surface">Une association engagée pour un monde plus solidaire et durable.</p>
           <p className="text-body text-surface/80">Sur le terrain, nous agissons aux côtés des communautés locales pour un impact positif et durable.</p>
@@ -214,30 +214,30 @@ function Footer({ hideCta = false }) {
 
         {/* Col 2 */}
         <div className="flex flex-col gap-2 w-40">
-          <h3 className="text-label text-surface mb-6 text-base">Découvrir</h3>
-          <a href="/" className="link-nav text-surface/70 hover:text-surface pt-4">Accueil</a>
-          <a href="/missions" className="link-nav text-surface/70 hover:text-surface">Nos missions</a>
-          <a href="/notre-impact" className="link-nav text-surface/70 hover:text-surface">Notre impact</a>
-          <a href="/actions-educatives" className="link-nav text-surface/70 hover:text-surface">Actions éducatives</a>
-          <a href="/medias-et-actualites" className="link-nav text-surface/70 hover:text-surface">Médias & actualités</a>
-          <a href="/a-propos" className="link-nav text-surface/70 hover:text-surface">À propos</a>
+          <h3 className="text-label text-surface mb-6">Découvrir</h3>
+          <a href="/" className="link-footer text-surface/70 hover:text-surface pt-4">Accueil</a>
+          <a href="/missions" className="link-footer text-surface/70 hover:text-surface">Nos missions</a>
+          <a href="/notre-impact" className="link-footer text-surface/70 hover:text-surface">Notre impact</a>
+          <a href="/actions-educatives" className="link-footer text-surface/70 hover:text-surface">Actions éducatives</a>
+          <a href="/medias-et-actualites" className="link-footer text-surface/70 hover:text-surface">Médias & actualités</a>
+          <a href="/a-propos" className="link-footer text-surface/70 hover:text-surface">À propos</a>
         </div>
 
         <div className="w-px bg-surface/20 mx-8 self-center h-64" />
 
         {/* Col 3 */}
         <div className="flex flex-col gap-2 w-40">
-          <h3 className="text-label text-surface mb-6 text-base">S'engager</h3>
-          <a href="/missions" className="link-nav text-surface/70 hover:text-surface pt-4">Partir en mission</a>
-          <a href="/don" className="link-nav text-surface/70 hover:text-surface">Faire un don</a>
-          <a href="/adhesion" className="link-nav text-surface/70 hover:text-surface">Adhérer à l'association</a>
+          <h3 className="text-label text-surface mb-6">S'engager</h3>
+          <a href="/missions" className="link-footer text-surface/70 hover:text-surface pt-4">Partir en mission</a>
+          <a href="/don" className="link-footer text-surface/70 hover:text-surface">Faire un don</a>
+          <a href="/adhesion" className="link-footer text-surface/70 hover:text-surface">Adhérer à l'association</a>
         </div>
 
         <div className="w-px bg-surface/20 mx-8 self-center h-64" />
 
         {/* Col 4 */}
         <div className="flex flex-col gap-4 w-84">
-          <h3 className="text-label text-surface mb-6 text-base">Nous contacter</h3>
+          <h3 className="text-label text-surface mb-6">Nous contacter</h3>
           <div className="flex gap-3">
             <IconPin className="text-surface text-lg mt-1 shrink-0" />
             <a href="https://maps.google.com/?q=3bis+rue+de+Guigonis+06300+Nice" target="_blank" rel="noopener noreferrer" className="link-inline text-surface/70 hover:text-surface">
@@ -270,9 +270,9 @@ function Footer({ hideCta = false }) {
           © 2026 Sens Solidaire. Tous droits réservés.
         </p>
         <div className="flex gap-6">
-          <a href="/mentions-legales" className="link-nav text-surface/50 hover:text-surface">Mentions légales</a>
-          <a href="/confidentialite" className="link-nav text-surface/50 hover:text-surface">Confidentialité</a>
-          <a href="/cookies" className="link-nav text-surface/50 hover:text-surface">Cookies</a>
+          <a href="/mentions-legales" className="link-footer text-surface/50 hover:text-surface">Mentions légales</a>
+          <a href="/confidentialite" className="link-footer text-surface/50 hover:text-surface">Confidentialité</a>
+          <a href="/cookies" className="link-footer text-surface/50 hover:text-surface">Cookies</a>
         </div>
       </div>
 
