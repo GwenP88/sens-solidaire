@@ -37,15 +37,16 @@ function EducationCard({ item }) {
       {/* Contenu — occupe le reste de l'espace, 3 zones réparties par justify-between */}
       <div className="flex flex-col justify-between flex-1 min-w-0 p-6 md:p-5 lg:p-6">
 
-        {/* ── Zone haute — type + public cible ── */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-eyebrow text-accent-2">{item.type}</span>
+        {/* ── Zone haute — type + public cible. text-eyebrow mb-0 : inline dans flex, pas besoin de marge basse ── */}
+        <div className="flex items-center gap-xs flex-wrap">
+          <span className="text-eyebrow text-accent-2 mb-0">{item.type}</span>
           <span className="text-caption text-primary/30">—</span>
           <span className="text-caption text-primary/50">{formatPublic(item.public)}</span>
         </div>
 
         {/* ── Zone centrale — titre (2 lignes max) + description (3 lignes max) ── */}
-        <div className="flex flex-col gap-2 flex-1 justify-center">
+        {/* h3-style mb-0 : dans un justify-between, pas besoin de marge basse en plus */}
+        <div className="flex flex-col gap-xs flex-1 justify-center">
           <h3 className="h3-style text-primary line-clamp-2">{item.title}</h3>
           <p className="text-body text-primary/60 line-clamp-3">{item.description}</p>
         </div>

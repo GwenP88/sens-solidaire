@@ -26,7 +26,7 @@ function ActionCard({ title, description, tags, slug, country, image, odds }) {
       <div className="flex flex-col justify-between flex-1 min-w-0 p-5 gap-sm">
 
         {/* ── Zone haute — titre (2 lignes max) ── */}
-        <h3 className="h3-style text-surface line-clamp-2 mb-0">{title}</h3>
+        <h3 className="h3-style text-surface line-clamp-2">{title}</h3>
 
         {/* ── Zone centrale — description (3 lignes max) + tags ── */}
         <div className="flex flex-col gap-xs flex-1 justify-center">
