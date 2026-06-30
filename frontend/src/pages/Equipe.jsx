@@ -45,7 +45,7 @@ function Equipe() {
       />
 
       {/* ── Direction — grille responsive ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <h2 className="h2-style text-primary mb-8">Direction</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {direction.map(m => (
@@ -61,7 +61,7 @@ function Equipe() {
       </section>
 
       {/* ── Bureau — grille responsive ── */}
-      <section className="section-padding bg-surface-mid">
+      <section className="padding-y padding-x bg-surface-mid">
         <h2 className="h2-style text-primary mb-8">Membres du bureau</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bureau.map(m => (
@@ -78,7 +78,7 @@ function Equipe() {
       </section>
 
       {/* ── Conseil d'administration — carousel toutes tailles ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <h2 className="h2-style text-primary mb-8">Conseil d'administration</h2>
         <Carousel
           items={ca}
@@ -97,7 +97,7 @@ function Equipe() {
       </section>
 
       {/* ── Également à nos côtés — grille responsive ── */}
-      <section className="section-padding bg-surface-mid">
+      <section className="padding-y padding-x bg-surface-mid">
         <h2 className="h2-style text-primary mb-8">Également à nos côtés</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {egalement.map(m => (
@@ -113,7 +113,7 @@ function Equipe() {
       </section>
 
       {/* ── Délégations — carousel toutes tailles ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <h2 className="h2-style text-primary mb-8">Nos délégations et partenaires terrain</h2>
         <Carousel
           items={delegations}
@@ -134,7 +134,7 @@ function Equipe() {
       </section>
 
       {/* ── CTA contact ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Envie de rejoindre l'aventure ?</h2>

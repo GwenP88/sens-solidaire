@@ -106,7 +106,7 @@ function Home() {
       <StatsBar />
 
       {/* ── Section types de missions — 4 cards 2x2 ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <div className="section-header flex-col xl:flex-row">
           <div className="max-w-4xl">
             <h2 className="h2-style text-primary">Nos missions</h2>
@@ -136,7 +136,7 @@ function Home() {
       </section>
 
       {/* ── Section témoignages — carousel depuis l'API (show_homepage) ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="section-header flex-col xl:flex-row">
           <div className="max-w-4xl">
             <h2 className="h2-style text-surface">Ils racontent leur aventure</h2>
@@ -163,7 +163,7 @@ function Home() {
       </section>
 
       {/* ── Section actions terrain — 6 dernières actions depuis l'API, en carousel ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <div className="section-header flex-col xl:flex-row">
           <div className="max-w-4xl">
             <h2 className="h2-style text-primary">Des actions concrètes au cœur des territoires</h2>
@@ -214,7 +214,7 @@ function Home() {
 
       {/* ── Section Actualités ── */}
       {mediaPosts.length > 0 && (
-        <section className="section-padding bg-surface-mid">
+        <section className="padding-y padding-x bg-surface-mid">
           <div className="section-header flex-col xl:flex-row">
             <div className="max-w-4xl">
               <h2 className="h2-style text-primary">Actualités & Médias</h2>
@@ -236,7 +236,7 @@ function Home() {
       )}
 
       {/* ── Section partenaires — logos depuis l'API ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="section-header flex-col xl:flex-row">
           <div>
             <h2 className="h2-style text-surface">Ils nous font confiance</h2>

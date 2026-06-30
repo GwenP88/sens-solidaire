@@ -101,7 +101,7 @@ function MissionDetail() {
 
       {/* ── Description — texte + image ── */}
       {mission.description && (
-        <section id="description" className="section-padding bg-surface-mid">
+        <section id="description" className="padding-y padding-x bg-surface-mid">
           <h2 className="h2-style text-primary mb-4">{mission.title}</h2>
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
 
@@ -122,7 +122,7 @@ function MissionDetail() {
 
       {/* ── Rôle du volontaire + Programme ── */}
       {(mission.volunteer_role || mission.programme) && (
-        <section id="role-programme" className="section-padding bg-surface">
+        <section id="role-programme" className="padding-y padding-x bg-surface">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
 
             {mission.volunteer_role && (
@@ -168,7 +168,7 @@ function MissionDetail() {
 
       {/* ── Lieux partenaires ── */}
       {mission.location?.length > 0 && (
-        <section id="lieux" className="section-padding bg-surface-mid">
+        <section id="lieux" className="padding-y padding-x bg-surface-mid">
           <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-4 mb-6">
             <div>
               <h2 className="h2-style text-primary mb-2">Nos lieux partenaires</h2>
@@ -192,7 +192,7 @@ function MissionDetail() {
       )}
 
       {/* ── Impact terrain ── */}
-      <section id="impact" className="section-padding bg-surface">
+      <section id="impact" className="padding-y padding-x bg-surface">
         <div className="flex flex-col xl:flex-row items-start justify-between gap-4 mb-8">
           <div className="flex flex-col gap-2 max-w-4xl">
             <h2 className="h2-style text-primary mb-4">Votre impact sur le terrain</h2>
@@ -237,7 +237,7 @@ function MissionDetail() {
 
       {/* ── Coût & durée ── */}
       {mission.pricing?.length > 0 && (
-        <section id="cout" className="section-padding bg-surface-mid">
+        <section id="cout" className="padding-y padding-x bg-surface-mid">
           <h2 className="h2-style text-primary mb-4">Durée du séjour & participation</h2>
           <p className="text-body text-primary/60 mb-8">
             Choisissez la durée de séjour qui correspond le mieux à vos disponibilités et à votre projet d'engagement.
@@ -341,7 +341,7 @@ function MissionDetail() {
 
       {/* ── Comment partir ── */}
       {howToGoSteps.length > 0 && (
-        <section id="comment-partir" className="section-padding bg-surface">
+        <section id="comment-partir" className="padding-y padding-x bg-surface">
           <h2 className="h2-style text-primary mb-4">Comment partir ?</h2>
           <p className="text-body text-primary/60 mb-8">
             Nous accueillons des volontaires toute l'année. Ensemble, nous définissons la période de départ la plus adaptée à votre projet, à vos disponibilités et aux besoins de nos partenaires.
@@ -403,7 +403,7 @@ function MissionDetail() {
 
       {/* ── Infos pratiques ── */}
       {(mission.health_info || mission.admin_info) && (
-        <section id="infos-pratiques" className="section-padding bg-surface-mid">
+        <section id="infos-pratiques" className="padding-y padding-x bg-surface-mid">
           <h2 className="h2-style text-primary mb-4">Préparer votre départ</h2>
           <p className="text-body text-primary/60 mb-8">
             Pour vivre cette expérience dans les meilleures conditions, prenez le temps de préparer votre départ grâce à nos recommandations et informations pratiques.
@@ -446,7 +446,7 @@ function MissionDetail() {
 
       {/* ── Témoignages ── */}
       {mission.testimonials?.length > 0 && (
-        <section id="temoignages" className="section-padding bg-accent-2">
+        <section id="temoignages" className="padding-y padding-x bg-accent-2">
           <div className="flex flex-col lg:flex-row items-start justify-between gap-4 mb-8">
             <div>
               <h2 className="h2-style text-surface mb-4">Ils ont vécu l'aventure, découvrez leurs témoignages</h2>
@@ -470,7 +470,7 @@ function MissionDetail() {
       )}
 
       {/* ── Galerie photos ── */}
-      <section id="galerie" className="section-padding bg-surface-mid">
+      <section id="galerie" className="padding-y padding-x bg-surface-mid">
         <h2 className="h2-style text-primary mb-4">Plongez dans l'aventure</h2>
         <p className="text-body text-primary/60 mb-8">
           Explorez la mission à travers les images de nos volontaires et découvrez l'environnement, les projets et les expériences qui vous attendent sur le terrain.

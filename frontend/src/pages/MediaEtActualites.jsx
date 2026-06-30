@@ -57,7 +57,7 @@ function MediaEtActualites() {
       />
 
       {/* ── Barre de filtres — via Filters (orchestrateur FilterSelect/FilterChips) ── */}
-      <div className="bg-primary px-4 md:px-24 py-4 md:py-6">
+      <div className="bg-primary padding-x filter-py">
         <Filters
           selects={FILTER_CONFIG_MEDIAS}
           selectValues={filters}
@@ -66,7 +66,7 @@ function MediaEtActualites() {
       </div>
 
       {/* ── Grille des articles ── */}
-      <section className="section-padding">
+      <section className="padding-y padding-x">
         {loading ? (
           <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredPosts.length === 0 ? (

@@ -56,7 +56,7 @@ function LocationDetail() {
       />
 
       {/* ── Contenu principal — texte 2/3 + sidebar 1/3 ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <div className="flex flex-col gap-6">
 
           {/* Lien retour vers la mission parente */}
@@ -110,7 +110,7 @@ function LocationDetail() {
 
       {/* ── Galerie photos — grille si ≤ 2 images, carousel sinon ── */}
       {extraImages.length > 0 && (
-        <section className="section-padding bg-surface-mid">
+        <section className="padding-y padding-x bg-surface-mid">
           <h2 className="h2-style text-primary mb-8">Photos</h2>
           {extraImages.length <= 2 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

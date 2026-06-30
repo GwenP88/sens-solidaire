@@ -67,7 +67,7 @@ function NotreImpact() {
       />
 
       {/* ── Section ODD — icônes officielles ONU avec labels français ── */}
-      <section className="section-padding bg-surface-mid">
+      <section className="padding-y padding-x bg-surface-mid">
         <div className="section-header">
           <div className="max-w-5xl">
             <h2 className="h2-style text-primary mb-2">Nos actions et les Objectifs de Développement Durable</h2>
@@ -97,7 +97,7 @@ function NotreImpact() {
       </section>
 
       {/* ── Barre de filtres — select pays + chips thématiques, via Filters (cas combiné) ── */}
-      <div className="bg-primary filter-bar-padding py-4 md:py-6">
+      <div className="bg-primary padding-x filter-py">
         <Filters
           selects={FILTER_CONFIG_COUNTRY}
           selectValues={filters}
@@ -112,7 +112,7 @@ function NotreImpact() {
       </div>
 
       {/* ── Grille des actions ── */}
-      <section className="section-padding">
+      <section className="padding-y padding-x">
         {loading ? (
           <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredActions.length === 0 ? (
@@ -136,7 +136,7 @@ function NotreImpact() {
       </section>
 
       {/* ── CTA missions ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Envie de vous engager à nos côtés ?</h2>

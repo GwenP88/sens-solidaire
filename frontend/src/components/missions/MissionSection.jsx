@@ -43,7 +43,7 @@ function MissionSection({
   children,
 }) {
   return (
-    <section id={id} className={`section-padding ${bg}`}>
+    <section id={id} className={`padding-y padding-x ${bg}`}>
 
       {/* ── En-tête de section ── */}
       <SectionHero

@@ -62,7 +62,7 @@ function ActionsEducatives() {
       />
 
       {/* ── Barre de filtres par public cible — via Filters (orchestrateur FilterSelect/FilterChips) ── */}
-      <div ref={filtersRef} className="bg-primary filter-bar-padding py-4 md:py-6">
+      <div ref={filtersRef} className="bg-primary padding-x filter-py">
         <Filters
           chips={{
             filters: FILTERS_EDUCATION_PUBLIC,
@@ -74,7 +74,7 @@ function ActionsEducatives() {
       </div>
 
       {/* ── Grille des ateliers ── */}
-      <section className="section-padding">
+      <section className="padding-y padding-x">
         {loading ? (
           <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredItems.length === 0 ? (
@@ -89,7 +89,7 @@ function ActionsEducatives() {
       </section>
 
       {/* ── CTA contact — invitation à accueillir une intervention ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Vous souhaitez accueillir une intervention ?</h2>

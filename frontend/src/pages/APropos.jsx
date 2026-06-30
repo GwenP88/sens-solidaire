@@ -56,7 +56,7 @@ function APropos() {
       />
 
       {/* ── Notre histoire — texte + image ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <div className="flex flex-col xl:flex-row gap-8 xl:gap-12 items-center">
           <div className="flex flex-col gap-6 flex-1">
             <p className="text-eyebrow text-accent-2">Notre histoire</p>
@@ -84,7 +84,7 @@ function APropos() {
       </section>
 
       {/* ── Nos valeurs ── */}
-      <section className="section-padding bg-surface-mid">
+      <section className="padding-y padding-x bg-surface-mid">
         <h2 className="h2-style text-primary text-center mb-10">Nos valeurs</h2>
 
         {/* ── Mobile + 768 + 1024 — scroll horizontal avec dégradé ── */}
@@ -114,7 +114,7 @@ function APropos() {
         </section>
 
       {/* ── Champs d'activité — grille 2 colonnes ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <h2 className="h2-style text-primary mb-2">Nos champs d'activité</h2>
         <p className="text-body text-primary/60 mb-10">Nous accompagnons les communautés locales dans la planification et l'exécution de leurs projets, en répondant à leurs besoins et en s'adaptant à leur culture.</p>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -128,7 +128,7 @@ function APropos() {
       </section>
 
       {/* ── Aperçu équipe — 4 membres direction depuis l'API ── */}
-      <section className="section-padding bg-surface-mid">
+      <section className="padding-y padding-x bg-surface-mid">
         <div className="flex flex-col xl:flex-row items-start xl:items-end justify-between gap-4 mb-10">
           <div>
             <p className="text-eyebrow text-accent-2 mb-2">L'équipe engagée</p>
@@ -151,7 +151,7 @@ function APropos() {
       </section>
 
       {/* ── Transparence — texte + image + lien rapports ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
           <div className="flex flex-col gap-4 flex-1">
             <p className="text-eyebrow text-accent-2">Notre engagement</p>
@@ -174,7 +174,7 @@ function APropos() {
       </section>
 
       {/* ── CTA contact ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Une question, une envie de collaborer avec nous ?</h2>

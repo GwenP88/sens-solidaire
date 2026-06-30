@@ -21,7 +21,7 @@ function Contact() {
         subtitle="Une équipe à votre écoute pour vous accompagner dans votre projet."
       />
 
-      <section className="section-padding">
+      <section className="padding-y padding-x">
 
         {/* ── Titre de section ── */}
         <h2 className="h2-style text-primary pb-4">Une question, un projet ou simplement l'envie d'en savoir plus ?</h2>

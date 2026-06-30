@@ -57,7 +57,7 @@ function ActionDetail() {
       />
 
       {/* ── Contenu principal — texte 2/3 + sidebar ODD sticky 1/3 ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <div className="flex flex-col gap-4 mb-8">
 
           {/* Lien retour */}
@@ -111,7 +111,7 @@ function ActionDetail() {
 
       {/* ── Galerie photos — carousel si médias disponibles ── */}
       {action.gallery?.length > 0 && (
-        <section className="section-padding bg-surface-mid">
+        <section className="padding-y padding-x bg-surface-mid">
           <h2 className="h2-style text-primary mb-8">Galerie photos</h2>
           <Carousel
             items={action.gallery}
@@ -129,7 +129,7 @@ function ActionDetail() {
       )}
 
       {/* ── CTA bas de page — invitation à s'engager ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Envie de vous engager à nos côtés ?</h2>

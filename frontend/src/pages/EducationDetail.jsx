@@ -82,7 +82,7 @@ function EducationDetail() {
       />
 
       {/* ── Contenu principal — texte 2/3 + sidebar 1/3 ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <div className="flex flex-col gap-6">
 
           {/* Lien retour vers la liste des ateliers */}
@@ -152,7 +152,7 @@ function EducationDetail() {
 
       {/* ── Galerie photos supplémentaires — grille ou carousel ── */}
       {extraImages.length > 0 && (
-        <section className="section-padding bg-surface-mid">
+        <section className="padding-y padding-x bg-surface-mid">
           <h2 className="h2-style text-primary mb-8">Photos</h2>
           {extraImages.length <= 2 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -180,7 +180,7 @@ function EducationDetail() {
       )}
 
       {/* ── CTA contact — invitation à accueillir une intervention ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Vous souhaitez accueillir une intervention ?</h2>

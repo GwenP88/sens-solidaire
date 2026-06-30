@@ -84,7 +84,7 @@ function MediaDetail() {
       />
 
       {/* ── Contenu principal — colonne centrée max-w-3xl ── */}
-      <section className="section-padding bg-surface">
+      <section className="padding-y padding-x bg-surface">
         <div className="flex flex-col gap-6 max-w-3xl">
 
           {/* Lien retour */}
@@ -115,7 +115,7 @@ function MediaDetail() {
       </section>
 
       {/* ── CTA bas de page ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Envie de vous engager à nos côtés ?</h2>

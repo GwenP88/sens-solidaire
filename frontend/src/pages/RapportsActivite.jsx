@@ -22,7 +22,7 @@ function RapportsActivite() {
 
       <div className="bg-primary h-20" />
 
-      <section className="section-padding max-w-4xl mx-auto flex flex-col gap-8">
+      <section className="padding-y padding-x max-w-4xl mx-auto flex flex-col gap-8">
 
         <div className="flex flex-col gap-2">
           <h1 className="h1-style text-primary">Rapports d'activité</h1>

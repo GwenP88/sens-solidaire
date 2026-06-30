@@ -8,7 +8,7 @@ import { IconClock, IconMoney, IconPin } from '../../utils/icons'
 
 function HeroPage({ image, title, subtitle, duration, price, country, tags }) {
   return (
-    <div className="relative w-full h-64 md:h-120 flex items-end pb-6 px-6 md:pb-12 md:px-24">
+    <div className="relative w-full h-80 md:h-96 lg:h-120 flex items-end padding-x hero-page-py">
 
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }}></div>
       <div className="absolute inset-0 bg-black/50"></div>
@@ -16,9 +16,9 @@ function HeroPage({ image, title, subtitle, duration, price, country, tags }) {
       <div className="relative flex flex-col gap-2">
 
         <span className="text-eyebrow text-surface">Sens Solidaire</span>
-        <h1 className="h1-style text-surface max-w-3xl">{title}</h1>
+        <h1 className="h1-style text-surface max-w-4xl">{title}</h1>
 
-        {subtitle && <p className="text-lead text-surface max-w-2xl">{subtitle}</p>}
+        {subtitle && <p className="text-lead text-surface max-w-3xl">{subtitle}</p>}
 
         {/* Infos rapides — durée + prix — missions détail */}
         {(duration || price) && (

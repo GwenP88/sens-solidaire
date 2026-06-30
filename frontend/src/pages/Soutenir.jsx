@@ -44,7 +44,7 @@ function Soutenir() {
       <AnchorNav variant="dark" sections={ANCHOR_SECTIONS} />
 
       {/* ── Section Don ── */}
-      <section id="don" className="section-padding bg-surface">
+      <section id="don" className="padding-y padding-x bg-surface">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
 
           <div className="w-full md:w-2/5 shrink-0">
@@ -84,7 +84,7 @@ function Soutenir() {
       </section>
 
       {/* ── Section Adhésion ── */}
-      <section id="adhesion" className="section-padding bg-surface-mid">
+      <section id="adhesion" className="padding-y padding-x bg-surface-mid">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
 
           <div className="flex flex-col gap-6 flex-1">
@@ -136,7 +136,7 @@ function Soutenir() {
       </section>
 
       {/* ── Pourquoi nous soutenir ── */}
-      <section id="pourquoi" className="section-padding bg-surface">
+      <section id="pourquoi" className="padding-y padding-x bg-surface">
         <p className="text-eyebrow text-accent-2 text-center mb-2">Pourquoi nous soutenir ?</p>
         <h2 className="h2-style text-primary text-center mb-10">Ensemble, agissons pour un impact durable</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
@@ -151,7 +151,7 @@ function Soutenir() {
       </section>
 
       {/* ── Transparence ── */}
-      <section id="rapports" className="section-padding bg-surface-mid">
+      <section id="rapports" className="padding-y padding-x bg-surface-mid">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
           <div className="flex flex-col gap-4 flex-1">
             <p className="text-eyebrow text-accent-2">Notre engagement</p>
@@ -170,7 +170,7 @@ function Soutenir() {
       </section>
 
       {/* ── CTA contact ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Une question ? Envie de vous engager autrement ?</h2>

@@ -69,13 +69,13 @@ function Testimonials() {
       />
 
       {/* ── Barre de filtres ── */}
-      <div className="bg-primary filter-bar-padding py-4">
+      <div className="bg-primary padding-x filter-py">
         <FilterSelect filters={FILTER_CONFIG_TEMOIGNAGES} values={filters} onChange={handleFilter} />
       </div>
 
       {/* ── Section témoignages ── */}
       {showTemoignages && (
-        <section className="section-padding bg-surface">
+        <section className="padding-y padding-x bg-surface">
           <h2 className="h2-style text-primary mb-8">Témoignages</h2>
           {loading ? (
             <p className="text-body text-primary/50 italic">Chargement...</p>
@@ -99,7 +99,7 @@ function Testimonials() {
 
       {/* ── Section rapports de mission ── */}
       {showRapports && (
-        <section className="section-padding bg-surface-mid">
+        <section className="padding-y padding-x bg-surface-mid">
           <h2 className="h2-style text-primary mb-8">Rapports de mission</h2>
           {filteredRapports.length === 0 ? (
             <p className="text-body text-primary/50 italic">Aucun rapport pour ces critères.</p>
@@ -127,7 +127,7 @@ function Testimonials() {
       )}
 
       {/* ── CTA soumission témoignage ── */}
-      <section className="section-padding bg-accent-2">
+      <section className="padding-y padding-x bg-accent-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="max-w-2xl">
             <h2 className="h2-style text-surface">Vous êtes partis en mission ?</h2>

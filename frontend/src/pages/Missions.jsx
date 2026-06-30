@@ -151,7 +151,7 @@ function Missions() {
       />
 
       {/* ── Bloc orientation ── */}
-      <section className="section-padding bg-surface-mid">
+      <section className="padding-y padding-x bg-surface-mid">
         <h2 className="h2-style text-primary mb-8">Quelle mission est faite pour vous ?</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {[
