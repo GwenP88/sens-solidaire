@@ -80,8 +80,13 @@ function Home() {
       .then(data => setTestimonials(data.filter(t => t.show_homepage)))
       .catch(console.error)
 
+    // ── Actions terrain — 6 dernières créées, triées par created_at décroissant
+    // NOTE : sélection manuelle par la cliente prévue en V2 (dashboard + champ BDD dédié, à coordonner avec Alison)
     fetchFieldActions()
-      .then(data => setActions(data.slice(0, 4)))
+      .then(data => {
+        const sorted = [...data].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        setActions(sorted.slice(0, 6))
+      })
       .catch(console.error)
 
     fetchPartners()
@@ -157,7 +162,7 @@ function Home() {
         />
       </section>
 
-      {/* ── Section actions terrain — 4 premières actions depuis l'API ── */}
+      {/* ── Section actions terrain — 6 dernières actions depuis l'API, en carousel ── */}
       <section className="section-padding bg-surface">
         <div className="section-header flex-col xl:flex-row">
           <div className="max-w-4xl">
@@ -186,36 +191,11 @@ function Home() {
           </a>
         </div>
 
-        {/* ── Grille desktop 1024+ / Carousel mobile+768 ── */}
-
-        {/* ── Mobile + 768 — carousel ── */}
-        <div className="lg:hidden">
-          <Carousel
-            items={actions}
-            renderSlide={(action) => (
-              <ActionCard
-                key={action.slug}
-                slug={action.slug}
-                title={action.title}
-                description={action.description}
-                image={action.image_url}
-                tags={action.tags.map(t => t.tag)}
-                odds={action.odds.map(o => o.odd_number)}
-                country={action.country}
-              />
-            )}
-            slidesPerView={1}
-            spaceBetween={16}
-            showPagination={true}
-            color="primary"
-          />
-        </div>
-
-        {/* ── Desktop 1024+ — 1 colonne ── */}
-        <div className="hidden lg:grid grid-cols-1 xl:grid-cols-2 gap-8">
-          {actions.map(action => (
+        {/* ── Carousel — 6 dernières actions, tous breakpoints ── */}
+        <Carousel
+          items={actions}
+          renderSlide={(action) => (
             <ActionCard
-              key={action.slug}
               slug={action.slug}
               title={action.title}
               description={action.description}
@@ -224,8 +204,12 @@ function Home() {
               odds={action.odds.map(o => o.odd_number)}
               country={action.country}
             />
-          ))}
-        </div>
+          )}
+          slidesPerView={3}
+          spaceBetween={24}
+          showPagination={true}
+          color="primary"
+        />
       </section>
 
       {/* ── Section Actualités ── */}
