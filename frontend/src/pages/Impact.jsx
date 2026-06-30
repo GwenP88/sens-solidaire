@@ -16,24 +16,30 @@ import HeroPage from '../components/layout/HeroPage'
 // ── Composants UI
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
-import FilterChips from '../components/navigation/FilterChips'
+import Filters from '../components/navigation/Filters'
 
 // ── Composants métier
 import ActionCard from '../components/actions/ActionCard'
 
 // ── Utils
-import { ODDS, ODD_TO_CATEGORY } from '../utils/odds'
-import { FILTERS_ACTION_TAGS } from '../utils/filters'
+import { ODDS } from '../utils/odds'
+import { FILTERS_ACTION_TAGS, FILTER_CONFIG_COUNTRY } from '../utils/filters'
 
 function NotreImpact() {
-  // ── État local — actions + chargement + filtres
+  // ── État local — actions + chargement + filtre thématique (chips)
   const [actions, setActions] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeFilter, setActiveFilter] = useState(null)
 
-  // ── Initialisation du filtre pays depuis l'URL (?pays=Kenya)
+  // ── État du filtre pays — géré via FilterSelect (objet { country: valeur })
+  // Initialisation depuis l'URL (?pays=Kenya) au montage
   const [searchParams] = useSearchParams()
-  const [activeCountry, setActiveCountry] = useState(searchParams.get('pays') || null)
+  const [filters, setFilters] = useState({ country: searchParams.get('pays') || null })
+
+  // ── Mise à jour du filtre pays — signature attendue par FilterSelect (key, value)
+  const handleCountryFilter = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }))
+  }
 
   // ── Chargement des actions depuis l'API au montage
   useEffect(() => {
@@ -45,11 +51,8 @@ function NotreImpact() {
 
   // ── Filtrage combiné — par tag thématique ET par pays
   const filteredActions = actions.filter(a => {
-    if (activeFilter) {
-      const categories = a.odds.map(o => ODD_TO_CATEGORY[o.odd_number])
-      if (!categories.includes(activeFilter)) return false
-    }
-    if (activeCountry && !a.country.includes(activeCountry)) return false
+    if (activeFilter && !a.tags.some(t => t.tag === activeFilter)) return false
+    if (filters.country && !a.country.includes(filters.country)) return false
     return true
   })
 
@@ -67,13 +70,14 @@ function NotreImpact() {
       <section className="section-padding bg-surface-mid">
         <div className="section-header">
           <div className="max-w-5xl">
-            <h2 className="h2-style text-primary mb-2">Nos actions au service des Objectifs de Développement Durable</h2>
+            <h2 className="h2-style text-primary mb-2">Nos actions et les Objectifs de Développement Durable</h2>
             <p className="text-body text-primary/60">
-              Sens Solidaire s'engage en France et à l'international à travers des projets dédiés à la préservation de la biodiversité, au soutien des populations locales et à la promotion d'un développement durable. Nos actions allient éducation, échanges interculturels et initiatives environnementales concrètes, tout en s'inscrivant dans les <span className='font-black text-primary/80'> 17 Objectifs de Développement Durable (ODD) définis par l'ONU</span>. Ces 17 objectifs, adoptés par 193 pays en 2015, constituent un cadre universel pour répondre aux grands défis de notre planète d'ici 2030.<br /> <br /> À notre échelle, chaque projet contribue à relever les défis sociaux, environnementaux et économiques de notre époque, en protégeant le vivant, en favorisant l'accès à l'éducation, en accompagnant les communautés locales et en sensibilisant les jeunes. Ensemble, nous œuvrons pour construire un monde plus juste, plus solidaire et plus durable.
+              Les Objectifs de Développement Durable (ODD) sont 17 grands objectifs définis par l'ONU pour relever les défis sociaux, environnementaux et économiques de notre époque.<br /><br />
+              À notre échelle, chacun de nos projets s'inscrit dans cette dynamique. Qu'il s'agisse de protéger la biodiversité, favoriser l'accès à l'éducation, soutenir les communautés locales ou sensibiliser les jeunes aux enjeux environnementaux, nous contribuons concrètement à bâtir un monde plus juste, plus solidaire et plus respectueux du vivant.
             </p>
           </div>
           <a href="https://www.un.org/sustainabledevelopment/fr/" target="_blank" rel="noopener noreferrer">
-            <Button label="En savoir plus sur les 17 ODD →" variant="primary" />
+            <Button label="Découvrir les 17 ODD →" variant="primary" />
           </a>
         </div>
 
@@ -92,69 +96,19 @@ function NotreImpact() {
         </div>
       </section>
 
-            {/* ── Barre de filtres — collée au hero ── */}
-      <div className="bg-primary px-4 lg:px-24 py-4 lg:py-6">
-
-        {/* ── Mobile + 768 — deux selects ── */}
-        <div className="flex flex-col md:flex-row gap-4 lg:hidden">
-
-          <select
-            value={activeCountry || ''}
-            onChange={e => setActiveCountry(e.target.value || null)}
-            className="w-full text-body text-primary border border-surface-dark rounded-xl px-4 py-1 bg-surface focus:outline-none focus:border-primary"
-          >
-            <option value="">Tous les pays</option>
-            <option value="Kenya">Kenya</option>
-            <option value="Sénégal">Sénégal</option>
-            <option value="Sri Lanka">Sri Lanka</option>
-            <option value="Pérou">Pérou</option>
-            <option value="Sumatra">Sumatra</option>
-            <option value="France">France</option>
-            <option value="Côte d'Ivoire">Côte d'Ivoire</option>
-          </select>
-
-          <select
-            value={activeFilter || ''}
-            onChange={e => setActiveFilter(e.target.value || null)}
-            className="w-full text-body text-primary border border-surface-dark rounded-xl px-4 py-1 bg-surface focus:outline-none focus:border-primary"
-          >
-            {FILTERS_ACTION_TAGS.map(f => (
-              <option key={f.label} value={f.value || ''}>{f.label}</option>
-            ))}
-          </select>
-
-        </div>
-
-        {/* ── Desktop 1024+ — select pays + FilterChips scrollable ── */}
-        <div className="hidden lg:flex flex-row items-start lg:gap-18 xl:gap-26">
-
-          <select
-            value={activeCountry || ''}
-            onChange={e => setActiveCountry(e.target.value || null)}
-            className="min-w-[220px] text-body text-primary border border-surface-dark rounded-xl px-4 py-1 bg-surface focus:outline-none focus:border-primary shrink-0"
-          >
-            <option value="">Tous les pays</option>
-            <option value="Kenya">Kenya</option>
-            <option value="Sénégal">Sénégal</option>
-            <option value="Sri Lanka">Sri Lanka</option>
-            <option value="Pérou">Pérou</option>
-            <option value="Sumatra">Sumatra</option>
-            <option value="France">France</option>
-            <option value="Côte d'Ivoire">Côte d'Ivoire</option>
-          </select>
-
-          <div className="overflow-x-auto pb-2 flex-1 min-w-0">
-            <FilterChips
-              filters={FILTERS_ACTION_TAGS}
-              active={activeFilter}
-              onChange={setActiveFilter}
-              variant="dark"
-              nowrap={true}
-            />
-          </div>
-
-        </div>
-
+            {/* ── Barre de filtres — select pays + chips thématiques, via Filters (cas combiné) ── */}
+      <div className="bg-primary px-4 md:px-24 py-4 md:py-6">
+        <Filters
+          selects={FILTER_CONFIG_COUNTRY}
+          selectValues={filters}
+          onSelectChange={handleCountryFilter}
+          chips={{
+            filters: FILTERS_ACTION_TAGS,
+            active: activeFilter,
+            onChange: setActiveFilter,
+            variant: 'dark',
+          }}
+        />
       </div>
 
       {/* ── Grille des actions ── */}
@@ -183,7 +137,7 @@ function NotreImpact() {
 
       {/* ── CTA missions ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Envie de vous engager à nos côtés ?</h2>
             <p className="text-body text-surface/80">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>

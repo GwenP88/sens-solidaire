@@ -11,7 +11,7 @@ import { fetchMediaPosts } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import FilterSelect from '../components/ui/FilterSelect'
+import Filters from '../components/navigation/Filters'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
 // ── Composants métier
@@ -56,12 +56,12 @@ function MediaEtActualites() {
         subtitle="Restez informés des dernières nouvelles de l'association, de nos missions et de nos actions sur le terrain."
       />
 
-      {/* ── Barre de filtres — collée au hero ── */}
+      {/* ── Barre de filtres — via Filters (orchestrateur FilterSelect/FilterChips) ── */}
       <div className="bg-primary px-4 md:px-24 py-4 md:py-6">
-        <FilterSelect
-          filters={FILTER_CONFIG_MEDIAS}
-          values={filters}
-          onChange={handleFilter}
+        <Filters
+          selects={FILTER_CONFIG_MEDIAS}
+          selectValues={filters}
+          onSelectChange={handleFilter}
         />
       </div>
 
@@ -72,7 +72,7 @@ function MediaEtActualites() {
         ) : filteredPosts.length === 0 ? (
           <p className="text-body text-primary/50 italic">Aucun article pour ces critères.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {filteredPosts.map(post => (
               <MediaCard key={post.slug} {...post} />
             ))}

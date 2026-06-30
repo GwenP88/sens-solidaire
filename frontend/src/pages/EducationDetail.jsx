@@ -15,6 +15,7 @@ import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
 import Button from '../components/ui/Button'
+import Filters from '../components/navigation/Filters'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 

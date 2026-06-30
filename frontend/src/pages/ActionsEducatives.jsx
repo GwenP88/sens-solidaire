@@ -11,7 +11,7 @@ import { fetchEducationItems } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import FilterChips from '../components/navigation/FilterChips'
+import Filters from '../components/navigation/Filters'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
@@ -61,13 +61,15 @@ function ActionsEducatives() {
         subtitle="Nous intervenons dans les écoles, collèges et lycées pour sensibiliser les jeunes à la biodiversité et au développement durable."
       />
 
-      {/* ── Barre de filtres par public cible — collée au hero ── */}
+      {/* ── Barre de filtres par public cible — via Filters (orchestrateur FilterSelect/FilterChips) ── */}
       <div ref={filtersRef} className="bg-primary px-4 md:px-24 py-4 md:py-6">
-        <FilterChips
-          filters={FILTERS_EDUCATION_PUBLIC}
-          active={activeFilter}
-          onChange={handleFilter}
-          variant="dark"
+        <Filters
+          chips={{
+            filters: FILTERS_EDUCATION_PUBLIC,
+            active: activeFilter,
+            onChange: handleFilter,
+            variant: 'dark',
+          }}
         />
       </div>
 
@@ -78,7 +80,7 @@ function ActionsEducatives() {
         ) : filteredItems.length === 0 ? (
           <p className="text-body text-primary/50 italic">Aucun atelier pour ce public.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {filteredItems.map(item => (
               <EducationCard key={item.slug} item={item} />
             ))}
@@ -88,7 +90,7 @@ function ActionsEducatives() {
 
       {/* ── CTA contact — invitation à accueillir une intervention ── */}
       <section className="section-padding bg-accent-2">
-        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="h2-style text-surface">Vous souhaitez accueillir une intervention ?</h2>
             <p className="text-body text-surface/80">Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux.</p>

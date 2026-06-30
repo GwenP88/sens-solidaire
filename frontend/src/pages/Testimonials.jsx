@@ -14,7 +14,7 @@ import { fetchTestimonials, fetchMissionReports } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import FilterSelect from '../components/ui/FilterSelect'
+import Filters from '../components/navigation/Filters'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Modal from '../components/ui/Modal'

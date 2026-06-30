@@ -1,14 +1,24 @@
 // FilterChips.jsx
 // Puces filtrantes réutilisables — scroll horizontal sur mobile, wrap à partir de lg
 // Props :
-//   filters  : [{ label: string, value: any }]
-//   active   : valeur active (null = toutes)
-//   onChange : fonction appelée au clic avec la nouvelle valeur
-//   variant  : "light" (défaut) | "dark"
+//   filters     : [{ label: string, value: any }]
+//   active      : valeur active (null = toutes)
+//   onChange    : fonction appelée au clic avec la nouvelle valeur
+//   variant     : "light" (défaut) | "dark"
+//   nowrap      : true = jamais de retour à la ligne, même hors scroll géré ici
+//   scrollable  : true (défaut) = ce composant gère son propre scroll horizontal interne
+//                 false = le scroll est délégué à un conteneur parent (ex: Filters.jsx) —
+//                 dans ce cas, pas d'overflow ni de padding ici, juste flex-nowrap
 
-function FilterChips({ filters, active, onChange, variant = 'light', nowrap = false }) {
+function FilterChips({ filters, active, onChange, variant = 'light', nowrap = false, scrollable = true }) {
+  // ── Si le scroll est géré par le parent, ce composant ne pose plus
+  // ── d'overflow ni de padding bottom — juste un flex en ligne, sans retour à la ligne
+  const layoutClasses = scrollable
+    ? `overflow-x-auto pb-3 scrollbar-hide ${nowrap ? 'flex-nowrap' : 'xl:flex-wrap'}`
+    : 'flex-nowrap'
+
   return (
-    <div className={`flex gap-3 overflow-x-auto pb-3 scrollbar-hide ${nowrap ? 'flex-nowrap' : 'lg:flex-wrap'}`}>
+    <div className={`flex gap-3 ${layoutClasses}`}>
       {filters.map(f => (
         <button
           key={f.label}
