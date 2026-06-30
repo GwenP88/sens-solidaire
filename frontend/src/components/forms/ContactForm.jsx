@@ -50,6 +50,8 @@ function ContactForm() {
   const inputClass = "text-body text-primary border border-surface-dark rounded-xl px-4 py-3 bg-surface focus:outline-none focus:border-primary w-full"
 
   // ── Message de succès après envoi
+  // h3-style n'a plus de marge automatique (retirée du CSS) — pas de gap parent ici,
+  // donc mb-2 reste nécessaire en dur pour espacer le titre du texte suivant
   if (status === 'success') return (
     <div className="bg-accent-2/10 rounded-xl p-8 text-center">
       <p className="h3-style text-primary mb-2">Message envoyé ✓</p>
@@ -61,29 +63,30 @@ function ContactForm() {
   )
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-sm">
 
       {/* Champs prénom + nom côte à côte — empilés sur mobile */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex flex-col gap-1 flex-1">
-          <label className="text-eyebrow text-primary/60">Prénom *</label>
+      <div className="flex flex-col sm:flex-row gap-sm">
+        <div className="flex flex-col gap-xs flex-1">
+          {/* text-eyebrow mb-0 : gap-xs du parent gère déjà l'espacement avec l'input */}
+          <label className="text-eyebrow text-primary/60 mb-0">Prénom *</label>
           <input name="prenom" value={form.prenom} onChange={handleChange} required className={inputClass} />
         </div>
-        <div className="flex flex-col gap-1 flex-1">
-          <label className="text-eyebrow text-primary/60">Nom *</label>
+        <div className="flex flex-col gap-xs flex-1">
+          <label className="text-eyebrow text-primary/60 mb-0">Nom *</label>
           <input name="nom" value={form.nom} onChange={handleChange} required className={inputClass} />
         </div>
       </div>
 
       {/* Champ email */}
-      <div className="flex flex-col gap-1">
-        <label className="text-eyebrow text-primary/60">Email *</label>
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Email *</label>
         <input name="email" type="email" value={form.email} onChange={handleChange} required className={inputClass} />
       </div>
 
       {/* Menu déroulant sujet */}
-      <div className="flex flex-col gap-1">
-        <label className="text-eyebrow text-primary/60">Sujet *</label>
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Sujet *</label>
         <select name="sujet" value={form.sujet} onChange={handleChange} required className={inputClass}>
           <option value="">Sélectionnez un sujet</option>
           <option value="Mission volontariat">Mission de volontariat</option>
@@ -97,13 +100,13 @@ function ContactForm() {
       </div>
 
       {/* Zone de message libre */}
-      <div className="flex flex-col gap-1">
-        <label className="text-eyebrow text-primary/60">Message *</label>
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Message *</label>
         <textarea name="message" value={form.message} onChange={handleChange} required rows={6} className={`${inputClass} resize-none`} />
       </div>
 
       {/* Case à cocher RGPD — obligatoire */}
-      <label className="flex items-start gap-3 cursor-pointer">
+      <label className="flex items-start gap-xs cursor-pointer">
         <input
           name="rgpd"
           type="checkbox"
