@@ -71,7 +71,7 @@ function Navbar() {
         </Link>
 
         {/* ── Liens desktop — masqués sur mobile ── */}
-        <div className="hidden lg:flex items-center gap-5 xl:gap-10">
+        <div className="hidden lg:flex items-center gap-4 xl:gap-10">
 
           {/* Accueil */}
           <Link

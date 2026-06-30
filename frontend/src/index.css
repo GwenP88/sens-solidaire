@@ -247,14 +247,14 @@
 /* Lien de navigation — navbar, footer */
 @utility link-nav {
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   transition: color 0.2s;
 }
 @media (min-width: 768px) {
-  .link-nav { font-size: 0.925rem; }
+  .link-nav { font-size: 0.85rem; }
 }
 @media (min-width: 1024px) {
-  .link-nav { font-size: 0.95rem; }
+  .link-nav { font-size: 0.9rem; }
 }
 @media (min-width: 1280px) {
   .link-nav { font-size: 1rem; }
@@ -345,16 +345,11 @@
   margin-bottom: 2.5rem;
   gap: 1rem;
 }
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .section-header {
     flex-direction: row;
     align-items: flex-start;
-    gap: 1rem;
-  }
-}
-@media (min-width: 1280px) {
-  .section-header {
-    gap: 0;
+    gap: 0rem;
   }
 }
 
