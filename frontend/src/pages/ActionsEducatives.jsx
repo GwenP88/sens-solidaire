@@ -80,7 +80,7 @@ function ActionsEducatives() {
         ) : filteredItems.length === 0 ? (
           <p className="text-body text-primary/50 italic">Aucun atelier pour ce public.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredItems.map(item => (
               <EducationCard key={item.slug} item={item} />
             ))}
