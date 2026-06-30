@@ -90,7 +90,7 @@ function Filters({ selects, selectValues, onSelectChange, chips }) {
 
       {/* ── Chips version desktop — scroll géré ici (scrollBg + overflow-x-auto) ── */}
       {/* scrollable=false sur FilterChips : évite le double scroll imbriqué (parent + enfant) */}
-      <div className={`hidden md:block flex-1 w-full min-w-0 overflow-x-auto pb-2 ${scrollBg}`}>
+      <div className={`hidden md:block flex-1 w-full min-w-0 overflow-x-auto scroll-pb ${scrollBg}`}>
         <div className="inline-flex">
           <FilterChips
             filters={chips.filters}

@@ -15,6 +15,7 @@ import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
+import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
 import TeamMemberCardLarge from '../components/team/TeamMemberCardLarge'
@@ -130,17 +131,12 @@ function Equipe() {
       </Section>
 
       {/* ── CTA contact ── */}
-      <section className="padding-y padding-x bg-accent-2">
-        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
-          <div>
-            <h2 className="h2-style text-surface">Envie de rejoindre l'aventure ?</h2>
-            <p className="text-body text-surface/80">Bénévole, volontaire, enseignant, partenaire... Il existe mille façons d'agir avec nous.</p>
-          </div>
-          <a href="/contact">
-            <Button label="Nous contacter →" variant="primary" />
-          </a>
-        </div>
-      </section>
+      <CTASection
+        title="Envie de rejoindre l'aventure ?"
+        text="Bénévole, volontaire, enseignant, partenaire... Il existe mille façons d'agir avec nous."
+        ctaLabel="Nous contacter →"
+        ctaHref="/contact"
+      />
 
       <ScrollToTop />
     </div>

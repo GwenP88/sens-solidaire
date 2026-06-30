@@ -427,6 +427,11 @@
   .filter-py { padding-block: 1.75rem; }
 }
 
+/* Padding-bottom des zones à scroll horizontal — laisse de l'air avant la scrollbar */
+@utility scroll-pb {
+  padding-bottom: 0.75rem;
+}
+
 /* ══════════════════════════════════════════════════════
    ÉCHELLE DE GAP — espacement entre blocs de mise en page
    4 niveaux fixes, à utiliser PARTOUT au lieu de gap-X arbitraire
