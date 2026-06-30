@@ -69,7 +69,7 @@ function Testimonials() {
       />
 
       {/* ── Barre de filtres ── */}
-      <div className="bg-primary px-4 md:px-24 py-4">
+      <div className="bg-primary filter-bar-padding py-4">
         <FilterSelect filters={FILTER_CONFIG_TEMOIGNAGES} values={filters} onChange={handleFilter} />
       </div>
 

@@ -260,10 +260,24 @@
 
 /* Padding standard des sections */
 @utility section-padding {
-  padding: 2rem 1.5rem;
+  padding: 2rem 2rem;
 }
 @media (min-width: 768px) {
+  .section-padding { padding: 3rem 4rem; }
+}
+@media (min-width: 1024px) {
   .section-padding { padding: 4rem 6rem; }
+}
+
+/* Padding horizontal des barres de filtres — même progression que section-padding mais horizontal uniquement */
+@utility filter-bar-padding {
+  padding-inline: 2rem;
+}
+@media (min-width: 768px) {
+  .filter-bar-padding { padding-inline: 4rem; }
+}
+@media (min-width: 1024px) {
+  .filter-bar-padding { padding-inline: 6rem; }
 }
 
 /* En-tête de section — titre à gauche + CTA à droite */

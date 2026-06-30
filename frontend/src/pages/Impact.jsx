@@ -96,8 +96,8 @@ function NotreImpact() {
         </div>
       </section>
 
-            {/* ── Barre de filtres — select pays + chips thématiques, via Filters (cas combiné) ── */}
-      <div className="bg-primary px-4 md:px-24 py-4 md:py-6">
+      {/* ── Barre de filtres — select pays + chips thématiques, via Filters (cas combiné) ── */}
+      <div className="bg-primary filter-bar-padding py-4 md:py-6">
         <Filters
           selects={FILTER_CONFIG_COUNTRY}
           selectValues={filters}

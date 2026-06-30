@@ -62,7 +62,7 @@ function ActionsEducatives() {
       />
 
       {/* ── Barre de filtres par public cible — via Filters (orchestrateur FilterSelect/FilterChips) ── */}
-      <div ref={filtersRef} className="bg-primary px-4 md:px-24 py-4 md:py-6">
+      <div ref={filtersRef} className="bg-primary filter-bar-padding py-4 md:py-6">
         <Filters
           chips={{
             filters: FILTERS_EDUCATION_PUBLIC,
