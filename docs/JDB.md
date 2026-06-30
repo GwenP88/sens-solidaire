@@ -1730,9 +1730,7 @@ docker compose up -d --build
 | Logos partenaires manquants| 🔴 |
 | Images placeholder témoignages + pays | 🟠 |
 | Textes de toutes les pages — relecture et corrections par la cliente | 🔴 |
-| Compteur action — contenu à fournir | 🟠 |
 | HelloAsso — remplacer les liens génériques par les liens par mission | 🔴 |
-| Google Maps — intégration iframes embed sur page Contact + À propos | 🟠 |
 | Accréditations ONU / UICN — ajouter bloc sur page À propos | 🟠 |
 | Steps missions — ajouter au seed pour toutes les missions | 🟠 |
 | Sumatra — ajouter comme destination congé solidaire | 🔴 |
