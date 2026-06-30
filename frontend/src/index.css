@@ -42,16 +42,31 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   TITRES — h1, h2, h3
-   Couleur toujours définie via text-[couleur] Tailwind
+   RÈGLE D'OR DU PROJET — à respecter pour CHAQUE nouvelle utility
+   ──────────────────────────────────────────────────────
+   1. Marge après un élément de TEXTE (titre, sous-titre, paragraphe,
+      eyebrow...) → toujours définie DANS l'utility du texte concerné.
+      Ne JAMAIS ajouter un mb-X en dur à côté sur une page ou un composant.
+   2. Espace entre des BLOCS DE MISE EN PAGE (colonnes, cards dans une
+      grille, boutons côte à côte) → utiliser l'échelle gap-xs/sm/md/lg
+      ci-dessous. Ne JAMAIS inventer un gap-X arbitraire sur une page.
+   3. Si une valeur doit être utilisée à 2 endroits ou plus → c'est une
+      utility, jamais une classe Tailwind dupliquée en dur.
 ══════════════════════════════════════════════════════ */
 
-/* H1 — Hero uniquement */
+/* ══════════════════════════════════════════════════════
+   TITRES — h1, h2, h3
+   Couleur toujours définie via text-[couleur] Tailwind
+   Chaque titre porte sa propre marge basse — ne jamais ajouter de mb- à côté
+══════════════════════════════════════════════════════ */
+
+/* H1 — Hero uniquement. Toujours suivi d'une accroche (text-lead) */
 @utility h1-style {
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 1.4rem;
   line-height: 1.3;
+  margin-bottom: 1rem;
 }
 @media (min-width: 768px) {
   .h1-style { font-size: 2rem; }
@@ -69,7 +84,7 @@
   font-weight: 700;
   font-size: 1.25rem;
   line-height: 1.2;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
 }
 @media (min-width: 768px) {
   .h2-style { font-size: 1.6rem; }
@@ -81,12 +96,13 @@
   .h2-style { font-size: 2.25rem; }
 }
 
-/* H3 — Sous-titres, titres de cards */
+/* H3 — Sous-titres, titres de cards. Souvent suivi d'un text-body */
 @utility h3-style {
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 0.9rem;
   line-height: 1.3;
+  margin-bottom: 1rem;
 }
 @media (min-width: 768px) {
   .h3-style { font-size: 1rem; }
@@ -103,7 +119,9 @@
    Couleur toujours définie via text-[couleur] Tailwind
 ══════════════════════════════════════════════════════ */
 
-/* Corps standard — texte courant */
+/* Corps standard — texte courant. Pas de marge par défaut :
+   utilisé aussi bien en dernier élément d'un bloc qu'en paragraphe
+   isolé dans une card */
 @utility text-body {
   font-family: var(--font-body);
   font-size: 0.8rem;
@@ -119,12 +137,13 @@
   .text-body { font-size: 1rem; }
 }
 
-/* Accroche — intro hero, sous-titre section */
+/* Accroche — intro hero, sous-titre section. Toujours suivie d'un bouton/CTA */
 @utility text-lead {
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 0.8rem;
   line-height: 1.6;
+  margin-bottom: 1.5rem;
 }
 @media (min-width: 768px) {
   .text-lead { font-size: 0.9rem; }
@@ -136,7 +155,8 @@
   .text-lead { font-size: 1.5rem; }
 }
 
-/* Petit texte — captions, métadonnées, dates */
+/* Petit texte — captions, métadonnées, dates. Pas de marge par défaut,
+   utilisé en ligne (inline) la plupart du temps */
 @utility text-caption {
   font-family: var(--font-body);
   font-size: 0.65rem;
@@ -152,13 +172,14 @@
   .text-caption { font-size: 0.75rem; }
 }
 
-/* Surtitre — au-dessus des h2, catégories */
+/* Surtitre — au-dessus des h2, catégories. Toujours suivi d'un titre */
 @utility text-eyebrow {
   font-family: var(--font-body);
   font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+  margin-bottom: 0.5rem;
 }
 @media (min-width: 768px) {
   .text-eyebrow { font-size: 0.7rem; }
@@ -170,7 +191,8 @@
   .text-eyebrow { font-size: 0.85rem; }
 }
 
-/* Label — colonnes footer, stats, navigation */
+/* Label — colonnes footer, stats, navigation. Pas de marge par défaut,
+   utilisé dans des contextes très variés (boutons, titres de colonne) */
 @utility text-label {
   font-family: var(--font-body);
   font-size: 0.8rem;
@@ -188,7 +210,7 @@
   .text-label { font-size: 0.9rem; }
 }
 
-/* Mention — légal, italic, notes de bas de page */
+/* Mention — légal, italic, notes de bas de page. Pas de marge par défaut */
 @utility text-mention {
   font-family: var(--font-body);
   font-size: 0.65rem;
@@ -205,7 +227,7 @@
   .text-mention { font-size: 0.75rem; }
 }
 
-/* Chiffres stats — StatsBar */
+/* Chiffres stats — StatsBar. Pas de marge, toujours associé à un label juste après via gap */
 @utility text-stat {
   font-family: var(--font-heading);
   font-weight: 700;
@@ -222,7 +244,7 @@
   .text-stat { font-size: 2.25rem; }
 }
 
-/* Nom de marque — "Sens Solidaires" dans le footer */
+/* Nom de marque — "Sens Solidaires" dans le footer. Usage unique, pas de marge nécessaire */
 @utility text-brand {
   font-family: var(--font-heading);
   font-weight: 700;
@@ -239,9 +261,28 @@
   .text-brand { font-size: 1.4rem; }
 }
 
+/* Sous-titre de section — accroche sous le h2, avant le contenu de la section */
+@utility section-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+@media (min-width: 768px) {
+  .section-subtitle { font-size: 0.925rem; }
+}
+@media (min-width: 1024px) {
+  .section-subtitle { font-size: 0.975rem; }
+}
+@media (min-width: 1280px) {
+  .section-subtitle { font-size: 1.05rem; }
+}
+
 /* ══════════════════════════════════════════════════════
    LIENS — a
    Couleur toujours définie via text-[couleur] Tailwind
+   Pas de marge par défaut — toujours utilisés en ligne ou en bouton,
+   l'espacement dépend du gap du conteneur parent
 ══════════════════════════════════════════════════════ */
 
 /* Lien de navigation — navbar, footer */
@@ -311,9 +352,12 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   LAYOUT UTILITIES
+   PADDING — espacements internes des grands blocs de layout
+   Un seul padding-x pour TOUT le site (Hero, HeroPage, sections, filtres)
+   Le vertical reste propre à chaque catégorie de zone
 ══════════════════════════════════════════════════════ */
-/* Padding horizontal général */
+
+/* Padding horizontal général — Hero, HeroPage, sections, filtres, AnchorNav : TOUS identiques */
 @utility padding-x {
   padding-inline: 2rem;
 }
@@ -327,34 +371,7 @@
   .padding-x { padding-inline: 6.5rem; }
 }
 
-/* Padding vertical du Hero (page d'accueil uniquement) */
-@utility hero-py {
-  padding-bottom: 3rem;
-}
-@media (min-width: 768px) {
-  .hero-py { padding-bottom: 4rem; }
-}
-@media (min-width: 1024px) {
-  .hero-py { padding-bottom: 5rem; }
-}
-@media (min-width: 1280px) {
-  .hero-py { padding-bottom: 6rem; }
-}
-
-/* Padding vertical du HeroPage (toutes les pages intérieures) */
-@utility hero-page-py {
-  padding-bottom: 1.5rem;
-}
-@media (min-width: 768px) {
-  .hero-page-py { padding-bottom: 2rem; }
-}
-@media (min-width: 1024px) {
-  .hero-page-py { padding-bottom: 2.5rem; }
-}
-@media (min-width: 1280px) {
-  .hero-page-py { padding-bottom: 3rem; }
-}
-
+/* Padding vertical des sections de contenu (grilles, carousels, texte) */
 @utility padding-y {
   padding-block: 2rem;
 }
@@ -368,7 +385,35 @@
   .padding-y { padding-block: 4.5rem; }
 }
 
-/* Padding vertical des barres de filtres — filter/chips/anchor */
+/* Padding vertical du Hero — page d'accueil uniquement */
+@utility hero-py {
+  padding-bottom: 3rem;
+}
+@media (min-width: 768px) {
+  .hero-py { padding-bottom: 4rem; }
+}
+@media (min-width: 1024px) {
+  .hero-py { padding-bottom: 5rem; }
+}
+@media (min-width: 1280px) {
+  .hero-py { padding-bottom: 6rem; }
+}
+
+/* Padding vertical du HeroPage — toutes les pages intérieures */
+@utility hero-page-py {
+  padding-bottom: 1.5rem;
+}
+@media (min-width: 768px) {
+  .hero-page-py { padding-bottom: 2rem; }
+}
+@media (min-width: 1024px) {
+  .hero-page-py { padding-bottom: 2.5rem; }
+}
+@media (min-width: 1280px) {
+  .hero-page-py { padding-bottom: 3rem; }
+}
+
+/* Padding vertical des barres de filtres — Filters, FilterChips, AnchorNav */
 @utility filter-py {
   padding-block: 1rem;
 }
@@ -381,6 +426,38 @@
 @media (min-width: 1280px) {
   .filter-py { padding-block: 1.75rem; }
 }
+
+/* ══════════════════════════════════════════════════════
+   ÉCHELLE DE GAP — espacement entre blocs de mise en page
+   4 niveaux fixes, à utiliser PARTOUT au lieu de gap-X arbitraire
+   xs = éléments très proches (icône+texte)
+   sm = intérieur d'une card
+   md = entre cards d'une grille / colonnes d'un bloc
+   lg = entre grands blocs internes d'une section (texte vs image)
+══════════════════════════════════════════════════════ */
+
+@utility gap-xs {
+  gap: 0.5rem;
+}
+
+@utility gap-sm {
+  gap: 1rem;
+}
+
+@utility gap-md {
+  gap: 1.5rem;
+}
+
+@utility gap-lg {
+  gap: 2rem;
+}
+@media (min-width: 1024px) {
+  .gap-lg { gap: 3rem; }
+}
+
+/* ══════════════════════════════════════════════════════
+   STRUCTURE DE SECTION
+══════════════════════════════════════════════════════ */
 
 /* En-tête de section — titre à gauche + CTA à droite */
 @utility section-header {
@@ -399,27 +476,50 @@
   }
 }
 
-/* Sous-titre de section — accroche sous le h2 */
-@utility section-subtitle {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  line-height: 1.6;
-}
-@media (min-width: 768px) {
-  .section-subtitle { font-size: 0.925rem; }
-}
-@media (min-width: 1024px) {
-  .section-subtitle { font-size: 0.975rem; }
-}
-@media (min-width: 1280px) {
-  .section-subtitle { font-size: 1.05rem; }
-}
-
 /* Contenu HTML riche — volunteer_role, health_info */
 @utility rich-text {
   p  { margin-bottom: 0.75rem; }
   ul { list-style: disc; padding-left: 1.5rem; }
   li { margin-bottom: 0.4rem; }
+}
+
+/* ══════════════════════════════════════════════════════
+   GRILLES DE CARDS
+   Nombre de colonnes nommé selon le nombre de cards visées par ligne
+   en desktop large — chaque variante a sa propre progression mobile-first
+══════════════════════════════════════════════════════ */
+
+/* 2 colonnes en desktop — ex: blocs textuels, champs d'activité */
+@utility grid-cards-2 {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+@media (min-width: 1024px) {
+  .grid-cards-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* 3 colonnes en desktop — ex: cards membres équipe, rapports d'activité */
+@utility grid-cards-3 {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+  .grid-cards-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .grid-cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* 4 colonnes en desktop — ex: cards compactes conseil d'administration */
+@utility grid-cards-4 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+@media (min-width: 1024px) {
+  .grid-cards-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 /* ══════════════════════════════════════════════════════

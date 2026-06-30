@@ -14,6 +14,7 @@ import HeroPage from '../components/layout/HeroPage'
 import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Section from '../components/ui/Section'
 
 // ── Composants métier
 import TeamMemberCardLarge from '../components/team/TeamMemberCardLarge'
@@ -45,9 +46,8 @@ function Equipe() {
       />
 
       {/* ── Direction — grille responsive ── */}
-      <section className="padding-y padding-x bg-surface">
-        <h2 className="h2-style text-primary mb-8">Direction</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <Section title="Direction">
+        <div className="grid-cards-3">
           {direction.map(m => (
             <TeamMemberCardLarge
               key={m.id}
@@ -58,12 +58,11 @@ function Equipe() {
             />
           ))}
         </div>
-      </section>
+      </Section>
 
       {/* ── Bureau — grille responsive ── */}
-      <section className="padding-y padding-x bg-surface-mid">
-        <h2 className="h2-style text-primary mb-8">Membres du bureau</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <Section title="Membres du bureau" bg="bg-surface-mid">
+        <div className="grid-cards-3">
           {bureau.map(m => (
             <TeamMemberCardLarge
               key={m.id}
@@ -75,11 +74,10 @@ function Equipe() {
             />
           ))}
         </div>
-      </section>
+      </Section>
 
       {/* ── Conseil d'administration — carousel toutes tailles ── */}
-      <section className="padding-y padding-x bg-surface">
-        <h2 className="h2-style text-primary mb-8">Conseil d'administration</h2>
+      <Section title="Conseil d'administration">
         <Carousel
           items={ca}
           renderSlide={(m) => (
@@ -94,12 +92,11 @@ function Equipe() {
           showPagination={true}
           color="primary"
         />
-      </section>
+      </Section>
 
       {/* ── Également à nos côtés — grille responsive ── */}
-      <section className="padding-y padding-x bg-surface-mid">
-        <h2 className="h2-style text-primary mb-8">Également à nos côtés</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <Section title="Également à nos côtés" bg="bg-surface-mid">
+        <div className="grid-cards-3">
           {egalement.map(m => (
             <TeamMemberCardSmall
               key={m.id}
@@ -110,11 +107,10 @@ function Equipe() {
             />
           ))}
         </div>
-      </section>
+      </Section>
 
       {/* ── Délégations — carousel toutes tailles ── */}
-      <section className="padding-y padding-x bg-surface">
-        <h2 className="h2-style text-primary mb-8">Nos délégations et partenaires terrain</h2>
+      <Section title="Nos délégations et partenaires terrain">
         <Carousel
           items={delegations}
           renderSlide={(d) => (
@@ -131,7 +127,7 @@ function Equipe() {
           showPagination={true}
           color="primary"
         />
-      </section>
+      </Section>
 
       {/* ── CTA contact ── */}
       <section className="padding-y padding-x bg-accent-2">
