@@ -7,7 +7,7 @@ import { IconClock } from '../../utils/icons'
 
 function MissionCard({ image, badge, title, description, duration, slug, ctaLabel, ctaUrl }) {
 
-  // ── Couleurs des badges par type de mission
+  // ── Couleurs des badges par type de mission — inline car dynamique (Tailwind ne peut pas générer dynamiquement)
   const badgeColors = {
     'Volontariat individuel': '#2F8A3A',
     'Service civique': '#1D6FA4',
@@ -28,7 +28,7 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
         {/* Overlay sombre */}
         <div className="absolute inset-0 bg-black/45"></div>
 
-        {/* Contenu */}
+        {/* Contenu — justify-between répartit les 3 zones sur toute la hauteur */}
         <div className="relative h-full flex flex-col justify-between p-6">
 
           {/* Badge — haut */}
@@ -39,14 +39,15 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
           </div>
 
           {/* Centre — titre + description */}
-          <div className="flex flex-col gap-1">
-            <h3 className="h3-style text-surface">{title}</h3>
+          {/* h3-style mb-0 : dans justify-between, pas besoin de marge basse en plus */}
+          <div className="flex flex-col gap-xs">
+            <h3 className="h3-style text-surface mb-0">{title}</h3>
             <p className="text-body text-surface">{description}</p>
           </div>
 
           {/* Bas — durée + bouton */}
-          <div className="flex items-center justify-between">
-            <span className="text-caption text-surface flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-xs">
+            <span className="text-caption text-surface flex items-center gap-xs">
               <IconClock /> {duration}
             </span>
             <Button label={ctaLabel} variant="primary" />
