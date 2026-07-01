@@ -83,7 +83,7 @@ function ActionDetail() {
           {/* Aside ODD — sticky 1/3 */}
           <aside className="sticky top-24 self-start bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
             <p className="text-eyebrow text-primary/40 mb-0">ODD associés</p>
-            <div className="flex flex-col md:flex-row md:items-start gap-sm">
+            <div className="flex flex-col md:flex-row md:items-start lg:flex-col gap-sm">
               <div className="flex flex-col gap-xs flex-1">
                 {action.odds.map(o => (
                   <div key={o.odd_number} className="flex items-center gap-xs">
