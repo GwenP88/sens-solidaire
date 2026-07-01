@@ -7,16 +7,16 @@
 // ── Composants UI
 import Button from './Button'
 
-function CTASection({ title, text, ctaLabel, ctaHref }) {
+function CTASection({ title, text, ctaLabel, ctaHref, onCtaClick }) {
   return (
     <section className="padding-y padding-x bg-accent-2">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-md">
         <div>
-          <h2 className="h2-style text-surface">{title}</h2>
-          <p className="text-body text-surface/80">{text}</p>
+          <h2 className="h2-style text-surface max-w-5xl">{title}</h2>
+          <p className="text-body text-surface/80 max-w-4xl">{text}</p>
         </div>
         <a href={ctaHref}>
-          <Button label={ctaLabel} variant="primary" />
+          <Button label={ctaLabel} variant="primary" onClick={onCtaClick} />
         </a>
       </div>
     </section>

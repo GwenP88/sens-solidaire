@@ -13,7 +13,6 @@ import Button from '../ui/Button'
 
 function TestimonialForm({ onClose }) {
 
-  // ── État local — champs du formulaire
   const [form, setForm] = useState({
     prenom: '',
     nom: '',
@@ -24,21 +23,17 @@ function TestimonialForm({ onClose }) {
     rgpd: false,
   })
 
-  // ── État de soumission — false | true
   const [submitted, setSubmitted] = useState(false)
 
-  // ── Mise à jour d'un champ — gère texte, checkbox, fichier et reset destination
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target
     setForm(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : type === 'file' ? files[0] : value,
-      // Reset destination si changement de type de mission
       ...(name === 'type' ? { destination: '' } : {})
     }))
   }
 
-  // ── Soumission — envoi vers l'API avec status pending
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -56,36 +51,37 @@ function TestimonialForm({ onClose }) {
     }
   }
 
-  // ── Classe CSS commune pour tous les champs
   const inputClass = "text-body text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary"
 
   // ── Message de confirmation après soumission réussie
+  // h3-style mb-0 : dans flex flex-col gap-sm, marge redondante avec gap
   if (submitted) return (
-    <div className="flex flex-col items-center gap-4 py-8 text-center">
-      <p className="h3-style text-primary">Merci pour votre témoignage !</p>
+    <div className="flex flex-col items-center gap-sm py-8 text-center">
+      <p className="h3-style text-primary mb-0">Merci pour votre témoignage !</p>
       <p className="text-body text-primary/60">Votre message sera publié après validation par notre équipe.</p>
       <Button label="Fermer" variant="secondary" onClick={onClose} />
     </div>
   )
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-sm">
 
       {/* Champs prénom + nom côte à côte — empilés sur mobile */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex flex-col gap-1 flex-1">
-          <label className="text-eyebrow text-primary/60">Prénom *</label>
+      <div className="flex flex-col sm:flex-row gap-sm">
+        <div className="flex flex-col gap-xs flex-1">
+          {/* text-eyebrow mb-0 : gap-xs du parent gère l'espacement avec l'input */}
+          <label className="text-eyebrow text-primary/60 mb-0">Prénom *</label>
           <input name="prenom" value={form.prenom} onChange={handleChange} required className={inputClass} />
         </div>
-        <div className="flex flex-col gap-1 flex-1">
-          <label className="text-eyebrow text-primary/60">Nom *</label>
+        <div className="flex flex-col gap-xs flex-1">
+          <label className="text-eyebrow text-primary/60 mb-0">Nom *</label>
           <input name="nom" value={form.nom} onChange={handleChange} required className={inputClass} />
         </div>
       </div>
 
       {/* Menu déroulant type de mission */}
-      <div className="flex flex-col gap-1">
-        <label className="text-eyebrow text-primary/60">Type de mission *</label>
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Type de mission *</label>
         <select name="type" value={form.type} onChange={handleChange} required className={inputClass}>
           <option value="">Sélectionnez un type</option>
           <option value="individuel">Volontariat individuel</option>
@@ -97,8 +93,8 @@ function TestimonialForm({ onClose }) {
 
       {/* Menu déroulant destination — affiché uniquement pour le volontariat individuel */}
       {form.type === 'individuel' && (
-        <div className="flex flex-col gap-1">
-          <label className="text-eyebrow text-primary/60">Destination *</label>
+        <div className="flex flex-col gap-xs">
+          <label className="text-eyebrow text-primary/60 mb-0">Destination *</label>
           <select name="destination" value={form.destination} onChange={handleChange} required className={inputClass}>
             <option value="">Sélectionnez une destination</option>
             <option value="kenya">Kenya</option>
@@ -111,8 +107,8 @@ function TestimonialForm({ onClose }) {
       )}
 
       {/* Zone de texte témoignage — limité à 280 caractères */}
-      <div className="flex flex-col gap-1">
-        <label className="text-eyebrow text-primary/60">
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">
           Votre témoignage * — {form.quote.length}/280 caractères
         </label>
         <textarea
@@ -127,8 +123,8 @@ function TestimonialForm({ onClose }) {
       </div>
 
       {/* Champ photo — optionnel */}
-      <div className="flex flex-col gap-1">
-        <label className="text-eyebrow text-primary/60">Photo (optionnel)</label>
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Photo (optionnel)</label>
         <input
           name="photo"
           type="file"
@@ -139,7 +135,7 @@ function TestimonialForm({ onClose }) {
       </div>
 
       {/* Case à cocher RGPD — obligatoire avant soumission */}
-      <label className="flex items-start gap-3 cursor-pointer">
+      <label className="flex items-start gap-xs cursor-pointer">
         <input
           name="rgpd"
           type="checkbox"
@@ -153,8 +149,8 @@ function TestimonialForm({ onClose }) {
         </span>
       </label>
 
-      {/* Boutons — annuler ou soumettre — empilés sur mobile */}
-      <div className="flex flex-col sm:flex-row gap-4 mt-2">
+      {/* Boutons — annuler ou soumettre */}
+      <div className="flex flex-col sm:flex-row gap-sm">
         <Button label="Annuler" variant="secondary" onClick={onClose} />
         <Button label="Envoyer mon témoignage →" variant="primary" type="submit" disabled={!form.rgpd} />
       </div>
