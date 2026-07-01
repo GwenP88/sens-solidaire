@@ -42,7 +42,7 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
           {/* h3-style mb-0 : dans justify-between, pas besoin de marge basse en plus */}
           <div className="flex flex-col gap-xs">
             <h3 className="h3-style text-surface mb-0">{title}</h3>
-            <p className="text-body text-surface">{description}</p>
+            <p className="text-body text-surface line-clamp-3">{description}</p>
           </div>
 
           {/* Bas — durée + bouton */}

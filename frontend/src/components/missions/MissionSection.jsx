@@ -97,10 +97,10 @@ function MissionSection({
       {carouselItems && (
         <div className="mt-8">
           {carouselTitle && (
-            <h3 className="h3-style text-primary">{carouselTitle}</h3>
+            <h3 className="h3-style text-primary mb-2">{carouselTitle}</h3>
           )}
           {carouselSubtitle && (
-            <p className="text-body text-primary/60 mb-6">{carouselSubtitle}</p>
+            <p className="text-body text-primary/60 mb-8">{carouselSubtitle}</p>
           )}
           <Carousel
             items={carouselItems}
