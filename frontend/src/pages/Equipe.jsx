@@ -95,10 +95,11 @@ function Equipe() {
         />
       </Section>
 
-      {/* ── Également à nos côtés — grille responsive ── */}
+      {/* ── Également à nos côtés — carousel ── */}
       <Section title="Également à nos côtés" bg="bg-surface-mid">
-        <div className="grid-cards-3">
-          {egalement.map(m => (
+        <Carousel
+          items={egalement}
+          renderSlide={(m) => (
             <TeamMemberCardSmall
               key={m.id}
               nom={m.nom}
@@ -106,8 +107,10 @@ function Equipe() {
               avatar={m.avatar_url}
               bg="bg-surface"
             />
-          ))}
-        </div>
+          )}
+          showPagination={true}
+          color="primary"
+        />
       </Section>
 
       {/* ── Délégations — carousel toutes tailles ── */}
