@@ -7,18 +7,15 @@
 //   variant     : "light" (défaut) | "dark"
 //   nowrap      : true = jamais de retour à la ligne, même hors scroll géré ici
 //   scrollable  : true (défaut) = ce composant gère son propre scroll horizontal interne
-//                 false = le scroll est délégué à un conteneur parent (ex: Filters.jsx) —
-//                 dans ce cas, pas d'overflow ni de padding ici, juste flex-nowrap
+//                 false = le scroll est délégué à un conteneur parent (ex: Filters.jsx)
 
 function FilterChips({ filters, active, onChange, variant = 'light', nowrap = false, scrollable = true }) {
-  // ── Si le scroll est géré par le parent, ce composant ne pose plus
-  // ── d'overflow ni de padding bottom — juste un flex en ligne, sans retour à la ligne
   const layoutClasses = scrollable
-    ? `overflow-x-auto pb-3 scrollbar-hide ${nowrap ? 'flex-nowrap' : 'xl:flex-wrap'}`
+    ? `overflow-x-auto scroll-pb scrollbar-hide ${nowrap ? 'flex-nowrap' : 'xl:flex-wrap'}`
     : 'flex-nowrap'
 
   return (
-    <div className={`flex gap-3 ${layoutClasses}`}>
+    <div className={`flex gap-sm ${layoutClasses}`}>
       {filters.map(f => (
         <button
           key={f.label}

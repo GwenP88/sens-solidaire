@@ -48,7 +48,6 @@ function Filters({ selects, selectValues, onSelectChange, chips }) {
   }
 
   // ── Cas 3 — selects + chips combinés
-  // Config select dérivée des chips — réutilisée uniquement pour le rendu mobile
   const chipsAsSelectConfig = [
     {
       key: '__chips_as_select',
@@ -59,16 +58,14 @@ function Filters({ selects, selectValues, onSelectChange, chips }) {
     },
   ]
 
-  // ── Valeur + onChange adaptés pour la version select des chips
   const chipsAsSelectValues = { __chips_as_select: chips.active }
   const handleChipsAsSelectChange = (_key, value) => chips.onChange(value)
 
   // ── Fond du conteneur scrollable — doit matcher le fond de la page autour des chips
-  // variant "dark" = fond bg-primary (cas actuel sur fond vert) / "light" = pas de fond forcé (page sur fond clair)
   const scrollBg = chips.variant === 'dark' ? 'bg-primary' : ''
 
   return (
-    <div className="flex flex-col md:flex-row md:items-start gap-3 md:gap-6 min-w-0">
+    <div className="flex flex-col md:flex-row md:items-start gap-xs md:gap-md min-w-0">
 
       {/* ── Selects — shrink-0 pour garder leur taille fixe à côté des chips ── */}
       <div className="shrink-0">
@@ -88,8 +85,8 @@ function Filters({ selects, selectValues, onSelectChange, chips }) {
         />
       </div>
 
-      {/* ── Chips version desktop — scroll géré ici (scrollBg + overflow-x-auto) ── */}
-      {/* scrollable=false sur FilterChips : évite le double scroll imbriqué (parent + enfant) */}
+      {/* ── Chips version desktop — scroll géré ici ── */}
+      {/* scrollable=false sur FilterChips : évite le double scroll imbriqué */}
       <div className={`hidden md:block flex-1 w-full min-w-0 overflow-x-auto scroll-pb ${scrollBg}`}>
         <div className="inline-flex">
           <FilterChips

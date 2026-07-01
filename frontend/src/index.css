@@ -151,7 +151,7 @@
   .text-lead { font-size: 1rem; }
 }
 @media (min-width: 1280px) {
-  .text-lead { font-size: 1.5rem; }
+  .text-lead { font-size: 1.2rem; }
 }
 
 /* Petit texte — captions, métadonnées, dates. Pas de marge par défaut,

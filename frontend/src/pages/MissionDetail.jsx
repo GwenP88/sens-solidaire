@@ -176,9 +176,6 @@ function MissionDetail() {
                 Nos partenaires locaux sont au cœur de chaque mission. Engagés dans la protection de la biodiversité et le développement des communautés, ils accueillent les volontaires et les accompagnent tout au long de leur expérience.
               </p>
             </div>
-            <div className="hidden md:block w-1/4 shrink-0">
-              <img src="/images/ui/one-line-3.png" alt="" aria-hidden="true" className="w-full object-contain max-h-40" />
-            </div>
           </div>
           <Carousel
             items={mission.location}
