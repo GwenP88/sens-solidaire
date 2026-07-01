@@ -81,29 +81,25 @@ function ActionDetail() {
           </div>
 
           {/* Aside ODD — sticky 1/3 */}
-          <aside className="sticky top-24 self-start bg-surface-mid rounded-2xl p-6 flex flex-col gap-4">
-            <p className="text-eyebrow text-primary/40">ODD associés</p>
-
-            {/* Liste ODD compacte */}
-            <div className="flex flex-col gap-3">
-              {action.odds.map(o => (
-                <div key={o.odd_number} className="flex items-center gap-3">
-                  {/* Icône officielle ONU */}
-                  <img
-                    src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(o.odd_number).padStart(2, '0')}.jpg`}
-                    alt={`ODD ${o.odd_number}`}
-                    className="w-16 h-16 rounded shrink-0 object-cover"
-                  />
-                  {/* Label ODD */}
-                  <p className="text-body text-primary/70">{ODDS_LABELS[o.odd_number]}</p>
-                </div>
-              ))}
+          <aside className="sticky top-24 self-start bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
+            <p className="text-eyebrow text-primary/40 mb-0">ODD associés</p>
+            <div className="flex flex-col md:flex-row md:items-start gap-sm">
+              <div className="flex flex-col gap-xs flex-1">
+                {action.odds.map(o => (
+                  <div key={o.odd_number} className="flex items-center gap-xs">
+                    <img
+                      src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(o.odd_number).padStart(2, '0')}.jpg`}
+                      alt={`ODD ${o.odd_number}`}
+                      className="w-16 h-16 rounded shrink-0 object-cover"
+                    />
+                    <p className="text-body text-primary/70">{ODDS_LABELS[o.odd_number]}</p>
+                  </div>
+                ))}
+              </div>
+              <a href="https://www.un.org/sustainabledevelopment/fr/" target="_blank" rel="noopener noreferrer" className="shrink-0">
+                <Button label="En savoir plus sur les 17 ODD →" variant="primary" />
+              </a>
             </div>
-
-            {/* CTA vers la page ODD ONU */}
-            <a href="https://www.un.org/sustainabledevelopment/fr/" target="_blank" rel="noopener noreferrer">
-              <Button label="En savoir plus sur les 17 ODD →" variant="primary" />
-            </a>
           </aside>
 
         </div>
