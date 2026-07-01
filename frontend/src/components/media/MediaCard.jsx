@@ -33,27 +33,30 @@ function MediaCard({ title, content, theme, date, image_url, slug, external_url 
       </div>
 
       {/* Contenu — occupe le reste de l'espace, 3 zones réparties par justify-between */}
-      <div className="flex flex-col justify-between flex-1 min-w-0 p-6">
+      <div className="flex flex-col justify-center flex-1 min-w-0 p-6">
 
         {/* ── Zone haute — date + thème ── */}
-        <div className="flex items-center gap-2 flex-wrap">
+        {/* text-eyebrow mb-0 : inline dans flex items-center, pas besoin de marge basse */}
+        <div className="flex items-center gap-xs flex-wrap">
           <span className="text-caption text-primary/50">{formattedDate}</span>
           <span className="text-caption text-primary/30">—</span>
-          <span className="text-eyebrow text-accent-2">{theme}</span>
+          <span className="text-eyebrow text-accent-2 mb-0">{theme}</span>
         </div>
 
         {/* ── Zone centrale — titre (2 lignes max) + extrait (4 lignes max) ── */}
-        <div className="flex flex-col gap-2 flex-1 justify-center">
-          <h3 className="h3-style text-primary line-clamp-2">{title}</h3>
+        {/* h3-style mb-0 : dans un justify-between, pas besoin de marge basse en plus */}
+        <div className="flex flex-col gap-xs flex-1 pt-6">
+          <h3 className="h3-style text-primary line-clamp-2 mb-0">{title}</h3>
           <p className="text-body text-primary/60 line-clamp-4">{content}</p>
         </div>
 
         {/* ── Zone basse — CTA toujours aligné en bas ── */}
+        {/* mt-2 retiré : justify-between du parent gère déjà le positionnement en bas */}
         <a
           href={href}
           target={isExternal ? '_blank' : '_self'}
           rel={isExternal ? 'noopener noreferrer' : undefined}
-          className="link-cta text-accent hover:text-accent/80 mt-2"
+          className="link-cta text-accent hover:text-accent/80"
         >
           {isExternal ? 'Consulter →' : 'Lire la suite →'}
         </a>

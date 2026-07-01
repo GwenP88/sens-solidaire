@@ -9,7 +9,6 @@ function LocationCard({ slug, name, image_url }) {
   return (
     // ── Lien vers la page détail du lieu
     <Link to={`/lieux/${slug}`} className="group">
-
       <div className="rounded-xl overflow-hidden bg-surface hover:shadow-md transition-shadow">
 
         {/* Image du lieu — zoom au survol */}
@@ -22,7 +21,7 @@ function LocationCard({ slug, name, image_url }) {
         </div>
 
         {/* Nom du lieu + lien "En savoir plus" */}
-        <div className="p-4 flex flex-col gap-2">
+        <div className="p-4 flex flex-col gap-xs">
           <p className="h3-style text-primary">{name}</p>
           <span className="link-cta text-accent group-hover:text-primary transition-colors">
             En savoir plus →
