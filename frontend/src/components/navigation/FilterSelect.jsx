@@ -8,7 +8,7 @@
 function FilterSelect({ filters, values, onChange }) {
   return (
     // ── Conteneur — empilé pleine largeur en mobile, en ligne à partir de 768px
-    <div className="flex flex-col md:flex-row gap-xs md:gap-md">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row gap-xs lg:gap-lg">
       {filters.map(filter => {
 
         if (filter.condition && !filter.condition(values)) return null
@@ -18,7 +18,7 @@ function FilterSelect({ filters, values, onChange }) {
             key={filter.key}
             value={values[filter.key] || ''}
             onChange={e => onChange(filter.key, e.target.value || null)}
-            className="w-full md:w-52 lg:w-60 xl:w-72 text-body text-primary bg-surface border border-surface-dark rounded-xl px-4 py-1 cursor-pointer"
+            className="w-full lg:w-60 xl:w-72 text-body text-primary bg-surface border border-surface-dark rounded-xl px-4 py-1 cursor-pointer"
           >
             <option value="">{filter.placeholder}</option>
             {filter.options.map(opt => (
