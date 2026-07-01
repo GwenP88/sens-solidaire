@@ -20,7 +20,7 @@ const STATS = [
 
 function StatsBar() {
   return (
-    <div className="bg-primary py-6 px-6">
+    <div className="bg-primary py-6 padding-x">
 
       {/* ── Mobile — carousel autoplay ── */}
       <div className="lg:hidden flex items-center justify-center">
@@ -45,11 +45,11 @@ function StatsBar() {
         </Swiper>
       </div>
 
-      {/* ── Desktop — ligne horizontale ── */}
+      {/* ── Desktop — ligne horizontale avec séparateurs ── */}
       <div className="hidden lg:flex justify-around items-center">
         {STATS.map((stat, i) => (
-           <React.Fragment key={stat.number}>
-            <div key={stat.number} className="flex flex-col items-center text-center">
+          <React.Fragment key={stat.number}>
+            <div className="flex flex-col items-center text-center">
               <p className="text-stat text-surface">{stat.number}</p>
               <p className="text-label text-surface-dark">{stat.label}</p>
             </div>
