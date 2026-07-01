@@ -2,7 +2,7 @@
 // Section complète d'un type de mission — structure identique pour les 4 types
 
 // ── Composants UI
-import SectionHero from '../ui/SectionHero'
+import SectionHero from './SectionHero'
 import Carousel from '../ui/Carousel'
 import MissionInfoBar from './MissionInfoBar'
 import MissionCTA from './MissionCTA'
