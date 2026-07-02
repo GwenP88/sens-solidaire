@@ -27,13 +27,13 @@ function Modal({ isOpen, onClose, title, children }) {
 
   return (
     // ── Overlay — clic en dehors ferme la modale
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 md:p-8 lg:p-12"
       onClick={onClose}
     >
       {/* Contenu — stoppe la propagation du clic */}
-      <div
-        className="bg-surface rounded-2xl shadow-xl w-full max-w-lg mx-4 p-8 relative"
+      <div 
+        className="bg-surface rounded-2xl shadow-xl w-full max-w-lg md:max-w-2xl lg:max-w-6xl p-8 relative"
         onClick={e => e.stopPropagation()}
       >
         {/* Header — h2-style porte margin-bottom: 2rem, pas de mb- en dur */}

@@ -108,7 +108,11 @@ function TestimonialForm({ onClose }) {
 
       {/* Zone de texte témoignage — limité à 280 caractères */}
       <div className="flex flex-col gap-xs">
-        <label className="text-eyebrow text-primary/60 mb-0">
+        <label className={`text-eyebrow mb-0 ${
+          form.quote.length >= 260 ? 'text-red-500' :
+          form.quote.length >= 224 ? 'text-orange-400' :
+          'text-primary/60'
+        }`}>
           Votre témoignage * — {form.quote.length}/280 caractères
         </label>
         <textarea
@@ -132,6 +136,9 @@ function TestimonialForm({ onClose }) {
           onChange={handleChange}
           className="text-body text-primary/60 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-body file:bg-surface-mid file:text-primary hover:file:bg-surface-dark cursor-pointer"
         />
+        <span className="text-caption text-primary/60 leading-relaxed">
+          Formats acceptés : JPG, PNG, WEBP • Taille maximale : 5 Mo
+        </span>
       </div>
 
       {/* Case à cocher RGPD — obligatoire avant soumission */}
@@ -145,9 +152,12 @@ function TestimonialForm({ onClose }) {
           className="mt-1 shrink-0 accent-accent"
         />
         <span className="text-caption text-primary/60 leading-relaxed">
-          J'accepte que mon témoignage soit publié sur le site de Sens Solidaire après validation. Mes données ne seront pas transmises à des tiers. *
+          J'autorise Sens Solidaires à publier mon témoignage et, le cas échéant, la photographie que je transmets, sur son site internet après validation. Je peux retirer mon consentement à tout moment en contactant l'association. Consultez notre{' '}
+              <a href="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</a>.
         </span>
       </label>
+
+      <span className="text-caption text-primary/60 leading-relaxed">* Champs obligatoires</span>
 
       {/* Boutons — annuler ou soumettre */}
       <div className="flex flex-col sm:flex-row gap-sm">

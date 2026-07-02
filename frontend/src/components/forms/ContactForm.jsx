@@ -116,9 +116,12 @@ function ContactForm() {
           className="mt-1 shrink-0 accent-accent"
         />
         <span className="text-caption text-primary/60 leading-relaxed">
-          J'accepte que mes données soient utilisées pour traiter ma demande. Elles ne seront pas transmises à des tiers. *
+          J'accepte que mes données soient utilisées pour traiter ma demande conformément à la {' '}
+              <a href="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</a>.
         </span>
       </label>
+
+      <span className="text-caption text-primary/60 leading-relaxed">* Champs obligatoires</span>
 
       {/* Message d'erreur si l'envoi échoue */}
       {status === 'error' && (
