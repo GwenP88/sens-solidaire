@@ -132,7 +132,7 @@ function Navbar() {
           </div>
 
           <Link to="/notre-impact" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/notre-impact' ? 'underline underline-offset-4' : ''}`}>Notre impact</Link>
-          <Link to="/actions-educatives" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/actions-educatives' ? 'underline underline-offset-4' : ''}`}>Éducation & sensibilisation</Link>
+          <Link to="/education-sensibilisation" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/education-sensibilisation' ? 'underline underline-offset-4' : ''}`}>Éducation & sensibilisation</Link>
           <Link to="/medias-et-actualites" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/medias-et-actualites' ? 'underline underline-offset-4' : ''}`}>Médias & actualités</Link>
           <Link to="/contact" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/contact' ? 'underline underline-offset-4' : ''}`}>Contact</Link>
 
@@ -198,7 +198,7 @@ function Navbar() {
           </div>
 
           <Link to="/notre-impact" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Notre impact</Link>
-          <Link to="/actions-educatives" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Éducation & sensibilisation</Link>
+          <Link to="/education-sensibilisation" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Éducation & sensibilisation</Link>
           <Link to="/medias-et-actualites" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Médias & actualités</Link>
           <Link to="/contact" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Contact</Link>
 

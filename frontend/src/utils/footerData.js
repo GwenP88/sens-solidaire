@@ -9,7 +9,7 @@ export const DECOUVRIR_LINKS = [
   { label: 'Accueil', href: '/' },
   { label: 'Nos missions', href: '/missions' },
   { label: 'Notre impact', href: '/notre-impact' },
-  { label: 'Actions éducatives', href: '/actions-educatives' },
+  { label: 'Actions éducatives', href: '/education-sensibilisation' },
   { label: 'Médias & actualités', href: '/medias-et-actualites' },
   { label: 'À propos', href: '/a-propos' },
 ]

@@ -39,7 +39,7 @@ function EducationDetail() {
   if (error || !item) return (
     <div className="p-12 text-center">
       <p className="text-body text-primary/60">Atelier introuvable.</p>
-      <a href="/actions-educatives" className="link-inline text-accent">← Retour aux ateliers</a>
+      <a href="/education-sensibilisation" className="link-inline text-accent">← Retour aux ateliers</a>
     </div>
   )
 
@@ -86,7 +86,7 @@ function EducationDetail() {
         <div className="flex flex-col gap-6">
 
           {/* Lien retour vers la liste des ateliers */}
-          <a href="/actions-educatives" className="link-nav text-primary/50 hover:text-primary">
+          <a href="/education-sensibilisation" className="link-nav text-primary/50 hover:text-primary">
             ← Retour aux ateliers
           </a>
 

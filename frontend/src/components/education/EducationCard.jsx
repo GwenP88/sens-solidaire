@@ -64,7 +64,7 @@ function EducationCard({ item }) {
             </a>
           ) : (
             <Link
-              to={`/actions-educatives/${item.slug}`}
+              to={`/education-sensibilisation/${item.slug}`}
               className="link-cta text-accent hover:text-accent/80"
             >
               {ctaLabel}

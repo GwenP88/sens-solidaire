@@ -1,4 +1,4 @@
-// ActionsEducatives.jsx
+// Education.jsx
 // Page Éducation & Sensibilisation — ateliers, correspondances, éco-école
 
 // ── React
@@ -12,8 +12,9 @@ import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
 import Filters from '../components/navigation/Filters'
-import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Section from '../components/ui/Section'
+import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
 import EducationCard from '../components/education/EducationCard'
@@ -21,7 +22,7 @@ import EducationCard from '../components/education/EducationCard'
 // ── Utils
 import { FILTERS_EDUCATION_PUBLIC } from '../utils/filters'
 
-function ActionsEducatives() {
+function Education() {
   // ── État local — items + chargement + filtre actif
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -61,7 +62,7 @@ function ActionsEducatives() {
         subtitle="Nous intervenons dans les écoles, collèges et lycées pour sensibiliser les jeunes à la biodiversité et au développement durable."
       />
 
-      {/* ── Barre de filtres par public cible — via Filters (orchestrateur FilterSelect/FilterChips) ── */}
+      {/* ── Barre de filtres par public cible ── */}
       <div ref={filtersRef} className="bg-primary padding-x filter-py">
         <Filters
           chips={{
@@ -74,36 +75,31 @@ function ActionsEducatives() {
       </div>
 
       {/* ── Grille des ateliers ── */}
-      <section className="padding-y padding-x">
+      <Section title="Nos ateliers">
         {loading ? (
           <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredItems.length === 0 ? (
           <p className="text-body text-primary/50 italic">Aucun atelier pour ce public.</p>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid-cards-3">
             {filteredItems.map(item => (
               <EducationCard key={item.slug} item={item} />
             ))}
           </div>
         )}
-      </section>
+      </Section>
 
-      {/* ── CTA contact — invitation à accueillir une intervention ── */}
-      <section className="padding-y padding-x bg-accent-2">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <h2 className="h2-style text-surface">Vous souhaitez accueillir une intervention ?</h2>
-            <p className="text-body text-surface/80">Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux.</p>
-          </div>
-          <a href="/contact">
-            <Button label="Nous contacter →" variant="primary" />
-          </a>
-        </div>
-      </section>
+      {/* ── CTA contact ── */}
+      <CTASection
+        title="Vous souhaitez accueillir une intervention ?"
+        text="Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux."
+        ctaLabel="Nous contacter →"
+        ctaHref="/contact"
+      />
 
       <ScrollToTop />
     </div>
   )
 }
 
-export default ActionsEducatives
+export default Education
