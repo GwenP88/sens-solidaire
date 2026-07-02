@@ -20,7 +20,7 @@ function Dashboard() {
   // Fonction réutilisable : appelée au montage ET après chaque action.
   const loadTestimonials = async () => {
     try {
-      const data = await fetchAdminTestimonials()
+      const data = await fetchAdminTestimonials('pending')
       setTestimonials(data)
     } catch (err) {
       console.error("Erreur chargement témoignages:", err)
