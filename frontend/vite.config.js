@@ -21,6 +21,7 @@ export default defineConfig({
     },
     watch: {
       usePolling: true,
+      interval: 1000,
     },
     // Autorise les hosts externes — nécessaire pour ngrok
     allowedHosts: ['couch-stray-twistable.ngrok-free.dev'],
