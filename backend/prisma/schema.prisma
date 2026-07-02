@@ -67,6 +67,8 @@ model Location {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   mission     Mission  @relation(fields: [mission_id], references: [id])
+  delegation_id Int?
+  delegation    Delegation? @relation(fields: [delegation_id], references: [id])
 }
 
 // ─────────────────────────────────────────
@@ -255,6 +257,7 @@ model Delegation {
   lieu            String
   contacts        String
   display_order   Int      @default(0)
+  locations Location[]
   is_active       Boolean  @default(true)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt

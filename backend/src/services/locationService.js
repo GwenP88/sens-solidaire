@@ -8,6 +8,7 @@ export const getLocationBySlugService = async (slug) => {
     where: { slug },
     include: {
       mission: { select: { slug: true, title: true } },
+      delegation: { select: { contacts: true, lieu: true } },
     },
   })
 }

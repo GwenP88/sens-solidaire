@@ -1,5 +1,5 @@
 // LocationDetail.jsx
-// Page détail d'un lieu partenaire — hero, description, galerie, mission liée, CTA
+// Page détail d'un lieu partenaire — hero, description, infos pratiques, galerie
 
 // ── React
 import { useState, useEffect } from 'react'
@@ -17,14 +17,18 @@ import HeroPage from '../components/layout/HeroPage'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
+// ── Utils
+import { IconPin, IconGlobe, IconPerson } from '../utils/icons'
+
 function LocationDetail() {
   // ── État local — lieu + chargement + erreur
+  // delegation est maintenant inclus directement dans location via l'API
   const { slug } = useParams()
   const [location, setLocation] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // ── Chargement du lieu depuis l'API au montage
+  // ── Chargement du lieu depuis l'API — delegation inclus via include Prisma
   useEffect(() => {
     fetchLocationBySlug(slug)
       .then(data => setLocation(data))
@@ -41,25 +45,25 @@ function LocationDetail() {
     </div>
   )
 
-  // ── Séparation des médias — première image en sidebar, reste en galerie
+  // ── Médias — galerie sans la première image (utilisée dans le hero)
   const images = location.gallery || []
-  const mainImage = images[0]
   const extraImages = images.slice(1)
 
   return (
     <div className="bg-surface min-h-screen">
 
-      {/* ── Hero immersif — nom du lieu ── */}
+      {/* ── Hero immersif — image du lieu + titre + pays si disponible ── */}
       <HeroPage
         image={location.image_url || '/images/hero/hero-missions.jpg'}
         title={location.name}
+        country={location.country || null}
       />
 
-      {/* ── Contenu principal — texte 2/3 + sidebar 1/3 ── */}
+      {/* ── Contenu principal — 2 colonnes à partir de lg ── */}
       <section className="padding-y padding-x bg-surface">
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-md">
 
-          {/* Lien retour vers la mission parente */}
+          {/* Lien retour — mission parente si disponible, sinon liste missions */}
           {location.mission?.slug ? (
             <a href={`/missions/${location.mission.slug}`} className="link-nav text-primary/50 hover:text-primary">
               ← Retour à la mission
@@ -70,50 +74,109 @@ function LocationDetail() {
             </a>
           )}
 
-          {/* Pays + mission associée */}
-          <div className="flex items-center gap-2">
-            <span className="text-eyebrow text-accent-2">{location.country}</span>
-            {location.mission?.title && (
-              <>
-                <span className="text-caption text-primary/30">—</span>
-                <span className="text-caption text-primary/50">{location.mission.title}</span>
-              </>
-            )}
-          </div>
+          {/* Layout 2 colonnes — description à gauche, card infos à droite */}
+          {/* gap-lg : entre deux grands blocs — responsive via @media dans index.css */}
+          <div className="flex flex-col lg:flex-row gap-lg items-start">
 
-          {/* Titre du lieu */}
-          <h2 className="h2-style text-primary">{location.title}</h2>
+            {/* ── Colonne gauche — description + encart mission ── */}
+            <div className="flex-1 flex flex-col gap-md">
 
-          {/* Layout 2 colonnes — texte + sidebar */}
-          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+              <h2 className="h2-style text-primary">À propos de ce lieu</h2>
 
-            {/* Colonne texte — 2/3 */}
-            <div className="flex-1 flex flex-col gap-4">
-              {location.description.split('\n\n').map((para, i) => (
-                <p key={i} className="text-body text-primary/80">{para}</p>
-              ))}
+              {/* Description — découpage par double saut de ligne */}
+              {/* gap-sm : entre les paragraphes */}
+              <div className="flex flex-col gap-sm">
+                {location.description.split('\n\n').map((para, i) => (
+                  <p key={i} className="text-body text-primary/80">{para}</p>
+                ))}
+              </div>
+
+              {/* Encart "Notre mission ici" */}
+              <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
+                <h3 className="h3-style text-primary mb-0">Notre mission ici</h3>
+                <p className="text-body text-primary/70">
+                  Les volontaires Sens Solidaire interviennent directement avec les équipes de ce partenaire local.
+                  Chaque action menée sur place s'inscrit dans une démarche durable et en lien étroit avec les communautés.
+                </p>
+                {location.mission?.slug && (
+                  <a href={`/missions/${location.mission.slug}`} className="link-cta text-accent hover:text-accent/80">
+                    Voir la mission associée →
+                  </a>
+                )}
+              </div>
+
             </div>
 
-            {/* Colonne sidebar — 1/3 */}
-            <div className="w-full md:w-1/3 shrink-0">
-              <div className="w-full overflow-hidden rounded-2xl">
-                <img
-                  src={mainImage?.file_url || location.image_url || '/images/hero/hero-missions.jpg'}
-                  alt={location.name}
-                  className="w-full h-56 object-cover"
-                />
+            {/* ── Colonne droite — card informations pratiques ── */}
+            <div className="w-full lg:w-1/3 shrink-0">
+              <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-md">
+
+                <h3 className="h3-style text-primary mb-0">Informations pratiques</h3>
+
+                {/* Contacts — inclus directement via location.delegation (FK BDD) */}
+                {location.delegation?.contacts && (
+                  <div className="flex flex-col gap-xs">
+                    <span className="text-eyebrow text-primary/40">Sur place</span>
+                    <div className="flex items-start gap-xs">
+                      <IconPerson className="text-accent shrink-0 mt-0.5" />
+                      <p className="text-body text-primary/80">{location.delegation.contacts}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Site web — location.website_url, champ optionnel pas encore en BDD */}
+                {location.website_url && (
+                  <a
+                    href={location.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-xs link-cta text-accent hover:text-accent/80"
+                  >
+                    <IconGlobe className="shrink-0" />
+                    Visiter le site web →
+                  </a>
+                )}
+
+                {/* Localisation — lien carte ou placeholder */}
+                <div className="flex flex-col gap-xs">
+                  <span className="text-eyebrow text-primary/40">Localisation</span>
+
+                  {location.map_url ? (
+                    /* Lien vers la carte — location.map_url pas encore en BDD */
+                    <a
+                      href={location.map_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-xs link-cta text-accent hover:text-accent/80"
+                    >
+                      <IconPin className="shrink-0" />
+                      Voir sur la carte →
+                    </a>
+                  ) : (
+                    /* Placeholder — champ non encore renseigné */
+                    <div className="bg-surface rounded-xl p-4 text-center">
+                      <IconPin className="text-primary/20 text-2xl mx-auto mb-1" />
+                      <p className="text-caption text-primary/40 italic">Localisation à renseigner</p>
+                    </div>
+                  )}
+                </div>
+
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* ── Galerie photos — grille si ≤ 2 images, carousel sinon ── */}
+      {/* ── Galerie photos — masquée s'il n'y a pas d'images supplémentaires ── */}
       {extraImages.length > 0 && (
         <section className="padding-y padding-x bg-surface-mid">
-          <h2 className="h2-style text-primary mb-8">Photos</h2>
+
+          {/* h2-style porte déjà margin-bottom: 2rem — pas de mb- en dur */}
+          <h2 className="h2-style text-primary">Galerie photos</h2>
+
           {extraImages.length <= 2 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
               {extraImages.map((m, i) => (
                 <div key={i} className="overflow-hidden rounded-xl">
                   <img src={m.file_url} alt="" className="w-full h-56 object-cover" />
@@ -123,8 +186,6 @@ function LocationDetail() {
           ) : (
             <Carousel
               items={extraImages}
-              slidesPerView={3}
-              spaceBetween={16}
               showPagination={true}
               color="primary"
               renderSlide={(m) => (
@@ -134,10 +195,13 @@ function LocationDetail() {
               )}
             />
           )}
+
         </section>
       )}
 
+      {/* ── ScrollToTop — bouton flottant, suit le scroll sur toute la page ── */}
       <ScrollToTop />
+
     </div>
   )
 }

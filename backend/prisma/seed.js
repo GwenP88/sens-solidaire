@@ -377,10 +377,43 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
   console.log("Pricing créé (20 lignes)")
 
   // ============================================================
-  // 4 — LIEUX DE MISSION
+  // 4 — DELEGATIONS (avant les locations pour récupérer les IDs)
   // ============================================================
 
-  // ── Voi (Kenya — ville principale) ─────────────────────────
+  await prisma.delegation.deleteMany({})
+
+  const delegLumo = await prisma.delegation.create({
+    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/lieux-missions/lumo-kenya.jpeg", lieu: "LUMO Community Wildlife Conservancy", contacts: "Denis (coordinateur), Ernest (chargé des projets biodiversité) et les 22 Rangers", display_order: 1 },
+  })
+  const delegTtnp = await prisma.delegation.create({
+    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/lieux-missions/ttnp-kenya.jpeg", lieu: "Taita Taveta National Polytechnic", contacts: "Kefa Okari (Coordinateur des missions, professeur de français), Madeline Nabwire (directrice du département de tourisme)", display_order: 2 },
+  })
+  const delegElsa = await prisma.delegation.create({
+    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/lieux-missions/etc-kenya.jpeg", lieu: "Elsa Conservation Trust", contacts: "Antony — Coordinateur des missions", display_order: 3 },
+  })
+  const delegAgada = await prisma.delegation.create({
+    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/lieux-missions/agada-senegal.jpg", lieu: "ONG AGADA", contacts: "François Bassene et Penda Diémé", display_order: 4 },
+  })
+  const delegCampement = await prisma.delegation.create({
+    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/lieux-missions/campement-senegal.jpg", lieu: "Campement de l'Ile d'Effrane", contacts: "Mamadou Ndiaye", display_order: 5 },
+  })
+  const delegMef = await prisma.delegation.create({
+    data: { pays: "Sri Lanka", flag_code: "lk", image_url: "/images/lieux-missions/mef-sri-lanka.jpg", lieu: "Millenium Elephant Foundation", contacts: "Nalaka — Chargé des volontaires, Sara — Coordinatrice des missions", display_order: 6 },
+  })
+  const delegAmazon = await prisma.delegation.create({
+    data: { pays: "Pérou amazonien", flag_code: "pe", image_url: "/images/lieux-missions/amazon-shelter-perou.jpg", lieu: "Amazon Shelter", contacts: "Magali, Kim et Latam", display_order: 7 },
+  })
+  const delegBatu = await prisma.delegation.create({
+    data: { pays: "Sumatra", flag_code: "id", image_url: "/images/lieux-missions/batu-kapal-sumatra.jpg", lieu: "Batu Kapal Conservation", contacts: "L'équipe Batu Kapal Conservation", display_order: 8 },
+  })
+
+  console.log('Délégations créées (8)')
+
+  // ============================================================
+  // 5 — LIEUX DE MISSION (avec delegation_id si disponible)
+  // ============================================================
+
+  // ── Voi — pas de délégation directe ───────────────────────
   const voiData = {
     name: "Voi",
     country: "Kenya",
@@ -400,6 +433,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     country: "Kenya",
     description: "LUMO a vu le jour en 1997, d'un protocole d'entente entre trois ranchs de la zone des Taita Hills afin de lutter contre le braconnage et de protéger la diversité biologique kényane. Lumo fait partie du corridor historique de migration des éléphants reliant l'écosystème Tsavo aux collines de Shimba.",
     image_url: "/images/lieux-missions/lumo-kenya.jpeg",
+    delegation_id: delegLumo.id,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -414,6 +448,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     country: "Kenya",
     description: "Établissement d'enseignement supérieur de la ville de Voi, aux portes du Parc Tsavo. Cette université possède un pôle dédié au tourisme avec lequel nous travaillons particulièrement. Le campus est très engagé pour la biodiversité et possède sa propre pépinière.",
     image_url: "/images/lieux-missions/ttnp-kenya.jpeg",
+    delegation_id: delegTtnp.id,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -428,6 +463,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     country: "Kenya",
     description: "La Elsa Conservation Trust a fait don de millions de dollars à des projets de conservation de la vie sauvage, aidant à créer les parcs kenyans de Meru, Samburu, Shaba, Kora et Hells Gate. Le centre offre un environnement propice à la recherche ornithologique avec 450 espèces d'oiseaux recensées.",
     image_url: "/images/lieux-missions/etc-kenya.jpeg",
+    delegation_id: delegElsa.id,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -436,7 +472,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "elsa-conservation-trust-kenya", mission_id: missionKenya.id, ...ectData },
   })
 
-  // ── Diani Turtle Watch ─────────────────────────────────────
+  // ── Diani Turtle Watch — pas de délégation ─────────────────
   const dtwData = {
     name: "Diani Turtle Watch",
     country: "Kenya",
@@ -450,7 +486,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "diani-turtle-watch-kenya", mission_id: missionKenya.id, ...dtwData },
   })
 
-  // ── Ziguinchor (Sénégal) ───────────────────────────────────
+  // ── Ziguinchor — pas de délégation directe ─────────────────
   const ziguinchorData = {
     name: "Ziguinchor",
     country: "Sénégal",
@@ -464,12 +500,13 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "ziguinchor-senegal", mission_id: missionSenegal.id, ...ziguinchorData },
   })
 
-  // ── ONG AGADA (Sénégal) ────────────────────────────────────
+  // ── ONG AGADA ──────────────────────────────────────────────
   const agadaData = {
     name: "ONG AGADA",
     country: "Sénégal",
     description: "AGADA (Agir Autrement pour le Développement en Afrique), basée à Ziguinchor en Casamance, œuvre pour le développement d'activités économiques locales. Investie depuis plus de 30 ans, elle soutient le reboisement de la mangrove, l'agriculture durable et la protection d'espèces patrimoniales comme le lamantin.",
     image_url: "/images/lieux-missions/agada-senegal.jpg",
+    delegation_id: delegAgada.id,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -478,7 +515,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "agada-senegal", mission_id: missionSenegal.id, ...agadaData },
   })
 
-  // ── Puerto Maldonado (Pérou) ───────────────────────────────
+  // ── Puerto Maldonado — pas de délégation directe ───────────
   const puertoData = {
     name: "Puerto Maldonado",
     country: "Pérou",
@@ -492,12 +529,13 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "puerto-maldonado-perou", mission_id: missionPerou.id, ...puertoData },
   })
 
-  // ── Amazon Shelter (Pérou) ─────────────────────────────────
+  // ── Amazon Shelter ─────────────────────────────────────────
   const amazonData = {
     name: "Amazon Shelter",
     country: "Pérou",
     description: "Le centre de réhabilitation Amazon Shelter, proche de Puerto Maldonado, est axé sur la conservation des singes laineux et d'atèles. Amazon Shelter poursuit un travail de plantation d'espèces sauvages menacées sur 90 hectares : cèdres blancs, acajous, fruitiers sauvages et palmiers.",
     image_url: "/images/lieux-missions/amazon-shelter-perou.jpg",
+    delegation_id: delegAmazon.id,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -506,7 +544,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "amazon-shelter-perou", mission_id: missionPerou.id, ...amazonData },
   })
 
-  // ── Kegalle (Sri Lanka) ────────────────────────────────────
+  // ── Kegalle — pas de délégation directe ───────────────────
   const kegalleData = {
     name: "Kegalle",
     country: "Sri Lanka",
@@ -520,12 +558,13 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "kegalle-sri-lanka", mission_id: missionSriLanka.id, ...kegalleData },
   })
 
-  // ── Millenium Elephant Foundation (Sri Lanka) ──────────────
+  // ── Millenium Elephant Foundation ─────────────────────────
   const mefData = {
     name: "Millenium Elephant Foundation",
     country: "Sri Lanka",
     description: "La Millenium Elephant Foundation (MEF) créée en 1999 à Kegalle a pour objectif la protection des éléphants sauvages et domestiques du Sri Lanka. Les éléphants malades et maltraités y sont accueillis. Plus de 60 éléphants ont pu y être hébergés.",
     image_url: "/images/lieux-missions/mef-sri-lanka.jpg",
+    delegation_id: delegMef.id,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -534,7 +573,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "mef-sri-lanka", mission_id: missionSriLanka.id, ...mefData },
   })
 
-  // ── Bohorok (Sumatra) ──────────────────────────────────────
+  // ── Bohorok — pas de délégation directe ───────────────────
   const bohorokData = {
     name: "Bohorok",
     country: "Indonésie",
@@ -548,12 +587,13 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "bohorok-sumatra", mission_id: missionSumatra.id, ...bohorokData },
   })
 
-  // ── Batu Kapal Conservation (Sumatra) ─────────────────────
+  // ── Batu Kapal Conservation ────────────────────────────────
   const batuKapalData = {
     name: "Batu Kapal Conservation",
     country: "Indonésie",
     description: "Le sanctuaire de Batu Kapal se trouve au cœur de la forêt qui surplombe le parc national Gunung Leuser, classé au patrimoine mondial de l'UNESCO. Il accueille des visites fréquentes d'orangs-outans, espèce en danger critique dont la population a diminué de 86% en 100 ans.",
     image_url: "/images/lieux-missions/batu-kapal-sumatra.jpg",
+    delegation_id: delegBatu.id,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -564,13 +604,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
 
   console.log("Locations créées (13)")
 
-// ============================================================
-// X — TÉMOIGNAGES
-// ============================================================
-// ⚠️ LIMITE : content max 280 caractères
-// maxLength={280} déjà appliqué sur le formulaire public (TestimonialForm.jsx)
-// À appliquer aussi dans le dashboard (maxLength={280} sur le textarea)
-// ============================================================
+  // ============================================================
+  // 6 — TÉMOIGNAGES
+  // ============================================================
 
   await prisma.testimonial.deleteMany({
     where: { mission_id: { in: missionIds } }
@@ -643,11 +679,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
   console.log("Témoignages créés (7 : 6 approved, 1 pending)")
 
 // ============================================================
-// 6 — ACTIONS SUR LE TERRAIN
+// 7 — ACTIONS SUR LE TERRAIN
 // ============================================================
-// ⚠️ LIMITE : description max 180 caractères
-// À appliquer aussi dans le dashboard (maxLength={180} sur le textarea)
-// 
+
 
   const FIELD_ACTIONS = [
     {
@@ -1094,7 +1128,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
   console.log(`FieldActions créées (${FIELD_ACTIONS.length})`)
 
   // ============================================================
-  // 7 — ARTICLES - MEDIAS ET ACTUALITES
+  // 8 — ARTICLES - MEDIAS ET ACTUALITES
   // ============================================================
 
   const MEDIA_POSTS = [
@@ -1402,7 +1436,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
   console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
 
   // ============================================================
-  // 8 — EDUCATION ET SENSIBILISATION
+  // 9 — EDUCATION ET SENSIBILISATION
   // ============================================================
 
   const EDUCATION_ITEMS = [
@@ -1505,7 +1539,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
   console.log('Médias EducationItems créés')
 
   // ============================================================
-  // 9 — ACTIVITY REPORTS
+  // 10 — ACTIVITY REPORTS
   // ============================================================
 
   await prisma.activityReport.deleteMany({})
@@ -1527,25 +1561,6 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     ]
   })
   console.log('ActivityReports créés (13)')
-
-  // ============================================================
-  // 10 — DELEGATIONS
-  // ============================================================
-
-  await prisma.delegation.deleteMany({})
-  await prisma.delegation.createMany({
-    data: [
-      { pays: "Kenya", flag_code: "ke", image_url: "/images/lieux-missions/lumo-kenya.jpeg", lieu: "LUMO Community Wildlife Sanctuary", contacts: "Denis (coordinateur), Ernest (chargé des projets biodiversité) et les 22 Rangers", display_order: 1 },
-      { pays: "Kenya", flag_code: "ke", image_url: "/images/lieux-missions/ttnp-kenya.jpeg", lieu: "Taita Taveta National Polytechnic", contacts: "Kefa Okari (Coordinateur des missions, professeur de français), Madeline Nabwire (directrice du département de tourisme)", display_order: 2 },
-      { pays: "Kenya", flag_code: "ke", image_url: "/images/lieux-missions/etc-kenya.jpeg", lieu: "Elsa Conservation Trust", contacts: "Antony — Coordinateur des missions", display_order: 3 },
-      { pays: "Sénégal", flag_code: "sn", image_url: "/images/lieux-missions/agada-senegal.jpg", lieu: "Association AGADA", contacts: "François Bassene et Penda Diémé", display_order: 4 },
-      { pays: "Sénégal", flag_code: "sn", image_url: "/images/lieux-missions/campement-senegal.jpg", lieu: "Campement de l'Ile d'Effrane", contacts: "Mamadou Ndiaye", display_order: 5 },
-      { pays: "Sri Lanka", flag_code: "lk", image_url: "/images/lieux-missions/mef-sri-lanka.jpg", lieu: "Millenium Elephant Foundation", contacts: "Nalaka — Chargé des volontaires, Sara — Coordinatrice des missions", display_order: 6 },
-      { pays: "Pérou amazonien", flag_code: "pe", image_url: "/images/lieux-missions/amazon-shelter-perou.jpg", lieu: "Amazon Shelter", contacts: "Magali, Kim et Latam", display_order: 7 },
-      { pays: "Sumatra", flag_code: "id", image_url: "/images/lieux-missions/batu-kapal-sumatra.jpg", lieu: "Batu Kapal Conservation", contacts: "L'équipe Batu Kapal Conservation", display_order: 8 },
-    ]
-  })
-  console.log('Délégations créées (8)')
 
   // ============================================================
   // 11 — RAPPORT DE MISSION
@@ -1652,13 +1667,13 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
   console.log(`Password      : Admin1234!`)
   console.log(`Missions      : 9`)
   console.log(`Pricing       : 20 lignes`)
+  console.log(`Délégations   : 8`)
   console.log(`Locations     : 13`)
   console.log(`Témoignages   : 7 (6 approved, 1 pending)`)
   console.log(`FieldActions  : ${FIELD_ACTIONS.length}`)
   console.log(`MediaPosts    : ${MEDIA_POSTS.length}`)
   console.log(`EducationItems: ${EDUCATION_ITEMS.length}`)
   console.log(`ActivityReports: 13`)
-  console.log(`Délégations   : 8`)
   console.log(`MissionReports: 17`)
   console.log(`TeamMembers   : 23`)
   console.log(`Partners      : 18`)
