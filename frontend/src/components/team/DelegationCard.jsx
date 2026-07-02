@@ -1,12 +1,20 @@
 // DelegationCard.jsx
-// Card délégation internationale — photo immersive avec overlay, drapeau, lieu et contacts
+// Card délégation internationale — wrapper de BaseOverlayCard
+// Drapeau + pays + lieu + contacts superposés sur l'image
+
+// ── Composants UI
+import BaseOverlayCard from '../ui/BaseOverlayCard'
 
 function DelegationCard({ pays, flag, image, lieu, contacts }) {
   return (
-    <div className="relative h-44 md:h-52 xl:h-44 rounded-2xl overflow-hidden">
-      <img src={image} alt={lieu} className="w-full h-full object-cover" />
-      <div className="absolute inset-0 bg-black/40" />
-      <div className="absolute inset-0 p-6 flex flex-col justify-start gap-xs">
+    <BaseOverlayCard
+      image={image}
+      height="h-44 md:h-52 xl:h-44"
+      overlayClassName="bg-black/40"
+      className="rounded-2xl"
+    >
+      {/* Contenu superposé — drapeau + pays + lieu + contacts */}
+      <div className="h-full p-6 flex flex-col justify-start gap-xs">
 
         {/* Ligne drapeau + nom du pays */}
         {/* h3-style mb-0 : dans flex flex-col gap-xs, marge redondante avec gap */}
@@ -14,7 +22,7 @@ function DelegationCard({ pays, flag, image, lieu, contacts }) {
           <div className="w-7 h-7 rounded-full overflow-hidden shadow-sm shrink-0">
             <img src={flag} alt={pays} className="w-full h-full object-cover" />
           </div>
-          <p className="h3-style text-surface">Délégation nationale au {pays}</p>
+          <p className="h3-style text-surface mb-0">Délégation nationale au {pays}</p>
         </div>
 
         {/* Nom du lieu partenaire */}
@@ -24,7 +32,7 @@ function DelegationCard({ pays, flag, image, lieu, contacts }) {
         <p className="text-mention text-surface">{contacts}</p>
 
       </div>
-    </div>
+    </BaseOverlayCard>
   )
 }
 

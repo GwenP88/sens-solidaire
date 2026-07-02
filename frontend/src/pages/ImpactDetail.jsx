@@ -1,4 +1,4 @@
-// ActionDetail.jsx
+// ImpactDetail.jsx
 // Page détail d'une action terrain — hero, description, ODD, galerie, CTA
 
 // ── React
@@ -23,7 +23,7 @@ import CTASection from '../components/ui/CTASection'
 // ── Utils
 import { ODDS_LABELS } from '../utils/odds'
 
-function ActionDetail() {
+function ImpactDetail() {
   const { slug } = useParams()
   const [action, setAction] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -130,4 +130,4 @@ function ActionDetail() {
   )
 }
 
-export default ActionDetail
+export default ImpactDetail

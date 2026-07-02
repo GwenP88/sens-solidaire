@@ -22,7 +22,7 @@ import ScrollToTop from '../components/ui/ScrollToTop'
 // ── Composants métier
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import LocationCard from '../components/locations/LocationCard'
-import ActionCard from '../components/actions/ActionCard'
+import ImpactCard from '../components/actions/ImpactCard'
 
 // ── Utils
 import { getDuration } from '../utils/missions'
@@ -213,7 +213,7 @@ function MissionDetail() {
           <Carousel
             items={actions.slice(0, 4)}
             renderSlide={(action) => (
-              <ActionCard
+              <ImpactCard
                 slug={action.slug}
                 title={action.title}
                 description={action.description}

@@ -26,7 +26,7 @@ import Cookies from './pages/Cookies'
 
 // ── Pages Notre Impact
 import Impact from './pages/Impact'
-import ActionDetail from './pages/ActionDetail'
+import ImpactDetail from './pages/ImpactDetail'
 
 // ── Pages Médias & Actualités
 import MediaEtActualites from './pages/MediaEtActualites'
@@ -78,7 +78,7 @@ function App() {
 
           {/* Notre Impact */}
           <Route path="/notre-impact" element={<Impact />} />
-          <Route path="/notre-impact/:slug" element={<ActionDetail />} />
+          <Route path="/notre-impact/:slug" element={<ImpactDetail />} />
 
           {/* Médias & Actualités */}
           <Route path="/medias-et-actualites" element={<MediaEtActualites />} />

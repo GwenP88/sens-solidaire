@@ -20,7 +20,7 @@ import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
 import MissionCard from '../components/missions/MissionCard'
-import ActionCard from '../components/actions/ActionCard'
+import ImpactCard from '../components/actions/ImpactCard'
 import MediaCard from '../components/media/MediaCard'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 
@@ -178,7 +178,7 @@ function Home() {
         <Carousel
           items={actions}
           renderSlide={(action) => (
-            <ActionCard
+            <ImpactCard
               slug={action.slug}
               title={action.title}
               description={action.description}

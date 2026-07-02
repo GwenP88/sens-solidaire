@@ -21,7 +21,7 @@ import Section from '../components/ui/Section'
 import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
-import ActionCard from '../components/actions/ActionCard'
+import ImpactCard from '../components/actions/ImpactCard'
 
 // ── Utils
 import { ODDS } from '../utils/odds'
@@ -118,7 +118,7 @@ function NotreImpact() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-md">
             {filteredActions.map(action => (
-              <ActionCard
+              <ImpactCard
                 key={action.slug}
                 slug={action.slug}
                 title={action.title}
