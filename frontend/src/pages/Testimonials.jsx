@@ -24,7 +24,7 @@ import CTASection from '../components/ui/CTASection'
 // ── Composants métier
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import TestimonialForm from '../components/testimonials/TestimonialForm'
-import RapportCard from '../components/testimonials/RapportCard'
+import RapportCard from '../components/ui/RapportCard'
 
 // ── Utils
 import { FILTER_CONFIG_TEMOIGNAGES } from '../utils/filters'

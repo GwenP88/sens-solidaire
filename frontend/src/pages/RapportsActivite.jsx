@@ -11,7 +11,7 @@ import { fetchActivityReports } from '../services/api'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
 // ── Composants métier
-import RapportCard from '../components/testimonials/RapportCard'
+import RapportCard from '../components/ui/RapportCard'
 
 function RapportsActivite() {
   const [rapports, setRapports] = useState([])
