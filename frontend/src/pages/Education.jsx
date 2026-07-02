@@ -81,7 +81,7 @@ function Education() {
         ) : filteredItems.length === 0 ? (
           <p className="text-body text-primary/50 italic">Aucun atelier pour ce public.</p>
         ) : (
-          <div className="grid-cards-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-md">
             {filteredItems.map(item => (
               <EducationCard key={item.slug} item={item} />
             ))}

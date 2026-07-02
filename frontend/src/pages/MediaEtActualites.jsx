@@ -72,7 +72,7 @@ function MediaEtActualites() {
         ) : filteredPosts.length === 0 ? (
           <p className="text-body text-primary/50 italic">Aucun article pour ces critères.</p>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-md">
             {filteredPosts.map(post => (
               <MediaCard key={post.slug} {...post} />
             ))}
