@@ -54,7 +54,7 @@ function LocationDetail() {
 
       {/* ── Hero immersif — image du lieu + titre + pays si disponible ── */}
       <HeroPage
-        image={location.image_url || '/images/hero/hero-missions.jpg'}
+        image={location.image_url || '/images/placeholders/placeholder-action-1.png'}
         title={location.name}
         country={location.country || null}
       />
@@ -126,6 +126,8 @@ function LocationDetail() {
 
                 {/* Site web — location.website_url, champ optionnel pas encore en BDD */}
                 {location.website_url && (
+                <div className="flex flex-col gap-xs">
+                  <span className="text-eyebrow text-primary/40">Site web</span>
                   <a
                     href={location.website_url}
                     target="_blank"
@@ -133,27 +135,27 @@ function LocationDetail() {
                     className="flex items-center gap-xs link-cta text-accent hover:text-accent/80"
                   >
                     <IconGlobe className="shrink-0" />
-                    Visiter le site web →
+                    Visiter le site →
                   </a>
-                )}
+                </div>
+              )}
 
                 {/* Localisation — lien carte ou placeholder */}
                 <div className="flex flex-col gap-xs">
                   <span className="text-eyebrow text-primary/40">Localisation</span>
 
                   {location.map_url ? (
-                    /* Lien vers la carte — location.map_url pas encore en BDD */
-                    <a
-                      href={location.map_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-xs link-cta text-accent hover:text-accent/80"
-                    >
-                      <IconPin className="shrink-0" />
-                      Voir sur la carte →
-                    </a>
+                    <iframe
+                      src={location.map_url}
+                      width="100%"
+                      height="200"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="rounded-xl"
+                    />
                   ) : (
-                    /* Placeholder — champ non encore renseigné */
                     <div className="bg-surface rounded-xl p-4 text-center">
                       <IconPin className="text-primary/20 text-2xl mx-auto mb-1" />
                       <p className="text-caption text-primary/40 italic">Localisation à renseigner</p>
@@ -179,7 +181,12 @@ function LocationDetail() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
               {extraImages.map((m, i) => (
                 <div key={i} className="overflow-hidden rounded-xl">
-                  <img src={m.file_url} alt="" className="w-full h-56 object-cover" />
+                  <img
+                    src={m.file_url}
+                    alt=""
+                    onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.png' }}
+                    className="w-full h-56 object-cover"
+                  />
                 </div>
               ))}
             </div>
@@ -190,7 +197,12 @@ function LocationDetail() {
               color="primary"
               renderSlide={(m) => (
                 <div className="w-full h-56 overflow-hidden rounded-xl">
-                  <img src={m.file_url} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={m.file_url}
+                    alt=""
+                    onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.png' }}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               )}
             />

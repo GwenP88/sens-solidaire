@@ -56,19 +56,21 @@ model MissionPricing {
 // ─────────────────────────────────────────
 
 model Location {
-  id          Int      @id @default(autoincrement())
-  mission_id  Int
-  slug        String   @unique
-  name        String
-  country     String
-  description String
-  image_url   String?
-  is_active   Boolean  @default(true)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  mission     Mission  @relation(fields: [mission_id], references: [id])
-  delegation_id Int?
-  delegation    Delegation? @relation(fields: [delegation_id], references: [id])
+  id              Int         @id @default(autoincrement())
+  mission_id      Int
+  slug            String      @unique
+  name            String
+  country         String
+  description     String
+  image_url       String?
+  map_url         String?
+  website_url     String?
+  is_active       Boolean     @default(true)
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  mission         Mission     @relation(fields: [mission_id], references: [id])
+  delegation_id   Int?
+  delegation      Delegation? @relation(fields: [delegation_id], references: [id])
 }
 
 // ─────────────────────────────────────────
@@ -239,7 +241,7 @@ model TeamMember {
   description   String?
   avatar_url    String?
   category      String   // direction, bureau, ca, egalement
-  display_order Int    @default(0)
+  display_order Int      @default(0)
   is_active     Boolean  @default(true)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
@@ -264,7 +266,7 @@ model Delegation {
 }
 
 // ─────────────────────────────────────────
-// PARTENAIRES
+// PARTENAIRES (LOGOS)
 // ─────────────────────────────────────────
 model Partner {
   id            Int      @id @default(autoincrement())

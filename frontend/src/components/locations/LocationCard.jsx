@@ -16,6 +16,7 @@ function LocationCard({ slug, name, image_url }) {
           <img
             src={image_url || '/images/placeholders/placeholder-photo.png'}
             alt={name}
+            onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.png' }}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         </div>

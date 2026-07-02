@@ -418,7 +418,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Voi",
     country: "Kenya",
     description: "Voi est une ville située dans le comté de Taita-Taveta, aux portes du Parc national de Tsavo Est. C'est le point de départ de nos missions de protection de la faune sauvage au Kenya.",
-    image_url: "/images/lieux-missions/voi-kenya.jpeg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15931.2071768332!2d38.54641188963989!3d-3.3984885449885964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18392955840748c1%3A0x612879b76e474c69!2sVoi%2C%20Kenya!5e0!3m2!1sen!2sfr!4v1783003244824!5m2!1sen!2sfr",
+    website_url: null,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -432,7 +434,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "LUMO Community Wildlife Conservancy",
     country: "Kenya",
     description: "LUMO a vu le jour en 1997, d'un protocole d'entente entre trois ranchs de la zone des Taita Hills afin de lutter contre le braconnage et de protéger la diversité biologique kényane. Lumo fait partie du corridor historique de migration des éléphants reliant l'écosystème Tsavo aux collines de Shimba.",
-    image_url: "/images/lieux-missions/lumo-kenya.jpeg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.506650684568!2d38.1950834105512!3d-3.4692507964905737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1838e44717c2d29d%3A0x94b99ab36036edac!2sLumo%20Community%20Wildlife%20Conservancy!5e0!3m2!1sen!2sfr!4v1783003373372!5m2!1sen!2sfr",
+    website_url: "https://lumoconservancy.com/",
     delegation_id: delegLumo.id,
     is_active: true,
   }
@@ -442,12 +446,25 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "lumo-kenya", mission_id: missionKenya.id, ...lumoData },
   })
 
+  const lumoLocation = await prisma.location.findUnique({ where: { slug: 'lumo-kenya' } })
+  await prisma.media.deleteMany({ where: { entity_type: 'location', entity_id: lumoLocation.id } })
+  await prisma.media.createMany({
+    data: [
+      { entity_type: 'location', entity_id: lumoLocation.id, file_url: '/images/placeholders/placeholder-galerie-1.png', file_type: 'image', display_order: 1 },
+      { entity_type: 'location', entity_id: lumoLocation.id, file_url: '/images/placeholders/placeholder-galerie-2.png', file_type: 'image', display_order: 2 },
+      { entity_type: 'location', entity_id: lumoLocation.id, file_url: '/images/placeholders/placeholder-galerie-3.png', file_type: 'image', display_order: 3 },
+      { entity_type: 'location', entity_id: lumoLocation.id, file_url: '/images/placeholders/placeholder-galerie-4.png', file_type: 'image', display_order: 4 },
+    ]
+  })
+
   // ── Taita Taveta National Polytechnic ──────────────────────
   const ttnpData = {
     name: "Taita Taveta National Polytechnic",
     country: "Kenya",
     description: "Établissement d'enseignement supérieur de la ville de Voi, aux portes du Parc Tsavo. Cette université possède un pôle dédié au tourisme avec lequel nous travaillons particulièrement. Le campus est très engagé pour la biodiversité et possède sa propre pépinière.",
-    image_url: "/images/lieux-missions/ttnp-kenya.jpeg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.8655631167626!2d38.57651901055072!3d-3.3830053965774107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18392bfa98bf3af3%3A0xdbb9428c85b95a3c!2sTaita%20Taveta%20National%20Polytechnic%2C%20Voi!5e0!3m2!1sen!2sfr!4v1783003480686!5m2!1sen!2sfr",
+    website_url: null,
     delegation_id: delegTtnp.id,
     is_active: true,
   }
@@ -462,7 +479,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Elsa Conservation Trust",
     country: "Kenya",
     description: "La Elsa Conservation Trust a fait don de millions de dollars à des projets de conservation de la vie sauvage, aidant à créer les parcs kenyans de Meru, Samburu, Shaba, Kora et Hells Gate. Le centre offre un environnement propice à la recherche ornithologique avec 450 espèces d'oiseaux recensées.",
-    image_url: "/images/lieux-missions/etc-kenya.jpeg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3086.1469911782483!2d36.31317642592106!3d-0.814968236091608!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182938fec8ba611d%3A0x9c93221648e498ad!2sElsamere%20Conservation%20Centre!5e0!3m2!1sen!2sfr!4v1783003508532!5m2!1sen!2sfr",
+    website_url: null,
     delegation_id: delegElsa.id,
     is_active: true,
   }
@@ -477,7 +496,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Diani Turtle Watch",
     country: "Kenya",
     description: "Diani Turtle Watch, créé en 2012, travaille avec une équipe de 14 observateurs couvrant 50 km sur la côte sud du Kenya. Les principales espèces suivies sont les tortues vertes et les tortues imbriquées. Il sensibilise les communautés locales, les écoles et les touristes aux espèces menacées.",
-    image_url: "/images/lieux-missions/dtw-kenya.jpg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3978.445318644362!2d39.569509510555534!3d-4.327148895628687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18404953574d39e9%3A0x76f7b649b72d4c05!2sDiani%20Turtle%20Watch!5e0!3m2!1sen!2sfr!4v1783003553259!5m2!1sen!2sfr",
+    website_url: null,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -491,7 +512,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Ziguinchor",
     country: "Sénégal",
     description: "Ziguinchor est la capitale de la Casamance, région au sud du Sénégal connue pour sa verdure exceptionnelle et sa culture riche. Nos missions de développement communautaire s'y déroulent dans un cadre chaleureux, au contact direct des familles locales.",
-    image_url: "/images/lieux-missions/ziguinchor-senegal.jpg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31154.710103122015!2d-16.294826054807107!3d12.559899910713627!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee793dbd0cbdc17%3A0x25b90fb2e17e99df!2sZiguinchor%2C%20Senegal!5e0!3m2!1sen!2sfr!4v1783003576053!5m2!1sen!2sfr",
+    website_url: null,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -505,7 +528,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "ONG AGADA",
     country: "Sénégal",
     description: "AGADA (Agir Autrement pour le Développement en Afrique), basée à Ziguinchor en Casamance, œuvre pour le développement d'activités économiques locales. Investie depuis plus de 30 ans, elle soutient le reboisement de la mangrove, l'agriculture durable et la protection d'espèces patrimoniales comme le lamantin.",
-    image_url: "/images/lieux-missions/agada-senegal.jpg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3894.3059138975273!2d-16.269258789351788!3d12.562068987665677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee791db8464e97b%3A0xa482f94cddde02ca!2sAgir%20Autrement%20pour%20le%20D%C3%A9veloppement%20de%20l&#39;Afrique%20(AGADA)!5e0!3m2!1sen!2sfr!4v1783003612281!5m2!1sen!2sfr",
+    website_url: null,
     delegation_id: delegAgada.id,
     is_active: true,
   }
@@ -520,7 +545,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Puerto Maldonado",
     country: "Pérou",
     description: "Puerto Maldonado est la capitale de la région de Madre de Dios, aux portes de la Réserve nationale de Tambopata en Amazonie péruvienne. C'est l'un des points d'entrée les plus importants pour la biodiversité amazonienne.",
-    image_url: "/images/lieux-missions/puerto-maldonado-perou.jpg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62298.00533978558!2d-69.23876695942893!3d-12.606926281720266!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x917b4beea5e653b1%3A0xe6c855b71f8fb54f!2sPuerto%20Maldonado%2C%20Peru!5e0!3m2!1sen!2sfr!4v1783003639436!5m2!1sen!2sfr",
+    website_url: null,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -534,7 +561,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Amazon Shelter",
     country: "Pérou",
     description: "Le centre de réhabilitation Amazon Shelter, proche de Puerto Maldonado, est axé sur la conservation des singes laineux et d'atèles. Amazon Shelter poursuit un travail de plantation d'espèces sauvages menacées sur 90 hectares : cèdres blancs, acajous, fruitiers sauvages et palmiers.",
-    image_url: "/images/lieux-missions/amazon-shelter-perou.jpg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3893.0502139918294!2d-69.19734378935038!3d-12.644710587589872!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x917b4b804f0f8d55%3A0xed30946df67f6bd2!2sAmazon%20Shelter!5e0!3m2!1sen!2sfr!4v1783003667486!5m2!1sen!2sfr",
+    website_url: null,
     delegation_id: delegAmazon.id,
     is_active: true,
   }
@@ -549,7 +578,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Kegalle",
     country: "Sri Lanka",
     description: "Kegalle est une ville de la province de Sabaragamuwa, dans les collines verdoyantes du centre du Sri Lanka. Notre sanctuaire d'éléphants y accueille des éléphants blessés ou orphelins dans un cadre naturel préservé, loin du tourisme de masse.",
-    image_url: "/images/lieux-missions/kegalle-sri-lanka.jpg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15831.55592355434!2d80.33539999007992!3d7.253474533565451!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae316b5affca98d%3A0xec4aece6bdbb55b1!2sKegalle%2C%20Sri%20Lanka!5e0!3m2!1sen!2sfr!4v1783003694518!5m2!1sen!2sfr",
+    website_url: null,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -563,7 +594,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Millenium Elephant Foundation",
     country: "Sri Lanka",
     description: "La Millenium Elephant Foundation (MEF) créée en 1999 à Kegalle a pour objectif la protection des éléphants sauvages et domestiques du Sri Lanka. Les éléphants malades et maltraités y sont accueillis. Plus de 60 éléphants ont pu y être hébergés.",
-    image_url: "/images/lieux-missions/mef-sri-lanka.jpg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.6985117037166!2d80.3810469105785!3d7.275106092701699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae3143ebe9f66e9%3A0x51d428851f9df151!2sMillennium%20Elephant%20Foundation!5e0!3m2!1sen!2sfr!4v1783003735878!5m2!1sen!2sfr",
+    website_url: null,
     delegation_id: delegMef.id,
     is_active: true,
   }
@@ -578,7 +611,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Bohorok",
     country: "Indonésie",
     description: "Bohorok est un village situé à l'orée du Parc national de Gunung Leuser, à Sumatra Nord. Ce parc est l'un des derniers endroits au monde où cohabitent orang-outans, tigres de Sumatra, rhinocéros et éléphants.",
-    image_url: "/images/lieux-missions/bohorok-sumatra.jpg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15929.235224148893!2d98.1430297896486!3d3.515888843097633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3030c7979b829cad%3A0x68ae15ff22e32241!2sBohorok%2C%20Timbang%20Lawan%2C%20Bohorok%2C%20Langkat%20Regency%2C%20North%20Sumatra%2C%20Indonesia!5e0!3m2!1sen!2sfr!4v1783003766296!5m2!1sen!2sfr",
+    website_url: null,
     is_active: true,
   }
   await prisma.location.upsert({
@@ -592,7 +627,9 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     name: "Batu Kapal Conservation",
     country: "Indonésie",
     description: "Le sanctuaire de Batu Kapal se trouve au cœur de la forêt qui surplombe le parc national Gunung Leuser, classé au patrimoine mondial de l'UNESCO. Il accueille des visites fréquentes d'orangs-outans, espèce en danger critique dont la population a diminué de 86% en 100 ans.",
-    image_url: "/images/lieux-missions/batu-kapal-sumatra.jpg",
+    image_url: null,
+    map_url : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.2984708366107!2d98.1213742105514!3d3.518308196441196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3030b99d565bdb21%3A0x190b2c3beaad7a36!2sBatu%20Kapal%20Conservation!5e0!3m2!1sen!2sfr!4v1783003793658!5m2!1sen!2sfr",
+    website_url: null,
     delegation_id: delegBatu.id,
     is_active: true,
   }
