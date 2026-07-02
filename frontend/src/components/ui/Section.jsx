@@ -27,7 +27,7 @@ function Section({
       {cta ? (
         // ── Avec CTA — section-header place le bloc texte à gauche, le bouton à droite ── */}
         <div className="section-header">
-          <div>
+          <div className="max-w-4xl">
             {eyebrow && <p className="text-eyebrow text-accent-2">{eyebrow}</p>}
             <h2 className={`h2-style ${textColor}`}>{title}</h2>
             {subtitle && <p className={`section-subtitle ${subTextColor}`}>{subtitle}</p>}
