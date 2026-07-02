@@ -39,7 +39,7 @@ function ActionCard({ title, description, tags, slug, country, image, odds }) {
         {/* ── Zone basse — CTA + pays, toujours alignés en bas ── */}
         <div className="flex items-center justify-between">
           <a href={`/notre-impact/${slug}`}>
-            <Button variant="primary" label="Découvrir →" />
+            <Button variant="light" label="Découvrir →" />
           </a>
           <span className="text-caption text-surface/70 flex items-center gap-xs">
             <IconPin /> {country}

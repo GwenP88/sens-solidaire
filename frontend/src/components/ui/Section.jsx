@@ -32,9 +32,9 @@ function Section({
             <h2 className={`h2-style ${textColor}`}>{title}</h2>
             {subtitle && <p className={`section-subtitle ${subTextColor}`}>{subtitle}</p>}
           </div>
-          <a href={cta.href}>
-            <Button label={cta.label} variant="primary" />
-          </a>
+            <a href={cta.href} target={cta.target || '_self'} rel={cta.target === '_blank' ? 'noopener noreferrer' : undefined}>
+              <Button label={cta.label} variant="primary" />
+            </a>
         </div>
       ) : (
         // ── Sans CTA — titre simple suivi du sous-titre, aucun CTA aligné à droite ── */}
