@@ -11,24 +11,24 @@ import { fetchTeamMembers, fetchDelegations } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
 import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
-import TeamMemberCardLarge from '../components/team/TeamMemberCardLarge'
-import TeamMemberCardSmall from '../components/team/TeamMemberCardSmall'
+import TeamMemberCard from '../components/team/TeamMemberCard'
 import DelegationCard from '../components/team/DelegationCard'
 
 function Equipe() {
+  // ── État local — membres par catégorie + délégations
   const [direction, setDirection] = useState([])
   const [bureau, setBureau] = useState([])
   const [ca, setCa] = useState([])
   const [egalement, setEgalement] = useState([])
   const [delegations, setDelegations] = useState([])
 
+  // ── Chargement de toutes les données en parallèle au montage
   useEffect(() => {
     fetchTeamMembers('direction').then(setDirection).catch(console.error)
     fetchTeamMembers('bureau').then(setBureau).catch(console.error)
@@ -40,18 +40,20 @@ function Equipe() {
   return (
     <div className="bg-surface min-h-screen">
 
+      {/* ── Hero immersif ── */}
       <HeroPage
         image="/images/hero/hero-missions.jpg"
         title="Notre équipe"
         subtitle="Des femmes et des hommes engagés, en France et à l'international, pour un monde plus juste et la protection de la biodiversité."
       />
 
-      {/* ── Direction — grille responsive ── */}
+      {/* ── Direction — cards larges ── */}
       <Section title="Direction">
         <div className="grid-cards-3">
           {direction.map(m => (
-            <TeamMemberCardLarge
+            <TeamMemberCard
               key={m.id}
+              variant="large"
               nom={m.nom}
               role={m.role}
               description={m.description}
@@ -61,12 +63,13 @@ function Equipe() {
         </div>
       </Section>
 
-      {/* ── Bureau — grille responsive ── */}
+      {/* ── Bureau — cards larges, fond inversé ── */}
       <Section title="Membres du bureau" bg="bg-surface-mid">
         <div className="grid-cards-3">
           {bureau.map(m => (
-            <TeamMemberCardLarge
+            <TeamMemberCard
               key={m.id}
+              variant="large"
               nom={m.nom}
               role={m.role}
               description={m.description}
@@ -77,19 +80,18 @@ function Equipe() {
         </div>
       </Section>
 
-      {/* ── Conseil d'administration — carousel toutes tailles ── */}
+      {/* ── Conseil d'administration — carousel ── */}
       <Section title="Conseil d'administration">
         <Carousel
           items={ca}
           renderSlide={(m) => (
-            <TeamMemberCardSmall
+            <TeamMemberCard
+              variant="small"
               nom={m.nom}
               role={m.role}
               avatar={m.avatar_url}
             />
           )}
-          slidesPerView={3}
-          spaceBetween={24}
           showPagination={true}
           color="primary"
         />
@@ -100,8 +102,8 @@ function Equipe() {
         <Carousel
           items={egalement}
           renderSlide={(m) => (
-            <TeamMemberCardSmall
-              key={m.id}
+            <TeamMemberCard
+              variant="small"
               nom={m.nom}
               role={m.role}
               avatar={m.avatar_url}
@@ -113,7 +115,7 @@ function Equipe() {
         />
       </Section>
 
-      {/* ── Délégations — carousel toutes tailles ── */}
+      {/* ── Délégations — carousel ── */}
       <Section title="Nos délégations et partenaires terrain">
         <Carousel
           items={delegations}
@@ -126,8 +128,6 @@ function Equipe() {
               contacts={d.contacts}
             />
           )}
-          slidesPerView={3}
-          spaceBetween={24}
           showPagination={true}
           color="primary"
         />

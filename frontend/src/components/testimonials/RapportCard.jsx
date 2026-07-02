@@ -1,43 +1,48 @@
 // RapportCard.jsx
-// Card rapport de mission — wrapper de BaseContentCard
-// Zone haute : année + destination | Zone centrale : auteur | Zone basse : bouton télécharger
+// Card rapport — rapport de mission ET rapport d'activité
+// Layout identique à BaseContentCard : portrait → paysage 768 → portrait 1024+
+// Card indépendante — hauteurs adaptées au contenu court des rapports
 // Props :
-//   auteur      : nom du/des auteur(s)
-//   annee       : année de la mission
-//   destination : destination optionnelle
+//   auteur      : nom ou type du rapport
+//   annee       : année
+//   destination : destination optionnelle (rapports de mission)
 //   pdf_url     : lien vers le PDF
-//   image       : image optionnelle (V2 : upload par la cliente)
+//   image       : image optionnelle (fallback si absente)
 
 // ── Composants UI
 import Button from '../ui/Button'
-import BaseContentCard from '../ui/BaseContentCard'
 
-function RapportCard({ auteur, annee, destination, pdf_url, image }) {
+function RapportCard({ auteur, annee, destination, type, pdf_url, image, bg = 'bg-accent-2' }) {
   return (
-    <BaseContentCard
-      image={image}
-      fallbackImage="/images/temoignages-et-rapports-missions/rapport-mission.png"
-      alt={`Rapport ${auteur}`}
-      bg="bg-accent-2"
-    >
+    <article className={`flex flex-col ${bg} rounded-2xl overflow-hidden `}>
 
-      {/* ── Zone haute — année + destination ── */}
-      <div className="flex flex-col gap-xs">
-        <span className="text-eyebrow text-surface/60 mb-0">
-          {annee}{destination ? ` — ${destination}` : ''}
-        </span>
-        <p className="text-caption text-surface/70">{auteur}</p>
+      {/* ── Zone image ── */}
+      <div className="w-full h-40 overflow-hidden shrink-0">
+        <img
+          src={image || '/images/temoignages-et-rapports-missions/rapport-mission.png'}
+          alt={`Rapport ${auteur}`}
+          className="w-full h-full object-cover"
+        />
       </div>
 
-      {/* ── Zone centrale — vide, espace géré par justify-between ── */}
-      <div className="flex-1" />
+      {/* ── Zone contenu ── */}
+      <div className="flex flex-col justify-between flex-1 min-w-0 p-6 gap-sm">
 
-      {/* ── Zone basse — bouton télécharger ── */}
-      <a href={pdf_url} target="_blank" rel="noopener noreferrer">
-        <Button label="Télécharger le rapport ↓" variant="light" fullWidth />
-      </a>
+        {/* ── Zone haute — année + destination/type + auteur ── */}
+        <div className="flex flex-col gap-xs">
+          <span className="text-eyebrow text-surface/60 mb-0">
+            {annee}{destination ? ` — ${destination}` : ''}{type ? ` — ${type}` : ''}
+          </span>
+          <p className="text-caption text-surface/70">{auteur}</p>
+        </div>
 
-    </BaseContentCard>
+        {/* ── Zone basse — bouton télécharger ── */}
+        <a href={pdf_url} target="_blank" rel="noopener noreferrer">
+          <Button label="Télécharger le rapport ↓" variant="light" fullWidth />
+        </a>
+
+      </div>
+    </article>
   )
 }
 
