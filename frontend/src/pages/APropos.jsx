@@ -15,6 +15,8 @@ import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
 import CTASection from '../components/ui/CTASection'
+import TeamMemberCard from '../components/team/TeamMemberCard'
+import Carousel from '../components/ui/Carousel'
 
 // ── Utils
 import { IconHeart, IconGlobe, IconPeople, IconLeaf, IconGuide } from '../utils/icons'
@@ -37,15 +39,18 @@ const ACTIVITES = [
 ]
 
 function APropos() {
-  // ── État local — 4 membres de la direction pour l'aperçu équipe
-  const [direction, setDirection] = useState([])
+// ── État local — membres direction + bureau pour l'aperçu équipe
+const [direction, setDirection] = useState([])
+const [bureau, setBureau] = useState([])
 
-  // ── Chargement des membres direction depuis l'API au montage
-  useEffect(() => {
-    fetchTeamMembers('direction', 4)
-      .then(data => setDirection(data))
-      .catch(err => console.error(err))
-  }, [])
+useEffect(() => {
+  fetchTeamMembers('direction', 4)
+    .then(setDirection)
+    .catch(console.error)
+  fetchTeamMembers('bureau', 4)
+    .then(setBureau)
+    .catch(console.error)
+}, [])
 
   return (
     <div className="bg-surface min-h-screen">
@@ -121,7 +126,7 @@ function APropos() {
         </div>
       </Section>
 
-      {/* ── Aperçu équipe — 4 membres direction depuis l'API ── */}
+      {/* ── Aperçu équipe — membres direction + bureau en carousel ── */}
       <Section
         bg="bg-surface-mid"
         eyebrow="L'équipe engagée"
@@ -129,15 +134,20 @@ function APropos() {
         subtitle="Une équipe passionnée et engagée sur le terrain comme au quotidien."
         cta={{ label: "Découvrir toute l'équipe →", href: "/equipe" }}
       >
-        <div className="grid-cards-4">
-          {direction.map(m => (
-            <div key={m.id} className="flex flex-col items-center gap-sm bg-surface rounded-2xl p-6 text-center">
-              <img src={m.avatar_url || '/placeholder-testimonials.png'} alt={m.nom} className="w-20 h-20 rounded-full object-cover" />
-              <p className="h3-style text-primary">{m.nom}</p>
-              <p className="text-caption text-primary/60">{m.role}</p>
-            </div>
-          ))}
-        </div>
+        <Carousel
+          items={[...direction, ...bureau]}
+          renderSlide={(m) => (
+            <TeamMemberCard
+              variant="small"
+              nom={m.nom}
+              role={m.role}
+              avatar={m.avatar_url}
+              bg="bg-surface"
+            />
+          )}
+          showPagination={true}
+          color="primary"
+        />
       </Section>
 
       {/* ── Transparence — texte + image + lien rapports ── */}
