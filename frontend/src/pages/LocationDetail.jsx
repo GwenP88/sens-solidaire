@@ -98,11 +98,6 @@ function LocationDetail() {
                   Les volontaires Sens Solidaire interviennent directement avec les équipes de ce partenaire local.
                   Chaque action menée sur place s'inscrit dans une démarche durable et en lien étroit avec les communautés.
                 </p>
-                {location.mission?.slug && (
-                  <a href={`/missions/${location.mission.slug}`} className="link-cta text-accent hover:text-accent/80">
-                    Voir la mission associée →
-                  </a>
-                )}
               </div>
 
             </div>

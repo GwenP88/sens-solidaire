@@ -13,6 +13,7 @@ import HeroPage from '../components/layout/HeroPage'
 // ── Composants UI
 import Filters from '../components/navigation/Filters'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Section from '../components/ui/Section'
 
 // ── Composants métier
 import MediaCard from '../components/media/MediaCard'
@@ -56,7 +57,7 @@ function MediaEtActualites() {
         subtitle="Restez informés des dernières nouvelles de l'association, de nos missions et de nos actions sur le terrain."
       />
 
-      {/* ── Barre de filtres — via Filters (orchestrateur FilterSelect/FilterChips) ── */}
+      {/* ── Barre de filtres ── */}
       <div className="bg-primary padding-x filter-py">
         <Filters
           selects={FILTER_CONFIG_MEDIAS}
@@ -66,7 +67,7 @@ function MediaEtActualites() {
       </div>
 
       {/* ── Grille des articles ── */}
-      <section className="padding-y padding-x">
+      <Section>
         {loading ? (
           <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredPosts.length === 0 ? (
@@ -78,7 +79,7 @@ function MediaEtActualites() {
             ))}
           </div>
         )}
-      </section>
+      </Section>
 
       <ScrollToTop />
     </div>
