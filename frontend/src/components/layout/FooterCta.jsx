@@ -21,7 +21,7 @@ function FooterCta({ hideCta = false }) {
         <p className="text-lead text-surface">
           Rejoignez-nous sur le terrain ou soutenez nos projets. <br /> Ensemble, construisons un avenir plus solidaire.
         </p>
-        <div className="flex flex-row gap-sm mt-2">
+        <div className="flex flex-wrap gap-sm mt-2">
           <a href="/missions">
             <Button label="Je pars en mission →" variant="primary" />
           </a>

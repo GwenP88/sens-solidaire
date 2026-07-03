@@ -6,7 +6,7 @@ import React from 'react'
 
 function MissionInfoBar({ items }) {
   return (
-    <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-around gap-sm padding-x py-4">
+    <div className="grid grid-cols-2 sm:flex sm:flex-nowrap items-center justify-around gap-sm py-4">
       {items.map((item, i) => (
         <React.Fragment key={item.label}>
           <span className="text-caption text-primary/60 flex flex-col items-center gap-xs text-center">

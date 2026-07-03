@@ -383,6 +383,7 @@
   letter-spacing: 0.05em;
   transition: colors 0.2s;
   cursor: pointer;
+  white-space: nowrap;
 }
 @media (min-width: 768px) {
   .btn-base { padding: 0.5rem 1rem; font-size: 0.8rem; }

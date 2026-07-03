@@ -74,7 +74,7 @@ function Missions() {
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (error) return <p className="text-body text-accent p-12">Erreur : {error}</p>
 
-  const missionVolontariat = missions.filter(m => m.type === 'volontariat_individuel')
+  const missionVolontariat    = missions.filter(m => m.type === 'volontariat_individuel')
   const missionServiceCivique = missions.filter(m => m.type === 'service_civique')
 
   const stepsServiceCivique = [
@@ -150,14 +150,15 @@ function Missions() {
         subtitle="Parce que l'engagement est ouvert à tous, nos missions s'adaptent à chaque profil : seul, à deux, en groupe, en famille ou avec votre entreprise, vivez une expérience humaine et solidaire au service de la biodiversité."
       />
 
-      {/* ── Bloc orientation ── */}
+      {/* ── Bloc orientation — quelle mission est faite pour vous ? ── */}
       <section className="padding-y padding-x bg-surface-mid">
-        <h2 className="h2-style text-primary mb-8">Quelle mission est faite pour vous ?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <h2 className="h2-style text-primary">Quelle mission est faite pour vous ?</h2>
+        {/* gap-sm : entre les cards d'orientation */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-sm">
           {[
-            { icon: IconPerson, situation: 'Vous souhaitez partir seul, à deux ou en petit groupe pour participer concrètement à un projet solidaire ?', label: 'Volontariat individuel', filter: 'individuel' },
-            { icon: IconClock, situation: 'Vous avez entre 16 et 25 ans et recherchez une expérience citoyenne riche de sens ?', label: 'Service Civique', filter: 'service_civique' },
-            { icon: IconPeople, situation: 'Vous représentez un lycée ou une structure jeunesse et souhaitez organiser un projet collectif ?', label: 'Mission de groupe', filter: 'groupe_jeunes' },
+            { icon: IconPerson,   situation: 'Vous souhaitez partir seul, à deux ou en petit groupe pour participer concrètement à un projet solidaire ?', label: 'Volontariat individuel', filter: 'individuel' },
+            { icon: IconClock,    situation: 'Vous avez entre 16 et 25 ans et recherchez une expérience citoyenne riche de sens ?', label: 'Service Civique', filter: 'service_civique' },
+            { icon: IconPeople,   situation: 'Vous représentez un lycée ou une structure jeunesse et souhaitez organiser un projet collectif ?', label: 'Mission de groupe', filter: 'groupe_jeunes' },
             { icon: IconBuilding, situation: 'Vous êtes salarié et souhaitez donner du sens à vos congés en vous engageant dans un projet solidaire à impact positif ?', label: 'Congé solidaire', filter: 'conge_solidaire' },
           ].map(item => {
             const Icon = item.icon
@@ -165,11 +166,11 @@ function Missions() {
               <button
                 key={item.filter}
                 onClick={() => handleFilter(item.filter)}
-                className="flex flex-col gap-4 bg-surface rounded-2xl p-6 text-left hover:shadow-md transition-shadow group"
+                className="flex flex-col gap-sm bg-surface rounded-2xl p-6 text-left hover:shadow-md transition-shadow group"
               >
                 <Icon className="text-accent-2 text-2xl" />
                 <p className="text-body text-primary/60 flex-1">{item.situation}</p>
-                <p className="h3-style text-primary group-hover:text-accent transition-colors">{item.label} →</p>
+                <p className="h3-style text-primary mb-0 group-hover:text-accent transition-colors">{item.label} →</p>
               </button>
             )
           })}
@@ -206,10 +207,10 @@ function Missions() {
             </>
           }
           infoBarItems={[
-            { icon: IconPerson, label: 'Individuel ou groupe' },
-            { icon: IconClock, label: '10 jours à 4 semaines' },
+            { icon: IconPerson,  label: 'Individuel ou groupe' },
+            { icon: IconClock,   label: '10 jours à 4 semaines' },
             { icon: IconPayment, label: 'à partir de 1175€' },
-            { icon: IconMoney, label: 'Réduction d\'impôt 66 %' },
+            { icon: IconMoney,   label: 'Réduction d\'impôt 66 %' },
           ]}
           testimonialsUrl="/temoignages"
           carouselItems={missionVolontariat}
@@ -246,9 +247,9 @@ function Missions() {
           }
           infoBarItems={[
             { icon: IconPerson, label: '16-25 ans' },
-            { icon: IconClock, label: '6 à 12 mois' },
-            { icon: IconPin, label: 'France & étranger' },
-            { icon: IconMoney, label: 'Indemnité mensuelle' },
+            { icon: IconClock,  label: '6 à 12 mois' },
+            { icon: IconPin,    label: 'France & étranger' },
+            { icon: IconMoney,  label: 'Indemnité mensuelle' },
           ]}
           primaryAction={{ label: 'Candidater →', href: 'https://www.service-civique.gouv.fr/', external: true }}
           testimonialsUrl="/temoignages?type=service_civique"
@@ -291,9 +292,9 @@ function Missions() {
           }
           infoBarItems={[
             { icon: IconPeople, label: 'Groupe encadré' },
-            { icon: IconClock, label: '10 jours' },
-            { icon: IconPin, label: 'Kenya ou Sénégal' },
-            { icon: IconHeart, label: 'Projet éducatif' },
+            { icon: IconClock,  label: '10 jours' },
+            { icon: IconPin,    label: 'Kenya ou Sénégal' },
+            { icon: IconHeart,  label: 'Projet éducatif' },
           ]}
           primaryAction={{ label: 'Monter votre projet →', href: '/contact' }}
           testimonialsUrl="/temoignages?type=groupe_jeune"
@@ -301,19 +302,21 @@ function Missions() {
           steps={stepsGroupeJeunes}
           bgCard="bg-surface-mid"
         >
-          {/* PDFs */}
+          {/* PDFs téléchargeables */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-2">Tout ce qu'il faut savoir avant de s'engager</h3>
+            <h3 className="h3-style text-primary mb-0">Tout ce qu'il faut savoir avant de s'engager</h3>
             <p className="text-body text-primary/60 mb-8">
               Retrouvez les dossiers de présentation détaillés pour découvrir les objectifs pédagogiques, le déroulement des missions, les conditions de participation et les informations pratiques.
             </p>
-            <div className="flex flex-col sm:flex-row gap-6">
+            {/* gap-md : entre les deux cards PDF */}
+            <div className="flex flex-col sm:flex-row gap-md">
               {[
-                { title: "Mission groupe — Kenya", size: "1,2 Mo" },
+                { title: "Mission groupe — Kenya",   size: "1,2 Mo" },
                 { title: "Mission groupe — Sénégal", size: "1,2 Mo" },
               ].map(pdf => (
                 <div key={pdf.title} className="flex items-center justify-between bg-surface-mid rounded-xl px-6 py-4 flex-1">
-                  <div className="flex items-center gap-4">
+                  {/* gap-sm : entre icône PDF et texte */}
+                  <div className="flex items-center gap-sm">
                     <span className="text-eyebrow text-primary/40">PDF</span>
                     <div>
                       <p className="text-body text-primary">{pdf.title}</p>
@@ -328,14 +331,12 @@ function Missions() {
 
           {/* Galerie */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-2">Ils ont vécu l'aventure</h3>
+            <h3 className="h3-style text-primary mb-0">Ils ont vécu l'aventure</h3>
             <p className="text-body text-primary/60 mb-8">
               Rencontres, découvertes, projets de terrain, moments de partage... découvrez quelques souvenirs de nos missions de groupe au Kenya et au Sénégal.
             </p>
             <Carousel
               items={[1, 2, 3, 4]}
-              slidesPerView={3}
-              spaceBetween={16}
               showPagination={true}
               color="primary"
               renderSlide={(_, i) => (
@@ -364,9 +365,9 @@ function Missions() {
           }
           infoBarItems={[
             { icon: IconBuilding, label: 'Salariés & entreprises' },
-            { icon: IconClock, label: '10 jours à 4 semaines' },
-            { icon: IconPin, label: 'Kenya ou Sénégal' },
-            { icon: IconMoney, label: 'Réduction d\'impôt 60 %' },
+            { icon: IconClock,    label: '10 jours à 4 semaines' },
+            { icon: IconPin,      label: 'Kenya ou Sénégal' },
+            { icon: IconMoney,    label: 'Réduction d\'impôt 60 %' },
           ]}
           primaryAction={{ label: 'En savoir plus →', href: 'https://france-volontaires.org/le-conge-de-solidarite-internationale/', external: true }}
           testimonialsUrl="/temoignages?type=conge_solidaire"
@@ -374,15 +375,14 @@ function Missions() {
           steps={stepsCongeSolidaire}
           bgCard="bg-surface"
         >
+          {/* Galerie */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-2">Des collaborateurs engagés sur le terrain</h3>
+            <h3 className="h3-style text-primary mb-0">Des collaborateurs engagés sur le terrain</h3>
             <p className="text-body text-primary/60 mb-8">
               Découvrez quelques moments vécus lors de nos missions solidaires réalisées avec des entreprises partenaires au Kenya et au Sénégal.
             </p>
             <Carousel
               items={[1, 2, 3, 4]}
-              slidesPerView={3}
-              spaceBetween={16}
               showPagination={true}
               color="primary"
               renderSlide={(_, i) => (

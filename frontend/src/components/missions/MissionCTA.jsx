@@ -9,7 +9,7 @@ import Button from '../ui/Button'
 
 function MissionCTA({ primaryAction, testimonialsUrl, contactUrl = '/contact' }) {
   return (
-    <div className="flex flex-col sm:flex-row gap-sm">
+    <div className="flex flex-col sm:flex-wrap gap-sm">
 
       {/* Bouton primaire — optionnel (candidater, télécharger, en savoir plus...) */}
       {primaryAction && (
