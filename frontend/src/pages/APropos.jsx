@@ -66,10 +66,10 @@ useEffect(() => {
         <div className="flex flex-col xl:flex-row gap-lg items-center">
           <div className="flex flex-col gap-sm flex-1">
             <p className="text-body text-primary/80">
-              Sens Solidaires est une association d'intérêt général régie par la loi 1901. Née d'une conviction simple : le voyage peut être un formidable vecteur de rencontres, d'échanges et de transformation, à condition d'être vécu dans le respect des populations et de l'environnement.
+              Sens Solidaires est une association d'intérêt général régie par la loi 1901. Née d'une conviction simple : le voyage peut être un formidable vecteur de rencontres, d'échanges et de transformation, à condition d'être vécu dans le respect des populations et de l'environnement. Elle est également reconnue pour son engagement international à travers ses accréditations et cadres de référence, notamment auprès de l'ONU, de l'UICN et des Objectifs de Développement Durable.
             </p>
             <p className="text-body text-primary/80">
-              Depuis plus de 15 ans, nous œuvrons aux côtés des communautés locales à travers des missions de terrain, des projets solidaires et des actions d'éducation à la citoyenneté mondiale.
+              Depuis plus de 15 ans, nous œuvrons aux côtés des communautés locales à travers des missions de terrain, des projets solidaires et des actions d'éducation à la citoyenneté mondiale. 
             </p>
             <p className="text-body text-primary/80">
               Sens Solidaires est <strong>multiculturelle, indépendante, apolitique et à vocation internationale.</strong> Nous contribuons à la préservation de l'environnement par des actions de solidarité internationale.

@@ -148,7 +148,7 @@ model FieldAction {
   title       String
   description String   // court — utilisé comme H2 sur la page détail
   content     String   // texte long — paragraphes séparés par \n\n
-  country     String   // Kenya, Sénégal, Sri Lanka...
+  countries   FieldActionCountry[]
   image_url   String?  // image principale
   is_active   Boolean  @default(true)
   created_at  DateTime @default(now())
@@ -179,6 +179,17 @@ model FieldActionODD {
   field_action  FieldAction @relation(fields: [action_id], references: [id])
   action_id     Int
   odd_number    Int         // 1 à 17
+}
+
+// ─────────────────────────────────────────
+// PAYS LIE A UNE ACTION SUR LE TERRAIN
+// ─────────────────────────────────────────
+
+model FieldActionCountry {
+  id          Int         @id @default(autoincrement())
+  field_action FieldAction @relation(fields: [action_id], references: [id])
+  action_id   Int
+  country     String      // "France", "Kenya", "Sénégal"...
 }
 
 // ─────────────────────────────────────────
