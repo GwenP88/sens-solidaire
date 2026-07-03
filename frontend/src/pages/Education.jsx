@@ -14,6 +14,7 @@ import HeroPage from '../components/layout/HeroPage'
 import Filters from '../components/navigation/Filters'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
+import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
 import EducationCard from '../components/education/EducationCard'
@@ -87,6 +88,13 @@ function Education() {
           </div>
         )}
       </Section>
+
+      <CTASection
+        title="Vous souhaitez accueillir une intervention ?"
+        text="Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux."
+        ctaLabel="Nous contacter →"
+        ctaHref="/contact"
+      />
 
       <ScrollToTop />
     </div>

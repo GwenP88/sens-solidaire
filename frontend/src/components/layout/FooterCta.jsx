@@ -10,6 +10,7 @@ function FooterCta({ hideCta = false }) {
 
   if (hideCta) return null
 
+
 // Résolution — alias exact d'abord, puis préfixe, puis config directe, sinon default
 const resolvedByPrefix = FOOTER_CTA_PREFIXES.find(p => pathname.startsWith(p.prefix))
 const resolvedRoute = FOOTER_CTA_ALIASES[pathname] || resolvedByPrefix?.config || pathname
