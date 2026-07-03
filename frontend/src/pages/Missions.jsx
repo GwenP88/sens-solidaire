@@ -74,69 +74,69 @@ function Missions() {
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (error) return <p className="text-body text-accent p-12">Erreur : {error}</p>
 
-  const missionVolontariat = missions.filter(m => m.type === 'volontariat_individuel')
+  const missionVolontariat    = missions.filter(m => m.type === 'volontariat_individuel')
   const missionServiceCivique = missions.filter(m => m.type === 'service_civique')
 
   const stepsServiceCivique = [
     {
       icon: IconFrance,
       title: 'Mission en France : Nice ou Annemasse',
-      description: 'Pendant la première partie de votre Service Civique, vous intervenez auprès de scolaires et du grand public pour sensibiliser aux enjeux du développement durable.',
-      list: ['L\'animation d\'ateliers autour des 17 Objectifs de Développement Durable', 'La coordination de correspondances scolaires avec nos partenaires étrangers', 'La promotion de nos actions et projets', 'La recherche de nouveaux partenaires', 'La communication et la recherche de financements'],
+      description: 'Pendant plusieurs mois, vous animez des actions de sensibilisation au développement durable et découvrez le fonctionnement de l\'association avant votre mission à l\'international',
+      list: ['Animation d\'ateliers pédagogiques', 'Promotion des projets de l\'association', 'Préparation au départ'],
     },
     {
       icon: IconAbroad,
-      title: 'Une immersion à l\'international',
-      description: 'Après cette première expérience en France, vous rejoignez pendant au moins trois mois l\'un de nos partenaires au Kenya, au Sénégal ou en Côte d\'Ivoire.',
-      list: ['La préservation de la biodiversité', 'L\'éducation et les échanges interculturels', 'L\'agriculture durable', 'La sensibilisation à l\'environnement', 'Le développement de nouveaux projets locaux'],
+      title: 'Mission au Kenya, au Sénégal ou en Côte d\'Ivoire',
+      description: 'Vous rejoignez l\'une de nos délégations pour participer à des projets concrets de préservation de la biodiversité et d\'éducation.',
+      list: ['Protection de l\'environnement', 'Actions éducatives', 'Vie avec les partenaires locaux'],
     },
     {
       icon: IconGrow,
-      title: 'Une expérience qui vous fait grandir',
-      description: 'Le Service Civique est bien plus qu\'une mission. C\'est l\'occasion de prendre confiance en vous et de développer des compétences recherchées dans de nombreux domaines.',
-      list: ['Gestion de projet', 'Education au développement durable', 'Animation et sensibilisation', 'Coopération internationale', 'Travail sur le terrain'],
+      title: 'Une expérience qui vous transforme',
+      description: 'Cette expérience vous permet de gagner en autonomie, de travailler en équipe et de développer des compétences valorisées dans votre parcours personnel et professionnel.',
+      list: ['Gestion de projet', 'Coopération internationale', 'Travail en équipe'],
     },
   ]
 
   const stepsGroupeJeunes = [
     {
       icon: IconFrance,
-      title: 'Préparer la mission ensemble',
-      description: 'Avant le départ, notre équipe accompagne le groupe dans la préparation interculturelle et logistique pour aborder la mission dans les meilleures conditions.',
-      list: ['Réunion de préparation avec les encadrants', 'Sensibilisation interculturelle', 'Échanges avec les partenaires locaux', 'Organisation logistique et administrative'],
+      title: 'Construire un projet collectif',
+      description: 'Nous accompagnons les jeunes et les encadrants afin de préparer la mission dans les meilleures conditions.',
+      list: ['Réunion de préparation avec les encadrants', 'Échanges avec les partenaires locaux', 'Organisation logistique et administrative'],
     },
     {
       icon: IconAbroad,
-      title: '10 jours de terrain au Kenya ou au Sénégal',
-      description: 'Sur place, les jeunes participent à des projets concrets : réhabilitation d\'espaces naturels, ateliers éducatifs, rencontres avec les communautés et les rangers.',
-      list: ['Projets environnementaux avec les partenaires', 'Rencontres avec les jeunes locaux', 'Ateliers interculturels et artistiques', 'Découverte de la faune et de la flore'],
+      title: 'Une immersion de 10 jours au Kenya ou au Sénégal',
+      description: 'Les jeunes participent à des actions concrètes tout en découvrant une nouvelle culture',
+      list: ['Actions environnementales', 'Rencontres locales', 'Découverte du territoire'],
     },
     {
       icon: IconGrow,
-      title: 'Valoriser et transmettre l\'expérience',
-      description: 'De retour en France, les jeunes partagent leur vécu et deviennent à leur tour ambassadeurs de la solidarité internationale dans leur établissement.',
-      list: ['Restitution auprès de l\'établissement', 'Rédaction du rapport de mission', 'Sensibilisation des pairs', 'Suivi des projets à distance'],
+      title: 'Partager et poursuivre l\'engagement',
+      description: 'Au retour, les participants valorisent leur expérience auprès de leur établissement et de leur entourage.',
+      list: ['Restitution auprès de l\'établissement', 'Rédaction du rapport de mission', 'Sensibilisation des pairs'],
     },
   ]
 
   const stepsCongeSolidaire = [
     {
       icon: IconBuilding,
-      title: 'Construire une mission adaptée',
-      description: 'Nous échangeons avec l\'entreprise afin de comprendre ses objectifs, identifier les compétences mobilisables et construire une mission cohérente avec les besoins du terrain.',
-      list: ['Diagnostic des compétences disponibles', 'Choix du terrain et du partenaire local', 'Définition des objectifs de mission', 'Accompagnement administratif et logistique'],
+      title: 'Construire un projet adapté',
+      description: 'Nous définissons ensemble une mission correspondant aux compétences des participants et aux besoins du terrain.',
+      list: ['Analyse des besoins', 'Choix du projet', 'Préparation logistique'],
     },
     {
       icon: IconLeaf,
-      title: 'Vivre l\'expérience sur le terrain',
-      description: 'Les participants rejoignent nos partenaires locaux pour partager leurs compétences, découvrir d\'autres réalités et contribuer à des projets concrets.',
-      list: ['Immersion complète avec les équipes locales', 'Apport de compétences métier concrètes', 'Projets de terrain adaptés au profil', 'Encadrement et suivi par Sens Solidaire'],
+      title: 'Agir au Kenya, au Sénégal ou à Sumatra',
+      description: 'Vous rejoignez l\'une de nos délégations au Kenya, au Sénégal ou à Sumatra afin de mettre vos compétences au service de projets portés par nos partenaires locaux.',
+      list: ['Immersion locale', 'Partage de compétences', 'Accompagnement par l\'association'],
     },
     {
       icon: IconHand,
-      title: 'Donner du sens à l\'engagement',
-      description: 'De retour en France, nous accompagnons l\'entreprise dans la valorisation de son engagement RSE et la restitution auprès des équipes.',
-      list: ['Rapport de mission détaillé', 'Restitution auprès des équipes', 'Contenu pour la communication RSE', 'Réduction d\'impôt à 60 % (art. 238 bis CGI)'],
+      title: 'Valoriser l\'engagement',
+      description: 'Nous accompagnons l\'entreprise dans la valorisation de son engagement et de son impact.',
+      list: ['Rapport de mission', 'Communication RSE', 'Avantage fiscal'],
     },
   ]
 
@@ -150,14 +150,15 @@ function Missions() {
         subtitle="Parce que l'engagement est ouvert à tous, nos missions s'adaptent à chaque profil : seul, à deux, en groupe, en famille ou avec votre entreprise, vivez une expérience humaine et solidaire au service de la biodiversité."
       />
 
-      {/* ── Bloc orientation ── */}
+      {/* ── Bloc orientation — quelle mission est faite pour vous ? ── */}
       <section className="padding-y padding-x bg-surface-mid">
-        <h2 className="h2-style text-primary mb-8">Quelle mission est faite pour vous ?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <h2 className="h2-style text-primary">Quelle mission est faite pour vous ?</h2>
+        {/* gap-sm : entre les cards d'orientation */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-sm">
           {[
-            { icon: IconPerson, situation: 'Vous souhaitez partir seul, à deux ou en petit groupe pour participer concrètement à un projet solidaire ?', label: 'Volontariat individuel', filter: 'individuel' },
-            { icon: IconClock, situation: 'Vous avez entre 16 et 25 ans et recherchez une expérience citoyenne riche de sens ?', label: 'Service Civique', filter: 'service_civique' },
-            { icon: IconPeople, situation: 'Vous représentez un lycée ou une structure jeunesse et souhaitez organiser un projet collectif ?', label: 'Mission de groupe', filter: 'groupe_jeunes' },
+            { icon: IconPerson,   situation: 'Vous souhaitez partir seul, à deux ou en petit groupe pour participer concrètement à un projet solidaire ?', label: 'Volontariat individuel', filter: 'individuel' },
+            { icon: IconClock,    situation: 'Vous avez entre 16 et 25 ans et recherchez une expérience citoyenne riche de sens ?', label: 'Service Civique', filter: 'service_civique' },
+            { icon: IconPeople,   situation: 'Vous représentez un lycée ou une structure jeunesse et souhaitez organiser un projet collectif ?', label: 'Mission de groupe', filter: 'groupe_jeunes' },
             { icon: IconBuilding, situation: 'Vous êtes salarié et souhaitez donner du sens à vos congés en vous engageant dans un projet solidaire à impact positif ?', label: 'Congé solidaire', filter: 'conge_solidaire' },
           ].map(item => {
             const Icon = item.icon
@@ -165,11 +166,11 @@ function Missions() {
               <button
                 key={item.filter}
                 onClick={() => handleFilter(item.filter)}
-                className="flex flex-col gap-4 bg-surface rounded-2xl p-6 text-left hover:shadow-md transition-shadow group"
+                className="flex flex-col gap-sm bg-surface rounded-2xl p-6 text-left hover:shadow-md transition-shadow group"
               >
                 <Icon className="text-accent-2 text-2xl" />
                 <p className="text-body text-primary/60 flex-1">{item.situation}</p>
-                <p className="h3-style text-primary group-hover:text-accent transition-colors">{item.label} →</p>
+                <p className="h3-style text-primary mb-0 group-hover:text-accent transition-colors">{item.label} →</p>
               </button>
             )
           })}
@@ -195,7 +196,7 @@ function Missions() {
           introSlot={
             <>
               <p className="text-body text-primary/80">
-                Partir en mission avec Sens Solidaire, c'est rejoindre des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka ou à Sumatra.
+                Partir en mission avec Sens Solidaires, c'est rejoindre des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka ou à Sumatra.
               </p>
               <p className="text-body text-primary/80">
                 Pendant 10 jours à 4 semaines, vous découvrez une autre culture tout en participant à des actions concrètes. <strong className="text-primary/70">Aucune compétence particulière n'est demandée.</strong>
@@ -206,10 +207,10 @@ function Missions() {
             </>
           }
           infoBarItems={[
-            { icon: IconPerson, label: 'Individuel ou groupe' },
-            { icon: IconClock, label: '10 jours à 4 semaines' },
+            { icon: IconPerson,  label: 'Individuel ou groupe' },
+            { icon: IconClock,   label: '10 jours à 4 semaines' },
             { icon: IconPayment, label: 'à partir de 1175€' },
-            { icon: IconMoney, label: 'Réduction d\'impôt 66 %' },
+            { icon: IconMoney,   label: 'Réduction d\'impôt 66 %' },
           ]}
           testimonialsUrl="/temoignages"
           carouselItems={missionVolontariat}
@@ -246,9 +247,9 @@ function Missions() {
           }
           infoBarItems={[
             { icon: IconPerson, label: '16-25 ans' },
-            { icon: IconClock, label: '6 à 12 mois' },
-            { icon: IconPin, label: 'France & étranger' },
-            { icon: IconMoney, label: 'Indemnité mensuelle' },
+            { icon: IconClock,  label: '6 à 12 mois' },
+            { icon: IconPin,    label: 'France & étranger' },
+            { icon: IconMoney,  label: 'Indemnité mensuelle' },
           ]}
           primaryAction={{ label: 'Candidater →', href: 'https://www.service-civique.gouv.fr/', external: true }}
           testimonialsUrl="/temoignages?type=service_civique"
@@ -291,9 +292,9 @@ function Missions() {
           }
           infoBarItems={[
             { icon: IconPeople, label: 'Groupe encadré' },
-            { icon: IconClock, label: '10 jours' },
-            { icon: IconPin, label: 'Kenya ou Sénégal' },
-            { icon: IconHeart, label: 'Projet éducatif' },
+            { icon: IconClock,  label: '10 jours' },
+            { icon: IconPin,    label: 'Kenya ou Sénégal' },
+            { icon: IconHeart,  label: 'Projet éducatif' },
           ]}
           primaryAction={{ label: 'Monter votre projet →', href: '/contact' }}
           testimonialsUrl="/temoignages?type=groupe_jeune"
@@ -301,19 +302,21 @@ function Missions() {
           steps={stepsGroupeJeunes}
           bgCard="bg-surface-mid"
         >
-          {/* PDFs */}
+          {/* PDFs téléchargeables */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-2">Tout ce qu'il faut savoir avant de s'engager</h3>
+            <h3 className="h3-style text-primary mb-0">Tout ce qu'il faut savoir avant de s'engager</h3>
             <p className="text-body text-primary/60 mb-8">
               Retrouvez les dossiers de présentation détaillés pour découvrir les objectifs pédagogiques, le déroulement des missions, les conditions de participation et les informations pratiques.
             </p>
-            <div className="flex flex-col sm:flex-row gap-6">
+            {/* gap-md : entre les deux cards PDF */}
+            <div className="flex flex-col sm:flex-row gap-md">
               {[
-                { title: "Mission groupe — Kenya", size: "1,2 Mo" },
+                { title: "Mission groupe — Kenya",   size: "1,2 Mo" },
                 { title: "Mission groupe — Sénégal", size: "1,2 Mo" },
               ].map(pdf => (
                 <div key={pdf.title} className="flex items-center justify-between bg-surface-mid rounded-xl px-6 py-4 flex-1">
-                  <div className="flex items-center gap-4">
+                  {/* gap-sm : entre icône PDF et texte */}
+                  <div className="flex items-center gap-sm">
                     <span className="text-eyebrow text-primary/40">PDF</span>
                     <div>
                       <p className="text-body text-primary">{pdf.title}</p>
@@ -328,14 +331,12 @@ function Missions() {
 
           {/* Galerie */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-2">Ils ont vécu l'aventure</h3>
+            <h3 className="h3-style text-primary mb-0">Ils ont vécu l'aventure</h3>
             <p className="text-body text-primary/60 mb-8">
               Rencontres, découvertes, projets de terrain, moments de partage... découvrez quelques souvenirs de nos missions de groupe au Kenya et au Sénégal.
             </p>
             <Carousel
               items={[1, 2, 3, 4]}
-              slidesPerView={3}
-              spaceBetween={16}
               showPagination={true}
               color="primary"
               renderSlide={(_, i) => (
@@ -364,9 +365,9 @@ function Missions() {
           }
           infoBarItems={[
             { icon: IconBuilding, label: 'Salariés & entreprises' },
-            { icon: IconClock, label: '10 jours à 4 semaines' },
-            { icon: IconPin, label: 'Kenya ou Sénégal' },
-            { icon: IconMoney, label: 'Réduction d\'impôt 60 %' },
+            { icon: IconClock,    label: '10 jours à 4 semaines' },
+            { icon: IconPin,      label: 'Kenya ou Sénégal' },
+            { icon: IconMoney,    label: 'Réduction d\'impôt 60 %' },
           ]}
           primaryAction={{ label: 'En savoir plus →', href: 'https://france-volontaires.org/le-conge-de-solidarite-internationale/', external: true }}
           testimonialsUrl="/temoignages?type=conge_solidaire"
@@ -374,15 +375,14 @@ function Missions() {
           steps={stepsCongeSolidaire}
           bgCard="bg-surface"
         >
+          {/* Galerie */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-2">Des collaborateurs engagés sur le terrain</h3>
+            <h3 className="h3-style text-primary mb-0">Des collaborateurs engagés sur le terrain</h3>
             <p className="text-body text-primary/60 mb-8">
               Découvrez quelques moments vécus lors de nos missions solidaires réalisées avec des entreprises partenaires au Kenya et au Sénégal.
             </p>
             <Carousel
               items={[1, 2, 3, 4]}
-              slidesPerView={3}
-              spaceBetween={16}
               showPagination={true}
               color="primary"
               renderSlide={(_, i) => (

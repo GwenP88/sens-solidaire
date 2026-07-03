@@ -26,14 +26,14 @@ import Cookies from './pages/Cookies'
 
 // ── Pages Notre Impact
 import Impact from './pages/Impact'
-import ActionDetail from './pages/ActionDetail'
+import ImpactDetail from './pages/ImpactDetail'
 
 // ── Pages Médias & Actualités
 import MediaEtActualites from './pages/MediaEtActualites'
 import MediaDetail from './pages/MediaDetail'
 
 // ── Pages Éducation & Sensibilisation
-import ActionsEducatives from './pages/ActionsEducatives'
+import Education from './pages/Education'
 import EducationDetail from './pages/EducationDetail'
 
 // ── Pages admin — sans Navbar ni Footer
@@ -78,15 +78,15 @@ function App() {
 
           {/* Notre Impact */}
           <Route path="/notre-impact" element={<Impact />} />
-          <Route path="/notre-impact/:slug" element={<ActionDetail />} />
+          <Route path="/notre-impact/:slug" element={<ImpactDetail />} />
 
           {/* Médias & Actualités */}
           <Route path="/medias-et-actualites" element={<MediaEtActualites />} />
           <Route path="/medias/:slug" element={<MediaDetail />} />
 
           {/* Éducation & Sensibilisation */}
-          <Route path="/actions-educatives" element={<ActionsEducatives />} />
-          <Route path="/actions-educatives/:slug" element={<EducationDetail />} />
+          <Route path="/education-sensibilisation" element={<Education />} />
+          <Route path="/education-sensibilisation/:slug" element={<EducationDetail />} />
 
           {/* Pages légales */}
           <Route path="/mentions-legales" element={<MentionsLegales />} />

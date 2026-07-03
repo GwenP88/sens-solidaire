@@ -7,7 +7,6 @@
 
 function AnchorNav({ sections, variant = 'light' }) {
 
-  // ── Scroll doux vers la section cible avec offset pour la navbar sticky
   const scrollToSection = (id) => {
     const el = document.getElementById(id)
     if (el) {
@@ -17,15 +16,12 @@ function AnchorNav({ sections, variant = 'light' }) {
   }
 
   return (
-    // ── Barre sticky — reste visible au scroll, fond adapté au variant
     <div className={`sticky top-0 z-10 border-b shadow-sm ${
       variant === 'dark'
         ? 'bg-primary border-surface/10'
         : 'bg-surface border-surface-dark'
     }`}>
-
-      {/* ── Liste des liens d'ancrage — scroll horizontal si débordement ── */}
-      <div className="flex gap-1 padding-x overflow-x-auto pb-2 lg:pb-0">
+      <div className="flex gap-xs padding-x overflow-x-auto scroll-pb lg:pb-0">
         {sections.map(s => (
           <button
             key={s.id}

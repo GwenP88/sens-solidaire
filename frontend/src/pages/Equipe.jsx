@@ -11,22 +11,23 @@ import { fetchTeamMembers, fetchDelegations } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Section from '../components/ui/Section'
 
 // ── Composants métier
-import TeamMemberCardLarge from '../components/team/TeamMemberCardLarge'
-import TeamMemberCardSmall from '../components/team/TeamMemberCardSmall'
+import TeamMemberCard from '../components/team/TeamMemberCard'
 import DelegationCard from '../components/team/DelegationCard'
 
 function Equipe() {
+  // ── État local — membres par catégorie + délégations
   const [direction, setDirection] = useState([])
   const [bureau, setBureau] = useState([])
   const [ca, setCa] = useState([])
   const [egalement, setEgalement] = useState([])
   const [delegations, setDelegations] = useState([])
 
+  // ── Chargement de toutes les données en parallèle au montage
   useEffect(() => {
     fetchTeamMembers('direction').then(setDirection).catch(console.error)
     fetchTeamMembers('bureau').then(setBureau).catch(console.error)
@@ -38,19 +39,20 @@ function Equipe() {
   return (
     <div className="bg-surface min-h-screen">
 
+      {/* ── Hero immersif ── */}
       <HeroPage
         image="/images/hero/hero-missions.jpg"
         title="Notre équipe"
         subtitle="Des femmes et des hommes engagés, en France et à l'international, pour un monde plus juste et la protection de la biodiversité."
       />
 
-      {/* ── Direction — grille responsive ── */}
-      <section className="padding-y padding-x bg-surface">
-        <h2 className="h2-style text-primary mb-8">Direction</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* ── Direction — cards larges ── */}
+      <Section title="Direction">
+        <div className="grid-cards-3">
           {direction.map(m => (
-            <TeamMemberCardLarge
+            <TeamMemberCard
               key={m.id}
+              variant="large"
               nom={m.nom}
               role={m.role}
               description={m.description}
@@ -58,15 +60,15 @@ function Equipe() {
             />
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* ── Bureau — grille responsive ── */}
-      <section className="padding-y padding-x bg-surface-mid">
-        <h2 className="h2-style text-primary mb-8">Membres du bureau</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* ── Bureau — cards larges, fond inversé ── */}
+      <Section title="Membres du bureau" bg="bg-surface-mid">
+        <div className="grid-cards-3">
           {bureau.map(m => (
-            <TeamMemberCardLarge
+            <TeamMemberCard
               key={m.id}
+              variant="large"
               nom={m.nom}
               role={m.role}
               description={m.description}
@@ -75,46 +77,45 @@ function Equipe() {
             />
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* ── Conseil d'administration — carousel toutes tailles ── */}
-      <section className="padding-y padding-x bg-surface">
-        <h2 className="h2-style text-primary mb-8">Conseil d'administration</h2>
+      {/* ── Conseil d'administration — carousel ── */}
+      <Section title="Conseil d'administration">
         <Carousel
           items={ca}
           renderSlide={(m) => (
-            <TeamMemberCardSmall
+            <TeamMemberCard
+              variant="small"
               nom={m.nom}
               role={m.role}
               avatar={m.avatar_url}
             />
           )}
-          slidesPerView={3}
-          spaceBetween={24}
           showPagination={true}
           color="primary"
         />
-      </section>
+      </Section>
 
-      {/* ── Également à nos côtés — grille responsive ── */}
-      <section className="padding-y padding-x bg-surface-mid">
-        <h2 className="h2-style text-primary mb-8">Également à nos côtés</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {egalement.map(m => (
-            <TeamMemberCardSmall
-              key={m.id}
+      {/* ── Également à nos côtés — carousel ── */}
+      <Section title="Également à nos côtés" bg="bg-surface-mid">
+        <Carousel
+          items={egalement}
+          renderSlide={(m) => (
+            <TeamMemberCard
+              variant="small"
               nom={m.nom}
               role={m.role}
               avatar={m.avatar_url}
               bg="bg-surface"
             />
-          ))}
-        </div>
-      </section>
+          )}
+          showPagination={true}
+          color="primary"
+        />
+      </Section>
 
-      {/* ── Délégations — carousel toutes tailles ── */}
-      <section className="padding-y padding-x bg-surface">
-        <h2 className="h2-style text-primary mb-8">Nos délégations et partenaires terrain</h2>
+      {/* ── Délégations — carousel ── */}
+      <Section title="Nos délégations et partenaires terrain">
         <Carousel
           items={delegations}
           renderSlide={(d) => (
@@ -126,25 +127,10 @@ function Equipe() {
               contacts={d.contacts}
             />
           )}
-          slidesPerView={3}
-          spaceBetween={24}
           showPagination={true}
           color="primary"
         />
-      </section>
-
-      {/* ── CTA contact ── */}
-      <section className="padding-y padding-x bg-accent-2">
-        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
-          <div>
-            <h2 className="h2-style text-surface">Envie de rejoindre l'aventure ?</h2>
-            <p className="text-body text-surface/80">Bénévole, volontaire, enseignant, partenaire... Il existe mille façons d'agir avec nous.</p>
-          </div>
-          <a href="/contact">
-            <Button label="Nous contacter →" variant="primary" />
-          </a>
-        </div>
-      </section>
+      </Section>
 
       <ScrollToTop />
     </div>

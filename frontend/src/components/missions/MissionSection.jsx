@@ -2,7 +2,7 @@
 // Section complète d'un type de mission — structure identique pour les 4 types
 
 // ── Composants UI
-import SectionHero from '../ui/SectionHero'
+import SectionHero from './SectionHero'
 import Carousel from '../ui/Carousel'
 import MissionInfoBar from './MissionInfoBar'
 import MissionCTA from './MissionCTA'
@@ -36,7 +36,6 @@ function MissionSection({
   carouselItems,
   carouselTitle,
   carouselSubtitle,
-  carouselSlidesPerView = 3,
   renderSlide,
 
   // ── Bloc additionnel optionnel
@@ -60,9 +59,9 @@ function MissionSection({
         </div>
       )}
 
-      {/* ── Bloc intro — contenu riche + infobar + CTA + image — empilés sur mobile ── */}
-      <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start lg:items-center mb-10 lg:mb-16">
-        <div className="flex flex-col gap-6 flex-1">
+      {/* ── Bloc intro — contenu riche + infobar + CTA + image ── */}
+      <div className="flex flex-col lg:flex-row gap-md lg:gap-lg items-start lg:items-center mb-10 lg:mb-16">
+        <div className="flex flex-col gap-sm flex-1">
 
           {/* Contenu riche — texte, listes, paragraphes... */}
           {introSlot}
@@ -96,7 +95,7 @@ function MissionSection({
 
       {/* ── Carousel ── */}
       {carouselItems && (
-        <div className="mt-16">
+        <div className="mt-8">
           {carouselTitle && (
             <h3 className="h3-style text-primary mb-2">{carouselTitle}</h3>
           )}
@@ -105,8 +104,6 @@ function MissionSection({
           )}
           <Carousel
             items={carouselItems}
-            slidesPerView={carouselSlidesPerView}
-            spaceBetween={24}
             showPagination={true}
             color="primary"
             renderSlide={renderSlide}

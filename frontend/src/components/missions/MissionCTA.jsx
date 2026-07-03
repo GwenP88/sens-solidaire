@@ -9,9 +9,8 @@ import Button from '../ui/Button'
 
 function MissionCTA({ primaryAction, testimonialsUrl, contactUrl = '/contact' }) {
   return (
-    <div className="flex flex-col sm:flex-row gap-4">
+    <div className="flex flex-col sm:flex-row gap-sm w-full">
 
-      {/* Bouton primaire — optionnel (candidater, télécharger, en savoir plus...) */}
       {primaryAction && (
         primaryAction.external ? (
           <a href={primaryAction.href} target="_blank" rel="noopener noreferrer" className="flex-1">
@@ -24,14 +23,12 @@ function MissionCTA({ primaryAction, testimonialsUrl, contactUrl = '/contact' })
         )
       )}
 
-      {/* Bouton témoignages */}
       {testimonialsUrl && (
         <Link to={testimonialsUrl} className="flex-1">
           <Button label="Voir les témoignages →" variant="secondary" fullWidth />
         </Link>
       )}
 
-      {/* Bouton contact */}
       <Link to={contactUrl} className="flex-1">
         <Button label="Nous contacter →" variant="secondary" fullWidth />
       </Link>

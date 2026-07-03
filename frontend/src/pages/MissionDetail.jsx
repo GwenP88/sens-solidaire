@@ -22,7 +22,7 @@ import ScrollToTop from '../components/ui/ScrollToTop'
 // ── Composants métier
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import LocationCard from '../components/locations/LocationCard'
-import ActionCard from '../components/actions/ActionCard'
+import ImpactCard from '../components/actions/ImpactCard'
 
 // ── Utils
 import { getDuration } from '../utils/missions'
@@ -41,15 +41,15 @@ const HOW_TO_GO_ICONS = [
 
 // ── Sections de l'AnchorNav
 const ANCHOR_SECTIONS = [
-  { label: "La mission", id: "description" },
-  { label: "Rôle & Programme", id: "role-programme" },
-  { label: "Lieux partenaires", id: "lieux" },
-  { label: "Impact terrain", id: "impact" },
-  { label: "Coût & durée", id: "cout" },
-  { label: "Comment partir", id: "comment-partir" },
-  { label: "Infos pratiques", id: "infos-pratiques" },
-  { label: "Témoignages", id: "temoignages" },
-  { label: "Galerie", id: "galerie" },
+  { label: "La mission",        id: "description"    },
+  { label: "Rôle & Programme",  id: "role-programme" },
+  { label: "Lieux partenaires", id: "lieux"          },
+  { label: "Impact terrain",    id: "impact"         },
+  { label: "Coût & durée",      id: "cout"           },
+  { label: "Comment partir",    id: "comment-partir" },
+  { label: "Infos pratiques",   id: "infos-pratiques"},
+  { label: "Témoignages",       id: "temoignages"    },
+  { label: "Galerie",           id: "galerie"        },
 ]
 
 function MissionDetail() {
@@ -102,17 +102,19 @@ function MissionDetail() {
       {/* ── Description — texte + image ── */}
       {mission.description && (
         <section id="description" className="padding-y padding-x bg-surface-mid">
-          <h2 className="h2-style text-primary mb-4">{mission.title}</h2>
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+          <h2 className="h2-style text-primary">{mission.title}</h2>
+          <div className="flex flex-col lg:flex-row gap-lg items-start">
 
-            <div className="flex flex-col gap-10 w-full lg:w-2/3">
+            {/* Texte principal */}
+            <div className="flex flex-col gap-md w-full lg:w-2/3">
               <p className="text-body text-primary/80">{mission.description}</p>
-              <h3 className="h3-style text-primary">De nombreux volontaires ont déjà sauté le pas…</h3>
+              <h3 className="h3-style text-primary mb-0">De nombreux volontaires ont déjà sauté le pas…</h3>
               <p className="text-body text-primary/80">
                 Découvrez la satisfaction de participer à des projets porteurs de sens. Que vous soyez étudiant, en activité ou retraité, aucun diplôme particulier n'est requis : nous recherchons avant tout des personnes motivées, ouvertes aux autres et désireuses de s'engager.
               </p>
             </div>
 
+            {/* Image secondaire */}
             <div className="w-full lg:w-1/3 shrink-0">
               <img src={mission.image_url} alt={mission.title} className="w-full h-72 object-cover rounded-xl" />
             </div>
@@ -123,11 +125,12 @@ function MissionDetail() {
       {/* ── Rôle du volontaire + Programme ── */}
       {(mission.volunteer_role || mission.programme) && (
         <section id="role-programme" className="padding-y padding-x bg-surface">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+          <div className="flex flex-col lg:flex-row gap-lg items-start">
 
+            {/* Rôle du volontaire */}
             {mission.volunteer_role && (
               <div className="w-full lg:w-2/5">
-                <h2 className="h2-style text-primary mb-4">Votre rôle sur le terrain</h2>
+                <h2 className="h2-style text-primary">Votre rôle sur le terrain</h2>
                 <div
                   className="text-body text-primary/80 rich-text"
                   dangerouslySetInnerHTML={{ __html: mission.volunteer_role }}
@@ -135,10 +138,11 @@ function MissionDetail() {
               </div>
             )}
 
+            {/* Programme jour par jour */}
             {mission.programme && (
               <div className="w-full lg:w-3/5">
-                <h2 className="h2-style text-primary mb-4">Programme de volontariat</h2>
-                <div className="flex flex-col gap-1">
+                <h2 className="h2-style text-primary">Programme de volontariat</h2>
+                <div className="flex flex-col gap-xs">
                   {mission.programme.split('\n').map((line, i) => {
                     if (!line.trim()) return null
                     const [label, ...rest] = line.split(':')
@@ -169,21 +173,16 @@ function MissionDetail() {
       {/* ── Lieux partenaires ── */}
       {mission.location?.length > 0 && (
         <section id="lieux" className="padding-y padding-x bg-surface-mid">
-          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-4 mb-6">
+          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-sm mb-6">
             <div>
-              <h2 className="h2-style text-primary mb-2">Nos lieux partenaires</h2>
+              <h2 className="h2-style text-primary">Nos lieux partenaires</h2>
               <p className="text-body text-primary/60">
                 Nos partenaires locaux sont au cœur de chaque mission. Engagés dans la protection de la biodiversité et le développement des communautés, ils accueillent les volontaires et les accompagnent tout au long de leur expérience.
               </p>
             </div>
-            <div className="hidden md:block w-1/4 shrink-0">
-              <img src="/images/ui/one-line-3.png" alt="" aria-hidden="true" className="w-full object-contain max-h-40" />
-            </div>
           </div>
           <Carousel
             items={mission.location}
-            slidesPerView={3}
-            spaceBetween={24}
             showPagination={true}
             color="primary"
             renderSlide={(loc) => <LocationCard {...loc} />}
@@ -193,9 +192,9 @@ function MissionDetail() {
 
       {/* ── Impact terrain ── */}
       <section id="impact" className="padding-y padding-x bg-surface">
-        <div className="flex flex-col xl:flex-row items-start justify-between gap-4 mb-8">
-          <div className="flex flex-col gap-2 max-w-4xl">
-            <h2 className="h2-style text-primary mb-4">Votre impact sur le terrain</h2>
+        <div className="flex flex-col xl:flex-row items-start justify-between gap-sm mb-8">
+          <div className="flex flex-col gap-xs max-w-4xl">
+            <h2 className="h2-style text-primary">Votre impact sur le terrain</h2>
             <p className="text-body text-primary/60">
               Depuis plus de 20 ans, des centaines de volontaires mettent leur temps, leur énergie et leurs compétences au service de projets portés par nos partenaires locaux.
             </p>
@@ -212,11 +211,12 @@ function MissionDetail() {
             </p>
           </div>
         ) : (
-
           <Carousel
             items={actions.slice(0, 4)}
+            showPagination={true}
+            color="primary"
             renderSlide={(action) => (
-              <ActionCard
+              <ImpactCard
                 slug={action.slug}
                 title={action.title}
                 description={action.description}
@@ -226,35 +226,30 @@ function MissionDetail() {
                 country={action.country}
               />
             )}
-            slidesPerView={3}
-            spaceBetween={24}
-            showPagination={true}
-            color="primary"
           />
-
         )}
       </section>
 
       {/* ── Coût & durée ── */}
       {mission.pricing?.length > 0 && (
         <section id="cout" className="padding-y padding-x bg-surface-mid">
-          <h2 className="h2-style text-primary mb-4">Durée du séjour & participation</h2>
+          <h2 className="h2-style text-primary">Durée du séjour & participation</h2>
           <p className="text-body text-primary/60 mb-8">
             Choisissez la durée de séjour qui correspond le mieux à vos disponibilités et à votre projet d'engagement.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-md items-stretch">
 
             {/* Tableau tarifs */}
             <div className="flex flex-col bg-surface rounded-xl p-4">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-surface-dark">
-                    <th className="text-left py-2 text-primary font-semibold flex items-center gap-3">
+                    <th className="text-left py-2 text-primary font-semibold flex items-center gap-xs">
                       <IconClock className="text-accent" /> Durée
                     </th>
                     <th className="text-right py-2 text-primary font-semibold">
-                      <span className="flex items-center justify-end gap-3">
+                      <span className="flex items-center justify-end gap-xs">
                         <IconMoney className="text-accent" /> Prix
                       </span>
                     </th>
@@ -274,10 +269,10 @@ function MissionDetail() {
             </div>
 
             {/* Inclus / non inclus */}
-            <div className="flex flex-col justify-between self-stretch gap-6">
+            <div className="flex flex-col justify-between self-stretch gap-md">
               {mission.included && (
                 <div>
-                  <h3 className="h3-style text-primary flex items-center gap-2 mb-2">
+                  <h3 className="h3-style text-primary flex items-center gap-xs mb-0">
                     <IconCheck className="text-accent-2" /> Inclus
                   </h3>
                   <p className="text-body text-primary/80">{mission.included}</p>
@@ -285,7 +280,7 @@ function MissionDetail() {
               )}
               {mission.not_include && (
                 <div>
-                  <h3 className="h3-style text-primary flex items-center gap-2 mb-2">
+                  <h3 className="h3-style text-primary flex items-center gap-xs mb-0">
                     <IconTimes className="text-accent" /> Non inclus
                   </h3>
                   <p className="text-body text-primary/80">{mission.not_include}</p>
@@ -294,25 +289,25 @@ function MissionDetail() {
             </div>
 
             {/* CTAs */}
-            <div className="col-span-1 md:col-span-2 xl:col-span-1 h-full flex flex-col md:flex-row xl:flex-col gap-4 justify-between">
-              <div className="bg-surface rounded-xl p-4 flex flex-col gap-3 flex-1">
-                <h3 className="h3-style text-primary">Prêt à vous engager ?</h3>
+            <div className="col-span-1 md:col-span-2 xl:col-span-1 h-full flex flex-col md:flex-row xl:flex-col gap-sm justify-between">
+              <div className="bg-surface rounded-xl p-4 flex flex-col gap-sm flex-1">
+                <h3 className="h3-style text-primary mb-0">Prêt à vous engager ?</h3>
                 <a href={mission.helloasso_url} target="_blank" rel="noopener noreferrer" className="block w-full">
                   <Button label="Je pars en mission →" variant="primary" fullWidth />
                 </a>
               </div>
-              <div className="bg-surface rounded-xl p-4 flex flex-col gap-3 flex-1">
-                <h3 className="h3-style text-primary">Besoin de plus d'informations ?</h3>
+              <div className="bg-surface rounded-xl p-4 flex flex-col gap-sm flex-1">
+                <h3 className="h3-style text-primary mb-0">Besoin de plus d'informations ?</h3>
                 <Button label="Nous contacter →" variant="secondary" fullWidth />
               </div>
             </div>
 
             {/* Répartition des frais */}
-            <div className="col-span-1 md:col-span-2 xl:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 border-t border-surface-dark">
-              <div className="flex flex-col gap-3">
-                <h3 className="h3-style text-primary">À quoi servent les frais de mission ?</h3>
+            <div className="col-span-1 md:col-span-2 xl:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-md pt-6 border-t border-surface-dark">
+              <div className="flex flex-col gap-sm">
+                <h3 className="h3-style text-primary mb-0">À quoi servent les frais de mission ?</h3>
                 <p className="text-body text-primary/60">
-                  Chez Sens Solidaire, nous avons à cœur de vous informer en toute transparence sur l'utilisation des fonds qui soutiennent nos actions sur le terrain.
+                  Chez Sens Solidaires, nous avons à cœur de vous informer en toute transparence sur l'utilisation des fonds qui soutiennent nos actions sur le terrain.
                 </p>
               </div>
               <div className="bg-accent-2/10 rounded-xl p-4">
@@ -342,28 +337,24 @@ function MissionDetail() {
       {/* ── Comment partir ── */}
       {howToGoSteps.length > 0 && (
         <section id="comment-partir" className="padding-y padding-x bg-surface">
-          <h2 className="h2-style text-primary mb-4">Comment partir ?</h2>
+          <h2 className="h2-style text-primary">Comment partir ?</h2>
           <p className="text-body text-primary/60 mb-8">
             Nous accueillons des volontaires toute l'année. Ensemble, nous définissons la période de départ la plus adaptée à votre projet, à vos disponibilités et aux besoins de nos partenaires.
           </p>
 
-          {/* ── Mobile + 768 — scroll horizontal avec dégradé indicateur ── */}
+          {/* Mobile — scroll horizontal avec dégradé indicateur */}
           <div className="relative lg:hidden">
-            {/* Dégradé indicateur — suggère qu'il y a du contenu à droite */}
             <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none" />
-
-            <div className="flex flex-row items-start gap-2 overflow-x-auto pb-3">
+            <div className="flex flex-row items-start gap-xs overflow-x-auto pb-3">
               {howToGoSteps.map((step, i) => {
                 const Icon = HOW_TO_GO_ICONS[i]
                 return (
-                  <div key={i} className="flex items-start gap-2 shrink-0 min-w-[140px]">
-                    <div className="flex flex-col items-center gap-3 flex-1">
+                  <div key={i} className="flex items-start gap-xs shrink-0 min-w-[140px]">
+                    <div className="flex flex-col items-center gap-sm flex-1">
                       <div className="w-14 h-14 rounded-full border-2 border-primary/50 flex items-center justify-center shrink-0">
                         <Icon className="text-primary/80 text-xl" />
                       </div>
-                      <p className="text-eyebrow text-primary/80 text-center">
-                        {String(i + 1).padStart(2, '0')}
-                      </p>
+                      <p className="text-eyebrow text-primary/80 text-center">{String(i + 1).padStart(2, '0')}</p>
                       <p className="text-caption text-primary/60 text-center leading-tight">{step}</p>
                     </div>
                     {i < howToGoSteps.length - 1 && (
@@ -375,19 +366,17 @@ function MissionDetail() {
             </div>
           </div>
 
-          {/* ── Desktop 1024+ — wrap normal centré ── */}
-          <div className="hidden lg:flex flex-row items-center gap-2">
+          {/* Desktop — wrap normal centré */}
+          <div className="hidden lg:flex flex-row items-center gap-xs">
             {howToGoSteps.map((step, i) => {
               const Icon = HOW_TO_GO_ICONS[i]
               return (
-                <div key={i} className="flex items-start gap-2 flex-1">
-                  <div className="flex flex-col items-center gap-3 flex-1">
+                <div key={i} className="flex items-start gap-xs flex-1">
+                  <div className="flex flex-col items-center gap-sm flex-1">
                     <div className="w-14 h-14 rounded-full border-2 border-primary/50 flex items-center justify-center shrink-0">
                       <Icon className="text-primary/80 text-xl" />
                     </div>
-                    <p className="text-eyebrow text-primary/80 text-center">
-                      {String(i + 1).padStart(2, '0')}
-                    </p>
+                    <p className="text-eyebrow text-primary/80 text-center">{String(i + 1).padStart(2, '0')}</p>
                     <p className="text-caption text-primary/60 text-center leading-tight">{step}</p>
                   </div>
                   {i < howToGoSteps.length - 1 && (
@@ -397,43 +386,42 @@ function MissionDetail() {
               )
             })}
           </div>
-
         </section>
       )}
 
       {/* ── Infos pratiques ── */}
       {(mission.health_info || mission.admin_info) && (
         <section id="infos-pratiques" className="padding-y padding-x bg-surface-mid">
-          <h2 className="h2-style text-primary mb-4">Préparer votre départ</h2>
+          <h2 className="h2-style text-primary">Préparer votre départ</h2>
           <p className="text-body text-primary/60 mb-8">
             Pour vivre cette expérience dans les meilleures conditions, prenez le temps de préparer votre départ grâce à nos recommandations et informations pratiques.
           </p>
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row gap-md">
             {mission.health_info && (
               <div className="flex-1 bg-surface rounded-xl p-6">
-                <h3 className="h3-style text-primary mb-2">Avant le départ : santé & prévention</h3>
+                <h3 className="h3-style text-primary mb-0">Avant le départ : santé & prévention</h3>
                 <div className="text-body text-primary/80 rich-text" dangerouslySetInnerHTML={{ __html: mission.health_info }} />
               </div>
             )}
             {mission.admin_info && (
               <div className="flex-1 bg-surface rounded-xl p-6">
-                <h3 className="h3-style text-primary mb-2">Avant de prendre votre envol</h3>
+                <h3 className="h3-style text-primary mb-0">Avant de prendre votre envol</h3>
                 <div className="text-body text-primary/80 rich-text" dangerouslySetInnerHTML={{ __html: mission.admin_info }} />
               </div>
             )}
           </div>
 
-          <div className="mt-8 flex flex-col lg:flex-row gap-6">
-            <div className="flex-1 bg-surface rounded-xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="mt-8 flex flex-col lg:flex-row gap-md">
+            <div className="flex-1 bg-surface rounded-xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-sm">
               <div>
-                <h3 className="h3-style text-primary">Guide du volontaire</h3>
+                <h3 className="h3-style text-primary mb-0">Guide du volontaire</h3>
                 <p className="text-body text-primary/60">Votre guide complet pour préparer votre mission.</p>
               </div>
               <Button label="Télécharger ↓" variant="secondary" />
             </div>
-            <div className="flex-1 bg-surface rounded-xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex-1 bg-surface rounded-xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-sm">
               <div>
-                <h3 className="h3-style text-primary">Recommandations officielles</h3>
+                <h3 className="h3-style text-primary mb-0">Recommandations officielles</h3>
                 <p className="text-body text-primary/60">Consultez les informations officielles avant votre départ.</p>
               </div>
               <a href={mission.ministry_url || '#'} target="_blank" rel="noopener noreferrer">
@@ -447,9 +435,9 @@ function MissionDetail() {
       {/* ── Témoignages ── */}
       {mission.testimonials?.length > 0 && (
         <section id="temoignages" className="padding-y padding-x bg-accent-2">
-          <div className="flex flex-col lg:flex-row items-start justify-between gap-4 mb-8">
+          <div className="flex flex-col lg:flex-row items-start justify-between gap-sm mb-8">
             <div>
-              <h2 className="h2-style text-surface mb-4">Ils ont vécu l'aventure, découvrez leurs témoignages</h2>
+              <h2 className="h2-style text-surface">Ils ont vécu l'aventure, découvrez leurs témoignages</h2>
               <p className="text-body text-surface/60">
                 Chaque mission est une expérience unique. Découvrez les récits de volontaires partis avant vous.
               </p>
@@ -460,25 +448,21 @@ function MissionDetail() {
           </div>
           <Carousel
             items={mission.testimonials}
-            renderSlide={(t) => <TestimonialCard {...t} />}
-            slidesPerView={3}
-            spaceBetween={24}
             showPagination={true}
             color="surface"
+            renderSlide={(t) => <TestimonialCard {...t} />}
           />
         </section>
       )}
 
       {/* ── Galerie photos ── */}
       <section id="galerie" className="padding-y padding-x bg-surface-mid">
-        <h2 className="h2-style text-primary mb-4">Plongez dans l'aventure</h2>
+        <h2 className="h2-style text-primary">Plongez dans l'aventure</h2>
         <p className="text-body text-primary/60 mb-8">
           Explorez la mission à travers les images de nos volontaires et découvrez l'environnement, les projets et les expériences qui vous attendent sur le terrain.
         </p>
         <Carousel
           items={[1, 2, 3, 4]}
-          slidesPerView={3}
-          spaceBetween={16}
           showPagination={true}
           color="primary"
           renderSlide={(_, i) => (

@@ -41,7 +41,7 @@ function Carousel({ items, renderSlide, showPagination = false, color = 'primary
 
   return (
     // ── Conteneur relatif — nécessaire pour positionner les chevrons en absolu
-    <div className={`relative px-4 swiper-carousel-${color}`}>
+    <div className={`relative lg:px-4 swiper-carousel-${color}`}>
 
       {/* ── Chevron gauche ── */}
       <button

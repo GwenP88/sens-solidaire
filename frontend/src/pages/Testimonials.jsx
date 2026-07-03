@@ -18,10 +18,12 @@ import Filters from '../components/navigation/Filters'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Modal from '../components/ui/Modal'
+import Section from '../components/ui/Section'
 
 // ── Composants métier
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 import TestimonialForm from '../components/testimonials/TestimonialForm'
+import RapportCard from '../components/ui/RapportCard'
 
 // ── Utils
 import { FILTER_CONFIG_TEMOIGNAGES } from '../utils/filters'
@@ -70,19 +72,22 @@ function Testimonials() {
 
       {/* ── Barre de filtres ── */}
       <div className="bg-primary padding-x filter-py">
-        <FilterSelect filters={FILTER_CONFIG_TEMOIGNAGES} values={filters} onChange={handleFilter} />
+        <Filters
+          selects={FILTER_CONFIG_TEMOIGNAGES}
+          selectValues={filters}
+          onSelectChange={handleFilter}
+        />
       </div>
 
       {/* ── Section témoignages ── */}
       {showTemoignages && (
-        <section className="padding-y padding-x bg-surface">
-          <h2 className="h2-style text-primary mb-8">Témoignages</h2>
+        <Section title="Témoignages" bg="bg-surface-mid">
           {loading ? (
             <p className="text-body text-primary/50 italic">Chargement...</p>
           ) : filteredTestimonials.length === 0 ? (
             <p className="text-body text-primary/50 italic">Aucun témoignage pour ces critères.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid-cards-3">
               {filteredTestimonials.map(t => (
                 <TestimonialCard
                   key={t.id}
@@ -94,48 +99,30 @@ function Testimonials() {
               ))}
             </div>
           )}
-        </section>
+        </Section>
       )}
 
       {/* ── Section rapports de mission ── */}
       {showRapports && (
-        <section className="padding-y padding-x bg-surface-mid">
-          <h2 className="h2-style text-primary mb-8">Rapports de mission</h2>
+        <Section title="Rapports de mission" bg="bg-surface">
           {filteredRapports.length === 0 ? (
             <p className="text-body text-primary/50 italic">Aucun rapport pour ces critères.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-md">
               {filteredRapports.map(r => (
-                <div key={r.id} className="flex flex-col bg-surface rounded-xl overflow-hidden">
-                  <div className="w-full h-40 overflow-hidden">
-                    <img src="images/placeholders/placeholder-rapport-mission.png" alt={`Rapport ${r.auteur}`} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex flex-col justify-between gap-4 p-6 flex-1">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-eyebrow text-primary/40">{r.annee} — {r.destination}</span>
-                      <p className="text-caption text-primary/50">{r.auteur}</p>
-                    </div>
-                    <a href={r.pdf_url} target="_blank" rel="noopener noreferrer">
-                      <Button label="Télécharger le rapport ↓" variant="secondary" fullWidth />
-                    </a>
-                  </div>
-                </div>
+                <RapportCard
+                  key={r.id}
+                  auteur={r.auteur}
+                  annee={r.annee}
+                  destination={r.destination}
+                  pdf_url={r.pdf_url}
+                  image={r.image_url}
+                />
               ))}
             </div>
           )}
-        </section>
+        </Section>
       )}
-
-      {/* ── CTA soumission témoignage ── */}
-      <section className="padding-y padding-x bg-accent-2">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="max-w-2xl">
-            <h2 className="h2-style text-surface">Vous êtes partis en mission ?</h2>
-            <p className="text-body text-surface/80">Vos rencontres, vos découvertes et les moments forts vécus sur le terrain peuvent donner à d'autres l'envie de s'engager et de vivre cette aventure à leur tour.</p>
-          </div>
-          <Button label="Partager mon expérience →" variant="primary" onClick={() => setModalOpen(true)} />
-        </div>
-      </section>
 
       <ScrollToTop />
 

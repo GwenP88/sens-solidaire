@@ -7,6 +7,7 @@ function Button({ label, variant = 'primary', onClick, fullWidth = false, type =
   const styles = {
     primary:   'bg-accent text-surface hover:bg-surface hover:text-accent hover:border-accent border border-transparent',
     secondary: 'bg-primary text-surface hover:bg-surface hover:text-primary hover:border-primary border border-transparent',
+    light: 'bg-surface text-accent-2 hover:bg-dark hover:text-surface hover:border-surface border border-transparent',
   }
 
   return (
@@ -14,7 +15,7 @@ function Button({ label, variant = 'primary', onClick, fullWidth = false, type =
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`px-3 py-2 rounded text-label transition-colors cursor-pointer ${styles[variant]} ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      className={`btn-base ${styles[variant]} ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       {label}
     </button>

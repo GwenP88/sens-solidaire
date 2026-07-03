@@ -13,23 +13,25 @@ function HeroPage({ image, title, subtitle, duration, price, country, tags }) {
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }}></div>
       <div className="absolute inset-0 bg-black/50"></div>
 
-      <div className="relative flex flex-col gap-2">
+      {/* gap-xs gère l'espacement entre tous les enfants — text-eyebrow et text-lead
+          neutralisés (mb-0) pour éviter le cumul avec ce gap */}
+      <div className="relative flex flex-col gap-xs">
 
-        <span className="text-eyebrow text-surface">Sens Solidaire</span>
-        <h1 className="h1-style text-surface max-w-4xl">{title}</h1>
+        <span className="text-eyebrow text-surface">Sens Solidaires</span>
+        <h1 className="h1-style text-surface max-w-5xl">{title}</h1>
 
-        {subtitle && <p className="text-lead text-surface max-w-3xl">{subtitle}</p>}
+        {subtitle && <p className="text-lead text-surface max-w-4xl">{subtitle}</p>}
 
         {/* Infos rapides — durée + prix — missions détail */}
         {(duration || price) && (
-          <div className="flex gap-6 mt-2">
+          <div className="flex gap-md">
             {duration && (
-              <span className="text-body text-surface/80 flex items-center gap-2">
+              <span className="text-body text-surface/80 flex items-center gap-xs">
                 <IconClock className="text-surface text-base" />{duration}
               </span>
             )}
             {price && (
-              <span className="text-body text-surface/80 flex items-center gap-2">
+              <span className="text-body text-surface/80 flex items-center gap-xs">
                 <IconMoney className="text-surface text-base" />À partir de {price} €
               </span>
             )}
@@ -38,24 +40,21 @@ function HeroPage({ image, title, subtitle, duration, price, country, tags }) {
 
         {/* Infos rapides — pays + tags — actions détail */}
         {(country || tags?.length > 0) && (
-        <div className="flex flex-wrap items-center gap-8 mt-2">
-          {country && (
-            <span className="text-body text-surface/80 flex items-center gap-1">
-              <IconPin className="text-surface text-base" />{country}
-            </span>
-          )}
-          {country && tags?.length > 0 && (
-            <span className="text-surface/40">|</span>
-          )}
-          <div className="flex flex-wrap gap-2">
-            {tags?.map(tag => (
-              <span key={tag} className="text-caption text-surface/70 px-3 py-1 rounded-full border border-surface/40">
-                {tag}
+          <div className="flex flex-wrap items-center gap-md">
+            {country && (
+              <span className="text-body text-surface/80 flex items-center gap-xs">
+                <IconPin className="text-surface text-base" />{country}
               </span>
-            ))}
+            )}
+            <div className="flex flex-wrap gap-xs">
+              {tags?.map(tag => (
+                <span key={tag} className="text-caption text-surface/70 px-3 py-1 rounded-full border border-surface/40">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       </div>
     </div>

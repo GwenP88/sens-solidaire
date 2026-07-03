@@ -1,5 +1,6 @@
 // MediaDetail.jsx
-// Page détail média & actualité — hero, contenu, médias attachés, CTA
+// Page détail média & actualité — layout éditorial magazine
+// Structure prête pour les évolutions futures (auteur, tags, galerie, articles liés...)
 
 // ── React
 import { useState, useEffect } from 'react'
@@ -46,8 +47,21 @@ function MediaDetail() {
     day: 'numeric', month: 'long', year: 'numeric'
   })
 
-  // ── Rendu d'un média selon son type
-  const renderMedia = (m, i) => {
+  // ── Séparation des médias par type — pour un rendu adapté
+  const mediaImages = post.media?.filter(m => m.file_type === 'image') || []
+  const mediaPdfs   = post.media?.filter(m => m.file_type === 'pdf')   || []
+  const mediaLinks  = post.media?.filter(m => m.file_type === 'link')  || []
+  const mediaVideos = post.media?.filter(m => m.file_type === 'video') || []
+  const mediaAudios = post.media?.filter(m => m.file_type === 'audio') || []
+
+  // ── Ressources à afficher dans la sidebar — PDF + liens externes
+  const sidebarResources = [...mediaPdfs, ...mediaLinks]
+
+  // ── Ressources dans le contenu — vidéos + audio + images
+  const contentResources = [...mediaVideos, ...mediaAudios, ...mediaImages]
+
+  // ── Rendu d'une ressource dans le contenu
+  const renderContentMedia = (m, i) => {
     if (m.file_type === 'image') return (
       <img key={i} src={m.file_url} alt="" className="w-full rounded-2xl object-cover" />
     )
@@ -61,16 +75,6 @@ function MediaDetail() {
         <source src={m.file_url} />
       </audio>
     )
-    if (m.file_type === 'pdf') return (
-      <a key={i} href={m.file_url} target="_blank" rel="noopener noreferrer">
-        <Button label={m.label ? m.label + ' ↓' : 'Télécharger le PDF ↓'} variant="secondary" />
-      </a>
-    )
-    if (m.file_type === 'link') return (
-      <a key={i} href={m.file_url} target="_blank" rel="noopener noreferrer">
-        <Button label={m.label ? m.label + ' →' : 'Voir le lien →'} variant="secondary" />
-      </a>
-    )
     return null
   }
 
@@ -83,47 +87,126 @@ function MediaDetail() {
         title={post.title}
       />
 
-      {/* ── Contenu principal — colonne centrée max-w-3xl ── */}
+      {/* ── Contenu principal — layout éditorial 2 colonnes ── */}
       <section className="padding-y padding-x bg-surface">
-        <div className="flex flex-col gap-6 max-w-3xl">
 
-          {/* Lien retour */}
-          <a href="/medias-et-actualites" className="link-nav text-primary/50 hover:text-primary">
-            ← Retour aux médias
-          </a>
+        {/* Lien retour */}
+        <a href="/medias-et-actualites" className="link-nav text-primary/50 hover:text-primary block mb-8">
+          ← Retour aux médias
+        </a>
 
-          {/* Date + thème */}
-          <div className="flex items-center gap-2">
-            <span className="text-caption text-primary/50">{formattedDate}</span>
-            <span className="text-caption text-primary/30">—</span>
-            <span className="text-eyebrow text-accent-2">{post.theme}</span>
+        {/* Grid — colonne contenu 70% + sidebar 30% à partir de lg */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-lg items-start">
+
+          {/* ── Colonne gauche — contenu éditorial (2/3) ── */}
+          <div className="lg:col-span-2 flex flex-col gap-md">
+
+            {/* Contenu long — paragraphes lisibles */}
+            {/* max-w-prose : limite la longueur des lignes pour le confort de lecture */}
+            {post.content && (
+              <div className="flex flex-col gap-sm max-w-prose">
+                {post.content.split('\n\n').map((para, i) => (
+                  <p key={i} className="text-body text-primary/80">{para}</p>
+                ))}
+              </div>
+            )}
+
+            {/* ── Ressources dans le contenu — vidéos, audio, images ── */}
+            {/* Séparées du texte pour ne pas interrompre la lecture */}
+            {contentResources.length > 0 && (
+              <div className="flex flex-col gap-md">
+                <h3 className="h3-style text-primary mb-0">Ressources associées</h3>
+                {contentResources.map((m, i) => renderContentMedia(m, i))}
+              </div>
+            )}
+
           </div>
 
-          {/* Contenu long */}
-          {post.content && post.content.split('\n\n').map((para, i) => (
-            <p key={i} className="text-body text-primary/80">{para}</p>
-          ))}
+          {/* ── Colonne droite — sidebar informations pratiques ── */}
+          {/* sticky : reste visible pendant le scroll du contenu */}
+          <aside className="sticky top-24 self-start flex flex-col gap-md">
 
-          {/* Médias attachés */}
-          {post.media?.length > 0 && (
-            <div className="flex flex-col gap-6 mt-4">
-              {post.media.map((m, i) => renderMedia(m, i))}
+            {/* Card infos — n'affiche que les données disponibles */}
+            <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
+              <h3 className="h3-style text-primary mb-0">Informations</h3>
+
+              {/* Thème */}
+              {post.theme && (
+                <div className="flex flex-col gap-xs">
+                  <span className="text-eyebrow text-primary/40">Thème</span>
+                  <span className="text-body text-primary/80">{post.theme}</span>
+                </div>
+              )}
+
+              {/* Date */}
+              {post.date && (
+                <div className="flex flex-col gap-xs">
+                  <span className="text-eyebrow text-primary/40">Date</span>
+                  <span className="text-body text-primary/80">{formattedDate}</span>
+                </div>
+              )}
+
+              {/* Lien externe principal — si disponible */}
+              {post.external_url && (
+                <a
+                  href={post.external_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2"
+                >
+                  <Button label="Voir la source →" variant="primary" fullWidth />
+                </a>
+              )}
+
+              {/* ── Champs futurs — décommenter quand disponibles en BDD ──
+              {post.author && (
+                <div className="flex flex-col gap-xs">
+                  <span className="text-eyebrow text-primary/40">Auteur</span>
+                  <span className="text-body text-primary/80">{post.author}</span>
+                </div>
+              )}
+              {post.source && (
+                <div className="flex flex-col gap-xs">
+                  <span className="text-eyebrow text-primary/40">Source</span>
+                  <a href={post.source} target="_blank" rel="noopener noreferrer"
+                    className="link-cta text-accent">Voir la source →</a>
+                </div>
+              )}
+              {post.read_time && (
+                <div className="flex flex-col gap-xs">
+                  <span className="text-eyebrow text-primary/40">Lecture</span>
+                  <span className="text-body text-primary/80">{post.read_time} min</span>
+                </div>
+              )}
+              */}
             </div>
-          )}
 
-        </div>
-      </section>
+            {/* ── Ressources téléchargeables — PDFs + liens en cards ── */}
+            {sidebarResources.length > 0 && (
+              <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
+                <h3 className="h3-style text-primary mb-0">Documents</h3>
+                {sidebarResources.map((m, i) => (
+                  <a
+                    key={i}
+                    href={m.file_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-xs p-3 bg-surface rounded-xl hover:shadow-sm transition-shadow"
+                  >
+                    {/* Icône selon le type */}
+                    <span className="text-accent text-lg shrink-0">
+                      {m.file_type === 'pdf' ? '📄' : '🔗'}
+                    </span>
+                    <span className="text-body text-primary/80 line-clamp-2">
+                      {m.label || (m.file_type === 'pdf' ? 'Télécharger le PDF' : 'Voir le lien')}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            )}
 
-      {/* ── CTA bas de page ── */}
-      <section className="padding-y padding-x bg-accent-2">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <h2 className="h2-style text-surface">Envie de vous engager à nos côtés ?</h2>
-            <p className="text-body text-surface/80">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
-          </div>
-          <a href="/missions">
-            <Button label="Voir nos missions →" variant="primary" />
-          </a>
+          </aside>
+
         </div>
       </section>
 

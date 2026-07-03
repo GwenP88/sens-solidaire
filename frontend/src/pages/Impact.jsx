@@ -1,4 +1,4 @@
-// NotreImpact.jsx
+// Impact.jsx
 // Page Notre Impact — actions terrain connectées à l'API
 
 // ── React
@@ -17,9 +17,10 @@ import HeroPage from '../components/layout/HeroPage'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Filters from '../components/navigation/Filters'
+import Section from '../components/ui/Section'
 
 // ── Composants métier
-import ActionCard from '../components/actions/ActionCard'
+import ImpactCard from '../components/actions/ImpactCard'
 
 // ── Utils
 import { ODDS } from '../utils/odds'
@@ -66,25 +67,17 @@ function NotreImpact() {
         subtitle="Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable."
       />
 
-      {/* ── Section ODD — icônes officielles ONU avec labels français ── */}
-      <section className="padding-y padding-x bg-surface-mid">
-        <div className="section-header">
-          <div className="max-w-5xl">
-            <h2 className="h2-style text-primary mb-2">Nos actions et les Objectifs de Développement Durable</h2>
-            <p className="text-body text-primary/60">
-              Les Objectifs de Développement Durable (ODD) sont 17 grands objectifs définis par l'ONU pour relever les défis sociaux, environnementaux et économiques de notre époque.<br /><br />
-              À notre échelle, chacun de nos projets s'inscrit dans cette dynamique. Qu'il s'agisse de protéger la biodiversité, favoriser l'accès à l'éducation, soutenir les communautés locales ou sensibiliser les jeunes aux enjeux environnementaux, nous contribuons concrètement à bâtir un monde plus juste, plus solidaire et plus respectueux du vivant.
-            </p>
-          </div>
-          <a href="https://www.un.org/sustainabledevelopment/fr/" target="_blank" rel="noopener noreferrer">
-            <Button label="Découvrir les 17 ODD →" variant="primary" />
-          </a>
-        </div>
-
-        {/* Grille ODD — flex wrap centré */}
-        <div className="flex flex-wrap gap-3 justify-center mt-8">
+      {/* ── Section ODD ── */}
+      <Section
+        bg="bg-surface-mid"
+        title="Nos actions et les Objectifs de Développement Durable"
+        subtitle="Les Objectifs de Développement Durable (ODD) sont 17 grands objectifs définis par l'ONU pour relever les défis sociaux, environnementaux et économiques de notre époque. À notre échelle, chacun de nos projets s'inscrit dans cette dynamique."
+        cta={{ label: "En savoir plus →", href: "https://www.un.org/sustainabledevelopment/fr/", target: "_blank" }}
+      >
+        {/* Grille ODD */}
+        <div className="flex flex-wrap gap-xs justify-center mt-8">
           {ODDS.map(odd => (
-            <div key={odd.n} className="flex flex-col items-center gap-2 w-20 text-center">
+            <div key={odd.n} className="flex flex-col items-center gap-xs w-20 text-center">
               <img
                 src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
                 alt={`ODD ${odd.n}`}
@@ -94,9 +87,9 @@ function NotreImpact() {
             </div>
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* ── Barre de filtres — select pays + chips thématiques, via Filters (cas combiné) ── */}
+      {/* ── Barre de filtres — select pays + chips thématiques ── */}
       <div className="bg-primary padding-x filter-py">
         <Filters
           selects={FILTER_CONFIG_COUNTRY}
@@ -112,15 +105,19 @@ function NotreImpact() {
       </div>
 
       {/* ── Grille des actions ── */}
-      <section className="padding-y padding-x">
+      <Section
+        title="Nos actions terrain"
+        subtitle="Sens Solidaires s'investit sur tous les continents afin de collaborer sur des projets tournés vers la sauvegarde de la biodiversité, le bien-être des populations locales et un développement durable."
+        cta={{ label: "Voir toutes les actions →", href: "/notre-impact" }}
+      >
         {loading ? (
           <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredActions.length === 0 ? (
           <p className="text-body text-primary/50 italic">Aucune action pour ce filtre.</p>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-md">
             {filteredActions.map(action => (
-              <ActionCard
+              <ImpactCard
                 key={action.slug}
                 slug={action.slug}
                 title={action.title}
@@ -133,20 +130,7 @@ function NotreImpact() {
             ))}
           </div>
         )}
-      </section>
-
-      {/* ── CTA missions ── */}
-      <section className="padding-y padding-x bg-accent-2">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <h2 className="h2-style text-surface">Envie de vous engager à nos côtés ?</h2>
-            <p className="text-body text-surface/80">Découvrez nos missions et participez à des projets concrets sur le terrain.</p>
-          </div>
-          <a href="/missions">
-            <Button label="Voir nos missions →" variant="primary" />
-          </a>
-        </div>
-      </section>
+      </Section>
 
       <ScrollToTop />
     </div>

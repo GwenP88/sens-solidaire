@@ -14,14 +14,19 @@ import StatsBar from '../components/layout/StatsBar'
 // ── Composants UI
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
-import { ODDS } from '../utils/odds'
 import Carousel from '../components/ui/Carousel'
+import Section from '../components/ui/Section'
+import Modal from '../components/ui/Modal'
 
 // ── Composants métier
 import MissionCard from '../components/missions/MissionCard'
-import ActionCard from '../components/actions/ActionCard'
+import ImpactCard from '../components/actions/ImpactCard'
 import MediaCard from '../components/media/MediaCard'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
+import TestimonialForm from '../components/testimonials/TestimonialForm'
+
+// ── Utils
+import { ODDS } from '../utils/odds'
 
 // ── Données statiques — 4 types de missions (contenu fixe, non géré en BDD)
 const MISSION_TYPES = [
@@ -68,20 +73,19 @@ const MISSION_TYPES = [
 ]
 
 function Home() {
-  // ── État local — données dynamiques depuis l'API
   const [testimonials, setTestimonials] = useState([])
   const [actions, setActions] = useState([])
   const [partners, setPartners] = useState([])
   const [mediaPosts, setMediaPosts] = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
 
-  // ── Chargement en parallèle au montage
   useEffect(() => {
     fetchTestimonials()
       .then(data => setTestimonials(data.filter(t => t.show_homepage)))
       .catch(console.error)
 
-    // ── Actions terrain — 6 dernières créées, triées par created_at décroissant
-    // NOTE : sélection manuelle par la cliente prévue en V2 (dashboard + champ BDD dédié, à coordonner avec Alison)
+    // ── 6 dernières actions — tri par created_at décroissant
+    // NOTE : sélection manuelle par la cliente prévue en V2 (dashboard + champ BDD, à coordonner avec Alison)
     fetchFieldActions()
       .then(data => {
         const sorted = [...data].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -105,20 +109,13 @@ function Home() {
       <Hero />
       <StatsBar />
 
-      {/* ── Section types de missions — 4 cards 2x2 ── */}
-      <section className="padding-y padding-x bg-surface">
-        <div className="section-header flex-col xl:flex-row">
-          <div className="max-w-4xl">
-            <h2 className="h2-style text-primary">Nos missions</h2>
-            <p className="text-body text-primary/80">
-              Parce que chaque parcours est unique, nous proposons différentes formes d'engagement adaptées à vos envies et à vos disponibilités. Mission individuelle, service civique, mission de groupe ou congé solidaire : rejoignez des projets concrets au service de la biodiversité et vivez une expérience humaine riche en rencontres et en découvertes.
-            </p>
-          </div>
-          <a href="/missions">
-            <Button label="Voir toutes les missions →" variant="primary" />
-          </a>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* ── Section types de missions ── */}
+      <Section
+        title="Nos missions"
+        subtitle="Parce que chaque parcours est unique, nous proposons différentes formes d'engagement adaptées à vos envies et à vos disponibilités."
+        cta={{ label: "Voir toutes les missions →", href: "/missions" }}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-md">
           {MISSION_TYPES.map(type => (
             <MissionCard
               key={type.slug}
@@ -133,19 +130,16 @@ function Home() {
             />
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* ── Section témoignages — carousel depuis l'API (show_homepage) ── */}
-      <section className="padding-y padding-x bg-accent-2">
-        <div className="section-header flex-col xl:flex-row">
-          <div className="max-w-4xl">
-            <h2 className="h2-style text-surface">Ils racontent leur aventure</h2>
-            <p className="text-body text-surface/80">Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain.</p>
-          </div>
-          <a href="/temoignages">
-            <Button label="Voir tous les témoignages →" variant="primary" />
-          </a>
-        </div>
+      {/* ── Section témoignages ── */}
+      <Section
+        bg="bg-accent-2"
+        textColor="text-surface"
+        title="Ils racontent leur aventure"
+        subtitle="Découvrez les retours d'expérience de nos volontaires engagés à nos côtés sur le terrain."
+        cta={{ label: "Voir tous les témoignages →", href: "/temoignages" }}
+      >
         <Carousel
           color="surface"
           items={testimonials}
@@ -156,27 +150,27 @@ function Home() {
               mission={t.mission?.title || ''}
             />
           )}
-          slidesPerView={3}
-          spaceBetween={24}
           showPagination={true}
         />
-      </section>
-
-      {/* ── Section actions terrain — 6 dernières actions depuis l'API, en carousel ── */}
-      <section className="padding-y padding-x bg-surface">
-        <div className="section-header flex-col xl:flex-row">
-          <div className="max-w-4xl">
-            <h2 className="h2-style text-primary">Des actions concrètes au cœur des territoires</h2>
-            <p className="text-body text-primary/80">Depuis plus de 20 ans, nous menons des projets en faveur des Objectifs de Développement Durable (ODD), un cadre international regroupant 17 objectifs fixés par les Nations Unies pour préserver la planète, réduire les inégalités et améliorer les conditions de vie de tous.</p>
-          </div>
-            <a href="/notre-impact">
-              <Button label="Voir toutes les actions →" variant="primary" />
-            </a>
+        <div className="flex justify-center mt-4">
+          <button onClick={() => setModalOpen(true)}>
+            <Button
+              label="Vous êtes partis en mission ? Racontez-nous →"
+              variant="light"
+            />
+          </button>
         </div>
+      </Section>
 
-        {/* ── Ligne ODD — icônes officielles ONU ── */}
-        <div className="flex flex-col items-center gap-6 my-8">
-          <div className="flex flex-wrap justify-center gap-2">
+      {/* ── Section actions terrain ── */}
+      <Section
+        title="Des actions concrètes au cœur des territoires"
+        subtitle="Depuis plus de 20 ans, nous menons des projets en faveur des Objectifs de Développement Durable (ODD), un cadre international regroupant 17 objectifs fixés par les Nations Unies."
+        cta={{ label: "Voir toutes les actions →", href: "/notre-impact" }}
+      >
+        {/* ── Ligne ODD ── */}
+        <div className="flex flex-col items-center gap-sm my-8">
+          <div className="flex flex-wrap justify-center gap-xs">
             {ODDS.map(odd => (
               <img
                 key={odd.n}
@@ -191,11 +185,10 @@ function Home() {
           </a>
         </div>
 
-        {/* ── Carousel — 6 dernières actions, tous breakpoints ── */}
         <Carousel
           items={actions}
           renderSlide={(action) => (
-            <ActionCard
+            <ImpactCard
               slug={action.slug}
               title={action.title}
               description={action.description}
@@ -205,55 +198,56 @@ function Home() {
               country={action.country}
             />
           )}
-          slidesPerView={3}
-          spaceBetween={24}
           showPagination={true}
           color="primary"
         />
-      </section>
+      </Section>
 
-      {/* ── Section Actualités ── */}
-      {mediaPosts.length > 0 && (
-        <section className="padding-y padding-x bg-surface-mid">
-          <div className="section-header flex-col xl:flex-row">
-            <div className="max-w-4xl">
-              <h2 className="h2-style text-primary">Actualités & Médias</h2>
-              <p className="text-body text-primary/80">Suivez la vie de Sens Solidaires à travers nos événements, nos projets, nos interventions dans les médias et nos actions de sensibilisation. Découvrez les temps forts de notre engagement qui font vivre l'association, en France comme à l'international.</p>
-            </div>
-            <a href="/medias-et-actualites">
-              <Button label="Voir toutes les actualités →" variant="primary" />
-            </a>
-          </div>
-          <Carousel
-            items={mediaPosts}
-            renderSlide={(post) => <MediaCard key={post.slug} {...post} />}
-            slidesPerView={3}
-            spaceBetween={24}
-            showPagination={true}
-            color="primary"
-          />
-        </section>
-      )}
+      {/* ── Section Actualités — épinglés en priorité, complétés par les plus récents ── */}
+      {mediaPosts.length > 0 && (() => {
+        const pinned = mediaPosts.filter(p => p.show_homepage)
+        const recent = mediaPosts.filter(p => !p.show_homepage).slice(0, 6 - pinned.length)
+        const homePosts = [...pinned, ...recent]
 
-      {/* ── Section partenaires — logos depuis l'API ── */}
-      <section className="padding-y padding-x bg-accent-2">
-        <div className="section-header flex-col xl:flex-row">
-          <div>
-            <h2 className="h2-style text-surface">Ils nous font confiance</h2>
-            <p className="text-body text-surface/80">Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire.</p>
-          </div>
-          <a href="/a-propos">
-            <Button label="En savoir plus sur nous →" variant="primary" />
-          </a>
-        </div>
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 items-center">
+        return (
+          <Section
+            bg="bg-surface-mid"
+            title="Actualités & Médias"
+            subtitle="Suivez la vie de Sens Solidaires à travers nos événements, nos projets, nos interventions dans les médias et nos actions de sensibilisation."
+            cta={{ label: "Voir toutes les actualités →", href: "/medias-et-actualites" }}
+          >
+            <Carousel
+              items={homePosts}
+              renderSlide={(post) => <MediaCard key={post.slug} {...post} />}
+              showPagination={true}
+              color="primary"
+            />
+          </Section>
+        )
+      })()}
+
+      {/* ── Section partenaires ── */}
+      <Section
+        bg="bg-accent-2"
+        textColor="text-surface"
+        title="Ils nous font confiance"
+        subtitle="Collectivités, institutions et associations s'engagent à nos côtés pour construire un monde plus solidaire."
+        cta={{ label: "En savoir plus sur nous →", href: "/a-propos" }}
+      >
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-md items-center">
           {partners.map(partner => (
             <div key={partner.id} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24 p-1">
-              <img src={partner.logo_url} alt={partner.name} className="max-h-14 max-w-full object-contain" />
+              <img 
+                src={partner.logo_url} alt={partner.name}
+                className="w-full h-full object-contain p-2" />
             </div>
           ))}
         </div>
-      </section>
+      </Section>
+
+        <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Partager votre témoignage">
+          <TestimonialForm onClose={() => setModalOpen(false)} />
+        </Modal>
 
       <ScrollToTop />
     </div>

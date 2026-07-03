@@ -6,6 +6,7 @@ import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Section from '../components/ui/Section'
 
 // ── Composants formulaire
 import ContactForm from '../components/forms/ContactForm'
@@ -21,13 +22,10 @@ function Contact() {
         subtitle="Une équipe à votre écoute pour vous accompagner dans votre projet."
       />
 
-      <section className="padding-y padding-x">
-
-        {/* ── Titre de section ── */}
-        <h2 className="h2-style text-primary pb-4">Une question, un projet ou simplement l'envie d'en savoir plus ?</h2>
+      <Section title="Une question, un projet ou simplement l'envie d'en savoir plus ?">
 
         {/* ── Intro + carte référente ── */}
-        <div className="flex flex-col md:flex-row gap-8 items-start mb-10">
+        <div className="flex flex-col md:flex-row gap-lg items-start">
 
           {/* Texte d'introduction — 2/3 */}
           <p className="text-body text-primary/80 flex-1">
@@ -36,8 +34,9 @@ function Contact() {
           </p>
 
           {/* Carte référente — 1/3 */}
-          <div className="w-full md:w-1/3 shrink-0 flex flex-col items-center gap-1 p-6 bg-surface-mid rounded-2xl text-center">
-            <h3 className="h3-style text-primary">Delphine Thibaut</h3>
+          {/* h3-style mb-0 : dans flex flex-col gap-xs, marge redondante avec gap */}
+          <div className="w-full md:w-1/3 shrink-0 flex flex-col items-center gap-xs p-6 bg-surface-mid rounded-2xl text-center">
+            <h3 className="h3-style text-primary mb-0">Delphine Thibaut</h3>
             <p className="text-caption text-primary/60">Fondatrice et Chargée des Programmes</p>
             <a href="mailto:contact@sensolidaire.org" className="link-inline text-primary/60 hover:text-accent">
               contact@sensolidaire.org
@@ -50,13 +49,13 @@ function Contact() {
         </div>
 
         {/* ── Layout 2 colonnes — photo + formulaire ── */}
-        <div className="flex flex-col-reverse xl:flex-row gap-8 items-stretch">
+        <div className="flex flex-col-reverse xl:flex-row gap-lg items-stretch mt-8">
 
-          {/* Photo — cachée mobile, pleine largeur 768+1024, 1/3 desktop */}
+          {/* Photo — cachée mobile, visible 768+, 1/3 desktop */}
           <div className="hidden md:block xl:w-1/3 xl:shrink-0">
             <img
               src="/images/contact/contact.jpg"
-              alt="Équipe Sens Solidaire"
+              alt="Équipe Sens Solidaires"
               className="w-full h-64 xl:h-full object-cover rounded-2xl"
             />
           </div>
@@ -67,7 +66,8 @@ function Contact() {
           </div>
 
         </div>
-      </section>
+
+      </Section>
 
       <ScrollToTop />
     </div>

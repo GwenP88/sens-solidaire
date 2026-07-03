@@ -56,17 +56,21 @@ model MissionPricing {
 // ─────────────────────────────────────────
 
 model Location {
-  id          Int      @id @default(autoincrement())
-  mission_id  Int
-  slug        String   @unique
-  name        String
-  country     String
-  description String
-  image_url   String?
-  is_active   Boolean  @default(true)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  mission     Mission  @relation(fields: [mission_id], references: [id])
+  id              Int         @id @default(autoincrement())
+  mission_id      Int
+  slug            String      @unique
+  name            String
+  country         String
+  description     String
+  image_url       String?
+  map_url         String?
+  website_url     String?
+  is_active       Boolean     @default(true)
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  mission         Mission     @relation(fields: [mission_id], references: [id])
+  delegation_id   Int?
+  delegation      Delegation? @relation(fields: [delegation_id], references: [id])
 }
 
 // ─────────────────────────────────────────
@@ -144,7 +148,7 @@ model FieldAction {
   title       String
   description String   // court — utilisé comme H2 sur la page détail
   content     String   // texte long — paragraphes séparés par \n\n
-  country     String   // Kenya, Sénégal, Sri Lanka...
+  countries   FieldActionCountry[]
   image_url   String?  // image principale
   is_active   Boolean  @default(true)
   created_at  DateTime @default(now())
@@ -178,6 +182,17 @@ model FieldActionODD {
 }
 
 // ─────────────────────────────────────────
+// PAYS LIE A UNE ACTION SUR LE TERRAIN
+// ─────────────────────────────────────────
+
+model FieldActionCountry {
+  id          Int         @id @default(autoincrement())
+  field_action FieldAction @relation(fields: [action_id], references: [id])
+  action_id   Int
+  country     String      // "France", "Kenya", "Sénégal"...
+}
+
+// ─────────────────────────────────────────
 // ARTICLES : MEDIAS ET ACTUALITES
 // ─────────────────────────────────────────
 
@@ -190,6 +205,7 @@ model MediaPost {
   date         DateTime
   image_url    String?
   external_url String?
+  show_homepage Boolean @default(false)
   is_active    Boolean  @default(true)
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
@@ -237,7 +253,7 @@ model TeamMember {
   description   String?
   avatar_url    String?
   category      String   // direction, bureau, ca, egalement
-  display_order Int    @default(0)
+  display_order Int      @default(0)
   is_active     Boolean  @default(true)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
@@ -255,13 +271,14 @@ model Delegation {
   lieu            String
   contacts        String
   display_order   Int      @default(0)
+  locations Location[]
   is_active       Boolean  @default(true)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 }
 
 // ─────────────────────────────────────────
-// PARTENAIRES
+// PARTENAIRES (LOGOS)
 // ─────────────────────────────────────────
 model Partner {
   id            Int      @id @default(autoincrement())

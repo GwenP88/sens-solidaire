@@ -22,7 +22,6 @@ import { IoChevronDownSharp, IoCloseSharp, IoMenuSharp } from 'react-icons/io5'
 // DONNÉES STATIQUES
 // ════════════════════════════════════════════════════════════════
 
-// ── Liste des missions pour le dropdown — à mettre à jour si nouvelles missions
 const MISSIONS = [
   { label: "Kenya", slug: "volontariat-kenya-environnement-biodiversite" },
   { label: "Sénégal", slug: "volontariat-senegal-casamance-agroecologie-mangrove" },
@@ -31,7 +30,6 @@ const MISSIONS = [
   { label: "Sumatra", slug: "volontariat-sumatra-biodiversite-orang-outan" },
 ]
 
-// ── Liens À propos pour le dropdown
 const APROPOS = [
   { label: "Notre association", href: "/a-propos" },
   { label: "Notre équipe", href: "/equipe" },
@@ -41,154 +39,91 @@ const APROPOS = [
 function Navbar() {
   const location = useLocation()
 
-  // ════════════════════════════════════════════════════════════════
-  // ÉTATS — ouverture/fermeture des menus
-  // ════════════════════════════════════════════════════════════════
-
-  // ── Menu burger mobile (toute la nav mobile)
   const [mobileOpen, setMobileOpen] = useState(false)
-
-  // ── Accordéons à l'intérieur du menu mobile
   const [mobileMissionsOpen, setMobileMissionsOpen] = useState(false)
   const [mobileAproposOpen, setMobileAproposOpen] = useState(false)
-
-  // ── Dropdowns desktop — ouverts par survol OU par clic (voir plus bas)
   const [missionsOpen, setMissionsOpen] = useState(false)
   const [aproposOpen, setAproposOpen] = useState(false)
-
-  // ── Timers — petit délai avant fermeture au survol, pour éviter une fermeture
-  // trop brutale si la souris quitte la zone une fraction de seconde
   const closeTimer = useRef(null)
   const closeTimerApropos = useRef(null)
 
-  // ── Détection de la page active — pour le soulignement du lien courant
   const isOnMissions = location.pathname.startsWith('/missions')
   const isOnApropos = location.pathname.startsWith('/a-propos') || location.pathname.startsWith('/equipe')
 
-  // ── Ferme tout le menu mobile (burger + accordéons) — appelé au clic sur un lien mobile
   const handleMobileNav = () => {
     setMobileOpen(false)
     setMobileMissionsOpen(false)
     setMobileAproposOpen(false)
   }
 
-
   return (
     <>
-
       {/* ════════════════════════════════════════════════════════════════
-          BARRE PRINCIPALE — toujours visible, transparente sur le Hero
+          BARRE PRINCIPALE
+          Note : px-4 lg:px-8 xl:px-16 volontairement différent de padding-x
+          la navbar a besoin de moins de marge pour ne pas étouffer les liens
           ════════════════════════════════════════════════════════════════ */}
       <nav className="w-full flex items-center justify-between px-4 lg:px-8 xl:px-16 h-20 bg-transparent absolute top-0 left-0 z-10">
 
-        {/* ── LOGO — toujours visible, lien vers l'accueil ── */}
         <Link to="/">
           <div className="bg-white/40 rounded-full p-1">
-            <img src="/logo.png" alt="Sens Solidaire" className="h-12 md:h-14" />
+            <img src="/logo.png" alt="Sens Solidaires" className="h-12 md:h-14" />
           </div>
         </Link>
 
-
         {/* ────────────────────────────────────────────────────────────
-            LIENS DESKTOP — masqués sur mobile (hidden lg:flex)
+            LIENS DESKTOP
             ──────────────────────────────────────────────────────────── */}
-        <div className="hidden lg:flex items-center gap-4 xl:gap-10">
+        <div className="hidden lg:flex items-center gap-sm xl:gap-lg">
 
-          {/* ── Accueil — icône maison ── */}
-          <Link
-            to="/"
-            className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/' ? 'underline underline-offset-4' : ''}`}
-          >
+          <Link to="/" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/' ? 'underline underline-offset-4' : ''}`}>
             <GrHomeRounded />
           </Link>
 
-
-          {/* ──────────────────────────────────────────────
-              DROPDOWN "NOS MISSIONS" — desktop
-              Ouverture : au survol (onMouseEnter) OU au clic sur le lien déclencheur
-              ────────────────────────────────────────────── */}
+          {/* ── DROPDOWN "NOS MISSIONS" ── */}
           <div
             className="relative flex items-center"
             onMouseEnter={() => { clearTimeout(closeTimer.current); setMissionsOpen(true) }}
             onMouseLeave={() => { closeTimer.current = setTimeout(() => setMissionsOpen(false), 150) }}
           >
-
-            {/* ── Lien déclencheur ──
-                onClick : empêche la navigation directe vers /missions (preventDefault)
-                et bascule l'ouverture du menu à la place — nécessaire pour que le clic
-                fonctionne de façon fiable en plus du survol */}
             <Link
               to="/missions"
-              onClick={(e) => {
-                e.preventDefault()
-                setMissionsOpen(prev => !prev)
-              }}
-              className={`link-nav text-surface hover:text-accent font-bold inline-flex items-center gap-1 ${isOnMissions ? 'underline underline-offset-4' : ''}`}
+              onClick={(e) => { e.preventDefault(); setMissionsOpen(prev => !prev) }}
+              className={`link-nav text-surface hover:text-accent font-bold inline-flex items-center gap-xs ${isOnMissions ? 'underline underline-offset-4' : ''}`}
             >
               Nos missions<IoChevronDownSharp className="text-xs" />
             </Link>
-
-            {/* ── Sous-menu — affiché uniquement si missionsOpen est true ── */}
             {missionsOpen && (
               <div className="absolute top-full left-0 mt-2 bg-primary rounded-xl shadow-lg py-2 min-w-48 z-20">
-
-                {/* ── Lien "Toutes les missions" — navigue normalement + ferme le menu ── */}
-                <Link
-                  to="/missions"
-                  onClick={() => setMissionsOpen(false)}
-                  className="block px-5 py-2 link-nav text-surface hover:text-accent border-b border-surface/10"
-                >
+                <Link to="/missions" onClick={() => setMissionsOpen(false)} className="block px-5 py-2 link-nav text-surface hover:text-accent border-b border-surface/10">
                   Toutes les missions
                 </Link>
-
-                {/* ── Liens par destination — naviguent normalement + ferment le menu ── */}
                 {MISSIONS.map(m => (
-                  <Link
-                    key={m.slug}
-                    to={`/missions/${m.slug}`}
-                    onClick={() => setMissionsOpen(false)}
-                    className={`block px-5 py-2 link-nav text-surface hover:text-accent ${location.pathname === `/missions/${m.slug}` ? 'text-accent' : ''}`}
-                  >
+                  <Link key={m.slug} to={`/missions/${m.slug}`} onClick={() => setMissionsOpen(false)} className={`block px-5 py-2 link-nav text-surface hover:text-accent ${location.pathname === `/missions/${m.slug}` ? 'text-accent' : ''}`}>
                     {m.label}
                   </Link>
                 ))}
-
               </div>
             )}
           </div>
 
-
-          {/* ──────────────────────────────────────────────
-              DROPDOWN "À PROPOS" — desktop, même logique que ci-dessus
-              ────────────────────────────────────────────── */}
+          {/* ── DROPDOWN "À PROPOS" ── */}
           <div
             className="relative flex items-center"
             onMouseEnter={() => { clearTimeout(closeTimerApropos.current); setAproposOpen(true) }}
             onMouseLeave={() => { closeTimerApropos.current = setTimeout(() => setAproposOpen(false), 150) }}
           >
-
-            {/* ── Lien déclencheur — même logique clic + survol que "Nos missions" ── */}
             <Link
               to="/a-propos"
-              onClick={(e) => {
-                e.preventDefault()
-                setAproposOpen(prev => !prev)
-              }}
-              className={`link-nav text-surface hover:text-accent font-bold inline-flex items-center gap-1 ${isOnApropos ? 'underline underline-offset-4' : ''}`}
+              onClick={(e) => { e.preventDefault(); setAproposOpen(prev => !prev) }}
+              className={`link-nav text-surface hover:text-accent font-bold inline-flex items-center gap-xs ${isOnApropos ? 'underline underline-offset-4' : ''}`}
             >
               À propos<IoChevronDownSharp className="text-xs" />
             </Link>
-
-            {/* ── Sous-menu — affiché uniquement si aproposOpen est true ── */}
             {aproposOpen && (
               <div className="absolute top-full left-0 mt-2 bg-primary rounded-xl shadow-lg py-2 min-w-48 z-20">
                 {APROPOS.map(item => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    onClick={() => setAproposOpen(false)}
-                    className={`block px-5 py-2 link-nav text-surface hover:text-accent ${location.pathname === item.href ? 'text-accent' : ''}`}
-                  >
+                  <Link key={item.href} to={item.href} onClick={() => setAproposOpen(false)} className={`block px-5 py-2 link-nav text-surface hover:text-accent ${location.pathname === item.href ? 'text-accent' : ''}`}>
                     {item.label}
                   </Link>
                 ))}
@@ -196,151 +131,78 @@ function Navbar() {
             )}
           </div>
 
-
-          {/* ── Liens simples — pas de dropdown ── */}
-          <Link to="/notre-impact" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/notre-impact' ? 'underline underline-offset-4' : ''}`}>
-            Notre impact
-          </Link>
-
-          <Link to="/actions-educatives" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/actions-educatives' ? 'underline underline-offset-4' : ''}`}>
-            Éducation & sensibilisation
-          </Link>
-
-          <Link to="/medias-et-actualites" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/medias-et-actualites' ? 'underline underline-offset-4' : ''}`}>
-            Médias & actualités
-          </Link>
-
-          <Link to="/contact" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/contact' ? 'underline underline-offset-4' : ''}`}>
-            Contact
-          </Link>
+          <Link to="/notre-impact" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/notre-impact' ? 'underline underline-offset-4' : ''}`}>Notre impact</Link>
+          <Link to="/education-sensibilisation" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/education-sensibilisation' ? 'underline underline-offset-4' : ''}`}>Éducation & sensibilisation</Link>
+          <Link to="/medias-et-actualites" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/medias-et-actualites' ? 'underline underline-offset-4' : ''}`}>Médias & actualités</Link>
+          <Link to="/contact" className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/contact' ? 'underline underline-offset-4' : ''}`}>Contact</Link>
 
         </div>
 
-        {/* ────────────────────────────────────────────────────────────
-            ACTIONS DROITE — langue, bouton don, burger mobile
-            ──────────────────────────────────────────────────────────── */}
-        <div className="flex items-center gap-4">
-
-          {/* ── Sélecteur langue — desktop uniquement ── */}
-          <button className="hidden lg:inline-flex link-nav text-surface hover:text-accent font-bold items-center gap-1">
+        {/* ── ACTIONS DROITE ── */}
+        <div className="flex items-center gap-sm">
+          <button className="hidden lg:inline-flex link-nav text-surface hover:text-accent font-bold items-center gap-xs">
             FR<IoChevronDownSharp className="text-xs" />
           </button>
-
-          {/* ── Bouton "Faire un don" — toujours visible, mobile et desktop ── */}
           <Link to="/soutenir">
             <Button label="Faire un don" variant="primary" />
           </Link>
-
-          {/* ── Burger — mobile uniquement, ferme aussi les accordéons quand on referme le menu ── */}
           <button
             className="lg:hidden text-surface text-2xl"
-            onClick={() => {
-              if (mobileOpen) {
-                setMobileMissionsOpen(false)
-                setMobileAproposOpen(false)
-              }
-              setMobileOpen(!mobileOpen)
-            }}
+            onClick={() => { if (mobileOpen) { setMobileMissionsOpen(false); setMobileAproposOpen(false) } setMobileOpen(!mobileOpen) }}
             aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
           >
             {mobileOpen ? <IoCloseSharp /> : <IoMenuSharp />}
           </button>
-
         </div>
 
       </nav>
 
       {/* ════════════════════════════════════════════════════════════════
-          MENU MOBILE — pleine largeur, s'ouvre vers le bas, visible si mobileOpen
+          MENU MOBILE
+          padding-x pour cohérence horizontale avec le reste du site
           ════════════════════════════════════════════════════════════════ */}
       {mobileOpen && (
-        <div className="fixed top-20 left-0 w-screen overflow-x-hidden bg-primary z-40 flex flex-col py-6 px-6 gap-1 lg:hidden overflow-y-auto max-h-[calc(100vh-5rem)]">
+        <div className="fixed top-20 left-0 w-screen overflow-x-hidden bg-primary z-40 flex flex-col py-6 padding-x gap-xs lg:hidden overflow-y-auto max-h-[calc(100vh-5rem)]">
 
-          {/* ── Accueil ── */}
-          <Link to="/" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
-            Accueil
-          </Link>
+          <Link to="/" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Accueil</Link>
 
-
-          {/* ── ACCORDÉON "NOS MISSIONS" — mobile, ouverture/fermeture au clic sur le bouton ── */}
+          {/* ── ACCORDÉON "NOS MISSIONS" ── */}
           <div>
-            <button
-              onClick={() => setMobileMissionsOpen(!mobileMissionsOpen)}
-              className="w-full flex items-center justify-between link-nav text-surface font-bold py-3 border-b border-surface/10"
-            >
+            <button onClick={() => setMobileMissionsOpen(!mobileMissionsOpen)} className="w-full flex items-center justify-between link-nav text-surface font-bold py-3 border-b border-surface/10">
               Nos missions
               <IoChevronDownSharp className={`transition-transform ${mobileMissionsOpen ? 'rotate-180' : ''}`} />
             </button>
-
-            {/* ── Sous-liste — visible uniquement si l'accordéon est ouvert ── */}
             {mobileMissionsOpen && (
-              <div className="flex flex-col pl-4 py-2 gap-1">
-                <Link to="/missions" onClick={handleMobileNav} className="link-nav text-surface/80 hover:text-accent py-2">
-                  Toutes les missions
-                </Link>
+              <div className="flex flex-col pl-4 py-2 gap-xs">
+                <Link to="/missions" onClick={handleMobileNav} className="link-nav text-surface/80 hover:text-accent py-2">Toutes les missions</Link>
                 {MISSIONS.map(m => (
-                  <Link
-                    key={m.slug}
-                    to={`/missions/${m.slug}`}
-                    onClick={handleMobileNav}
-                    className="link-nav text-surface/80 hover:text-accent py-2"
-                  >
-                    {m.label}
-                  </Link>
+                  <Link key={m.slug} to={`/missions/${m.slug}`} onClick={handleMobileNav} className="link-nav text-surface/80 hover:text-accent py-2">{m.label}</Link>
                 ))}
               </div>
             )}
           </div>
 
-
-          {/* ── ACCORDÉON "À PROPOS" — mobile, même logique ── */}
+          {/* ── ACCORDÉON "À PROPOS" ── */}
           <div>
-            <button
-              onClick={() => setMobileAproposOpen(!mobileAproposOpen)}
-              className="w-full flex items-center justify-between link-nav text-surface font-bold py-3 border-b border-surface/10"
-            >
+            <button onClick={() => setMobileAproposOpen(!mobileAproposOpen)} className="w-full flex items-center justify-between link-nav text-surface font-bold py-3 border-b border-surface/10">
               À propos
               <IoChevronDownSharp className={`transition-transform ${mobileAproposOpen ? 'rotate-180' : ''}`} />
             </button>
-
             {mobileAproposOpen && (
-              <div className="flex flex-col pl-4 py-2 gap-1">
+              <div className="flex flex-col pl-4 py-2 gap-xs">
                 {APROPOS.map(item => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    onClick={handleMobileNav}
-                    className="link-nav text-surface/80 hover:text-accent py-2"
-                  >
-                    {item.label}
-                  </Link>
+                  <Link key={item.href} to={item.href} onClick={handleMobileNav} className="link-nav text-surface/80 hover:text-accent py-2">{item.label}</Link>
                 ))}
               </div>
             )}
           </div>
 
+          <Link to="/notre-impact" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Notre impact</Link>
+          <Link to="/education-sensibilisation" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Éducation & sensibilisation</Link>
+          <Link to="/medias-et-actualites" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Médias & actualités</Link>
+          <Link to="/contact" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Contact</Link>
 
-          {/* ── Liens simples mobile — ferment tout le menu au clic ── */}
-          <Link to="/notre-impact" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
-            Notre impact
-          </Link>
-
-          <Link to="/actions-educatives" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
-            Éducation & sensibilisation
-          </Link>
-
-          <Link to="/medias-et-actualites" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
-            Médias & actualités
-          </Link>
-
-          <Link to="/contact" onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">
-            Contact
-          </Link>
-
-          {/* ── Sélecteur langue — mobile ── */}
-          <button className="link-nav text-surface font-bold py-3 text-left">
-            FR / EN
-          </button>
+          <button className="link-nav text-surface font-bold py-3 text-left">FR / EN</button>
 
         </div>
       )}
