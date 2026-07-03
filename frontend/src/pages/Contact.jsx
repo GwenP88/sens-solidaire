@@ -55,7 +55,7 @@ function Contact() {
           <div className="hidden md:block xl:w-1/3 xl:shrink-0">
             <img
               src="/images/contact/contact.jpg"
-              alt="Équipe Sens Solidaire"
+              alt="Équipe Sens Solidaires"
               className="w-full h-64 xl:h-full object-cover rounded-2xl"
             />
           </div>

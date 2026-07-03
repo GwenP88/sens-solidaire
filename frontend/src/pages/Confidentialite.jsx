@@ -24,7 +24,7 @@ function Confidentialite() {
 
           <section className="flex flex-col gap-sm">
             <h2 className="h2-style text-primary mb-0">Responsable du traitement</h2>
-            <p className="text-body text-primary/80">L'association <strong>Sens Solidaire</strong>, dont le siège est situé au 3bis rue de Guigonis, 06300 Nice, est responsable du traitement de vos données personnelles.</p>
+            <p className="text-body text-primary/80">L'association <strong>Sens Solidaires</strong>, dont le siège est situé au 3bis rue de Guigonis, 06300 Nice, est responsable du traitement de vos données personnelles.</p>
             <p className="text-body text-primary/80">
               Pour toute question relative au traitement de vos données personnelles, vous pouvez nous contacter à{' '}
               <a
@@ -74,7 +74,7 @@ function Confidentialite() {
           <section className="flex flex-col gap-sm">
             <h2 className="h2-style text-primary mb-0">Destinataires des données</h2>
             <p className="text-body text-primary/80">
-              Les données personnelles collectées sont accessibles uniquement aux personnes habilitées au sein de l'association Sens Solidaire, dans la limite de leurs missions.
+              Les données personnelles collectées sont accessibles uniquement aux personnes habilitées au sein de l'association Sens Solidaires, dans la limite de leurs missions.
             </p>
             <p className="text-body text-primary/80">
               Elles peuvent également être traitées par nos prestataires techniques (hébergement, maintenance du site) uniquement lorsque cela est nécessaire au fonctionnement du service et dans le respect de la réglementation applicable.

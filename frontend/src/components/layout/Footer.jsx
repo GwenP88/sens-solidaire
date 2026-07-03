@@ -87,7 +87,7 @@ function Footer({ hideCta = false }) {
       {/* Zone 3 — Barre légale */}
       <div className="bg-dark padding-x py-4 flex flex-col md:flex-row gap-xs md:gap-0 justify-between items-center border-t border-surface/15">
         <p className="text-caption text-surface/50 italic">
-          © 2026 Sens Solidaire. Tous droits réservés.
+          © 2026 Sens Solidaires. Tous droits réservés.
         </p>
         <div className="flex gap-md">
           <a href="/mentions-legales" className="link-footer text-surface/50 hover:text-surface">Mentions légales</a>

@@ -95,7 +95,7 @@ function LocationDetail() {
               <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
                 <h3 className="h3-style text-primary mb-0">Notre mission ici</h3>
                 <p className="text-body text-primary/70">
-                  Les volontaires Sens Solidaire interviennent directement avec les équipes de ce partenaire local.
+                  Les volontaires Sens Solidaires interviennent directement avec les équipes de ce partenaire local.
                   Chaque action menée sur place s'inscrit dans une démarche durable et en lien étroit avec les communautés.
                 </p>
               </div>

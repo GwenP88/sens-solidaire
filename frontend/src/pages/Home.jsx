@@ -237,14 +237,18 @@ function Home() {
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-md items-center">
           {partners.map(partner => (
             <div key={partner.id} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24 p-1">
-              <img src={partner.logo_url} alt={partner.name} className="max-h-14 max-w-full object-contain" />
+              <img 
+                src={partner.logo_url} alt={partner.name}
+                className="w-full h-full object-contain p-2" />
             </div>
           ))}
         </div>
       </Section>
+
         <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Partager votre témoignage">
           <TestimonialForm onClose={() => setModalOpen(false)} />
         </Modal>
+
       <ScrollToTop />
     </div>
   )

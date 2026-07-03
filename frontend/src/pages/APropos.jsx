@@ -57,7 +57,7 @@ useEffect(() => {
       {/* ── Hero immersif ── */}
       <HeroPage
         image="/images/hero/hero-home.jpg"
-        title="À propos de Sens Solidaire"
+        title="À propos de Sens Solidaires"
         subtitle="Voyager, rencontrer, partager et agir pour un monde plus solidaire."
       />
 
@@ -66,19 +66,19 @@ useEffect(() => {
         <div className="flex flex-col xl:flex-row gap-lg items-center">
           <div className="flex flex-col gap-sm flex-1">
             <p className="text-body text-primary/80">
-              Sens Solidaire est une association d'intérêt général régie par la loi 1901. Née d'une conviction simple : le voyage peut être un formidable vecteur de rencontres, d'échanges et de transformation, à condition d'être vécu dans le respect des populations et de l'environnement.
+              Sens Solidaires est une association d'intérêt général régie par la loi 1901. Née d'une conviction simple : le voyage peut être un formidable vecteur de rencontres, d'échanges et de transformation, à condition d'être vécu dans le respect des populations et de l'environnement.
             </p>
             <p className="text-body text-primary/80">
               Depuis plus de 15 ans, nous œuvrons aux côtés des communautés locales à travers des missions de terrain, des projets solidaires et des actions d'éducation à la citoyenneté mondiale.
             </p>
             <p className="text-body text-primary/80">
-              Sens Solidaire est <strong>multiculturelle, indépendante, apolitique et à vocation internationale.</strong> Nous contribuons à la préservation de l'environnement par des actions de solidarité internationale.
+              Sens Solidaires est <strong>multiculturelle, indépendante, apolitique et à vocation internationale.</strong> Nous contribuons à la préservation de l'environnement par des actions de solidarité internationale.
             </p>
           </div>
           <div className="w-full xl:w-2/5 shrink-0">
             <img
               src="/images/missions/groupe-jeune-2.jpg"
-              alt="Sens Solidaire sur le terrain"
+              alt="Sens Solidaires sur le terrain"
               className="w-full h-96 object-cover rounded-2xl"
             />
           </div>
@@ -129,7 +129,7 @@ useEffect(() => {
       <Section
         bg="bg-surface-mid"
         eyebrow="L'équipe engagée"
-        title={<>Celles et ceux qui font vivre <span className="text-accent-2">Sens Solidaire</span></>}
+        title={<>Celles et ceux qui font vivre <span className="text-accent-2">Sens Solidaires</span></>}
         subtitle="Une équipe passionnée et engagée sur le terrain comme au quotidien."
         cta={{ label: "Découvrir toute l'équipe →", href: "/equipe" }}
       >
@@ -154,7 +154,7 @@ useEffect(() => {
         <div className="flex flex-col md:flex-row gap-lg items-center">
           <div className="flex flex-col gap-sm flex-1">
             <p className="text-body text-primary/80">
-              Sens Solidaire agit en toute transparence. Nos comptes sont contrôlés et nos rapports d'activité sont publiés chaque année.
+              Sens Solidaires agit en toute transparence. Nos comptes sont contrôlés et nos rapports d'activité sont publiés chaque année.
             </p>
             <a href="/rapports-activite">
               <Button label="Consulter nos rapports d'activité →" variant="secondary" />

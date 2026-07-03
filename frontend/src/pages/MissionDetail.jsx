@@ -307,7 +307,7 @@ function MissionDetail() {
               <div className="flex flex-col gap-sm">
                 <h3 className="h3-style text-primary mb-0">À quoi servent les frais de mission ?</h3>
                 <p className="text-body text-primary/60">
-                  Chez Sens Solidaire, nous avons à cœur de vous informer en toute transparence sur l'utilisation des fonds qui soutiennent nos actions sur le terrain.
+                  Chez Sens Solidaires, nous avons à cœur de vous informer en toute transparence sur l'utilisation des fonds qui soutiennent nos actions sur le terrain.
                 </p>
               </div>
               <div className="bg-accent-2/10 rounded-xl p-4">

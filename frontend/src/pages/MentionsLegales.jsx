@@ -49,7 +49,7 @@ function MentionsLegales() {
 
           <section className="flex flex-col gap-sm">
             <h2 className="h2-style text-primary mb-0">Propriété intellectuelle</h2>
-            <p className="text-body text-primary/80">L'ensemble du contenu de ce site (textes, images, vidéos, logos) est la propriété de l'association Sens Solidaire ou de ses partenaires. Toute reproduction, même partielle, est interdite sans autorisation préalable.</p>
+            <p className="text-body text-primary/80">L'ensemble du contenu de ce site (textes, images, vidéos, logos) est la propriété de l'association Sens Solidaires ou de ses partenaires. Toute reproduction, même partielle, est interdite sans autorisation préalable.</p>
           </section>
 
           <section className="flex flex-col gap-sm">

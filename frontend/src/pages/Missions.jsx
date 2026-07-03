@@ -130,7 +130,7 @@ function Missions() {
       icon: IconLeaf,
       title: 'Vivre l\'expérience sur le terrain',
       description: 'Les participants rejoignent nos partenaires locaux pour partager leurs compétences, découvrir d\'autres réalités et contribuer à des projets concrets.',
-      list: ['Immersion complète avec les équipes locales', 'Apport de compétences métier concrètes', 'Projets de terrain adaptés au profil', 'Encadrement et suivi par Sens Solidaire'],
+      list: ['Immersion complète avec les équipes locales', 'Apport de compétences métier concrètes', 'Projets de terrain adaptés au profil', 'Encadrement et suivi par Sens Solidaires'],
     },
     {
       icon: IconHand,
@@ -196,7 +196,7 @@ function Missions() {
           introSlot={
             <>
               <p className="text-body text-primary/80">
-                Partir en mission avec Sens Solidaire, c'est rejoindre des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka ou à Sumatra.
+                Partir en mission avec Sens Solidaires, c'est rejoindre des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka ou à Sumatra.
               </p>
               <p className="text-body text-primary/80">
                 Pendant 10 jours à 4 semaines, vous découvrez une autre culture tout en participant à des actions concrètes. <strong className="text-primary/70">Aucune compétence particulière n'est demandée.</strong>

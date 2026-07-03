@@ -17,7 +17,7 @@ function HeroPage({ image, title, subtitle, duration, price, country, tags }) {
           neutralisés (mb-0) pour éviter le cumul avec ce gap */}
       <div className="relative flex flex-col gap-xs">
 
-        <span className="text-eyebrow text-surface">Sens Solidaire</span>
+        <span className="text-eyebrow text-surface">Sens Solidaires</span>
         <h1 className="h1-style text-surface max-w-5xl">{title}</h1>
 
         {subtitle && <p className="text-lead text-surface max-w-4xl">{subtitle}</p>}

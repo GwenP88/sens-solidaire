@@ -107,7 +107,7 @@ function NotreImpact() {
       {/* ── Grille des actions ── */}
       <Section
         title="Nos actions terrain"
-        subtitle="Sens Solidaire s'investit sur tous les continents afin de collaborer sur des projets tournés vers la sauvegarde de la biodiversité, le bien-être des populations locales et un développement durable."
+        subtitle="Sens Solidaires s'investit sur tous les continents afin de collaborer sur des projets tournés vers la sauvegarde de la biodiversité, le bien-être des populations locales et un développement durable."
         cta={{ label: "Voir toutes les actions →", href: "/notre-impact" }}
       >
         {loading ? (

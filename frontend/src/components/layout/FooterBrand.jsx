@@ -10,7 +10,7 @@ function FooterBrand({ logoSize = 'h-12' }) {
     <div className="flex flex-col gap-sm">
       <div className="flex items-start gap-md">
         <div className="bg-white/50 rounded-full p-1 w-fit">
-          <img src="/logo.png" alt="Sens Solidaire" className={logoSize} />
+          <img src="/logo.png" alt="Sens Solidaires" className={logoSize} />
         </div>
         <span className="text-brand text-surface">Sens Solidaires</span>
       </div>
