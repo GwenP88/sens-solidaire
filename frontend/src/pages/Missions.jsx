@@ -81,62 +81,62 @@ function Missions() {
     {
       icon: IconFrance,
       title: 'Mission en France : Nice ou Annemasse',
-      description: 'Pendant la première partie de votre Service Civique, vous intervenez auprès de scolaires et du grand public pour sensibiliser aux enjeux du développement durable.',
-      list: ['L\'animation d\'ateliers autour des 17 Objectifs de Développement Durable', 'La coordination de correspondances scolaires avec nos partenaires étrangers', 'La promotion de nos actions et projets', 'La recherche de nouveaux partenaires', 'La communication et la recherche de financements'],
+      description: 'Pendant plusieurs mois, vous animez des actions de sensibilisation au développement durable et découvrez le fonctionnement de l\'association avant votre mission à l\'international',
+      list: ['Animation d\'ateliers pédagogiques', 'Promotion des projets de l\'association', 'Préparation au départ'],
     },
     {
       icon: IconAbroad,
-      title: 'Une immersion à l\'international',
-      description: 'Après cette première expérience en France, vous rejoignez pendant au moins trois mois l\'un de nos partenaires au Kenya, au Sénégal ou en Côte d\'Ivoire.',
-      list: ['La préservation de la biodiversité', 'L\'éducation et les échanges interculturels', 'L\'agriculture durable', 'La sensibilisation à l\'environnement', 'Le développement de nouveaux projets locaux'],
+      title: 'Mission au Kenya, au Sénégal ou en Côte d\'Ivoire',
+      description: 'Vous rejoignez l\'une de nos délégations pour participer à des projets concrets de préservation de la biodiversité et d\'éducation.',
+      list: ['Protection de l\'environnement', 'Actions éducatives', 'Vie avec les partenaires locaux'],
     },
     {
       icon: IconGrow,
-      title: 'Une expérience qui vous fait grandir',
-      description: 'Le Service Civique est bien plus qu\'une mission. C\'est l\'occasion de prendre confiance en vous et de développer des compétences recherchées dans de nombreux domaines.',
-      list: ['Gestion de projet', 'Education au développement durable', 'Animation et sensibilisation', 'Coopération internationale', 'Travail sur le terrain'],
+      title: 'Une expérience qui vous transforme',
+      description: 'Cette expérience vous permet de gagner en autonomie, de travailler en équipe et de développer des compétences valorisées dans votre parcours personnel et professionnel.',
+      list: ['Gestion de projet', 'Coopération internationale', 'Travail en équipe'],
     },
   ]
 
   const stepsGroupeJeunes = [
     {
       icon: IconFrance,
-      title: 'Préparer la mission ensemble',
-      description: 'Avant le départ, notre équipe accompagne le groupe dans la préparation interculturelle et logistique pour aborder la mission dans les meilleures conditions.',
-      list: ['Réunion de préparation avec les encadrants', 'Sensibilisation interculturelle', 'Échanges avec les partenaires locaux', 'Organisation logistique et administrative'],
+      title: 'Construire un projet collectif',
+      description: 'Nous accompagnons les jeunes et les encadrants afin de préparer la mission dans les meilleures conditions.',
+      list: ['Réunion de préparation avec les encadrants', 'Échanges avec les partenaires locaux', 'Organisation logistique et administrative'],
     },
     {
       icon: IconAbroad,
-      title: '10 jours de terrain au Kenya ou au Sénégal',
-      description: 'Sur place, les jeunes participent à des projets concrets : réhabilitation d\'espaces naturels, ateliers éducatifs, rencontres avec les communautés et les rangers.',
-      list: ['Projets environnementaux avec les partenaires', 'Rencontres avec les jeunes locaux', 'Ateliers interculturels et artistiques', 'Découverte de la faune et de la flore'],
+      title: 'Une immersion de 10 jours au Kenya ou au Sénégal',
+      description: 'Les jeunes participent à des actions concrètes tout en découvrant une nouvelle culture',
+      list: ['Actions environnementales', 'Rencontres locales', 'Découverte du territoire'],
     },
     {
       icon: IconGrow,
-      title: 'Valoriser et transmettre l\'expérience',
-      description: 'De retour en France, les jeunes partagent leur vécu et deviennent à leur tour ambassadeurs de la solidarité internationale dans leur établissement.',
-      list: ['Restitution auprès de l\'établissement', 'Rédaction du rapport de mission', 'Sensibilisation des pairs', 'Suivi des projets à distance'],
+      title: 'Partager et poursuivre l\'engagement',
+      description: 'Au retour, les participants valorisent leur expérience auprès de leur établissement et de leur entourage.',
+      list: ['Restitution auprès de l\'établissement', 'Rédaction du rapport de mission', 'Sensibilisation des pairs'],
     },
   ]
 
   const stepsCongeSolidaire = [
     {
       icon: IconBuilding,
-      title: 'Construire une mission adaptée',
-      description: 'Nous échangeons avec l\'entreprise afin de comprendre ses objectifs, identifier les compétences mobilisables et construire une mission cohérente avec les besoins du terrain.',
-      list: ['Diagnostic des compétences disponibles', 'Choix du terrain et du partenaire local', 'Définition des objectifs de mission', 'Accompagnement administratif et logistique'],
+      title: 'Construire un projet adapté',
+      description: 'Nous définissons ensemble une mission correspondant aux compétences des participants et aux besoins du terrain.',
+      list: ['Analyse des besoins', 'Choix du projet', 'Préparation logistique'],
     },
     {
       icon: IconLeaf,
-      title: 'Vivre l\'expérience sur le terrain',
-      description: 'Les participants rejoignent nos partenaires locaux pour partager leurs compétences, découvrir d\'autres réalités et contribuer à des projets concrets.',
-      list: ['Immersion complète avec les équipes locales', 'Apport de compétences métier concrètes', 'Projets de terrain adaptés au profil', 'Encadrement et suivi par Sens Solidaires'],
+      title: 'Agir au Kenya, au Sénégal ou à Sumatra',
+      description: 'Vous rejoignez l\'une de nos délégations au Kenya, au Sénégal ou à Sumatra afin de mettre vos compétences au service de projets portés par nos partenaires locaux.',
+      list: ['Immersion locale', 'Partage de compétences', 'Accompagnement par l\'association'],
     },
     {
       icon: IconHand,
-      title: 'Donner du sens à l\'engagement',
-      description: 'De retour en France, nous accompagnons l\'entreprise dans la valorisation de son engagement RSE et la restitution auprès des équipes.',
-      list: ['Rapport de mission détaillé', 'Restitution auprès des équipes', 'Contenu pour la communication RSE', 'Réduction d\'impôt à 60 % (art. 238 bis CGI)'],
+      title: 'Valoriser l\'engagement',
+      description: 'Nous accompagnons l\'entreprise dans la valorisation de son engagement et de son impact.',
+      list: ['Rapport de mission', 'Communication RSE', 'Avantage fiscal'],
     },
   ]
 
