@@ -203,22 +203,28 @@ function Home() {
         />
       </Section>
 
-      {/* ── Section Actualités ── */}
-      {mediaPosts.length > 0 && (
-        <Section
-          bg="bg-surface-mid"
-          title="Actualités & Médias"
-          subtitle="Suivez la vie de Sens Solidaires à travers nos événements, nos projets, nos interventions dans les médias et nos actions de sensibilisation."
-          cta={{ label: "Voir toutes les actualités →", href: "/medias-et-actualites" }}
-        >
-          <Carousel
-            items={mediaPosts}
-            renderSlide={(post) => <MediaCard key={post.slug} {...post} />}
-            showPagination={true}
-            color="primary"
-          />
-        </Section>
-      )}
+      {/* ── Section Actualités — épinglés en priorité, complétés par les plus récents ── */}
+      {mediaPosts.length > 0 && (() => {
+        const pinned = mediaPosts.filter(p => p.show_homepage)
+        const recent = mediaPosts.filter(p => !p.show_homepage).slice(0, 6 - pinned.length)
+        const homePosts = [...pinned, ...recent]
+
+        return (
+          <Section
+            bg="bg-surface-mid"
+            title="Actualités & Médias"
+            subtitle="Suivez la vie de Sens Solidaires à travers nos événements, nos projets, nos interventions dans les médias et nos actions de sensibilisation."
+            cta={{ label: "Voir toutes les actualités →", href: "/medias-et-actualites" }}
+          >
+            <Carousel
+              items={homePosts}
+              renderSlide={(post) => <MediaCard key={post.slug} {...post} />}
+              showPagination={true}
+              color="primary"
+            />
+          </Section>
+        )
+      })()}
 
       {/* ── Section partenaires ── */}
       <Section

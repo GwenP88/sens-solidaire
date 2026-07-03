@@ -1466,6 +1466,17 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
       image_url: '/images/placeholders/placeholder-photo.png',
       external_url: null,
     },
+    {
+      slug: 'post-instagram-willy-rovelli',
+      title: 'Willy Rovelli parle de Sens Solidaires',
+      content: 'Willy Rovelli a partagé son expérience de congé solidaire au Kenya avec Sens Solidaires.',
+      theme: 'Ils parlent de nous',
+      date: new Date('2024-06-01'),
+      image_url: '/images/Willy_Rovelli.png',
+      external_url: 'https://www.instagram.com/stories/highlights/18049986517744153/',
+      is_active: true,
+      show_homepage: true,
+    },
   ]
 
   await prisma.mediaPost.deleteMany({})

@@ -194,6 +194,7 @@ model MediaPost {
   date         DateTime
   image_url    String?
   external_url String?
+  show_homepage Boolean @default(false)
   is_active    Boolean  @default(true)
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt

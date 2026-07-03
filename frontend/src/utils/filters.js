@@ -58,6 +58,7 @@ export const FILTERS_MEDIA_THEME = [
   { label: "Vie de l'association", value: "Vie de l'association" },
   { label: "Éducation & sensibilisation", value: "Éducation & sensibilisation" },
   { value: 'Événement', label: 'Événement' },
+  { value: 'Ils parlent de nous', label: 'Ils parlent de nous' },
 ]
 
 
