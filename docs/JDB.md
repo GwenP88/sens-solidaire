@@ -1743,4 +1743,137 @@ docker compose up -d --build
 | Images UI — revoir les images placeholder de l'interface | 🟠 |
 | Préparer tous les composants affichant du contenu BDD pour HTML riche — TipTap (`ActionDetail`, `LocationDetail`, `MissionDetail`, `EducationDetail`) | 🟠 |
 
+---
+
+---
+
+## Jours 24 à 28 · 29 juin — 3 juillet 2026
+### S6 — Sprint final MVP · Migration pages + Architecture BDD + Refonte Education
+
+---
+
+### Statut général
+
+| Élément | Statut |
+|---|---|
+| Migration pages restantes vers Section/CTASection | ✅ Terminé |
+| LocationDetail enrichi — contacts, carte, galerie | ✅ Terminé |
+| BDD — 5 migrations appliquées | ✅ Terminé |
+| Seed refactorisé — délégations, pays, show_homepage | ✅ Terminé |
+| FooterCta dynamique par route | ✅ Terminé |
+| Suppression CTASection sur toutes les pages | ✅ Terminé |
+| Education.jsx refonte complète | ✅ Terminé |
+| Soutenir.jsx refonte narrative | ✅ Terminé |
+| Renommage "Sens Solidaire" → "Sens Solidaires" | ✅ Terminé |
+| Merge dev-front → dev | ✅ Terminé |
+
+---
+
+### ✅ Réalisé
+
+#### Migrations BDD (5 au total)
+
+| Migration | Contenu |
+|---|---|
+| `add_delegation_to_location` | FK `delegation_id` sur `Location` → `Delegation` |
+| `add_map_url_to_location` | Champ `map_url String?` sur `Location` |
+| `add_website_url_to_location` | Champ `website_url String?` sur `Location` |
+| `add_show_homepage_to_media_post` | Champ `show_homepage Boolean @default(false)` sur `MediaPost` |
+| `add_countries_to_field_action` | Suppression `country String` + nouveau modèle `FieldActionCountry` |
+
+#### Seed — refacto majeure
+
+- **Délégations créées avant les locations** — IDs capturés et injectés via `delegation_id` sur chaque `Location`
+- **`FieldActionCountry`** — migration du champ `country` (string fragile) vers une relation FK propre. Syntaxe seed : `countries: { create: [{ country: 'Kenya' }] }`. Actions triées par pays dans le seed.
+- **`show_homepage` sur `MediaPost`** — permet d'épingler des posts sur la home depuis le dashboard. Logique home : épinglés en priorité, complétés par les 6 plus récents.
+- **Post "Ils parlent de nous"** — nouveau thème `MediaPost` pour les posts Instagram / presse. Filtre `theme === 'Ils parlent de nous'` côté front.
+
+#### Architecture — FooterCta dynamique
+
+- **`utils/footerCta.js`** — config statique par route (`FOOTER_CTA_BUTTONS`, `FOOTER_CTA_PREFIXES`)
+- **`FooterCta.jsx`** — lit `useLocation()` et affiche les bons boutons selon la route active
+- **Routes spécifiques** : `/soutenir` → Je pars en mission + Nous contacter · `/missions` + sous-routes → Je fais un don + Nous contacter · Toutes les autres → Je pars en mission + Je fais un don (default)
+- **Suppression de toutes les `CTASection`** sur les pages — le `FooterCta` centralise les CTAs de fin de page
+
+#### Pages migrées
+
+| Page | Changements |
+|---|---|
+| `LocationDetail.jsx` | Layout 2 colonnes lg, card infos pratiques, contacts délégation via FK, iframe Google Maps, galerie médias |
+| `MediaDetail.jsx` | Layout éditorial magazine, sidebar sticky, ressources séparées par type |
+| `MediaEtActualites.jsx` | `Section` wrapper sur la grille |
+| `MissionDetail.jsx` | Gap scale + mb-0 sur titres |
+| `Missions.jsx` | Gap scale + mb-0 + `MissionCTA` flex-col mobile / flex-row desktop |
+| `Soutenir.jsx` | Refonte narrative — card fiscale, exemples dons, section émotionnelle, chiffres clés |
+
+#### Composants modifiés
+
+- **`LocationCard.jsx`** — hauteur fixe responsive (h-[220px] → h-[280px] selon breakpoint), `mt-auto` sur le lien "En savoir plus", `line-clamp-2` sur le titre
+- **`MissionCTA.jsx`** — `flex-col` mobile → `flex-row` desktop, suppression `flex-1` et `fullWidth`, boutons à taille naturelle
+- **`MissionInfoBar.jsx`** — `sm:flex-nowrap` pour éviter le passage à la ligne
+- **`FooterCta.jsx`** — `flex-wrap` sur le conteneur de boutons
+- **`btn-base` (index.css)** — `white-space: nowrap` — les boutons ne cassent jamais leur texte en interne
+- **`Button.jsx`** — inchangé, `fullWidth` toujours disponible pour les cas où nécessaire
+
+#### Education.jsx — refonte complète
+
+- **Suppression des filtres par public** — remplacés par une `AnchorNav` (Éco-École / Correspondances / Ateliers scolaires)
+- **Section ODD** — reprise identique de `Impact.jsx`
+- **Pattern `grid grid-cols-1 lg:grid-cols-3`** — identique à `ImpactDetail` et `MediaDetail` sur les 3 sections
+- **`InfoSidebar`** — composant local réutilisable (public, tarif, ctas) — même structure sur les 3 sections
+- **Contenu Éco-École et Correspondances intégré directement** — plus de card intermédiaire
+- **Carousel actions France** — filtrage par `countries.some(c => c.country === 'France')` depuis la relation `FieldActionCountry`
+- **Carousel photos placeholders** pour les correspondances
+
+#### Corrections diverses
+
+- **Renommage "Sens Solidaire" → "Sens Solidaires"** — `grep` + `sed` sur tout `frontend/src/` — 23 occurrences corrigées dans 13 fichiers
+- **Home — CTA témoignage** — bouton `variant="light"` sous le carousel section témoignages, ouvre la `Modal` `TestimonialForm`
+- **Home — section Actualités** — posts épinglés (`show_homepage: true`) remontent en priorité, complétés par les 6 plus récents. Posts "Ils parlent de nous" inclus dans le carousel
+- **Logos partenaires** — `w-full h-full object-contain p-2` — les logos prennent toute la place de leur div conteneur
+- **`FOOTER_CTA_ALIASES`** — export vide ajouté dans `footerCta.js` pour éviter l'erreur d'import dans `FooterCta.jsx`
+
+---
+
+### Décisions d'architecture
+
+| Décision | Justification |
+|---|---|
+| `FieldActionCountry` relation FK | `country: string` était fragile et non filtrable proprement — FK + `includes()` est maintenable et extensible |
+| `delegation_id` FK sur `Location` | Supprime le string matching `d.lieu === location.name` — source de bugs (typos) |
+| FooterCta dynamique par route | Évite la redondance CTASection + FooterCta — un seul point de vérité pour les CTAs de fin de page |
+| `InfoSidebar` composant local dans Education.jsx | Pattern réutilisable dans la même page, pas assez générique pour être dans `components/ui/` |
+| Contenu Éco-École/Correspondances intégré directement | Évite un clic supplémentaire inutile vers une page détail — contenu trop court pour justifier une page à part |
+
+---
+
+### Bugs résolus
+
+| Bug | Cause | Solution |
+|---|---|---|
+| Seed `PrismaClientValidationError` sur `countries` | Syntaxe tableau de strings au lieu de relation Prisma | `countries: { create: [{ country: 'Kenya' }] }` |
+| Dégradé `MissionInfoBar` passe sur la navbar | `z-10` trop élevé + position dans le mauvais conteneur | Dégradé en dehors du `flex overflow-x-auto`, `overflow-hidden` sur le parent |
+| Boutons prennent toute la largeur | `flex-1` + `fullWidth` sur `MissionCTA` | Suppression `flex-1` et `fullWidth`, conteneur `flex-col` mobile / `flex-row` desktop |
+
+---
+
+### Post-MVP — backlog mis à jour
+
+| Tâche | Priorité |
+|---|---|
+| SEO basique — composant `SEOHead` | 🟠 |
+| Accessibilité basique — `alt`, `aria-label`, `focus-visible` | 🟠 |
+| `PageLayout` générique — factoriser `bg-surface min-h-screen` + `ScrollToTop` + `HeroPage` | 🟡 |
+| `PropTypes` sur tous les composants | 🟡 |
+| Sharp + lazy loading images | 🟡 |
+| Buffer API — auto-draft réseaux sociaux à la publication d'un article | 🟡 |
+| `location_id` FK sur `Delegation` — architecture bidirectionnelle | 🟡 |
+| `latitude` / `longitude` sur `Location` — embed Google Maps propre | 🟡 |
+| `maxLength={280}` sur textarea témoignage dans le dashboard | 🟠 |
+| Sélection manuelle actions terrain home (dashboard + BDD avec Alison) | 🟡 |
+| Instagram oEmbed — posts du feed en V2 | 🟡 |
+| `flex-wrap` sur tous les conteneurs de boutons (`flex-row`) — polish | 🟡 |
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

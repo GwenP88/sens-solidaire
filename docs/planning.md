@@ -1,197 +1,215 @@
-# Planning de développement — Sens Solidaire
+# Planning de développement — Sens Solidaires
 *Pichot Gwen & Amblard Alison · Holberton School — Thonon-les-Bains*
-*Mise à jour : 17 juin 2026*
+*Mise à jour : 3 juillet 2026*
 
 **Légende** : ✅ Terminé · ⚠️ Partiel · 🔵 À faire · 🔴 Bloqué
 **Devs** : Gwen (frontend + design) · Alison (backend + BDD) · Ensemble = tâches communes
 
 ---
 
-## Phase 1 — 28 mai › 3 juillet 2026 : MVP + Dashboard admin
+## Phase 1 — 28 mai › 3 juillet 2026 : MVP ✅ LIVRÉ
 
 ---
 
-### S1 — 28 › 30 mai · Initialisation
+### S1 — 28 › 30 mai · Initialisation ✅
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 01 | Gwen | Repo GitHub + monorepo /frontend /backend /docs + branches | 28 mai | ✅ Terminé |
-| 02 | Gwen | React + Tailwind CSS + Vite + React Router | 28 mai | ✅ Terminé |
-| 03 | Alison | Node.js + Express + route /api/health | 28 mai | ✅ Terminé |
-| 04 | Alison | PostgreSQL + Prisma v7 + 6 tables MVP | 28-29 mai | ✅ Terminé |
-| 05 | Ensemble | Docker Compose + Dockerfiles dev | 29 mai | ✅ Terminé |
-| 06 | Ensemble | .env + .gitignore + test docker compose up | 29 mai | ✅ Terminé |
-
-> ✅ **S1 — COMPLÈTE**
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 01 | Gwen | Repo GitHub + monorepo + branches | ✅ |
+| 02 | Gwen | React + Tailwind CSS v4 + Vite + React Router | ✅ |
+| 03 | Alison | Node.js + Express + route /api/health | ✅ |
+| 04 | Alison | PostgreSQL + Prisma v7 + tables MVP | ✅ |
+| 05 | Ensemble | Docker Compose + Dockerfiles dev | ✅ |
+| 06 | Ensemble | .env + .gitignore + test docker compose up | ✅ |
 
 ---
 
-### S2 — 2 › 6 juin · Fondations frontend + Auth backend
+### S2 — 2 › 6 juin · Fondations frontend + Auth backend ✅
 
-#### Figma (hors planning initial)
-
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 07 | Gwen | Système de composants Figma complet | 2-4 juin | ✅ Terminé |
-| 08 | Gwen | Page Accueil assemblée dans Figma | 4-6 juin | ✅ Terminé |
-
-#### Dev
-
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 09 | Gwen | Tailwind avec design system (palette, typographie) | S2/S3 | ✅ Terminé |
-| 10 | Gwen | Composants de base : Button, Badge | S2/S3 | ✅ Terminé |
-| 11 | Gwen | Layout global : Navbar + Footer + Outlet | S2/S3 | ✅ Terminé |
-| 12 | Gwen | Page Accueil statique | S2/S3 | ✅ Terminé |
-| 13 | Gwen | Page Login admin | S2/S3 | ✅ Terminé |
-| 14 | Alison | Auth JWT : login / logout / refresh token | S2/S3 | ✅ Terminé |
-| 15 | Alison | Middleware authMiddleware | S2/S3 | ✅ Terminé |
-| 16 | Alison | Route POST /api/auth/login + bcrypt | S2/S3 | ✅ Terminé |
-| 17 | Alison | Seed BDD — données de test | S2/S3 | ✅ Terminé |
-| 18 | Ensemble | Test connexion front ↔ back + Docker | S2/S3 | ✅ Terminé |
-
-> ✅ **S2 — COMPLÈTE**
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 07 | Gwen | Système de composants Figma complet | ✅ |
+| 08 | Gwen | Page Accueil assemblée dans Figma | ✅ |
+| 09 | Gwen | Tailwind — design system (palette, typographie, utilities) | ✅ |
+| 10 | Gwen | Composants de base : Button, Badge, Modal | ✅ |
+| 11 | Gwen | Layout global : Navbar + Footer + Outlet | ✅ |
+| 12 | Gwen | Page Accueil statique | ✅ |
+| 13 | Gwen | Page Login admin | ✅ |
+| 14 | Alison | Auth JWT : login / logout / refresh token | ✅ |
+| 15 | Alison | Middleware authMiddleware | ✅ |
+| 16 | Alison | Route POST /api/auth/login + bcrypt | ✅ |
+| 17 | Alison | Seed BDD — données de test | ✅ |
+| 18 | Ensemble | Test connexion front ↔ back + Docker | ✅ |
 
 ---
 
-### S3 — 9 › 13 juin · Missions
+### S3 — 9 › 13 juin · Missions ✅
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 19 | Gwen | Page Accueil connectée API | 9-10 juin | ✅ Terminé |
-| 20 | Gwen | Page /missions — toutes sections + filtres | 10-11 juin | ✅ Terminé |
-| 21 | Gwen | Page /missions/:slug — détail mission complet | 11 juin | ✅ Terminé |
-| 22 | Alison | Seed BDD — données réalistes | 10 juin | ✅ Terminé |
-| 23 | Alison | GET /api/missions (liste + filtres) | 12 juin | ✅ Terminé |
-| 24 | Alison | GET /api/missions/:slug + pricing + locations + testimonials | 12-13 juin | ✅ Terminé |
-| 25 | Alison | Service + Controller missions | 12-13 juin | ✅ Terminé |
-
-> ✅ **S3 — COMPLÈTE**
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 19 | Gwen | Page Accueil connectée API | ✅ |
+| 20 | Gwen | Page /missions — 4 sections + filtres + AnchorNav | ✅ |
+| 21 | Gwen | Page /missions/:slug — détail mission complet | ✅ |
+| 22 | Alison | Seed BDD — données réalistes | ✅ |
+| 23 | Alison | GET /api/missions (liste + filtres) | ✅ |
+| 24 | Alison | GET /api/missions/:slug + pricing + locations + testimonials | ✅ |
+| 25 | Alison | Service + Controller missions | ✅ |
 
 ---
 
-### S4 — 16 › 20 juin · Témoignages + Contact + Pages secondaires
+### S4 — 16 › 20 juin · Témoignages + Contact + Pages secondaires ✅
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 26 | Gwen | Page Témoignages — onglets, filtres, grille, modale | 16 juin | ✅ Terminé |
-| 27 | Gwen | GET /api/testimonials + POST /api/testimonials | 16 juin | ✅ Terminé |
-| 28 | Gwen | Page Contact + ContactForm + RGPD | 16 juin | ✅ Terminé |
-| 29 | Gwen | POST /api/contact + Resend — test complet | 16 juin | ✅ Terminé |
-| 30 | Gwen | Page Mentions légales + Confidentialité + bannière cookies | 17 juin | ✅ Terminé |
-| 31 | Gwen | Page Soutenir — don, adhésion, transparence, AnchorNav | 17 juin | ✅ Terminé |
-| 32 | Gwen | Page Rapports d'activité — grille PDFs | 17 juin | ✅ Terminé |
-| 33 | Gwen | Page À propos — histoire, valeurs, activités, équipe | 17 juin | ✅ Terminé |
-| 34 | Gwen | Page Équipe — direction, bureau, CA, délégations | 17 juin | ✅ Terminé |
-| 35 | Alison | CRUD /api/admin/missions (back) | 13 juin | ✅ Terminé |
-| 36 | Alison | Dashboard admin — Sidebar + layout + routes protégées | 16-20 juin | 🔵 À faire |
-| 37 | Alison | PATCH /api/admin/testimonials/:id — modération | 19-20 juin | ✅ Terminé  |
-| 38 | Ensemble | Flux complet : soumission → modération → affichage | 20 juin | 🔵 À faire |
-
----
-
-### S5 — 23 › 27 juin · Dashboard + Upload + Responsive
-
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 39 | Alison | Dashboard : CRUD missions front | 23-24 juin | 🔵 À faire |
-| 40 | Alison | Dashboard : modération témoignages | 23-24 juin | 🔵 À faire |
-| 41 | Alison | Dashboard : routage email contact | 24-25 juin | 🔵 À faire |
-| 42 | Alison | Upload fichiers Multer (images + PDFs) | 25-26 juin | 🔵 À faire |
-| 43 | Gwen | Responsive mobile-first — toutes pages MVP (375px / 768px) | 23-26 juin | ⚠️ Partiel|
-| 43bis | Gwen | si temps dispo : page impact, éducation et sensibilisation, média et actualités | 23-26 juin | ✅ Terminé  |
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 26 | Gwen | Page /temoignages — filtres, grille, modale soumission | ✅ |
+| 27 | Gwen | GET + POST /api/testimonials | ✅ |
+| 28 | Gwen | Page /contact + ContactForm + RGPD | ✅ |
+| 29 | Gwen | POST /api/contact + Resend | ✅ |
+| 30 | Gwen | Pages légales : mentions, confidentialité, cookies | ✅ |
+| 31 | Gwen | Page /soutenir — refonte narrative + section émotionnelle | ✅ |
+| 32 | Gwen | Page /rapports-activite — grille PDFs | ✅ |
+| 33 | Gwen | Page /a-propos | ✅ |
+| 34 | Gwen | Page /equipe | ✅ |
+| 35 | Alison | CRUD /api/admin/missions (back) | ✅ |
+| 36 | Alison | Dashboard admin — sidebar + layout + routes protégées | ✅ |
+| 37 | Alison | PATCH /api/admin/testimonials/:id — modération | ✅ |
+| 38 | Ensemble | Flux complet : soumission → modération → affichage | ✅ |
 
 ---
 
-### S6 — 30 juin › 3 juillet · Recette MVP
+### S5 — 23 › 27 juin · Dashboard + Responsive ✅
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 44 | Ensemble | Tests complets pages publiques | 30 juin | 🔵 À faire |
-| 45 | Ensemble | Tests dashboard : CRUD, modération, contact | 1 juillet | 🔵 À faire |
-| 46 | Ensemble | Seed BDD avec données proches du réel | 1 juillet | ⚠️ Partiel |
-| 47 | Ensemble | Audit Lighthouse — corrections prioritaires | 2 juillet | 🔵 À faire |
-| 48 | Ensemble | Accessibilité de base : labels, alt, focus | 2 juillet | 🔵 À faire |
-| 49 | Ensemble | Préparation soutenance / démo MVP | 2-3 juillet | 🔵 À faire |
-| 50 | Ensemble | 🎯 LIVRAISON MVP — 3 juillet 2026 | 3 juillet | 🔵 À faire |
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 39 | Alison | Dashboard : CRUD missions front | ✅ |
+| 40 | Alison | Dashboard : modération témoignages | ✅ |
+| 41 | Alison | Dashboard : routage email contact | ✅ |
+| 42 | Alison | Upload fichiers Multer (images + PDFs) | ⚠️ Partiel |
+| 43 | Gwen | Responsive mobile-first toutes pages MVP (375 / 768 / 1024 / 1440) | ✅ |
+| 43bis | Gwen | Harmonisation CSS — gap scale, utilities, Section/CTASection | ✅ |
 
 ---
 
-## Phase 2 — 3 › 17 juillet 2026 : Dashboard complet + Pages secondaires
+### S6 — 30 juin › 3 juillet · Sprint final MVP ✅
 
-### S7 — 3 › 10 juillet · Dashboard étendu
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 44 | Gwen | Migration pages restantes : LocationDetail, MediaDetail, MediaEtActualites, MissionDetail, Missions, Soutenir | ✅ |
+| 45 | Gwen | LocationDetail enrichi — contacts délégation FK, iframe Google Maps, galerie | ✅ |
+| 46 | Gwen | BDD — 5 migrations : delegation_id, map_url, website_url, show_homepage, FieldActionCountry | ✅ |
+| 47 | Gwen | Seed refacto — délégations avant locations, pays multi-valeurs, show_homepage | ✅ |
+| 48 | Gwen | FooterCta dynamique par route — suppression CTASection sur toutes les pages | ✅ |
+| 49 | Gwen | Education.jsx refonte — ODD + AnchorNav + sections Éco-École/Correspondances/Ateliers | ✅ |
+| 50 | Gwen | Renommage "Sens Solidaire" → "Sens Solidaires" (grep + sed, 23 occurrences) | ✅ |
+| 51 | Gwen | Home — CTA témoignage + section Actualités show_homepage + logos partenaires | ✅ |
+| 52 | Ensemble | Merge dev-front → dev | ✅ |
+| 53 | Ensemble | 🎯 LIVRAISON MVP — 3 juillet 2026 | ✅ |
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 51 | Alison | Dashboard : gestion médias + équipe + rapports d'activité | 3-7 juillet | 🔵 À faire |
-| 52 | Alison | Responsive dashboard | 7-8 juillet | 🔵 À faire |
-| 53 | Alison | APIs : médias, équipe, rapports | 3-7 juillet | ✅ Terminé  |
-| 54 | Alison | CRUD actions terrain + tags | 7-8 juillet | 🔵 À faire |
-| 55 | Alison | Tests d'intégration | 8-10 juillet | 🔵 À faire |
+---
 
-### S8 — 10 › 17 juillet · Pages secondaires
+## Phase 2 — 7 › 18 juillet 2026 : Dashboard complet + Finitions front
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 56 | Gwen | Page /lieux/:slug (LocationDetail.jsx) | 10-12 juillet | ✅ Terminé |
-| 57 | Alison | APIs restantes : locations, équipe, rapports | 10-14 juillet | 🔵 À faire |
-| 58 | Alison | Corrections bugs post-recette | 14-17 juillet | 🔵 À faire |
-| 59 | Ensemble | 🧊 Code freezé — pause estivale | 17 juillet | 🔵 À faire |
+---
+
+### S7 — 7 › 11 juillet · Dashboard étendu
+
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 54 | Alison | Dashboard : gestion médias (upload image, show_homepage) | 🔵 |
+| 55 | Alison | Dashboard : gestion équipe (CRUD membres) | 🔵 |
+| 56 | Alison | Dashboard : gestion rapports d'activité | 🔵 |
+| 57 | Alison | Dashboard : CRUD actions terrain + pays + tags | 🔵 |
+| 58 | Alison | Dashboard : responsive | 🔵 |
+| 59 | Alison | APIs restantes : locations, équipe | 🔵 |
+| 60 | Alison | Upload Multer — finalisation images + PDFs | 🔵 |
+| 61 | Alison | Tests d'intégration dashboard | 🔵 |
+
+---
+
+### S8 — 14 › 18 juillet · Finitions front + freeze
+
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 62 | Gwen | Accessibilité basique — alt, aria-label, focus-visible | 🔵 |
+| 63 | Gwen | SEO basique — SEOHead (title, meta, Open Graph) par page | 🔵 |
+| 64 | Gwen | Lazy loading — `loading="lazy"` sur toutes les images cards/grilles | 🔵 |
+| 65 | Gwen | `maxLength={280}` sur textarea témoignage dashboard | 🔵 |
+| 66 | Gwen | Buffer API — auto-draft réseaux sociaux à la publication (V2) | 🔵 |
+| 67 | Gwen | `PageLayout` — factoriser bg-surface + ScrollToTop + HeroPage | 🔵 |
+| 68 | Ensemble | Corrections bugs post-recette | 🔵 |
+| 69 | Ensemble | 🧊 Code freezé — pause estivale (18 juillet) | 🔵 |
+
+---
+
+## Pause estivale — Août 2026 🧊
+
+Code freezé. Aucune modification.
 
 ---
 
 ## Phase 3 — Septembre 2026 : Finalisation & Déploiement
 
-### Sept. S1 · Pages éditoriales
+---
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 60 | Gwen | Page Actions terrain + détail (badges ODD) | Sept. S1 | ✅ Terminé  |
-| 61 | Gwen | Page Actions éducatives | Sept. S1 | ✅ Terminé  |
-| 62 | Gwen | Page Médias & Actualités (filtres) | Sept. S1 | ✅ Terminé  |
-| 63 | Gwen | APIs : actions terrain, actions éducatives, médias | Sept. S1 | ✅ Terminé |
-| 64 | Gwen | Seed BDD avec contenus réels | Sept. S1 | ⚠️ Partiel |
+### Sept. S1 — Polishing + SEO avancé
 
-### Sept. S2 · Polishing + SEO + Bilingue
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 70 | Gwen | Audit Lighthouse — objectif > 90 | 🔵 |
+| 71 | Gwen | Optimisations WebP + images production | 🔵 |
+| 72 | Alison | Upload Sharp — redimensionnement auto WebP | 🔵 |
+| 73 | Gwen | Bilingue FR/EN — react-i18next (si décision cliente) | 🔵 |
+| 74 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | 🔵 |
+| 75 | Ensemble | Seed BDD — contenus réels finaux fournis par la cliente | 🔵 |
+| 76 | Ensemble | Relecture complète tous les textes avec la cliente | 🔵 |
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 65 | Gwen | Compteurs d'impact animés | Sept. S2 | 🔵 À faire |
-| 66 | Gwen | Bilingue FR/EN — react-i18next | Sept. S2 | 🔵 À faire |
-| 67 | Gwen | Accessibilité WCAG 2.1 AA | Sept. S2 | 🔵 À faire |
-| 68 | Gwen | SEO : méta, Open Graph, sitemap, robots.txt | Sept. S2 | 🔵 À faire |
-| 69 | Gwen | Audit Lighthouse final — objectif > 90 | Sept. S2 | 🔵 À faire |
-| 70 | Gwen | Optimisations : WebP, lazy loading | Sept. S2 | 🔵 À faire |
-| 70bis | Alison | Upload images — redimensionnement automatique avec Sharp (WebP, dimensions par contexte) | Sept. S2 | 🔵 À faire |
-| 70ter | Gwen | Lazy loading — attribut loading="lazy" sur toutes les images cards et grilles | Sept. S2 | 🔵 À faire |
+---
 
-### Sept. S3 · Déploiement
+### Sept. S2 — Déploiement
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 71 | Gwen | Dockerfile production (multi-stage build) | Sept. S3 | 🔵 À faire |
-| 72 | Gwen | VPS + Docker + Nginx + SSL | Sept. S3 | 🔵 À faire |
-| 73 | Alison | Migration contenus réels | Sept. S3 | 🔵 À faire |
-| 74 | Alison | Variables d'env production + secrets | Sept. S3 | 🔵 À faire |
-| 75 | Ensemble | UptimeRobot monitoring + tests HTTPS | Sept. S3 | 🔵 À faire |
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 77 | Gwen | Dockerfile production (multi-stage build) | 🔵 |
+| 78 | Gwen | VPS + Docker + Nginx + SSL (Let's Encrypt) | 🔵 |
+| 79 | Alison | Variables d'env production + secrets | 🔵 |
+| 80 | Alison | Migration BDD production | 🔵 |
+| 81 | Ensemble | UptimeRobot monitoring + tests HTTPS | 🔵 |
 
-### Sept. S4 · Livraison finale
+---
 
-| # | Dev | Tâche | Période | Statut |
-|---|---|---|---|---|
-| 76 | Ensemble | Tests en conditions de production | Sept. S4 | 🔵 À faire |
-| 77 | Ensemble | Guide utilisateur dashboard (PDF) | Sept. S4 | 🔵 À faire |
-| 78 | Ensemble | Remise des accès | Sept. S4 | 🔵 À faire |
-| 79 | Ensemble | Corrections finales | Sept. S4 | 🔵 À faire |
-| 80 | Ensemble | 🎉 LIVRAISON OFFICIELLE | Fin sept. 2026 | 🔵 À faire |
+### Sept. S3 — Livraison
+
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 82 | Ensemble | Tests complets en production | 🔵 |
+| 83 | Ensemble | Guide utilisateur dashboard (PDF) | 🔵 |
+| 84 | Ensemble | Remise des accès à la cliente | 🔵 |
+| 85 | Ensemble | Corrections finales | 🔵 |
+| 86 | Ensemble | 🎉 LIVRAISON OFFICIELLE | 🔵 |
+
+---
+
+## Backlog V2 — Post-livraison
+
+| Fonctionnalité | Description |
+|---|---|
+| Buffer API | Auto-draft réseaux sociaux à la publication d'un article |
+| Instagram oEmbed | Embed posts du feed Instagram (nécessite app Meta) |
+| `latitude` / `longitude` sur Location | Embed Google Maps propre (remplace iframe URL) |
+| `location_id` FK sur Delegation | Architecture bidirectionnelle Delegation ↔ Location |
+| Sélection manuelle actions terrain home | Dashboard + champ BDD (avec Alison) |
+| TipTap — éditeur riche | HTML riche pour MissionDetail, LocationDetail, EducationDetail |
+| Compteurs StatsBar depuis dashboard | La cliente peut modifier les chiffres clés |
+| Suisse vs France éducation | Filtrage des ateliers par zone géographique |
+| Congé solidaire Sumatra | Ajouter destination dans la section congé solidaire |
 
 ---
 
 ## Récapitulatif
 
-| Phase | Période | Livrable |
-|---|---|---|
-| Phase 1 — MVP | 28 mai › 3 juillet | MVP + dashboard fonctionnels |
-| Phase 2 — Dashboard complet | 3 › 17 juillet | Site quasi-complet |
-| Pause estivale | Août 2026 | Code freezé |
-| Phase 3 — Finalisation | Septembre 2026 | Site en production ✅ |
+| Phase | Période | Livrable | Statut |
+|---|---|---|---|
+| Phase 1 — MVP | 28 mai › 3 juillet | MVP + dashboard fonctionnels | ✅ Livré |
+| Phase 2 — Dashboard complet | 7 › 18 juillet | Site quasi-complet | 🔵 En cours |
+| Pause estivale | Août 2026 | Code freezé | 🧊 |
+| Phase 3 — Finalisation | Septembre 2026 | Site en production | 🔵 À faire |
