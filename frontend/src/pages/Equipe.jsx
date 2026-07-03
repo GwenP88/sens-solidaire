@@ -14,7 +14,6 @@ import HeroPage from '../components/layout/HeroPage'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
-import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
 import TeamMemberCard from '../components/team/TeamMemberCard'
@@ -132,14 +131,6 @@ function Equipe() {
           color="primary"
         />
       </Section>
-
-      {/* ── CTA contact ── */}
-      <CTASection
-        title="Envie de rejoindre l'aventure ?"
-        text="Bénévole, volontaire, enseignant, partenaire... Il existe mille façons d'agir avec nous."
-        ctaLabel="Nous contacter →"
-        ctaHref="/contact"
-      />
 
       <ScrollToTop />
     </div>

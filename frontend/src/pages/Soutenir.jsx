@@ -3,7 +3,6 @@
 
 // ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
-import CTASection from '../components/ui/CTASection'
 
 // ── Composants UI
 import Button from '../components/ui/Button'
@@ -298,14 +297,6 @@ function Soutenir() {
 
         </div>
       </section>
-
-      {/* ── CTA final ── */}
-      <CTASection
-        title="Vous aussi, devenez acteur de cette aventure."
-        text="Un don, une adhésion ou un simple échange peuvent devenir le point de départ d’un engagement durable."
-        ctaLabel="Nous contacter →"
-        ctaHref="/contact"
-      />
 
       <ScrollToTop />
     </div>

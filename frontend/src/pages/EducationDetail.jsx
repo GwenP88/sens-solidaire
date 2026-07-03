@@ -17,7 +17,6 @@ import HeroPage from '../components/layout/HeroPage'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
-import CTASection from '../components/ui/CTASection'
 
 function EducationDetail() {
   const { slug } = useParams()
@@ -90,14 +89,6 @@ function EducationDetail() {
 
         </div>
       </section>
-
-      {/* ── CTA bas de page ── */}
-      <CTASection
-        title="Vous souhaitez accueillir une intervention ?"
-        text="Notre équipe se déplace dans vos locaux ou vous accueille dans nos bureaux."
-        ctaLabel="Nous contacter →"
-        ctaHref="/contact"
-      />
 
       <ScrollToTop />
     </div>

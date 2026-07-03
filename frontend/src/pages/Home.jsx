@@ -16,7 +16,6 @@ import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Carousel from '../components/ui/Carousel'
 import Section from '../components/ui/Section'
-import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
 import MissionCard from '../components/missions/MissionCard'

@@ -18,7 +18,6 @@ import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
-import CTASection from '../components/ui/CTASection'
 
 // ── Utils
 import { ODDS_LABELS } from '../utils/odds'
@@ -116,14 +115,6 @@ function ImpactDetail() {
           />
         </Section>
       )}
-
-      {/* ── CTA bas de page ── */}
-      <CTASection
-        title="Envie de vous engager à nos côtés ?"
-        text="Découvrez nos missions et participez à des projets concrets sur le terrain."
-        ctaLabel="Voir nos missions →"
-        ctaHref="/missions"
-      />
 
       <ScrollToTop />
     </div>

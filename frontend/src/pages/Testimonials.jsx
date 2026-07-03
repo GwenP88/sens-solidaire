@@ -19,7 +19,6 @@ import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Modal from '../components/ui/Modal'
 import Section from '../components/ui/Section'
-import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
 import TestimonialCard from '../components/testimonials/TestimonialCard'
@@ -124,15 +123,6 @@ function Testimonials() {
           )}
         </Section>
       )}
-
-      {/* ── CTA soumission témoignage ── */}
-      <CTASection
-        title="Vous êtes partis en mission ?"
-        text="Vos rencontres, vos découvertes et les moments forts vécus sur le terrain peuvent donner à d'autres l'envie de s'engager et de vivre cette aventure à leur tour."
-        ctaLabel="Partager mon expérience →"
-        ctaHref="#"
-        onCtaClick={() => setModalOpen(true)}
-      />
 
       <ScrollToTop />
 

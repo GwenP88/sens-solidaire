@@ -13,7 +13,6 @@ import { fetchMediaPostBySlug } from '../services/api'
 
 // ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
-import CTASection from '../components/ui/CTASection'
 
 // ── Composants UI
 import Button from '../components/ui/Button'
@@ -210,14 +209,6 @@ function MediaDetail() {
 
         </div>
       </section>
-
-      {/* ── CTA bas de page ── */}
-      <CTASection
-        title="Envie de vous engager à nos côtés ?"
-        text="Découvrez nos missions et participez à des projets concrets sur le terrain."
-        ctaLabel="Voir nos missions →"
-        ctaHref="/missions"
-      />
 
       <ScrollToTop />
     </div>

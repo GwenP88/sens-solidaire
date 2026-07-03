@@ -14,7 +14,6 @@ import HeroPage from '../components/layout/HeroPage'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
-import CTASection from '../components/ui/CTASection'
 import TeamMemberCard from '../components/team/TeamMemberCard'
 import Carousel from '../components/ui/Carousel'
 
@@ -170,14 +169,6 @@ useEffect(() => {
           </div>
         </div>
       </Section>
-
-      {/* ── CTA contact ── */}
-      <CTASection
-        title="Une question, une envie de collaborer avec nous ?"
-        text="Notre équipe est à votre écoute."
-        ctaLabel="Nous contacter →"
-        ctaHref="/contact"
-      />
 
       <ScrollToTop />
     </div>

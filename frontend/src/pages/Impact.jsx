@@ -18,7 +18,6 @@ import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Filters from '../components/navigation/Filters'
 import Section from '../components/ui/Section'
-import CTASection from '../components/ui/CTASection'
 
 // ── Composants métier
 import ImpactCard from '../components/actions/ImpactCard'
@@ -132,14 +131,6 @@ function NotreImpact() {
           </div>
         )}
       </Section>
-
-      {/* ── CTA missions ── */}
-      <CTASection
-        title="Envie de vous engager à nos côtés ?"
-        text="Découvrez nos missions et participez à des projets concrets sur le terrain."
-        ctaLabel="Voir nos missions →"
-        ctaHref="/missions"
-      />
 
       <ScrollToTop />
     </div>
