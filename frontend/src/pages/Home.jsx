@@ -16,12 +16,14 @@ import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Carousel from '../components/ui/Carousel'
 import Section from '../components/ui/Section'
+import Modal from '../components/ui/Modal'
 
 // ── Composants métier
 import MissionCard from '../components/missions/MissionCard'
 import ImpactCard from '../components/actions/ImpactCard'
 import MediaCard from '../components/media/MediaCard'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
+import TestimonialForm from '../components/testimonials/TestimonialForm'
 
 // ── Utils
 import { ODDS } from '../utils/odds'
@@ -75,6 +77,7 @@ function Home() {
   const [actions, setActions] = useState([])
   const [partners, setPartners] = useState([])
   const [mediaPosts, setMediaPosts] = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     fetchTestimonials()
@@ -149,6 +152,14 @@ function Home() {
           )}
           showPagination={true}
         />
+        <div className="flex justify-center mt-4">
+          <button onClick={() => setModalOpen(true)}>
+            <Button
+              label="Vous êtes partis en mission ? Racontez-nous →"
+              variant="light"
+            />
+          </button>
+        </div>
       </Section>
 
       {/* ── Section actions terrain ── */}
@@ -225,7 +236,9 @@ function Home() {
           ))}
         </div>
       </Section>
-
+        <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Partager votre témoignage">
+          <TestimonialForm onClose={() => setModalOpen(false)} />
+        </Modal>
       <ScrollToTop />
     </div>
   )
