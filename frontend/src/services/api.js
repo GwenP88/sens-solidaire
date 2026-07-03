@@ -5,6 +5,18 @@
 // URL de base de l'API — pointe vers le backend Express
 const API_URL = "http://localhost:3000/api"
 
+// ── AUTH HELPERS ─────────────────────────────────────────────────────────────
+
+// Construit les headers d'authentification pour les appels admin.
+// Centralise la lecture du token — un seul endroit à modifier si la stratégie
+// de stockage évolue (ex: passage en mémoire React, cf. dette technique V2).
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("admin_token")
+  return {
+    "Authorization": `Bearer ${token}`,
+  }
+}
+
 // ── AUTH ADMIN ───────────────────────────────────────────────────────────────
 
 // Connexion admin : envoie email + password, récupère l'access token.
@@ -62,7 +74,7 @@ export const fetchTestimonials = async () => {
 export const submitTestimonial = async (data) => {
   const response = await fetch(`${API_URL}/testimonials`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
   if (!response.ok) throw new Error("L'envoi du témoignage a échoué. Vérifiez votre connexion ou réessayez.")
@@ -166,18 +178,20 @@ export const fetchLocationBySlug = async (slug) => {
 
 // ── ADMIN — TÉMOIGNAGES ──────────────────────────────────────────────────────
 
-// Récupère TOUS les témoignages pour la modération (tous statuts).
-// Route protégée → on doit envoyer le token dans le header Authorization.
-export const fetchAdminTestimonials = async () => {
-  // 1. On récupère le token stocké au login
+// Récupère les témoignages pour la modération.
+// status optionnel : "pending" | "approved" | "rejected" | undefined (= tous)
+export const fetchAdminTestimonials = async (status) => {
   const token = localStorage.getItem("admin_token")
 
-  const response = await fetch(`${API_URL}/admin/testimonials`, {
-    headers: {
-      // 2. Le header qui authentifie la requête.
-      //    Format exact attendu par ton back : "Bearer <token>"
-      "Authorization": `Bearer ${token}`,
-    },
+  const params = new URLSearchParams()
+  if (status) {
+    params.append("status", status)   // ajoute la paire clé/valeur "status=pending"
+  }
+
+  const query = params.toString() ? `?${params.toString()}` : ''
+
+  const response = await fetch(`${API_URL}/admin/testimonials${query}`, {
+    headers: getAuthHeaders(),
   })
 
   if (!response.ok) {
@@ -194,9 +208,7 @@ export const approveTestimonial = async (id) => {
 
   const response = await fetch(`${API_URL}/admin/testimonials/${id}/approve`, {
     method: "PATCH",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
+    headers: getAuthHeaders(),
   })
 
   if (!response.ok) {
@@ -212,14 +224,70 @@ export const rejectTestimonial = async (id) => {
 
   const response = await fetch(`${API_URL}/admin/testimonials/${id}/reject`, {
     method: "PATCH",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
+    headers: getAuthHeaders(),
   })
 
   if (!response.ok) {
     throw new Error("Échec du refus du témoignage.")
   }
 
+  return await response.json()
+}
+
+// ── ADMIN — MISSIONS ─────────────────────────────────────────────────────────
+
+// Récupère TOUTES les missions (actives + inactives) pour le dashboard admin.
+export const fetchAdminMissions = async () => {
+  const response = await fetch(`${API_URL}/admin/missions`, {
+    headers: getAuthHeaders(),
+  })
+  if (!response.ok) {
+    throw new Error("Impossible de charger les missions (admin).")
+  }
+  const data = await response.json()
+  return data.missions
+}
+
+// Crée une nouvelle mission.
+export const createMission = async (missionData) => {
+  const response = await fetch(`${API_URL}/admin/missions`, {
+    method: "POST",
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(missionData),
+  })
+  if (!response.ok) {
+    // On propage le message d'erreur précis du backend (400 champs manquants,
+    // 409 slug dupliqué...) plutôt qu'un message générique.
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la création de la mission.")
+  }
+  const data = await response.json()
+  return data.mission
+}
+
+// Met à jour partiellement une mission existante.
+export const updateMission = async (id, missionData) => {
+  const response = await fetch(`${API_URL}/admin/missions/${id}`, {
+    method: "PATCH",
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(missionData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la mise à jour de la mission.")
+  }
+  const data = await response.json()
+  return data.mission
+}
+
+// Supprime (soft delete) une mission — is_active passe à false côté backend.
+export const deleteMission = async (id) => {
+  const response = await fetch(`${API_URL}/admin/missions/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  })
+  if (!response.ok) {
+    throw new Error("Échec de la suppression de la mission.")
+  }
   return await response.json()
 }

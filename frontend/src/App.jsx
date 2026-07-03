@@ -40,6 +40,8 @@ import EducationDetail from './pages/EducationDetail'
 import LoginAdmin from './pages/admin/LoginAdmin'
 import Dashboard from './pages/admin/Dashboard'
 import ProtectedRoute from './components/navigation/ProtectedRoute'
+import DashboardLayout from './components/admin/DashboardLayout'
+import MissionsPage from './pages/admin/MissionsPage'
 
 //  ── Pages lieux
 import LocationDetail from './pages/LocationDetail'
@@ -95,13 +97,23 @@ function App() {
 
         </Route>
 
-        {/* ── Routes admin — sans Navbar ni Footer ── */}
+{/* ── Routes admin — sans Navbar ni Footer ── */}
         <Route path="/admin/login" element={<LoginAdmin />} />
-        <Route path="/admin" element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } />
+
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<div>Vue d'ensemble — à construire</div>} />
+          <Route path="temoignages" element={<Dashboard />} />
+          <Route path="missions" element={<MissionsPage />} />
+          {/* missions, ateliers, medias, a-propos, actions-terrain, soutenir,
+              contact, parametres : routes à ajouter au fur et à mesure des composants */}
+        </Route>
 
       </Routes>
 
