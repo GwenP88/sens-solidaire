@@ -1,5 +1,8 @@
+// ════════════════════════════════════════════════════════════════
 // MissionDetail.jsx
-// Page détail d'une mission — Hero, description, rôle, programme, tarifs, lieux, témoignages
+// Page détail d'une mission — Hero, description, rôle, programme,
+// tarifs, lieux, impact, comment partir, infos pratiques, témoignages, galerie
+// ════════════════════════════════════════════════════════════════
 
 // ── React
 import { useState, useEffect } from 'react'
@@ -33,7 +36,7 @@ import {
   IconFileMission, IconCheck, IconTimes,
 } from '../utils/icons'
 
-// ── Données statiques — icônes fixes pour les étapes "Comment partir"
+// ── Icônes fixes pour les 7 étapes "Comment partir"
 const HOW_TO_GO_ICONS = [
   IconFlight, IconContact, IconBooking,
   IconPayment, IconContract, IconGuide, IconFileMission,
@@ -41,23 +44,40 @@ const HOW_TO_GO_ICONS = [
 
 // ── Sections de l'AnchorNav
 const ANCHOR_SECTIONS = [
-  { label: "La mission",        id: "description"    },
-  { label: "Rôle & Programme",  id: "role-programme" },
-  { label: "Lieux partenaires", id: "lieux"          },
-  { label: "Impact terrain",    id: "impact"         },
-  { label: "Coût & durée",      id: "cout"           },
-  { label: "Comment partir",    id: "comment-partir" },
-  { label: "Infos pratiques",   id: "infos-pratiques"},
-  { label: "Témoignages",       id: "temoignages"    },
-  { label: "Galerie",           id: "galerie"        },
+  { label: "La mission",        id: "description"     },
+  { label: "Rôle & Programme",  id: "role-programme"  },
+  { label: "Lieux partenaires", id: "lieux"           },
+  { label: "Impact terrain",    id: "impact"          },
+  { label: "Coût & durée",      id: "cout"            },
+  { label: "Comment partir",    id: "comment-partir"  },
+  { label: "Infos pratiques",   id: "infos-pratiques" },
+  { label: "Témoignages",       id: "temoignages"     },
+  { label: "Galerie",           id: "galerie"         },
 ]
+
+// ── Utilitaire — transforme un texte multi-lignes en tableau de puces
+// Chaque ligne non vide devient un élément <li>
+function LignesToPuces({ texte, className = "" }) {
+  if (!texte) return null
+  const lignes = texte.split('\n').filter(l => l.trim() !== '')
+  return (
+    <ul className={`flex flex-col gap-0 list-none ${className}`}>
+      {lignes.map((ligne, i) => (
+        <li key={i} className="flex items-start gap-xs text-body text-primary/80">
+          <span className="text-accent mt-1 shrink-0">•</span>
+          <span>{ligne.trim()}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 function MissionDetail() {
   const { slug } = useParams()
-  const [mission, setMission] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [actions, setActions] = useState([])
+  const [mission, setMission]   = useState(null)
+  const [loading, setLoading]   = useState(true)
+  const [error, setError]       = useState(null)
+  const [actions, setActions]   = useState([])
 
   useEffect(() => {
     const loadMission = async () => {
@@ -82,7 +102,19 @@ function MissionDetail() {
     </div>
   )
 
-  const howToGoSteps = mission.how_to_go ? JSON.parse(mission.how_to_go) : []
+  // ── Parsing des champs JSON ──
+  // how_to_go : JSON array de strings ["étape 1", "étape 2"...]
+  const howToGoSteps = (() => {
+    try { return mission.how_to_go ? JSON.parse(mission.how_to_go) : [] }
+    catch { return [] }
+  })()
+
+  // programme : JSON array [{label: "Jour 1", content: "..."}]
+  const programmeSteps = (() => {
+    try { return mission.programme ? JSON.parse(mission.programme) : [] }
+    catch { return [] }
+  })()
+
 
   return (
     <div className="bg-surface min-h-screen">
@@ -96,16 +128,13 @@ function MissionDetail() {
         price={mission.pricing?.sort((a, b) => a.display_order - b.display_order)[0]?.price || null}
       />
 
-      {/* ── Navigation ancres ── */}
       <AnchorNav variant="dark" sections={ANCHOR_SECTIONS} />
 
-      {/* ── Description — texte + image ── */}
+      {/* ── Description ── */}
       {mission.description && (
         <section id="description" className="padding-y padding-x bg-surface-mid">
           <h2 className="h2-style text-primary">{mission.title}</h2>
           <div className="flex flex-col lg:flex-row gap-lg items-start">
-
-            {/* Texte principal */}
             <div className="flex flex-col gap-md w-full lg:w-2/3">
               <p className="text-body text-primary/80">{mission.description}</p>
               <h3 className="h3-style text-primary mb-0">De nombreux volontaires ont déjà sauté le pas…</h3>
@@ -113,59 +142,59 @@ function MissionDetail() {
                 Découvrez la satisfaction de participer à des projets porteurs de sens. Que vous soyez étudiant, en activité ou retraité, aucun diplôme particulier n'est requis : nous recherchons avant tout des personnes motivées, ouvertes aux autres et désireuses de s'engager.
               </p>
             </div>
-
-            {/* Image secondaire */}
             <div className="w-full lg:w-1/3 shrink-0">
-              <img src={mission.image_url} alt={mission.title} className="w-full h-72 object-cover rounded-xl" />
+              <img
+                src={mission.image_url || '/images/placeholders/placeholder-galerie-1.png'}
+                alt={mission.title}
+                className="w-full h-72 object-cover rounded-xl"
+              />
             </div>
           </div>
         </section>
       )}
 
       {/* ── Rôle du volontaire + Programme ── */}
-      {(mission.volunteer_role || mission.programme) && (
+      {(mission.volunteer_role || programmeSteps.length > 0) && (
         <section id="role-programme" className="padding-y padding-x bg-surface">
           <div className="flex flex-col lg:flex-row gap-lg items-start">
 
-            {/* Rôle du volontaire */}
+            {/* ── Rôle du volontaire ── */}
             {mission.volunteer_role && (
-              <div className="w-full lg:w-2/5">
+              <div className="w-full lg:w-2/5 flex flex-col gap-md">
                 <h2 className="h2-style text-primary">Votre rôle sur le terrain</h2>
-                <div
-                  className="text-body text-primary/80 rich-text"
-                  dangerouslySetInnerHTML={{ __html: mission.volunteer_role }}
-                />
+                {/* Phrase fixe — introduction de la liste */}
+                <p className="text-body text-primary/80">
+                  Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :
+                </p>
+                {/* Lignes saisies dans le dashboard → puces */}
+                <LignesToPuces texte={mission.volunteer_role} />
               </div>
             )}
 
-            {/* Programme jour par jour */}
-            {mission.programme && (
-              <div className="w-full lg:w-3/5">
+            {/* ── Programme jour par jour ── */}
+            {programmeSteps.length > 0 && (
+              <div className="w-full lg:w-3/5 flex flex-col gap-md">
                 <h2 className="h2-style text-primary">Programme de volontariat</h2>
                 <div className="flex flex-col gap-xs">
-                  {mission.programme.split('\n').map((line, i) => {
-                    if (!line.trim()) return null
-                    const [label, ...rest] = line.split(':')
-                    const content = rest.join(':').trim()
-                    return (
-                      <div key={i} className="flex items-stretch border-l-4 border-accent rounded-r-xl overflow-hidden">
-                        <span className="text-body text-accent font-semibold bg-surface-dark px-4 py-3 shrink-0 w-32 flex items-center">
-                          {label.trim()}
-                        </span>
-                        <span className="text-body text-primary/80 bg-surface-mid px-5 py-3 flex-1 flex items-center">
-                          {content}
-                        </span>
-                      </div>
-                    )
-                  })}
+                  {programmeSteps.map((step, i) => (
+                    <div key={i} className="flex items-stretch border-l-4 border-accent rounded-r-xl overflow-hidden">
+                      <span className="text-body text-accent font-semibold bg-surface-dark px-4 py-3 shrink-0 w-32 flex items-center">
+                        {step.label}
+                      </span>
+                      <span className="text-body text-primary/80 bg-surface-mid px-5 py-3 flex-1 flex items-center">
+                        {step.content}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                <div className="mt-6 border border-surface-dark rounded-xl px-5 py-4">
+                <div className="border border-surface-dark rounded-xl px-5 py-4">
                   <p className="text-mention text-primary/40">
                     La nature exacte de la mission dépendra des priorités du moment sur le terrain.
                   </p>
                 </div>
               </div>
             )}
+
           </div>
         </section>
       )}
@@ -238,15 +267,17 @@ function MissionDetail() {
             Choisissez la durée de séjour qui correspond le mieux à vos disponibilités et à votre projet d'engagement.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-md items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-md items-stretch">
 
             {/* Tableau tarifs */}
-            <div className="flex flex-col bg-surface rounded-xl p-4">
+            <div className="flex flex-col bg-surface rounded-xl p-4 xl:col-span-1">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-surface-dark">
-                    <th className="text-left py-2 text-primary font-semibold flex items-center gap-xs">
-                      <IconClock className="text-accent" /> Durée
+                    <th className="text-left py-2 text-primary font-semibold">
+                      <span className="flex items-center gap-xs">
+                        <IconClock className="text-accent" /> Durée
+                      </span>
                     </th>
                     <th className="text-right py-2 text-primary font-semibold">
                       <span className="flex items-center justify-end gap-xs">
@@ -256,26 +287,28 @@ function MissionDetail() {
                   </tr>
                 </thead>
                 <tbody>
-                  {mission.pricing.sort((a, b) => a.display_order - b.display_order).map((p) => (
-                    <tr key={p.id} className="border-b border-surface-dark/50">
-                      <td className="py-3 text-body text-primary/80">{p.duration_label}</td>
-                      <td className="py-3 text-right text-body font-semibold text-primary">
-                        {p.price > 0 ? `${p.price} €` : 'Nous contacter'}
-                      </td>
-                    </tr>
-                  ))}
+                  {mission.pricing
+                    .sort((a, b) => a.display_order - b.display_order)
+                    .map((p) => (
+                      <tr key={p.id} className="border-b border-surface-dark/50">
+                        <td className="py-3 text-body text-primary/80">{p.duration_label}</td>
+                        <td className="py-3 text-right text-body font-semibold text-primary">
+                          {p.price > 0 ? `${p.price} €` : 'Nous contacter'}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
 
             {/* Inclus / non inclus */}
-            <div className="flex flex-col justify-between self-stretch gap-md">
+            <div className="flex flex-col justify-between self-stretch gap-md xl:col-span-2">
               {mission.included && (
                 <div>
                   <h3 className="h3-style text-primary flex items-center gap-xs mb-0">
                     <IconCheck className="text-accent-2" /> Inclus
                   </h3>
-                  <p className="text-body text-primary/80">{mission.included}</p>
+                  <LignesToPuces texte={mission.included} />
                 </div>
               )}
               {mission.not_include && (
@@ -283,7 +316,7 @@ function MissionDetail() {
                   <h3 className="h3-style text-primary flex items-center gap-xs mb-0">
                     <IconTimes className="text-accent" /> Non inclus
                   </h3>
-                  <p className="text-body text-primary/80">{mission.not_include}</p>
+                  <LignesToPuces texte={mission.not_include} />
                 </div>
               )}
             </div>
@@ -298,12 +331,14 @@ function MissionDetail() {
               </div>
               <div className="bg-surface rounded-xl p-4 flex flex-col gap-sm flex-1">
                 <h3 className="h3-style text-primary mb-0">Besoin de plus d'informations ?</h3>
-                <Button label="Nous contacter →" variant="secondary" fullWidth />
+                <a href="/contact">
+                  <Button label="Nous contacter →" variant="secondary" fullWidth />
+                </a>
               </div>
             </div>
 
             {/* Répartition des frais */}
-            <div className="col-span-1 md:col-span-2 xl:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-md pt-6 border-t border-surface-dark">
+           <div className="col-span-1 md:col-span-2 xl:col-span-4 grid grid-cols-1 md:grid-cols-3 gap-md pt-6 border-t border-surface-dark">
               <div className="flex flex-col gap-sm">
                 <h3 className="h3-style text-primary mb-0">À quoi servent les frais de mission ?</h3>
                 <p className="text-body text-primary/60">
@@ -325,7 +360,7 @@ function MissionDetail() {
             </div>
 
             {/* Mention fiscale */}
-            <div className="col-span-1 md:col-span-2 xl:col-span-3">
+            <div className="col-span-1 md:col-span-2 xl:col-span-4">
               <p className="text-mention text-primary/40">
                 Conformément aux articles 200 et 238 bis du CGI, 66 % du montant engagé est déductible de vos impôts. Un reçu fiscal vous sera délivré à l'issue de votre mission.
               </p>
@@ -334,7 +369,7 @@ function MissionDetail() {
         </section>
       )}
 
-      {/* ── Comment partir ── */}
+      {/* ── Comment partir — 7 étapes fixes avec icônes ── */}
       {howToGoSteps.length > 0 && (
         <section id="comment-partir" className="padding-y padding-x bg-surface">
           <h2 className="h2-style text-primary">Comment partir ?</h2>
@@ -342,7 +377,7 @@ function MissionDetail() {
             Nous accueillons des volontaires toute l'année. Ensemble, nous définissons la période de départ la plus adaptée à votre projet, à vos disponibilités et aux besoins de nos partenaires.
           </p>
 
-          {/* Mobile — scroll horizontal avec dégradé indicateur */}
+          {/* Mobile — scroll horizontal */}
           <div className="relative lg:hidden">
             <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none" />
             <div className="flex flex-row items-start gap-xs overflow-x-auto pb-3">
@@ -366,7 +401,7 @@ function MissionDetail() {
             </div>
           </div>
 
-          {/* Desktop — wrap normal centré */}
+          {/* Desktop — flex centré */}
           <div className="hidden lg:flex flex-row items-center gap-xs">
             {howToGoSteps.map((step, i) => {
               const Icon = HOW_TO_GO_ICONS[i]
@@ -397,34 +432,47 @@ function MissionDetail() {
             Pour vivre cette expérience dans les meilleures conditions, prenez le temps de préparer votre départ grâce à nos recommandations et informations pratiques.
           </p>
           <div className="flex flex-col lg:flex-row gap-md">
+
+            {/* Infos santé */}
             {mission.health_info && (
-              <div className="flex-1 bg-surface rounded-xl p-6">
+              <div className="flex-1 bg-surface rounded-xl p-6 flex flex-col gap-md">
                 <h3 className="h3-style text-primary mb-0">Avant le départ : santé & prévention</h3>
-                <div className="text-body text-primary/80 rich-text" dangerouslySetInnerHTML={{ __html: mission.health_info }} />
+                {/* Lignes saisies dans le dashboard → puces */}
+                <LignesToPuces texte={mission.health_info} />
               </div>
             )}
+
+            {/* Infos administratives */}
             {mission.admin_info && (
-              <div className="flex-1 bg-surface rounded-xl p-6">
+              <div className="flex-1 bg-surface rounded-xl p-6 flex flex-col gap-md">
                 <h3 className="h3-style text-primary mb-0">Avant de prendre votre envol</h3>
-                <div className="text-body text-primary/80 rich-text" dangerouslySetInnerHTML={{ __html: mission.admin_info }} />
+                {/* Lignes saisies dans le dashboard → puces */}
+                <LignesToPuces texte={mission.admin_info} />
               </div>
             )}
+
           </div>
 
+          {/* Guide + lien ministère */}
           <div className="mt-8 flex flex-col lg:flex-row gap-md">
             <div className="flex-1 bg-surface rounded-xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-sm">
               <div>
                 <h3 className="h3-style text-primary mb-0">Guide du volontaire</h3>
                 <p className="text-body text-primary/60">Votre guide complet pour préparer votre mission.</p>
               </div>
-              <Button label="Télécharger ↓" variant="secondary" />
+              {mission.guide_url
+                ? <a href={mission.guide_url} target="_blank" rel="noopener noreferrer">
+                    <Button label="Télécharger ↓" variant="secondary" />
+                  </a>
+                : <Button label="Télécharger ↓" variant="secondary" />
+              }
             </div>
             <div className="flex-1 bg-surface rounded-xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-sm">
               <div>
                 <h3 className="h3-style text-primary mb-0">Recommandations officielles</h3>
                 <p className="text-body text-primary/60">Consultez les informations officielles avant votre départ.</p>
               </div>
-              <a href={mission.ministry_url || '#'} target="_blank" rel="noopener noreferrer">
+              <a href={mission.ministry_url || 'https://www.diplomatie.gouv.fr'} target="_blank" rel="noopener noreferrer">
                 <Button label="Consulter →" variant="secondary" />
               </a>
             </div>
