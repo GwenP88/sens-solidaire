@@ -71,7 +71,7 @@ function MissionsPage() {
     const load = async () => {
       try {
         const data = await fetchAdminMissions(controller.signal)
-        setMissions(data)
+        setMissions(data.filter(m => m.type === 'volontariat_individuel'))
       } catch (err) {
         if (err.name === 'AbortError') return // navigation avant fin du fetch — silencieux
         console.error('Erreur chargement missions :', err)
@@ -95,7 +95,7 @@ function MissionsPage() {
   const reloadMissions = async () => {
     try {
       const data = await fetchAdminMissions()
-      setMissions(data)
+      setMissions(data.filter(m => m.type === 'volontariat_individuel'))
     } catch (err) {
       console.error('Erreur rechargement missions :', err)
       setError('Impossible de recharger les missions.')

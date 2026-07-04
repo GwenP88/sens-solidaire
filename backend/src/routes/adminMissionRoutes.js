@@ -5,8 +5,9 @@
 
 import { Router } from "express"
 import  authMiddleware  from "../middlewares/authMiddleware.js"
-
 import { createMission, updateMission, deleteMission, getMissionsForAdmin, getMissionById } from "../controllers/missionController.js"
+import { updateMissionPricing } from '../controllers/pricingController.js'
+import { updateMissionMedia } from '../controllers/mediaController.js'
 
 const router = Router()
 
@@ -26,5 +27,11 @@ router.delete("/:id", deleteMission)
 
 // GET /api/admin/missions/:id → une mission pour le formulaire d'édition
 router.get("/:id", getMissionById)
+
+// PUT /api/admin/missions/:id/pricing → remplace tous les tarifs
+router.put("/:id/pricing", updateMissionPricing)
+
+// PUT /api/admin/missions/:id/media → remplace images et PDF de la mission
+router.put("/:id/media", updateMissionMedia)
 
 export default router

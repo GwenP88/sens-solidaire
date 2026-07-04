@@ -11,7 +11,13 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
 // ── API
-import { fetchAdminMissionById, createMission, updateMission } from '../../services/api'
+import {
+  fetchAdminMissionById,
+  createMission,
+  updateMission,
+  updateMissionPricing,
+  updateMissionMedia,
+} from '../../services/api'
 
 
 // ════════════════════════════════════════════════════════════════
@@ -23,17 +29,6 @@ const VALID_TYPES = [
   { value: 'service_civique',        label: 'Service Civique'        },
   { value: 'groupe_jeunes',          label: 'Groupe jeunes'          },
   { value: 'conge_solidaire',        label: 'Congé solidaire'        },
-]
-
-// Labels fixes pour les 7 étapes "Comment partir"
-const HOW_TO_GO_LABELS = [
-  "Vérifier les vols",
-  "Nous contacter",
-  "Réserver les billets",
-  "Payer les frais de mission",
-  "Signer les termes d'engagement",
-  "Recevoir les conseils de préparation",
-  "Recevoir la fiche mission",
 ]
 
 // État initial du formulaire
@@ -49,13 +44,28 @@ const EMPTY_FORM = {
   programme:         [],
   included:          '',
   not_include:       '',
-  how_to_go:         ['', '', '', '', '', '', ''],
+  // Comment partir — un seul champ modifiable : les villes
+  how_to_go_villes:  '',
   helloasso_url:     '',
   ministry_url:      '',
   health_info:       '',
   admin_info:        '',
+  guide_pdf_url:     '',  // URL du PDF guide du volontaire
   is_active:         true,
+  pricing:           [], // [{ duration_label, price }]
+  galerie:           [], // [{ file_url }]
 }
+
+// Étapes fixes "Comment partir" — seule la première est modifiable (les villes)
+const HOW_TO_GO_FIXED = [
+  null,                                      // étape 1 — modifiable (villes)
+  "Nous contacter par mail à contact@sensolidaires.org",
+  "Réserver vos billets d'avion et nous les envoyer",
+  "Payer les frais de mission, adhérer à l'association (25 €)",
+  "Signer les termes d'engagement",
+  "Recevoir les conseils pratiques de préparation",
+  "Recevoir votre fiche mission à remplir à votre retour",
+]
 
 
 // ════════════════════════════════════════════════════════════════
@@ -137,14 +147,37 @@ function MissionFormPage() {
       try {
         const mission = await fetchAdminMissionById(id)
 
+        // Parsing programme JSON
         let programme = []
         try { programme = mission.programme ? JSON.parse(mission.programme) : [] } catch {}
 
-        let howToGo = ['', '', '', '', '', '', '']
+        // Parsing how_to_go — on récupère uniquement l'étape 1 (les villes)
+        let how_to_go_villes = ''
         try {
           const parsed = mission.how_to_go ? JSON.parse(mission.how_to_go) : []
-          howToGo = HOW_TO_GO_LABELS.map((_, i) => parsed[i] || '')
+          how_to_go_villes = parsed[0] || ''
         } catch {}
+
+        // Pricing trié par display_order
+        const pricing = mission.pricing
+          ? mission.pricing
+              .sort((a, b) => a.display_order - b.display_order)
+              .map(p => ({ duration_label: p.duration_label, price: String(p.price) }))
+          : []
+
+        // Galerie — médias de type image
+        const galerie = mission.media
+          ? mission.media
+              .filter(m => m.file_type === 'image')
+              .sort((a, b) => a.display_order - b.display_order)
+              .map(m => ({ file_url: m.file_url }))
+          : []
+
+        // PDF guide du volontaire
+        const pdfMedia = mission.media
+          ? mission.media.find(m => m.file_type === 'pdf')
+          : null
+        const guide_pdf_url = pdfMedia ? pdfMedia.file_url : ''
 
         setFormData({
           title:             mission.title             || '',
@@ -158,12 +191,15 @@ function MissionFormPage() {
           programme,
           included:          mission.included          || '',
           not_include:       mission.not_include       || '',
-          how_to_go:         howToGo,
+          how_to_go_villes,
           helloasso_url:     mission.helloasso_url     || '',
           ministry_url:      mission.ministry_url      || '',
           health_info:       mission.health_info       || '',
           admin_info:        mission.admin_info        || '',
+          guide_pdf_url,
           is_active:         mission.is_active         ?? true,
+          pricing,
+          galerie,
         })
       } catch (err) {
         setError("Impossible de charger la mission.")
@@ -192,29 +228,30 @@ function MissionFormPage() {
       return { ...prev, programme: updated }
     })
   }
+  const addProgrammeLine = () => setFormData(prev => ({ ...prev, programme: [...prev.programme, { label: '', content: '' }] }))
+  const removeProgrammeLine = (index) => setFormData(prev => ({ ...prev, programme: prev.programme.filter((_, i) => i !== index) }))
 
-  const addProgrammeLine = () => {
-    setFormData(prev => ({
-      ...prev,
-      programme: [...prev.programme, { label: '', content: '' }],
-    }))
-  }
-
-  const removeProgrammeLine = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      programme: prev.programme.filter((_, i) => i !== index),
-    }))
-  }
-
-  // ── Handlers how_to_go ──
-  const handleHowToGoChange = (index, value) => {
+  // ── Handlers pricing ──
+  const handlePricingChange = (index, field, value) => {
     setFormData(prev => {
-      const updated = [...prev.how_to_go]
-      updated[index] = value
-      return { ...prev, how_to_go: updated }
+      const updated = [...prev.pricing]
+      updated[index] = { ...updated[index], [field]: value }
+      return { ...prev, pricing: updated }
     })
   }
+  const addPricingLine = () => setFormData(prev => ({ ...prev, pricing: [...prev.pricing, { duration_label: '', price: '' }] }))
+  const removePricingLine = (index) => setFormData(prev => ({ ...prev, pricing: prev.pricing.filter((_, i) => i !== index) }))
+
+  // ── Handlers galerie ──
+  const handleGalerieChange = (index, value) => {
+    setFormData(prev => {
+      const updated = [...prev.galerie]
+      updated[index] = { file_url: value }
+      return { ...prev, galerie: updated }
+    })
+  }
+  const addGalerieLine = () => setFormData(prev => ({ ...prev, galerie: [...prev.galerie, { file_url: '' }] }))
+  const removeGalerieLine = (index) => setFormData(prev => ({ ...prev, galerie: prev.galerie.filter((_, i) => i !== index) }))
 
   // ── Soumission ──
   const handleSubmit = async (e) => {
@@ -223,17 +260,44 @@ function MissionFormPage() {
     setSubmitting(true)
 
     try {
+      // Reconstruction du tableau how_to_go complet (7 étapes)
+      // Étape 1 = saisie libre, étapes 2-7 = texte fixe
+      const howToGoFull = HOW_TO_GO_FIXED.map((fixed, i) =>
+        i === 0 ? formData.how_to_go_villes : fixed
+      )
+
       const payload = {
         ...formData,
         programme: JSON.stringify(formData.programme),
-        how_to_go: JSON.stringify(formData.how_to_go),
+        how_to_go: JSON.stringify(howToGoFull),
       }
+      // Champs gérés séparément — on les retire du payload mission
+      delete payload.pricing
+      delete payload.galerie
+      delete payload.how_to_go_villes
+      delete payload.guide_pdf_url
+
+      let missionId
 
       if (isEditing) {
         await updateMission(Number(id), payload)
+        missionId = Number(id)
       } else {
-        await createMission(payload)
+        const created = await createMission(payload)
+        missionId = created.id
       }
+
+      // Sauvegarde des tarifs
+      if (formData.pricing.length > 0) {
+        await updateMissionPricing(missionId, formData.pricing)
+      }
+
+      // Sauvegarde des médias (galerie + PDF)
+      const images = formData.galerie.filter(g => g.file_url.trim() !== '')
+      const pdf = formData.guide_pdf_url.trim()
+        ? { file_url: formData.guide_pdf_url.trim(), label: 'Guide du volontaire' }
+        : null
+      await updateMissionMedia(missionId, images, pdf)
 
       navigate('/admin/missions')
     } catch (err) {
@@ -248,6 +312,10 @@ function MissionFormPage() {
     <p className="text-gray-400 text-sm italic p-8">Chargement de la mission...</p>
   )
 
+
+  // ════════════════════════════════════════════════════════════════
+  // RENDU
+  // ════════════════════════════════════════════════════════════════
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
@@ -288,7 +356,10 @@ function MissionFormPage() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-10">
 
         {/* ── BLOC 1 : Informations essentielles ── */}
-        <FormSection title="Informations essentielles">
+        <FormSection
+          title="Informations essentielles"
+          description="Affichées sur la card mission et dans le hero de la page détail."
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Titre" name="title" value={formData.title} onChange={handleChange} required />
             <Field
@@ -317,16 +388,20 @@ function MissionFormPage() {
           <TextareaField
             label="Description courte" name="short_description"
             value={formData.short_description} onChange={handleChange}
-            required rows={3} hint="Affichée sur la card mission"
+            required rows={3}
+            hint="Affichée sur la card et dans le hero de la page détail"
           />
         </FormSection>
 
         {/* ── BLOC 2 : Visuel ── */}
-        <FormSection title="Visuel">
+        <FormSection
+          title="Visuel"
+          description="Photo affichée dans le hero et dans la section 'La mission'."
+        >
           <Field
-            label="URL de l'image hero" name="image_url"
+            label="URL de l'image principale" name="image_url"
             value={formData.image_url} onChange={handleChange}
-            hint="/images/missions/nom-du-fichier.jpg"
+            hint="/images/missions/nom-du-fichier.webp"
           />
           {formData.image_url && (
             <img
@@ -340,28 +415,27 @@ function MissionFormPage() {
         {/* ── BLOC 3 : Contenu ── */}
         <FormSection
           title="Contenu de la page détail"
-          description="Ces informations apparaissent sur la page mission publique."
+          description="Ces informations apparaissent sur la page mission détaillée."
         >
           <TextareaField
             label="Description longue" name="description"
             value={formData.description} onChange={handleChange}
-            rows={5} hint="Section 'La mission'"
+            rows={6} hint="Section 'La mission'"
           />
           <TextareaField
-            label="Rôle du volontaire" name="volunteer_role"
+            label="Section 'Votre rôle sur le terrain'" name="volunteer_role"
             value={formData.volunteer_role} onChange={handleChange}
-            rows={6}
-            hint="Une ligne = une puce dans le front"
+            rows={10} hint="Une ligne = une puce affichée"
           />
           <p className="text-xs text-gray-300 -mt-2 italic">
-            La phrase d'introduction est fixe et s'affiche automatiquement dans le front.
+            La phrase d'introduction est fixe et s'affiche automatiquement.
           </p>
         </FormSection>
 
         {/* ── BLOC 4 : Programme ── */}
         <FormSection
-          title="Programme"
-          description="Colonne gauche = horaire ou jour (ex: 8h00, Jour 1). Colonne droite = activité."
+          title="Section 'Programme de volontariat'"
+          description="Colonne gauche : horaire ou jour. Colonne droite : activité."
         >
           <div className="flex flex-col gap-2">
             {formData.programme.map((step, i) => (
@@ -380,40 +454,66 @@ function MissionFormPage() {
                   placeholder="Description de l'activité"
                   className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary/30"
                 />
-                <button
-                  type="button"
-                  onClick={() => removeProgrammeLine(i)}
-                  className="text-gray-300 hover:text-red-500 text-xl shrink-0 transition-colors"
-                  aria-label="Supprimer cette ligne"
-                >
-                  ×
-                </button>
+                <button type="button" onClick={() => removeProgrammeLine(i)}
+                  className="text-gray-300 hover:text-red-500 text-xl shrink-0 transition-colors">×</button>
               </div>
             ))}
           </div>
-          <button
-            type="button"
-            onClick={addProgrammeLine}
-            className="text-sm text-primary hover:text-primary/70 border border-dashed border-primary/30 rounded-lg px-4 py-2 transition-colors"
-          >
+          <button type="button" onClick={addProgrammeLine}
+            className="text-sm text-primary hover:text-primary/70 border border-dashed border-primary/30 rounded-lg px-4 py-2 transition-colors">
             + Ajouter une ligne
           </button>
         </FormSection>
 
-        {/* ── BLOC 5 : Logistique ── */}
+        {/* ── BLOC 5 : Tarifs & durées ── */}
         <FormSection
-          title="Logistique & inscription"
-          description="Une ligne = un item dans la liste du front."
+          title="Tableau durée / prix"
+          description="Colonne gauche : durée. Colonne droite : prix en €."
+        >
+          <div className="flex flex-col gap-2">
+            {formData.pricing.map((line, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={line.duration_label}
+                  onChange={e => handlePricingChange(i, 'duration_label', e.target.value)}
+                  placeholder="10 jours"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+                <input
+                  type="number"
+                  value={line.price}
+                  onChange={e => handlePricingChange(i, 'price', e.target.value)}
+                  placeholder="1175"
+                  min="0"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-28 shrink-0 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+                <span className="text-sm text-gray-400 shrink-0">€</span>
+                <button type="button" onClick={() => removePricingLine(i)}
+                  className="text-gray-300 hover:text-red-500 text-xl shrink-0 transition-colors">×</button>
+              </div>
+            ))}
+          </div>
+          <button type="button" onClick={addPricingLine}
+            className="text-sm text-primary hover:text-primary/70 border border-dashed border-primary/30 rounded-lg px-4 py-2 transition-colors">
+            + Ajouter une durée
+          </button>
+        </FormSection>
+
+        {/* ── BLOC 6 : Logistique ── */}
+        <FormSection
+          title="Section 'Inclus/non inclus'"
+          description="une ligne = un item dans la liste inclus / non inclus."
         >
           <TextareaField
             label="Ce qui est inclus" name="included"
             value={formData.included} onChange={handleChange}
-            rows={4} hint="Une ligne = un item — ex: Hébergement sur site"
+            rows={6} hint="Une ligne = un item — ex: Hébergement sur site"
           />
           <TextareaField
             label="Ce qui n'est pas inclus" name="not_include"
             value={formData.not_include} onChange={handleChange}
-            rows={4} hint="Une ligne = un item — ex: Billet d'avion (~700 €)"
+            rows={6} hint="Une ligne = un item — ex: Billet d'avion (~700 €)"
           />
           <Field
             label="Lien HelloAsso" name="helloasso_url"
@@ -422,52 +522,102 @@ function MissionFormPage() {
           />
         </FormSection>
 
-        {/* ── BLOC 6 : Comment partir ── */}
+        {/* ── BLOC 7 : Comment partir ── */}
         <FormSection
-          title="Comment partir ?"
-          description="7 étapes fixes — complétez le texte de chaque étape. Les icônes sont automatiques."
+          title="Section 'Comment partir ?'"
+          description="Seule la première étape est à renseigner — les autres sont fixes pour toutes les missions."
         >
           <div className="flex flex-col gap-3">
-            {HOW_TO_GO_LABELS.map((label, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <span className="text-xs font-bold text-gray-400 w-6 shrink-0 text-center">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <span className="text-sm text-gray-400 w-48 shrink-0">{label}</span>
+
+            {/* Étape 1 — modifiable */}
+            <div className="flex items-start gap-3">
+              <span className="text-xs font-bold text-gray-400 w-6 shrink-0 text-center mt-2.5">01</span>
+              <div className="flex flex-col gap-1 flex-1">
+                <p className="text-sm text-gray-500 font-medium">Réserver votre vol</p>
                 <input
                   type="text"
-                  value={formData.how_to_go[i]}
-                  onChange={e => handleHowToGoChange(i, e.target.value)}
-                  placeholder={`Texte affiché dans le front...`}
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  name="how_to_go_villes"
+                  value={formData.how_to_go_villes}
+                  onChange={handleChange}
+                  placeholder="ex: Paris › Nairobi ou Paris › Mombasa"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                 />
               </div>
+            </div>
+
+            {/* Étapes 2-7 — fixes, affichées en lecture seule */}
+            {HOW_TO_GO_FIXED.slice(1).map((texte, i) => (
+              <div key={i} className="flex items-center gap-3 opacity-40">
+                <span className="text-xs font-bold text-gray-400 w-6 shrink-0 text-center">
+                  {String(i + 2).padStart(2, '0')}
+                </span>
+                <p className="text-sm text-gray-500 flex-1">{texte}</p>
+                <span className="text-xs text-gray-300 shrink-0 italic">fixe</span>
+              </div>
             ))}
+
           </div>
         </FormSection>
 
-        {/* ── BLOC 7 : Infos pratiques ── */}
+        {/* ── BLOC 8 : Infos pratiques ── */}
         <FormSection
-          title="Infos pratiques"
-          description="Une ligne = une puce dans le front. Les titres de section sont fixes."
+          title="Section 'Préparer votre départ'"
+          description="Une ligne = une puce affichée."
         >
           <TextareaField
             label='Infos santé' name="health_info"
             value={formData.health_info} onChange={handleChange}
-            rows={4}
-            hint='Titre fixe : "Avant le départ : santé & prévention"'
+            rows={6} hint='Titre fixe : "Avant le départ : santé & prévention"'
           />
           <TextareaField
             label='Infos administratives' name="admin_info"
             value={formData.admin_info} onChange={handleChange}
-            rows={4}
-            hint='Titre fixe : "Avant de prendre votre envol"'
+            rows={6} hint='Titre fixe : "Avant de prendre votre envol"'
           />
           <Field
             label="Lien site du ministère" name="ministry_url"
             value={formData.ministry_url} onChange={handleChange}
             hint="Bouton Recommandations officielles"
           />
+          <Field
+            label="Guide du volontaire (PDF)" name="guide_pdf_url"
+            value={formData.guide_pdf_url} onChange={handleChange}
+            hint="/pdfs/guides/guide-volontaire-kenya.pdf"
+          />
+        </FormSection>
+
+        {/* ── BLOC 9 : Galerie photos ── */}
+        <FormSection
+          title="Galerie photos"
+          description="Photos affichées dans le carrousel galerie en bas de la page détaillée."
+        >
+          <div className="flex flex-col gap-2">
+            {formData.galerie.map((item, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={item.file_url}
+                  onChange={e => handleGalerieChange(i, e.target.value)}
+                  placeholder="/images/missions/kenya-galerie-1.webp"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+                {/* Aperçu miniature si URL renseignée */}
+                {item.file_url && (
+                  <img
+                    src={item.file_url} alt=""
+                    className="w-12 h-8 object-cover rounded shrink-0"
+                    onError={e => e.target.style.display = 'none'}
+                  />
+                )}
+                <button type="button" onClick={() => removeGalerieLine(i)}
+                  className="text-gray-300 hover:text-red-500 text-xl shrink-0 transition-colors">×</button>
+              </div>
+            ))}
+          </div>
+          <button type="button" onClick={addGalerieLine}
+            className="text-sm text-primary hover:text-primary/70 border border-dashed border-primary/30 rounded-lg px-4 py-2 transition-colors">
+            + Ajouter une photo
+          </button>
         </FormSection>
 
         {/* ── Actions ── */}

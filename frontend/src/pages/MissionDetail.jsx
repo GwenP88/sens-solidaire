@@ -42,19 +42,6 @@ const HOW_TO_GO_ICONS = [
   IconPayment, IconContract, IconGuide, IconFileMission,
 ]
 
-// ── Sections de l'AnchorNav
-const ANCHOR_SECTIONS = [
-  { label: "La mission",        id: "description"     },
-  { label: "Rôle & Programme",  id: "role-programme"  },
-  { label: "Lieux partenaires", id: "lieux"           },
-  { label: "Impact terrain",    id: "impact"          },
-  { label: "Coût & durée",      id: "cout"            },
-  { label: "Comment partir",    id: "comment-partir"  },
-  { label: "Infos pratiques",   id: "infos-pratiques" },
-  { label: "Témoignages",       id: "temoignages"     },
-  { label: "Galerie",           id: "galerie"         },
-]
-
 // ── Utilitaire — transforme un texte multi-lignes en tableau de puces
 // Chaque ligne non vide devient un élément <li>
 function LignesToPuces({ texte, className = "" }) {
@@ -115,6 +102,17 @@ function MissionDetail() {
     catch { return [] }
   })()
 
+  const anchorSections = [
+    { label: "La mission",        id: "description",     show: !!mission.description },
+    { label: "Rôle & Programme",  id: "role-programme",  show: !!mission.volunteer_role || programmeSteps.length > 0 },
+    { label: "Lieux partenaires", id: "lieux",           show: mission.location?.length > 0 },
+    { label: "Impact terrain",    id: "impact",          show: actions.length > 0 },
+    { label: "Coût & durée",      id: "cout",            show: mission.pricing?.length > 0 },
+    { label: "Comment partir",    id: "comment-partir",  show: howToGoSteps.length > 0 },
+    { label: "Infos pratiques",   id: "infos-pratiques", show: !!mission.health_info || !!mission.admin_info },
+    { label: "Témoignages",       id: "temoignages",     show: mission.testimonials?.length > 0 },
+    { label: "Galerie",           id: "galerie",         show: mission.media?.filter(m => m.file_type === 'image').length > 0 },
+  ].filter(s => s.show)
 
   return (
     <div className="bg-surface min-h-screen">
@@ -128,7 +126,7 @@ function MissionDetail() {
         price={mission.pricing?.sort((a, b) => a.display_order - b.display_order)[0]?.price || null}
       />
 
-      <AnchorNav variant="dark" sections={ANCHOR_SECTIONS} />
+      <AnchorNav variant="dark" sections={anchorSections} />
 
       {/* ── Description ── */}
       {mission.description && (
@@ -219,7 +217,8 @@ function MissionDetail() {
         </section>
       )}
 
-      {/* ── Impact terrain ── */}
+      {/* ── Impact terrain — masquée si aucune action ── */}
+      {actions.length > 0 && (
       <section id="impact" className="padding-y padding-x bg-surface">
         <div className="flex flex-col xl:flex-row items-start justify-between gap-sm mb-8">
           <div className="flex flex-col gap-xs max-w-4xl">
@@ -258,6 +257,7 @@ function MissionDetail() {
           />
         )}
       </section>
+      )}
 
       {/* ── Coût & durée ── */}
       {mission.pricing?.length > 0 && (
@@ -510,12 +510,12 @@ function MissionDetail() {
           Explorez la mission à travers les images de nos volontaires et découvrez l'environnement, les projets et les expériences qui vous attendent sur le terrain.
         </p>
         <Carousel
-          items={[1, 2, 3, 4]}
+          items={mission.media?.filter(m => m.file_type === 'image') || []}
           showPagination={true}
           color="primary"
-          renderSlide={(_, i) => (
+          renderSlide={(item) => (
             <img
-              src={`/images/placeholders/placeholder-galerie-${i + 1}.png`}
+              src={item.file_url}
               alt=""
               aria-hidden="true"
               className="w-full h-56 object-cover rounded-xl"

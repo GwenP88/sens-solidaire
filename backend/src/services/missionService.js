@@ -73,7 +73,12 @@ export const findById = async (id) => {
     throw err
   }
 
-  return mission
+  const media = await prisma.media.findMany({
+    where: { entity_type: 'mission', entity_id: id },
+    orderBy: { display_order: 'asc' },
+  })
+
+  return { ...mission, media }
 }
 
 // ── FIND BY SLUG ─────────────────────────────────────────────────────────────
@@ -102,9 +107,16 @@ export const findBySlug = async (slug) => {
     throw error
   }
 
+  // Récupère les médias liés à cette mission (galerie + PDF)
+  const media = await prisma.media.findMany({
+    where: { entity_type: 'mission', entity_id: mission.id },
+    orderBy: { display_order: 'asc' },
+  })
+
   // Formatage des témoignages pour correspondre aux props de TestimonialCard
   return {
     ...mission,
+    media,
     testimonials: mission.testimonials.map(t => ({
       ...t,
       quote: t.content,
