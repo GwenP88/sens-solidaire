@@ -84,9 +84,8 @@
 | 39 | Alison | Dashboard : CRUD missions front | ✅ |
 | 40 | Alison | Dashboard : modération témoignages | ✅ |
 | 41 | Alison | Dashboard : routage email contact | ✅ |
-| 42 | Alison | Upload fichiers Multer (images + PDFs) | ⚠️ Partiel |
-| 43 | Gwen | Responsive mobile-first toutes pages MVP (375 / 768 / 1024 / 1440) | ✅ |
-| 43bis | Gwen | Harmonisation CSS — gap scale, utilities, Section/CTASection | ✅ |
+| 42 | Gwen | Responsive mobile-first toutes pages MVP (375 / 768 / 1024 / 1440) | ✅ |
+| 43 | Gwen | Harmonisation CSS — gap scale, utilities, Section/CTASection | ✅ |
 
 ---
 
@@ -115,14 +114,19 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 54 | Alison | Dashboard : gestion médias (upload image, show_homepage) | 🔵 |
+| 54 | Alison | Dashboard : gestion médias (upload image, show_homepage) | ⚠️ Partiel |
 | 55 | Alison | Dashboard : gestion équipe (CRUD membres) | 🔵 |
 | 56 | Alison | Dashboard : gestion rapports d'activité | 🔵 |
 | 57 | Alison | Dashboard : CRUD actions terrain + pays + tags | 🔵 |
 | 58 | Alison | Dashboard : responsive | 🔵 |
 | 59 | Alison | APIs restantes : locations, équipe | 🔵 |
-| 60 | Alison | Upload Multer — finalisation images + PDFs | 🔵 |
+| 60 | Gwen | Upload Multer | 🔵 |
 | 61 | Alison | Tests d'intégration dashboard | 🔵 |
+| 62 | Gwen | Navbar dropdown missions dynamique — 2 colonnes (destinations API + S'engager autrement statique) | ✅ |
+| 63 | Gwen | `MissionFormPage` — page formulaire CRUD complet (9 blocs, création + édition) | ✅ |
+| 64 | Gwen | Back — `pricingService` + `mediaService` + routes `PUT /:id/pricing` et `PUT /:id/media` | ✅ |
+| 65 | Gwen | `MissionDetail` refonte complète — puces `LignesToPuces`, programme JSON, AnchorNav dynamique, galerie BDD | ✅ |
+| 66 | Gwen | Seed reformaté — `volunteer_role`, `health_info`, `admin_info`, `included`, `not_include` en texte brut `\n`, `programme` en JSON | ✅ |
 
 ---
 
@@ -130,14 +134,14 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 62 | Gwen | Accessibilité basique — alt, aria-label, focus-visible | 🔵 |
-| 63 | Gwen | SEO basique — SEOHead (title, meta, Open Graph) par page | 🔵 |
-| 64 | Gwen | Lazy loading — `loading="lazy"` sur toutes les images cards/grilles | 🔵 |
-| 65 | Gwen | `maxLength={280}` sur textarea témoignage dashboard | 🔵 |
-| 66 | Gwen | Buffer API — auto-draft réseaux sociaux à la publication (V2) | 🔵 |
-| 67 | Gwen | `PageLayout` — factoriser bg-surface + ScrollToTop + HeroPage | 🔵 |
-| 68 | Ensemble | Corrections bugs post-recette | 🔵 |
-| 69 | Ensemble | 🧊 Code freezé — pause estivale (18 juillet) | 🔵 |
+| 67 | Gwen | Accessibilité basique — alt, aria-label, focus-visible | 🔵 |
+| 68 | Gwen | SEO basique — SEOHead (title, meta, Open Graph) par page | 🔵 |
+| 69 | Gwen | Lazy loading — `loading="lazy"` sur toutes les images cards/grilles | 🔵 |
+| 70 | Gwen | `maxLength={280}` sur textarea témoignage dashboard | 🔵 |
+| 71 | Gwen | Buffer API — auto-draft réseaux sociaux à la publication (V2) | 🔵 |
+| 72 | Gwen | `PageLayout` — factoriser bg-surface + ScrollToTop + HeroPage | 🔵 |
+| 73 | Ensemble | Corrections bugs post-recette | 🔵 |
+| 74 | Ensemble | 🧊 Code freezé — pause estivale (18 juillet) | 🔵 |
 
 ---
 
@@ -155,13 +159,13 @@ Code freezé. Aucune modification.
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 70 | Gwen | Audit Lighthouse — objectif > 90 | 🔵 |
-| 71 | Gwen | Optimisations WebP + images production | 🔵 |
-| 72 | Alison | Upload Sharp — redimensionnement auto WebP | 🔵 |
-| 73 | Gwen | Bilingue FR/EN — react-i18next (si décision cliente) | 🔵 |
-| 74 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | 🔵 |
-| 75 | Ensemble | Seed BDD — contenus réels finaux fournis par la cliente | 🔵 |
-| 76 | Ensemble | Relecture complète tous les textes avec la cliente | 🔵 |
+| 75 | Gwen | Audit Lighthouse — objectif > 90 | 🔵 |
+| 76 | Gwen | Optimisations WebP + images production | 🔵 |
+| 77 | Alison | Upload Sharp — redimensionnement auto WebP | 🔵 |
+| 78 | Gwen | Bilingue FR/EN — react-i18next (si décision cliente) | 🔵 |
+| 79 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | 🔵 |
+| 80 | Ensemble | Seed BDD — contenus réels finaux fournis par la cliente | 🔵 |
+| 81 | Ensemble | Relecture complète tous les textes avec la cliente | 🔵 |
 
 ---
 
@@ -169,11 +173,11 @@ Code freezé. Aucune modification.
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 77 | Gwen | Dockerfile production (multi-stage build) | 🔵 |
-| 78 | Gwen | VPS + Docker + Nginx + SSL (Let's Encrypt) | 🔵 |
-| 79 | Alison | Variables d'env production + secrets | 🔵 |
-| 80 | Alison | Migration BDD production | 🔵 |
-| 81 | Ensemble | UptimeRobot monitoring + tests HTTPS | 🔵 |
+| 82 | Gwen | Dockerfile production (multi-stage build) | 🔵 |
+| 83 | Gwen | VPS + Docker + Nginx + SSL (Let's Encrypt) | 🔵 |
+| 84 | Alison | Variables d'env production + secrets | 🔵 |
+| 85 | Alison | Migration BDD production | 🔵 |
+| 86 | Ensemble | UptimeRobot monitoring + tests HTTPS | 🔵 |
 
 ---
 
@@ -181,11 +185,11 @@ Code freezé. Aucune modification.
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 82 | Ensemble | Tests complets en production | 🔵 |
-| 83 | Ensemble | Guide utilisateur dashboard (PDF) | 🔵 |
-| 84 | Ensemble | Remise des accès à la cliente | 🔵 |
-| 85 | Ensemble | Corrections finales | 🔵 |
-| 86 | Ensemble | 🎉 LIVRAISON OFFICIELLE | 🔵 |
+| 87 | Ensemble | Tests complets en production | 🔵 |
+| 88 | Ensemble | Guide utilisateur dashboard (PDF) | 🔵 |
+| 89 | Ensemble | Remise des accès à la cliente | 🔵 |
+| 90 | Ensemble | Corrections finales | 🔵 |
+| 91 | Ensemble | 🎉 LIVRAISON OFFICIELLE | 🔵 |
 
 ---
 
