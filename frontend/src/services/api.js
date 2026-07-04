@@ -286,3 +286,16 @@ export const deleteMission = async (id) => {
   }
   return await response.json()
 }
+
+// Récupère une mission par son id pour le formulaire d'édition
+export const fetchAdminMissionById = async (id) => {
+  const response = await fetch(`${API_URL}/admin/missions/${id}`, {
+    headers: getAuthHeaders(),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Mission introuvable.")
+  }
+  const data = await response.json()
+  return data.mission
+}

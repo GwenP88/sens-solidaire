@@ -6,7 +6,7 @@
 import { Router } from "express"
 import  authMiddleware  from "../middlewares/authMiddleware.js"
 
-import { createMission, updateMission, deleteMission, getMissionsForAdmin } from "../controllers/missionController.js"
+import { createMission, updateMission, deleteMission, getMissionsForAdmin, getMissionById } from "../controllers/missionController.js"
 
 const router = Router()
 
@@ -23,5 +23,8 @@ router.post("/", createMission)
 router.patch("/:id", updateMission)
 
 router.delete("/:id", deleteMission)
+
+// GET /api/admin/missions/:id → une mission pour le formulaire d'édition
+router.get("/:id", getMissionById)
 
 export default router

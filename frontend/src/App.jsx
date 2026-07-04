@@ -42,6 +42,7 @@ import Dashboard from './pages/admin/Dashboard'
 import ProtectedRoute from './components/navigation/ProtectedRoute'
 import DashboardLayout from './components/admin/DashboardLayout'
 import MissionsPage from './pages/admin/MissionsPage'
+import MissionFormPage from './pages/admin/MissionFormPage'
 
 //  ── Pages lieux
 import LocationDetail from './pages/LocationDetail'
@@ -111,6 +112,9 @@ function App() {
           <Route index element={<div>Vue d'ensemble — à construire</div>} />
           <Route path="temoignages" element={<Dashboard />} />
           <Route path="missions" element={<MissionsPage />} />
+          <Route path="missions/new" element={<MissionFormPage />} />
+          <Route path="missions/:id/edit" element={<MissionFormPage />} />
+          
           {/* missions, ateliers, medias, a-propos, actions-terrain, soutenir,
               contact, parametres : routes à ajouter au fur et à mesure des composants */}
         </Route>
