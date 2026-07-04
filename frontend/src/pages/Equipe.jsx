@@ -11,12 +11,12 @@ import { fetchTeamMembers, fetchDelegations } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import Button from '../components/ui/Button'
+import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Section from '../components/ui/Section'
 
 // ── Composants métier
-import TeamMemberCardLarge from '../components/team/TeamMemberCardLarge'
-import TeamMemberCardSmall from '../components/team/TeamMemberCardSmall'
+import TeamMemberCard from '../components/team/TeamMemberCard'
 import DelegationCard from '../components/team/DelegationCard'
 
 function Equipe() {
@@ -46,13 +46,13 @@ function Equipe() {
         subtitle="Des femmes et des hommes engagés, en France et à l'international, pour un monde plus juste et la protection de la biodiversité."
       />
 
-      {/* ── Direction — cards larges 3 colonnes ── */}
-      <section className="section-padding bg-surface">
-        <h2 className="section-title text-primary mb-8">Direction</h2>
-        <div className="grid grid-cols-3 gap-6">
+      {/* ── Direction — cards larges ── */}
+      <Section title="Direction">
+        <div className="grid-cards-3">
           {direction.map(m => (
-            <TeamMemberCardLarge
+            <TeamMemberCard
               key={m.id}
+              variant="large"
               nom={m.nom}
               role={m.role}
               description={m.description}
@@ -60,15 +60,15 @@ function Equipe() {
             />
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* ── Bureau — cards larges 3 colonnes, fond inversé ── */}
-      <section className="section-padding bg-surface-mid">
-        <h2 className="section-title text-primary mb-8">Membres du bureau</h2>
-        <div className="grid grid-cols-3 gap-6">
+      {/* ── Bureau — cards larges, fond inversé ── */}
+      <Section title="Membres du bureau" bg="bg-surface-mid">
+        <div className="grid-cards-3">
           {bureau.map(m => (
-            <TeamMemberCardLarge
+            <TeamMemberCard
               key={m.id}
+              variant="large"
               nom={m.nom}
               role={m.role}
               description={m.description}
@@ -77,68 +77,60 @@ function Equipe() {
             />
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* ── Conseil d'administration — cards compactes 4 colonnes ── */}
-      <section className="section-padding bg-surface">
-        <h2 className="section-title text-primary mb-8">Conseil d'administration</h2>
-        <div className="grid grid-cols-4 gap-6">
-          {ca.map(m => (
-            <TeamMemberCardSmall
-              key={m.id}
+      {/* ── Conseil d'administration — carousel ── */}
+      <Section title="Conseil d'administration">
+        <Carousel
+          items={ca}
+          renderSlide={(m) => (
+            <TeamMemberCard
+              variant="small"
               nom={m.nom}
               role={m.role}
               avatar={m.avatar_url}
             />
-          ))}
-        </div>
-      </section>
+          )}
+          showPagination={true}
+          color="primary"
+        />
+      </Section>
 
-      {/* ── Également à nos côtés — cards compactes 3 colonnes ── */}
-      <section className="section-padding bg-surface-mid">
-        <h2 className="section-title text-primary mb-8">Également à nos côtés</h2>
-        <div className="grid grid-cols-3 gap-6">
-          {egalement.map(m => (
-            <TeamMemberCardSmall
-              key={m.id}
+      {/* ── Également à nos côtés — carousel ── */}
+      <Section title="Également à nos côtés" bg="bg-surface-mid">
+        <Carousel
+          items={egalement}
+          renderSlide={(m) => (
+            <TeamMemberCard
+              variant="small"
               nom={m.nom}
               role={m.role}
               avatar={m.avatar_url}
               bg="bg-surface"
             />
-          ))}
-        </div>
-      </section>
+          )}
+          showPagination={true}
+          color="primary"
+        />
+      </Section>
 
-      {/* ── Délégations internationales — cards immersives 3 colonnes ── */}
-      <section className="section-padding bg-surface">
-        <h2 className="section-title text-primary mb-8">Nos délégations et partenaires terrain</h2>
-        <div className="grid grid-cols-3 gap-6">
-          {delegations.map(d => (
+      {/* ── Délégations — carousel ── */}
+      <Section title="Nos délégations et partenaires terrain">
+        <Carousel
+          items={delegations}
+          renderSlide={(d) => (
             <DelegationCard
-              key={d.id}
               pays={d.pays}
               flag={`https://flagcdn.com/w40/${d.flag_code}.png`}
               image={d.image_url}
               lieu={d.lieu}
               contacts={d.contacts}
             />
-          ))}
-        </div>
-      </section>
-
-      {/* ── CTA contact ── */}
-      <section className="section-padding bg-accent-2">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="section-title text-surface mb-2">Envie de rejoindre l'aventure ?</h2>
-            <p className="font-body text-surface/80 text-sm">Bénévole, volontaire, enseignant, partenaire... Il existe mille façons d'agir avec nous.</p>
-          </div>
-          <a href="/contact">
-            <Button label="Nous contacter →" variant="primary" />
-          </a>
-        </div>
-      </section>
+          )}
+          showPagination={true}
+          color="primary"
+        />
+      </Section>
 
       <ScrollToTop />
     </div>

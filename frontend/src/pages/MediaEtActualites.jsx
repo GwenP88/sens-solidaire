@@ -11,8 +11,9 @@ import { fetchMediaPosts } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import FilterSelect from '../components/ui/FilterSelect'
+import Filters from '../components/navigation/Filters'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Section from '../components/ui/Section'
 
 // ── Composants métier
 import MediaCard from '../components/media/MediaCard'
@@ -56,29 +57,29 @@ function MediaEtActualites() {
         subtitle="Restez informés des dernières nouvelles de l'association, de nos missions et de nos actions sur le terrain."
       />
 
-      {/* ── Barre de filtres — collée au hero ── */}
-      <div className="bg-primary px-24 py-6">
-        <FilterSelect
-          filters={FILTER_CONFIG_MEDIAS}
-          values={filters}
-          onChange={handleFilter}
+      {/* ── Barre de filtres ── */}
+      <div className="bg-primary padding-x filter-py">
+        <Filters
+          selects={FILTER_CONFIG_MEDIAS}
+          selectValues={filters}
+          onSelectChange={handleFilter}
         />
       </div>
 
-      {/* ── Grille des articles — 3 colonnes ── */}
-      <section className="section-padding">
+      {/* ── Grille des articles ── */}
+      <Section>
         {loading ? (
-          <p className="font-body text-sm text-primary/50 italic">Chargement...</p>
+          <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredPosts.length === 0 ? (
-          <p className="font-body text-sm text-primary/50 italic">Aucun article pour ces critères.</p>
+          <p className="text-body text-primary/50 italic">Aucun article pour ces critères.</p>
         ) : (
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-md">
             {filteredPosts.map(post => (
               <MediaCard key={post.slug} {...post} />
             ))}
           </div>
         )}
-      </section>
+      </Section>
 
       <ScrollToTop />
     </div>

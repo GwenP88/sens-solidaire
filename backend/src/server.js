@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 3000
 
 // Démarre le serveur sur le port défini
 // Le callback s'exécute une fois le serveur prêt
-app.listen(PORT, () => {
-  console.log(`✅ Serveur démarré sur http://localhost:${PORT}`)
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Serveur démarré sur le port ${PORT}`)
   console.log(`📦 Environnement : ${process.env.NODE_ENV || "development"}`)
   console.log(`🔍 Health check : http://localhost:${PORT}/api/health`)
 })

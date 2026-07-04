@@ -117,7 +117,7 @@
 
 ---
 
-## Jour 2 · 29 mai 2026 — Matin
+## Jour 2 · 29 mai 2026
 ### S1 — Docker + Schéma Prisma complet + Maquettes
 
 #### Statut général — fin de matinée
@@ -168,7 +168,7 @@
 
 ---
 
-## Jour 2 · 29 mai 2026 — Après-midi
+## Jour 3 · 01 juin 2026
 ### S1/S2 — Auth JWT + Charte graphique + Maquettes Figma
 
 #### Statut général — fin de journée
@@ -236,7 +236,7 @@
 
 ---
 
-## Jour 3 · 30 mai 2026
+## Jour 4 · 02 juin 2026
 ### S1 — Composants Figma : Footer (Zones 1, 2 & 3)
 
 #### Statut général
@@ -306,7 +306,7 @@
 
 ---
 
-## Jour 4 · 2 juin 2026
+## Jour 5 · 3 juin 2026
 ### S2 — Composants Figma : Cards, Navigation, Formulaires
 
 #### Statut général
@@ -442,7 +442,7 @@
 
 ---
 
-## Jour 6 · 4 juin 2026
+## Jour 6 · 5 juin 2026
 ### S2 — Assemblage page Accueil (complet)
 
 #### Ce qui a été fait
@@ -684,22 +684,29 @@ frontend/src/
 ---
 
 ## Jour 9 · 10 juin 2026
-### S3 — Connexion API + Page Missions
+### S3 — Connexion API + Page Missions + Intégration stack complète
 
 #### Statut général
 
 | Élément | Statut |
 |---|---|
+| Backend — `npx prisma generate` | ✅ Débloqué — Prisma Client v7.8.0 généré |
+| Backend — API missions | ✅ `GET /api/missions` retourne les 5 missions (JSON vérifié) |
 | Connexion front ↔ back | ✅ Fonctionnelle |
 | Page /missions — Volontariat individuel | ✅ Connectée à l'API |
 | Page /missions — Service civique | ✅ Section custom avec destinations BDD |
+| Frontend — route `/missions` | ✅ Créée et branchée dans `App.jsx` (sous `<Layout />`) |
 | utils/missions.js | ✅ Créé — constantes partagées |
 | Design tokens Tailwind | ✅ section-padding, section-header, section-title, section-subtitle |
 | Migration BDD | ✅ short_description NOT NULL + description nullable |
 | Seed BDD — missions service civique | ✅ 2 nouvelles missions ajoutées |
+| Docker — 3 conteneurs | ✅ postgres healthy + backend + frontend relancés |
+| Docker — dépendance `react-icons` | ✅ Réinstallée dans le conteneur après purge du volume |
+| BDD — migrations + seed | ✅ Régénérées après `down -v` (2 migrations + seed complet) |
+| Stack complète | ✅ Front (`:5173`) affiche correctement, back (`:3000`) répond |
 | Merge dev-front → dev | ⏳ À faire en fin de session |
 
-#### Ce qui a été fait — Gwen
+#### Ce qui a été fait
 
 **Connexion front ↔ back**
 - Création `frontend/src/services/api.js` — fonctions `fetchMissions()` et `fetchMissionBySlug()`
@@ -707,6 +714,16 @@ frontend/src/
 - Résolution erreur Prisma — `dotenv/config` ajouté dans `server.js` et `seed.js`
 - `npx prisma db push` pour synchroniser la BDD après migration manquante
 - `npx prisma db seed` → `node prisma/seed.js` après ajout `dotenv/config`
+
+**Déblocage `npx prisma generate`**
+- Erreur au lancement : `Cannot find module 'dotenv/config'` chargé par `prisma.config.ts`
+- Cause : Prisma v7 ne charge plus le `.env` automatiquement — le package `dotenv` est requis explicitement mais n'était pas installé
+- Solution : `npm install dotenv` — Prisma Client v7.8.0 généré ensuite sans erreur
+- `prisma.config.ts` validé : structure correcte (`import "dotenv/config"` + `env("DATABASE_URL")`)
+
+**Vérification API**
+- `GET http://localhost:3000/api/missions` → JSON avec les 5 missions confirmé
+- `Cannot GET /` sur la racine = comportement normal (l'API n'a pas de route `/`, seulement `/api/...`)
 
 **Page /missions**
 - Création `HeroPage.jsx` — hero compact réutilisable pour toutes les pages intérieures
@@ -725,11 +742,34 @@ frontend/src/
 
 **Design system**
 - Utilities Tailwind v4 ajoutées dans `index.css` : `section-padding`, `section-header`, `section-title`, `section-subtitle`
-- Uniformisation des paddings et titres sur Home.jsx et Missions.jsx
+- Uniformisation des paddings et titres sur `Home.jsx` et `Missions.jsx`
 
 **Composants modifiés**
-- `MissionCard.jsx` — ajout props `ctaLabel` et `ctaUrl` pour CTA personnalisable (lien externe service civique)
+- `MissionCard.jsx` — ajout props `ctaLabel` et `ctaUrl` pour CTA personnalisable
 - `Home.jsx` — connecté à l'API missions, suppression mock data missions
+
+**Docker**
+
+**Conflit de ports front (5173 vs 5174)**
+- Constat : `npm run dev` manuel basculait sur `:5174` car `:5173` déjà occupé
+- Cause : le conteneur `sensolidaire_frontend` tournait déjà sur `:5173` — deux fronts tournaient en parallèle
+- Solution : arrêt du `npm run dev` manuel, utilisation exclusive du front Docker sur `:5173`
+
+**Dépendance `react-icons` absente du conteneur**
+- Symptôme : `Failed to resolve import "react-icons/fa"` depuis `ActionCard.jsx`
+- Vérifications : `react-icons` bien présent dans `package.json` ✅ mais absent de `node_modules` du conteneur
+- Cause : le volume anonyme `/app/node_modules` recouvrait le `node_modules` de l'image fraîche, même après `--build`
+- Solution : `docker-compose down -v` (purge des volumes) + `docker-compose up -d --build` → `node_modules` recréé proprement
+
+**BDD régénérée après purge**
+- `down -v` ayant supprimé le volume `postgres_data`, la base a été reconstruite :
+  - `docker-compose exec backend npx prisma migrate deploy` → 2 migrations appliquées (`init` + `add_mission_type`)
+  - `docker-compose exec backend node prisma/seed.js` → admin + 5 missions + 14 pricing + 5 locations + 7 témoignages réinjectés
+
+**Route `/missions` manquante**
+- Symptôme : page blanche sur `/missions`, console → `No routes matched location "/missions"`
+- Cause : aucune `<Route path="/missions">` déclarée dans `App.jsx` ; le fichier `Missions.jsx` n'existait pas
+- Solution : création de `frontend/src/pages/Missions.jsx` (placeholder) + import + `<Route path="/missions">` ajoutée à l'intérieur du bloc `<Layout />`
 
 **Git**
 - Commits du jour sur `dev-front` :
@@ -739,39 +779,51 @@ frontend/src/
   - `style: ajout utilities section-padding, section-header, section-title, section-subtitle dans index.css`
   - `feat: section service civique custom avec destinations BDD + MissionCard ctaLabel/ctaUrl`
 
-#### Ce qui a été fait — Alison
-
-- Test Docker complet : front sur `:5173`, back sur `:3000`
-- Résolution bug `react-icons` manquant dans le conteneur Docker (`down -v` + rebuild)
-- Re-seed BDD après vidage volume Docker
-- Note : App.jsx modifié côté Alison avec placeholder route `/missions` — à vérifier au prochain pull
-
 #### Erreurs rencontrées & solutions
 
 | Erreur | Solution appliquée |
 |---|---|
+| `Cannot find module 'dotenv/config'` (prisma.config.ts) | `npm install dotenv` — Prisma v7 ne charge plus le `.env` automatiquement |
+| `vite: not found` (frontend) | `npm install` — `node_modules` non versionné, absent après le merge |
+| `No routes matched location "/missions"` | Création de `Missions.jsx` + déclaration de la route dans `App.jsx` |
+| Page blanche après ajout de la route | Commentaire `/* */` non fermé dans `App.jsx` — remplacé par `//` |
+| Page toujours blanche | `App.jsx` non sauvegardé (`Ctrl+S` oublié) |
+| `Failed to resolve import "react-icons/fa"` | Volume anonyme `node_modules` périmé — `docker-compose down -v` + rebuild |
+| Port front sur `:5174` au lieu de `:5173` | Front Docker occupait déjà `:5173` — arrêt du `npm run dev` manuel |
 | `SASL: client password must be a string` | `dotenv/config` manquant dans `server.js` et `seed.js` |
-| CORS bloqué | Frontend sur `127.0.0.1:5173` au lieu de `localhost:5173` — toujours utiliser `localhost` |
-| `Mission.type` colonne inexistante | `npx prisma db push` pour synchroniser après merge migration Alison |
+| CORS bloqué | Frontend sur `127.0.0.1:5173` au lieu de `localhost:5173` |
+| `Mission.type` colonne inexistante | `npx prisma db push` pour synchroniser après merge migration |
 | Port 3000 déjà occupé | `lsof -i :3000` + `kill PID` |
 | `short_description` champ inconnu | Migration manquante — `npx prisma migrate dev` + `npx prisma generate` |
 | Double section service civique | `service_civique` retiré du tableau `SECTIONS` — section gérée manuellement |
 
 #### Notes & observations
-- `npm run dev` frontend démarre sur `:5174` si Docker tourne déjà sur `:5173` — ne pas lancer les deux en même temps
-- Routine quotidienne mise à jour : `routine-quotidienne.md` dans `/docs`
+- Prisma v7 ne charge plus le `.env` tout seul : `dotenv` doit être installé et déclaré dans `dependencies`
+- Après un `git merge`, réflexe systématique : `npm install` (front comme back) car `node_modules` n'est pas versionné
+- Le front du projet tourne **dans Docker sur `:5173`** — pas besoin de lancer `npm run dev` à la main
+- Piège Docker : `--build` reconstruit l'image mais **ne purge pas les volumes anonymes** — utiliser `down -v` puis rebuild
+- `down -v` supprime aussi le volume `postgres_data` (la BDD) → toujours re-`migrate deploy` + re-`seed` ensuite
+- Dans un conteneur, utiliser `migrate deploy` (non interactif) plutôt que `migrate dev`
+- Commentaires JS : préférer `//` pour une ligne — un `/* */` non fermé casse tout le fichier
 - `utils/missions.js` — pattern à reproduire pour d'autres entités (témoignages, actions...)
-- Les sections Groupe jeune et Congé solidaire restent à construire demain
+- Les sections Groupe jeune et Congé solidaire restent à construire le lendemain
 
-#### À faire demain
-- Section Service civique : remplacer les emojis par des icônes React + redesign étapes + verif si les cards service civique sont sur la home (elle ne devrait pas)
+#### Points à surveiller (dette technique)
+- Conteneur back en `node:20-alpine` — sous-package Prisma v7 recommande Node ≥ 22 (warning `EBADENGINE`, non bloquant)
+- `3 moderate severity vulnerabilities` signalées par npm — à inspecter via `npm audit` (sans `--force`)
+- Gestion de `node_modules` dans Docker avec hot-reload fragile (volume anonyme) — à revoir après la deadline
+
+#### À faire
+- Section Service civique : remplacer les emojis par des icônes React + redesign étapes
 - Sections Groupe jeune + Congé solidaire
-- Vérifier App.jsx après pull Alison
+- Vérifier `App.jsx` après pull
 - Page `/missions/:slug` (détail mission)
+- CRUD admin missions (routes protégées : create / update / delete)
+- CRUD admin témoignages (modération : approuver / refuser / toggle homepage)
 
 ---
 
-## Jour 9 — 11 juin 2026
+## Jour 10 — 11 juin 2026
 
 ### 🎯 Objectifs du jour
 - Résoudre les problèmes d'infrastructure Docker
@@ -874,7 +926,7 @@ pour consulter et vérifier les données.
 
 ---
 
-## Jour 10 — 12 juin 2026
+## Jour 11 — 12 juin 2026
 
 ### 🎯 Objectifs du jour
 - Finaliser MissionDetail.jsx toutes sections
@@ -926,99 +978,9 @@ pour consulter et vérifier les données.
 
 ---
 
-## Jour 9 · 10 juin 2026
-### S3/S4 — Intégration & débogage de la stack complète (front + back + Docker)
 
-#### Statut général
 
-| Élément | Statut |
-|---|---|
-| Backend — `npx prisma generate` | ✅ Débloqué — Prisma Client v7.8.0 généré |
-| Backend — API missions | ✅ `GET /api/missions` retourne les 5 missions (JSON vérifié) |
-| Frontend — route `/missions` | ✅ Créée et branchée dans `App.jsx` (sous `<Layout />`) |
-| Frontend — placeholder `Missions.jsx` | ✅ Créé temporairement (en attente du travail front de Gwen) |
-| Docker — 3 conteneurs | ✅ postgres healthy + backend + frontend relancés |
-| Docker — dépendance `react-icons` | ✅ Réinstallée dans le conteneur après purge du volume |
-| BDD — migrations + seed | ✅ Régénérées après `down -v` (2 migrations + seed complet) |
-| Stack complète | ✅ Front (`:5173`) affiche correctement, back (`:3000`) répond |
-
-#### Ce qui a été fait
-
-**Backend — Alison**
-
-**Déblocage `npx prisma generate`**
-- Erreur au lancement : `Cannot find module 'dotenv/config'` chargé par `prisma.config.ts`
-- Cause : Prisma v7 ne charge plus le `.env` automatiquement — le package `dotenv` est requis explicitement mais n'était pas installé
-- Solution : `npm install dotenv` — Prisma Client v7.8.0 généré ensuite sans erreur
-- `prisma.config.ts` validé : structure correcte (`import "dotenv/config"` + `env("DATABASE_URL")`)
-
-**Vérification API**
-- `GET http://localhost:3000/api/missions` → JSON avec les 5 missions confirmé
-- `Cannot GET /` sur la racine = comportement normal (l'API n'a pas de route `/`, seulement `/api/...`)
-
-**Frontend — Alison (avec accord de Gwen sur le périmètre)**
-
-**Route `/missions` manquante**
-- Symptôme : page blanche sur `/missions`, console → `No routes matched location "/missions"`
-- Cause : aucune `<Route path="/missions">` déclarée dans `App.jsx` ; le fichier `Missions.jsx` n'existait pas
-- Coordination : message envoyé à Gwen avant toute modification — elle confirme ne pas avoir commencé la page → feu vert pour un placeholder temporaire
-- Solution : création de `frontend/src/pages/Missions.jsx` (placeholder) + import + `<Route path="/missions">` ajoutée **à l'intérieur** du bloc `<Layout />` (page publique → hérite de Navbar + Footer)
-
-**Docker — Alison**
-
-**Conflit de ports front (5173 vs 5174)**
-- Constat : `npm run dev` manuel basculait sur `:5174` car `:5173` déjà occupé
-- Cause : le conteneur `sensolidaire_frontend` tournait déjà sur `:5173` (front Docker) — deux fronts tournaient en parallèle sans le savoir
-- Solution : arrêt du `npm run dev` manuel, utilisation exclusive du front Docker sur `:5173` (aligné avec la config CORS du back qui autorise `:5173`)
-
-**Dépendance `react-icons` absente du conteneur**
-- Symptôme : `Failed to resolve import "react-icons/fa"` depuis `ActionCard.jsx`
-- Vérifications : `react-icons` bien présent dans `package.json` ✅ mais absent de `node_modules` du conteneur (`ls node_modules/react-icons` → No such file)
-- Cause : le volume anonyme `/app/node_modules` (créé 11 jours plus tôt) recouvrait le `node_modules` de l'image fraîche, même après `--build`
-- Solution : `docker-compose down -v` (purge des volumes) + `docker-compose up -d --build` → `node_modules` recréé proprement, `react-icons` installé (dossier `fa` présent)
-
-**BDD régénérée après purge**
-- `down -v` ayant supprimé le volume `postgres_data`, la base a été reconstruite :
-  - `docker-compose exec backend npx prisma migrate deploy` → 2 migrations appliquées (`init` + `add_mission_type`)
-  - `docker-compose exec backend node prisma/seed.js` → admin + 5 missions + 14 pricing + 5 locations + 7 témoignages réinjectés
-
-#### Erreurs rencontrées & solutions
-
-| Erreur | Solution appliquée |
-|---|---|
-| `Cannot find module 'dotenv/config'` (prisma.config.ts) | `npm install dotenv` — Prisma v7 ne charge plus le `.env` automatiquement |
-| `vite: not found` (frontend) | `npm install` — `node_modules` non versionné, absent après le merge |
-| `No routes matched location "/missions"` | Création de `Missions.jsx` + déclaration de la route dans `App.jsx` |
-| Page blanche après ajout de la route | Commentaire `/* */` non fermé dans `App.jsx` avalait tout le fichier — remplacé par `//` |
-| Page toujours blanche / route non prise en compte | `App.jsx` non sauvegardé (`Ctrl+S` oublié) — Vite recharge sur le fichier sauvegardé |
-| `Failed to resolve import "react-icons/fa"` | Volume anonyme `node_modules` périmé — `docker-compose down -v` + rebuild |
-| Port front sur `:5174` au lieu de `:5173` | Front Docker occupait déjà `:5173` — arrêt du `npm run dev` manuel |
-
-#### Notes & observations
-- Prisma v7 ne charge plus le `.env` tout seul : `dotenv` doit être installé et déclaré dans `dependencies` (sinon erreur de chargement de `prisma.config.ts`)
-- Après un `git merge`, réflexe systématique : `npm install` (front comme back) car `node_modules` n'est pas versionné
-- L'API back n'est pas un site web : tester sur `/api/...`, jamais sur `/` (qui renvoie `Cannot GET /`)
-- Le front du projet tourne **dans Docker sur `:5173`** — pas besoin de lancer `npm run dev` à la main (cela crée un doublon sur `:5174`)
-- Piège Docker : `--build` reconstruit l'image mais **ne purge pas les volumes anonymes** — pour rafraîchir `node_modules` dans le conteneur, il faut `down -v` puis rebuild
-- `down -v` supprime aussi le volume `postgres_data` (la BDD) → toujours re-`migrate deploy` + re-`seed` ensuite
-- Dans un conteneur, utiliser `migrate deploy` (non interactif) plutôt que `migrate dev`
-- Commentaires JS : préférer `//` pour une ligne — un `/*` non fermé casse tout le fichier
-- Réflexe de debug : toujours **vérifier** (console F12, `ls`, `package.json`) avant de supposer la cause
-
-#### Coordination équipe
-- Le placeholder `Missions.jsx` est **temporaire** — la vraie page Missions (hero, filtres type/pays/durée, carte, MissionCards) reste dans le périmètre de Gwen
-- La couche service front (`services/missionsService.js` + variable `VITE_API_URL`) n'existe pas encore → l'affichage réel des missions dans le front (test front↔API de bout en bout) est en attente de cette couche
-
-#### Points à surveiller (dette technique)
-- Conteneur back en `node:20-alpine` alors qu'un sous-package Prisma v7 (`@prisma/streams-local`) recommande Node ≥ 22 (warning `EBADENGINE`, non bloquant aujourd'hui)
-- `3 moderate severity vulnerabilities` signalées par npm — à inspecter via `npm audit` (sans `--force`)
-- Gestion de `node_modules` dans Docker avec hot-reload fragile (volume anonyme) — à revoir après la deadline
-
-#### Prévu — Jour 10
-- S4 — CRUD admin missions (routes protégées : create / update / delete)
-- S4 — CRUD admin témoignages (modération : approuver / refuser / toggle homepage)
-
-## Jour 13 · 14 juin 2026
+## Jour 12 · 15 juin 2026
 ### S4 — CRUD admin missions (Create / Update / Delete) + incident base de données
 
 #### Statut général
@@ -1081,71 +1043,9 @@ pour consulter et vérifier les données.
 - CRUD admin témoignages (avec gestion RGPD du droit à l'oubli).
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
 
-## Jour 14 · 22 juin 2026
-### S4 — Modération des témoignages (back) : lecture + approve / reject
-
-#### Statut général
-
-| Élément | Statut |
-|---|---|
-| `GET /api/admin/testimonials` (+ filtre `?status=`) | ✅ Écrit + testé (200 / 400 / 401) |
-| `PATCH /api/admin/testimonials/:id/approve` | ✅ Écrit + testé (200 / 404 / 400) |
-| `PATCH /api/admin/testimonials/:id/reject` | ✅ Écrit + testé (200 / 404 / 400) |
-| Règle métier RGPD : refus → `show_homepage = false` | ✅ Implémentée + vérifiée |
-| Routeur témoignages monté derrière `authMiddleware` | ✅ (porte gardée en amont) |
-| Branchement dans `app.js` (`/api/admin/testimonials`) | ✅ |
-| Runbook de tests Postman autonome | ✅ Créé |
-| Test 401 (sans token) sur route de modération | ⏳ À reconfirmer |
-
-#### Ce qui a été fait
-
-**Backend — Alison**
-
-**Lecture admin des témoignages**
-- `findAllForAdmin` (service) + `getTestimonials` (controller) : renvoie **tous** les statuts (l'admin doit voir pending/approved/rejected pour modérer), filtre `?status=` optionnel validé contre une **whitelist** (`pending` / `approved` / `rejected`), `include` de la mission (`id` + `title` uniquement), tri `created_at asc` (file FIFO).
-
-**Modération (approve / reject)**
-- `updateStatus(id, status)` (service) : fonction **générique** unique pour les deux actions ; catch du `P2025` → 404 `TESTIMONIAL_NOT_FOUND` (même pattern que `missionService`). Règle métier : si `status === "rejected"`, force `show_homepage = false`.
-- `approveTestimonial` / `rejectTestimonial` (controller) : statut codé **EN DUR** (`"approved"` / `"rejected"`) — le client choisit la route, jamais la valeur. `req.body` n'est jamais lu. Validation d'id reprise de `updateMission` (`Number.isInteger`).
-- Routeur `adminTestimonialRoutes.js` séparé (un fichier par ressource), `router.use(authMiddleware)`.
-
-#### Erreurs rencontrées & solutions
-
-| Erreur | Cause | Solution |
-|---|---|---|
-| `socket hang up` (Postman) | Serveur crashé au démarrage → rien n'écoute sur 3000 | Lire `docker-compose logs backend` en premier |
-| `does not provide an export named 'approveTestimonial'` | Fonctions non collées dans le controller **+** import au pluriel (`approveTestimonialS`) dans le routeur | Coller les fonctions + aligner les noms au caractère près (singulier) |
-| `Cannot GET /.../approve` (404) | Mauvais **verbe HTTP** dans Postman (GET au lieu de PATCH) | Lire le verbe dans le message d'erreur, le corriger |
-| `updateStatus is not defined` (500) | Import du service incomplet dans le controller | Ajouter `updateStatus` à l'import |
-
-#### Notes & observations
-- Réflexe consolidé : `X is not defined` = import oublié **ou** faute de frappe sur le nom ; `Cannot GET/POST` = vérifier le **verbe** ou l'**URL** avant de douter du code.
-- La file `?status=pending` qui se vide après un approve est la **preuve** que l'écriture en base a bien eu lieu (et non un simple succès de façade).
-- Un témoignage peut avoir `mission_id = null` (cas valide) → `mission` revient `null` ; à gérer au front (« Mission non précisée »).
-
-#### Décisions techniques
-- **Statut en dur** côté controller (vs `req.body.status`) : verrouille la valeur, empêche l'injection d'un statut arbitraire en base.
-- **`consent_given` jamais modifié** lors d'une modération : c'est le consentement RGPD de la personne, pas une décision admin.
-- **`updateStatus` générique** (DRY) plutôt que deux fonctions de service dupliquées.
-- **Catch `P2025`** plutôt que `findUnique` préalable : une seule requête, pas de race condition (cohérent avec `softDelete` des missions).
-- **Un fichier de routes par ressource** (`adminTestimonialRoutes` distinct de `adminMissionRoutes`).
-
-#### Dette technique notée (à traiter plus tard)
-- `authMiddleware` ne vérifie toujours pas `role === 'admin'` (OK en admin-only, à durcir → 403 si d'autres rôles arrivent).
-- `schema.prisma` : `type @default("faune_sauvage")` périmé → migration.
-- `VALID_TYPES` à confirmer avec la cliente.
-- Tests Jest + Supertest (témoignages compris) : setup ESM + vraie DB encore à faire.
-
-#### Prochaines étapes
-- `GET /api/admin/missions` (lister toutes les missions, actives + inactives, pour la table du dashboard).
-- `POST /api/testimonials` **public** (formulaire visiteur) : création en `pending`, refus 400 si `consent_given` absent/false (RGPD).
-- **Front du dashboard** minimaliste (route protégée, layout, page modération, page missions) — **à coordonner avec Gwen** (branche `dev-front`).
-- Reconfirmer le test 401 sur une route de modération ; re-seed avant démo (état propre).
-
-
 ---
 
-## Jour 10 · 16 juin 2026
+## Jour 13 · 16 juin 2026
 
 ### 🎯 Objectifs du jour
 - Finaliser la navigation cards home → /missions avec filtre actif
@@ -1212,7 +1112,7 @@ pour consulter et vérifier les données.
 
 ---
 
-## Jour 11 · 17 juin 2026
+## Jour 14 · 17 juin 2026
 
 ### 🎯 Objectifs du jour
 - Pages hors MVP initial : Soutenir, Rapports d'activité, À propos, Équipe
@@ -1273,7 +1173,7 @@ pour consulter et vérifier les données.
 
 ---
 
-## Jour 12 · 20 juin 2026
+## Jour 15 · 19 juin 2026
 
 ### 🎯 Objectifs du jour
 - Connecter toutes les pages statiques à l'API
@@ -1342,34 +1242,57 @@ pour consulter et vérifier les données.
 
 ---
 
-## Jour 13 · 21 juin 2026
+## Jour 16 et 17 · 20 et 21 juin 2026
+### S4 — Modération témoignages (back) + Refacto imports + LocationDetail
 
-### 🎯 Objectifs du jour
-- Refactorisation complète imports + commentaires français sur tous les fichiers
-- Lier missions ↔ actions terrain
-- Créer la page LocationDetail
-- Diverses corrections et améliorations UX
+#### Statut général
 
----
+| Élément | Statut |
+|---|---|
+| `GET /api/admin/testimonials` (+ filtre `?status=`) | ✅ Écrit + testé (200 / 400 / 401) |
+| `PATCH /api/admin/testimonials/:id/approve` | ✅ Écrit + testé (200 / 404 / 400) |
+| `PATCH /api/admin/testimonials/:id/reject` | ✅ Écrit + testé (200 / 404 / 400) |
+| Règle métier RGPD : refus → `show_homepage = false` | ✅ Implémentée + vérifiée |
+| Routeur témoignages monté derrière `authMiddleware` | ✅ |
+| Branchement dans `app.js` (`/api/admin/testimonials`) | ✅ |
+| Runbook de tests Postman autonome | ✅ Créé |
+| Test 401 (sans token) sur route de modération | ⏳ À reconfirmer |
+| Imports groupés par catégorie — tous les fichiers | ✅ |
+| Commentaires français — tous les blocs | ✅ |
+| MissionDetail — actions terrain filtrées par pays | ✅ |
+| Backend — `getAllFieldActions` filtre `country` | ✅ |
+| Page LocationDetail | ✅ Créée |
+| Route `GET /api/locations/:slug` | ✅ |
+| Architecture images `/public/images/` | ✅ Décidée |
 
-### ✅ Réalisé
+#### Ce qui a été fait
 
-#### Refactorisation complète
+**Modération témoignages (back)**
+
+**Lecture admin des témoignages**
+- `findAllForAdmin` (service) + `getTestimonials` (controller) : renvoie **tous** les statuts (l'admin doit voir pending/approved/rejected pour modérer), filtre `?status=` optionnel validé contre une **whitelist** (`pending` / `approved` / `rejected`), `include` de la mission (`id` + `title` uniquement), tri `created_at asc` (file FIFO).
+
+**Modération (approve / reject)**
+- `updateStatus(id, status)` (service) : fonction **générique** unique pour les deux actions ; catch du `P2025` → 404 `TESTIMONIAL_NOT_FOUND` (même pattern que `missionService`). Règle métier : si `status === "rejected"`, force `show_homepage = false`.
+- `approveTestimonial` / `rejectTestimonial` (controller) : statut codé **EN DUR** (`"approved"` / `"rejected"`) — le client choisit la route, jamais la valeur. `req.body` n'est jamais lu. Validation d'id reprise de `updateMission` (`Number.isInteger`).
+- Routeur `adminTestimonialRoutes.js` séparé (un fichier par ressource), `router.use(authMiddleware)`.
+
+**Refactorisation complète**
 - Imports groupés par catégorie sur tous les fichiers pages et composants
 - Commentaires français ajoutés sur chaque bloc de code
 
-#### MissionDetail — actions terrain
+**MissionDetail — actions terrain**
 - `fetchFieldActions(country)` appelé après chargement de la mission
 - Section impact remplacée — affiche jusqu'à 4 `ActionCard` filtrées par pays
 - Lien "Voir toutes les actions →" pointe vers `/notre-impact?pays=:country`
 - Placeholder affiché si aucune action disponible pour ce pays
 
-#### Backend — fieldAction
+**Backend — fieldAction**
 - `getAllFieldActions` mise à jour avec filtre `country` optionnel (`contains`)
 - `fieldActionController` unifié — plus de double déclaration
 - `fetchFieldActions(country)` mis à jour dans `api.js`
 
-#### Page LocationDetail — nouvelle page
+**Page LocationDetail**
 - Création `src/pages/LocationDetail.jsx`
 - Hero + description longue + sidebar image + infos pratiques
 - Galerie photos — grille si ≤ 2 images, carousel sinon
@@ -1379,9 +1302,7 @@ pour consulter et vérifier les données.
 - `fetchLocationBySlug` ajouté dans `api.js`
 - Route `/lieux/:slug` ajoutée dans `App.jsx`
 
----
-
-### 🏗️ Architecture images — décisions prises
+**Architecture images — décisions prises**
 - Structure `/public/images/` par contexte métier (hero, missions, locations, actions, partners, team, rapports, ui)
 - Uploads clients dans `/public/uploads/` séparé (missions, actions, medias, education, team)
 - Format recommandé : WebP, PNG pour logos, SVG pour illustrations
@@ -1389,37 +1310,68 @@ pour consulter et vérifier les données.
 - **Lazy loading** (`loading="lazy"` sur toutes les cards/grilles) → planifié Sept. S2
 - Consignes à transmettre à la cliente : WebP/JPG · heroes 1920×1080px · cards 800×600px · avatars 400×400px · 500 Ko max
 
----
+#### Erreurs rencontrées & solutions
 
-### 🔵 À faire
+| Erreur | Cause | Solution |
+|---|---|---|
+| `socket hang up` (Postman) | Serveur crashé au démarrage → rien n'écoute sur 3000 | Lire `docker-compose logs backend` en premier |
+| `does not provide an export named 'approveTestimonial'` | Fonctions non collées dans le controller + import au pluriel dans le routeur | Coller les fonctions + aligner les noms au caractère près (singulier) |
+| `Cannot GET /.../approve` (404) | Mauvais verbe HTTP dans Postman (GET au lieu de PATCH) | Lire le verbe dans le message d'erreur, le corriger |
+| `updateStatus is not defined` (500) | Import du service incomplet dans le controller | Ajouter `updateStatus` à l'import |
 
-#### Contenu & données
+#### Notes & observations
+- Réflexe consolidé : `X is not defined` = import oublié ou faute de frappe ; `Cannot GET/POST` = vérifier le verbe ou l'URL avant de douter du code.
+- La file `?status=pending` qui se vide après un approve est la **preuve** que l'écriture en base a bien eu lieu.
+- Un témoignage peut avoir `mission_id = null` (cas valide) → `mission` revient `null` ; à gérer au front.
+
+#### Décisions techniques
+- **Statut en dur** côté controller (vs `req.body.status`) : verrouille la valeur, empêche l'injection d'un statut arbitraire en base.
+- **`consent_given` jamais modifié** lors d'une modération : c'est le consentement RGPD de la personne, pas une décision admin.
+- **`updateStatus` générique** (DRY) plutôt que deux fonctions de service dupliquées.
+- **Catch `P2025`** plutôt que `findUnique` préalable : une seule requête, pas de race condition.
+- **Un fichier de routes par ressource** (`adminTestimonialRoutes` distinct de `adminMissionRoutes`).
+
+#### Dette technique notée (à traiter plus tard)
+- `authMiddleware` ne vérifie toujours pas `role === 'admin'` (à durcir → 403 si d'autres rôles arrivent).
+- `schema.prisma` : `type @default("faune_sauvage")` périmé → migration.
+- `VALID_TYPES` à confirmer avec la cliente.
+- Tests Jest + Supertest : setup ESM + vraie DB encore à faire.
+
+#### 🔵 À faire
+
+**Contenu & données**
 - Seed actions terrain — compléter les actions manquantes
 - Revoir les textes d'erreur dans `api.js` — messages plus explicites et cohérents
 - Uniformiser les sections groupe jeune, service civique et congé solidaire sur la page Missions
 
-#### Images & médias
+**Images & médias**
 - Organiser les photos fixes par dossier (`/images/hero/`, `/images/missions/`, `/images/locations/`, etc.)
 - Consignes images à transmettre à la cliente (WebP/JPG, dimensions, poids max)
 
-#### Frontend
+**Frontend**
 - Responsive mobile-first toutes les pages MVP — 375px / 768px (S5)
 - Accessibilité basique — labels, alt, focus visible
 - SEO basique — balises meta, title par page, Open Graph
 
-#### Évolutions dashboard (à confirmer avec la cliente)
-- Voir pour que la cliente puisse ajouter un type de mission depuis le dashboard (section Home)
+**Évolutions dashboard (à confirmer avec la cliente)**
+- Voir pour que la cliente puisse ajouter un type de mission depuis le dashboard
 - Voir pour que la cliente puisse modifier les chiffres de la StatsBar depuis le dashboard
 
-#### Dashboard Alison
+**Dashboard**
 - Sidebar + CRUD missions front
 - Modération témoignages
 - Routage email contact
 - Upload Multer images + PDFs
 
+#### Prochaines étapes
+- `GET /api/admin/missions` (lister toutes les missions, actives + inactives, pour la table du dashboard)
+- `POST /api/testimonials` **public** (formulaire visiteur) : création en `pending`, refus 400 si `consent_given` absent/false (RGPD)
+- **Front du dashboard** minimaliste (route protégée, layout, page modération, page missions)
+- Reconfirmer le test 401 sur une route de modération ; re-seed avant démo (état propre)
+
 ---
 
-## Jour 14 · 22 juin 2026
+## Jour 18 · 22 juin 2026
 ### S5 — Réorganisation images + Seed complet + Refacto page Missions
 
 #### Statut général
@@ -1474,7 +1426,7 @@ pour consulter et vérifier les données.
 
 ---
 
-## Jour 15 · 23 juin 2026
+## Jour 19 · 23 juin 2026
 ### S5 — RDV cliente + Ajustements suite retours + Seed Côte d'Ivoire
 
 #### Statut général
@@ -1542,7 +1494,125 @@ pour consulter et vérifier les données.
 
 ---
 
-## Jour 16 — Dashboard admin : module de modération des témoignages
+## Jour 20 · 24 juin 2026
+### S5 — Setup tunnel ngrok + Responsive home
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Tunnel ngrok frontend (port 5173) | ✅ Configuré |
+| Tunnel ngrok backend (port 3000, second compte) | ✅ Configuré |
+| Proxy Vite → backend Docker (`http://backend:3000`) | ✅ Configuré |
+| `vite.config.js` — `allowedHosts` + `proxy` | ✅ Mis à jour |
+| `api.js` — URL relative `/api` | ✅ Mis à jour |
+| `app.js` — CORS ngrok + IP locale | ✅ Mis à jour |
+| Responsive Home.jsx — 375px validé | ✅ |
+| Responsive Home.jsx — 768px validé | ✅ |
+| Responsive Home.jsx — 1024px validé | ✅ |
+| Responsive Home.jsx — 1280px+ validé | ✅ |
+
+#### Ce qui a été fait
+
+**Setup ngrok**
+- Installation ngrok sur WSL Ubuntu
+- Tunnel frontend : `https://couch-stray-twistable.ngrok-free.dev` → `localhost:5173`
+- Tunnel backend : `https://hatchback-lumpiness-routine.ngrok-free.dev` → `localhost:3000` (second compte ngrok)
+- Solution retenue : proxy Vite (`target: http://backend:3000`) — un seul tunnel frontend suffit, le proxy redirige les appels `/api` vers le backend Docker
+- `allowedHosts: ['couch-stray-twistable.ngrok-free.dev']` dans `vite.config.js`
+- `api.js` : `const API_URL = "/api"` — chemin relatif, proxy Vite gère la redirection
+- CORS backend : accepte `*.ngrok-free.app`, `*.ngrok-free.dev`, `192.168.x.x`
+
+**Responsive Home.jsx**
+- `Navbar.jsx` — menu mobile : overflow fix, chevrons accordéon visibles, `w-screen overflow-x-hidden`
+- `Hero.jsx` — titre `text-[1.6rem]` mobile, centrage horizontal bas vertical, `pb-24` mobile
+- `StatsBar.jsx` — carousel Swiper mobile (`lg:hidden`), ligne horizontale desktop (`lg:flex`), `stats-swiper` CSS fix hauteur, `py-6 px-6` padding
+- `MissionCard.jsx` — `h-[320px] md:h-[260px] lg:h-[320px] xl:h-[260px]`, contenu réparti en 3 blocs `justify-between`, grille `grid-cols-1 lg:grid-cols-2`
+- `TestimonialCard.jsx` — `h-[310px] md:h-[210px] lg:h-[280px] xl:h-[300px]`, texte `text-[0.8rem]` mobile
+- `ActionCard.jsx` — portrait sur mobile+768+1024 (`xl:flex-row`), hauteur `h-auto`
+- Section actions — carousel mobile+768, grille `lg:grid-cols-1 xl:grid-cols-2` desktop
+- Section ODD — `flex-col items-center`, bouton ODD en dessous des icônes
+- Section partenaires — `grid-cols-3 md:grid-cols-4 lg:grid-cols-6`, `p-1` padding logos
+- Section actualités — `MediaCard` hauteur fixe `h-[420px]`
+- `section-header` CSS — breakpoint `flex-row` passé de `768px` à `1280px`
+- `Footer.jsx` — 3 layouts distincts : mobile/768 empilé, 1024 2 lignes, 1280+ 4 colonnes
+- `index.css` — système typo entièrement responsive (h1/h2/h3 + body/lead/caption/eyebrow/label/stat) avec breakpoints 768/1024/1280
+
+#### Points d'attention
+- ngrok URL change à chaque relance — `allowedHosts` dans `vite.config.js` à mettre à jour si relance
+- Landscape mobile — layout dégradé (Hero, ODD, Footer) — non prioritaire pour MVP, à traiter Phase 2
+
+---
+
+## Jour 21 et 22 · 25 et 26 juin 2026
+### S5 — Responsive toutes pages + Refacto Carousel
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Responsive Missions.jsx | ✅ |
+| Responsive MissionDetail.jsx | ✅ |
+| Responsive APropos.jsx | ✅ |
+| Responsive Equipe.jsx | ✅ |
+| Responsive Contact.jsx | ✅ |
+| Refacto Carousel.jsx — comportement uniforme | ✅ |
+| Suppression TestimonialCarousel.jsx | ✅ |
+
+#### Ce qui a été fait
+
+**Carousel.jsx — refacto complète**
+- Breakpoints unifiés : `0→1 slide`, `1024→2 slides`, `1280→slidesPerView`
+- Chevrons `hidden lg:block` — visibles uniquement à partir de 1024px
+- `showPagination` — dots toujours affichés si `true`, indépendamment du nombre de slides
+- `hasNavigationDesktop` et `hasNavigationTablet` — logique chevrons séparée
+- `customBreakpoints` prop ajoutée pour cas spécifiques (page Équipe)
+- `loop={true}` activé par défaut
+- `TestimonialCarousel.jsx` supprimé — `Carousel` utilisé directement partout
+
+**Responsive Missions.jsx**
+- Bloc orientation — `grid-cols-1 lg:grid-cols-2 xl:grid-cols-4`
+- FilterChips — scroll horizontal mobile+768 (`lg:flex-wrap`), centré en 768
+- `SectionHero.jsx` — `decorImage` masquée mobile+768 (`hidden lg:block`)
+- `MissionSection.jsx` — image bloc intro en dessous mobile+768+1024, côte à côte 1280+
+- `MissionSteps.jsx` — 1 colonne mobile+768+1024, 3 colonnes desktop (`xl:grid-cols-3`)
+- `MissionInfoBar.jsx` — grille 2 colonnes mobile (`grid-cols-2 sm:flex`)
+- `FilterChips.jsx` — scroll horizontal mobile, `shrink-0` sur chaque chip
+
+**Responsive MissionDetail.jsx**
+- Section description — image pleine largeur mobile+768, côte à côte 1024+ (`lg:flex-row`)
+- Section impact terrain — carousel `ActionCard` sur toutes les tailles
+- Section coût & durée — `md:grid-cols-2 xl:grid-cols-3`, CTAs côte à côte en 768+1024
+- Section "Comment partir" — scroll horizontal mobile+768 avec dégradé indicateur, wrap desktop
+- Section témoignages — carousel avec dots toujours visibles
+- `AnchorNav.jsx` — scroll horizontal, `pb-2` barre de scroll, scrollbar colorée CSS
+
+**Responsive APropos.jsx**
+- Section "Notre histoire" — image pleine largeur mobile+768+1024 (`xl:flex-row`)
+- Section valeurs — scroll horizontal mobile+768+1024 avec dégradé, grille 5 colonnes desktop
+
+**Responsive Equipe.jsx**
+- Direction + Bureau + Également — grille `1/2/3` colonnes
+- CA — carousel toutes tailles
+- Délégations — carousel toutes tailles, `DelegationCard` hauteur `h-36 md:h-52 lg:h-36`
+- `TeamMemberCardLarge.jsx` — portrait sur mobile+768+1024, horizontal desktop (`xl:flex-row`)
+
+**Responsive Contact.jsx**
+- Photo sous formulaire en 768+1024 (`flex-col-reverse xl:flex-row`)
+
+#### Points d'attention
+- `Carousel.jsx` avec `customBreakpoints` — prop à utiliser avec précaution, réservée aux cas exceptionnels
+- `MissionSection.jsx` a deux blocs image (mobile et desktop) — logique `block xl:hidden` / `hidden xl:block`
+
+#### 🔵 À faire
+- Responsive pages restantes : `NotreImpact`, `Testimonials`, `MediaEtActualites`, `Soutenir`, `RapportsActivite`
+- SEO basique — composant `SEOHead`
+- Accessibilité basique — `alt`, `aria-label`, `focus-visible`
+- Backlog cliente — textes, HelloAsso, Maps, ODD page À propos
+
+---
+
+## Jour 23 · 28 juin 2026 — Dashboard admin : module de modération des témoignages
 
 ### Réalisé
 - Création du composant `ModerationCard.jsx` (présentationnel pur : reçoit données + actions par props, aucun appel API)
@@ -1572,5 +1642,238 @@ Ne pas deviner → lire la console (`console.error` + code de statut), remonter 
 - Filtre `?status=pending` (les témoignages traités sortent de la file)
 - Module missions (CRUD) + layout/sidebar
 - Dette : toggle "à la une" (V2), warning ESLint setState-in-effect (inoffensif)
+
+--- 
+
+## Jour 24 · 27 juin 2026
+### S5 — Responsive NotreImpact + ActionDetail + Corrections diverses
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Résolution bug Docker Desktop / WSL2 | ✅ |
+| ngrok relancé + routine_quotidienne.md mis à jour | ✅ |
+| Merge dev-front → dev + pull Alison | ✅ |
+| Responsive NotreImpact.jsx — filtres select/chips | ✅ |
+| Filtres ActionCard — nouvelles catégories ODD | ✅ |
+| `ODD_TO_CATEGORY` mapping dans `utils/odds.js` | ✅ |
+| `FILTERS_ACTION_TAGS` mis à jour — 6 catégories | ✅ |
+| ActionDetail.jsx — bloc ODD compact + sticky aside | ✅ |
+| ActionDetail.jsx — pays + tags dans le hero | ✅ |
+| `HeroPage.jsx` — props `country` + `tags` ajoutées | ✅ |
+| Navbar mobile — reset accordéons à la fermeture | ✅ |
+
+#### Ce qui a été fait
+
+**Résolution bug Docker Desktop / WSL2**
+- Symptôme : `error getting credentials` + `WSL ERROR: UtilAcceptVsock` au `docker compose up --build`
+- Cause : `~/.docker/config.json` contenait `"credsStore": "desktop.exe"` — plus compatible après mise à jour Docker Desktop
+- Solution :
+```bash
+cp ~/.docker/config.json ~/.docker/config.json.backup
+echo '{}' > ~/.docker/config.json
+docker compose up -d --build
+```
+
+**ngrok**
+- Relancé après redémarrage PC
+- URL frontend : `https://couch-stray-twistable.ngrok-free.dev` → inchangée ✅
+- Section ajoutée dans `routine_quotidienne.md` — commandes ngrok + procédure
+
+**Responsive NotreImpact.jsx — barre de filtres**
+- Mobile + 768 → deux `<select>` empilés pleine largeur (375) / côte à côte (768)
+- Desktop 1024+ → select pays + `FilterChips` scrollable sur une ligne (`nowrap`)
+- Prop `nowrap` ajoutée dans `FilterChips.jsx`
+- Select pays — `min-w-[180px]` sur desktop
+
+**Filtres ActionCard — nouvelles catégories ODD**
+- `FILTERS_ACTION_TAGS` remplacé — 6 nouvelles catégories :
+  - 🌳 Biodiversité (ODD 14, 15)
+  - 👥 Solidarité (ODD 1, 2, 3, 5, 10)
+  - 🎓 Éducation et sensibilisation (ODD 4)
+  - 🌍 Développement local (ODD 8, 9, 11)
+  - 🤝 Coopération (ODD 16, 17)
+  - 🌱 Climat & Ressources (ODD 6, 7, 12, 13)
+- `ODD_TO_CATEGORY` ajouté dans `utils/odds.js` — mapping numéro ODD → catégorie
+- Logique filtrage mise à jour dans `NotreImpact.jsx` — filtre via ODD de l'action
+
+**ActionDetail.jsx — refonte mise en page**
+- Bloc ODD remplacé — liste compacte avec icône ONU + label + CTA "Voir tous les ODD →"
+- Layout grid `lg:grid-cols-3` — texte sur 2 colonnes, aside ODD sur 1 colonne
+- Aside ODD en `sticky top-24 self-start` — reste visible pendant le scroll du contenu
+- Galerie dans section séparée après le grid — non concernée par le sticky
+
+**HeroPage.jsx — pays + tags**
+- Props `country` et `tags` ajoutées
+- Affichage sous le titre : icône pin + pays | tags en pills
+- Séparateur `|` entre le pays et le bloc tags
+- Utilisé dans `ActionDetail.jsx`
+
+**Navbar mobile**
+- Reset `mobileMissionsOpen` et `mobileAproposOpen` à `false` à la fermeture du burger
+- Évite que le sous-menu soit déjà ouvert à la réouverture du menu
+
+#### Points d'attention
+- `dangerouslySetInnerHTML` à prévoir dans `ActionDetail.jsx` pour la migration vers TipTap (Phase 2)
+- `FILTERS_ACTION_TAGS` — les anciens tags en BDD (`Environnement`, `Biodiversité`, etc.) ne sont plus utilisés pour le filtrage — le filtrage se fait désormais via les ODD de l'action
+
+#### 🔵 À faire cette semaine
+
+| Tâche | Priorité |
+|---|---|
+| Responsive pages restantes : `Testimonials`, `MediaEtActualites`, `Soutenir`, `RapportsActivite` | 🔴 |
+| SEO basique — composant `SEOHead` | 🔴 |
+| Accessibilité basique — `alt`, `aria-label`, `focus-visible` | 🔴 |
+| Préparer tous les composants affichant du contenu BDD pour HTML riche — TipTap Phase 2 (`ActionDetail`, `LocationDetail`, `MissionDetail`, `EducationDetail` ...) | 🟠 |
+| Témoignages de Marine — récupérer + intégrer au seed | 🔴 |
+| Logos partenaires manquants| 🔴 |
+| Images placeholder témoignages + pays | 🟠 |
+| Textes de toutes les pages — relecture et corrections par la cliente | 🔴 |
+| HelloAsso — remplacer les liens génériques par les liens par mission | 🔴 |
+| Accréditations ONU / UICN — ajouter bloc sur page À propos | 🟠 |
+| Steps missions — ajouter au seed pour toutes les missions | 🟠 |
+| Sumatra — ajouter comme destination congé solidaire | 🔴 |
+| "Sens Solidaires" — grep + sed sur tout le projet pour vérifier le S majuscule | 🔴 |
+| Page Éducation & Sensibilisation — revoir entièrement la mise en page et le contenu | 🔴 |
+| Lien école Steiner — ajouter sur la page éco-école | 🟠 |
+| Bandeau ODD — ajouter sur la page Éducation & Sensibilisation | 🟠 |
+| Contenu actions terrain — revoir et corriger tous les textes | 🔴 |
+| Compteur actions — compter toutes les actions + mettre à jour la StatsBar | 🟠 |
+| Images UI — revoir les images placeholder de l'interface | 🟠 |
+| Préparer tous les composants affichant du contenu BDD pour HTML riche — TipTap (`ActionDetail`, `LocationDetail`, `MissionDetail`, `EducationDetail`) | 🟠 |
+
+---
+
+---
+
+## Jours 24 à 28 · 29 juin — 3 juillet 2026
+### S6 — Sprint final MVP · Migration pages + Architecture BDD + Refonte Education
+
+---
+
+### Statut général
+
+| Élément | Statut |
+|---|---|
+| Migration pages restantes vers Section/CTASection | ✅ Terminé |
+| LocationDetail enrichi — contacts, carte, galerie | ✅ Terminé |
+| BDD — 5 migrations appliquées | ✅ Terminé |
+| Seed refactorisé — délégations, pays, show_homepage | ✅ Terminé |
+| FooterCta dynamique par route | ✅ Terminé |
+| Suppression CTASection sur toutes les pages | ✅ Terminé |
+| Education.jsx refonte complète | ✅ Terminé |
+| Soutenir.jsx refonte narrative | ✅ Terminé |
+| Renommage "Sens Solidaire" → "Sens Solidaires" | ✅ Terminé |
+| Merge dev-front → dev | ✅ Terminé |
+
+---
+
+### ✅ Réalisé
+
+#### Migrations BDD (5 au total)
+
+| Migration | Contenu |
+|---|---|
+| `add_delegation_to_location` | FK `delegation_id` sur `Location` → `Delegation` |
+| `add_map_url_to_location` | Champ `map_url String?` sur `Location` |
+| `add_website_url_to_location` | Champ `website_url String?` sur `Location` |
+| `add_show_homepage_to_media_post` | Champ `show_homepage Boolean @default(false)` sur `MediaPost` |
+| `add_countries_to_field_action` | Suppression `country String` + nouveau modèle `FieldActionCountry` |
+
+#### Seed — refacto majeure
+
+- **Délégations créées avant les locations** — IDs capturés et injectés via `delegation_id` sur chaque `Location`
+- **`FieldActionCountry`** — migration du champ `country` (string fragile) vers une relation FK propre. Syntaxe seed : `countries: { create: [{ country: 'Kenya' }] }`. Actions triées par pays dans le seed.
+- **`show_homepage` sur `MediaPost`** — permet d'épingler des posts sur la home depuis le dashboard. Logique home : épinglés en priorité, complétés par les 6 plus récents.
+- **Post "Ils parlent de nous"** — nouveau thème `MediaPost` pour les posts Instagram / presse. Filtre `theme === 'Ils parlent de nous'` côté front.
+
+#### Architecture — FooterCta dynamique
+
+- **`utils/footerCta.js`** — config statique par route (`FOOTER_CTA_BUTTONS`, `FOOTER_CTA_PREFIXES`)
+- **`FooterCta.jsx`** — lit `useLocation()` et affiche les bons boutons selon la route active
+- **Routes spécifiques** : `/soutenir` → Je pars en mission + Nous contacter · `/missions` + sous-routes → Je fais un don + Nous contacter · Toutes les autres → Je pars en mission + Je fais un don (default)
+- **Suppression de toutes les `CTASection`** sur les pages — le `FooterCta` centralise les CTAs de fin de page
+
+#### Pages migrées
+
+| Page | Changements |
+|---|---|
+| `LocationDetail.jsx` | Layout 2 colonnes lg, card infos pratiques, contacts délégation via FK, iframe Google Maps, galerie médias |
+| `MediaDetail.jsx` | Layout éditorial magazine, sidebar sticky, ressources séparées par type |
+| `MediaEtActualites.jsx` | `Section` wrapper sur la grille |
+| `MissionDetail.jsx` | Gap scale + mb-0 sur titres |
+| `Missions.jsx` | Gap scale + mb-0 + `MissionCTA` flex-col mobile / flex-row desktop |
+| `Soutenir.jsx` | Refonte narrative — card fiscale, exemples dons, section émotionnelle, chiffres clés |
+
+#### Composants modifiés
+
+- **`LocationCard.jsx`** — hauteur fixe responsive (h-[220px] → h-[280px] selon breakpoint), `mt-auto` sur le lien "En savoir plus", `line-clamp-2` sur le titre
+- **`MissionCTA.jsx`** — `flex-col` mobile → `flex-row` desktop, suppression `flex-1` et `fullWidth`, boutons à taille naturelle
+- **`MissionInfoBar.jsx`** — `sm:flex-nowrap` pour éviter le passage à la ligne
+- **`FooterCta.jsx`** — `flex-wrap` sur le conteneur de boutons
+- **`btn-base` (index.css)** — `white-space: nowrap` — les boutons ne cassent jamais leur texte en interne
+- **`Button.jsx`** — inchangé, `fullWidth` toujours disponible pour les cas où nécessaire
+
+#### Education.jsx — refonte complète
+
+- **Suppression des filtres par public** — remplacés par une `AnchorNav` (Éco-École / Correspondances / Ateliers scolaires)
+- **Section ODD** — reprise identique de `Impact.jsx`
+- **Pattern `grid grid-cols-1 lg:grid-cols-3`** — identique à `ImpactDetail` et `MediaDetail` sur les 3 sections
+- **`InfoSidebar`** — composant local réutilisable (public, tarif, ctas) — même structure sur les 3 sections
+- **Contenu Éco-École et Correspondances intégré directement** — plus de card intermédiaire
+- **Carousel actions France** — filtrage par `countries.some(c => c.country === 'France')` depuis la relation `FieldActionCountry`
+- **Carousel photos placeholders** pour les correspondances
+
+#### Corrections diverses
+
+- **Renommage "Sens Solidaire" → "Sens Solidaires"** — `grep` + `sed` sur tout `frontend/src/` — 23 occurrences corrigées dans 13 fichiers
+- **Home — CTA témoignage** — bouton `variant="light"` sous le carousel section témoignages, ouvre la `Modal` `TestimonialForm`
+- **Home — section Actualités** — posts épinglés (`show_homepage: true`) remontent en priorité, complétés par les 6 plus récents. Posts "Ils parlent de nous" inclus dans le carousel
+- **Logos partenaires** — `w-full h-full object-contain p-2` — les logos prennent toute la place de leur div conteneur
+- **`FOOTER_CTA_ALIASES`** — export vide ajouté dans `footerCta.js` pour éviter l'erreur d'import dans `FooterCta.jsx`
+
+---
+
+### Décisions d'architecture
+
+| Décision | Justification |
+|---|---|
+| `FieldActionCountry` relation FK | `country: string` était fragile et non filtrable proprement — FK + `includes()` est maintenable et extensible |
+| `delegation_id` FK sur `Location` | Supprime le string matching `d.lieu === location.name` — source de bugs (typos) |
+| FooterCta dynamique par route | Évite la redondance CTASection + FooterCta — un seul point de vérité pour les CTAs de fin de page |
+| `InfoSidebar` composant local dans Education.jsx | Pattern réutilisable dans la même page, pas assez générique pour être dans `components/ui/` |
+| Contenu Éco-École/Correspondances intégré directement | Évite un clic supplémentaire inutile vers une page détail — contenu trop court pour justifier une page à part |
+
+---
+
+### Bugs résolus
+
+| Bug | Cause | Solution |
+|---|---|---|
+| Seed `PrismaClientValidationError` sur `countries` | Syntaxe tableau de strings au lieu de relation Prisma | `countries: { create: [{ country: 'Kenya' }] }` |
+| Dégradé `MissionInfoBar` passe sur la navbar | `z-10` trop élevé + position dans le mauvais conteneur | Dégradé en dehors du `flex overflow-x-auto`, `overflow-hidden` sur le parent |
+| Boutons prennent toute la largeur | `flex-1` + `fullWidth` sur `MissionCTA` | Suppression `flex-1` et `fullWidth`, conteneur `flex-col` mobile / `flex-row` desktop |
+
+---
+
+### Post-MVP — backlog mis à jour
+
+| Tâche | Priorité |
+|---|---|
+| SEO basique — composant `SEOHead` | 🟠 |
+| Accessibilité basique — `alt`, `aria-label`, `focus-visible` | 🟠 |
+| `PageLayout` générique — factoriser `bg-surface min-h-screen` + `ScrollToTop` + `HeroPage` | 🟡 |
+| `PropTypes` sur tous les composants | 🟡 |
+| Sharp + lazy loading images | 🟡 |
+| Buffer API — auto-draft réseaux sociaux à la publication d'un article | 🟡 |
+| `location_id` FK sur `Delegation` — architecture bidirectionnelle | 🟡 |
+| `latitude` / `longitude` sur `Location` — embed Google Maps propre | 🟡 |
+| `maxLength={280}` sur textarea témoignage dans le dashboard | 🟠 |
+| Sélection manuelle actions terrain home (dashboard + BDD avec Alison) | 🟡 |
+| Instagram oEmbed — posts du feed en V2 | 🟡 |
+| `flex-wrap` sur tous les conteneurs de boutons (`flex-row`) — polish | 🟡 |
+
+---
 
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

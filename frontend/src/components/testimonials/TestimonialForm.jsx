@@ -13,7 +13,6 @@ import Button from '../ui/Button'
 
 function TestimonialForm({ onClose }) {
 
-  // ── État local — champs du formulaire
   const [form, setForm] = useState({
     prenom: '',
     nom: '',
@@ -24,21 +23,17 @@ function TestimonialForm({ onClose }) {
     rgpd: false,
   })
 
-  // ── État de soumission — false | true
   const [submitted, setSubmitted] = useState(false)
 
-  // ── Mise à jour d'un champ — gère texte, checkbox, fichier et reset destination
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target
     setForm(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : type === 'file' ? files[0] : value,
-      // Reset destination si changement de type de mission
       ...(name === 'type' ? { destination: '' } : {})
     }))
   }
 
-  // ── Soumission — envoi vers l'API avec status pending
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -56,52 +51,38 @@ function TestimonialForm({ onClose }) {
     }
   }
 
+  const inputClass = "text-body text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary"
+
   // ── Message de confirmation après soumission réussie
+  // h3-style mb-0 : dans flex flex-col gap-sm, marge redondante avec gap
   if (submitted) return (
-    <div className="flex flex-col items-center gap-4 py-8 text-center">
-      <p className="font-heading font-bold text-primary text-lg">Merci pour votre témoignage !</p>
-      <p className="font-body text-sm text-primary/60">Votre message sera publié après validation par notre équipe.</p>
+    <div className="flex flex-col items-center gap-sm py-8 text-center">
+      <p className="h3-style text-primary mb-0">Merci pour votre témoignage !</p>
+      <p className="text-body text-primary/60">Votre message sera publié après validation par notre équipe.</p>
       <Button label="Fermer" variant="secondary" onClick={onClose} />
     </div>
   )
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-sm">
 
-      {/* Champs prénom + nom côte à côte */}
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-1 flex-1">
-          <label className="font-body text-xs font-bold text-primary/60">Prénom *</label>
-          <input
-            name="prenom"
-            value={form.prenom}
-            onChange={handleChange}
-            required
-            className="font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary"
-          />
+      {/* Champs prénom + nom côte à côte — empilés sur mobile */}
+      <div className="flex flex-col sm:flex-row gap-sm">
+        <div className="flex flex-col gap-xs flex-1">
+          {/* text-eyebrow mb-0 : gap-xs du parent gère l'espacement avec l'input */}
+          <label className="text-eyebrow text-primary/60 mb-0">Prénom *</label>
+          <input name="prenom" value={form.prenom} onChange={handleChange} required className={inputClass} />
         </div>
-        <div className="flex flex-col gap-1 flex-1">
-          <label className="font-body text-xs font-bold text-primary/60">Nom *</label>
-          <input
-            name="nom"
-            value={form.nom}
-            onChange={handleChange}
-            required
-            className="font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary"
-          />
+        <div className="flex flex-col gap-xs flex-1">
+          <label className="text-eyebrow text-primary/60 mb-0">Nom *</label>
+          <input name="nom" value={form.nom} onChange={handleChange} required className={inputClass} />
         </div>
       </div>
 
       {/* Menu déroulant type de mission */}
-      <div className="flex flex-col gap-1">
-        <label className="font-body text-xs font-bold text-primary/60">Type de mission *</label>
-        <select
-          name="type"
-          value={form.type}
-          onChange={handleChange}
-          required
-          className="font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary"
-        >
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Type de mission *</label>
+        <select name="type" value={form.type} onChange={handleChange} required className={inputClass}>
           <option value="">Sélectionnez un type</option>
           <option value="individuel">Volontariat individuel</option>
           <option value="service_civique">Service civique</option>
@@ -112,15 +93,9 @@ function TestimonialForm({ onClose }) {
 
       {/* Menu déroulant destination — affiché uniquement pour le volontariat individuel */}
       {form.type === 'individuel' && (
-        <div className="flex flex-col gap-1">
-          <label className="font-body text-xs font-bold text-primary/60">Destination *</label>
-          <select
-            name="destination"
-            value={form.destination}
-            onChange={handleChange}
-            required
-            className="font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary"
-          >
+        <div className="flex flex-col gap-xs">
+          <label className="text-eyebrow text-primary/60 mb-0">Destination *</label>
+          <select name="destination" value={form.destination} onChange={handleChange} required className={inputClass}>
             <option value="">Sélectionnez une destination</option>
             <option value="kenya">Kenya</option>
             <option value="senegal">Sénégal</option>
@@ -132,8 +107,12 @@ function TestimonialForm({ onClose }) {
       )}
 
       {/* Zone de texte témoignage — limité à 280 caractères */}
-      <div className="flex flex-col gap-1">
-        <label className="font-body text-xs font-bold text-primary/60">
+      <div className="flex flex-col gap-xs">
+        <label className={`text-eyebrow mb-0 ${
+          form.quote.length >= 260 ? 'text-red-500' :
+          form.quote.length >= 224 ? 'text-orange-400' :
+          'text-primary/60'
+        }`}>
           Votre témoignage * — {form.quote.length}/280 caractères
         </label>
         <textarea
@@ -143,24 +122,27 @@ function TestimonialForm({ onClose }) {
           required
           maxLength={280}
           rows={4}
-          className="font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary resize-none"
+          className={`${inputClass} resize-none`}
         />
       </div>
 
       {/* Champ photo — optionnel */}
-      <div className="flex flex-col gap-1">
-        <label className="font-body text-xs font-bold text-primary/60">Photo (optionnel)</label>
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Photo (optionnel)</label>
         <input
           name="photo"
           type="file"
           accept="image/*"
           onChange={handleChange}
-          className="font-body text-sm text-primary/60 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:font-body file:text-sm file:bg-surface-mid file:text-primary hover:file:bg-surface-dark cursor-pointer"
+          className="text-body text-primary/60 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-body file:bg-surface-mid file:text-primary hover:file:bg-surface-dark cursor-pointer"
         />
+        <span className="text-caption text-primary/60 leading-relaxed">
+          Formats acceptés : JPG, PNG, WEBP • Taille maximale : 5 Mo
+        </span>
       </div>
 
       {/* Case à cocher RGPD — obligatoire avant soumission */}
-      <label className="flex items-start gap-3 cursor-pointer">
+      <label className="flex items-start gap-xs cursor-pointer">
         <input
           name="rgpd"
           type="checkbox"
@@ -169,13 +151,16 @@ function TestimonialForm({ onClose }) {
           required
           className="mt-1 shrink-0 accent-accent"
         />
-        <span className="font-body text-xs text-primary/60 leading-relaxed">
-          J'accepte que mon témoignage soit publié sur le site de Sens Solidaire après validation. Mes données ne seront pas transmises à des tiers. *
+        <span className="text-caption text-primary/60 leading-relaxed">
+          J'autorise Sens Solidaires à publier mon témoignage et, le cas échéant, la photographie que je transmets, sur son site internet après validation. Je peux retirer mon consentement à tout moment en contactant l'association. Consultez notre{' '}
+              <a href="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</a>.
         </span>
       </label>
 
-      {/* Boutons — annuler ou soumettre (désactivé si RGPD non coché) */}
-      <div className="flex gap-4 mt-2">
+      <span className="text-caption text-primary/60 leading-relaxed">* Champs obligatoires</span>
+
+      {/* Boutons — annuler ou soumettre */}
+      <div className="flex flex-col sm:flex-row gap-sm">
         <Button label="Annuler" variant="secondary" onClick={onClose} />
         <Button label="Envoyer mon témoignage →" variant="primary" type="submit" disabled={!form.rgpd} />
       </div>

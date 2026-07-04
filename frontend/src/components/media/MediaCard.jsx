@@ -1,27 +1,30 @@
 // MediaCard.jsx
 // Card média & actualités — photo, date, thème, titre, extrait, CTA
+// Layout : portrait (image haut / contenu bas) en mobile et à partir de 1024px
+//          paysage (image gauche / contenu droite) uniquement entre 768px et 1024px,
+//          car la grille passe à 1 colonne sur cette plage et le format portrait y est moins lisible
+// Hauteur fixe dans les deux layouts — garantit des cards identiques dans la grille
 
 function MediaCard({ title, content, theme, date, image_url, slug, external_url }) {
 
-  // Formate la date
+  // ── Formate la date en français
   const formattedDate = new Date(date).toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   })
 
-  // Tronque le contenu à 150 caractères
-  const excerpt = content?.length > 150 ? content.slice(0, 150) + '...' : content
-
-  // Lien : PDF/externe direct ou page détail
+  // ── Lien : PDF/externe direct ou page détail
   const href = external_url || `/medias/${slug}`
   const isExternal = !!external_url
 
   return (
-    <article className="flex flex-col bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    // ── flex-col par défaut (portrait) → md:flex-row (paysage 768-1023px) → lg:flex-col (retour portrait dès 1024px)
+    // ── Hauteur fixe différente par layout : h-[480px] portrait / md:h-[280px] paysage / lg:h-[480px] retour portrait
+    <article className="flex flex-col md:flex-row lg:flex-col h-[440px] md:h-[260px] lg:h-[480px] bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
 
-      {/* Image */}
-      <div className="w-full h-48 overflow-hidden">
+      {/* Image — hauteur fixe en portrait, largeur fixe en paysage, shrink-0 dans les deux cas */}
+      <div className="w-full h-48 md:w-64 md:h-full lg:w-full lg:h-48 shrink-0 overflow-hidden">
         <img
           src={image_url || '/images/hero/hero-missions.jpg'}
           alt={title}
@@ -29,28 +32,31 @@ function MediaCard({ title, content, theme, date, image_url, slug, external_url 
         />
       </div>
 
-      {/* Contenu */}
-      <div className="flex flex-col gap-3 p-6 flex-1">
+      {/* Contenu — occupe le reste de l'espace, 3 zones réparties par justify-between */}
+      <div className="flex flex-col justify-center flex-1 min-w-0 p-6">
 
-        {/* Date + thème */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-body text-xs text-primary/50">{formattedDate}</span>
-          <span className="font-body text-xs text-primary/30">—</span>
-          <span className="font-body text-xs font-bold text-accent-2">{theme}</span>
+        {/* ── Zone haute — date + thème ── */}
+        {/* text-eyebrow mb-0 : inline dans flex items-center, pas besoin de marge basse */}
+        <div className="flex items-center gap-xs flex-wrap">
+          <span className="text-caption text-primary/50">{formattedDate}</span>
+          <span className="text-caption text-primary/30">—</span>
+          <span className="text-eyebrow text-accent-2 mb-0">{theme}</span>
         </div>
 
-        {/* Titre */}
-        <h3 className="font-heading font-bold text-primary text-base leading-snug">{title}</h3>
+        {/* ── Zone centrale — titre (2 lignes max) + extrait (4 lignes max) ── */}
+        {/* h3-style mb-0 : dans un justify-between, pas besoin de marge basse en plus */}
+        <div className="flex flex-col gap-xs flex-1 pt-6">
+          <h3 className="h3-style text-primary line-clamp-2 mb-0">{title}</h3>
+          <p className="text-body text-primary/60 line-clamp-4">{content}</p>
+        </div>
 
-        {/* Extrait */}
-        <p className="font-body text-sm text-primary/60 leading-relaxed flex-1">{excerpt}</p>
-
-        {/* CTA */}
+        {/* ── Zone basse — CTA toujours aligné en bas ── */}
+        {/* mt-2 retiré : justify-between du parent gère déjà le positionnement en bas */}
         <a
           href={href}
           target={isExternal ? '_blank' : '_self'}
           rel={isExternal ? 'noopener noreferrer' : undefined}
-          className="font-body text-sm font-bold text-accent hover:text-accent/80 transition-colors mt-2"
+          className="link-cta text-accent hover:text-accent/80"
         >
           {isExternal ? 'Consulter →' : 'Lire la suite →'}
         </a>

@@ -14,7 +14,7 @@ function ScrollToTop() {
     // ── Bouton fixe en bas à droite — z-index élevé pour passer au-dessus du contenu
     <button
       onClick={handleClick}
-      className="fixed bottom-8 right-8 z-50 bg-primary text-surface w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-accent transition-colors"
+      className="fixed bottom-8 right-8 z-50 bg-accent text-surface w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-accent transition-colors"
       aria-label="Retour en haut de page"
     >
       <FiArrowUpCircle className="text-2xl" />

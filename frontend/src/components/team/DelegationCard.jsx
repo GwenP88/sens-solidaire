@@ -1,42 +1,38 @@
 // DelegationCard.jsx
-// Card délégation internationale — photo immersive avec overlay, drapeau, lieu et contacts
-// Props :
-//   pays     : nom du pays affiché
-//   flag     : URL du drapeau (flagcdn.com)
-//   image    : URL de la photo de fond
-//   lieu     : nom du lieu partenaire
-//   contacts : noms et rôles des contacts locaux
+// Card délégation internationale — wrapper de BaseOverlayCard
+// Drapeau + pays + lieu + contacts superposés sur l'image
+
+// ── Composants UI
+import BaseOverlayCard from '../ui/BaseOverlayCard'
 
 function DelegationCard({ pays, flag, image, lieu, contacts }) {
   return (
-    // ── Conteneur relatif — permet le positionnement absolu de l'overlay et du contenu
-    <div className="relative h-36 rounded-2xl overflow-hidden">
-
-      {/* Photo de fond immersive */}
-      <img src={image} alt={lieu} className="w-full h-full object-cover" />
-
-      {/* Overlay sombre — améliore la lisibilité du texte */}
-      <div className="absolute inset-0 bg-black/40" />
-
+    <BaseOverlayCard
+      image={image}
+      height="h-44 md:h-52 xl:h-44"
+      overlayClassName="bg-black/40"
+      className="rounded-2xl"
+    >
       {/* Contenu superposé — drapeau + pays + lieu + contacts */}
-      <div className="absolute inset-0 p-6 flex flex-col justify-start gap-2">
+      <div className="h-full p-6 flex flex-col justify-start gap-xs">
 
         {/* Ligne drapeau + nom du pays */}
-        <div className="flex items-center gap-2">
+        {/* h3-style mb-0 : dans flex flex-col gap-xs, marge redondante avec gap */}
+        <div className="flex items-center gap-xs">
           <div className="w-7 h-7 rounded-full overflow-hidden shadow-sm shrink-0">
             <img src={flag} alt={pays} className="w-full h-full object-cover" />
           </div>
-          <p className="font-heading font-bold text-surface text-base">Délégation nationale au {pays}</p>
+          <p className="h3-style text-surface mb-0">Délégation nationale au {pays}</p>
         </div>
 
         {/* Nom du lieu partenaire */}
-        <p className="font-body font-bold text-surface text-sm">{lieu}</p>
+        <p className="text-body text-surface">{lieu}</p>
 
         {/* Contacts locaux */}
-        <p className="font-body italic text-xs text-surface/90 leading-relaxed">{contacts}</p>
+        <p className="text-mention text-surface">{contacts}</p>
 
       </div>
-    </div>
+    </BaseOverlayCard>
   )
 }
 

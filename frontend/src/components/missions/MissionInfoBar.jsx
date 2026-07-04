@@ -1,19 +1,22 @@
 // MissionInfoBar.jsx
 // Barre d'informations clés d'une section mission — icônes + labels + séparateurs
 
+// ── React
+import React from 'react'
+
 function MissionInfoBar({ items }) {
   return (
-    <div className="flex items-center justify-between px-6 py-4">
+    <div className="grid grid-cols-2 sm:flex sm:flex-nowrap items-center justify-around gap-sm py-4">
       {items.map((item, i) => (
-        <>
-          <span key={item.label} className="font-body text-sm text-primary/60 flex flex-col items-center gap-1">
+        <React.Fragment key={item.label}>
+          <span className="text-caption text-primary/60 flex flex-col items-center gap-xs text-center">
             <item.icon className="text-primary text-xl" />
             <span>{item.label}</span>
           </span>
           {i < items.length - 1 && (
-            <div key={`sep-${i}`} className="w-[2px] h-12 bg-surface-dark" />
+            <div className="hidden sm:block w-[2px] h-12 bg-surface-dark" />
           )}
-        </>
+        </React.Fragment>
       ))}
     </div>
   )

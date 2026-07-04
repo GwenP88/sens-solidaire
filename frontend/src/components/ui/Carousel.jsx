@@ -1,12 +1,14 @@
 // components/ui/Carousel.jsx
 // Carousel réutilisable — basé sur Swiper v12 avec navigation custom
 // Navigation via useRef (le module Navigation de Swiper v12 est cassé en React)
+// Comportement uniforme sur toutes les pages — non personnalisable, volontairement :
+//   - Mobile + 768  : 1 slide visible, dots toujours affichés, pas de chevrons
+//   - 1024          : 2 slides visibles, dots + chevrons si items > 2
+//   - 1280+         : 3 slides visibles, dots + chevrons si items > 3
 // Props :
 //   items          : tableau d'éléments à afficher
 //   renderSlide    : fonction de rendu pour chaque slide
-//   slidesPerView  : nombre de slides visibles (défaut : 3)
-//   spaceBetween   : espacement entre slides en px (défaut : 24)
-//   showPagination : affiche les dots de pagination (défaut : false)
+//   showPagination : affiche les dots (défaut : false)
 //   color          : "primary" (défaut) | "surface" — couleur des chevrons et dots
 
 // ── React
@@ -21,34 +23,47 @@ import 'swiper/css/pagination'
 // ── Icônes
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
-function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, showPagination = false, color = 'primary' }) {
+function Carousel({ items, renderSlide, showPagination = false, color = 'primary' }) {
   // ── Référence vers l'instance Swiper — permet d'appeler slidePrev/slideNext depuis l'extérieur
   const swiperRef = useRef(null)
 
-  // ── Navigation masquée si le nombre d'items ne dépasse pas slidesPerView
-  const hasNavigation = items.length > slidesPerView
+  // ── Chevrons visibles uniquement si assez d'items par rapport aux slides visibles à CE palier précis
+  // hasNavigation1024 : palier 1024-1279px — 2 slides visibles
+  // hasNavigation1280 : palier 1280px+ — 3 slides visibles
+  const hasNavigation1024 = items.length > 2
+  const hasNavigation1280 = items.length > 3
+
+  // ── Classe commune des chevrons — calculée une fois, réutilisée gauche/droite
+  // hidden par défaut (mobile + 768) → lg:block si nav utile à 1024 → xl:hidden si plus utile à 1280
+  // (le xl:hidden est nécessaire : sans lui, un lg:block "fuiterait" et resterait visible à 1280+
+  // même quand hasNavigation1280 est false)
+  const chevronVisibility = `hidden ${hasNavigation1024 ? 'lg:block' : ''} ${!hasNavigation1280 ? 'xl:hidden' : ''}`
 
   return (
     // ── Conteneur relatif — nécessaire pour positionner les chevrons en absolu
-    <div className={`relative px-4 swiper-carousel-${color}`}>
+    <div className={`relative lg:px-4 swiper-carousel-${color}`}>
 
-      {/* Chevron gauche — invisible si navigation inutile */}
+      {/* ── Chevron gauche ── */}
       <button
         onClick={() => swiperRef.current?.slidePrev()}
-        className={`absolute -left-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
+        className={`${chevronVisibility} absolute -left-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
           color === 'surface' ? 'text-surface/50 hover:text-surface' : 'text-primary/50 hover:text-primary'
-        } ${!hasNavigation ? 'invisible' : ''}`}
+        }`}
       >
         <FaChevronLeft />
       </button>
 
-      {/* Swiper — pagination conditionnelle selon showPagination et hasNavigation */}
+      {/* ── Swiper — breakpoints fixes, comportement identique partout sur le site ── */}
       <Swiper
         onSwiper={(swiper) => { swiperRef.current = swiper }}
         modules={[Pagination]}
-        slidesPerView={slidesPerView}
-        spaceBetween={spaceBetween}
-        pagination={showPagination && hasNavigation ? { clickable: true } : false}
+        loop={true}
+        breakpoints={{
+          0:    { slidesPerView: 1, spaceBetween: 16 },
+          1024: { slidesPerView: 2, spaceBetween: 20 },
+          1280: { slidesPerView: 3, spaceBetween: 24 },
+        }}
+        pagination={showPagination ? { clickable: true } : false}
         style={{ width: '100%' }}
       >
         {items.map((item, i) => (
@@ -59,12 +74,12 @@ function Carousel({ items, renderSlide, slidesPerView = 3, spaceBetween = 24, sh
         ))}
       </Swiper>
 
-      {/* Chevron droit — invisible si navigation inutile */}
+      {/* ── Chevron droit ── */}
       <button
         onClick={() => swiperRef.current?.slideNext()}
-        className={`absolute -right-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
+        className={`${chevronVisibility} absolute -right-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
           color === 'surface' ? 'text-surface/50 hover:text-surface' : 'text-primary/50 hover:text-primary'
-        } ${!hasNavigation ? 'invisible' : ''}`}
+        }`}
       >
         <FaChevronRight />
       </button>

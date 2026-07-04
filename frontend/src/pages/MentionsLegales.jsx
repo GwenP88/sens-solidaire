@@ -1,5 +1,5 @@
 // MentionsLegales.jsx
-// Page mentions légales — obligatoire LCEN 2004
+// Page mentions légales
 
 // ── Composants UI
 import ScrollToTop from '../components/ui/ScrollToTop'
@@ -11,72 +11,73 @@ function MentionsLegales() {
       {/* Header — fond primary pour la navbar */}
       <div className="bg-primary h-20" />
 
-      <section className="section-padding max-w-4xl mx-auto flex flex-col gap-8">
+      <section className="padding-y padding-x max-w-4xl mx-auto flex flex-col gap-lg">
 
-        {/* Titre — hors cadre */}
-        <div className="flex flex-col gap-2">
-          <h1 className="font-heading font-bold text-primary text-4xl">Mentions légales</h1>
-          <p className="font-body text-sm text-primary/60">Informations juridiques relatives au site sensolidaire.org</p>
+        {/* Titre */}
+        <div className="flex flex-col gap-xs">
+          <h1 className="h1-style text-primary">Mentions légales</h1>
+          <p className="text-caption text-primary/50">Dernière mise à jour : juin 2026</p>
         </div>
 
-        {/* Contenu encadré */}
-        <div className="border border-primary/30 rounded-2xl p-8 flex flex-col gap-10">
+        {/* Contenu */}
+        <div className="flex flex-col gap-md">
 
-          {/* Éditeur + Hébergeur — 2 colonnes */}
-          <div className="grid grid-cols-2 gap-8">
-
-            <div className="flex flex-col gap-3 bg-surface-mid rounded-xl p-6">
-              <h2 className="font-heading font-bold text-primary text-xl">Éditeur du site</h2>
-              <p className="font-body text-sm text-primary/80 leading-relaxed">
-                <strong>Sens Solidaire</strong><br />
-                Association loi 1901<br />
-                Siège social : 3bis rue de Guigonis, 06300 Nice<br />
-                SIRET : <span className="italic text-primary/40">[À compléter]</span><br />
-                Email : contact@sensolidaire.org<br />
-                Directeur de publication : Delphine Thibaut
-              </p>
+          <section className="flex flex-col gap-sm">
+            <h2 className="h2-style text-primary mb-0">Éditeur du site</h2>
+            <p className="text-body text-primary/80">
+              Le site <strong>senssolidaire.org</strong> est édité par l'association <strong>Sens Solidaires</strong>, association régie par la loi du 1er juillet 1901.
+            </p>
+            <div className="flex flex-col gap-xs text-body text-primary/80">
+              <p>Siège social : 3bis rue de Guigonis, 06300 Nice</p>
+              <p>RNA : WXXXXXXXXX</p>
+              <p>SIREN : 479943086</p>
+              <p>Email : <a>contact@sensolidaire.org</a></p>
+              <p>Directrice de la publication : Delphine Thibaut</p>
             </div>
+          </section>
 
-            <div className="flex flex-col gap-3 bg-surface-mid rounded-xl p-6">
-              <h2 className="font-heading font-bold text-primary text-xl">Hébergeur</h2>
-              <p className="font-body text-sm text-primary/80 leading-relaxed">
-                <span className="italic text-primary/40">[Nom de l'hébergeur à compléter]</span><br />
-                <span className="italic text-primary/40">[Adresse à compléter]</span>
-              </p>
+          <section className="flex flex-col gap-sm">
+            <h2 className="h2-style text-primary mb-0">Hébergement</h2>
+            <p className="text-body text-primary/80">Le site est hébergé par :</p>
+            <div className="flex flex-col gap-xs text-body text-primary/80">
+              <p><strong>OVHcloud</strong></p>
+              <p>2 rue Kellermann, 59100 Roubaix, France</p>
+              <p>Site : <a href="https://www.ovhcloud.com" className="link-inline text-accent-2" target="_blank" rel="noopener noreferrer">www.ovhcloud.com</a></p>
+              <p>Téléphone : 1007</p>
             </div>
-          </div>
+          </section>
 
-          {/* Propriété intellectuelle */}
-          <div className="flex flex-col gap-3">
-            <h2 className="font-heading font-bold text-primary text-xl">Propriété intellectuelle</h2>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
-              L'ensemble des contenus présents sur ce site (textes, images, vidéos, logos) sont la propriété exclusive de l'association Sens Solidaire ou de leurs auteurs respectifs. Toute reproduction, représentation ou diffusion, intégrale ou partielle, est interdite sans autorisation préalable.
-            </p>
-          </div>
+          <section className="flex flex-col gap-sm">
+            <h2 className="h2-style text-primary mb-0">Propriété intellectuelle</h2>
+            <p className="text-body text-primary/80">L'ensemble du contenu de ce site (textes, images, vidéos, logos) est la propriété de l'association Sens Solidaires ou de ses partenaires. Toute reproduction, même partielle, est interdite sans autorisation préalable.</p>
+          </section>
 
-          {/* Données personnelles */}
-          <div className="flex flex-col gap-3">
-            <h2 className="font-heading font-bold text-primary text-xl">Données personnelles</h2>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Pour exercer ce droit, contactez-nous à : contact@sensolidaire.org
+          <section className="flex flex-col gap-sm">
+            <h2 className="h2-style text-primary mb-0">Données personnelles</h2>
+            <p className="text-body text-primary/80">
+              Pour en savoir plus sur le traitement de vos données personnelles, consultez notre{' '}
+              <a href="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</a>.
             </p>
-          </div>
+          </section>
 
-          {/* Cookies */}
-          <div className="flex flex-col gap-3">
-            <h2 className="font-heading font-bold text-primary text-xl">Cookies</h2>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Ce site utilise des cookies strictement nécessaires à son fonctionnement. Aucun cookie publicitaire ou de tracking n'est utilisé. En continuant à naviguer sur ce site, vous acceptez l'utilisation de ces cookies.
+          <section className="flex flex-col gap-sm">
+            <h2 className="h2-style text-primary mb-0">Cookies</h2>
+            <p className="text-body text-primary/80">
+              Pour en savoir plus sur les cookies utilisés sur ce site, consultez notre{' '}
+              <a href="/cookies" className="link-inline text-accent-2">politique de cookies</a>.
             </p>
-          </div>
+          </section>
 
-          {/* Crédits */}
-          <div className="flex flex-col gap-3">
-            <h2 className="font-heading font-bold text-primary text-xl">Crédits</h2>
-            <p className="font-body text-sm text-primary/80 leading-relaxed">
-              Site développé par Gwen Pichot & Alison Amblard — Holberton School Thonon-les-Bains — 2026.
+          <section className="flex flex-col gap-sm">
+            <h2 className="h2-style text-primary mb-0">Contact</h2>
+            <p className="text-body text-primary/80">
+              Pour toute question, contactez-nous à{' '}
+              <a href="mailto:contact@sensolidaire.org" className="link-inline text-accent-2">
+                contact@sensolidaire.org
+              </a>.
             </p>
-          </div>
+          </section>
+
         </div>
       </section>
 

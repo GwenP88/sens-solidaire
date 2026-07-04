@@ -1,136 +1,98 @@
 // Footer.jsx
 // Pied de page — 3 zones : CTA immersif, Navigation 4 colonnes, Barre légale
+// Factorisé en composants (FooterBrand, FooterLinksColumn, FooterContact, FooterCta) —
+// le contenu n'est plus dupliqué, seule la disposition (largeurs, gap, ordre) varie par breakpoint
 
-// ── Composants UI
-import { IconPin, IconMail, IconYoutube, IconLinkedin, IconInstagram, IconFacebook, IconTikTok } from '../../utils/icons'
-import Button from '../ui/Button'
+// ── Composants layout
+import FooterCta from './FooterCta'
+import FooterBrand from './FooterBrand'
+import FooterLinksColumn from './FooterLinksColumn'
+import FooterContact from './FooterContact'
+
+// ── Données
+import { DECOUVRIR_LINKS, ENGAGER_LINKS } from '../../utils/footerData'
 
 function Footer({ hideCta = false }) {
   return (
     <footer>
 
-      {/* Zone 1 — CTA immersif — masqué si hideCta */}
-      {!hideCta && (
-        <div className="relative w-full h-96 flex items-end p-16" style={{ backgroundImage: `url(/images/hero/hero-footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/50"></div>
-          <div className="relative flex flex-col gap-4">
-            <h2 className="font-heading font-bold text-surface text-3xl max-w-2xl">
-              Chaque action peut changer une vie.
-            </h2>
-            <p className="font-body text-surface text-base max-w-2xl">
-              Rejoignez-nous sur le terrain ou soutenez nos projets. <br /> Ensemble, construisons un avenir plus solidaire.
-            </p>
-            <div className="flex gap-4 mt-2">
-              <a href="/missions">
-                <Button label="Je pars en mission →" variant="primary" />
-              </a>
-              <a href="/soutenir">
-                <Button label="Je fais un don →" variant="secondary" />
-              </a>
-            </div>
+      {/* Zone 1 — CTA immersif */}
+      <FooterCta hideCta={hideCta} />
+
+      {/* Zone 2 — Navigation
+          Mobile (<768)      : empilé col1 / col2+col3 / col4
+          Tablette (768-1279): 2 lignes — ligne1: col1(2/3)+col2(1/3) / ligne2: col3(1/3)+col4(2/3)
+          Desktop (1280+)    : 4 colonnes côte à côte
+      */}
+
+      {/* ── Mobile uniquement (<768) ── */}
+      <div className="bg-primary padding-x py-8 flex flex-col gap-lg md:hidden">
+        <FooterBrand logoSize="h-10" />
+        <div className="h-px bg-surface/20" />
+        <div className="flex flex-row gap-0">
+          <div className="flex-1">
+            <FooterLinksColumn title="Découvrir" links={DECOUVRIR_LINKS} />
+          </div>
+          <div className="w-px bg-surface/20 mx-4" />
+          <div className="flex-1">
+            <FooterLinksColumn title="S'engager" links={ENGAGER_LINKS} />
           </div>
         </div>
-      )}
+        <div className="h-px bg-surface/20" />
+        <FooterContact />
+      </div>
 
-      {/* Zone 2 — Navigation 4 colonnes */}
-      <div className="bg-primary px-20 py-8 flex justify-between">
-
-        {/* Col 1 — Logo + Tagline + Réseaux */}
-        <div className="flex flex-col gap-4 w-72">
-          <div className="bg-white/40 rounded-full p-1 w-fit">
-            <img src="/logo.png" alt="Sens Solidaire" className="h-12" />
+      {/* ── Tablette (768-1279) ── */}
+      <div className="bg-primary padding-x py-8 hidden md:block xl:hidden">
+        <div className="flex flex-row gap-lg">
+          <div className="w-2/3">
+            <FooterBrand logoSize="h-12" />
           </div>
-          <p className="font-body text-surface text-sm">
-            Une association engagée pour un monde plus solidaire et durable.
-          </p>
-          <p className="font-body text-surface text-sm">
-            Sur le terrain, nous agissons aux côtés des communautés locales pour un impact positif et durable.
-          </p>
-          <div className="flex gap-4">
-            <a href="https://www.youtube.com/channel/UC4lhQB-8zXiZJvD-kQS-q4A/featured">
-              <IconYoutube className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            </a>
-            <a href="https://www.linkedin.com/company/sens-solidaires/">
-              <IconLinkedin className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            </a>
-            <a href="https://www.instagram.com/sens_solidaires/">
-              <IconInstagram className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            </a>
-            <a href="https://www.facebook.com/Sensolidaires">
-              <IconFacebook className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            </a>
-            <a href="https://www.tiktok.com/@sensolidaires?lang=fr&is_copy_url=1&is_from_webapp=v1">
-              <IconTikTok className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
-            </a>
+          <div className="w-px bg-surface/20 self-stretch" />
+          <div className="w-1/3">
+            <FooterLinksColumn title="Découvrir" links={DECOUVRIR_LINKS} />
           </div>
         </div>
-
-        {/* Col 2 — Découvrir */}
-        <div className="flex flex-col gap-2">
-          <h3 className="font-heading font-bold text-surface text-sm uppercase tracking-widest mb-3">
-            Découvrir
-          </h3>
-          <a href="/" className="font-body text-surface/70 text-sm hover:text-surface transition-colors">Accueil</a>
-          <a href="/missions" className="font-body text-surface/70 text-sm hover:text-surface transition-colors">Nos missions</a>
-          <a href="/notre-impact" className="font-body text-surface/70 text-sm hover:text-surface transition-colors">Notre impact</a>
-          <a href="/actions-educatives" className="font-body text-surface/70 text-sm hover:text-surface transition-colors">Actions éducatives</a>
-          <a href="/medias-et-actualites" className="font-body text-surface/70 text-sm hover:text-surface transition-colors">Médias & actualités</a>
-          <a href="/a-propos" className="font-body text-surface/70 text-sm hover:text-surface transition-colors">À propos</a>
-        </div>
-
-        {/* Col 3 — S'engager */}
-        <div className="flex flex-col gap-2">
-          <h3 className="font-heading font-bold text-surface text-sm uppercase tracking-widest mb-3">
-            S'engager
-          </h3>
-          <a href="/missions" className="font-body text-surface/70 text-sm hover:text-surface transition-colors">Partir en mission</a>
-          <a href="/don" className="font-body text-surface/70 text-sm hover:text-surface transition-colors">Faire un don</a>
-          <a href="/adhesion" className="font-body text-surface/70 text-sm hover:text-surface transition-colors">Adhérer à l'association</a>
-        </div>
-
-        {/* Col 4 — Nous contacter */}
-        <div className="flex flex-col gap-3">
-          <h3 className="font-heading font-bold text-surface text-sm uppercase tracking-widest mb-3">
-            Nous contacter
-          </h3>
-          <div className="flex gap-3">
-            <IconPin className="text-surface text-lg mt-1 shrink-0" />
-            <p className="font-body text-surface/70 text-sm">
-              Antenne en France - Maison des associations<br />3bis rue de Guigonis, 06300 Nice
-            </p>
+        <div className="h-px bg-surface/20 my-8" />
+        <div className="flex flex-row gap-lg">
+          <div className="w-1/3">
+            <FooterLinksColumn title="S'engager" links={ENGAGER_LINKS} />
           </div>
-          <div className="flex gap-3">
-            <IconPin className="text-surface text-lg mt-1 shrink-0" />
-            <p className="font-body text-surface/70 text-sm">
-              Annexe<br />Cité de la Solidarité Internationale, 74100 Annemasse
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <IconPin className="text-surface text-lg mt-1 shrink-0" />
-            <p className="font-body text-surface/70 text-sm">
-              Antenne en Suisse - Maison Internationale des associations<br />15 rue des Savoises, 1205 Genève
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <IconMail className="text-surface text-lg mt-1 shrink-0" />
-            <a href="mailto:contact@sensolidaire.org" className="font-body text-surface/70 text-sm hover:text-surface transition-colors underline">
-              contact@sensolidaire.org
-            </a>
+          <div className="w-px bg-surface/20 self-stretch" />
+          <div className="w-2/3">
+            <FooterContact />
           </div>
         </div>
+      </div>
 
+      {/* ── Desktop (1280+) ── */}
+      <div className="bg-primary padding-x py-8 hidden xl:flex flex-row gap-0 justify-between">
+        <div className="w-84">
+          <FooterBrand logoSize="h-14" />
+        </div>
+        <div className="w-px bg-surface/20 mx-8 self-center h-64" />
+        <div className="w-40">
+          <FooterLinksColumn title="Découvrir" links={DECOUVRIR_LINKS} />
+        </div>
+        <div className="w-px bg-surface/20 mx-8 self-center h-64" />
+        <div className="w-40">
+          <FooterLinksColumn title="S'engager" links={ENGAGER_LINKS} />
+        </div>
+        <div className="w-px bg-surface/20 mx-8 self-center h-64" />
+        <div className="w-84">
+          <FooterContact />
+        </div>
       </div>
 
       {/* Zone 3 — Barre légale */}
-      <div className="bg-dark px-20 py-4 flex justify-between items-center border-t border-surface/15">
-        <p className="font-body text-surface/50 text-sm">
-          © 2026 Sens Solidaire. Tous droits réservés.
+      <div className="bg-dark padding-x py-4 flex flex-col md:flex-row gap-xs md:gap-0 justify-between items-center border-t border-surface/15">
+        <p className="text-caption text-surface/50 italic">
+          © 2026 Sens Solidaires. Tous droits réservés.
         </p>
-        <div className="flex gap-6">
-          <a href="/mentions-legales" className="font-body text-surface/50 text-sm hover:text-surface transition-colors">Mentions légales</a>
-          <a href="/confidentialite" className="font-body text-surface/50 text-sm hover:text-surface transition-colors">Confidentialité</a>
-          <a href="/cookies" className="font-body text-surface/50 text-sm hover:text-surface transition-colors">Cookies</a>
+        <div className="flex gap-md">
+          <a href="/mentions-legales" className="link-footer text-surface/50 hover:text-surface">Mentions légales</a>
+          <a href="/confidentialite" className="link-footer text-surface/50 hover:text-surface">Confidentialité</a>
+          <a href="/cookies" className="link-footer text-surface/50 hover:text-surface">Cookies</a>
         </div>
       </div>
 

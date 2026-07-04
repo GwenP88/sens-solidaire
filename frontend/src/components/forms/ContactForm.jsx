@@ -47,13 +47,15 @@ function ContactForm() {
   }
 
   // ── Classe CSS commune pour tous les champs
-  const inputClass = "font-body text-sm text-primary border border-surface-dark rounded-xl px-4 py-3 bg-surface focus:outline-none focus:border-primary w-full"
+  const inputClass = "text-body text-primary border border-surface-dark rounded-xl px-4 py-3 bg-surface focus:outline-none focus:border-primary w-full"
 
   // ── Message de succès après envoi
+  // h3-style n'a plus de marge automatique (retirée du CSS) — pas de gap parent ici,
+  // donc mb-2 reste nécessaire en dur pour espacer le titre du texte suivant
   if (status === 'success') return (
     <div className="bg-accent-2/10 rounded-xl p-8 text-center">
-      <p className="font-heading font-bold text-primary text-lg mb-2">Message envoyé ✓</p>
-      <p className="font-body text-sm text-primary/60">Nous vous répondrons dans les plus brefs délais.</p>
+      <p className="h3-style text-primary mb-2">Message envoyé ✓</p>
+      <p className="text-body text-primary/60">Nous vous répondrons dans les plus brefs délais.</p>
       <div className="mt-4">
         <Button label="Envoyer un autre message" variant="secondary" onClick={() => setStatus(null)} />
       </div>
@@ -61,29 +63,30 @@ function ContactForm() {
   )
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-sm">
 
-      {/* Champs prénom + nom côte à côte */}
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-1 flex-1">
-          <label className="font-body text-xs font-bold text-primary/60">Prénom *</label>
+      {/* Champs prénom + nom côte à côte — empilés sur mobile */}
+      <div className="flex flex-col sm:flex-row gap-sm">
+        <div className="flex flex-col gap-xs flex-1">
+          {/* text-eyebrow mb-0 : gap-xs du parent gère déjà l'espacement avec l'input */}
+          <label className="text-eyebrow text-primary/60 mb-0">Prénom *</label>
           <input name="prenom" value={form.prenom} onChange={handleChange} required className={inputClass} />
         </div>
-        <div className="flex flex-col gap-1 flex-1">
-          <label className="font-body text-xs font-bold text-primary/60">Nom *</label>
+        <div className="flex flex-col gap-xs flex-1">
+          <label className="text-eyebrow text-primary/60 mb-0">Nom *</label>
           <input name="nom" value={form.nom} onChange={handleChange} required className={inputClass} />
         </div>
       </div>
 
       {/* Champ email */}
-      <div className="flex flex-col gap-1">
-        <label className="font-body text-xs font-bold text-primary/60">Email *</label>
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Email *</label>
         <input name="email" type="email" value={form.email} onChange={handleChange} required className={inputClass} />
       </div>
 
       {/* Menu déroulant sujet */}
-      <div className="flex flex-col gap-1">
-        <label className="font-body text-xs font-bold text-primary/60">Sujet *</label>
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Sujet *</label>
         <select name="sujet" value={form.sujet} onChange={handleChange} required className={inputClass}>
           <option value="">Sélectionnez un sujet</option>
           <option value="Mission volontariat">Mission de volontariat</option>
@@ -97,13 +100,13 @@ function ContactForm() {
       </div>
 
       {/* Zone de message libre */}
-      <div className="flex flex-col gap-1">
-        <label className="font-body text-xs font-bold text-primary/60">Message *</label>
+      <div className="flex flex-col gap-xs">
+        <label className="text-eyebrow text-primary/60 mb-0">Message *</label>
         <textarea name="message" value={form.message} onChange={handleChange} required rows={6} className={`${inputClass} resize-none`} />
       </div>
 
       {/* Case à cocher RGPD — obligatoire */}
-      <label className="flex items-start gap-3 cursor-pointer">
+      <label className="flex items-start gap-xs cursor-pointer">
         <input
           name="rgpd"
           type="checkbox"
@@ -112,14 +115,17 @@ function ContactForm() {
           required
           className="mt-1 shrink-0 accent-accent"
         />
-        <span className="font-body text-xs text-primary/60 leading-relaxed">
-          J'accepte que mes données soient utilisées pour traiter ma demande. Elles ne seront pas transmises à des tiers. *
+        <span className="text-caption text-primary/60 leading-relaxed">
+          J'accepte que mes données soient utilisées pour traiter ma demande conformément à la {' '}
+              <a href="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</a>.
         </span>
       </label>
 
+      <span className="text-caption text-primary/60 leading-relaxed">* Champs obligatoires</span>
+
       {/* Message d'erreur si l'envoi échoue */}
       {status === 'error' && (
-        <p className="font-body text-sm text-accent">Une erreur est survenue. Veuillez réessayer.</p>
+        <p className="text-body text-accent">Une erreur est survenue. Veuillez réessayer.</p>
       )}
 
       {/* Bouton de soumission — désactivé si RGPD non coché ou envoi en cours */}

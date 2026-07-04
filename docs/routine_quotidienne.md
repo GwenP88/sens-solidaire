@@ -26,6 +26,27 @@ docker-compose up -d
 
 ---
 
+4. **Lancer le tunnel ngrok** (dans un terminal séparé) :
+```bash
+ngrok http 5173
+```
+
+⚠️ L'URL ngrok change à chaque relance de ngrok (pas à chaque redémarrage Docker).
+✅ URL actuelle : `https://couch-stray-twistable.ngrok-free.dev`
+✅ Partager cette URL à Alison et à la cliente pour accès externe
+⚠️ Si l'URL change, mettre à jour `allowedHosts` dans `vite.config.js` :
+```javascript
+allowedHosts: ['nouvelle-url.ngrok-free.dev']
+```
+Puis redémarrer Docker : `docker compose down && docker compose up`
+
+**Second tunnel backend** (second compte ngrok, si besoin) :
+```bash
+ngrok http 3000 --config ~/.config/ngrok/ngrok2.yml
+```
+
+---
+
 ## 🌙 Soir — Fermeture
 
 1. **Arrêter les conteneurs** :

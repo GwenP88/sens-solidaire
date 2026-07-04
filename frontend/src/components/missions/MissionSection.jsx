@@ -2,7 +2,7 @@
 // Section complète d'un type de mission — structure identique pour les 4 types
 
 // ── Composants UI
-import SectionHero from '../ui/SectionHero'
+import SectionHero from './SectionHero'
 import Carousel from '../ui/Carousel'
 import MissionInfoBar from './MissionInfoBar'
 import MissionCTA from './MissionCTA'
@@ -36,14 +36,13 @@ function MissionSection({
   carouselItems,
   carouselTitle,
   carouselSubtitle,
-  carouselSlidesPerView = 3,
   renderSlide,
 
   // ── Bloc additionnel optionnel
   children,
 }) {
   return (
-    <section id={id} className={`section-padding ${bg}`}>
+    <section id={id} className={`padding-y padding-x ${bg}`}>
 
       {/* ── En-tête de section ── */}
       <SectionHero
@@ -53,9 +52,16 @@ function MissionSection({
         image={decorImage}
       />
 
+      {/* Image mobile+768+1024 — pleine largeur ── */}
+      {image && (
+        <div className="block xl:hidden w-full mb-6">
+          <img src={image} alt={imageAlt} className="w-full h-72 object-cover rounded-xl" />
+        </div>
+      )}
+
       {/* ── Bloc intro — contenu riche + infobar + CTA + image ── */}
-      <div className="flex gap-16 items-center mb-16">
-        <div className="flex flex-col gap-6 flex-1">
+      <div className="flex flex-col lg:flex-row gap-md lg:gap-lg items-start lg:items-center mb-10 lg:mb-16">
+        <div className="flex flex-col gap-sm flex-1">
 
           {/* Contenu riche — texte, listes, paragraphes... */}
           {introSlot}
@@ -70,9 +76,9 @@ function MissionSection({
           />
         </div>
 
-        {/* Image illustrative */}
+        {/* Image — visible uniquement sur desktop ── */}
         {image && (
-          <div className="w-2/5 shrink-0">
+          <div className="hidden xl:block xl:w-2/5 shrink-0">
             <img src={image} alt={imageAlt} className="w-full h-72 object-cover rounded-xl" />
           </div>
         )}
@@ -89,18 +95,16 @@ function MissionSection({
 
       {/* ── Carousel ── */}
       {carouselItems && (
-        <div className="mt-16">
+        <div className="mt-8">
           {carouselTitle && (
-            <h3 className="font-heading font-bold text-primary text-base mb-2">{carouselTitle}</h3>
+            <h3 className="h3-style text-primary mb-2">{carouselTitle}</h3>
           )}
           {carouselSubtitle && (
-            <p className="font-body text-sm text-primary/60 mb-8">{carouselSubtitle}</p>
+            <p className="text-body text-primary/60 mb-8">{carouselSubtitle}</p>
           )}
           <Carousel
             items={carouselItems}
-            slidesPerView={carouselSlidesPerView}
-            spaceBetween={24}
-            showPagination={carouselItems.length > carouselSlidesPerView}
+            showPagination={true}
             color="primary"
             renderSlide={renderSlide}
           />
