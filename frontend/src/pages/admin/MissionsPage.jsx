@@ -1,27 +1,45 @@
+// ════════════════════════════════════════════════════════════════
 // pages/admin/MissionsPage.jsx
-// Page métier : charge les missions, gère les actions CRUD, orchestre la modale.
+// Page dashboard — liste et gestion des missions (CRUD)
+// Responsabilités :
+//   - charger et afficher toutes les missions (actives + inactives)
+//   - naviguer vers la page de création (/admin/missions/new)
+//   - naviguer vers la page d'édition  (/admin/missions/:id/edit)
+//   - gérer la suppression (soft delete) avec confirmation
+// ════════════════════════════════════════════════════════════════
 
+// ── React
 import { useState, useEffect } from 'react'
-import {
-  fetchAdminMissions,
-  createMission,
-  updateMission,
-  deleteMission,
-} from '../../services/api'
-import DashboardTable from '../../components/admin/DashboardTable'
-import MissionForm from '../../components/admin/MissionForm'
 
-// Config des colonnes — SEULE partie qui change d'une section à l'autre.
-const columns = [
-  { key: 'title', label: 'Titre' },
-  { key: 'country', label: 'Pays' },
-  { key: 'slug', label: 'Slug' },
+// ── Router
+import { useNavigate } from 'react-router-dom'
+
+// ── API
+import { fetchAdminMissions, deleteMission } from '../../services/api'
+
+// ── Composants admin
+import DashboardTable from '../../components/admin/DashboardTable'
+
+
+// ════════════════════════════════════════════════════════════════
+// CONFIGURATION DES COLONNES
+// Définit ce qu'affiche DashboardTable — un objet par colonne.
+// render() est optionnel : permet de personnaliser l'affichage
+// (badge coloré, date formatée, etc.) sans toucher à DashboardTable.
+// ════════════════════════════════════════════════════════════════
+
+const COLUMNS = [
+  { key: 'title',   label: 'Titre' },
+  { key: 'country', label: 'Pays'  },
+  { key: 'type',    label: 'Type'  },
   {
     key: 'is_active',
     label: 'Statut',
     render: (row) => (
       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-        row.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+        row.is_active
+          ? 'bg-green-100 text-green-700'
+          : 'bg-gray-100 text-gray-500'
       }`}>
         {row.is_active ? 'Active' : 'Inactive'}
       </span>
@@ -29,118 +47,129 @@ const columns = [
   },
 ]
 
+
+// ════════════════════════════════════════════════════════════════
+// COMPOSANT
+// ════════════════════════════════════════════════════════════════
+
 function MissionsPage() {
+  const navigate = useNavigate()
+
+  // ── États ──
   const [missions, setMissions] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [loading,  setLoading]  = useState(true)
+  const [error,    setError]    = useState(null)
 
-  // null = mode création (formulaire vide) | {...mission} = mode édition (formulaire pré-rempli)
-  const [editingMission, setEditingMission] = useState(null)
-  const [showForm, setShowForm] = useState(false)
 
-  // Chargement au montage — avec AbortController pour éviter les setState
-  // sur composant démonté si l'utilisateur navigue avant la fin du fetch.
+  // ── Chargement initial ──────────────────────────────────────
+  // AbortController : annule le fetch si l'utilisateur navigue
+  // avant la fin du chargement → évite un setState sur composant
+  // démonté (warning React + fuite mémoire potentielle).
   useEffect(() => {
     const controller = new AbortController()
 
-    const loadMissionsOnMount = async () => {
+    const load = async () => {
       try {
         const data = await fetchAdminMissions(controller.signal)
         setMissions(data)
-        setLoading(false)
       } catch (err) {
-        if (err.name === 'AbortError') return // composant démonté, on ignore silencieusement
-        console.error('Erreur chargement missions:', err)
+        if (err.name === 'AbortError') return // navigation avant fin du fetch — silencieux
+        console.error('Erreur chargement missions :', err)
         setError('Impossible de charger les missions.')
+      } finally {
         setLoading(false)
       }
     }
 
-    loadMissionsOnMount()
+    load()
 
-    return () => {
-      controller.abort()
-    }
+    // Nettoyage : annule le fetch au démontage du composant
+    return () => controller.abort()
   }, [])
 
-  // Fonction réutilisée après les actions CRUD (create/update/delete) —
-  // pas de signal ici : ce sont des appels ponctuels déclenchés par une action
-  // utilisateur, pas liés au cycle de vie du montage du composant.
-  const loadMissions = async () => {
+
+  // ── Rechargement ponctuel ───────────────────────────────────
+  // Appelé après une suppression pour resynchroniser l'affichage.
+  // Pas d'AbortController ici : c'est un appel déclenché par une
+  // action utilisateur, pas lié au cycle de vie du composant.
+  const reloadMissions = async () => {
     try {
       const data = await fetchAdminMissions()
       setMissions(data)
     } catch (err) {
-      console.error('Erreur rechargement missions:', err)
+      console.error('Erreur rechargement missions :', err)
       setError('Impossible de recharger les missions.')
     }
   }
 
-  const handleCreate = () => {
-    setEditingMission(null)  // pas de données initiales → mode création
-    setShowForm(true)
-  }
 
-  const handleEdit = (mission) => {
-    setEditingMission(mission)
-    setShowForm(true)
-  }
+  // ── Navigation ──────────────────────────────────────────────
 
-  const handleFormSubmit = async (formData) => {
-    if (editingMission) {
-      await updateMission(editingMission.id, formData)
-    } else {
-      await createMission(formData)
-    }
-    setShowForm(false)
-    await loadMissions()  // resynchronise l'affichage avec le backend
-  }
+  // Bouton "+ Ajouter" → page de création
+  const handleCreate = () => navigate('/admin/missions/new')
 
+  // Bouton crayon → page d'édition avec l'id de la mission
+  const handleEdit = (mission) => navigate(`/admin/missions/${mission.id}/edit`)
+
+
+  // ── Suppression ─────────────────────────────────────────────
+  // Soft delete : is_active passe à false côté backend.
+  // La mission reste en base (récupérable) mais disparaît du site.
   const handleDelete = async (mission) => {
-    // Confirmation native — suffisant pour un MVP, accessible par défaut.
     const confirmed = window.confirm(
-      `Supprimer la mission "${mission.title}" ? Cette action la masquera du site (récupérable en base).`
+      `Supprimer la mission "${mission.title}" ?\n\nCette action la masquera du site. Elle reste récupérable en base de données.`
     )
     if (!confirmed) return
 
     try {
       await deleteMission(mission.id)
-      await loadMissions()
+      await reloadMissions()
     } catch (err) {
-      console.error('Erreur suppression mission:', err)
-      alert('Échec de la suppression.')
+      console.error('Erreur suppression mission :', err)
+      alert('Échec de la suppression. Réessaie.')
     }
   }
 
-  if (loading) return <div className="text-gray-500">Chargement...</div>
-  if (error) return <div className="text-red-600">{error}</div>
+
+  // ── États de chargement / erreur ────────────────────────────
+
+  if (loading) return (
+    <p className="text-gray-400 text-sm italic">Chargement des missions...</p>
+  )
+
+  if (error) return (
+    <p className="text-red-600 text-sm">{error}</p>
+  )
+
+
+  // ── Rendu ───────────────────────────────────────────────────
 
   return (
     <div>
+
+      {/* ── En-tête ── */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-heading font-bold text-2xl text-gray-900">Missions</h1>
+        <h1 className="font-heading font-bold text-2xl text-gray-900">
+          Missions
+        </h1>
         <button
           onClick={handleCreate}
-          className="px-4 py-2 bg-primary text-white text-sm rounded-lg"
+          className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary/90 transition-colors"
         >
           + Ajouter une mission
         </button>
       </div>
 
+      {/* ── Tableau des missions ── */}
+      {/* DashboardTable est générique : on lui passe les colonnes,
+          les données et les callbacks — il ne connaît pas le métier. */}
       <DashboardTable
-        columns={columns}
+        columns={COLUMNS}
         data={missions}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
 
-      {showForm && (
-        <MissionForm
-          initialData={editingMission}
-          onSubmit={handleFormSubmit}
-          onCancel={() => setShowForm(false)}
-        />
-      )}
     </div>
   )
 }
