@@ -34,25 +34,47 @@ function MissionsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // null = modale fermée | {} = mode création | {...mission} = mode édition
+  // null = mode création (formulaire vide) | {...mission} = mode édition (formulaire pré-rempli)
   const [editingMission, setEditingMission] = useState(null)
   const [showForm, setShowForm] = useState(false)
 
+  // Chargement au montage — avec AbortController pour éviter les setState
+  // sur composant démonté si l'utilisateur navigue avant la fin du fetch.
+  useEffect(() => {
+    const controller = new AbortController()
+
+    const loadMissionsOnMount = async () => {
+      try {
+        const data = await fetchAdminMissions(controller.signal)
+        setMissions(data)
+        setLoading(false)
+      } catch (err) {
+        if (err.name === 'AbortError') return // composant démonté, on ignore silencieusement
+        console.error('Erreur chargement missions:', err)
+        setError('Impossible de charger les missions.')
+        setLoading(false)
+      }
+    }
+
+    loadMissionsOnMount()
+
+    return () => {
+      controller.abort()
+    }
+  }, [])
+
+  // Fonction réutilisée après les actions CRUD (create/update/delete) —
+  // pas de signal ici : ce sont des appels ponctuels déclenchés par une action
+  // utilisateur, pas liés au cycle de vie du montage du composant.
   const loadMissions = async () => {
     try {
       const data = await fetchAdminMissions()
       setMissions(data)
     } catch (err) {
-      console.error('Erreur chargement missions:', err)
-      setError('Impossible de charger les missions.')
-    } finally {
-      setLoading(false)
+      console.error('Erreur rechargement missions:', err)
+      setError('Impossible de recharger les missions.')
     }
   }
-
-  useEffect(() => {
-    loadMissions()
-  }, [])
 
   const handleCreate = () => {
     setEditingMission(null)  // pas de données initiales → mode création

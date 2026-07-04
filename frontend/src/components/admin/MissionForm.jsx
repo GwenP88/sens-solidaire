@@ -78,7 +78,7 @@ function MissionForm({ initialData, onSubmit, onCancel }) {
             />
           </div>
 
-          <div>
+		  <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Pays *
             </label>
@@ -88,6 +88,8 @@ function MissionForm({ initialData, onSubmit, onCancel }) {
               value={formData.country}
               onChange={handleChange}
               required
+              pattern="[a-zA-ZÀ-ÿ\s\-]+"
+              title="Lettres, espaces et tirets uniquement"
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
             />
           </div>

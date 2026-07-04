@@ -181,8 +181,6 @@ export const fetchLocationBySlug = async (slug) => {
 // Récupère les témoignages pour la modération.
 // status optionnel : "pending" | "approved" | "rejected" | undefined (= tous)
 export const fetchAdminTestimonials = async (status) => {
-  const token = localStorage.getItem("admin_token")
-
   const params = new URLSearchParams()
   if (status) {
     params.append("status", status)   // ajoute la paire clé/valeur "status=pending"
@@ -204,8 +202,6 @@ export const fetchAdminTestimonials = async (status) => {
 
 // Approuve un témoignage (statut → "approved", figé côté back).
 export const approveTestimonial = async (id) => {
-  const token = localStorage.getItem("admin_token")
-
   const response = await fetch(`${API_URL}/admin/testimonials/${id}/approve`, {
     method: "PATCH",
     headers: getAuthHeaders(),
@@ -220,8 +216,6 @@ export const approveTestimonial = async (id) => {
 
 // Refuse un témoignage (statut → "rejected" + retire de l'accueil, figé côté back).
 export const rejectTestimonial = async (id) => {
-  const token = localStorage.getItem("admin_token")
-
   const response = await fetch(`${API_URL}/admin/testimonials/${id}/reject`, {
     method: "PATCH",
     headers: getAuthHeaders(),
@@ -237,9 +231,10 @@ export const rejectTestimonial = async (id) => {
 // ── ADMIN — MISSIONS ─────────────────────────────────────────────────────────
 
 // Récupère TOUTES les missions (actives + inactives) pour le dashboard admin.
-export const fetchAdminMissions = async () => {
+export const fetchAdminMissions = async (signal) => {
   const response = await fetch(`${API_URL}/admin/missions`, {
     headers: getAuthHeaders(),
+    signal,   // undefined si non fourni → fetch() l'ignore, aucun risque de casse ailleurs
   })
   if (!response.ok) {
     throw new Error("Impossible de charger les missions (admin).")
