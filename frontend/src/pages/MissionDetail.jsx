@@ -21,6 +21,7 @@ import Carousel from '../components/ui/Carousel'
 import Button from '../components/ui/Button'
 import AnchorNav from '../components/navigation/AnchorNav'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import LignesToPuces from '../components/ui/LignesToPuces'
 
 // ── Composants métier
 import TestimonialCard from '../components/testimonials/TestimonialCard'
@@ -41,23 +42,6 @@ const HOW_TO_GO_ICONS = [
   IconFlight, IconContact, IconBooking,
   IconPayment, IconContract, IconGuide, IconFileMission,
 ]
-
-// ── Utilitaire — transforme un texte multi-lignes en tableau de puces
-// Chaque ligne non vide devient un élément <li>
-function LignesToPuces({ texte, className = "" }) {
-  if (!texte) return null
-  const lignes = texte.split('\n').filter(l => l.trim() !== '')
-  return (
-    <ul className={`flex flex-col gap-0 list-none ${className}`}>
-      {lignes.map((ligne, i) => (
-        <li key={i} className="flex items-start gap-xs text-body text-primary/80">
-          <span className="text-accent mt-1 shrink-0">•</span>
-          <span>{ligne.trim()}</span>
-        </li>
-      ))}
-    </ul>
-  )
-}
 
 function MissionDetail() {
   const { slug } = useParams()

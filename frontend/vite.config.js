@@ -33,6 +33,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       }
-    }
+    },
+  },
+  // Configuration Vitest — au même niveau que plugins/server, pas dedans
+  test: {
+    environment: 'jsdom',                 // simule un navigateur pour les tests
+    setupFiles: './src/setupTests.js',    // fichier de config globale (à créer ensuite)
   },
 })

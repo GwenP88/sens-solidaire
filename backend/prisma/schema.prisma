@@ -34,6 +34,7 @@ model Mission {
   location          Location[]
   pricing           MissionPricing[]
   testimonials      Testimonial[]
+  missionReports  MissionReport[] 
 }
 
 // ─────────────────────────────────────────
@@ -103,6 +104,8 @@ model MissionReport {
   type        String   // individuel, service_civique, groupe_jeune, conge_solidaire
   annee       Int
   pdf_url     String
+  mission_id  Int?
+  mission     Mission? @relation(fields: [mission_id], references: [id])
   is_active   Boolean  @default(true)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt

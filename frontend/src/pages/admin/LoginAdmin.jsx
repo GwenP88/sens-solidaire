@@ -5,6 +5,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+// ── API
+import { loginAdmin } from '../../services/api'
+
 function LoginAdmin() {
   const navigate = useNavigate()
 
@@ -20,30 +23,19 @@ function LoginAdmin() {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        // Le serveur a répondu avec une erreur (401, 400...)
-        setError(data.message || 'Email ou mot de passe incorrect.')
-        return
-      }
+      // loginAdmin gère déjà : bonne URL (proxy Vite), credentials: "include"
+      // pour le cookie refresh token, et le message d'erreur du backend
+      const token = await loginAdmin(email, password)
 
       // Stockage du token JWT en localStorage
-      localStorage.setItem('admin_token', data.accessToken)
+      localStorage.setItem('admin_token', token)
 
       // Redirection vers le dashboard
       navigate('/admin')
 
     } catch (err) {
-      // Erreur réseau (serveur injoignable)
       console.error("Erreur login:", err)
-      setError('Impossible de contacter le serveur. Vérifie que le backend est démarré.')
+      setError(err.message)
     } finally {
       setLoading(false)
     }

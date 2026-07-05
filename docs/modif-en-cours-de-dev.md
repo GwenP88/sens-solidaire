@@ -1,7 +1,7 @@
 # Modifications apportées en cours de développement
 ## Sens Solidaire — Refonte du site web
 *Pichot Gwen & Amblard Alison · Holberton School — Thonon-les-Bains*
-*Dernière mise à jour : 8 juin 2026*
+*Dernière mise à jour : 5 juillet 2026*
 
 Ce document trace toutes les décisions qui s'écartent des guides initiaux.
 Il sera mis à jour en continu et servira à actualiser la documentation officielle en fin de projet.
@@ -57,6 +57,22 @@ Il sera mis à jour en continu et servira à actualiser la documentation officie
 | 41 | 12/06/26 | Carousel | Navigation conditionnelle — chevrons et dots masqués si items ≤ slidesPerView | Évite les contrôles inutiles sur peu d'items | ✅ Appliquée |
 | 42 | 15/06/26 | Feature — Dashboard articles | Créer un modèle Article (title, content WYSIWYG, image_url, published_at, status draft/published) + page publique /medias-et-actualites | V2 | 🔵 À faire |
 | 43 | 15/06/26 | Feature — Intégration Buffer | Au moment de la publication d'un article dans le dashboard, appel API Buffer pour créer un brouillon de post automatiquement. Nécessite clé API Buffer de la cliente. | V2 | 🔵 À faire |
+| 44 | 12/06/26 | Composant — Carousel.jsx | Module Navigation de Swiper v12 cassé en React → navigation custom via `useRef` + boutons externes appelant `slidePrev()`/`slideNext()` | Bug connu de Swiper v12 avec React — le module officiel ne fonctionne pas correctement | ✅ Appliquée |
+| 45 | 12/06/26 | Navigation — scroll | `react-scroll` incompatible React 19 → remplacé par `smoothScrollTo` custom (`window.scrollTo({ behavior: 'smooth' })`) | Incompatibilité de version bloquante | ✅ Appliquée |
+| 46 | 15/06/26 | Backend — update mission | Méthode **PATCH** retenue (vs PUT) pour la modification de mission — seuls les champs fournis sont mis à jour | Adapté à un dashboard d'édition champ par champ, pas de risque d'écraser un champ non renvoyé | ✅ Appliquée |
+| 47 | 15/06/26 | Backend — delete mission | **Soft delete** (`is_active = false`) retenu au lieu d'une suppression réelle | Réversibilité, traçabilité, évite la gestion en cascade des relations (pricing, location, testimonials) | ✅ Appliquée |
+| 48 | 15/06/26 | Backend — delete témoignage | **Hard delete** conservé pour les témoignages, contrairement aux missions (soft delete) | Droit à l'oubli RGPD (article 17) — une donnée personnelle doit pouvoir être effacée réellement | ✅ Appliquée |
+| 49 | 15/06/26 | schema.prisma — Mission.type | `VALID_TYPES` remplacés : anciens types périmés (`faune_sauvage`...) → taxonomie réelle (`volontariat_individuel`, `service_civique`, `groupe_jeunes`, `conge_solidaire`) | Alignement avec les types réellement utilisés dans le seed | ✅ Appliquée (provisoire — à valider avec la cliente) |
+| 50 | 15/06/26 | missionService.js — findBySlug | `findUnique` → `findFirst` + filtre `is_active: true` | Une mission soft-deletée doit aussi disparaître de la page détail publique, pas seulement de la liste | ✅ Appliquée |
+| 51 | 19/06/26 | schema.prisma | Nouvelles tables créées : `ActivityReport`, `Delegation`, `MissionReport`, `TeamMember`, `Partner` | Besoin des pages secondaires (équipe, rapports d'activité, délégations internationales, témoignages enrichis) | ✅ Appliquée |
+| 52 | 19/06/26 | Testimonials.jsx | Abandon du système d'onglets → filtre unique `vue` intégré dans `FilterSelect` | Simplification de l'UX — un seul composant de filtre au lieu de deux systèmes parallèles | ✅ Appliquée |
+| 53 | 22/06/26 | /public/images/ | Réorganisation complète — 10 dossiers thématiques créés, tous les fichiers renommés en kebab-case et déplacés | Structure par contexte métier plus maintenable, cohérence de nommage | ✅ Appliquée |
+| 54 | 29/06 → 03/07/26 | schema.prisma — FieldAction | `FieldActionCountry` (relation FK) remplace l'ancien champ `country: String` sur `FieldAction` | `country: string` était fragile et non filtrable proprement — une action peut désormais concerner plusieurs pays | ✅ Appliquée |
+| 55 | 29/06 → 03/07/26 | schema.prisma — Location | FK `delegation_id` ajoutée sur `Location` → `Delegation` | Supprime le string matching fragile (`d.lieu === location.name`), source de bugs par typo | ✅ Appliquée |
+| 56 | 29/06 → 03/07/26 | Composant — FooterCta.jsx | Nouveau composant dynamique par route, remplaçant `CTASection` sur toutes les pages | Évite la redondance CTASection + FooterCta — un seul point de vérité pour les CTAs de fin de page | ✅ Appliquée |
+| 57 | 03/07/26 | Nom du projet | Renommage global "Sens Solidaire" → "Sens Solidaires" — 23 occurrences corrigées (grep + sed) | Nom officiel exact de l'association | ✅ Appliquée |
+| 58 | 04/07/26 | Composant — LignesToPuces.jsx | Composant utilitaire créé puis extrait de `MissionDetail.jsx` vers `components/ui/` — transforme un texte multi-lignes (`\n`) en liste à puces | Permet à la cliente de saisir du contenu riche (rôle volontaire, infos santé/admin) sans éditeur WYSIWYG complexe ; extraction nécessaire pour rendre le composant testable unitairement | ✅ Appliquée |
+| 59 | 05/07/26 | schema.prisma — MissionReport | Ajout FK optionnelle `mission_id` (+ relation inverse `missionReports[]` sur `Mission`) | `destination`/`type` en texte libre dupliquaient l'information déjà présente sur `Mission` — même anti-pattern déjà corrigé sur `FieldActionCountry`. FK optionnelle car un rapport peut exister sans mission liée (ex : retour d'expérience enseignant) | ✅ Appliquée |
 
 ---
 
@@ -155,3 +171,58 @@ Trois composants distincts selon la catégorie du membre. Option B retenue : 3 c
 <div className="bg-primary text-surface font-heading">Titre</div>
 <button className="bg-accent text-surface font-body">CTA</button>
 ```
+
+---
+
+### Modification 44 — Carousel.jsx : navigation Swiper custom
+
+**Problème rencontré**
+Le module `Navigation` officiel de Swiper v12 ne fonctionne pas correctement dans un contexte React — les flèches précédent/suivant ne réagissent pas de façon fiable.
+
+**Solution retenue**
+- `useRef` pointant vers l'instance Swiper
+- Boutons HTML externes (hors du module Swiper) appelant directement `swiperRef.current?.slidePrev()` / `slideNext()`
+
+**Impact**
+Solution appliquée uniformément dans le composant `Carousel.jsx` réutilisable — tous les carrousels du site en bénéficient sans dupliquer le contournement.
+
+---
+
+### Modification 46, 47, 48 — Stratégie de suppression : PATCH + soft/hard delete
+
+Trois décisions liées, prises ensemble lors du CRUD admin missions (15/06) :
+
+| Ressource | Méthode update | Méthode delete | Justification |
+|---|---|---|---|
+| Mission | PATCH (partiel) | Soft delete (`is_active`) | Dashboard d'édition champ par champ + réversibilité |
+| Témoignage | — | Hard delete | RGPD article 17 (droit à l'oubli) — donnée personnelle |
+
+Cette distinction est une décision d'architecture à part entière : toutes les ressources ne suivent pas la même politique de suppression, et c'est volontaire.
+
+---
+
+### Modification 58 — LignesToPuces : extraction pour testabilité
+
+**Contexte**
+Le composant était initialement défini localement (non exporté) à l'intérieur de `MissionDetail.jsx`.
+
+**Problème**
+Un composant non exporté ne peut pas être importé isolément dans un fichier de test — impossible de le tester unitairement sans dépendre de tout `MissionDetail`.
+
+**Solution**
+Extraction vers `components/ui/LignesToPuces.jsx`, avec `export default`, puis import dans `MissionDetail.jsx`. Permet un test unitaire dédié (`LignesToPuces.test.jsx`).
+
+---
+
+### Modification 59 — MissionReport : ajout de la relation vers Mission
+
+**Avant**
+`MissionReport` utilisait deux champs texte libres (`destination`, `type`) sans lien réel avec la table `Mission`.
+
+**Problème identifié**
+Anti-pattern déjà rencontré et corrigé sur `FieldAction` : un champ texte dupliquant une information qui existe déjà ailleurs en base, sans contrainte d'intégrité.
+
+**Solution**
+Ajout d'une FK optionnelle `mission_id` (nullable) + relation inverse `missionReports: MissionReport[]` sur `Mission`. Nullable car un rapport peut exister sans mission officiellement fichée en base (ex : retour d'expérience déposé par un enseignant).
+
+**Champs `destination`/`type` conservés** : ils deviennent redondants avec `mission.country`/`mission.type` quand `mission_id` est renseigné, mais servent de repli quand ce n'est pas le cas.

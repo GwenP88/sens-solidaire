@@ -1,6 +1,6 @@
 # Planning de développement — Sens Solidaires
 *Pichot Gwen & Amblard Alison · Holberton School — Thonon-les-Bains*
-*Mise à jour : 3 juillet 2026*
+*Mise à jour : 5 juillet 2026*
 
 **Légende** : ✅ Terminé · ⚠️ Partiel · 🔵 À faire · 🔴 Bloqué
 **Devs** : Gwen (frontend + design) · Alison (backend + BDD) · Ensemble = tâches communes
@@ -102,6 +102,11 @@
 | 50 | Gwen | Renommage "Sens Solidaire" → "Sens Solidaires" (grep + sed, 23 occurrences) | ✅ |
 | 51 | Gwen | Home — CTA témoignage + section Actualités show_homepage + logos partenaires | ✅ |
 | 52 | Ensemble | Merge dev-front → dev | ✅ |
+| 62 | Gwen | Navbar dropdown missions dynamique — 2 colonnes (destinations API + S'engager autrement statique) | ✅ |
+| 63 | Gwen | `MissionFormPage` — page formulaire CRUD complet (9 blocs, création + édition) | ✅ |
+| 64 | Gwen | Back — `pricingService` + `mediaService` + routes `PUT /:id/pricing` et `PUT /:id/media` | ✅ |
+| 65 | Gwen | `MissionDetail` refonte complète — puces `LignesToPuces`, programme JSON, AnchorNav dynamique, galerie BDD | ✅ |
+| 66 | Gwen | Seed reformaté — `volunteer_role`, `health_info`, `admin_info`, `included`, `not_include` en texte brut `\n`, `programme` en JSON | ✅ |
 | 53 | Ensemble | 🎯 LIVRAISON MVP — 3 juillet 2026 | ✅ |
 
 ---
@@ -122,11 +127,19 @@
 | 59 | Alison | APIs restantes : locations, équipe | 🔵 |
 | 60 | Gwen | Upload Multer | 🔵 |
 | 61 | Alison | Tests d'intégration dashboard | 🔵 |
-| 62 | Gwen | Navbar dropdown missions dynamique — 2 colonnes (destinations API + S'engager autrement statique) | ✅ |
-| 63 | Gwen | `MissionFormPage` — page formulaire CRUD complet (9 blocs, création + édition) | ✅ |
-| 64 | Gwen | Back — `pricingService` + `mediaService` + routes `PUT /:id/pricing` et `PUT /:id/media` | ✅ |
-| 65 | Gwen | `MissionDetail` refonte complète — puces `LignesToPuces`, programme JSON, AnchorNav dynamique, galerie BDD | ✅ |
-| 66 | Gwen | Seed reformaté — `volunteer_role`, `health_info`, `admin_info`, `included`, `not_include` en texte brut `\n`, `programme` en JSON | ✅ |
+
+---
+
+### S7 (suite) — 5 juillet · Documentation, qualité & dette technique
+
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 92 | Gwen & Alison | README.md complet — architecture, BDD (5 domaines), fonctionnalités, installation, tests, équipe | ✅ |
+| 93 | Alison | Ajout FK `mission_id` sur `MissionReport` (relation vers `Mission`, optionnelle) + migration Prisma | ✅ |
+| 94 | Gwen | Extraction `LignesToPuces` en composant réutilisable (`components/ui/`) | ✅ |
+| 95 | Gwen | Setup Vitest + React Testing Library (config `vite.config.js`, `setupTests.js`) | ✅ |
+| 96 | Gwen | Tests unitaires frontend : `LignesToPuces`, `Button`, `TestimonialForm`, `LoginAdmin` (avec mock API) | ✅ |
+| 97 | Gwen | Résolution vulnérabilité `npm audit` (vite) — frontend, 0 vulnérabilité restante | ✅ |
 
 ---
 
@@ -206,6 +219,8 @@ Code freezé. Aucune modification.
 | Compteurs StatsBar depuis dashboard | La cliente peut modifier les chiffres clés |
 | Suisse vs France éducation | Filtrage des ateliers par zone géographique |
 | Congé solidaire Sumatra | Ajouter destination dans la section congé solidaire |
+| `MissionFieldAction` (many-to-many) | Relation explicite mission ↔ actions terrain, indépendante du filtre pays |
+| `mission_id` sur `MediaPost` | Publier un article directement rattaché à une mission |
 
 ---
 
