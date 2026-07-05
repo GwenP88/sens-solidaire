@@ -1876,4 +1876,105 @@ docker compose up -d --build
 
 ---
 
+## Jour 38 · 4 juillet 2026
+### S7 — Dashboard missions — CRUD complet + Navbar dynamique
+
+---
+
+### Statut général
+
+| Élément | Statut |
+|---|---|
+| Navbar dropdown missions dynamique | ✅ Terminé |
+| Dashboard CRUD missions — page formulaire | ✅ Terminé |
+| Back — routes pricing + media + findById médias | ✅ Terminé |
+| MissionDetail — AnchorNav dynamique + puces | ✅ Terminé |
+| Seed reformaté — texte brut (lignes → puces) | ✅ Terminé |
+| Merge dev-front → dev | ✅ Terminé |
+
+---
+
+### ✅ Réalisé
+
+#### Navbar
+- Dropdown "Nos missions" dynamique — fetch `GET /api/missions?type=volontariat_individuel` au montage
+- Structure 2 colonnes : destinations (dynamiques) + "S'engager autrement" (statique)
+- Menu mobile mis à jour avec les mêmes 2 sections
+- `MISSIONS` statique supprimé
+
+#### Dashboard — CRUD Missions
+- `MissionsPage.jsx` — filtre `volontariat_individuel` côté front, navigation vers `MissionFormPage` au lieu d'une modale
+- `MissionFormPage.jsx` — page dédiée création/édition avec 9 blocs :
+  1. Informations essentielles
+  2. Visuel (image + aperçu)
+  3. Contenu page détail (description + rôle volontaire lignes → puces)
+  4. Programme (tableau dynamique 2 colonnes)
+  5. Tarifs & durées (tableau dynamique)
+  6. Logistique (inclus/non inclus/HelloAsso)
+  7. Comment partir (étape 1 modifiable, étapes 2-7 fixes)
+  8. Infos pratiques (santé, admin, ministère, PDF)
+  9. Galerie photos (tableau dynamique + aperçu miniature)
+- Routes `/admin/missions/new` et `/admin/missions/:id/edit` ajoutées dans `App.jsx`
+
+#### Back — nouveaux services et routes
+- `pricingService.js` — `upsertPricing` (deleteMany + createMany)
+- `pricingController.js` + route `PUT /api/admin/missions/:id/pricing`
+- `mediaService.js` — `upsertMedia` polymorphique (image, pdf)
+- `mediaController.js` + route `PUT /api/admin/missions/:id/media`
+- `findById` dans `missionService.js` — inclut les médias via requête séparée
+- `findBySlug` dans `missionService.js` — inclut les médias (galerie + PDF)
+- `fetchAdminMissionById` + `updateMissionPricing` + `updateMissionMedia` dans `api.js`
+
+#### MissionDetail.jsx
+- `LignesToPuces` — composant utilitaire local (texte brut `\n` → puces)
+- Phrase fixe ajoutée avant les puces du rôle volontaire
+- Programme parsé depuis JSON `[{label, content}]`
+- Infos santé/admin/inclus/non inclus en puces
+- Galerie connectée aux médias BDD (`entity_type: 'mission'`, `file_type: 'image'`)
+- PDF guide du volontaire connecté aux médias BDD
+- `AnchorNav` dynamique — sections masquées si contenu vide
+- Section impact masquée si aucune action terrain
+
+#### Seed
+- `volunteer_role`, `health_info`, `admin_info`, `included`, `not_include` → texte brut lignes `\n`
+- `programme` → `JSON.stringify([{label, content}])`
+
+---
+
+### Décisions d'architecture
+
+| Décision | Justification |
+|---|---|
+| Médias via requête séparée (pas `include`) | Table `Media` polymorphique — pas de relation Prisma directe sur `Mission` |
+| `MissionFormPage` page dédiée (pas modale) | Formulaire trop long pour une modale — scroll naturel, extensible V2 |
+| Filtre `volontariat_individuel` côté front | Les autres types seront gérables via des modules dashboard dédiés plus tard |
+| `how_to_go` — étape 1 seule modifiable | Les 7 étapes sont identiques sur toutes les missions sauf les villes de vol |
+| Pricing route séparée `PUT /:id/pricing` | `MissionPricing` est une table relationnelle — pas un champ JSON sur `Mission` |
+
+---
+
+### Bugs résolus
+
+| Bug | Cause | Solution |
+|---|---|---|
+| `Unknown field media` Prisma | `media` pas une relation directe sur `Mission` | Requête `prisma.media.findMany` séparée |
+| `media` absent du return `findBySlug` | Variable déclarée mais non incluse dans le return | Ajout de `media` dans l'objet retourné |
+| Section impact toujours affichée | Pas de condition sur `actions.length` | Enveloppé dans `{actions.length > 0 && ...}` |
+| `fieldActionService` — `country` inexistant | Migration `FieldActionCountry` non répercutée | `where.countries = { some: { country: ... } }` |
+
+---
+
+### Dossier test-mission créé
+- `frontend/public/test-mission/` — 5 photos + 1 PDF pour tester le CRUD mission Chine
+- ⚠️ Images non compressées (3-7 Mo) — à convertir en WebP avant production (squoosh.app)
+
+---
+
+### Pour mardi — démo Delphine
+- ✅ Navbar dynamique
+- ✅ Créer une mission complète depuis le dashboard
+- ✅ Voir le résultat sur la page détail publique
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

@@ -53,6 +53,34 @@ export const findAllForAdmin = async () => {
   return missions
 }
 
+// ── FIND BY ID (ADMIN) ───────────────────────────────────────────────────────
+// Récupère une mission complète par son id — pour le formulaire d'édition
+// Paramètre : id (number)
+// Retourne  : la mission avec ses relations OU throw 404
+export const findById = async (id) => {
+  const mission = await prisma.mission.findUnique({
+    where: { id },
+    include: {
+      pricing: true,
+      location: true,
+    }
+  })
+
+  if (!mission) {
+    const err = new Error("Mission introuvable")
+    err.status = 404
+    err.code = "MISSION_NOT_FOUND"
+    throw err
+  }
+
+  const media = await prisma.media.findMany({
+    where: { entity_type: 'mission', entity_id: id },
+    orderBy: { display_order: 'asc' },
+  })
+
+  return { ...mission, media }
+}
+
 // ── FIND BY SLUG ─────────────────────────────────────────────────────────────
 // Récupère une mission complète par son slug
 // Paramètres : slug (string) — ex: "volontariat-kenya-faune-sauvage"
@@ -79,9 +107,16 @@ export const findBySlug = async (slug) => {
     throw error
   }
 
+  // Récupère les médias liés à cette mission (galerie + PDF)
+  const media = await prisma.media.findMany({
+    where: { entity_type: 'mission', entity_id: mission.id },
+    orderBy: { display_order: 'asc' },
+  })
+
   // Formatage des témoignages pour correspondre aux props de TestimonialCard
   return {
     ...mission,
+    media,
     testimonials: mission.testimonials.map(t => ({
       ...t,
       quote: t.content,

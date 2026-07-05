@@ -64,21 +64,48 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     image_url: "/images/missions/kenya.jpg",
     short_description: "Patrouilles avec les rangers, suivi de la faune et échanges avec des élèves kényans.",
     description: "Partez au Kenya pour contribuer à la préservation de la biodiversité aux côtés des communautés locales, des étudiants et des rangers. Entre réserves naturelles, projets éducatifs et initiatives de développement durable, vivez une expérience immersive, utile et profondément humaine.",
-    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Patrouilles avec les rangers et participation aux actions de conservation de la biodiversité.</li><li>Recensement de la faune sauvage et des espèces d'oiseaux.</li><li>Entretien des équipements et appui aux projets environnementaux.</li><li>Mise en place et suivi des correspondances scolaires entre la France et le Kenya.</li><li>Accompagnement des élèves et étudiants dans leurs projets éducatifs et interculturels.</li><li>Partage de compétences selon votre expérience : informatique, gestion de projet, tourisme solidaire, hôtellerie, restauration, communication, etc.</li><li>Soutien aux initiatives locales de développement durable, d'agroécologie et d'entrepreneuriat.</li></ul>",
-    programme: "Jour 1 : Transfert depuis l'aéroport, déjeuner, installation, briefing et orientation avant le dîner.\nJour 2 : Formation sur l'observation de la faune, recommandations sécurité, rencontre avec le référent rangers et le chargé des projets biodiversité, présentation de la communauté locale.\nJours 3-6 : Programme des volontaires : 4 jours enrichissants en participant aux projets de développement.\nWeek-end : Quartier libre — visite des Sanctuaires, Parc Tsavo, Hell's Gate, Lac Naivasha, Parc Amboseli ou côte océanienne de Mombasa.\nJours 9-13 : Finalisation du programme de développement avec les communautés.\nJour 14 : Séparation avec la communauté et transfert vers l'aéroport.",
-    included: "Les frais de mission comprennent l'hébergement, la restauration, les déplacements sur place ainsi que l'encadrement par nos équipes et partenaires locaux.",
-    not_include: "Les frais de mission ne comprennent pas l'adhésion à l'association (25 €), les billets d'avion (~700 €, avec option annulation fortement recommandée), l'assurance voyage, les frais de visa (32 €), ainsi que les éventuels vaccins et frais de pharmacie et les activités du week-end et les déplacements personnels hors programme.",
+    volunteer_role: `Patrouilles avec les rangers et participation aux actions de conservation de la biodiversité.
+Recensement de la faune sauvage et des espèces d'oiseaux.
+Entretien des équipements et appui aux projets environnementaux.
+Mise en place et suivi des correspondances scolaires entre la France et le Kenya.
+Accompagnement des élèves et étudiants dans leurs projets éducatifs et interculturels.
+Partage de compétences selon votre expérience : informatique, gestion de projet, tourisme solidaire, hôtellerie, restauration, communication, etc.
+Soutien aux initiatives locales de développement durable, d'agroécologie et d'entrepreneuriat.`,
+    programme: JSON.stringify([
+      { label: "Jour 1",    content: "Transfert depuis l'aéroport, déjeuner, installation, briefing et orientation avant le dîner." },
+      { label: "Jour 2",    content: "Formation sur l'observation de la faune, recommandations sécurité, rencontre avec le référent rangers et le chargé des projets biodiversité, présentation de la communauté locale." },
+      { label: "Jours 3-6", content: "Programme des volontaires : 4 jours enrichissants en participant aux projets de développement." },
+      { label: "Week-end",  content: "Quartier libre — visite des Sanctuaires, Parc Tsavo, Hell's Gate, Lac Naivasha, Parc Amboseli ou côte océanienne de Mombasa." },
+      { label: "Jours 9-13",content: "Finalisation du programme de développement avec les communautés." },
+      { label: "Jour 14",   content: "Séparation avec la communauté et transfert vers l'aéroport." },
+    ]),
+    included: `Hébergement sur le site partenaire
+Restauration (3 repas par jour)
+Déplacements sur place liés au programme
+Encadrement par nos équipes et partenaires locaux`,
+    not_include: `Adhésion à l'association (25 €)
+Billets d'avion (~700 €, avec option annulation fortement recommandée)
+Assurance voyage
+Frais de visa (32 €)
+Vaccins et frais de pharmacie
+Activités du week-end et déplacements personnels hors programme`,
     how_to_go: JSON.stringify([
       "Vérifier les vols Paris › Mombasa ou Paris › Nairobi",
       "Nous contacter par mail à contact@sensolidaire.org",
-      "Réserver vos billets d'avion et ous les envoyer",
-      "Payer les frais de mission, adhérer à l'association (25€)",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission, adhérer à l'association (25 €)",
       "Signer les termes d'engagement",
       "Recevoir les conseils pratiques de préparation",
-      "Recevoir votre fiche mission à remplir à votre retour"
+      "Recevoir votre fiche mission à remplir à votre retour",
     ]),
-    admin_info: "<ul><li>Évitez les périodes de fortes pluies, généralement entre mars-mai et novembre-décembre.</li><li>Un passeport valide au moins 6 mois après votre date de retour est requis.</li><li>L'obtention d'un visa est obligatoire pour entrer sur le territoire kenyan (32 €).</li><li>Comparez les offres de plusieurs compagnies : Kenya Airways, KLM, Ethiopian Airlines, Air France.</li></ul>",
-    health_info: "<ul><li>Une bonne condition physique est recommandée pour participer à cette mission.</li><li>Un certificat médical d'aptitude délivré par votre médecin vous sera demandé avant le départ.</li><li>Les vaccinations obligatoires doivent être à jour. La vaccination contre la fièvre jaune est requise.</li><li>Un traitement antipaludéen devra être prescrit par votre médecin en fonction de votre situation et des recommandations sanitaires en vigueur.</li></ul>",
+    health_info: `Une bonne condition physique est recommandée pour participer à cette mission.
+Un certificat médical d'aptitude délivré par votre médecin vous sera demandé avant le départ.
+Les vaccinations obligatoires doivent être à jour. La vaccination contre la fièvre jaune est requise.
+Un traitement antipaludéen devra être prescrit par votre médecin en fonction de votre situation et des recommandations sanitaires en vigueur.`,
+    admin_info: `Évitez les périodes de fortes pluies, généralement entre mars-mai et novembre-décembre.
+Un passeport valide au moins 6 mois après votre date de retour est requis.
+L'obtention d'un visa est obligatoire pour entrer sur le territoire kenyan (32 €).
+Compagnies recommandées : Kenya Airways, KLM, Ethiopian Airlines, Air France.`,
     helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
     ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/kenya/",
     is_active: true,
@@ -98,21 +125,46 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     image_url: "/images/missions/senegal.jpg",
     short_description: "Correspondances scolaires, reboisement de la mangrove, potager, soutien des femmes.",
     description: "Partez à la découverte de la Casamance et engagez-vous aux côtés de nos partenaires locaux à Ziguinchor. Entre échanges avec les écoles, soutien aux jardins potagers, projets d'accès à l'eau et rencontres avec les communautés, vous contribuerez à des actions concrètes tout en vivant une expérience humaine authentique au cœur du Sénégal.",
-    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Correspondance scolaire et échanges interculturels avec les élèves locaux.</li><li>Visites terrain et suivi des projets en cours.</li><li>Appui aux projets jardin potager, filtres à eau et puits.</li><li>Sensibilisation communautaire au développement durable.</li><li>Soutien aux groupements de femmes maraîchères.</li><li>Reboisement de la mangrove et actions environnementales.</li><li>Coordination des visioconférences collèges entre Nice et le Sénégal.</li><li>Contribution au chantier de digue sur l'île d'Effrane.</li></ul>",
-    programme: "8h : Petit déjeuner.\n9h à 12h : Activités de la matinée — correspondance scolaire, visites terrain.\n12h : Déjeuner.\n14h à 17h : Visite de l'avancement des projets sur place — jardin potager, utilisation des filtres à eau et puits.\n19h : Dîner.",
-    included: "Hébergement chez l'habitant ou en gîte local, repas, encadrement sur place, transport local.",
-    not_include: "Billet d'avion (~800€, avec option annulation fortement recommandée), assurance voyage, vaccins, visa (ressortissants hors CEDEAO), dépenses personnelles.",
+    volunteer_role: `Correspondance scolaire et échanges interculturels avec les élèves locaux.
+Visites terrain et suivi des projets en cours.
+Appui aux projets jardin potager, filtres à eau et puits.
+Sensibilisation communautaire au développement durable.
+Soutien aux groupements de femmes maraîchères.
+Reboisement de la mangrove et actions environnementales.
+Coordination des visioconférences collèges entre Nice et le Sénégal.
+Contribution au chantier de digue sur l'île d'Effrane.`,
+    programme: JSON.stringify([
+      { label: "8h",        content: "Petit déjeuner." },
+      { label: "9h - 12h",  content: "Activités de la matinée — correspondance scolaire, visites terrain." },
+      { label: "12h",       content: "Déjeuner." },
+      { label: "14h - 17h", content: "Visite de l'avancement des projets sur place — jardin potager, utilisation des filtres à eau et puits." },
+      { label: "19h",       content: "Dîner." },
+    ]),
+    included: `Hébergement chez l'habitant ou en gîte local
+Repas
+Encadrement sur place
+Transport local`,
+    not_include: `Billet d'avion (~800 €, avec option annulation fortement recommandée)
+Assurance voyage
+Vaccins
+Visa (ressortissants hors CEDEAO)
+Dépenses personnelles`,
     how_to_go: JSON.stringify([
-      "Vérifier les vols Paris › Cap Skirring (la navette jusqu'à Ziguinchor).",
+      "Vérifier les vols Paris › Cap Skirring (navette jusqu'à Ziguinchor)",
       "Nous contacter par mail à contact@sensolidaire.org",
-      "Réserver vos billets d'avion et ous les envoyer",
-      "Payer les frais de mission, adhérer à l'association (25€)",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission, adhérer à l'association (25 €)",
       "Signer les termes d'engagement",
       "Recevoir les conseils pratiques de préparation",
-      "Recevoir votre fiche mission à remplir à votre retour"
+      "Recevoir votre fiche mission à remplir à votre retour",
     ]),
-    admin_info: "<ul><li>La nature exacte du travail dépendra des priorités sur place.</li><li>En tant que volontaire, il est important de rester flexible.</li><li>Aucun visa requis pour les ressortissants de l'espace CEDEAO.</li><li>Compagnies recommandées : Cap Portugal, Air France, Royal Air Maroc.</li><li>Meilleure période : novembre à mai (saison sèche).</li></ul>",
-    health_info: "<ul><li>Vaccins obligatoires: fièvre jaune.</li><li>Traitement antipaludéen obligatoire.</li><li>Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
+    health_info: `Vaccins obligatoires : fièvre jaune.
+Traitement antipaludéen obligatoire.
+Un certificat médical d'aptitude sera demandé avant le départ.`,
+    admin_info: `La nature exacte du travail dépendra des priorités sur place — restez flexible.
+Aucun visa requis pour les ressortissants de l'espace CEDEAO.
+Compagnies recommandées : Cap Portugal, Air France, Royal Air Maroc.
+Meilleure période : novembre à mai (saison sèche).`,
     helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
     ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/senegal/",
     is_active: true,
@@ -131,22 +183,57 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     country: "Pérou",
     image_url: "/images/missions/perou.jpg",
     short_description: "Soins aux animaux sauvages et sensibilisation des communautés à la protection de l'Amazonie.",
-    description: "Rejoignez nos partenaires à Puerto Maldonado, au cœur de l'Amazonie péruvienne, et participez à des actions concrètes en faveur de la biodiversité. Aux côtés des équipes locales, vous contribuerez au soin des animaux du sanctuaire et aux actions de conservation menées sur le terrain. Une connaissance élémentaire de l'espagnol ou de l'anglais vous permettra de profiter pleinement de cette immersion et de faciliter les échanges avec les équipes locales.",
-    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Préparation des régimes alimentaires adaptés à chaque espèce.</li><li>Nourrissage des animaux, dont les singes hurleurs.</li><li>Cueillette de feuilles sauvages pour les animaux du sanctuaire.</li><li>Entretien et réparation des structures et enclos.</li><li>Nettoyage des espaces de vie des animaux.</li><li>Sensibilisation des communautés locales à la protection de l'Amazonie.</li><li>Soins aux perroquets, toucans, tapir.</li><li>Repérage des singes hurleurs en forêt primaire.</li><li>Sorties nocturnes pour recensement des douroucoulis.</li><li>Observation des singes laineux et atèles en réhabilitation.</li><li>Sorties dans les communautés indigènes.</li></ul>",
-    programme: "7h30 : Petit déjeuner pour les volontaires.\n8h00 : Préparation des régimes alimentaires pour les animaux.\n8h30 à 9h30 : Nourrir les animaux.\n10h00 : Cueillette de feuilles sauvages pour les singes hurleurs.\n11h00 à 13h00 : Projets spécifiques — entretien et réparation.\n13h00 : Déjeuner des volontaires.\n14h00 : Régime alimentaire de l'après-midi et alimentation des animaux.\n16h00 : Nettoyage des enclos et vaisselle.\n17h00 : Préparation de la soirée — couvertures et lait.\n18h00 : Temps de repos des bénévoles.\n19h00 : Dîner des bénévoles. \n20h00 : Activités bénévoles du soir ou repos.",
-    included: "Hébergement sur site, repas, encadrement par les coordinateurs locaux, formation à l'arrivée.",
-    not_include: "Vols internationaux (~900€, avec option annulation fortement recommandée), assurance, visa, vaccins, équipement personnel.",
+    description: "Rejoignez nos partenaires à Puerto Maldonado, au cœur de l'Amazonie péruvienne, et participez à des actions concrètes en faveur de la biodiversité. Aux côtés des équipes locales, vous contribuerez au soin des animaux du sanctuaire et aux actions de conservation menées sur le terrain.",
+    volunteer_role: `Préparation des régimes alimentaires adaptés à chaque espèce.
+Nourrissage des animaux, dont les singes hurleurs.
+Cueillette de feuilles sauvages pour les animaux du sanctuaire.
+Entretien et réparation des structures et enclos.
+Nettoyage des espaces de vie des animaux.
+Sensibilisation des communautés locales à la protection de l'Amazonie.
+Soins aux perroquets, toucans, tapir.
+Repérage des singes hurleurs en forêt primaire.
+Sorties nocturnes pour recensement des douroucoulis.
+Observation des singes laineux et atèles en réhabilitation.
+Sorties dans les communautés indigènes.`,
+    programme: JSON.stringify([
+      { label: "7h30",        content: "Petit déjeuner pour les volontaires." },
+      { label: "8h00",        content: "Préparation des régimes alimentaires pour les animaux." },
+      { label: "8h30 - 9h30", content: "Nourrir les animaux." },
+      { label: "10h00",       content: "Cueillette de feuilles sauvages pour les singes hurleurs." },
+      { label: "11h - 13h",   content: "Projets spécifiques — entretien et réparation des enclos." },
+      { label: "13h00",       content: "Déjeuner des volontaires." },
+      { label: "14h00",       content: "Régime alimentaire de l'après-midi et alimentation des animaux." },
+      { label: "16h00",       content: "Nettoyage des enclos et vaisselle." },
+      { label: "17h00",       content: "Préparation de la soirée — couvertures et lait." },
+      { label: "19h00",       content: "Dîner des bénévoles." },
+      { label: "20h00",       content: "Activités bénévoles du soir ou repos." },
+    ]),
+    included: `Hébergement sur site
+Repas
+Encadrement par les coordinateurs locaux
+Formation à l'arrivée`,
+    not_include: `Vols internationaux (~900 €, avec option annulation fortement recommandée)
+Assurance voyage
+Visa
+Vaccins
+Équipement personnel`,
     how_to_go: JSON.stringify([
       "Vérifier les vols Paris › Puerto Maldonado",
       "Nous contacter par mail à contact@sensolidaire.org",
-      "Réserver vos billets d'avion et ous les envoyer",
-      "Payer les frais de mission, adhérer à l'association (25€)",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission, adhérer à l'association (25 €)",
       "Signer les termes d'engagement",
       "Recevoir les conseils pratiques de préparation",
-      "Recevoir votre fiche mission à remplir à votre retour"
+      "Recevoir votre fiche mission à remplir à votre retour",
     ]),
-    admin_info: "<ul><li>Les activités varient selon les besoins du sanctuaire — flexibilité indispensable.</li><li>Un passeport valide est requis. Pas de visa pour les ressortissants français (séjour < 90 jours).</li><li>Prévoir des vêtements légers et imperméables adaptés au climat amazonien.</li><li>Compagnies recommandées : Iberia, LATAM, Air Europa, Air France, Delta, KLM.</li></ul>",
-    health_info: "<ul><li>Les volontaires évoluent dans un environnement chaud et humide et participent à des activités physiques quotidiennes ; une bonne condition physique est donc recommandée.</li><li>Vaccins recommandés : fièvre jaune (obligatoire), hépatite A et B, typhoïde, rage.</li><li>Traitement antipaludéen obligatoire pour la région amazonienne.</li><li>Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
+    health_info: `Une bonne condition physique est recommandée — environnement chaud, humide et activités physiques quotidiennes.
+Vaccins recommandés : fièvre jaune (obligatoire), hépatite A et B, typhoïde, rage.
+Traitement antipaludéen obligatoire pour la région amazonienne.
+Un certificat médical d'aptitude sera demandé avant le départ.`,
+    admin_info: `Les activités varient selon les besoins du sanctuaire — flexibilité indispensable.
+Passeport valide requis. Pas de visa pour les ressortissants français (séjour < 90 jours).
+Prévoir des vêtements légers et imperméables adaptés au climat amazonien.
+Compagnies recommandées : Iberia, LATAM, Air Europa, Air France, Delta, KLM.`,
     helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
     ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/perou/",
     is_active: true,
@@ -165,22 +252,55 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     country: "Sri Lanka",
     image_url: "/images/missions/sri-lanka.jpg",
     short_description: "Soins aux éléphants du sanctuaire MEF et protection de la biodiversité sri-lankaise.",
-    description: "Partez à la rencontre des éléphants d'Asie et contribuez à leur protection au sein du sanctuaire de Kegalle. Entre soins aux animaux, découverte de la faune locale et immersion dans les traditions sri-lankaises, vivez une expérience humaine et enrichissante au cœur du Sri Lanka. Une connaissance élémentaire de l'anglais est recommandée pour faciliter les échanges avec les équipes locales et profiter pleinement de cette immersion culturelle.",
-    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Préparation des médicaments et vitamines pour les éléphants.</li><li>Nourrissage et examen vétérinaire quotidien.</li><li>Baignade des éléphants.</li><li>Nettoyage des enclos et litières.</li><li>Travaux de jardinage, peinture et recyclage dans le sanctuaire.</li><li>Gestion des soins avec le Mahout attitré</li><li>Entretien du jardin biologique, plantation d'arbres fruitiers et plantes médicinales.</li><li>Initiation à la médecine Ayurveda et aux plantes locales.</li><li>Apprendre à reconnaître les sons, mouvements, humeurs de l'éléphant</li></ul>",
-    programme: "7h30 : Préparation des médicaments et vitamines des éléphants.\n8h00 : Nourrissage des éléphants et examen vétérinaire.\n8h30 : Nettoyage des enclos.\n9h00 : Petit déjeuner à la Colonial House.\n10h00 : Baignade des éléphants.\n11h00 : Nettoyage des litières.\n12h00 à 14h00 : Pause du midi.\n14h00 : Visite de la fabrique de papier Ecomaximus ou du jardin, apprentissage de la médecine Ayurveda.\n15h00 à 17h00 : Travaux dans le sanctuaire (jardinage, peinture, recyclage).\n17h00 à 18h00 : Temps libre.\n18h00 : Dîner.",
-    included: "Hébergement à la Colonial House, repas, encadrement vétérinaire, initiation à la médecine Ayurveda.",
-    not_include: "Vols internationaux  (~800€, avec option annulation fortement recommandée), assurance, visa Sri Lanka (52€), vaccins, dépenses personnelles.",
+    description: "Partez à la rencontre des éléphants d'Asie et contribuez à leur protection au sein du sanctuaire de Kegalle. Entre soins aux animaux, découverte de la faune locale et immersion dans les traditions sri-lankaises, vivez une expérience humaine et enrichissante au cœur du Sri Lanka.",
+    volunteer_role: `Préparation des médicaments et vitamines pour les éléphants.
+Nourrissage et examen vétérinaire quotidien.
+Baignade des éléphants.
+Nettoyage des enclos et litières.
+Travaux de jardinage, peinture et recyclage dans le sanctuaire.
+Gestion des soins avec le Mahout attitré.
+Entretien du jardin biologique, plantation d'arbres fruitiers et plantes médicinales.
+Initiation à la médecine Ayurveda et aux plantes locales.
+Apprendre à reconnaître les sons, mouvements et humeurs de l'éléphant.`,
+    programme: JSON.stringify([
+      { label: "7h30",        content: "Préparation des médicaments et vitamines des éléphants." },
+      { label: "8h00",        content: "Nourrissage des éléphants et examen vétérinaire." },
+      { label: "8h30",        content: "Nettoyage des enclos." },
+      { label: "9h00",        content: "Petit déjeuner à la Colonial House." },
+      { label: "10h00",       content: "Baignade des éléphants." },
+      { label: "11h00",       content: "Nettoyage des litières." },
+      { label: "12h - 14h",   content: "Pause du midi." },
+      { label: "14h00",       content: "Visite de la fabrique Ecomaximus ou apprentissage de la médecine Ayurveda." },
+      { label: "15h - 17h",   content: "Travaux dans le sanctuaire (jardinage, peinture, recyclage)." },
+      { label: "17h - 18h",   content: "Temps libre." },
+      { label: "18h00",       content: "Dîner." },
+    ]),
+    included: `Hébergement à la Colonial House
+Repas
+Encadrement vétérinaire
+Initiation à la médecine Ayurveda`,
+    not_include: `Vols internationaux (~800 €, avec option annulation fortement recommandée)
+Assurance voyage
+Visa Sri Lanka (52 €)
+Vaccins
+Dépenses personnelles`,
     how_to_go: JSON.stringify([
       "Vérifier les vols Paris › Colombo",
       "Nous contacter par mail à contact@sensolidaire.org",
-      "Réserver vos billets d'avion et ous les envoyer",
-      "Payer les frais de mission, adhérer à l'association (25€)",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission, adhérer à l'association (25 €)",
       "Signer les termes d'engagement",
       "Recevoir les conseils pratiques de préparation",
-      "Recevoir votre fiche mission à remplir à votre retour"
+      "Recevoir votre fiche mission à remplir à votre retour",
     ]),
-    admin_info: "<ul><li>Le programme peut varier selon les besoins des éléphants et du sanctuaire.</li><li>Un visa électronique (ETA) est obligatoire avant le départ. Les conditions et frais éventuels peuvent évoluer ; nous vous recommandons de consulter le site officiel des autorités sri-lankaises avant votre voyage</li><li>Prévoir des vêtements légers et confortables adaptés au climat tropical.</li><li>Compagnies recommandées : Air India, Emirates, Qatar Airways .</li></ul>",
-    health_info: "<ul><li>Vaccins obligatoires à jour : hépatite A et B, typhoïde, rage.</li><li>Pas de risque paludéen majeur à Kegalle. Prévoir protection contre les moustiques.</li><li>Bonne condition physique recommandée : Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
+    health_info: `Vaccins recommandés à jour : hépatite A et B, typhoïde, rage.
+Pas de risque paludéen majeur à Kegalle — prévoir protection contre les moustiques.
+Bonne condition physique recommandée.
+Un certificat médical d'aptitude sera demandé avant le départ.`,
+    admin_info: `Le programme peut varier selon les besoins des éléphants et du sanctuaire.
+Un visa électronique (ETA) est obligatoire avant le départ.
+Prévoir des vêtements légers et confortables adaptés au climat tropical.
+Compagnies recommandées : Air India, Emirates, Qatar Airways.`,
     helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
     ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/sri-lanka/",
     is_active: true,
@@ -199,22 +319,53 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     country: "Sumatra",
     image_url: "/images/missions/sumatra.jpg",
     short_description: "Cartographie et protection des orangs-outans, restauration des corridors forestiers.",
-    description: "Partez au cœur de la forêt tropicale de Sumatra et engagez-vous aux côtés de nos partenaires locaux pour protéger les orangs-outans et préserver l'un des écosystèmes les plus riches au monde. Entre observation de la faune, reboisement, projets d'éco-construction et échanges avec l'école du village, vivez une expérience humaine unique au plus près de la nature. Des bases en anglais sont recommandées pour faciliter les échanges avec les équipes locales et profiter pleinement de cette immersion.",
-    volunteer_role: "<p>Au cours de votre mission, vous pourrez participer à différentes actions selon les besoins du terrain :</p><ul><li>Observation de la faune (GPS, photos, notes de terrain).</li><li>Activités de conservation : surveillance, enquête et création de corridors pour la faune.</li><li>Projets plastique Eco-Brick et gestion des déchets.</li><li>Pépinières et reboisement de la forêt tropicale.</li><li>Entretien du jardin potager.</li><li>Soutien à l'école Selang Pangeran Jungle School (aide aux cours d'anglais, sensibilisation environnementale).</li><li>Cartographies GPS des habitats orang-outans et primates.</li><li>Développer un programme de reconstitution des espèces vulnérables.</li><li>Créer des corridors entre parcs nationaux et zone tampon.</li><li>Développer meilleures pratiques agriculture et écotourisme.</li></ul>",
-    programme: "6h30 : Observation de la faune — GPS, photos et notes d'observations.\n8h00 : Aide à la préparation du petit déjeuner.\n9h00 : Début des activités de conservation (surveillance, enquête et création de corridors pour la faune).\n12h00 : Aide à la préparation du déjeuner.\n13h00 à 17h00 : Selon les besoins du site — programme de conservation, projets plastique (Eco-Brick), pépinières et reboisement, entretien du jardin potager, projet école.\n17h30 : Aide à la préparation du dîner.\n18h30 : Dîner.\n19h30 à 22h30 : Promenade nocturne (repérage de mycticèbes, civettes, léopards, porcs-épics), détente, feu de camp et guitare.",
-    included: "Hébergement en lodge dans la forêt, repas, encadrement par les coordinateurs locaux, équipement d'observation.",
-    not_include: "Vols internationaux (~800€, avec option annulation fortement recommandée), assurance, visa Indonésie (32€), vaccins, équipement personnel de randonnée.",
+    description: "Partez au cœur de la forêt tropicale de Sumatra et engagez-vous aux côtés de nos partenaires locaux pour protéger les orangs-outans et préserver l'un des écosystèmes les plus riches au monde. Entre observation de la faune, reboisement, projets d'éco-construction et échanges avec l'école du village, vivez une expérience humaine unique au plus près de la nature.",
+    volunteer_role: `Observation de la faune (GPS, photos, notes de terrain).
+Activités de conservation : surveillance, enquête et création de corridors pour la faune.
+Projets plastique Eco-Brick et gestion des déchets.
+Pépinières et reboisement de la forêt tropicale.
+Entretien du jardin potager.
+Soutien à l'école Selang Pangeran Jungle School (aide aux cours d'anglais, sensibilisation environnementale).
+Cartographies GPS des habitats orang-outans et primates.
+Développer un programme de reconstitution des espèces vulnérables.
+Créer des corridors entre parcs nationaux et zone tampon.
+Développer meilleures pratiques agriculture et écotourisme.`,
+    programme: JSON.stringify([
+      { label: "6h30",        content: "Observation de la faune — GPS, photos et notes d'observations." },
+      { label: "8h00",        content: "Aide à la préparation du petit déjeuner." },
+      { label: "9h - 12h",    content: "Activités de conservation (surveillance, enquête et création de corridors pour la faune)." },
+      { label: "12h00",       content: "Aide à la préparation du déjeuner." },
+      { label: "13h - 17h",   content: "Selon les besoins : conservation, projets Eco-Brick, pépinières, entretien du jardin, projet école." },
+      { label: "17h30",       content: "Aide à la préparation du dîner." },
+      { label: "18h30",       content: "Dîner." },
+      { label: "19h30",       content: "Promenade nocturne, détente, feu de camp et guitare." },
+    ]),
+    included: `Hébergement en lodge dans la forêt
+Repas
+Encadrement par les coordinateurs locaux
+Équipement d'observation`,
+    not_include: `Vols internationaux (~800 €, avec option annulation fortement recommandée)
+Assurance voyage
+Visa Indonésie (32 €)
+Vaccins
+Équipement personnel de randonnée`,
     how_to_go: JSON.stringify([
       "Vérifier les vols Paris › Medan (Sumatra Nord)",
       "Nous contacter par mail à contact@sensolidaire.org",
-      "Réserver vos billets d'avion et ous les envoyer",
-      "Payer les frais de mission, adhérer à l'association (25€)",
+      "Réserver vos billets d'avion et nous les envoyer",
+      "Payer les frais de mission, adhérer à l'association (25 €)",
       "Signer les termes d'engagement",
       "Recevoir les conseils pratiques de préparation",
-      "Recevoir votre fiche mission à remplir à votre retour"
+      "Recevoir votre fiche mission à remplir à votre retour",
     ]),
-    admin_info: "<ul><li>La nature exacte du travail dépendra des priorités du sanctuaire — flexibilité indispensable.</li><li>Un visa à l'arrivée (Visa on Arrival) est disponible pour les ressortissants français.</li><li>Prévoir un équipement de randonnée adapté à la forêt tropicale humide.</li><li>Compagnies recommandées : Silkair, Lufthansa, Emirates, Swiss, Singapore Airlines, Malaysia Airlines.</li></ul>",
-    health_info: "<ul><li>Aucune vaccination n'est obligatoire mais certaines sont recommandées : antituberculeuse, typhoïde, rage, encéphalite japonaise et les hépatites A et B.</li><li>Traitement antipaludéen recommandé. Prévoir répulsifs puissants.</li><li>Bonne condition physique recommandée : Un certificat médical d'aptitude sera demandé avant le départ.</li></ul>",
+    health_info: `Aucune vaccination obligatoire mais certaines sont recommandées : antituberculeuse, typhoïde, rage, encéphalite japonaise, hépatites A et B.
+Traitement antipaludéen recommandé — prévoir répulsifs puissants.
+Bonne condition physique recommandée.
+Un certificat médical d'aptitude sera demandé avant le départ.`,
+    admin_info: `La nature exacte du travail dépendra des priorités du sanctuaire — flexibilité indispensable.
+Un visa à l'arrivée (Visa on Arrival) est disponible pour les ressortissants français.
+Prévoir un équipement de randonnée adapté à la forêt tropicale humide.
+Compagnies recommandées : Silkair, Lufthansa, Emirates, Swiss, Singapore Airlines, Malaysia Airlines.`,
     helloasso_url: "https://www.helloasso.com/associations/sens-solidaires",
     ministry_url: "https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/indonesie/",
     is_active: true,
@@ -258,19 +409,17 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "service-civique-senegal", ...scSenegalData },
   })
 
- // ── Mission 9 : Service civique Cote d'Ivoire ───────────────
-
+  // ── Mission 8 : Service civique Côte d'Ivoire ──────────────
   const scCotedIvoireData = {
     type: "service_civique",
     title: "Service civique en Côte d'Ivoire",
     country: "Côte d'Ivoire",
     image_url: "/images/missions/service-civique-1.jpeg",
-    short_description:
-      "À Abidjan, participation aux actions de lutte contre la pollution plastique, aux ateliers d'éducation au développement durable et au suivi des projets environnementaux menés avec les partenaires locaux.",
+    short_description: "À Abidjan, participation aux actions de lutte contre la pollution plastique, aux ateliers d'éducation au développement durable et au suivi des projets environnementaux menés avec les partenaires locaux.",
     is_active: true,
   }
 
-    const missionScCotedIvoire = await prisma.mission.upsert({
+  const missionScCotedIvoire = await prisma.mission.upsert({
     where: { slug: "service-civique-cote-d-ivoire" },
     update: scCotedIvoireData,
     create: { slug: "service-civique-cote-d-ivoire", ...scCotedIvoireData },
@@ -292,7 +441,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "groupe-jeunes", ...groupeJeunesData },
   })
 
-  // ── Mission 10 : Congé solidaire ────────────────────────────
+  // ── Mission 10 : Congé solidaire ───────────────────────────
   const congeSolidaireData = {
     type: "conge_solidaire",
     title: "Congé solidaire",
@@ -308,7 +457,7 @@ const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
     create: { slug: "conge-solidaire", ...congeSolidaireData },
   })
 
-  console.log("Missions créées : Kenya, Sénégal, Pérou, Sri Lanka, Sumatra, SC Kenya, SC Sénégal, Groupe jeunes, Congé solidaire")
+  console.log("Missions créées : Kenya, Sénégal, Pérou, Sri Lanka, Sumatra, SC Kenya, SC Sénégal, SC Côte d'Ivoire, Groupe jeunes, Congé solidaire")
 
   // ============================================================
   // 3 — MISSION PRICING

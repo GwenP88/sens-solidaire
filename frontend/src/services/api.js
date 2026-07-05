@@ -286,3 +286,44 @@ export const deleteMission = async (id) => {
   }
   return await response.json()
 }
+
+// Récupère une mission par son id pour le formulaire d'édition
+export const fetchAdminMissionById = async (id) => {
+  const response = await fetch(`${API_URL}/admin/missions/${id}`, {
+    headers: getAuthHeaders(),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Mission introuvable.")
+  }
+  const data = await response.json()
+  return data.mission
+}
+
+// Remplace tous les tarifs d'une mission
+export const updateMissionPricing = async (id, lines) => {
+  const response = await fetch(`${API_URL}/admin/missions/${id}/pricing`, {
+    method: 'PUT',
+    headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ lines }),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || 'Échec de la mise à jour des tarifs.')
+  }
+  return await response.json()
+}
+
+// Remplace les médias (images galerie + PDF) d'une mission
+export const updateMissionMedia = async (id, images, pdf) => {
+  const response = await fetch(`${API_URL}/admin/missions/${id}/media`, {
+    method: 'PUT',
+    headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ images, pdf }),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || 'Échec de la mise à jour des médias.')
+  }
+  return await response.json()
+}

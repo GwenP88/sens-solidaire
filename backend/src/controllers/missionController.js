@@ -5,7 +5,7 @@
 // Ne contient AUCUNE logique métier — tout est délégué à missionService.js
 
 // Import des fonctions du service missions
-import { findAll, findAllForAdmin, findBySlug, create, update, softDelete } from "../services/missionService.js"
+import { findAll, findAllForAdmin, findById, findBySlug, create, update, softDelete } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
@@ -162,6 +162,24 @@ export const getMissionsForAdmin = async (req, res, next) => {
       success: true,
       missions
     })
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ── GET MISSION BY ID (ADMIN) ─────────────────────────────────────────────────
+// GET /api/admin/missions/:id
+// Route PROTÉGÉE — charge une mission par son id pour le formulaire d'édition
+export const getMissionById = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    const mission = await findById(id)
+    return res.status(200).json({ success: true, mission })
 
   } catch (error) {
     next(error)
