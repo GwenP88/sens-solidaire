@@ -3,9 +3,10 @@
 
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export const sendContactEmail = async ({ nom, prenom, email, sujet, message }) => {
+  // Le client Resend est créé ICI, seulement quand la fonction est appelée
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
   const { data, error } = await resend.emails.send({
     from: 'Contact Sens Solidaire <onboarding@resend.dev>',
     to: 'gwenpichot@gmail.com',
