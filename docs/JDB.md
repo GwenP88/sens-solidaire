@@ -1976,5 +1976,152 @@ docker compose up -d --build
 - ✅ Voir le résultat sur la page détail publique
 
 ---
+# Journal de bord — Sens Solidaires
+
+## Jour 16–17 — Dashboard admin, tests bout-en-bout & incident sécurité (.env) — Alison (branche `dev-back`)
+
+> Entrée couvrant deux jours : consolidation du dashboard admin, intégration du travail frontend de Gwen (merge `dev` → `dev-back`), campagne de tests manuels complète (Missions + Témoignages), et résolution d'un incident de sécurité (secrets exposés dans le dépôt public).
+
+---
+
+### 1. Intégration du travail de Gwen — merge `dev` → `dev-back`
+
+Récupération de 6 commits de Gwen (4 juillet) sur la branche `dev`, portant notamment sur le CRUD dashboard missions étendu.
+
+| Élément intégré | Nature |
+|---|---|
+| `MissionFormPage.jsx` (nouveau, ~650 lignes) | Passage de la modale (`MissionForm.jsx`) à une **page dédiée** (`/admin/missions/new` et `/:id/edit`) |
+| `pricingController.js` + `pricingService.js` | Nouveaux — gestion des tarifs (`PUT /api/admin/missions/:id/pricing`) |
+| `mediaController.js` + `mediaService.js` | Nouveaux — gestion galerie images + PDF (`PUT /api/admin/missions/:id/media`) |
+| `getMissionById` + route `GET /api/admin/missions/:id` | Pré-remplissage du formulaire d'édition |
+| `fieldActionService.js` | Passage `country` (scalaire) → `countries` (relation M2M via `some`) |
+| `seed.js` | Refonte format `programme`/`included`/`not_include` (texte brut → JSON structuré) |
+
+**Merge propre (0 conflit)** — le merge-base était le `HEAD` de `dev-back`, donc application directe de la version de `dev`. Vérification systématique `git grep "<<<<<<<"` : aucun marqueur. Logs backend au redémarrage : sains.
+
+**Point de vigilance identifié** : « 0 conflit » ≠ « 0 impact ». Le passage modale → page rend `MissionForm.jsx` orphelin (plus aucun import) → **code mort à supprimer** après validation.
+
+---
+
+### 2. Décision d'architecture — modale vs page dédiée (formulaire mission)
+
+**Décision : conserver l'approche page dédiée de Gwen.**
+
+| Critère | Page dédiée (retenue) |
+|---|---|
+| Formulaire complexe (programme + tarifs + galerie + PDF) | Respire mieux, surtout sur mobile |
+| URL bookmarkable, survit au F5, bouton retour natif | ✅ |
+| Accessibilité | Hérite de la navigation clavier standard (une modale exigerait focus-trap, ARIA `dialog`, gestion Échap à implémenter manuellement) |
+| Coût | 1 appel API supplémentaire en édition (négligeable) |
+
+À faire : supprimer `MissionForm.jsx` (code mort) une fois le nouveau flow validé.
+
+---
+
+### 3. Tests manuels complets — Missions (curl + token shell)
+
+Méthode : extraction `$TOKEN` en variable shell, tests du chemin nominal **et** des chemins d'erreur.
+
+| Test | Attendu | Résultat |
+|---|---|---|
+| POST création | 201 + `{success, mission}` | ✅ |
+| POST slug dupliqué | **409** `SLUG_TAKEN` | ✅ code métier propre |
+| GET admin/:id | Mission + relations `pricing`/`location`/`media` | ✅ |
+| PATCH partiel | Champ modifié, reste intact | ✅ |
+| PUT pricing | 200 | ✅ |
+| DELETE soft | `is_active: false`, objet conservé en base | ✅ |
+| Vérif publique post-delete | Mission disparue (10 → 9) | ✅ |
+
+**Preuve du soft-delete démontrée** : la mission reste en base (`is_active: false`) mais l'API publique ne l'expose plus.
+
+---
+
+### 4. Tests manuels complets — Témoignages
+
+Cycle de modération complet testé, incluant tests négatifs RGPD.
+
+| Test | Attendu | Résultat |
+|---|---|---|
+| POST public valide | 201, `status: pending`, `show_homepage: false` | ✅ |
+| POST sans `consent_given` | **400** « Consentement RGPD obligatoire » | ✅ |
+| POST contenu > 280 car. | **400** | ✅ |
+| Pending invisible côté public | Absent de `GET /api/testimonials` | ✅ |
+| PATCH approve | `status: approved` → devient visible public | ✅ |
+| PATCH reject | `status: rejected` + `show_homepage: false` forcé | ✅ |
+| DELETE (hard) | Ligne réellement supprimée de la base | ✅ |
+| Re-DELETE (P2025) | **404** `TESTIMONIAL_NOT_FOUND`, pas de 500 | ✅ |
+
+**Distinction soft/hard delete démontrée en direct** : Missions = soft (donnée métier réversible) ; Témoignages = hard (droit à l'effacement RGPD art. 17).
+
+---
+
+### 5. Incident sécurité — secrets exposés dans le dépôt public
+
+**Constat** : `backend/.env` était **suivi par Git** et poussé sur le dépôt public, exposant tous les secrets : `RESEND_API_KEY`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `DATABASE_URL`, `ADMIN_PASSWORD`.
+
+**Cause racine** : `.gitignore` n'agit **pas rétroactivement** sur un fichier déjà tracké. La règle `.env` a été ajoutée *après* le premier commit du fichier → sans effet.
+
+**Hiérarchie de remédiation appliquée (ordre = priorité)** :
+
+| Étape | Action | Statut |
+|---|---|---|
+| 1. Révoquer | Clé Resend révoquée côté service (neutralise le risque) | ✅ (Gwen) |
+| 2. Régénérer | Nouvelle clé générée, installée en **local uniquement** | ✅ |
+| 3. Arrêter la fuite | `git rm --cached backend/.env` (détrackage sans suppression disque) + commit **normal** | ✅ |
+| 4. Documenter | Création `backend/.env.example` (8 variables, sans valeurs) | ✅ |
+| 5. Vérifier | `git check-ignore backend/.env` confirme le relais du `.gitignore` | ✅ |
+
+**Principe retenu** : révoquer > arrêter la fuite > nettoyer l'historique. La révocation neutralise le risque ; le reste est de l'hygiène.
+
+---
+
+### Décisions d'architecture (Jour 16–17)
+
+| Décision | Justification |
+|---|---|
+| Formulaire mission = page dédiée (pas modale) | Formulaire trop riche (programme/tarifs/galerie/PDF) pour une modale ; a11y native + URL bookmarkable |
+| Conserver `git rm --cached` plutôt que réécriture d'historique immédiate | Une fois la clé révoquée, la purge d'historique n'est plus qu'une hygiène → à coordonner en binôme, non urgent |
+| `.env.example` versionné, `.env` détracké | Standard pro : documenter les variables sans exposer les valeurs |
+
+---
+
+### Bugs & pièges rencontrés (Jour 16–17)
+
+| Élément | Cause | Résolution |
+|---|---|---|
+| `Connection refused :3000` | `docker-compose up` (sans `-d`) arrêté par `Ctrl+C` → conteneurs down | Relancer en `-d` (arrière-plan) |
+| Placeholder `<ID>` en shell | `<` = redirection fichier en bash → `No such file or directory` | Utiliser une variable (`MID=27`) |
+| Sortie vide sur `-w` + `json.tool` | `-w` colle le code HTTP au JSON → parser plante, masqué par `2>/dev/null` | Séparer : soit `-w` + brut, soit pipe Python — jamais les deux |
+| `.gitignore` sans effet sur `backend/.env` | Fichier déjà tracké — `.gitignore` non rétroactif | `git rm --cached` |
+
+---
+
+### Dette technique documentée (mise à jour)
+
+| # | Élément | Priorité |
+|---|---|---|
+| 1 | Ancienne clé Resend (révoquée) encore dans l'historique Git → purge `git filter-repo` en binôme post-deadline | 🟡 |
+| 2 | Autres secrets exposés (`JWT_SECRET`, `JWT_REFRESH_SECRET`, `ADMIN_PASSWORD`, `DATABASE_URL`) à faire tourner (hygiène post-fuite) | 🟠 |
+| 3 | Incohérence de forme des réponses API : `GET /api/testimonials` public renvoie un tableau brut vs enveloppe `{success, data}` ailleurs | 🟡 |
+| 4 | Validation `price` (pricing) et `file_url` (media) absente côté backend | 🟠 |
+| 5 | JWT access token porté à 7j (au lieu de 15 min) — choix démo assumé, à revenir en V2 | 🟡 |
+| 6 | Logs `[ERROR]` sur cas métier attendus (slug dupliqué, témoignage introuvable) → passer en `[WARN]`/`[INFO]` | 🟡 |
+| 7 | `MissionForm.jsx` = code mort à supprimer | 🟢 |
+| 8 | Filtre `type === 'volontariat_individuel'` en dur dans `MissionsPage` → masque silencieusement les autres types de missions | 🟠 |
+
+---
+
+### Prochaines étapes
+
+- [ ] Coordonner avec Gwen : mise à jour de son `.env` local avec la nouvelle clé Resend
+- [ ] Nettoyage des données de test en base (témoignages ids 24/25/26/27)
+- [ ] Item 3 : redirection automatique 401 → `/admin/login` (ProtectedRoute ne vérifie que la présence du token, pas sa validité continue)
+- [ ] Supprimer `MissionForm.jsx` (code mort)
+- [ ] Revue de code + nettoyage
+- [ ] (Optionnel) Tests Jest+Supertest
+- [ ] Préparation soutenance : soft vs hard delete, incident sécurité `.env`, choix modale→page
+
+---
+
 
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

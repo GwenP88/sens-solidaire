@@ -7,14 +7,40 @@ const API_URL = "/api"
 
 // ── AUTH HELPERS ─────────────────────────────────────────────────────────────
 
-// Construit les headers d'authentification pour les appels admin.
-// Centralise la lecture du token — un seul endroit à modifier si la stratégie
-// de stockage évolue (ex: passage en mémoire React, cf. dette technique V2).
-const getAuthHeaders = () => {
+// Wrapper autour de fetch pour les appels admin authentifiés.
+// Rôle :
+//   1. Injecte automatiquement le Bearer token dans les headers.
+//   2. Intercepte les 401 (token expiré, invalide, révoqué) :
+//      → efface le token
+//      → redirige vers /admin/login
+//      → throw pour interrompre proprement la chaîne d'appels
+//
+// À NE PAS utiliser pour loginAdmin (produit l'auth, ne la consomme pas)
+// ni pour les fetch publics (pas de token à envoyer).
+const authFetch = async (url, options = {}) => {
   const token = localStorage.getItem("admin_token")
-  return {
-    "Authorization": `Bearer ${token}`,
+
+  // Merge des headers : ceux fournis par l'appelant priment sur les nôtres,
+  // sauf Authorization qu'on ajoute systématiquement.
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+
+  // Interception centralisée du 401 : session invalide → on dégage.
+  // Ordre critique : (1) supprimer le token, (2) rediriger, (3) throw.
+  // Sans le throw, l'appelant tenterait de lire response.ok sur undefined
+  // pendant les quelques ms avant que le navigateur ne charge /admin/login.
+  if (response.status === 401) {
+    localStorage.removeItem("admin_token")
+    window.location.href = "/admin/login"
+    throw new Error("SESSION_EXPIRED")
   }
+
+  return response
 }
 
 // ── AUTH ADMIN ───────────────────────────────────────────────────────────────
@@ -22,6 +48,8 @@ const getAuthHeaders = () => {
 // Connexion admin : envoie email + password, récupère l'access token.
 // credentials: "include" → indispensable pour que le navigateur accepte
 // le cookie HTTP-Only (refresh token) renvoyé par le back.
+// ⚠️ Ne PAS passer par authFetch : le login PRODUIT l'auth, il ne la consomme pas.
+// Sans ça, un mauvais mot de passe → 401 → redirection en boucle sur /admin/login.
 export const loginAdmin = async (email, password) => {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
@@ -188,9 +216,7 @@ export const fetchAdminTestimonials = async (status) => {
 
   const query = params.toString() ? `?${params.toString()}` : ''
 
-  const response = await fetch(`${API_URL}/admin/testimonials${query}`, {
-    headers: getAuthHeaders(),
-  })
+  const response = await authFetch(`${API_URL}/admin/testimonials${query}`)
 
   if (!response.ok) {
     throw new Error("Impossible de charger les témoignages (admin).")
@@ -202,9 +228,8 @@ export const fetchAdminTestimonials = async (status) => {
 
 // Approuve un témoignage (statut → "approved", figé côté back).
 export const approveTestimonial = async (id) => {
-  const response = await fetch(`${API_URL}/admin/testimonials/${id}/approve`, {
+  const response = await authFetch(`${API_URL}/admin/testimonials/${id}/approve`, {
     method: "PATCH",
-    headers: getAuthHeaders(),
   })
 
   if (!response.ok) {
@@ -216,9 +241,8 @@ export const approveTestimonial = async (id) => {
 
 // Refuse un témoignage (statut → "rejected" + retire de l'accueil, figé côté back).
 export const rejectTestimonial = async (id) => {
-  const response = await fetch(`${API_URL}/admin/testimonials/${id}/reject`, {
+  const response = await authFetch(`${API_URL}/admin/testimonials/${id}/reject`, {
     method: "PATCH",
-    headers: getAuthHeaders(),
   })
 
   if (!response.ok) {
@@ -232,8 +256,7 @@ export const rejectTestimonial = async (id) => {
 
 // Récupère TOUTES les missions (actives + inactives) pour le dashboard admin.
 export const fetchAdminMissions = async (signal) => {
-  const response = await fetch(`${API_URL}/admin/missions`, {
-    headers: getAuthHeaders(),
+  const response = await authFetch(`${API_URL}/admin/missions`, {
     signal,   // undefined si non fourni → fetch() l'ignore, aucun risque de casse ailleurs
   })
   if (!response.ok) {
@@ -245,9 +268,9 @@ export const fetchAdminMissions = async (signal) => {
 
 // Crée une nouvelle mission.
 export const createMission = async (missionData) => {
-  const response = await fetch(`${API_URL}/admin/missions`, {
+  const response = await authFetch(`${API_URL}/admin/missions`, {
     method: "POST",
-    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(missionData),
   })
   if (!response.ok) {
@@ -262,9 +285,9 @@ export const createMission = async (missionData) => {
 
 // Met à jour partiellement une mission existante.
 export const updateMission = async (id, missionData) => {
-  const response = await fetch(`${API_URL}/admin/missions/${id}`, {
+  const response = await authFetch(`${API_URL}/admin/missions/${id}`, {
     method: "PATCH",
-    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(missionData),
   })
   if (!response.ok) {
@@ -277,9 +300,8 @@ export const updateMission = async (id, missionData) => {
 
 // Supprime (soft delete) une mission — is_active passe à false côté backend.
 export const deleteMission = async (id) => {
-  const response = await fetch(`${API_URL}/admin/missions/${id}`, {
+  const response = await authFetch(`${API_URL}/admin/missions/${id}`, {
     method: "DELETE",
-    headers: getAuthHeaders(),
   })
   if (!response.ok) {
     throw new Error("Échec de la suppression de la mission.")
@@ -289,9 +311,7 @@ export const deleteMission = async (id) => {
 
 // Récupère une mission par son id pour le formulaire d'édition
 export const fetchAdminMissionById = async (id) => {
-  const response = await fetch(`${API_URL}/admin/missions/${id}`, {
-    headers: getAuthHeaders(),
-  })
+  const response = await authFetch(`${API_URL}/admin/missions/${id}`)
   if (!response.ok) {
     const data = await response.json()
     throw new Error(data.message || "Mission introuvable.")
@@ -302,9 +322,9 @@ export const fetchAdminMissionById = async (id) => {
 
 // Remplace tous les tarifs d'une mission
 export const updateMissionPricing = async (id, lines) => {
-  const response = await fetch(`${API_URL}/admin/missions/${id}/pricing`, {
+  const response = await authFetch(`${API_URL}/admin/missions/${id}/pricing`, {
     method: 'PUT',
-    headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ lines }),
   })
   if (!response.ok) {
@@ -316,9 +336,9 @@ export const updateMissionPricing = async (id, lines) => {
 
 // Remplace les médias (images galerie + PDF) d'une mission
 export const updateMissionMedia = async (id, images, pdf) => {
-  const response = await fetch(`${API_URL}/admin/missions/${id}/media`, {
+  const response = await authFetch(`${API_URL}/admin/missions/${id}/media`, {
     method: 'PUT',
-    headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ images, pdf }),
   })
   if (!response.ok) {
