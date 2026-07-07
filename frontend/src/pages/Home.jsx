@@ -153,12 +153,10 @@ function Home() {
           showPagination={true}
         />
         <div className="flex justify-center mt-4">
-          <button onClick={() => setModalOpen(true)}>
-            <Button
+            <Button onClick={() => setModalOpen(true)}
               label="Vous êtes partis en mission ? Racontez-nous →"
               variant="light"
             />
-          </button>
         </div>
       </Section>
 
