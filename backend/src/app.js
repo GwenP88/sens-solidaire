@@ -48,6 +48,9 @@ import partnerRouter from './routes/partnerRoutes.js'
 import locationRouter from './routes/locationRoutes.js'
 // ── Import du router testimonials ──
 import adminTestimonialRoutes from "./routes/adminTestimonialRoutes.js"
+// ── Import des routers upload ──
+import uploadRoutes from "./routes/uploadRoutes.js"
+import adminUploadRoutes from "./routes/adminUploadRoutes.js"
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -91,6 +94,10 @@ app.use(cookieParser())
 // Sans ça, req.body serait undefined
 app.use(express.json())
 
+// 5. Fichiers statiques — dossier uploads accessible publiquement
+// Permet d'accéder à un fichier uploadé via son URL relative (ex: /uploads/images/photo.jpg)
+app.use('/uploads', express.static('public/uploads'))
+
 
 // ── ROUTES ───────────────────────────────────────────────────────────────────
 
@@ -133,6 +140,10 @@ app.use('/api/mission-reports', missionReportRouter)
 app.use('/api/partners', partnerRouter)
 // Route lieux des missions 
 app.use('/api/locations', locationRouter)
+// Route upload public — formulaire témoignage
+app.use('/api/upload', uploadRoutes)
+// Route upload admin — dashboard
+app.use('/api/admin/upload', adminUploadRoutes)
 // Le préfixe /api/admin/testimonials est ajouté ICI.
 // → dans le fichier de routes, router.get("/") devient GET /api/admin/testimonials
 app.use("/api/admin/testimonials", adminTestimonialRoutes)

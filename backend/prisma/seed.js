@@ -1739,9 +1739,10 @@ console.log(`FieldActions créées (${FIELD_ACTIONS.length})`)
       { nom: "Eduardo Widakowich", role: "Consultant en gestion de projet développement durable", avatar_url: "/images/placeholders/avatar-men.png", category: "ca", display_order: 10 },
       { nom: "Johanna Zerbib", role: "Responsable Opérations Thompson Africa", avatar_url: "/images/placeholders/avatar-women.png", category: "ca", display_order: 11 },
       // ── Également à nos côtés ──
-      { nom: "Bertrand D.", role: "Infographiste", avatar_url: "/images/placeholders/avatar-men.png", category: "egalement", display_order: 1 },
-      { nom: "Thierry Montalban", role: "Agence de communication", avatar_url: "/images/placeholders/avatar-men.png", category: "egalement", display_order: 2 },
-      { nom: "Sabine Jerome", role: "Comptabilité", avatar_url: "/images/placeholders/avatar-women.png", category: "egalement", display_order: 3 },
+      { nom: "Gwen Pichot", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/avatar-women.png", category: "egalement", display_order: 1 },
+      { nom: "Alison Amblard", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/avatar-women.png", category: "egalement", display_order: 2 },
+      { nom: "Thierry Montalban", role: "Agence de communication", avatar_url: "/images/placeholders/avatar-men.png", category: "egalement", display_order: 3 },
+      { nom: "Sabine Jerome", role: "Comptabilité", avatar_url: "/images/placeholders/avatar-women.png", category: "egalement", display_order: 4 },
     ]
   })
   console.log('TeamMembers créés (23)')
