@@ -9,3 +9,7 @@ node_modules/
 
 # Fichier généré par Prisma Client — se régénère avec npx prisma generate
 node_modules/.prisma/
+
+# Fichiers uploadés par les utilisateurs — jamais versionnés
+public/uploads/*
+!public/uploads/.gitkeep
