@@ -40,7 +40,7 @@ const EMPTY_FORM = {
   country:           '',
   slug:              '',
   short_description: '',
-  type:              '',
+  type:              'volontariat_individuel',  // ← seul type créable pour l'instant
   description:       '',
   volunteer_role:    '',
   programme:         [],
@@ -89,7 +89,8 @@ function FormSection({ title, description, children }) {
   )
 }
 
-function Field({ label, name, value, onChange, required, hint, pattern, title: fieldTitle }) {
+// error : message de validation à afficher sous le champ (texte rouge)
+function Field({ label, name, value, onChange, required, hint, pattern, title: fieldTitle, error }) {
   return (
     <div className="flex flex-col gap-1">
       <label className="text-sm font-medium text-gray-700">
@@ -101,16 +102,18 @@ function Field({ label, name, value, onChange, required, hint, pattern, title: f
         name={name}
         value={value}
         onChange={onChange}
-        required={required}
         pattern={pattern}
         title={fieldTitle}
-        className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+        className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
+          error ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-primary/30'
+        }`}
       />
+      {error && <span className="text-xs text-red-500">{error}</span>}
     </div>
   )
 }
 
-function TextareaField({ label, name, value, onChange, required, rows = 4, hint }) {
+function TextareaField({ label, name, value, onChange, required, rows = 4, hint, error }) {
   return (
     <div className="flex flex-col gap-1">
       <label className="text-sm font-medium text-gray-700">
@@ -121,10 +124,12 @@ function TextareaField({ label, name, value, onChange, required, rows = 4, hint 
         name={name}
         value={value}
         onChange={onChange}
-        required={required}
         rows={rows}
-        className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-y font-mono"
+        className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-y font-mono ${
+          error ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-primary/30'
+        }`}
       />
+      {error && <span className="text-xs text-red-500">{error}</span>}
     </div>
   )
 }
@@ -142,6 +147,7 @@ function MissionFormPage() {
   const [formData, setFormData]     = useState(EMPTY_FORM)
   const [loading, setLoading]       = useState(isEditing)
   const [error, setError]           = useState(null)
+  const [fieldErrors, setFieldErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
 
   // ── Chargement en mode édition ──
@@ -230,6 +236,21 @@ function MissionFormPage() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }))
+
+    // Efface l'erreur du champ dès que l'utilisateur le corrige
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => ({ ...prev, [name]: null }))
+    }
+  }
+
+  // ── Validation — champs obligatoires du bloc 1 ──
+  const validate = () => {
+    const newErrors = {}
+    if (!formData.title.trim())             newErrors.title             = "Le titre est obligatoire."
+    if (!formData.country.trim())           newErrors.country           = "Le pays est obligatoire."
+    if (!formData.slug.trim())              newErrors.slug              = "Le slug est obligatoire."
+    if (!formData.short_description.trim()) newErrors.short_description = "La description courte est obligatoire."
+    return newErrors
   }
 
   // ── Handlers programme ──
@@ -258,6 +279,15 @@ function MissionFormPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
+
+    // Validation des champs obligatoires — arrête tout si erreurs
+    const validationErrors = validate()
+    if (Object.keys(validationErrors).length > 0) {
+      setFieldErrors(validationErrors)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
     setSubmitting(true)
 
     try {
@@ -359,7 +389,7 @@ function MissionFormPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-10">
 
         {/* ── BLOC 1 : Informations essentielles ── */}
         <FormSection
@@ -367,17 +397,26 @@ function MissionFormPage() {
           description="Affichées sur la card mission et dans le hero de la page détail."
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Field label="Titre" name="title" value={formData.title} onChange={handleChange} required />
             <Field
-              label="Pays" name="country" value={formData.country} onChange={handleChange} required
-              pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
+              label="Titre" name="title" value={formData.title} onChange={handleChange}
+              required error={fieldErrors.title}
+            />
+            <Field
+              label="Pays" name="country" value={formData.country} onChange={handleChange}
+              required pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
+              error={fieldErrors.country}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/*<div className="grid grid-cols-1 md:grid-cols-2 gap-4">*/}
             <Field
-              label="Slug" name="slug" value={formData.slug} onChange={handleChange} required
-              hint="utilisé dans l'URL" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement"
+              label="Slug" name="slug" value={formData.slug} onChange={handleChange}
+              required hint="utilisé dans l'URL" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement"
+              error={fieldErrors.slug}
             />
+            {/* Type de mission — masqué : seul "Volontariat individuel" est gérable en dashboard pour l'instant.
+                Les autres types (service civique, groupe jeunes, congé solidaire) sont du contenu fixe côté front.
+                Réactiver ce select quand ces types seront pris en charge par le dashboard (V2). */}
+            {/*
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-700">Type</label>
               <select
@@ -390,12 +429,14 @@ function MissionFormPage() {
                 ))}
               </select>
             </div>
-          </div>
+            */}
+          {/*</div>*/}
           <TextareaField
             label="Description courte" name="short_description"
             value={formData.short_description} onChange={handleChange}
             required rows={3}
             hint="Affichée sur la card et dans le hero de la page détail"
+            error={fieldErrors.short_description}
           />
         </FormSection>
 
