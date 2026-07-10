@@ -12,4 +12,12 @@ node_modules/.prisma/
 
 # Fichiers uploadés par les utilisateurs — jamais versionnés
 public/uploads/*
-!public/uploads/.gitkeep
+!public/uploads/images/
+!public/uploads/videos/
+!public/uploads/documents/
+public/uploads/images/*
+!public/uploads/images/.gitkeep
+public/uploads/videos/*
+!public/uploads/videos/.gitkeep
+public/uploads/documents/*
+!public/uploads/documents/.gitkeep
