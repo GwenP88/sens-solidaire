@@ -2123,5 +2123,98 @@ Cycle de modération complet testé, incluant tests négatifs RGPD.
 
 ---
 
+## Jour 39 · 10 juillet 2026
+### S7 (suite) — Préparation MR mardi : upload médias, formulaire témoignage, validation formulaires
+
+---
+
+### 🎯 Objectifs du jour
+- Gérer l'import photo/vidéo/document dans le dashboard
+- Rendre fonctionnel l'upload photo du formulaire témoignage
+- Ajouter les noms des développeuses (À propos / Équipe)
+- Gérer les messages d'erreur de validation sur tous les formulaires
+- Accès BDD pour le responsable + reset/allègement seed
+
+---
+
+### Statut général
+
+| Élément | Statut |
+|---|---|
+| Accès BDD documenté (psql + extension VS Code) | ✅ Terminé |
+| Mention développeuses (À propos / Équipe) | ✅ Terminé |
+| Backend upload Multer (public + admin) | ✅ Terminé |
+| Upload photo formulaire témoignage + aperçu | ✅ Terminé |
+| Destinations dynamiques formulaire témoignage | ✅ Terminé |
+| Dashboard — upload médias missions (photos + PDF unifiés) | ✅ Terminé |
+| Validation champ par champ (texte rouge) — 3 formulaires | ✅ Terminé |
+| Fix bug création mission (champs optionnels perdus) | ✅ Terminé |
+| Fix bouton téléchargement PDF guide du volontaire | ✅ Terminé |
+| Fix ContactForm — URL API en dur | ✅ Terminé |
+
+---
+
+### ✅ Réalisé
+
+#### Page À propos / Équipe
+- Seed `TeamMember` (catégorie `egalement`) : remplacement de "Bertrand D. — Infographiste" par 2 nouvelles entrées :
+  - `role: "Étudiante Développeuse Web — DWWM"`, mention "Holberton School — Thonon-les-Bains" intégrée directement dans `role` (le `variant="small"` de `TeamMemberCard` n'affichant pas `description`)
+- Décision actée : ne pas modifier `TeamMemberCard.jsx` pour afficher `description` en `variant="small"` — hors scope MR
+
+#### Backend — infrastructure upload (Multer)
+- `storageService.js` (nouveau) — `saveFile()` / `deleteFile()`, seule pièce à remplacer si bascule vers un stockage externe (Cloudinary etc.) plus tard
+- `uploadMiddleware.js` (nouveau) — Multer en `memoryStorage` (jamais d'écriture disque directe par Multer), 2 configs : `uploadPublic` (images seules, 5 Mo max) et `uploadAdmin` (images + vidéos + PDF, 20 Mo max)
+- `uploadController.js` (nouveau) — `handlePublicUpload` / `handleAdminUpload`, tri automatique par sous-dossier (`images`/`videos`/`documents`) selon le MIME type
+- Routes : `POST /api/upload` (publique) + `POST /api/admin/upload` (protégée, `authMiddleware`)
+- `app.js` : `express.static('public/uploads')` ajouté pour servir les fichiers, routes enregistrées
+- `vite.config.js` : proxy `/uploads` ajouté (même principe que `/api`) — nécessaire pour que le frontend (port 5173) atteigne les fichiers servis par le backend (port 3000) sans coder l'URL en dur
+
+#### Formulaire témoignage (`TestimonialForm.jsx`)
+- `api.js` : fonction `uploadFile()` ajoutée (upload public, FormData, sans header `Content-Type` — laissé au navigateur)
+- Upload de la photo intégré dans `handleSubmit` — upload d'abord, puis `avatar_url` inclus dans `submitTestimonial()`
+- Aperçu miniature de la photo avant envoi (`URL.createObjectURL` + nettoyage `useEffect`/`revokeObjectURL`)
+- Destinations du select rendues dynamiques via `fetchMissions({ type: 'volontariat_individuel' })` (même pattern que le dropdown navbar) — se met à jour automatiquement à chaque nouvelle mission créée
+- Validation champ par champ : `noValidate` sur le form, état `errors`, fonction `validate()`, texte rouge sous chaque champ concerné, erreur effacée à la correction
+
+#### Dashboard — upload médias missions (`MissionFormPage.jsx`)
+- Nouveau composant réutilisable `AdminFileUpload.jsx` — upload immédiat à la sélection, aperçu, champ légende/alt (accessibilité), réordonnancement (flèches ▲▼), suppression
+- Fusion des blocs "Image principale" + "Galerie photos" en un seul champ **"Photos de la mission"** (upload multiple, 1 à 10 images) : la 1ère photo devient automatiquement `image_url` (hero), les suivantes vont dans la galerie (`Media`) — simulé côté frontend uniquement, sans toucher à l'architecture BDD existante
+- PDF guide du volontaire converti en vrai upload (`AdminFileUpload`, 1 fichier max) avec champ légende
+- `api.js` : fonction `uploadAdminFile()` ajoutée (upload protégé, `authFetch` + FormData)
+- Validation champ par champ sur les 4 champs obligatoires du bloc 1 (titre, pays, slug, description courte) — même pattern que les formulaires publics
+- Champ "Type de mission" masqué (commenté, pas supprimé) — seul `volontariat_individuel` est gérable en dashboard actuellement, valeur par défaut fixée directement dans `EMPTY_FORM`
+
+#### Bugs corrigés
+| Bug | Cause | Correction |
+|---|---|---|
+| Photo témoignage jamais enregistrée | `avatar_url` non extrait/transmis dans `testimonialController.js` (`createTestimonial`) | Ajout de `avatar_url` à la déstructuration + à l'appel du service |
+| Photo affichée cassée après upload | URL relative `/uploads/...` cherchée sur le port frontend (5173) au lieu du backend (3000) | Proxy Vite `/uploads` ajouté |
+| Bouton "Envoyer" inaccessible dans la modale témoignage | `Modal.jsx` sans `max-height`/`overflow-y-auto` — contenu débordant hors écran sur petits viewports | `max-h-[90vh] overflow-y-auto` ajouté sur le conteneur de la modale |
+| Création mission : seuls 5 champs enregistrés (titre, pays, slug, type, description courte) | `createMission` (controller) n'extrayait/transmettait que 5 champs à `create()`, alors que le service en supportait beaucoup plus | Extraction + transmission de tous les champs optionnels (`description`, `image_url`, `volunteer_role`, etc.) |
+| Bouton "Télécharger" guide du volontaire toujours inactif | `MissionDetail.jsx` lisait `mission.guide_url` (n'existe pas) au lieu du PDF stocké dans `mission.media` | `guidePdf = mission.media?.find(m => m.file_type === 'pdf')`, bouton `disabled` si absent |
+| `ContactForm.jsx` — URL API en dur | `http://localhost:3000/api/contact` codé en dur au lieu du chemin relatif `/api` | Remplacé par `/api/contact` (proxy Vite) |
+
+#### ContactForm.jsx
+- Validation champ par champ ajoutée (même pattern), y compris validation format email (regex simple)
+- URL API corrigée (relative, cohérente avec le reste du site)
+
+---
+
+### 🔵 À faire / Idées du jour à prévoir (backlog)
+
+- **Génération automatique du slug (SEO)** — `MissionFormPage.jsx` : remplacer le champ slug unique par **5 petits champs mots-clés** (ex: sauvetage / antarctique / pingouins / réchauffement / glacier) qui se combinent automatiquement en un slug propre et court (`sauvetage-antarctique-pingouins`), avec le slug final affiché et modifiable directement en dessous. Nécessite : fonction `slugify()`, état `slug_keywords` (tableau de 5), état `slugTouched` pour ne plus régénérer si édité à la main, reconstruction des mots-clés depuis le slug existant en mode édition, nettoyage du champ avant l'envoi au backend (`slug_keywords` n'existe pas en base). **Non commencé — à faire dans une session dédiée.**
+- **Unification stockage images mission** (déjà noté précédemment en mémoire) — fusionner `Mission.image_url` et la galerie `Media` en une seule source de vérité, une fois le MVP livré. Actuellement simulé côté frontend uniquement dans `MissionFormPage.jsx` sans toucher à l'architecture BDD (risque trop élevé si près d'une deadline).
+- **Outil de recadrage image** dans le dashboard — déjà en V2 sur le planning, confirmé toujours pertinent.
+- **Réactiver le champ "Type de mission"** dans `MissionFormPage.jsx` quand service civique / groupe jeunes / congé solidaire seront gérables en dashboard (actuellement commenté, pas supprimé).
+- **`TeamMemberCard.jsx`** — évaluer si `variant="small"` doit un jour afficher aussi `description` (actuellement non, contournement fait en mettant l'info dans `role`).
+
+---
+
+### ⚠️ Points d'attention
+- Le PDF, la galerie et l'image hero d'une mission dépendent maintenant tous de la même brique d'upload (`storageService.js`) — un futur changement de stockage (Cloudinary, etc.) n'impactera qu'un seul fichier
+- Prisma Studio toujours inutilisable dans Docker — extension VS Code PostgreSQL (côté WSL) mise en place comme alternative visuelle fiable, `psql` reste le filet de sécurité
+- Merge `dev-front` → `dev` à faire en fin de journée selon la routine habituelle
+
+---
 
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

@@ -32,6 +32,13 @@ export default defineConfig({
         target: 'http://backend:3000',
         changeOrigin: true,
         secure: false,
+      },
+      // Proxy — redirige les fichiers uploadés vers le backend local
+      // Même principe que /api : évite de coder l'URL du backend en dur dans le frontend
+      '/uploads': {
+        target: 'http://backend:3000',
+        changeOrigin: true,
+        secure: false,
       }
     },
   },

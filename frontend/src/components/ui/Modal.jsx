@@ -33,7 +33,7 @@ function Modal({ isOpen, onClose, title, children }) {
     >
       {/* Contenu — stoppe la propagation du clic */}
       <div 
-        className="bg-surface rounded-2xl shadow-xl w-full max-w-lg md:max-w-2xl lg:max-w-6xl p-8 relative"
+        className="bg-surface rounded-2xl shadow-xl w-full max-w-lg md:max-w-2xl lg:max-w-6xl p-8 relative max-h-[90vh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
       >
         {/* Header — h2-style porte margin-bottom: 2rem, pas de mb- en dur */}

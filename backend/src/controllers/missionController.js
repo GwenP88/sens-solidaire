@@ -193,8 +193,12 @@ export const getMissionById = async (req, res, next) => {
 export const createMission = async (req, res, next) => {
   try {
     // 1. Extraction des champs depuis le body
-    const { title, country, slug, short_description, type } = req.body
-    // 👉 ajoute ici tes champs optionnels si tu veux les accepter dès maintenant
+    const {
+      title, country, slug, short_description, type,
+      description, volunteer_role, programme, included, not_include,
+      admin_info, ministry_url, health_info, helloasso_url,
+      image_url, how_to_go,
+    } = req.body
 
     // 2. Validation : champs OBLIGATOIRES présents
     const missing = []
@@ -236,8 +240,12 @@ export const createMission = async (req, res, next) => {
     }
 
     // 4. Appel du service avec un objet PROPRE (jamais req.body brut !)
-    // 👉 const mission = await create({ title, country, slug, short_description, type, ... })
-    const mission = await create({title, country, slug, short_description, type})
+    const mission = await create({
+      title, country, slug, short_description, type,
+      description, volunteer_role, programme, included, not_include,
+      admin_info, ministry_url, health_info, helloasso_url,
+      image_url, how_to_go,
+    })
 
     // 5. Réponse 201 Created (ressource créée, pas un simple 200)
     // 👉 return res.status(201).json({ success: true, mission })

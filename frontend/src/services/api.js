@@ -89,6 +89,51 @@ export const fetchMissionBySlug = async (slug) => {
   return data.mission
 }
 
+// ── UPLOAD DE FICHIERS ───────────────────────────────────────────────────────
+
+// Upload public d'une image (utilisé par le formulaire témoignage visiteur)
+// Contrairement aux autres appels, le body est un FormData — pas de JSON.stringify,
+// pas de header Content-Type (le navigateur le génère lui-même avec le bon boundary).
+export const uploadFile = async (file) => {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  const response = await fetch(`${API_URL}/upload`, {
+    method: 'POST',
+    body: formData,
+  })
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "L'envoi de la photo a échoué. Vérifiez votre connexion ou réessayez.")
+  }
+
+  const data = await response.json()
+  return data.url
+}
+
+// ── UPLOAD DE FICHIERS (ADMIN) ────────────────────────────────────────────────
+
+// Upload admin — images, vidéos, PDF (dashboard, route protégée)
+// label optionnel — texte alternatif/légende fourni par la cliente
+export const uploadAdminFile = async (file, label = '') => {
+  const formData = new FormData()
+  formData.append('file', file)
+  if (label) formData.append('label', label)
+
+  const response = await authFetch(`${API_URL}/admin/upload`, {
+    method: 'POST',
+    body: formData,
+  })
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "L'envoi du fichier a échoué.")
+  }
+
+  return await response.json() // { url, label }
+}
+
 // ── TÉMOIGNAGES ──────────────────────────────────────────────────────────────
 
 // Récupère tous les témoignages validés

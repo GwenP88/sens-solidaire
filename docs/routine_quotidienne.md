@@ -73,3 +73,62 @@ git merge dev-front
 git push origin dev
 git checkout dev-front
 ```
+
+---
+
+## 🗄️ Base de données — commandes utiles
+
+> Prisma Studio ne fonctionne pas sous Docker (bug connu v7) → tout passe par `psql` directement.
+
+### Se connecter à la BDD
+```bash
+docker-compose exec postgres psql -U postgres -d sensolidaire
+```
+
+### Explorer (une fois connecté dans psql)
+```sql
+\dt                          -- liste toutes les tables
+\d "NomTable"                -- structure d'une table (colonnes, types, clés)
+SELECT * FROM "Mission";     -- lire les données d'une table
+```
+⚠️ Les noms de tables Prisma sont sensibles à la casse → toujours entre guillemets doubles `" "`
+
+### Modifier des données
+```sql
+UPDATE "TeamMember" SET role = 'Nouveau rôle' WHERE id = 1;
+```
+
+### Supprimer des données
+```sql
+DELETE FROM "TeamMember" WHERE id = 1;   -- une ligne précise
+```
+⚠️ Sans `WHERE`, `DELETE FROM "TeamMember";` supprime **toutes** les lignes de la table — à utiliser avec prudence.
+
+### Quitter psql
+```sql
+\q
+```
+
+### Repartir de zéro (reset complet de la BDD)
+```bash
+# 1. Supprime le conteneur ET le volume (= toutes les données)
+docker-compose down -v
+
+# 2. Reconstruit et redémarre
+docker-compose up -d --build
+
+# 3. Réapplique les migrations
+docker exec sensolidaire_backend npx prisma migrate deploy
+
+# 4. Régénère le client Prisma (réflexe obligatoire en v7)
+docker exec sensolidaire_backend npx prisma generate
+
+# 5. Réinjecte les données de base (seed)
+docker exec sensolidaire_backend npx prisma db seed
+```
+
+### Relancer juste le seed (sans tout reset)
+```bash
+docker exec sensolidaire_backend npx prisma db seed
+```
+⚠️ Le seed fait un `deleteMany` avant de recréer → toutes les données actuelles des tables seedées sont remplacées, pas seulement ajoutées.

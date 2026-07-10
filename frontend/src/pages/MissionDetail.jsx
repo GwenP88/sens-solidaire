@@ -86,6 +86,9 @@ function MissionDetail() {
     catch { return [] }
   })()
 
+  // Récupère le PDF guide du volontaire depuis les médias de la mission
+  const guidePdf = mission.media?.find(m => m.file_type === 'pdf')
+
   const anchorSections = [
     { label: "La mission",        id: "description",     show: !!mission.description },
     { label: "Rôle & Programme",  id: "role-programme",  show: !!mission.volunteer_role || programmeSteps.length > 0 },
@@ -444,11 +447,11 @@ function MissionDetail() {
                 <h3 className="h3-style text-primary mb-0">Guide du volontaire</h3>
                 <p className="text-body text-primary/60">Votre guide complet pour préparer votre mission.</p>
               </div>
-              {mission.guide_url
-                ? <a href={mission.guide_url} target="_blank" rel="noopener noreferrer">
+              {guidePdf
+                ? <a href={guidePdf.file_url} target="_blank" rel="noopener noreferrer">
                     <Button label="Télécharger ↓" variant="secondary" />
                   </a>
-                : <Button label="Télécharger ↓" variant="secondary" />
+                : <Button label="Télécharger ↓" variant="secondary" disabled />
               }
             </div>
             <div className="flex-1 bg-surface rounded-xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-sm">
