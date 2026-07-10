@@ -3,7 +3,7 @@
 // Le témoignage est soumis avec status "pending" et validé par l'admin avant publication
 
 // ── React
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ── API
 import { submitTestimonial, uploadFile } from '../../services/api'
@@ -24,6 +24,7 @@ function TestimonialForm({ onClose }) {
   })
 
   const [submitted, setSubmitted] = useState(false)
+  const [photoPreview, setPhotoPreview] = useState(null)
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target
@@ -32,6 +33,11 @@ function TestimonialForm({ onClose }) {
       [name]: type === 'checkbox' ? checked : type === 'file' ? files[0] : value,
       ...(name === 'type' ? { destination: '' } : {})
     }))
+
+    // Génère une prévisualisation locale si un fichier photo est sélectionné
+    if (name === 'photo' && files[0]) {
+      setPhotoPreview(URL.createObjectURL(files[0]))
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -57,6 +63,13 @@ function TestimonialForm({ onClose }) {
       alert("Une erreur est survenue, veuillez réessayer.")
     }
   }
+
+  // Libère l'URL de prévisualisation quand elle n'est plus utilisée (évite une fuite mémoire)
+  useEffect(() => {
+    return () => {
+      if (photoPreview) URL.revokeObjectURL(photoPreview)
+    }
+  }, [photoPreview])
 
   const inputClass = "text-body text-primary border border-surface-dark rounded-xl px-4 py-2 bg-surface focus:outline-none focus:border-primary"
 
@@ -142,7 +155,14 @@ function TestimonialForm({ onClose }) {
           accept="image/*"
           onChange={handleChange}
           className="text-body text-primary/60 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-body file:bg-surface-mid file:text-primary hover:file:bg-surface-dark cursor-pointer"
-        />
+        /> 
+        {photoPreview && (
+          <img
+            src={photoPreview}
+            alt="Aperçu de la photo"
+            className="w-20 h-20 rounded-full object-cover mt-2"
+          />
+        )}
         <span className="text-caption text-primary/60 leading-relaxed">
           Formats acceptés : JPG, PNG, WEBP • Taille maximale : 5 Mo
         </span>
