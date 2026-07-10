@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react'
 
 // ── API
-import { submitTestimonial, uploadFile } from '../../services/api'
+import { submitTestimonial, uploadFile, fetchMissions } from '../../services/api'
 
 // ── Composants UI
 import Button from '../ui/Button'
@@ -25,6 +25,7 @@ function TestimonialForm({ onClose }) {
 
   const [submitted, setSubmitted] = useState(false)
   const [photoPreview, setPhotoPreview] = useState(null)
+  const [destinations, setDestinations] = useState([])
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target
@@ -63,6 +64,17 @@ function TestimonialForm({ onClose }) {
       alert("Une erreur est survenue, veuillez réessayer.")
     }
   }
+
+  // Récupère dynamiquement les pays des missions individuelles actives
+  // (même logique que le dropdown navbar) — se met à jour à chaque nouvelle mission créée
+  useEffect(() => {
+    fetchMissions({ type: 'volontariat_individuel' })
+      .then(missions => {
+        const uniqueCountries = [...new Set(missions.map(m => m.country))].sort()
+        setDestinations(uniqueCountries)
+      })
+      .catch(console.error)
+  }, [])
 
   // Libère l'URL de prévisualisation quand elle n'est plus utilisée (évite une fuite mémoire)
   useEffect(() => {
@@ -117,11 +129,9 @@ function TestimonialForm({ onClose }) {
           <label className="text-eyebrow text-primary/60 mb-0">Destination *</label>
           <select name="destination" value={form.destination} onChange={handleChange} required className={inputClass}>
             <option value="">Sélectionnez une destination</option>
-            <option value="kenya">Kenya</option>
-            <option value="senegal">Sénégal</option>
-            <option value="sri-lanka">Sri Lanka</option>
-            <option value="perou">Pérou</option>
-            <option value="sumatra">Sumatra</option>
+            {destinations.map(country => (
+              <option key={country} value={country}>{country}</option>
+            ))}
           </select>
         </div>
       )}

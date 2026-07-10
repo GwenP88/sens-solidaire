@@ -112,6 +112,28 @@ export const uploadFile = async (file) => {
   return data.url
 }
 
+// ── UPLOAD DE FICHIERS (ADMIN) ────────────────────────────────────────────────
+
+// Upload admin — images, vidéos, PDF (dashboard, route protégée)
+// label optionnel — texte alternatif/légende fourni par la cliente
+export const uploadAdminFile = async (file, label = '') => {
+  const formData = new FormData()
+  formData.append('file', file)
+  if (label) formData.append('label', label)
+
+  const response = await authFetch(`${API_URL}/admin/upload`, {
+    method: 'POST',
+    body: formData,
+  })
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "L'envoi du fichier a échoué.")
+  }
+
+  return await response.json() // { url, label }
+}
+
 // ── TÉMOIGNAGES ──────────────────────────────────────────────────────────────
 
 // Récupère tous les témoignages validés

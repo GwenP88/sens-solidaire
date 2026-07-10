@@ -19,6 +19,9 @@ import {
   updateMissionMedia,
 } from '../../services/api'
 
+// ── Composants admin
+import AdminFileUpload from '../../components/admin/AdminFileUpload'
+
 
 // ════════════════════════════════════════════════════════════════
 // CONSTANTES
@@ -38,7 +41,6 @@ const EMPTY_FORM = {
   slug:              '',
   short_description: '',
   type:              '',
-  image_url:         '',
   description:       '',
   volunteer_role:    '',
   programme:         [],
@@ -50,10 +52,13 @@ const EMPTY_FORM = {
   ministry_url:      '',
   health_info:       '',
   admin_info:        '',
-  guide_pdf_url:     '',  // URL du PDF guide du volontaire
   is_active:         true,
   pricing:           [], // [{ duration_label, price }]
-  galerie:           [], // [{ file_url }]
+  // Photos de la mission — la 1ère devient l'image principale (hero),
+  // les suivantes forment la galerie. [{ file_url, label }]
+  photos:            [],
+  // Guide du volontaire — 1 fichier max. [{ file_url, label }]
+  guide_pdf:         [],
 }
 
 // Étapes fixes "Comment partir" — seule la première est modifiable (les villes)
@@ -165,19 +170,27 @@ function MissionFormPage() {
               .map(p => ({ duration_label: p.duration_label, price: String(p.price) }))
           : []
 
-        // Galerie — médias de type image
-        const galerie = mission.media
+        // Galerie — médias de type image, triés
+        const galerieMedia = mission.media
           ? mission.media
               .filter(m => m.file_type === 'image')
               .sort((a, b) => a.display_order - b.display_order)
-              .map(m => ({ file_url: m.file_url }))
+              .map(m => ({ file_url: m.file_url, label: m.label || '' }))
           : []
+
+        // Photos reconstituées — l'image principale existante en 1ère position,
+        // suivie de la galerie déjà enregistrée
+        const photos = mission.image_url
+          ? [{ file_url: mission.image_url, label: '' }, ...galerieMedia]
+          : galerieMedia
 
         // PDF guide du volontaire
         const pdfMedia = mission.media
           ? mission.media.find(m => m.file_type === 'pdf')
           : null
-        const guide_pdf_url = pdfMedia ? pdfMedia.file_url : ''
+        const guide_pdf = pdfMedia
+          ? [{ file_url: pdfMedia.file_url, label: pdfMedia.label || '' }]
+          : []
 
         setFormData({
           title:             mission.title             || '',
@@ -185,7 +198,6 @@ function MissionFormPage() {
           slug:              mission.slug              || '',
           short_description: mission.short_description || '',
           type:              mission.type              || '',
-          image_url:         mission.image_url         || '',
           description:       mission.description       || '',
           volunteer_role:    mission.volunteer_role    || '',
           programme,
@@ -196,10 +208,10 @@ function MissionFormPage() {
           ministry_url:      mission.ministry_url      || '',
           health_info:       mission.health_info       || '',
           admin_info:        mission.admin_info        || '',
-          guide_pdf_url,
           is_active:         mission.is_active         ?? true,
           pricing,
-          galerie,
+          photos,
+          guide_pdf,
         })
       } catch (err) {
         setError("Impossible de charger la mission.")
@@ -242,17 +254,6 @@ function MissionFormPage() {
   const addPricingLine = () => setFormData(prev => ({ ...prev, pricing: [...prev.pricing, { duration_label: '', price: '' }] }))
   const removePricingLine = (index) => setFormData(prev => ({ ...prev, pricing: prev.pricing.filter((_, i) => i !== index) }))
 
-  // ── Handlers galerie ──
-  const handleGalerieChange = (index, value) => {
-    setFormData(prev => {
-      const updated = [...prev.galerie]
-      updated[index] = { file_url: value }
-      return { ...prev, galerie: updated }
-    })
-  }
-  const addGalerieLine = () => setFormData(prev => ({ ...prev, galerie: [...prev.galerie, { file_url: '' }] }))
-  const removeGalerieLine = (index) => setFormData(prev => ({ ...prev, galerie: prev.galerie.filter((_, i) => i !== index) }))
-
   // ── Soumission ──
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -266,16 +267,21 @@ function MissionFormPage() {
         i === 0 ? formData.how_to_go_villes : fixed
       )
 
+      // La 1ère photo devient l'image principale (hero), les suivantes la galerie
+      const [heroPhoto, ...galeriePhotos] = formData.photos
+      const image_url = heroPhoto ? heroPhoto.file_url : ''
+
       const payload = {
         ...formData,
+        image_url,
         programme: JSON.stringify(formData.programme),
         how_to_go: JSON.stringify(howToGoFull),
       }
       // Champs gérés séparément — on les retire du payload mission
       delete payload.pricing
-      delete payload.galerie
+      delete payload.photos
+      delete payload.guide_pdf
       delete payload.how_to_go_villes
-      delete payload.guide_pdf_url
 
       let missionId
 
@@ -293,9 +299,9 @@ function MissionFormPage() {
       }
 
       // Sauvegarde des médias (galerie + PDF)
-      const images = formData.galerie.filter(g => g.file_url.trim() !== '')
-      const pdf = formData.guide_pdf_url.trim()
-        ? { file_url: formData.guide_pdf_url.trim(), label: 'Guide du volontaire' }
+      const images = galeriePhotos.map(p => ({ file_url: p.file_url, label: p.label || null }))
+      const pdf = formData.guide_pdf[0]
+        ? { file_url: formData.guide_pdf[0].file_url, label: formData.guide_pdf[0].label || 'Guide du volontaire' }
         : null
       await updateMissionMedia(missionId, images, pdf)
 
@@ -393,23 +399,19 @@ function MissionFormPage() {
           />
         </FormSection>
 
-        {/* ── BLOC 2 : Visuel ── */}
+        {/* ── BLOC 2 : Photos de la mission (fusion image principale + galerie) ── */}
         <FormSection
-          title="Visuel"
-          description="Photo affichée dans le hero et dans la section 'La mission'."
+          title="Photos de la mission"
+          description="La 1ère photo devient l'image principale (hero). Les suivantes forment la galerie de la page détail. Glissez les flèches pour réordonner."
         >
-          <Field
-            label="URL de l'image principale" name="image_url"
-            value={formData.image_url} onChange={handleChange}
-            hint="/images/missions/nom-du-fichier.webp"
+          <AdminFileUpload
+            value={formData.photos}
+            onChange={(photos) => setFormData(prev => ({ ...prev, photos }))}
+            accept="image/*"
+            maxFiles={10}
+            showLabel={true}
+            helperText="Formats : JPG, PNG, WEBP. La légende sert de texte alternatif (accessibilité)."
           />
-          {formData.image_url && (
-            <img
-              src={formData.image_url} alt="Aperçu"
-              className="w-full h-40 object-cover rounded-lg border border-gray-200"
-              onError={e => e.target.style.display = 'none'}
-            />
-          )}
         </FormSection>
 
         {/* ── BLOC 3 : Contenu ── */}
@@ -579,45 +581,17 @@ function MissionFormPage() {
             value={formData.ministry_url} onChange={handleChange}
             hint="Bouton Recommandations officielles"
           />
-          <Field
-            label="Guide du volontaire (PDF)" name="guide_pdf_url"
-            value={formData.guide_pdf_url} onChange={handleChange}
-            hint="/pdfs/guides/guide-volontaire-kenya.pdf"
-          />
-        </FormSection>
-
-        {/* ── BLOC 9 : Galerie photos ── */}
-        <FormSection
-          title="Galerie photos"
-          description="Photos affichées dans le carrousel galerie en bas de la page détaillée."
-        >
-          <div className="flex flex-col gap-2">
-            {formData.galerie.map((item, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={item.file_url}
-                  onChange={e => handleGalerieChange(i, e.target.value)}
-                  placeholder="/images/missions/kenya-galerie-1.webp"
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary/30"
-                />
-                {/* Aperçu miniature si URL renseignée */}
-                {item.file_url && (
-                  <img
-                    src={item.file_url} alt=""
-                    className="w-12 h-8 object-cover rounded shrink-0"
-                    onError={e => e.target.style.display = 'none'}
-                  />
-                )}
-                <button type="button" onClick={() => removeGalerieLine(i)}
-                  className="text-gray-300 hover:text-red-500 text-xl shrink-0 transition-colors">×</button>
-              </div>
-            ))}
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Guide du volontaire (PDF)</label>
+            <AdminFileUpload
+              value={formData.guide_pdf}
+              onChange={(guide_pdf) => setFormData(prev => ({ ...prev, guide_pdf }))}
+              accept="application/pdf"
+              maxFiles={1}
+              showLabel={true}
+              helperText="Le libellé s'affiche sur le bouton de téléchargement (ex: Guide du volontaire Kenya)."
+            />
           </div>
-          <button type="button" onClick={addGalerieLine}
-            className="text-sm text-primary hover:text-primary/70 border border-dashed border-primary/30 rounded-lg px-4 py-2 transition-colors">
-            + Ajouter une photo
-          </button>
         </FormSection>
 
         {/* ── Actions ── */}
