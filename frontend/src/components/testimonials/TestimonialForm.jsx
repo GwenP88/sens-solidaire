@@ -6,7 +6,7 @@
 import { useState } from 'react'
 
 // ── API
-import { submitTestimonial } from '../../services/api'
+import { submitTestimonial, uploadFile } from '../../services/api'
 
 // ── Composants UI
 import Button from '../ui/Button'
@@ -37,10 +37,17 @@ function TestimonialForm({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      // Si une photo a été sélectionnée, on l'upload d'abord pour obtenir son URL
+      let avatarUrl = null
+      if (form.photo) {
+        avatarUrl = await uploadFile(form.photo)
+      }
+
       await submitTestimonial({
         author_name: `${form.prenom} ${form.nom}`,
         content: form.quote,
         mission_id: null,
+        avatar_url: avatarUrl,
         annee: new Date().getFullYear(),
         consent_given: form.rgpd,
       })
