@@ -94,7 +94,7 @@ function MissionSection({
       )}
 
       {/* ── Carousel ── */}
-      {carouselItems && (
+      {carouselItems && carouselItems.length > 0 && (
         <div className="mt-8">
           {carouselTitle && (
             <h3 className="h3-style text-primary mb-2">{carouselTitle}</h3>

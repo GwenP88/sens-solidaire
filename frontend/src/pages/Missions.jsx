@@ -7,8 +7,8 @@ import { useState, useEffect, useRef } from 'react'
 // ── Router
 import { useSearchParams } from 'react-router-dom'
 
-// ── API
-import { fetchMissions } from '../services/api'
+// ── API ──
+import { fetchMissions, fetchTestimonials, fetchFieldActions } from '../services/api'
 
 // ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
@@ -19,9 +19,11 @@ import Carousel from '../components/ui/Carousel'
 import FilterChips from '../components/navigation/FilterChips'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
-// ── Composants métier
+// ── Composants métier ──
+import ImpactCard from '../components/actions/ImpactCard'
 import MissionCard from '../components/missions/MissionCard'
 import MissionSection from '../components/missions/MissionSection'
+import TestimonialCard from '../components/testimonials/TestimonialCard'
 
 // ── Utils
 import { getDuration, TYPE_LABELS } from '../utils/missions'
@@ -36,6 +38,8 @@ function Missions() {
   const [missions, setMissions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [testimonials, setTestimonials] = useState([])
+  const [actions, setActions] = useState([])
   const [searchParams] = useSearchParams()
   const [activeFilter, setActiveFilter] = useState(searchParams.get('filter') || null)
   const filtersRef = useRef(null)
@@ -63,6 +67,14 @@ function Missions() {
       }
     }
     loadMissions()
+  }, [])
+
+  useEffect(() => {
+    fetchTestimonials().then(setTestimonials).catch(console.error)
+  }, [])
+
+  useEffect(() => {
+    fetchFieldActions().then(setActions).catch(console.error)
   }, [])
 
   useEffect(() => {
@@ -139,6 +151,21 @@ function Missions() {
       list: ['Rapport de mission', 'Communication RSE', 'Avantage fiscal'],
     },
   ]
+
+  // Témoignages filtrés par type de mission — utilisés pour masquer les galeries si vides
+  const testimonialsGroupeJeunes = testimonials.filter(t => t.mission?.type === 'groupe_jeunes')
+  const testimonialsCongeSolidaire = testimonials.filter(t => t.mission?.type === 'conge_solidaire')
+
+  // Listes de pays fixes par section — pas de lien BDD direct type↔pays
+  const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal', "Côte d'Ivoire"]
+  const COUNTRIES_GROUPE_JEUNES   = ['Kenya', 'Sénégal']
+  const COUNTRIES_CONGE_SOLIDAIRE = ['Kenya', 'Sénégal', 'Sumatra']
+
+  const testimonialsServiceCivique = testimonials.filter(t => t.mission?.type === 'service_civique')
+
+  const actionsServiceCivique  = actions.filter(a => a.countries?.some(c => COUNTRIES_SERVICE_CIVIQUE.includes(c.country)))
+  const actionsGroupeJeunes    = actions.filter(a => a.countries?.some(c => COUNTRIES_GROUPE_JEUNES.includes(c.country)))
+  const actionsCongeSolidaire  = actions.filter(a => a.countries?.some(c => COUNTRIES_CONGE_SOLIDAIRE.includes(c.country)))
 
   return (
     <div className="bg-surface min-h-screen">
@@ -256,22 +283,72 @@ function Missions() {
           stepsTitle="Comment ça fonctionne ?"
           steps={stepsServiceCivique}
           bgCard="bg-white"
-          carouselItems={missionServiceCivique}
-          carouselTitle="Nos missions de service civique"
-          carouselSubtitle="Partez en France puis à l'international pour une expérience unique de 6 à 12 mois."
-          carouselSlidesPerView={2}
-          renderSlide={(mission) => (
-            <MissionCard
-              slug={mission.slug}
-              title={mission.title}
-              description={mission.short_description}
-              image={mission.image_url}
-              badge={TYPE_LABELS[mission.type]}
-              duration={getDuration(mission.pricing)}
-              ctaLabel="En savoir plus →"
-            />
+        >
+          {/* Témoignages — masqué si aucun témoignage approuvé pour ce type */}
+          {testimonialsServiceCivique.length > 0 && (
+            <div className="mt-12">
+              <h3 className="h3-style text-primary mb-0">Ils ont vécu l'aventure</h3>
+              <p className="text-body text-primary/60 mb-8">
+                Découvrez les retours de nos volontaires en service civique au Kenya, au Sénégal et en Côte d'Ivoire.
+              </p>
+              <Carousel
+                items={testimonialsServiceCivique}
+                showPagination={true}
+                color="primary"
+                renderSlide={(t) => (
+                  <TestimonialCard
+                    quote={t.content}
+                    name={t.author_name}
+                    mission={t.mission?.title || ''}
+                    avatar={t.avatar_url || undefined}
+                  />
+                )}
+              />
+            </div>
           )}
-        />
+
+          {/* Actions terrain — masqué si aucune action dans ces pays */}
+          {actionsServiceCivique.length > 0 && (
+            <div className="mt-12">
+              <h3 className="h3-style text-primary mb-0">Notre impact sur le terrain</h3>
+              <p className="text-body text-primary/60 mb-8">
+                Découvrez quelques-unes des actions menées avec nos partenaires locaux.
+              </p>
+              <Carousel
+                items={actionsServiceCivique.slice(0, 4)}
+                showPagination={true}
+                color="primary"
+                renderSlide={(action) => (
+                  <ImpactCard
+                    slug={action.slug}
+                    title={action.title}
+                    description={action.description}
+                    image={action.image_url}
+                    tags={action.tags.map(t => t.tag)}
+                    odds={action.odds.map(o => o.odd_number)}
+                    country={action.countries?.map(c => c.country).join(', ')}
+                  />
+                )}
+              />
+            </div>
+          )}
+
+          {/* Galerie photos — toujours visible, emplacement réservé */}
+          <div className="mt-12">
+            <h3 className="h3-style text-primary mb-0">Quelques instants sur le terrain</h3>
+            <p className="text-body text-primary/60 mb-8">
+              Un aperçu des moments vécus lors de nos missions — la galerie sera enrichie au fil des prochains départs.
+            </p>
+            <Carousel
+              items={[1, 2, 3, 4]}
+              showPagination={true}
+              color="primary"
+              renderSlide={(_, i) => (
+                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.png`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
+              )}
+            />
+          </div>
+        </MissionSection>
       )}
 
       {/* ── Section Groupe jeunes ── */}
@@ -329,11 +406,60 @@ function Missions() {
             </div>
           </div>
 
-          {/* Galerie */}
+          {/* Témoignages — masqué si aucun témoignage approuvé pour ce type de mission */}
+          {testimonialsGroupeJeunes.length > 0 && (
+            <div className="mt-12">
+              <h3 className="h3-style text-primary mb-0">Ils ont vécu l'aventure</h3>
+              <p className="text-body text-primary/60 mb-8">
+                Rencontres, découvertes, projets de terrain, moments de partage... découvrez quelques souvenirs de nos missions de groupe au Kenya et au Sénégal.
+              </p>
+              <Carousel
+                items={testimonialsGroupeJeunes}
+                showPagination={true}
+                color="primary"
+                renderSlide={(t) => (
+                  <TestimonialCard
+                    quote={t.content}
+                    name={t.author_name}
+                    mission={t.mission?.title || ''}
+                    avatar={t.avatar_url || undefined}
+                  />
+                )}
+              />
+            </div>
+          )}
+
+        {/* Actions terrain — masqué si aucune action dans ces pays */}
+          {actionsGroupeJeunes.length > 0 && (
+            <div className="mt-12">
+              <h3 className="h3-style text-primary mb-0">Notre impact sur le terrain</h3>
+              <p className="text-body text-primary/60 mb-8">
+                Découvrez quelques-unes des actions menées avec nos partenaires locaux.
+              </p>
+              <Carousel
+                items={actionsGroupeJeunes.slice(0, 4)}
+                showPagination={true}
+                color="primary"
+                renderSlide={(action) => (
+                  <ImpactCard
+                    slug={action.slug}
+                    title={action.title}
+                    description={action.description}
+                    image={action.image_url}
+                    tags={action.tags.map(t => t.tag)}
+                    odds={action.odds.map(o => o.odd_number)}
+                    country={action.countries?.map(c => c.country).join(', ')}
+                  />
+                )}
+              />
+            </div>
+          )}
+
+          {/* Galerie photos — toujours visible, emplacement réservé */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-0">Ils ont vécu l'aventure</h3>
+            <h3 className="h3-style text-primary mb-0">Quelques instants sur le terrain</h3>
             <p className="text-body text-primary/60 mb-8">
-              Rencontres, découvertes, projets de terrain, moments de partage... découvrez quelques souvenirs de nos missions de groupe au Kenya et au Sénégal.
+              Un aperçu des moments vécus lors de nos missions — la galerie sera enrichie au fil des prochains départs.
             </p>
             <Carousel
               items={[1, 2, 3, 4]}
@@ -344,6 +470,7 @@ function Missions() {
               )}
             />
           </div>
+
         </MissionSection>
       )}
 
@@ -375,11 +502,60 @@ function Missions() {
           steps={stepsCongeSolidaire}
           bgCard="bg-surface"
         >
-          {/* Galerie */}
+          {/* Témoignages — masqué si aucun témoignage approuvé pour ce type de mission */}
+          {testimonialsCongeSolidaire.length > 0 && (
+            <div className="mt-12">
+              <h3 className="h3-style text-primary mb-0">Des collaborateurs engagés sur le terrain</h3>
+              <p className="text-body text-primary/60 mb-8">
+                Découvrez quelques moments vécus lors de nos missions solidaires réalisées avec des entreprises partenaires au Kenya et au Sénégal.
+              </p>
+              <Carousel
+                items={testimonialsCongeSolidaire}
+                showPagination={true}
+                color="primary"
+                renderSlide={(t) => (
+                  <TestimonialCard
+                    quote={t.content}
+                    name={t.author_name}
+                    mission={t.mission?.title || ''}
+                    avatar={t.avatar_url || undefined}
+                  />
+                )}
+              />
+            </div>
+          )}
+
+        {/* Actions terrain — masqué si aucune action dans ces pays */}
+          {actionsCongeSolidaire.length > 0 && (
+            <div className="mt-12">
+              <h3 className="h3-style text-primary mb-0">Notre impact sur le terrain</h3>
+              <p className="text-body text-primary/60 mb-8">
+                Découvrez quelques-unes des actions menées avec nos partenaires locaux.
+              </p>
+              <Carousel
+                items={actionsCongeSolidaire.slice(0, 4)}
+                showPagination={true}
+                color="primary"
+                renderSlide={(action) => (
+                  <ImpactCard
+                    slug={action.slug}
+                    title={action.title}
+                    description={action.description}
+                    image={action.image_url}
+                    tags={action.tags.map(t => t.tag)}
+                    odds={action.odds.map(o => o.odd_number)}
+                    country={action.countries?.map(c => c.country).join(', ')}
+                  />
+                )}
+              />
+            </div>
+          )}
+
+          {/* Galerie photos — toujours visible, emplacement réservé */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-0">Des collaborateurs engagés sur le terrain</h3>
+            <h3 className="h3-style text-primary mb-0">Quelques instants sur le terrain</h3>
             <p className="text-body text-primary/60 mb-8">
-              Découvrez quelques moments vécus lors de nos missions solidaires réalisées avec des entreprises partenaires au Kenya et au Sénégal.
+              Un aperçu des moments vécus lors de nos missions — la galerie sera enrichie au fil des prochains départs.
             </p>
             <Carousel
               items={[1, 2, 3, 4]}
@@ -390,6 +566,7 @@ function Missions() {
               )}
             />
           </div>
+
         </MissionSection>
       )}
 
