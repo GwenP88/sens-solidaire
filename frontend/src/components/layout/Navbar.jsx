@@ -117,7 +117,6 @@ function Navbar() {
           >
             <Link
               to="/missions"
-              onClick={(e) => { e.preventDefault(); setMissionsOpen(prev => !prev) }}
               className={`link-nav text-surface hover:text-accent font-bold inline-flex items-center gap-xs ${isOnMissions ? 'underline underline-offset-4' : ''}`}
             >
               Nos missions <IoChevronDownSharp className="text-xs" />
@@ -179,7 +178,6 @@ function Navbar() {
           >
             <Link
               to="/a-propos"
-              onClick={(e) => { e.preventDefault(); setAproposOpen(prev => !prev) }}
               className={`link-nav text-surface hover:text-accent font-bold inline-flex items-center gap-xs ${isOnApropos ? 'underline underline-offset-4' : ''}`}
             >
               À propos <IoChevronDownSharp className="text-xs" />
@@ -211,9 +209,12 @@ function Navbar() {
 
         {/* ── Actions droite ── */}
         <div className="flex items-center gap-sm">
+          {/* FR/EN — masqué : traduction pas encore implémentée (bilingue FR/EN prévu en Phase 3, cf. planning) */}
+          {/*
           <button className="hidden lg:inline-flex link-nav text-surface hover:text-accent font-bold items-center gap-xs">
             FR <IoChevronDownSharp className="text-xs" />
           </button>
+          */}
           <Link to="/soutenir">
             <Button label="Faire un don" variant="primary" />
           </Link>
@@ -320,7 +321,8 @@ function Navbar() {
           <Link to="/medias-et-actualites"      onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Médias & actualités</Link>
           <Link to="/contact"                   onClick={handleMobileNav} className="link-nav text-surface font-bold py-3 border-b border-surface/10">Contact</Link>
 
-          <button className="link-nav text-surface font-bold py-3 text-left">FR / EN</button>
+          {/* FR/EN — masqué : traduction pas encore implémentée */}
+          {/* <button className="link-nav text-surface font-bold py-3 text-left">FR / EN</button> */}
 
         </div>
       )}
