@@ -28,7 +28,7 @@ const seed = async () => {
 
   const admin = await prisma.admin.upsert({
     where: { email: "admin@sensolidaire.org" },
-    update: {},
+    update: { password_hash },   // ← synchronise le hash à chaque relance du seed
     create: {
       email: "admin@sensolidaire.org",
       password_hash,
