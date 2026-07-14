@@ -373,7 +373,6 @@ function Missions() {
             { icon: IconPin,    label: 'Kenya ou Sénégal' },
             { icon: IconHeart,  label: 'Projet éducatif' },
           ]}
-          primaryAction={{ label: 'Monter votre projet →', href: '/contact' }}
           testimonialsUrl="/temoignages?type=groupe_jeune"
           stepsTitle="Une mission en trois temps"
           steps={stepsGroupeJeunes}

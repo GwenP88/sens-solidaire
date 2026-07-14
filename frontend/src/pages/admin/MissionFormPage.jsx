@@ -187,7 +187,7 @@ function MissionFormPage() {
         // Photos reconstituées — l'image principale existante en 1ère position,
         // suivie de la galerie déjà enregistrée
         const photos = mission.image_url
-          ? [{ file_url: mission.image_url, label: '' }, ...galerieMedia]
+          ? [{ file_url: mission.image_url, label: mission.image_alt || '' }, ...galerieMedia]
           : galerieMedia
 
         // PDF guide du volontaire
@@ -300,10 +300,12 @@ function MissionFormPage() {
       // La 1ère photo devient l'image principale (hero), les suivantes la galerie
       const [heroPhoto, ...galeriePhotos] = formData.photos
       const image_url = heroPhoto ? heroPhoto.file_url : ''
+      const image_alt = heroPhoto ? heroPhoto.label : ''
 
       const payload = {
         ...formData,
         image_url,
+        image_alt,
         programme: JSON.stringify(formData.programme),
         how_to_go: JSON.stringify(howToGoFull),
       }
@@ -431,13 +433,29 @@ function MissionFormPage() {
             </div>
             */}
           {/*</div>*/}
-          <TextareaField
-            label="Description courte" name="short_description"
-            value={formData.short_description} onChange={handleChange}
-            required rows={3}
-            hint="Affichée sur la card et dans le hero de la page détail"
-            error={fieldErrors.short_description}
-          />
+          <div className="flex flex-col gap-1">
+            <label className={`text-sm font-medium ${
+              formData.short_description.length >= 140 ? 'text-red-500' :
+              formData.short_description.length >= 120 ? 'text-orange-500' :
+              'text-gray-700'
+            }`}>
+              Description courte <span className="text-red-500">*</span>
+              <span className="font-normal ml-1 text-xs">— {formData.short_description.length}/150 caractères</span>
+            </label>
+            <p className="text-xs text-gray-400 -mt-0.5">Affichée sur la card et dans le hero de la page détail</p>
+            <textarea
+              name="short_description"
+              value={formData.short_description}
+              onChange={handleChange}
+              maxLength={150}
+              rows={3}
+              className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-y font-mono ${
+                fieldErrors.short_description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-primary/30'
+              }`}
+            />
+            {fieldErrors.short_description && <span className="text-xs text-red-500">{fieldErrors.short_description}</span>}
+          </div>
+
         </FormSection>
 
         {/* ── BLOC 2 : Photos de la mission (fusion image principale + galerie) ── */}
