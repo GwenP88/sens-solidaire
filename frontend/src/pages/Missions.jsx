@@ -157,9 +157,9 @@ function Missions() {
   const testimonialsCongeSolidaire = testimonials.filter(t => t.mission?.type === 'conge_solidaire')
 
   // Listes de pays fixes par section — pas de lien BDD direct type↔pays
-  const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal', "Côte d'Ivoire"]
+  const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal']
   const COUNTRIES_GROUPE_JEUNES   = ['Kenya', 'Sénégal']
-  const COUNTRIES_CONGE_SOLIDAIRE = ['Kenya', 'Sénégal', 'Sumatra']
+  const COUNTRIES_CONGE_SOLIDAIRE = ['Kenya', 'Sénégal']
 
   const testimonialsServiceCivique = testimonials.filter(t => t.mission?.type === 'service_civique')
 
