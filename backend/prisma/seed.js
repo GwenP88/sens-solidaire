@@ -105,19 +105,19 @@ const seed = async () => {
   await prisma.delegation.deleteMany({})
 
   const delegLumo = await prisma.delegation.create({
-    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/lieux-missions/lumo-kenya.jpeg", lieu: "LUMO Community Wildlife Conservancy", contacts: "Denis (coordinateur), Ernest (chargé des projets biodiversité) et les 22 Rangers", display_order: 1 },
+    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "LUMO Community Wildlife Conservancy", contacts: "Denis (coordinateur), Ernest (chargé des projets biodiversité) et les 22 Rangers", display_order: 1 },
   })
   const delegTtnp = await prisma.delegation.create({
-    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/lieux-missions/ttnp-kenya.jpeg", lieu: "Taita Taveta National Polytechnic", contacts: "Kefa Okari (Coordinateur des missions, professeur de français), Madeline Nabwire (directrice du département de tourisme)", display_order: 2 },
+    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "Taita Taveta National Polytechnic", contacts: "Kefa Okari (Coordinateur des missions, professeur de français), Madeline Nabwire (directrice du département de tourisme)", display_order: 2 },
   })
   const delegElsa = await prisma.delegation.create({
-    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/lieux-missions/etc-kenya.jpeg", lieu: "Elsa Conservation Trust", contacts: "Antony — Coordinateur des missions", display_order: 3 },
+    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "Elsa Conservation Trust", contacts: "Antony — Coordinateur des missions", display_order: 3 },
   })
   const delegAgada = await prisma.delegation.create({
-    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/lieux-missions/agada-senegal.jpg", lieu: "ONG AGADA", contacts: "François Bassene et Penda Diémé", display_order: 4 },
+    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "ONG AGADA", contacts: "François Bassene et Penda Diémé", display_order: 4 },
   })
   await prisma.delegation.create({
-    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/lieux-missions/campement-senegal.jpg", lieu: "Campement de l'Ile d'Effrane", contacts: "Mamadou Ndiaye", display_order: 5 },
+    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "Campement de l'Ile d'Effrane", contacts: "Mamadou Ndiaye", display_order: 5 },
   })
 
   console.log("Délégations créées (5)")
@@ -279,6 +279,8 @@ const TESTIMONIALS = [
     // ── Service civique — ancre (mission_id: 3) ──
     { mission_id: 3, author_name: "Manon T.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
     { mission_id: 3, author_name: "Hugo V.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem.", annee: 2025, status: "approved", show_homepage: false, consent_given: true },
+    { mission_id: 3, author_name: "Lycée International de Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
+    { mission_id: 3, author_name: "MJC Annemasse", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
 
     // ── Groupe jeunes — ancre (mission_id: 4) ──
     { mission_id: 4, author_name: "Lycée International de Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },

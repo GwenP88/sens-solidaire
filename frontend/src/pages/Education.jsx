@@ -169,7 +169,7 @@ function Education() {
 
           {/* Sidebar — infos pratiques Éco-École */}
           <InfoSidebar
-            public="Maternelle au lycée — établissements publics et privés"
+            public="Du collège au lycée — établissements publics et privés"
             tarif={{ prix: "Gratuit", detail: "La participation au programme Éco-École est gratuite" }}
             ctas={[
               { label: "Site officiel Éco-École →", href: "https://www.eco-ecole.org/", variant: "secondary", external: true },
@@ -282,7 +282,9 @@ function Education() {
           {/* Colonne principale — 2/3 */}
           <div className="lg:col-span-2 flex flex-col gap-sm">
             <p className="text-body text-primary/80">
-              Nous intervenons directement dans vos locaux ou vous accueillons dans nos bureaux pour des animations pédagogiques adaptées à chaque niveau. Biodiversité, ODD, solidarité internationale, environnement — nos ateliers sont ludiques, participatifs et conçus pour éveiller les consciences.
+              Nos interventions dans les écoles primaires, collèges publiques et/ou privés sont riches d’apprentissages, de découvertes et d’échanges avec les scolaires.Nous sommes convaincus que l’acquisition de connaissances sur des sujets sensibles tels que la conservation de la biodiversité, le développement durable, la notion de solidarité internationale…éveillera les consciences de nos futurs écocitoyens.
+            </p>
+            <p className="text-body text-primary/80">Connaitre un peu plus les bienfaits des ressources naturelles que la Planète peut nous apporter permettra de mieux vivre ensemble, n’oublions pas que nous sommes qu’un maillon de la chaine du vivant… Alors commençons par construire notre avenir commun en harmonie avec la nature !
             </p>
             <p className="text-body text-primary/80">
               Sans être professionnel de la solidarité internationale, chacun peut accueillir un atelier. Nous nous adaptons à vos contraintes horaires et à votre programme pédagogique.
@@ -291,7 +293,7 @@ function Education() {
 
           {/* Sidebar — infos pratiques Ateliers */}
           <InfoSidebar
-            public="Maternelle, primaire, collège, lycée et adultes"
+            public="A partir de 5 ans"
             tarif={{ prix: "Sur devis", detail: "Tarif adapté selon le type d'intervention et l'établissement" }}
             ctas={[
               { label: "Demander un atelier →", href: "/contact", variant: "primary" },

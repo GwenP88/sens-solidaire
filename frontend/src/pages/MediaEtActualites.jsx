@@ -67,7 +67,7 @@ function MediaEtActualites() {
       </div>
 
       {/* ── Grille des articles ── */}
-      <Section>
+      <Section bg="bg-surface-mid">
         {loading ? (
           <p className="text-body text-primary/50 italic">Chargement...</p>
         ) : filteredPosts.length === 0 ? (
