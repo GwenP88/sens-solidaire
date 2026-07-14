@@ -197,7 +197,7 @@ export const createMission = async (req, res, next) => {
       title, country, slug, short_description, type,
       description, volunteer_role, programme, included, not_include,
       admin_info, ministry_url, health_info, helloasso_url,
-      image_url, how_to_go,
+      image_url, image_alt, how_to_go,
     } = req.body
 
     // 2. Validation : champs OBLIGATOIRES présents
@@ -244,7 +244,7 @@ export const createMission = async (req, res, next) => {
       title, country, slug, short_description, type,
       description, volunteer_role, programme, included, not_include,
       admin_info, ministry_url, health_info, helloasso_url,
-      image_url, how_to_go,
+      image_url, how_to_go, image_alt,
     })
 
     // 5. Réponse 201 Created (ressource créée, pas un simple 200)
@@ -280,7 +280,7 @@ export const updateMission = async (req, res, next) => {
       "title", "country", "slug", "short_description", "type",
       "description", "volunteer_role", "programme", "included", "not_include",
       "admin_info", "ministry_url", "health_info", "helloasso_url",
-      "image_url", "how_to_go", "is_active",
+      "image_url", "how_to_go", "is_active", "image_alt",
     ]
     for (const champ of allowed) {
       if (req.body[champ] !== undefined) {

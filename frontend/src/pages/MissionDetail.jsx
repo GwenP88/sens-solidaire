@@ -130,7 +130,7 @@ function MissionDetail() {
             <div className="w-full lg:w-1/3 shrink-0">
               <img
                 src={mission.image_url || '/images/placeholders/placeholder-galerie-1.png'}
-                alt={mission.title}
+                alt={mission.image_alt || mission.title}
                 className="w-full h-72 object-cover rounded-xl"
               />
             </div>
@@ -238,7 +238,7 @@ function MissionDetail() {
                 image={action.image_url}
                 tags={action.tags.map(t => t.tag)}
                 odds={action.odds.map(o => o.odd_number)}
-                country={action.country}
+                country={action.countries?.map(c => c.country).join(', ')}
               />
             )}
           />
@@ -503,8 +503,7 @@ function MissionDetail() {
           renderSlide={(item) => (
             <img
               src={item.file_url}
-              alt=""
-              aria-hidden="true"
+              alt={item.label || ''}
               className="w-full h-56 object-cover rounded-xl"
             />
           )}
