@@ -2217,4 +2217,116 @@ Cycle de modération complet testé, incluant tests négatifs RGPD.
 
 ---
 
+## Jour 40 à 43 · 11 au 14 juillet 2026
+### S7 (suite) — Reset BDD démo, création missions via dashboard, refonte complète du seed, fix critique Carousel, contrastes cards
+
+---
+
+### 🎯 Objectifs de la période
+- Vider la base et repartir sur un contenu de démo allégé, centré Kenya/Sénégal
+- Créer les 2 missions "vitrine" (Kenya, Sénégal) directement via le dashboard — vrai test de bout en bout du système d'upload construit précédemment
+- Réintégrer un seed minimal pour tout le contenu non gérable via dashboard (délégations, locations, témoignages, actions terrain, équipe, partenaires, médias/actus, éducation)
+- Nettoyer les sections `/missions` (masquage conditionnel, sections dynamiques par type)
+- Corriger un bug bloquant de navigation sur tous les carrousels du site
+- Harmoniser les contrastes cards / fonds de section
+
+---
+
+### Statut général
+
+| Élément | Statut |
+|---|---|
+| Reset BDD + admin recréé | ✅ Terminé |
+| Fix bug mot de passe admin (`upsert` ne mettait jamais à jour le hash) | ✅ Terminé |
+| Missions Kenya + Sénégal créées via dashboard | ✅ Terminé |
+| Champ `image_alt` (migration + branchement complet) | ✅ Terminé |
+| Fix `FieldAction.country` → `countries[]` dans `MissionDetail.jsx` | ✅ Terminé |
+| Barre d'actions collante `MissionFormPage.jsx` | ✅ Terminé |
+| Seed retravaillé — missions ancres, délégations, locations, témoignages, actions, rapports, équipe, partenaires, médias, éducation | ✅ Terminé |
+| `Missions.jsx` — sections dynamiques par type (témoignages/actions/galerie) | ✅ Terminé |
+| Fix bug critique `Carousel.jsx` (navigation cassée) | ✅ Terminé |
+| Fix `TestimonialCard.jsx` (centrage + contraste) | ✅ Terminé |
+| Fix contrastes `EducationCard`, `MediaEtActualites` | ✅ Terminé |
+
+---
+
+### ✅ Réalisé
+
+#### Reset base de données et compte admin
+- Reset complet (`down -v` + `up --build` + `migrate deploy` + `generate`)
+- Seed temporairement réduit à l'admin seul, pour permettre la création manuelle des missions via dashboard
+- **Bug trouvé et corrigé** : `prisma.admin.upsert()` avait un `update: {}` vide — relancer le seed après changement de `ADMIN_PASSWORD` ne mettait jamais à jour le hash en base, bloquant la connexion. Corrigé en `update: { password_hash }`
+
+#### Missions Kenya + Sénégal (dashboard)
+- Créées manuellement via `MissionFormPage` — premier vrai test en conditions réelles de tout le système d'upload construit précédemment (photos multiples, PDF, tarifs)
+- IDs obtenus : Kenya = 1, Sénégal = 2 (réutilisés ensuite dans le seed pour Locations et Témoignages)
+
+#### Champ `image_alt` (texte alternatif de l'image principale)
+- Migration Prisma ajoutant `image_alt` (nullable) sur `Mission`
+- Bug trouvé : le client Prisma généré était périmé après la migration → `npx prisma generate` + redémarrage backend
+- Branché de bout en bout : `missionController.js` (create/update), `MissionFormPage.jsx` (extraction depuis `heroPhoto.label`, reconstruction en mode édition), `MissionDetail.jsx` (`alt={mission.image_alt || mission.title}` sur l'image de la section "La mission")
+- Confirmé : le hero (`HeroPage.jsx`) utilise une image de fond CSS, pas de balise `<img>` — pas d'`alt` nécessaire là, le titre visible en `<h1>` remplit déjà ce rôle
+
+#### Bugs annexes corrigés
+| Bug | Cause | Correction |
+|---|---|---|
+| Bouton "Impact terrain" — pays jamais affiché | `MissionDetail.jsx` lisait `action.country` (n'existe plus) au lieu de `action.countries[]` | `country={action.countries?.map(c => c.country).join(', ')}` |
+| Formulaire mission long à valider en édition | Barre "Annuler/Enregistrer" en bas du contenu, invisible sans scroller | Barre rendue `sticky bottom-0` avec ombre |
+
+#### Seed — refonte complète pour la démo
+Reconstruit section par section à partir du backup, sans les missions/pricing (créées via dashboard) :
+- **3 missions ancres** (`is_active: false`) — service civique, groupe jeunes, congé solidaire : non gérables via dashboard, servent uniquement à rattacher des témoignages par type sur les sections codées en dur de `/missions`
+- **5 délégations** (Kenya ×3, Sénégal ×2)
+- **7 locations** Kenya + Sénégal, chacune avec `image_url` renseignée + galerie `Media` (3 photos placeholder) — plus aucune location sans visuel
+- **16 témoignages fictifs** (longueurs volontairement variées, 100 à 280 caractères, pour tester le rendu des cards) — répartis sur les 5 missions (Kenya, Sénégal, + les 3 ancres), avec quelques `status: "pending"` pour montrer la modération, et 6 en `show_homepage: true` (seuil minimum pour que le carrousel de la home boucle correctement, cf. bug Carousel ci-dessous)
+- **6 field actions** Kenya + Sénégal uniquement (plus de Côte d'Ivoire/Sri Lanka/Sumatra/Pérou pour la démo)
+- ActivityReports, MissionReports, TeamMembers (24), Partners (22), 6 MediaPosts, 4 EducationItems (ateliers)
+- **Harmonisation** : tous les `console.log` de comptage utilisent désormais `${TABLEAU.length}` plutôt que des nombres tapés en dur (sauf missions ancres/délégations/locations, qui utilisent `.create()` un par un pour récupérer les ids — laissés en dur, risque de désynchronisation jugé faible)
+- Récap final entièrement dynamique en fin de script
+- Bug de fusion corrigé au passage : une déclaration `const seed = async () => {}` dupliquée/imbriquée par erreur lors d'un copier-coller
+
+#### `Missions.jsx` — nettoyage et sections dynamiques
+- Navbar : clic direct sur "Nos missions"/"À propos" navigue désormais vers la page (au lieu de seulement togglé le dropdown) ; survol continue d'ouvrir le dropdown
+- Bouton FR/EN masqué (non implémenté)
+- Suppression des 3 cards missions Service Civique codées en dur (Kenya/Sénégal/Côte d'Ivoire) — jugées peu utiles sans plus d'info que le nom du pays
+- Pour Service Civique / Groupe jeunes / Congé solidaire : ajout de 3 blocs par section, chacun avec sa propre condition d'affichage :
+  - **Témoignages** (filtrés par `mission.type`, masqué si vide)
+  - **Actions terrain** (filtrées par liste de pays fixe par section — Kenya + Sénégal partout désormais, masqué si vide)
+  - **Galerie photos** (toujours visible, placeholders — pas de dépendance BDD)
+- `MissionSection.jsx` : fix générique — un tableau vide `[]` est "vrai" en JS, donc `{carouselItems && (...)}` affichait quand même le titre/sous-titre sans rien en dessous ; corrigé en `{carouselItems && carouselItems.length > 0 && (...)}`
+
+#### Bug critique — navigation Carousel cassée
+Long chantier de débogage, cause réelle trouvée après plusieurs fausses pistes (timing d'init, seuil de boucle) :
+- **Cause** : le module `Navigation` officiel de Swiper, combiné à des boutons externes personnalisés via `onBeforeInit`, entrait en conflit avec ces mêmes boutons — un seul des deux chevrons recevait effectivement le clic, l'autre restait inerte
+- **Solution retenue** : retour à l'approche `useRef` + `swiperRef.current?.slidePrev()/slideNext()` (appel direct sur l'instance), sans le module Navigation
+- Ajout de `observer={true}` / `observeParents={true}` pour forcer Swiper à recalculer ses positions si le DOM change après le montage (images qui finissent de charger, etc.)
+- `loop` rendu conditionnel : `items.length >= 6` — en dessous de ce seuil (le double du nombre max de slides visibles, 3 à partir de 1280px), Swiper ne peut pas boucler de façon fiable dans les deux sens ; navigation aller-retour simple dans ce cas, comportement normal et volontaire
+
+#### Contrastes cards / fonds de section
+Plusieurs cards se fondaient dans leur fond de section (même couleur `bg-surface` des deux côtés) :
+- `TestimonialCard.jsx` : centrage vertical de la citation (au lieu de rester collée en haut avec un vide disgracieux pour les textes courts), `shadow-sm` ajouté
+- Sections témoignages de `Missions.jsx` (Service Civique/Groupe jeunes/Congé solidaire) : encapsulées dans un bandeau `bg-primary` distinct, avec `color="surface"` sur le `Carousel` correspondant (sinon chevrons/dots invisibles, même couleur que le fond)
+- `EducationCard.jsx` (via `BaseContentCard`) : `bg="bg-surface-mid"` passé en prop, plutôt que de laisser le défaut `bg-surface` identique au fond de la section Ateliers
+- `MediaEtActualites.jsx` : fond de la `<Section>` passé à `bg-surface-mid` (au lieu du défaut `bg-surface`), `MediaCard` inchangée
+
+---
+
+### 🔵 À faire / Backlog (rappel + nouveautés)
+
+- **Génération automatique du slug (SEO)** via mots-clés — toujours non commencé (cf. JDB précédent)
+- **Unification stockage images mission** (`Mission.image_url` + galerie `Media` → source unique) — toujours en attente, post-MVP
+- **Bouton "Se souvenir de moi"** (LoginAdmin) — à vérifier, toujours en attente
+- **Page Éducation et sensibilisation** — refonte dynamique complète, toujours en attente (seules les cards "Ateliers" sont branchées BDD, le reste — Éco-École, Correspondances — reste codé en dur)
+- **Nouveau** : réactiver le champ "Type de mission" dans `MissionFormPage.jsx` quand service civique/groupe jeunes/congé solidaire seront gérables en dashboard (actuellement commenté, valeur par défaut forcée à `volontariat_individuel`)
+- **Nouveau** : les 3 missions "ancres" (`is_active: false`) sont un contournement technique pour rattacher des témoignages par type sans dashboard dédié — à réévaluer si un jour ces types deviennent gérables (possible redondance avec de vraies missions)
+
+---
+
+### ⚠️ Points d'attention
+- Le seed ne crée plus les missions Kenya/Sénégal (volontairement) — après tout reset complet de la BDD, il faut penser à les recréer manuellement via le dashboard **avant** de relancer le seed complet, sinon les Locations (FK obligatoire vers `Mission`) échoueront
+- Permissions Docker/Git sur `backend/public/uploads/` : résolu via `.gitignore` + `.gitkeep`, mais à surveiller si un nouveau souci de propriétaire (`root` vs utilisateur local) réapparaît après un rebuild
+- `TESTIMONIALS`, `PARTNERS`, `TEAM_MEMBERS`, etc. sont maintenant des `const` nommées avec `.length` dynamique dans les logs — bon réflexe à garder pour toute future section ajoutée au seed
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
