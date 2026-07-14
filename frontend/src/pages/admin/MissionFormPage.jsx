@@ -653,8 +653,8 @@ function MissionFormPage() {
           </div>
         </FormSection>
 
-        {/* ── Actions ── */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+        {/* ── Actions — barre collante en bas de l'écran, toujours accessible sans scroller ── */}
+        <div className="sticky bottom-0 -mx-6 px-6 py-4 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] flex items-center justify-between">
           <button
             type="button"
             onClick={() => navigate('/admin/missions')}
