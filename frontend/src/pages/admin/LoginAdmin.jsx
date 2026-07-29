@@ -55,7 +55,7 @@ function LoginAdmin() {
 
         {/* Logo */}
         <div className="rounded-full p-2 mb-4">
-          <img src="/Logo.png" alt="Sens Solidaires" className="h-24" />
+          <img src="/logo.png" alt="Sens Solidaires" className="h-24" />
         </div>
 
         {/* Titre */}

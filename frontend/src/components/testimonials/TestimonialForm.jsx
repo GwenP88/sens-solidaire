@@ -17,7 +17,7 @@ function TestimonialForm({ onClose }) {
     prenom: '',
     nom: '',
     type: '',
-    destination: '',
+    destination: '', // contient désormais l'id de la mission (string issue du select), pas le pays
     quote: '',
     photo: null,
     rgpd: false,
@@ -25,7 +25,7 @@ function TestimonialForm({ onClose }) {
 
   const [submitted, setSubmitted] = useState(false)
   const [photoPreview, setPhotoPreview] = useState(null)
-  const [destinations, setDestinations] = useState([])
+  const [destinations, setDestinations] = useState([]) // tableau de missions { id, country }, plus de strings
   const [errors, setErrors] = useState({})
 
   const handleChange = (e) => {
@@ -79,10 +79,14 @@ function TestimonialForm({ onClose }) {
         avatarUrl = await uploadFile(form.photo)
       }
 
+      // mission_id : uniquement pour le volontariat individuel, où l'utilisateur
+      // choisit une destination précise (1 pays = 1 mission active, cf. vérification BDD).
+      // Les autres types (service civique, groupe jeune, congé solidaire) ne sont pas
+      // rattachés à une mission précise pour l'instant → null (à valider si besoin d'évoluer).
       await submitTestimonial({
         author_name: `${form.prenom} ${form.nom}`,
         content: form.quote,
-        mission_id: null,
+        mission_id: form.destination ? Number(form.destination) : null,
         avatar_url: avatarUrl,
         annee: new Date().getFullYear(),
         consent_given: form.rgpd,
@@ -94,13 +98,13 @@ function TestimonialForm({ onClose }) {
     }
   }
 
-  // Récupère dynamiquement les pays des missions individuelles actives
+  // Récupère dynamiquement les missions individuelles actives
   // (même logique que le dropdown navbar) — se met à jour à chaque nouvelle mission créée
+  // On garde les missions entières (id + country) pour pouvoir résoudre mission_id à la soumission
   useEffect(() => {
     fetchMissions({ type: 'volontariat_individuel' })
       .then(missions => {
-        const uniqueCountries = [...new Set(missions.map(m => m.country))].sort()
-        setDestinations(uniqueCountries)
+        setDestinations(missions)
       })
       .catch(console.error)
   }, [])
@@ -166,6 +170,7 @@ function TestimonialForm({ onClose }) {
       </div>
 
       {/* Menu déroulant destination — affiché uniquement pour le volontariat individuel */}
+      {/* value = id de la mission (résolu directement en mission_id à la soumission) */}
       {form.type === 'individuel' && (
         <div className="flex flex-col gap-xs">
           <label className="text-eyebrow text-primary/60 mb-0">Destination *</label>
@@ -174,8 +179,8 @@ function TestimonialForm({ onClose }) {
             className={errors.destination ? errorInputClass : inputClass}
           >
             <option value="">Sélectionnez une destination</option>
-            {destinations.map(country => (
-              <option key={country} value={country}>{country}</option>
+            {destinations.map(mission => (
+              <option key={mission.id} value={mission.id}>{mission.country}</option>
             ))}
           </select>
           {errors.destination && <span className="text-caption text-red-500">{errors.destination}</span>}
