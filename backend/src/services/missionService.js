@@ -26,7 +26,7 @@ export const findAll = async (filters = {}) => {
     where,
     include: {
       pricing: true,
-  	  location: true,
+  	  locations: true,
     },
     orderBy: { created_at: "asc" },
 })
@@ -45,7 +45,7 @@ export const findAllForAdmin = async () => {
 
     include: {
       pricing: true,
-  	  location: true,
+  	  locations: true,
     },
     orderBy: { created_at: "asc" },
   })
@@ -62,7 +62,7 @@ export const findById = async (id) => {
     where: { id },
     include: {
       pricing: true,
-      location: true,
+      locations: true,
     }
   })
 
@@ -94,7 +94,7 @@ export const findBySlug = async (slug) => {
     where: { slug, is_active: true, },
     include: {
       pricing: true,
-      location: true,
+      locations: true,
       testimonials: {
         where: { status: "approved" }
       }
