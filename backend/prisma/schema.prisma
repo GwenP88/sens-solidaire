@@ -32,10 +32,10 @@ model Mission {
   image_url         String?
   image_alt         String?
   how_to_go         String?
-  location          Location[]
+  locations         Location[]
   pricing           MissionPricing[]
   testimonials      Testimonial[]
-  missionReports  MissionReport[] 
+  missionReports    MissionReport[] 
 }
 
 // ─────────────────────────────────────────
@@ -59,7 +59,6 @@ model MissionPricing {
 
 model Location {
   id              Int         @id @default(autoincrement())
-  mission_id      Int
   slug            String      @unique
   name            String
   country         String
@@ -70,7 +69,7 @@ model Location {
   is_active       Boolean     @default(true)
   created_at      DateTime    @default(now())
   updated_at      DateTime    @updatedAt
-  mission         Mission     @relation(fields: [mission_id], references: [id])
+  missions        Mission[]           // ← remplace mission_id + mission
   delegation_id   Int?
   delegation      Delegation? @relation(fields: [delegation_id], references: [id])
 }
