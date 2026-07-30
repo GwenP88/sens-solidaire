@@ -234,3 +234,51 @@ export const softDelete = async (id) => {
     throw error
   }
 }
+
+// ── HARD DELETE ───────────────────────────────────────────────────────────────
+// Supprime DÉFINITIVEMENT une mission et ses données dépendantes.
+// Contrairement au soft delete, IRRÉVERSIBLE.
+// Paramètre : id (number)
+// Retourne  : la mission supprimée
+// Throw     : 404 si l'id n'existe pas
+export const hardDelete = async (id) => {
+  try {
+    return await prisma.$transaction(async (tx) => {
+
+      // 1. Détache les témoignages — contenu conservé, lien cassé (mission_id nullable)
+      await tx.testimonial.updateMany({
+        where: { mission_id: id },
+        data: { mission_id: null },
+      })
+
+      // 2. Supprime les tarifs — appartiennent exclusivement à cette mission
+      await tx.missionPricing.deleteMany({
+        where: { mission_id: id },
+      })
+
+      // 3. Supprime les médias orphelins (galerie + hero)
+      // Pas de vraie FK Prisma sur Media → nettoyage manuel obligatoire
+      await tx.media.deleteMany({
+        where: { entity_type: 'mission', entity_id: id },
+      })
+
+      // 4. Supprime la mission elle-même
+      // → la liaison _LocationToMission est retirée automatiquement (cascade DB)
+      // → les Location partagés avec d'autres missions restent intacts
+      const mission = await tx.mission.delete({
+        where: { id },
+      })
+
+      return mission
+    })
+
+  } catch (error) {
+    if (error.code === "P2025") {
+      const err = new Error("Mission introuvable")
+      err.status = 404
+      err.code = "MISSION_NOT_FOUND"
+      throw err
+    }
+    throw error
+  }
+}
