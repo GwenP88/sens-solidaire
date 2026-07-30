@@ -364,6 +364,17 @@ export const deleteMission = async (id) => {
   return await response.json()
 }
 
+// Supprime DÉFINITIVEMENT une mission (hard delete) — irréversible.
+export const hardDeleteMission = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/missions/${id}/permanent`, {
+    method: "DELETE",
+  })
+  if (!response.ok) {
+    throw new Error("Échec de la suppression définitive de la mission.")
+  }
+  return await response.json()
+}
+
 // Récupère une mission par son id pour le formulaire d'édition
 export const fetchAdminMissionById = async (id) => {
   const response = await authFetch(`${API_URL}/admin/missions/${id}`)
