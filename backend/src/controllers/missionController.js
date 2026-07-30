@@ -5,7 +5,7 @@
 // Ne contient AUCUNE logique métier — tout est délégué à missionService.js
 
 // Import des fonctions du service missions
-import { findAll, findAllForAdmin, findById, findBySlug, create, update, softDelete } from "../services/missionService.js"
+import { findAll, findAllForAdmin, findById, findBySlug, create, update, softDelete, hardDelete } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
@@ -340,5 +340,29 @@ export const deleteMission = async (req, res, next) => {
 
   } catch (error) {
     next(error)   // attrape le 404 du service
+  }
+}
+
+// ── HARD DELETE MISSION (ADMIN) ───────────────────────────────────────────────
+// DELETE /api/admin/missions/:id/permanent
+// HARD DELETE : supprime définitivement la mission et ses données dépendantes.
+// Route PROTÉGÉE (authMiddleware). IRRÉVERSIBLE.
+export const hardDeleteMission = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    const mission = await hardDelete(id)
+
+    return res.status(200).json({
+      success: true,
+      message: "Mission supprimée définitivement",
+      mission,
+    })
+
+  } catch (error) {
+    next(error)
   }
 }
