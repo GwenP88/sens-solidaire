@@ -92,7 +92,7 @@ function MissionDetail() {
   const anchorSections = [
     { label: "La mission",        id: "description",     show: !!mission.description },
     { label: "Rôle & Programme",  id: "role-programme",  show: !!mission.volunteer_role || programmeSteps.length > 0 },
-    { label: "Lieux partenaires", id: "lieux",           show: mission.location?.length > 0 },
+    { label: "Lieux partenaires", id: "lieux",           show: mission.locations?.length > 0 },
     { label: "Impact terrain",    id: "impact",          show: actions.length > 0 },
     { label: "Coût & durée",      id: "cout",            show: mission.pricing?.length > 0 },
     { label: "Comment partir",    id: "comment-partir",  show: howToGoSteps.length > 0 },
@@ -185,7 +185,7 @@ function MissionDetail() {
       )}
 
       {/* ── Lieux partenaires ── */}
-      {mission.location?.length > 0 && (
+      {mission.locations?.length > 0 && (
         <section id="lieux" className="padding-y padding-x bg-surface-mid">
           <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-sm mb-6">
             <div>
@@ -196,10 +196,10 @@ function MissionDetail() {
             </div>
           </div>
           <Carousel
-            items={mission.location}
+            items={mission.locations}
             showPagination={true}
             color="primary"
-            renderSlide={(loc) => <LocationCard {...loc} />}
+            renderSlide={(loc) => <LocationCard {...loc} fromMissionSlug={mission.slug} />}
           />
         </section>
       )}

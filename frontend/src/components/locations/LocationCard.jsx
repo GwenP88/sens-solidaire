@@ -4,9 +4,10 @@
 // ── Router
 import { Link } from 'react-router-dom'
 
-function LocationCard({ slug, name, image_url }) {
+function LocationCard({ slug, name, image_url, fromMissionSlug }) {
+  const to = fromMissionSlug ? `/lieux/${slug}?from=${fromMissionSlug}` : `/lieux/${slug}`
   return (
-    <Link to={`/lieux/${slug}`} className="group">
+    <Link to={to} className="group">
 
       {/* Hauteur fixe — uniformise les cards en grille/carousel quelle que soit la longueur du titre */}
       <div className="h-[240px] md:h-[240px] lg:h-[260px] xl:h-[300px] flex flex-col rounded-xl overflow-hidden bg-surface hover:shadow-md transition-shadow">

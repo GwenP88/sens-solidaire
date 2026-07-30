@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react'
 
 // ── Router
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 // ── API
 import { fetchLocationBySlug } from '../services/api'
@@ -27,6 +27,9 @@ function LocationDetail() {
   const [location, setLocation] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [searchParams] = useSearchParams()
+  const fromSlug = searchParams.get('from')
+  const originMission = location?.missions?.find(m => m.slug === fromSlug)
 
   // ── Chargement du lieu depuis l'API — delegation inclus via include Prisma
   useEffect(() => {
@@ -64,9 +67,9 @@ function LocationDetail() {
         <div className="flex flex-col gap-md">
 
           {/* Lien retour — mission parente si disponible, sinon liste missions */}
-          {location.mission?.slug ? (
-            <a href={`/missions/${location.mission.slug}`} className="link-nav text-primary/50 hover:text-primary">
-              ← Retour à la mission
+          {originMission ? (
+            <a href={`/missions/${originMission.slug}`} className="link-nav text-primary/50 hover:text-primary">
+              ← Retour à la mission {originMission.title}
             </a>
           ) : (
             <a href="/missions" className="link-nav text-primary/50 hover:text-primary">

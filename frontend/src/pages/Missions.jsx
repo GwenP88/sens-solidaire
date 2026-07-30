@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 // ── API ──
-import { fetchMissions, fetchTestimonials, fetchFieldActions } from '../services/api'
+import { fetchMissions, fetchTestimonials, fetchFieldActions, fetchLocationsByCountry } from '../services/api'
 
 // ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
@@ -24,6 +24,7 @@ import ImpactCard from '../components/actions/ImpactCard'
 import MissionCard from '../components/missions/MissionCard'
 import MissionSection from '../components/missions/MissionSection'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
+import LocationCard from '../components/locations/LocationCard'
 
 // ── Utils
 import { getDuration, TYPE_LABELS } from '../utils/missions'
@@ -43,6 +44,12 @@ function Missions() {
   const [searchParams] = useSearchParams()
   const [activeFilter, setActiveFilter] = useState(searchParams.get('filter') || null)
   const filtersRef = useRef(null)
+  const [locationsServiceCivique, setLocationsServiceCivique] = useState([])
+
+  // Listes de pays fixes par section — pas de lien BDD direct type↔pays
+  const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal']
+  const COUNTRIES_GROUPE_JEUNES   = ['Kenya', 'Sénégal']
+  const COUNTRIES_CONGE_SOLIDAIRE = ['Kenya', 'Sénégal']
 
   const handleFilter = (value) => {
     setActiveFilter(value)
@@ -75,6 +82,10 @@ function Missions() {
 
   useEffect(() => {
     fetchFieldActions().then(setActions).catch(console.error)
+  }, [])
+
+  useEffect(() => {
+    fetchLocationsByCountry(COUNTRIES_SERVICE_CIVIQUE).then(setLocationsServiceCivique).catch(console.error)
   }, [])
 
   useEffect(() => {
@@ -156,11 +167,6 @@ function Missions() {
   const testimonialsGroupeJeunes = testimonials.filter(t => t.mission?.type === 'groupe_jeunes')
   const testimonialsCongeSolidaire = testimonials.filter(t => t.mission?.type === 'conge_solidaire')
 
-  // Listes de pays fixes par section — pas de lien BDD direct type↔pays
-  const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal']
-  const COUNTRIES_GROUPE_JEUNES   = ['Kenya', 'Sénégal']
-  const COUNTRIES_CONGE_SOLIDAIRE = ['Kenya', 'Sénégal']
-
   const testimonialsServiceCivique = testimonials.filter(t => t.mission?.type === 'service_civique')
 
   const actionsServiceCivique  = actions.filter(a => a.countries?.some(c => COUNTRIES_SERVICE_CIVIQUE.includes(c.country)))
@@ -218,18 +224,24 @@ function Missions() {
           audience="Pour les volontaires individuels"
           description="Vivez une expérience utile, authentique et accessible à tous."
           decorImage="/images/ui/one-line-1.png"
-          image="/images/missions/kenya.jpg"
+          image="/images/placeholders/placeholder-photo.png"
           imageAlt="Volontariat individuel"
           introSlot={
             <>
               <p className="text-body text-primary/80">
-                Partir en mission avec Sens Solidaires, c'est rejoindre des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka ou à Sumatra.
+                Partir en mission avec Sens Solidaires, c'est soutenir des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka et à Sumatra.
               </p>
+
               <p className="text-body text-primary/80">
-                Pendant 10 jours à 4 semaines, vous découvrez une autre culture tout en participant à des actions concrètes. <strong className="text-primary/70">Aucune compétence particulière n'est demandée.</strong>
+                Pendant 10 jours à 4 semaines, vous découvrez une autre culture tout en participant à des actions concrètes au service des communautés locales. <strong className="text-primary/70">Aucune compétence particulière n'est demandée</strong> : votre motivation et votre envie de vous engager sont l'essentiel.
               </p>
+
+              <p className="text-body text-primary/80">
+                Chaque mission est aussi une expérience humaine unique, riche en rencontres, en partage de compétences et en découvertes culturelles et environnementales.
+              </p>
+
               <p className="text-mention text-primary/60">
-                En tant que particulier, vous pouvez bénéficier d'une réduction d'impôt de 66 % sur les frais de mission engagés.
+                Les frais engagés pour votre mission peuvent ouvrir droit à une réduction d'impôt de 66 % (selon la législation en vigueur). Un reçu fiscal est délivré à l'issue de votre mission.
               </p>
             </>
           }
@@ -265,12 +277,20 @@ function Missions() {
           audience="Pour les 16 à 25 ans"
           description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
           decorImage="/images/ui/one-line-2.png"
-          image="/images/missions/service-civique.jpg"
+          image="/images/placeholders/placeholder-photo.png"
           imageAlt="Service civique"
           introSlot={
-            <p className="text-body text-primary/80">
-              Vous avez entre 16 et 25 ans (jusqu'à 30 ans en situation de handicap) et souhaitez vous engager dans une mission utile, enrichissante et porteuse de sens ? Le Service Civique vous permet de consacrer plusieurs mois à une mission d'intérêt général tout en bénéficiant d'une indemnité mensuelle.
-            </p>
+            <>
+              <p className="text-body text-primary/80">
+                Vous avez entre 16 et 25 ans (jusqu'à 30 ans en situation de handicap) et souhaitez vous engager dans une mission utile, enrichissante et porteuse de sens ? Le Service Civique vous permet de consacrer 6 à 12 mois à une mission d'intérêt général tout en bénéficiant d'une indemnité mensuelle.
+              </p>
+              <p className="text-body text-primary/80">
+                Avec Sens Solidaires, vous participez à des projets d'éducation au développement durable, de solidarité internationale et de préservation de l'environnement. Selon la mission, votre engagement se déroule en France, puis à l'international (Kenya, Sénégal ou Côte d'Ivoire) aux côtés de nos partenaires locaux.
+              </p>
+              <p className="text-body text-primary/80">
+                Au-delà des actions menées sur le terrain, cette expérience vous permet de développer de nouvelles compétences, de gagner en autonomie, de vivre une immersion culturelle et de contribuer concrètement à des projets porteurs de sens.
+              </p>
+            </>
           }
           infoBarItems={[
             { icon: IconPerson, label: '16-25 ans' },
@@ -284,6 +304,23 @@ function Missions() {
           steps={stepsServiceCivique}
           bgCard="bg-white"
         >
+
+          {/* Lieux de mission — lieux partenaires où interviennent les volontaires en service civique */}
+          {locationsServiceCivique.length > 0 && (
+            <div className="mt-12">
+              <h3 className="h3-style text-primary mb-0">Nos lieux de mission</h3>
+              <p className="text-body text-primary/60 mb-8">
+                Découvrez les partenaires locaux qui accueillent nos volontaires en service civique.
+              </p>
+              <Carousel
+                items={locationsServiceCivique}
+                showPagination={true}
+                color="primary"
+                renderSlide={(loc) => <LocationCard {...loc} />}
+              />
+            </div>
+          )}  
+
           {/* Témoignages — masqué si aucun témoignage approuvé pour ce type */}
           {testimonialsServiceCivique.length > 0 && (
             <div className="mt-12 bg-primary rounded-2xl p-6 lg:p-10">
@@ -360,7 +397,7 @@ function Missions() {
           audience="Pour les lycées, MJC et structures de jeunesse"
           description="Organisez une mission solidaire au Kenya ou au Sénégal et faites vivre à votre groupe une expérience éducative et interculturelle unique."
           decorImage="/images/ui/one-line-3.png"
-          image="/images/missions/groupe-jeune.jpg"
+          image="/images/placeholders/placeholder-photo.png"
           imageAlt="Mission groupe jeunes"
           introSlot={
             <p className="text-body text-primary/80">
@@ -482,7 +519,7 @@ function Missions() {
           audience="Pour les salariés et les entreprises"
           description="Une expérience humaine forte pour les salariés et un engagement concret pour les entreprises."
           decorImage="/images/ui/one-line-4.png"
-          image="/images/missions/conge-solidaire.jpg"
+          image="/images/placeholders/placeholder-photo.png"
           imageAlt="Congé solidaire"
           introSlot={
             <p className="text-body text-primary/80">

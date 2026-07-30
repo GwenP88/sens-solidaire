@@ -78,8 +78,8 @@ function MissionSection({
 
         {/* Image — visible uniquement sur desktop ── */}
         {image && (
-          <div className="hidden xl:block xl:w-2/5 shrink-0">
-            <img src={image} alt={imageAlt} className="w-full h-72 object-cover rounded-xl" />
+          <div className="hidden xl:block xl:w-1/3 shrink-0">
+            <img src={image} alt={imageAlt} className="w-full h-[400px] object-cover rounded-xl" />
           </div>
         )}
       </div>
