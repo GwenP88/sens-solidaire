@@ -43,6 +43,8 @@ import ProtectedRoute from './components/navigation/ProtectedRoute'
 import DashboardLayout from './components/admin/DashboardLayout'
 import MissionsPage from './pages/admin/MissionsPage'
 import MissionFormPage from './pages/admin/MissionFormPage'
+import ServiceCiviquePage from './pages/admin/ServiceCiviquePage'
+import ServiceCiviqueFormPage from './pages/admin/ServiceCiviqueFormPage'
 
 //  ── Pages lieux
 import LocationDetail from './pages/LocationDetail'
@@ -114,6 +116,9 @@ function App() {
           <Route path="missions" element={<MissionsPage />} />
           <Route path="missions/new" element={<MissionFormPage />} />
           <Route path="missions/:id/edit" element={<MissionFormPage />} />
+          <Route path="service-civique" element={<ServiceCiviquePage />} />
+          <Route path="service-civique/new" element={<ServiceCiviqueFormPage />} />
+          <Route path="service-civique/:id/edit" element={<ServiceCiviqueFormPage />} />
           
           {/* missions, ateliers, medias, a-propos, actions-terrain, soutenir,
               contact, parametres : routes à ajouter au fur et à mesure des composants */}

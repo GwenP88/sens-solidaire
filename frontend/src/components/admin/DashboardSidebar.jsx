@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom'
 import {
   FiHome,
   FiGlobe,
+  FiFlag,
   FiMessageCircle,
   FiBookOpen,
   FiFileText,
@@ -29,9 +30,16 @@ const navItems = [
     iconActive: 'text-emerald-600',
   },
   {
-    label: 'Missions',
+    label: 'Missions individuelles',
     path: '/admin/missions',
     icon: FiGlobe,
+    activeClass: 'bg-emerald-50 text-emerald-700',
+    iconActive: 'text-emerald-600',
+  },
+  {
+    label: 'Service Civique',
+    path: '/admin/service-civique',
+    icon: FiFlag,
     activeClass: 'bg-emerald-50 text-emerald-700',
     iconActive: 'text-emerald-600',
   },
