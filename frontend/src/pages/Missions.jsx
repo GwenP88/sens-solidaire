@@ -5,10 +5,10 @@
 import { useState, useEffect, useRef } from 'react'
 
 // ── Router
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 // ── API ──
-import { fetchMissions, fetchTestimonials, fetchFieldActions, fetchLocationsByCountry } from '../services/api'
+import { fetchMissions, fetchTestimonials, fetchFieldActions } from '../services/api'
 
 // ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
@@ -24,7 +24,6 @@ import ImpactCard from '../components/actions/ImpactCard'
 import MissionCard from '../components/missions/MissionCard'
 import MissionSection from '../components/missions/MissionSection'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
-import LocationCard from '../components/locations/LocationCard'
 
 // ── Utils
 import { getDuration, TYPE_LABELS } from '../utils/missions'
@@ -44,12 +43,51 @@ function Missions() {
   const [searchParams] = useSearchParams()
   const [activeFilter, setActiveFilter] = useState(searchParams.get('filter') || null)
   const filtersRef = useRef(null)
-  const [locationsServiceCivique, setLocationsServiceCivique] = useState([])
 
   // Listes de pays fixes par section — pas de lien BDD direct type↔pays
   const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal']
   const COUNTRIES_GROUPE_JEUNES   = ['Kenya', 'Sénégal']
   const COUNTRIES_CONGE_SOLIDAIRE = ['Kenya', 'Sénégal']
+
+  const LIEUX_MISSION_SERVICE_CIVIQUE = [
+  {
+    pays: 'Au Kenya',
+    bullets: [
+      "Auprès de notre partenaire local l'école polytechnique de Taita Taveta, vous participerez à la vie quotidienne du campus, notamment auprès des étudiants en tourisme et les appuierez dans leur apprentissage du français.",
+      "Vous suivrez et développerez les projets de l'association sur place avec différents partenaires engagés pour la préservation de l'environnement, notamment autour d'un projet de potager agroécologique avec le club biodiversité des étudiants.",
+      "Au sanctuaire de LUMO, au cœur du Parc Tsavo, vous suivrez l'avancée du projet de sentier botanique.",
+      "Vous accueillerez également les volontaires français en mission courte et apporterez les correspondances scolaires de France aux jeunes Kényans et les aiderez à écrire leur réponse.",
+      "Cette mission vous permettra de mettre en pratique votre anglais !",
+    ],
+    liens: [
+      { label: 'le TTNP', slug: 'ttnp-kenya' },
+      { label: 'LUMO', slug: 'lumo-kenya' },
+    ],
+  },
+  {
+    pays: 'Au Sénégal',
+    bullets: [
+      "Auprès de l'association sénégalaise AGADA, dans la région de la Casamance, vous suivrez et participerez à leurs activités sur le terrain, notamment les actions de reboisement de la mangrove et d'agriculture durable.",
+      "Vous apporterez les correspondances françaises aux élèves sénégalais et les aiderez à répondre.",
+      "Vous réaliserez le suivi d'après-projet de la construction d'un puits et de l'utilisation de kits de filtration de l'eau, et ferez un diagnostic des besoins des communautés locales.",
+      "Vous accueillerez les groupes de volontaires de l'association.",
+    ],
+    liens: [
+      { label: 'AGADA', slug: 'agada-senegal' },
+    ],
+  },
+  {
+    pays: "En Côte d'Ivoire",
+    bullets: [
+      "À Abidjan, capitale du pays, vous soutiendrez les actions de l'institut Georges Aristide et de l'association Zéro Plastique AZEP.",
+      "Vous appuierez la distribution de la correspondance scolaire Nice-Abidjan et la rédaction des réponses.",
+      "Vous proposerez des ateliers de sensibilisation au développement durable pour les élèves des écoles partenaires.",
+      "Vous réaliserez un état des lieux des activités du partenaire ivoirien et de l'accueil des volontaires pour de futurs projets : nettoyage du littoral, reboisement de la mangrove, diagnostic de la production de l'attiéké par les ateliers de femmes, traitement des déchets plastiques.",
+      "Vous serez un membre actif d'AZEP et mobiliserez la communauté des jeunes pour lutter contre la pollution plastique et la pollution de la lagune Ébrié.",
+    ],
+    liens: [], // pas de Location en base — en attente de confirmation cliente (C2/C3)
+  },
+]
 
   const handleFilter = (value) => {
     setActiveFilter(value)
@@ -85,10 +123,6 @@ function Missions() {
   }, [])
 
   useEffect(() => {
-    fetchLocationsByCountry(COUNTRIES_SERVICE_CIVIQUE).then(setLocationsServiceCivique).catch(console.error)
-  }, [])
-
-  useEffect(() => {
     if (activeFilter) {
       setTimeout(() => filtersRef.current?.scrollIntoView({ behavior: 'smooth' }), 100)
     }
@@ -103,19 +137,19 @@ function Missions() {
   const stepsServiceCivique = [
     {
       icon: IconFrance,
-      title: 'Mission en France : Nice ou Annemasse',
-      description: 'Pendant plusieurs mois, vous animez des actions de sensibilisation au développement durable et découvrez le fonctionnement de l\'association avant votre mission à l\'international',
+      title: 'Mission en France',
+      description: 'Pendant plusieurs mois, sur Nice ou Annemasse, vous animez des actions de sensibilisation au développement durable et découvrez le fonctionnement de l\'association avant votre mission à l\'international',
       list: ['Animation d\'ateliers pédagogiques', 'Promotion des projets de l\'association', 'Préparation au départ'],
     },
     {
       icon: IconAbroad,
-      title: 'Mission au Kenya, au Sénégal ou en Côte d\'Ivoire',
-      description: 'Vous rejoignez l\'une de nos délégations pour participer à des projets concrets de préservation de la biodiversité et d\'éducation.',
+      title: 'Mission à l\'étranger',
+      description: 'Vous rejoignez l\'une de nos délégations au Kenya, au Sénégal ou en Côte d\'Ivoire pour participer à des projets concrets de préservation de la biodiversité et d\'éducation.',
       list: ['Protection de l\'environnement', 'Actions éducatives', 'Vie avec les partenaires locaux'],
     },
     {
       icon: IconGrow,
-      title: 'Une expérience qui vous transforme',
+      title: 'Une expérience unique',
       description: 'Cette expérience vous permet de gagner en autonomie, de travailler en équipe et de développer des compétences valorisées dans votre parcours personnel et professionnel.',
       list: ['Gestion de projet', 'Coopération internationale', 'Travail en équipe'],
     },
@@ -304,22 +338,6 @@ function Missions() {
           steps={stepsServiceCivique}
           bgCard="bg-white"
         >
-
-          {/* Lieux de mission — lieux partenaires où interviennent les volontaires en service civique */}
-          {locationsServiceCivique.length > 0 && (
-            <div className="mt-12">
-              <h3 className="h3-style text-primary mb-0">Nos lieux de mission</h3>
-              <p className="text-body text-primary/60 mb-8">
-                Découvrez les partenaires locaux qui accueillent nos volontaires en service civique.
-              </p>
-              <Carousel
-                items={locationsServiceCivique}
-                showPagination={true}
-                color="primary"
-                renderSlide={(loc) => <LocationCard {...loc} />}
-              />
-            </div>
-          )}  
 
           {/* Témoignages — masqué si aucun témoignage approuvé pour ce type */}
           {testimonialsServiceCivique.length > 0 && (
