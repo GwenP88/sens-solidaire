@@ -158,7 +158,14 @@ export const create = async (data) => {
         health_info:       data.health_info,
         helloasso_url:     data.helloasso_url,
         image_url:         data.image_url,
+        image_alt:         data.image_alt,
         how_to_go:         data.how_to_go,
+        age_min:           data.age_min,
+        age_max:           data.age_max,
+        duration_label:    data.duration_label,
+        role_france:       data.role_france,
+        role_etranger:     data.role_etranger,
+        candidater_url:    data.candidater_url,
       },
     })
 
