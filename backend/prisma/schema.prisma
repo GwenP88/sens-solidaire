@@ -27,11 +27,17 @@ model Mission {
   is_active         Boolean          @default(true)
   created_at        DateTime         @default(now())
   updated_at        DateTime         @updatedAt
-  type              String           @default("faune_sauvage")
+  type              String           @default("volontariat_individuel")
   short_description String
   image_url         String?
   image_alt         String?
   how_to_go         String?
+  age_min           Int?      // Service Civique — âge minimum requis
+  age_max           Int?      // Service Civique — âge maximum requis
+  duration_label    String?   // Service Civique — durée en texte libre (ex: "6 à 12 mois")
+  role_france       String?   // Service Civique — rôle colonne 1 (mission en France)
+  role_etranger     String?   // Service Civique — rôle colonne 2 (mission à l'étranger)
+  candidater_url    String?   // Service Civique — lien bouton Candidater
   locations         Location[]
   pricing           MissionPricing[]
   testimonials      Testimonial[]
