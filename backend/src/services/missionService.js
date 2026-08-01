@@ -166,7 +166,9 @@ export const create = async (data) => {
         duration_label:    data.duration_label,
         role_france:       data.role_france,
         role_etranger:     data.role_etranger,
+        competences:       data.competences,
         candidater_url:    data.candidater_url,
+        info_service_civique_url: data.info_service_civique_url,
       },
     })
 
