@@ -31,6 +31,7 @@ import { FormSection, Field, TextareaField } from '../../components/admin/FormEl
 const EMPTY_FORM = {
   title:             '',
   country:           '',
+  country_preposition: 'au',
   slug:              '',
   short_description: '',
   type:              'service_civique',
@@ -87,12 +88,13 @@ function ServiceCiviqueFormPage() {
         setFormData({
           title:             mission.title             || '',
           country:           mission.country           || '',
+          country_preposition: mission.country_preposition || 'au',
           slug:              mission.slug              || '',
           short_description: mission.short_description || '',
           type:              'service_civique',
           description:       mission.description       || '',
-          age_min:           mission.age_min ?? '',
-          age_max:           mission.age_max ?? '',
+          age_min:           mission.age_min || '',
+          age_max:           mission.age_max || '',
           duration_label:    mission.duration_label     || '',
           admin_info:        mission.admin_info         || '',
           role_france:       mission.role_france         || '',
@@ -160,12 +162,13 @@ function ServiceCiviqueFormPage() {
       const payload = {
         title:             formData.title,
         country:           formData.country,
+        country_preposition: formData.country_preposition,
         slug:              formData.slug,
         short_description: formData.short_description,
         type:              'service_civique',
         description:       formData.description,
-        age_min:           formData.age_min !== '' ? Number(formData.age_min) : null,
-        age_max:           formData.age_max !== '' ? Number(formData.age_max) : null,
+        age_min:           formData.age_min || null,
+        age_max:           formData.age_max || null,
         duration_label:    formData.duration_label,
         admin_info:        formData.admin_info,
         role_france:       formData.role_france,
@@ -247,23 +250,44 @@ function ServiceCiviqueFormPage() {
           title="Informations essentielles"
           description="Affichées sur la card mission et dans le hero de la page détail."
         >
+          {/* Ligne 1 — Titre, pleine largeur */}
+          <Field
+            label="Titre" name="title" value={formData.title} onChange={handleChange}
+            required error={fieldErrors.title}
+            hint="ex: Service Civique au Kenya"
+          />
+
+          {/* Ligne 2 — Préposition + Pays côte à côte */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Field
-              label="Titre" name="title" value={formData.title} onChange={handleChange}
-              required error={fieldErrors.title}
-              hint="ex: Service Civique au Kenya"
-            />
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">Préposition</label>
+              <select
+                name="country_preposition"
+                value={formData.country_preposition}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+              >
+                <option value="au">au (ex: au Kenya)</option>
+                <option value="en">en (ex: en France)</option>
+                <option value="à">à (ex: à Sumatra)</option>
+                <option value="aux">aux (ex: aux Philippines)</option>
+              </select>
+            </div>
+
             <Field
               label="Pays" name="country" value={formData.country} onChange={handleChange}
               required pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
               error={fieldErrors.country}
             />
           </div>
+
+          {/* Ligne 3 — Slug, pleine largeur */}
           <Field
             label="Slug" name="slug" value={formData.slug} onChange={handleChange}
             required hint="utilisé dans l'URL" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement"
             error={fieldErrors.slug}
           />
+
           <div className="flex flex-col gap-1">
             <label className={`text-sm font-medium ${
               formData.short_description.length >= 140 ? 'text-red-500' :
