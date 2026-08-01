@@ -32,12 +32,13 @@ model Mission {
   image_url         String?
   image_alt         String?
   how_to_go         String?
-  age_min           Int?      // Service Civique — âge minimum requis
-  age_max           Int?      // Service Civique — âge maximum requis
+  age_min           String?   // Service Civique — âge minimum, texte libre (ex: "16 ans")
+  age_max           String?   // Service Civique — âge maximum, texte libre (ex: "25 ans (30 en situation de handicap)")
   duration_label    String?   // Service Civique — durée en texte libre (ex: "6 à 12 mois")
   role_france       String?   // Service Civique — rôle colonne 1 (mission en France)
   role_etranger     String?   // Service Civique — rôle colonne 2 (mission à l'étranger)
   candidater_url    String?   // Service Civique — lien bouton Candidater
+  country_preposition   String?   // Service Civique — "au"/"en"/"à"/"aux", ex: "au Kenya"
   locations         Location[]
   pricing           MissionPricing[]
   testimonials      Testimonial[]
