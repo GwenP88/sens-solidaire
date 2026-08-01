@@ -2329,4 +2329,94 @@ Plusieurs cards se fondaient dans leur fond de section (même couleur `bg-surfac
 
 ---
 
+## Jour 44 · 1er août 2026
+### Reprise post-pause — Hard delete missions + Lieux many-to-many + Service Civique dashboard complet
+
+#### Statut général
+
+| Élément | Statut |
+|---|---|
+| Hard delete missions (transaction + dashboard) | ✅ Terminé |
+| Location ↔ Mission passé en many-to-many | ✅ Terminé |
+| Section "Nos lieux de mission" sur Missions.jsx | ✅ Terminé (puis retirée au profit de Service Civique dédié) |
+| Service Civique — sortie du contenu figé, vraies missions BDD | ✅ Terminé |
+| ServiceCiviqueFormPage.jsx (dashboard) | ✅ Terminé |
+| ServiceCiviquePage.jsx (dashboard, listing) | ✅ Terminé |
+| ServiceCiviqueDetail.jsx (page publique) | ✅ Terminé |
+| country_preposition sur Mission | ✅ Terminé (Mission + ServiceCivique) |
+| Champs competences + info_service_civique_url | ✅ Terminé |
+
+---
+
+#### Ce qui a été fait
+
+**Hard delete des missions**
+- Décision cliente : choix entre "rendre invisible" (soft, existant) et "supprimer définitivement" (nouveau)
+- `hardDelete()` (service) — transaction Prisma : détache les témoignages (`mission_id = null`), supprime les tarifs, nettoie les médias orphelins (pas de FK Prisma sur `Media`), supprime la mission
+- Route dédiée `DELETE /api/admin/missions/:id/permanent` — distincte du soft delete existant
+- Dashboard : 3ᵉ bouton (poubelle) sur `DashboardTable`, `onHardDelete` optionnel pour ne pas casser les autres usages du composant
+- `ConfirmModal.jsx` — remplace `window.confirm` natif, réutilisable pour toute confirmation future
+- Bug corrigé au passage : `image_alt` jamais sauvegardé à la création (whitelist du service incomplète)
+
+**Location ↔ Mission — many-to-many**
+- Un lieu (ex: TTNP) peut désormais être partagé entre plusieurs missions (volontariat individuel ET service civique)
+- Migration en 1 fichier édité à la main : création table de jointure `_LocationToMission` → copie SQL des données existantes (`mission_id` → jointure) → suppression de l'ancienne colonne
+- Renommage `Mission.location` → `Mission.locations` (front + back)
+- `LocationDetail.jsx` — lien "Retour à la mission" désormais basé sur un paramètre `?from=slug-mission` (traçant d'où vient l'utilisateur), plutôt qu'un lien figé impossible avec plusieurs missions parentes possibles
+- Nouvelle route publique `GET /api/locations?country=Kenya,Sénégal` (`findAllByCountry`)
+
+**Service Civique — sortie du contenu figé**
+- Ancien état : contenu 100% codé en dur dans `Missions.jsx`, aucune vraie mission en base
+- Nouveaux champs `Mission` : `age_min`/`age_max` (texte libre, pas numérique — accepte "16 ans", "25 ans (30 en situation de handicap)"), `duration_label`, `role_france`/`role_etranger`, `candidater_url`, `country_preposition`, `competences`, `info_service_civique_url`
+- `ServiceCiviqueFormPage.jsx` — formulaire dashboard dédié (page séparée de `MissionFormPage`, pas de dropdown type conditionnel) : infos essentielles, photos, hero (âge/durée), infos pratiques (paragraphe libre `admin_info` réutilisé + CTA), rôle 2 colonnes, compétences
+- `ServiceCiviquePage.jsx` — listing dashboard filtré `type === 'service_civique'`, réutilise `DashboardTable`/`ConfirmModal`
+- `ServiceCiviqueDetail.jsx` (page publique `/service-civique/:slug`) — Hero (âge + durée), La mission (texte fixe légal + photo), Rôle et compétences (2 blocs France/Étranger avec icônes + puces `accent-2`, compétences en pastilles sur fond `bg-primary`), Lieux partenaires (réutilise `LocationCard`/`Carousel`), Procédure (frise 7 étapes fixes, icônes Lucide `Lu*`, + 3 CTA : Candidater/Contact/Comprendre le Service Civique), Impact terrain, Témoignages, Galerie
+- Garde-fou ajouté : `MissionDetail.jsx` et `ServiceCiviqueDetail.jsx` vérifient chacun `mission.type` — une mission service civique ouverte via `/missions/:slug` (mauvais composant) affiche "Mission introuvable" plutôt qu'une page à moitié fonctionnelle
+- `FormElements.jsx` créé — extraction de `FormSection`/`Field`/`TextareaField` (dupliqués entre les deux formulaires), maintenant partagés
+
+**country_preposition — préposition pays éditable**
+- Constat : "Service Civique au Kenya" ne fonctionne pas pour tous les pays (Sumatra = "à", France = "en")
+- Décision : champ éditable par mission (select au/en/à/aux) plutôt que dictionnaire codé en dur — la cliente peut créer un nouveau pays sans développeur
+- Ajouté aux deux formulaires (`MissionFormPage`, `ServiceCiviqueFormPage`), même disposition (Titre / Préposition+Pays / Slug)
+- `DelegationCard.jsx` — phrase reformulée pour retirer la préposition figée (`Delegation` n'a pas encore de dashboard, pas de champ ajouté pour l'instant)
+
+**Corrections en cours de route**
+- `type` par défaut sur `Mission` : `"faune_sauvage"` (obsolète) → `"volontariat_individuel"`
+- Piège récurrent identifié : après une migration Prisma, `prisma generate` explicite + redémarrage backend sont **tous les deux** nécessaires (un restart seul ne suffit pas)
+
+---
+
+#### Bugs rencontrés et résolus
+
+| Bug | Cause | Solution |
+|---|---|---|
+| Migration `_LocationToMission` — erreur `mission_id` | Ordre des opérations dans le SQL généré par Prisma (`--create-only`) | Réordonné : créer table → copier données → supprimer ancienne colonne |
+| `Unknown argument age_min` | Client Prisma non régénéré après migration | `npx prisma generate` explicite + `docker-compose restart backend` |
+| Champ âge se vidait à l'enregistrement | `Number("16 ans")` → `NaN` | Passage du champ en `String` (texte libre, affiché tel quel) |
+| Page Service Civique affichait le contenu de MissionDetail | Route `/missions/:slug` sans filtre de type — accessible par les deux URLs | Garde-fou `mission.type` ajouté sur les deux pages détail |
+| SyntaxError `Unexpected token 'export'` (api.js) | Accolade manquante en fin de fonction, fonction suivante collée à l'intérieur | Accolade fermante ajoutée |
+
+---
+
+#### Décisions d'architecture
+
+| Décision | Justification |
+|---|---|
+| Page dédiée `ServiceCiviqueFormPage` plutôt que dropdown type sur `MissionFormPage` | Déjà anticipé dans la doc S7 ("types gérables via modules dashboard dédiés plus tard") — évite de complexifier un formulaire pensé pour le volontariat (tarifs, programme...) |
+| `age_min`/`age_max` en `String`, pas `Int` | La cliente doit pouvoir écrire "30 ans en situation de handicap", pas juste un nombre |
+| Procédure Service Civique — contenu fixe, pas en base | Identique pour toutes les missions (démarches administratives), aucun bénéfice à le stocker par mission |
+| `country_preposition` en champ éditable plutôt que dictionnaire | La cliente doit pouvoir ajouter un pays sans développeur |
+| `competences`/`info_service_civique_url` en nouveaux champs séparés | Réutiliser un champ existant (`admin_info`) aurait mélangé des contenus de nature différente |
+
+---
+
+#### 🔵 À faire — identifié aujourd'hui
+
+- **CRUD dashboard pour Location, Delegation, TeamMember, FieldAction** — briques de base utilisées par Mission, actuellement seed-only. Bloquant rencontré plusieurs fois (pas de préposition sur Delegation, pas de gestion des lieux Côte d'Ivoire). Priorité proposée pour la prochaine session.
+- Missions.jsx — remplacer le contenu Service Civique encore statique par un carrousel de vraies cards cliquables vers `/service-civique/:slug`
+- Navbar — dropdown "Nos missions" à étendre pour inclure Service Civique dynamique
+- Réponse client toujours en attente : Côte d'Ivoire active ou non (questions C2/C3, doc questions-cliente.md)
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
