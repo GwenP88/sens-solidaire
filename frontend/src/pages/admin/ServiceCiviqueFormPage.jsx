@@ -42,7 +42,9 @@ const EMPTY_FORM = {
   admin_info:        '', // paragraphe "Infos pratiques" — texte libre
   role_france:       '',
   role_etranger:     '',
+  competences:         '',
   candidater_url:    '',
+  info_service_civique_url: '',
   is_active:         true,
   // Photos — la 1ère devient l'image principale (hero), les suivantes la galerie
   photos:            [],
@@ -99,7 +101,9 @@ function ServiceCiviqueFormPage() {
           admin_info:        mission.admin_info         || '',
           role_france:       mission.role_france         || '',
           role_etranger:     mission.role_etranger       || '',
+          competences:       mission.competences         || '',
           candidater_url:    mission.candidater_url      || '',
+          info_service_civique_url: mission.info_service_civique_url || '',
           is_active:         mission.is_active ?? true,
           photos,
         })
@@ -173,7 +177,9 @@ function ServiceCiviqueFormPage() {
         admin_info:        formData.admin_info,
         role_france:       formData.role_france,
         role_etranger:     formData.role_etranger,
+        competences:       formData.competences,
         candidater_url:    formData.candidater_url,
+        info_service_civique_url: formData.info_service_civique_url,
         is_active:         formData.is_active,
         image_url,
         image_alt,
@@ -366,6 +372,11 @@ function ServiceCiviqueFormPage() {
           <p className="text-xs text-gray-300 -mt-2 italic">
             Le bouton "Nous contacter" est fixe (contact@sensolidaires.org) et ne nécessite aucune saisie.
           </p>
+          <Field
+            label="Lien 'Comprendre le Service Civique'" name="info_service_civique_url"
+            value={formData.info_service_civique_url} onChange={handleChange}
+            hint="ex: https://www.service-civique.gouv.fr/comprendre-le-service-civique"
+          />
         </FormSection>
 
         {/* ── BLOC 5 : Votre rôle (2 colonnes) ── */}
@@ -373,7 +384,7 @@ function ServiceCiviqueFormPage() {
           title="Section 'Votre rôle'"
           description="Une ligne = une puce affichée dans chaque colonne."
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid gap-4">
             <TextareaField
               label="Mission en France" name="role_france"
               value={formData.role_france} onChange={handleChange}
@@ -384,6 +395,11 @@ function ServiceCiviqueFormPage() {
               value={formData.role_etranger} onChange={handleChange}
               rows={8}
             />
+            <TextareaField
+            label="Compétences développées" name="competences"
+            value={formData.competences} onChange={handleChange}
+            rows={6} hint="Une ligne = une puce affichée"
+          />
           </div>
         </FormSection>
 
