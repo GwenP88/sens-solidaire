@@ -29,7 +29,7 @@ import LocationCard from '../components/locations/LocationCard'
 import ImpactCard from '../components/actions/ImpactCard'
 
 // ── Utils
-import { IconPerson } from '../utils/icons'
+import { IconPerson, IconFrance, IconAbroad, IconCheck } from '../utils/icons'
 import {
   IconEligibilite, IconCandidature, IconEtudeDossier,
   IconEntretien, IconValidation, IconPreparation, IconDepart,
@@ -88,7 +88,7 @@ function ServiceCiviqueDetail() {
 
   const anchorSections = [
     { label: "La mission", id: "description", show: true },
-    { label: "Infos pratiques & rôle", id: "infos-role",    show: !!mission.admin_info || !!mission.role_france || !!mission.role_etranger },
+    { label: "Rôle et compétences", id: "role-competences", show: !!mission.admin_info || !!mission.role_france || !!mission.role_etranger },
     { label: "Lieux partenaires",    id: "lieux",           show: mission.locations?.length > 0 },
     { label: "Procédure",            id: "procedure",       show: true },
     { label: "Impact terrain",       id: "impact",          show: actions.length > 0 },
@@ -140,47 +140,67 @@ function ServiceCiviqueDetail() {
         </div>
       </section>
 
-      {/* ── Infos pratiques & rôle ── */}
+      {/* ── Rôle & compétences ── */}
       {(mission.admin_info || mission.role_france || mission.role_etranger) && (
-        <section id="infos-role" className="padding-y padding-x bg-surface">
-          <h2 className="h2-style text-primary">Infos pratiques & votre rôle</h2>
+        <section id="role-competences" className="padding-y padding-x bg-surface">
+          <h2 className="h2-style text-primary">Ce que vous ferez et ce que vous apprendrez</h2>
 
-          {/* Paragraphe libre — pas de puces, texte simple */}
+          {/* Paragraphes libres — texte propre à la mission */}
           {mission.admin_info && (
-            <p className="text-body text-primary/80 mb-8 whitespace-pre-line">
-              {mission.admin_info}
-            </p>
+            <div className="flex flex-col gap-md mb-8">
+              {mission.admin_info.split('\n\n').filter(p => p.trim()).map((p, i) => (
+                <p key={i} className="text-body text-primary/80">{p.trim()}</p>
+              ))}
+            </div>
           )}
 
-          {/* Rôle — 2 colonnes côte à côte */}
+          {/* Rôle — 2 blocs côte à côte, avec icône */}
           {(mission.role_france || mission.role_etranger) && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-lg mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-lg mb-10">
               {mission.role_france && (
                 <div className="bg-surface-mid rounded-xl p-6 flex flex-col gap-md">
-                  <h3 className="h3-style text-primary mb-0">En France</h3>
+                  <div className="flex items-center gap-sm">
+                    <IconFrance className="text-accent-2 text-2xl shrink-0" />
+                    <div>
+                      <h3 className="h3-style text-primary mb-0">En France</h3>
+                      <p className="text-caption text-primary/50">À Nice ou Annemasse — 3 mois minimum</p>
+                    </div>
+                  </div>
                   <LignesToPuces texte={mission.role_france} />
                 </div>
               )}
               {mission.role_etranger && (
                 <div className="bg-surface-mid rounded-xl p-6 flex flex-col gap-md">
-                  <h3 className="h3-style text-primary mb-0">À l'étranger</h3>
+                  <div className="flex items-center gap-sm">
+                    <IconAbroad className="text-accent-2 text-2xl shrink-0" />
+                    <div>
+                      <h3 className="h3-style text-primary mb-0">À l'étranger</h3>
+                      <p className="text-caption text-primary/50">{mission.country} — 3 mois minimum</p>
+                    </div>
+                  </div>
                   <LignesToPuces texte={mission.role_etranger} />
                 </div>
               )}
             </div>
           )}
 
-          {/* CTA — Candidater + Nous contacter */}
-          <div className="flex flex-col sm:flex-row gap-md">
-            {mission.candidater_url && (
-              <a href={mission.candidater_url} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button label="Candidater →" variant="primary" fullWidth />
-              </a>
-            )}
-            <a href="mailto:contact@sensolidaires.org" className="flex-1">
-              <Button label="Nous contacter →" variant="secondary" fullWidth />
-            </a>
-          </div>
+          {/* Compétences — bloc plein, même couleur que l'AnchorNav */}
+          {mission.competences && (
+            <div className="bg-primary rounded-xl p-6 flex flex-col gap-md">
+              <h3 className="h3-style text-surface mb-0">Compétences développées</h3>
+              <div className="flex flex-wrap gap-sm">
+                {mission.competences.split('\n').filter(c => c.trim()).map((c, i) => (
+                  <span
+                    key={i}
+                    className="flex items-center gap-xs text-body text-primary bg-surface px-4 py-2 rounded-full"
+                  >
+                    <IconCheck style={{ color: '#2F8A3A' }} className="text-sm shrink-0" />
+                    {c.trim()}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
       )}
 
@@ -254,6 +274,22 @@ function ServiceCiviqueDetail() {
               </div>
             )
           })}
+        </div>
+        {/* CTA — Candidater + Nous contacter + En savoir plus */}
+        <div className="flex flex-col sm:flex-row gap-md mt-8">
+          {mission.candidater_url && (
+            <a href={mission.candidater_url} target="_blank" rel="noopener noreferrer" className="flex-1">
+              <Button label="Candidater →" variant="primary" fullWidth />
+            </a>
+          )}
+          <a href="mailto:contact@sensolidaires.org" className="flex-1">
+            <Button label="Nous contacter →" variant="secondary" fullWidth />
+          </a>
+          {mission.info_service_civique_url && (
+            <a href={mission.info_service_civique_url} target="_blank" rel="noopener noreferrer" className="flex-1">
+              <Button label="Comprendre le Service Civique →" variant="secondary" fullWidth />
+            </a>
+          )}
         </div>
       </section>
 
