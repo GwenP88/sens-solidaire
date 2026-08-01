@@ -194,7 +194,7 @@ export const createMission = async (req, res, next) => {
   try {
     // 1. Extraction des champs depuis le body
     const {
-      title, country, slug, short_description, type,
+      title, country, country_preposition, slug, short_description, type,
       description, volunteer_role, programme, included, not_include,
       admin_info, ministry_url, health_info, helloasso_url,
       image_url, image_alt, how_to_go,
@@ -242,7 +242,7 @@ export const createMission = async (req, res, next) => {
 
     // 4. Appel du service avec un objet PROPRE (jamais req.body brut !)
     const mission = await create({
-      title, country, slug, short_description, type,
+      title, country, country_preposition, slug, short_description, type,
       description, volunteer_role, programme, included, not_include,
       admin_info, ministry_url, health_info, helloasso_url,
       image_url, how_to_go, image_alt,
@@ -279,7 +279,7 @@ export const updateMission = async (req, res, next) => {
     //    → un champ absent ne sera pas touché (c'est tout l'intérêt du PATCH).
     const data = {}
     const allowed = [
-      "title", "country", "slug", "short_description", "type",
+      "title", "country", "country_preposition", "slug", "short_description", "type",
       "description", "volunteer_role", "programme", "included", "not_include",
       "admin_info", "ministry_url", "health_info", "helloasso_url",
       "image_url", "how_to_go", "is_active", "image_alt",

@@ -143,6 +143,7 @@ export const create = async (data) => {
         // — Champs OBLIGATOIRES —
         title:             data.title,
         country:           data.country,
+        country_preposition: data.country_preposition,
         slug:              data.slug,
         short_description: data.short_description,
         type:              data.type, // défaut en base, mais validé en amont
