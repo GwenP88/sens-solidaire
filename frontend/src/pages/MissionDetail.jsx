@@ -66,7 +66,7 @@ function MissionDetail() {
   }, [slug])
 
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
-  if (error || !mission) return (
+  if (error || !mission || mission.type !== 'volontariat_individuel') return (
     <div className="p-12 text-center">
       <p className="text-body text-primary/50 italic">Mission introuvable.</p>
       <a href="/missions" className="link-inline text-accent">← Retour aux missions</a>
@@ -222,7 +222,7 @@ function MissionDetail() {
         {actions.length === 0 ? (
           <div className="flex items-center justify-center bg-surface-mid rounded-xl h-64">
             <p className="text-body text-primary/40 italic text-center px-8">
-              Nous préparons actuellement la présentation des actions menées avec nos partenaires au {mission.country}. Revenez bientôt pour les découvrir.
+              Nous préparons actuellement la présentation des actions menées avec nos partenaires {mission.country_preposition || 'au'} {mission.country}.
             </p>
           </div>
         ) : (

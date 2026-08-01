@@ -112,9 +112,7 @@ function ServiceCiviqueDetail() {
 
       {/* ── La mission ── */}
       <section id="description" className="padding-y padding-x bg-surface-mid">
-        <h2 className="h2-style text-primary">
-          Service Civique {mission.country_preposition || 'au'} {mission.country}
-        </h2>
+        <h2 className="h2-style text-primary">{mission.title}</h2>
         <div className="flex flex-col lg:flex-row gap-lg items-start">
           <div className="flex flex-col gap-md w-full lg:w-2/3">
 
