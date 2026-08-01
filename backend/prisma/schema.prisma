@@ -14,6 +14,7 @@ model Mission {
   id                Int              @id @default(autoincrement())
   title             String
   country           String
+  country_preposition   String?   // "au"/"en"/"à"/"aux", ex: "au Kenya"
   slug              String           @unique
   description       String?
   volunteer_role    String?
@@ -38,7 +39,8 @@ model Mission {
   role_france       String?   // Service Civique — rôle colonne 1 (mission en France)
   role_etranger     String?   // Service Civique — rôle colonne 2 (mission à l'étranger)
   candidater_url    String?   // Service Civique — lien bouton Candidater
-  country_preposition   String?   // Service Civique — "au"/"en"/"à"/"aux", ex: "au Kenya"
+  info_service_civique_url   String?   // Service Civique — lien "Comprendre le Service Civique"
+  competences   String?   // Service Civique — texte libre, une ligne = une puce
   locations         Location[]
   pricing           MissionPricing[]
   testimonials      Testimonial[]
