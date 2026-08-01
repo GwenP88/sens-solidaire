@@ -16,6 +16,7 @@ import Testimonials from './pages/Testimonials'
 import Contact from './pages/Contact'
 import Soutenir from './pages/Soutenir'
 import RapportsActivite from './pages/RapportsActivite'
+import ServiceCiviqueDetail from './pages/ServiceCiviqueDetail'
 
 // ── Pages institutionnelles
 import APropos from './pages/APropos'
@@ -65,6 +66,7 @@ function App() {
           {/* Missions */}
           <Route path="/missions" element={<Missions />} />
           <Route path="/missions/:slug" element={<MissionDetail />} />
+          <Route path="/service-civique/:slug" element={<ServiceCiviqueDetail />} />
           <Route path="/lieux/:slug" element={<LocationDetail />} />
 
           {/* Témoignages & rapports */}

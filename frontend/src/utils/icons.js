@@ -9,6 +9,7 @@ import { BiCoinStack } from 'react-icons/bi'
 import { GiFrance } from 'react-icons/gi'
 import { FaHandshakeSimple } from "react-icons/fa6";
 import { FaPlaneDeparture, FaHandHoldingHeart, FaEnvelope, FaYoutube, FaLinkedin, FaInstagram, FaFacebook, FaMapMarkerAlt, FaCreditCard, FaFileContract, FaBook, FaFileAlt, FaRegCheckCircle, FaRegTimesCircle, FaLeaf, FaGlobeAmericas, FaHeart, FaUsers, FaTiktok, FaRegBuilding } from 'react-icons/fa'
+import { LuUserCheck, LuSend, LuFileSearch, LuMessagesSquare, LuHandshake, LuLuggage, LuRocket } from 'react-icons/lu'
 
 // Icônes génériques — utilisées sur tout le site
 export const IconPerson = IoPerson       // âge, profil
@@ -49,3 +50,12 @@ export const IconLeaf = FaLeaf
 export const IconGlobe = FaGlobeAmericas
 export const IconHeart = FaHeart
 export const IconPeople = FaUsers
+
+// Icônes Procédure Service Civique — page détail Service Civique
+export const IconEligibilite   = LuUserCheck
+export const IconCandidature   = LuSend
+export const IconEtudeDossier  = LuFileSearch
+export const IconEntretien     = LuMessagesSquare
+export const IconValidation    = LuHandshake
+export const IconPreparation   = LuLuggage
+export const IconDepart        = LuRocket
