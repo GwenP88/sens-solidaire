@@ -52,6 +52,10 @@ const authMiddleware = (req, res, next) => {
       role: payload.role
     }
 
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ error: true, message: "Accès refusé" })
+    }
+
     // Token valide → on laisse passer la requête vers le controller
     next()
 
