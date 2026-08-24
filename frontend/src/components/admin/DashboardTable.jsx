@@ -2,12 +2,12 @@
 // Tableau générique réutilisable pour toutes les sections admin.
 // Ne contient AUCUNE logique métier — uniquement de l'affichage + délégation d'actions.
 
-import { FiEdit2, FiTrash2 } from 'react-icons/fi'
+import { FiEdit2, FiPause, FiTrash2 } from 'react-icons/fi'
 
 // columns : [{ key, label, render?: (row) => ReactNode }]
 // data    : tableau d'objets (doit contenir keyField, "id" par défaut)
 // onEdit / onDelete : callbacks reçoivent la ligne complète (row)
-function DashboardTable({ columns, data, onEdit, onDelete, keyField = 'id' }) {
+function DashboardTable({ columns, data, onEdit, onDelete, onHardDelete, keyField = 'id' }) {
   if (data.length === 0) {
     return (
       <div className="text-center py-12 text-gray-400 text-sm">
@@ -50,11 +50,22 @@ function DashboardTable({ columns, data, onEdit, onDelete, keyField = 'id' }) {
                   </button>
                   <button
                     onClick={() => onDelete(row)}
-                    className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
-                    aria-label={`Supprimer ${row[keyField]}`}
+                    className="p-1.5 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded"
+                    aria-label={`Mettre en pause ${row[keyField]}`}
+                    title="Rendre invisible (réversible)"
                   >
-                    <FiTrash2 size={16} />
+                    <FiPause size={16} />
                   </button>
+                  {onHardDelete && (
+                    <button
+                      onClick={() => onHardDelete(row)}
+                      className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
+                      aria-label={`Supprimer définitivement ${row[keyField]}`}
+                      title="Supprimer définitivement"
+                    >
+                      <FiTrash2 size={16} />
+                    </button>
+                  )}
                 </div>
               </td>
             </tr>

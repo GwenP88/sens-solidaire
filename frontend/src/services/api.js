@@ -216,6 +216,16 @@ export const fetchActivityReports = async () => {
   return await response.json()
 }
 
+// ── LIEUX DE MISSIONS ──────────────────────────────────────────────────────
+
+export const fetchLocationsByCountry = async (countries) => {
+  const params = new URLSearchParams({ country: countries.join(',') })
+  const response = await fetch(`${API_URL}/locations?${params}`)
+  if (!response.ok) throw new Error("Impossible de charger les lieux partenaires.")
+  const data = await response.json()
+  return data.locations
+}
+
 // ── DÉLÉGATIONS ──────────────────────────────────────────────────────────────
 
 export const fetchDelegations = async () => {
@@ -350,6 +360,17 @@ export const deleteMission = async (id) => {
   })
   if (!response.ok) {
     throw new Error("Échec de la suppression de la mission.")
+  }
+  return await response.json()
+}
+
+// Supprime DÉFINITIVEMENT une mission (hard delete) — irréversible.
+export const hardDeleteMission = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/missions/${id}/permanent`, {
+    method: "DELETE",
+  })
+  if (!response.ok) {
+    throw new Error("Échec de la suppression définitive de la mission.")
   }
   return await response.json()
 }

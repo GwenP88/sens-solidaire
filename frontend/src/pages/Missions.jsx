@@ -5,7 +5,7 @@
 import { useState, useEffect, useRef } from 'react'
 
 // ── Router
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 // ── API ──
 import { fetchMissions, fetchTestimonials, fetchFieldActions } from '../services/api'
@@ -43,6 +43,51 @@ function Missions() {
   const [searchParams] = useSearchParams()
   const [activeFilter, setActiveFilter] = useState(searchParams.get('filter') || null)
   const filtersRef = useRef(null)
+
+  // Listes de pays fixes par section — pas de lien BDD direct type↔pays
+  const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal']
+  const COUNTRIES_GROUPE_JEUNES   = ['Kenya', 'Sénégal']
+  const COUNTRIES_CONGE_SOLIDAIRE = ['Kenya', 'Sénégal']
+
+  const LIEUX_MISSION_SERVICE_CIVIQUE = [
+  {
+    pays: 'Au Kenya',
+    bullets: [
+      "Auprès de notre partenaire local l'école polytechnique de Taita Taveta, vous participerez à la vie quotidienne du campus, notamment auprès des étudiants en tourisme et les appuierez dans leur apprentissage du français.",
+      "Vous suivrez et développerez les projets de l'association sur place avec différents partenaires engagés pour la préservation de l'environnement, notamment autour d'un projet de potager agroécologique avec le club biodiversité des étudiants.",
+      "Au sanctuaire de LUMO, au cœur du Parc Tsavo, vous suivrez l'avancée du projet de sentier botanique.",
+      "Vous accueillerez également les volontaires français en mission courte et apporterez les correspondances scolaires de France aux jeunes Kényans et les aiderez à écrire leur réponse.",
+      "Cette mission vous permettra de mettre en pratique votre anglais !",
+    ],
+    liens: [
+      { label: 'le TTNP', slug: 'ttnp-kenya' },
+      { label: 'LUMO', slug: 'lumo-kenya' },
+    ],
+  },
+  {
+    pays: 'Au Sénégal',
+    bullets: [
+      "Auprès de l'association sénégalaise AGADA, dans la région de la Casamance, vous suivrez et participerez à leurs activités sur le terrain, notamment les actions de reboisement de la mangrove et d'agriculture durable.",
+      "Vous apporterez les correspondances françaises aux élèves sénégalais et les aiderez à répondre.",
+      "Vous réaliserez le suivi d'après-projet de la construction d'un puits et de l'utilisation de kits de filtration de l'eau, et ferez un diagnostic des besoins des communautés locales.",
+      "Vous accueillerez les groupes de volontaires de l'association.",
+    ],
+    liens: [
+      { label: 'AGADA', slug: 'agada-senegal' },
+    ],
+  },
+  {
+    pays: "En Côte d'Ivoire",
+    bullets: [
+      "À Abidjan, capitale du pays, vous soutiendrez les actions de l'institut Georges Aristide et de l'association Zéro Plastique AZEP.",
+      "Vous appuierez la distribution de la correspondance scolaire Nice-Abidjan et la rédaction des réponses.",
+      "Vous proposerez des ateliers de sensibilisation au développement durable pour les élèves des écoles partenaires.",
+      "Vous réaliserez un état des lieux des activités du partenaire ivoirien et de l'accueil des volontaires pour de futurs projets : nettoyage du littoral, reboisement de la mangrove, diagnostic de la production de l'attiéké par les ateliers de femmes, traitement des déchets plastiques.",
+      "Vous serez un membre actif d'AZEP et mobiliserez la communauté des jeunes pour lutter contre la pollution plastique et la pollution de la lagune Ébrié.",
+    ],
+    liens: [], // pas de Location en base — en attente de confirmation cliente (C2/C3)
+  },
+]
 
   const handleFilter = (value) => {
     setActiveFilter(value)
@@ -92,19 +137,19 @@ function Missions() {
   const stepsServiceCivique = [
     {
       icon: IconFrance,
-      title: 'Mission en France : Nice ou Annemasse',
-      description: 'Pendant plusieurs mois, vous animez des actions de sensibilisation au développement durable et découvrez le fonctionnement de l\'association avant votre mission à l\'international',
+      title: 'Mission en France',
+      description: 'Pendant plusieurs mois, sur Nice ou Annemasse, vous animez des actions de sensibilisation au développement durable et découvrez le fonctionnement de l\'association avant votre mission à l\'international',
       list: ['Animation d\'ateliers pédagogiques', 'Promotion des projets de l\'association', 'Préparation au départ'],
     },
     {
       icon: IconAbroad,
-      title: 'Mission au Kenya, au Sénégal ou en Côte d\'Ivoire',
-      description: 'Vous rejoignez l\'une de nos délégations pour participer à des projets concrets de préservation de la biodiversité et d\'éducation.',
+      title: 'Mission à l\'étranger',
+      description: 'Vous rejoignez l\'une de nos délégations au Kenya, au Sénégal ou en Côte d\'Ivoire pour participer à des projets concrets de préservation de la biodiversité et d\'éducation.',
       list: ['Protection de l\'environnement', 'Actions éducatives', 'Vie avec les partenaires locaux'],
     },
     {
       icon: IconGrow,
-      title: 'Une expérience qui vous transforme',
+      title: 'Une expérience unique',
       description: 'Cette expérience vous permet de gagner en autonomie, de travailler en équipe et de développer des compétences valorisées dans votre parcours personnel et professionnel.',
       list: ['Gestion de projet', 'Coopération internationale', 'Travail en équipe'],
     },
@@ -155,11 +200,6 @@ function Missions() {
   // Témoignages filtrés par type de mission — utilisés pour masquer les galeries si vides
   const testimonialsGroupeJeunes = testimonials.filter(t => t.mission?.type === 'groupe_jeunes')
   const testimonialsCongeSolidaire = testimonials.filter(t => t.mission?.type === 'conge_solidaire')
-
-  // Listes de pays fixes par section — pas de lien BDD direct type↔pays
-  const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal']
-  const COUNTRIES_GROUPE_JEUNES   = ['Kenya', 'Sénégal']
-  const COUNTRIES_CONGE_SOLIDAIRE = ['Kenya', 'Sénégal']
 
   const testimonialsServiceCivique = testimonials.filter(t => t.mission?.type === 'service_civique')
 
@@ -218,18 +258,24 @@ function Missions() {
           audience="Pour les volontaires individuels"
           description="Vivez une expérience utile, authentique et accessible à tous."
           decorImage="/images/ui/one-line-1.png"
-          image="/images/missions/kenya.jpg"
+          image="/images/placeholders/placeholder-photo.png"
           imageAlt="Volontariat individuel"
           introSlot={
             <>
               <p className="text-body text-primary/80">
-                Partir en mission avec Sens Solidaires, c'est rejoindre des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka ou à Sumatra.
+                Partir en mission avec Sens Solidaires, c'est soutenir des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka et à Sumatra.
               </p>
+
               <p className="text-body text-primary/80">
-                Pendant 10 jours à 4 semaines, vous découvrez une autre culture tout en participant à des actions concrètes. <strong className="text-primary/70">Aucune compétence particulière n'est demandée.</strong>
+                Pendant 10 jours à 4 semaines, vous découvrez une autre culture tout en participant à des actions concrètes au service des communautés locales. <strong className="text-primary/70">Aucune compétence particulière n'est demandée</strong> : votre motivation et votre envie de vous engager sont l'essentiel.
               </p>
+
+              <p className="text-body text-primary/80">
+                Chaque mission est aussi une expérience humaine unique, riche en rencontres, en partage de compétences et en découvertes culturelles et environnementales.
+              </p>
+
               <p className="text-mention text-primary/60">
-                En tant que particulier, vous pouvez bénéficier d'une réduction d'impôt de 66 % sur les frais de mission engagés.
+                Les frais engagés pour votre mission peuvent ouvrir droit à une réduction d'impôt de 66 % (selon la législation en vigueur). Un reçu fiscal est délivré à l'issue de votre mission.
               </p>
             </>
           }
@@ -265,12 +311,20 @@ function Missions() {
           audience="Pour les 16 à 25 ans"
           description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
           decorImage="/images/ui/one-line-2.png"
-          image="/images/missions/service-civique.jpg"
+          image="/images/placeholders/placeholder-photo.png"
           imageAlt="Service civique"
           introSlot={
-            <p className="text-body text-primary/80">
-              Vous avez entre 16 et 25 ans (jusqu'à 30 ans en situation de handicap) et souhaitez vous engager dans une mission utile, enrichissante et porteuse de sens ? Le Service Civique vous permet de consacrer plusieurs mois à une mission d'intérêt général tout en bénéficiant d'une indemnité mensuelle.
-            </p>
+            <>
+              <p className="text-body text-primary/80">
+                Vous avez entre 16 et 25 ans (jusqu'à 30 ans en situation de handicap) et souhaitez vous engager dans une mission utile, enrichissante et porteuse de sens ? Le Service Civique vous permet de consacrer 6 à 12 mois à une mission d'intérêt général tout en bénéficiant d'une indemnité mensuelle.
+              </p>
+              <p className="text-body text-primary/80">
+                Avec Sens Solidaires, vous participez à des projets d'éducation au développement durable, de solidarité internationale et de préservation de l'environnement. Selon la mission, votre engagement se déroule en France, puis à l'international (Kenya, Sénégal ou Côte d'Ivoire) aux côtés de nos partenaires locaux.
+              </p>
+              <p className="text-body text-primary/80">
+                Au-delà des actions menées sur le terrain, cette expérience vous permet de développer de nouvelles compétences, de gagner en autonomie, de vivre une immersion culturelle et de contribuer concrètement à des projets porteurs de sens.
+              </p>
+            </>
           }
           infoBarItems={[
             { icon: IconPerson, label: '16-25 ans' },
@@ -284,6 +338,7 @@ function Missions() {
           steps={stepsServiceCivique}
           bgCard="bg-white"
         >
+
           {/* Témoignages — masqué si aucun témoignage approuvé pour ce type */}
           {testimonialsServiceCivique.length > 0 && (
             <div className="mt-12 bg-primary rounded-2xl p-6 lg:p-10">
@@ -360,7 +415,7 @@ function Missions() {
           audience="Pour les lycées, MJC et structures de jeunesse"
           description="Organisez une mission solidaire au Kenya ou au Sénégal et faites vivre à votre groupe une expérience éducative et interculturelle unique."
           decorImage="/images/ui/one-line-3.png"
-          image="/images/missions/groupe-jeune.jpg"
+          image="/images/placeholders/placeholder-photo.png"
           imageAlt="Mission groupe jeunes"
           introSlot={
             <p className="text-body text-primary/80">
@@ -482,7 +537,7 @@ function Missions() {
           audience="Pour les salariés et les entreprises"
           description="Une expérience humaine forte pour les salariés et un engagement concret pour les entreprises."
           decorImage="/images/ui/one-line-4.png"
-          image="/images/missions/conge-solidaire.jpg"
+          image="/images/placeholders/placeholder-photo.png"
           imageAlt="Congé solidaire"
           introSlot={
             <p className="text-body text-primary/80">

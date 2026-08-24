@@ -14,6 +14,7 @@ model Mission {
   id                Int              @id @default(autoincrement())
   title             String
   country           String
+  country_preposition   String?   // "au"/"en"/"à"/"aux", ex: "au Kenya"
   slug              String           @unique
   description       String?
   volunteer_role    String?
@@ -27,15 +28,23 @@ model Mission {
   is_active         Boolean          @default(true)
   created_at        DateTime         @default(now())
   updated_at        DateTime         @updatedAt
-  type              String           @default("faune_sauvage")
+  type              String           @default("volontariat_individuel")
   short_description String
   image_url         String?
   image_alt         String?
   how_to_go         String?
-  location          Location[]
+  age_min           String?   // Service Civique — âge minimum, texte libre (ex: "16 ans")
+  age_max           String?   // Service Civique — âge maximum, texte libre (ex: "25 ans (30 en situation de handicap)")
+  duration_label    String?   // Service Civique — durée en texte libre (ex: "6 à 12 mois")
+  role_france       String?   // Service Civique — rôle colonne 1 (mission en France)
+  role_etranger     String?   // Service Civique — rôle colonne 2 (mission à l'étranger)
+  candidater_url    String?   // Service Civique — lien bouton Candidater
+  info_service_civique_url   String?   // Service Civique — lien "Comprendre le Service Civique"
+  competences   String?   // Service Civique — texte libre, une ligne = une puce
+  locations         Location[]
   pricing           MissionPricing[]
   testimonials      Testimonial[]
-  missionReports  MissionReport[] 
+  missionReports    MissionReport[] 
 }
 
 // ─────────────────────────────────────────
@@ -59,7 +68,6 @@ model MissionPricing {
 
 model Location {
   id              Int         @id @default(autoincrement())
-  mission_id      Int
   slug            String      @unique
   name            String
   country         String
@@ -70,7 +78,7 @@ model Location {
   is_active       Boolean     @default(true)
   created_at      DateTime    @default(now())
   updated_at      DateTime    @updatedAt
-  mission         Mission     @relation(fields: [mission_id], references: [id])
+  missions        Mission[]           // ← remplace mission_id + mission
   delegation_id   Int?
   delegation      Delegation? @relation(fields: [delegation_id], references: [id])
 }

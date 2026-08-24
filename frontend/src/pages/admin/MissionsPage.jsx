@@ -15,10 +15,11 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // ── API
-import { fetchAdminMissions, deleteMission } from '../../services/api'
+import { fetchAdminMissions, deleteMission, hardDeleteMission } from '../../services/api'
 
 // ── Composants admin
 import DashboardTable from '../../components/admin/DashboardTable'
+import ConfirmModal from '../../components/admin/ConfirmModal'
 
 
 // ════════════════════════════════════════════════════════════════
@@ -59,6 +60,7 @@ function MissionsPage() {
   const [missions, setMissions] = useState([])
   const [loading,  setLoading]  = useState(true)
   const [error,    setError]    = useState(null)
+  const [missionToHardDelete, setMissionToHardDelete] = useState(null)
 
 
   // ── Chargement initial ──────────────────────────────────────
@@ -130,6 +132,26 @@ function MissionsPage() {
     }
   }
 
+  // ── Suppression définitive ──────────────────────────────────
+// Hard delete : la mission ET ses données dépendantes (tarifs, médias)
+// sont effacées de la base. IRRÉVERSIBLE.
+// Ouvre la modale de confirmation
+const handleHardDelete = (mission) => {
+  setMissionToHardDelete(mission)
+}
+
+// Exécute la suppression définitive après confirmation dans la modale
+const confirmHardDelete = async () => {
+  try {
+    await hardDeleteMission(missionToHardDelete.id)
+    await reloadMissions()
+  } catch (err) {
+    console.error('Erreur suppression définitive :', err)
+    alert('Échec de la suppression définitive. Réessaie.')
+  } finally {
+    setMissionToHardDelete(null)
+  }
+}
 
   // ── États de chargement / erreur ────────────────────────────
 
@@ -168,8 +190,18 @@ function MissionsPage() {
         data={missions}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onHardDelete={handleHardDelete} 
       />
 
+      {missionToHardDelete && (
+        <ConfirmModal
+          title="Supprimer définitivement"
+          message={`Voulez-vous supprimer définitivement la mission "${missionToHardDelete.title}" ?\n\nCette action est irréversible. La mission, ses tarifs et toutes les photos associées seront supprimés définitivement.\n\nLes lieux partenaires utilisés par d'autres missions ne seront pas supprimés.`}
+          confirmLabel="Supprimer définitivement"
+          onConfirm={confirmHardDelete}
+          onCancel={() => setMissionToHardDelete(null)}
+        />
+      )}
     </div>
   )
 }

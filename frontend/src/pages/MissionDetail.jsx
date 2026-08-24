@@ -66,7 +66,7 @@ function MissionDetail() {
   }, [slug])
 
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
-  if (error || !mission) return (
+  if (error || !mission || mission.type !== 'volontariat_individuel') return (
     <div className="p-12 text-center">
       <p className="text-body text-primary/50 italic">Mission introuvable.</p>
       <a href="/missions" className="link-inline text-accent">← Retour aux missions</a>
@@ -92,7 +92,7 @@ function MissionDetail() {
   const anchorSections = [
     { label: "La mission",        id: "description",     show: !!mission.description },
     { label: "Rôle & Programme",  id: "role-programme",  show: !!mission.volunteer_role || programmeSteps.length > 0 },
-    { label: "Lieux partenaires", id: "lieux",           show: mission.location?.length > 0 },
+    { label: "Lieux partenaires", id: "lieux",           show: mission.locations?.length > 0 },
     { label: "Impact terrain",    id: "impact",          show: actions.length > 0 },
     { label: "Coût & durée",      id: "cout",            show: mission.pricing?.length > 0 },
     { label: "Comment partir",    id: "comment-partir",  show: howToGoSteps.length > 0 },
@@ -185,7 +185,7 @@ function MissionDetail() {
       )}
 
       {/* ── Lieux partenaires ── */}
-      {mission.location?.length > 0 && (
+      {mission.locations?.length > 0 && (
         <section id="lieux" className="padding-y padding-x bg-surface-mid">
           <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-sm mb-6">
             <div>
@@ -196,10 +196,10 @@ function MissionDetail() {
             </div>
           </div>
           <Carousel
-            items={mission.location}
+            items={mission.locations}
             showPagination={true}
             color="primary"
-            renderSlide={(loc) => <LocationCard {...loc} />}
+            renderSlide={(loc) => <LocationCard {...loc} fromMissionSlug={mission.slug} />}
           />
         </section>
       )}
@@ -222,7 +222,7 @@ function MissionDetail() {
         {actions.length === 0 ? (
           <div className="flex items-center justify-center bg-surface-mid rounded-xl h-64">
             <p className="text-body text-primary/40 italic text-center px-8">
-              Nous préparons actuellement la présentation des actions menées avec nos partenaires au {mission.country}. Revenez bientôt pour les découvrir.
+              Nous préparons actuellement la présentation des actions menées avec nos partenaires {mission.country_preposition || 'au'} {mission.country}.
             </p>
           </div>
         ) : (

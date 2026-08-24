@@ -26,7 +26,7 @@ export const findAll = async (filters = {}) => {
     where,
     include: {
       pricing: true,
-  	  location: true,
+  	  locations: true,
     },
     orderBy: { created_at: "asc" },
 })
@@ -45,7 +45,7 @@ export const findAllForAdmin = async () => {
 
     include: {
       pricing: true,
-  	  location: true,
+  	  locations: true,
     },
     orderBy: { created_at: "asc" },
   })
@@ -62,7 +62,7 @@ export const findById = async (id) => {
     where: { id },
     include: {
       pricing: true,
-      location: true,
+      locations: true,
     }
   })
 
@@ -94,7 +94,7 @@ export const findBySlug = async (slug) => {
     where: { slug, is_active: true, },
     include: {
       pricing: true,
-      location: true,
+      locations: true,
       testimonials: {
         where: { status: "approved" }
       }
@@ -143,6 +143,7 @@ export const create = async (data) => {
         // — Champs OBLIGATOIRES —
         title:             data.title,
         country:           data.country,
+        country_preposition: data.country_preposition,
         slug:              data.slug,
         short_description: data.short_description,
         type:              data.type, // défaut en base, mais validé en amont
@@ -158,7 +159,16 @@ export const create = async (data) => {
         health_info:       data.health_info,
         helloasso_url:     data.helloasso_url,
         image_url:         data.image_url,
+        image_alt:         data.image_alt,
         how_to_go:         data.how_to_go,
+        age_min:           data.age_min,
+        age_max:           data.age_max,
+        duration_label:    data.duration_label,
+        role_france:       data.role_france,
+        role_etranger:     data.role_etranger,
+        competences:       data.competences,
+        candidater_url:    data.candidater_url,
+        info_service_civique_url: data.info_service_civique_url,
       },
     })
 
@@ -225,6 +235,54 @@ export const softDelete = async (id) => {
 
   } catch (error) {
     // P2025 = "record to update not found" → l'id n'existe pas
+    if (error.code === "P2025") {
+      const err = new Error("Mission introuvable")
+      err.status = 404
+      err.code = "MISSION_NOT_FOUND"
+      throw err
+    }
+    throw error
+  }
+}
+
+// ── HARD DELETE ───────────────────────────────────────────────────────────────
+// Supprime DÉFINITIVEMENT une mission et ses données dépendantes.
+// Contrairement au soft delete, IRRÉVERSIBLE.
+// Paramètre : id (number)
+// Retourne  : la mission supprimée
+// Throw     : 404 si l'id n'existe pas
+export const hardDelete = async (id) => {
+  try {
+    return await prisma.$transaction(async (tx) => {
+
+      // 1. Détache les témoignages — contenu conservé, lien cassé (mission_id nullable)
+      await tx.testimonial.updateMany({
+        where: { mission_id: id },
+        data: { mission_id: null },
+      })
+
+      // 2. Supprime les tarifs — appartiennent exclusivement à cette mission
+      await tx.missionPricing.deleteMany({
+        where: { mission_id: id },
+      })
+
+      // 3. Supprime les médias orphelins (galerie + hero)
+      // Pas de vraie FK Prisma sur Media → nettoyage manuel obligatoire
+      await tx.media.deleteMany({
+        where: { entity_type: 'mission', entity_id: id },
+      })
+
+      // 4. Supprime la mission elle-même
+      // → la liaison _LocationToMission est retirée automatiquement (cascade DB)
+      // → les Location partagés avec d'autres missions restent intacts
+      const mission = await tx.mission.delete({
+        where: { id },
+      })
+
+      return mission
+    })
+
+  } catch (error) {
     if (error.code === "P2025") {
       const err = new Error("Mission introuvable")
       err.status = 404

@@ -5,7 +5,7 @@
 // Ne contient AUCUNE logique métier — tout est délégué à missionService.js
 
 // Import des fonctions du service missions
-import { findAll, findAllForAdmin, findById, findBySlug, create, update, softDelete } from "../services/missionService.js"
+import { findAll, findAllForAdmin, findById, findBySlug, create, update, softDelete, hardDelete } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
@@ -194,10 +194,11 @@ export const createMission = async (req, res, next) => {
   try {
     // 1. Extraction des champs depuis le body
     const {
-      title, country, slug, short_description, type,
+      title, country, country_preposition, slug, short_description, type,
       description, volunteer_role, programme, included, not_include,
       admin_info, ministry_url, health_info, helloasso_url,
       image_url, image_alt, how_to_go,
+      age_min, age_max, duration_label, role_france, role_etranger, competences, candidater_url, info_service_civique_url,
     } = req.body
 
     // 2. Validation : champs OBLIGATOIRES présents
@@ -241,10 +242,11 @@ export const createMission = async (req, res, next) => {
 
     // 4. Appel du service avec un objet PROPRE (jamais req.body brut !)
     const mission = await create({
-      title, country, slug, short_description, type,
+      title, country, country_preposition, slug, short_description, type,
       description, volunteer_role, programme, included, not_include,
       admin_info, ministry_url, health_info, helloasso_url,
       image_url, how_to_go, image_alt,
+      age_min, age_max, duration_label, role_france, role_etranger, competences, candidater_url, info_service_civique_url,
     })
 
     // 5. Réponse 201 Created (ressource créée, pas un simple 200)
@@ -277,10 +279,11 @@ export const updateMission = async (req, res, next) => {
     //    → un champ absent ne sera pas touché (c'est tout l'intérêt du PATCH).
     const data = {}
     const allowed = [
-      "title", "country", "slug", "short_description", "type",
+      "title", "country", "country_preposition", "slug", "short_description", "type",
       "description", "volunteer_role", "programme", "included", "not_include",
       "admin_info", "ministry_url", "health_info", "helloasso_url",
       "image_url", "how_to_go", "is_active", "image_alt",
+      "age_min", "age_max", "duration_label", "role_france", "role_etranger", "competences", "candidater_url", "info_service_civique_url",
     ]
     for (const champ of allowed) {
       if (req.body[champ] !== undefined) {
@@ -340,5 +343,29 @@ export const deleteMission = async (req, res, next) => {
 
   } catch (error) {
     next(error)   // attrape le 404 du service
+  }
+}
+
+// ── HARD DELETE MISSION (ADMIN) ───────────────────────────────────────────────
+// DELETE /api/admin/missions/:id/permanent
+// HARD DELETE : supprime définitivement la mission et ses données dépendantes.
+// Route PROTÉGÉE (authMiddleware). IRRÉVERSIBLE.
+export const hardDeleteMission = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: "Id invalide" })
+    }
+
+    const mission = await hardDelete(id)
+
+    return res.status(200).json({
+      success: true,
+      message: "Mission supprimée définitivement",
+      mission,
+    })
+
+  } catch (error) {
+    next(error)
   }
 }

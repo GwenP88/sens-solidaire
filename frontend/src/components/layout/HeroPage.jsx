@@ -4,9 +4,9 @@
 // Props optionnelles : duration, price — affichées uniquement sur les pages mission détail
 
 // ── Composants UI
-import { IconClock, IconMoney, IconPin } from '../../utils/icons'
+import { IconClock, IconMoney, IconPin, IconPerson } from '../../utils/icons'
 
-function HeroPage({ image, title, subtitle, duration, price, country, tags }) {
+function HeroPage({ image, title, subtitle, duration, price, age, country, tags }) {
   return (
     <div className="relative w-full h-80 md:h-96 lg:h-120 flex items-end padding-x hero-page-py">
 
@@ -22,8 +22,8 @@ function HeroPage({ image, title, subtitle, duration, price, country, tags }) {
 
         {subtitle && <p className="text-lead text-surface max-w-4xl">{subtitle}</p>}
 
-        {/* Infos rapides — durée + prix — missions détail */}
-        {(duration || price) && (
+        {/* Infos rapides — durée + prix + age — missions détail */}
+        {(duration || price || age) && (
           <div className="flex gap-md">
             {duration && (
               <span className="text-body text-surface/80 flex items-center gap-xs">
@@ -33,6 +33,11 @@ function HeroPage({ image, title, subtitle, duration, price, country, tags }) {
             {price && (
               <span className="text-body text-surface/80 flex items-center gap-xs">
                 <IconMoney className="text-surface text-base" />À partir de {price} €
+              </span>
+            )}
+            {age && (
+              <span className="text-body text-surface/80 flex items-center gap-xs">
+                <IconPerson className="text-surface text-base" />{age}
               </span>
             )}
           </div>

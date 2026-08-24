@@ -16,6 +16,7 @@ import Testimonials from './pages/Testimonials'
 import Contact from './pages/Contact'
 import Soutenir from './pages/Soutenir'
 import RapportsActivite from './pages/RapportsActivite'
+import ServiceCiviqueDetail from './pages/ServiceCiviqueDetail'
 
 // ── Pages institutionnelles
 import APropos from './pages/APropos'
@@ -43,6 +44,8 @@ import ProtectedRoute from './components/navigation/ProtectedRoute'
 import DashboardLayout from './components/admin/DashboardLayout'
 import MissionsPage from './pages/admin/MissionsPage'
 import MissionFormPage from './pages/admin/MissionFormPage'
+import ServiceCiviquePage from './pages/admin/ServiceCiviquePage'
+import ServiceCiviqueFormPage from './pages/admin/ServiceCiviqueFormPage'
 
 //  ── Pages lieux
 import LocationDetail from './pages/LocationDetail'
@@ -63,6 +66,7 @@ function App() {
           {/* Missions */}
           <Route path="/missions" element={<Missions />} />
           <Route path="/missions/:slug" element={<MissionDetail />} />
+          <Route path="/service-civique/:slug" element={<ServiceCiviqueDetail />} />
           <Route path="/lieux/:slug" element={<LocationDetail />} />
 
           {/* Témoignages & rapports */}
@@ -114,6 +118,9 @@ function App() {
           <Route path="missions" element={<MissionsPage />} />
           <Route path="missions/new" element={<MissionFormPage />} />
           <Route path="missions/:id/edit" element={<MissionFormPage />} />
+          <Route path="service-civique" element={<ServiceCiviquePage />} />
+          <Route path="service-civique/new" element={<ServiceCiviqueFormPage />} />
+          <Route path="service-civique/:id/edit" element={<ServiceCiviqueFormPage />} />
           
           {/* missions, ateliers, medias, a-propos, actions-terrain, soutenir,
               contact, parametres : routes à ajouter au fur et à mesure des composants */}

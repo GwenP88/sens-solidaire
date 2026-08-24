@@ -21,6 +21,7 @@ import {
 
 // ── Composants admin
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
+import { FormSection, Field, TextareaField } from '../../components/admin/FormElements'
 
 
 // ════════════════════════════════════════════════════════════════
@@ -38,6 +39,7 @@ const VALID_TYPES = [
 const EMPTY_FORM = {
   title:             '',
   country:           '',
+  country_preposition: 'au',
   slug:              '',
   short_description: '',
   type:              'volontariat_individuel',  // ← seul type créable pour l'instant
@@ -71,69 +73,6 @@ const HOW_TO_GO_FIXED = [
   "Recevoir les conseils pratiques de préparation",
   "Recevoir votre fiche mission à remplir à votre retour",
 ]
-
-
-// ════════════════════════════════════════════════════════════════
-// SOUS-COMPOSANTS
-// ════════════════════════════════════════════════════════════════
-
-function FormSection({ title, description, children }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="border-b border-gray-200 pb-2">
-        <h2 className="font-heading font-semibold text-base text-primary">{title}</h2>
-        {description && <p className="text-xs text-gray-400 mt-0.5">{description}</p>}
-      </div>
-      {children}
-    </div>
-  )
-}
-
-// error : message de validation à afficher sous le champ (texte rouge)
-function Field({ label, name, value, onChange, required, hint, pattern, title: fieldTitle, error }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
-        {hint && <span className="text-gray-400 font-normal ml-1 text-xs">({hint})</span>}
-      </label>
-      <input
-        type="text"
-        name={name}
-        value={value}
-        onChange={onChange}
-        pattern={pattern}
-        title={fieldTitle}
-        className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
-          error ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-primary/30'
-        }`}
-      />
-      {error && <span className="text-xs text-red-500">{error}</span>}
-    </div>
-  )
-}
-
-function TextareaField({ label, name, value, onChange, required, rows = 4, hint, error }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      {hint && <p className="text-xs text-gray-400 -mt-0.5">{hint}</p>}
-      <textarea
-        name={name}
-        value={value}
-        onChange={onChange}
-        rows={rows}
-        className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-y font-mono ${
-          error ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-primary/30'
-        }`}
-      />
-      {error && <span className="text-xs text-red-500">{error}</span>}
-    </div>
-  )
-}
-
 
 // ════════════════════════════════════════════════════════════════
 // COMPOSANT PRINCIPAL
@@ -201,6 +140,7 @@ function MissionFormPage() {
         setFormData({
           title:             mission.title             || '',
           country:           mission.country           || '',
+          country_preposition: mission.country_preposition || 'au',
           slug:              mission.slug              || '',
           short_description: mission.short_description || '',
           type:              mission.type              || '',
@@ -398,41 +338,37 @@ function MissionFormPage() {
           title="Informations essentielles"
           description="Affichées sur la card mission et dans le hero de la page détail."
         >
+          {/* Ligne 1 — Titre, pleine largeur */}
+          <Field label="Titre" name="title" value={formData.title} onChange={handleChange} required />
+
+          {/* Ligne 2 — Préposition + Pays côte à côte */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Field
-              label="Titre" name="title" value={formData.title} onChange={handleChange}
-              required error={fieldErrors.title}
-            />
-            <Field
-              label="Pays" name="country" value={formData.country} onChange={handleChange}
-              required pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
-              error={fieldErrors.country}
-            />
-          </div>
-          {/*<div className="grid grid-cols-1 md:grid-cols-2 gap-4">*/}
-            <Field
-              label="Slug" name="slug" value={formData.slug} onChange={handleChange}
-              required hint="utilisé dans l'URL" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement"
-              error={fieldErrors.slug}
-            />
-            {/* Type de mission — masqué : seul "Volontariat individuel" est gérable en dashboard pour l'instant.
-                Les autres types (service civique, groupe jeunes, congé solidaire) sont du contenu fixe côté front.
-                Réactiver ce select quand ces types seront pris en charge par le dashboard (V2). */}
-            {/*
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-700">Type</label>
+              <label className="text-sm font-medium text-gray-700">Préposition</label>
               <select
-                name="type" value={formData.type} onChange={handleChange}
+                name="country_preposition"
+                value={formData.country_preposition}
+                onChange={handleChange}
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
               >
-                <option value="">— Non spécifié —</option>
-                {VALID_TYPES.map(t => (
-                  <option key={t.value} value={t.value}>{t.label}</option>
-                ))}
+                <option value="au">au (ex: au Kenya)</option>
+                <option value="en">en (ex: en France)</option>
+                <option value="à">à (ex: à Sumatra)</option>
+                <option value="aux">aux (ex: aux Philippines)</option>
               </select>
             </div>
-            */}
-          {/*</div>*/}
+            <Field
+              label="Pays" name="country" value={formData.country} onChange={handleChange} required
+              pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
+            />
+          </div>
+
+          {/* Ligne 3 — Slug, pleine largeur */}
+          <Field
+            label="Slug" name="slug" value={formData.slug} onChange={handleChange} required
+            hint="utilisé dans l'URL" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement"
+          />
+
           <div className="flex flex-col gap-1">
             <label className={`text-sm font-medium ${
               formData.short_description.length >= 140 ? 'text-red-500' :

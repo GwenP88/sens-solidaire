@@ -22,7 +22,7 @@ function DelegationCard({ pays, flag, image, lieu, contacts }) {
           <div className="w-7 h-7 rounded-full overflow-hidden shadow-sm shrink-0">
             <img src={flag} alt={pays} className="w-full h-full object-cover" />
           </div>
-          <p className="h3-style text-surface mb-0">Délégation nationale au {pays}</p>
+          <p className="h3-style text-surface mb-0">Délégation nationale — {pays}</p>
         </div>
 
         {/* Nom du lieu partenaire */}

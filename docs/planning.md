@@ -1,6 +1,6 @@
 # Planning de développement — Sens Solidaires
 *Pichot Gwen & Amblard Alison · Holberton School — Thonon-les-Bains*
-*Mise à jour : 5 juillet 2026*
+*Mise à jour : 1er août 2026*
 
 **Légende** : ✅ Terminé · ⚠️ Partiel · 🔵 À faire · 🔴 Bloqué
 **Devs** : Gwen (frontend + design) · Alison (backend + BDD) · Ensemble = tâches communes
@@ -111,7 +111,7 @@
 
 ---
 
-## Phase 2 — 7 › 18 juillet 2026 : Dashboard complet + Finitions front
+## Phase 2 — 7 juillet › 1er août 2026 : Dashboard complet + Finitions front
 
 ---
 
@@ -155,6 +155,21 @@
 | 72 | Gwen | `PageLayout` — factoriser bg-surface + ScrollToTop + HeroPage | 🔵 |
 | 73 | Ensemble | Corrections bugs post-recette | 🔵 |
 | 74 | Ensemble | 🧊 Code freezé — pause estivale (18 juillet) | 🔵 |
+
+---
+
+### S9 — 1er août · Reprise post-pause — Hard delete + Lieux partagés + Service Civique dashboard
+
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 98 | Gwen | Hard delete missions — transaction + dashboard (pause/suppression définitive) | ✅ |
+| 99 | Gwen | Location ↔ Mission — migration many-to-many | ✅ |
+| 100 | Gwen | ServiceCiviqueFormPage + ServiceCiviquePage (dashboard complet) | ✅ |
+| 101 | Gwen | ServiceCiviqueDetail.jsx — page publique complète | ✅ |
+| 102 | Gwen | country_preposition — champ éditable (Mission + Service Civique) | ✅ |
+| 103 | Gwen | Champs competences + info_service_civique_url | ✅ |
+| 104 | Gwen | Garde-fou type sur MissionDetail/ServiceCiviqueDetail | ✅ |
+| 105 | Gwen | FormElements.jsx — extraction composants formulaire partagés | ✅ |
 
 ---
 
@@ -210,6 +225,7 @@ Code freezé. Aucune modification.
 
 | Fonctionnalité | Description |
 |---|---|
+| CRUD dashboard Location/Delegation/TeamMember/FieldAction | Briques de base actuellement seed-only, utilisées par Mission — priorité identifiée le 01/08 |
 | Buffer API | Auto-draft réseaux sociaux à la publication d'un article |
 | Instagram oEmbed | Embed posts du feed Instagram (nécessite app Meta) |
 | `latitude` / `longitude` sur Location | Embed Google Maps propre (remplace iframe URL) |
@@ -229,6 +245,6 @@ Code freezé. Aucune modification.
 | Phase | Période | Livrable | Statut |
 |---|---|---|---|
 | Phase 1 — MVP | 28 mai › 3 juillet | MVP + dashboard fonctionnels | ✅ Livré |
-| Phase 2 — Dashboard complet | 7 › 18 juillet | Site quasi-complet | 🔵 En cours |
+| Phase 2 — Dashboard complet | 7 juillet › 1er août | Site quasi-complet | 🔵 En cours |
 | Pause estivale | Août 2026 | Code freezé | 🧊 |
 | Phase 3 — Finalisation | Septembre 2026 | Site en production | 🔵 À faire |

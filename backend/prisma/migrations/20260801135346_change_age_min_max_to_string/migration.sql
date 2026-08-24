@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Mission" ALTER COLUMN "age_max" SET DATA TYPE TEXT,
+ALTER COLUMN "age_min" SET DATA TYPE TEXT;
