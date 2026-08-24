@@ -23,7 +23,7 @@ Refonte complète du site web de **Sens Solidaires**, association humanitaire et
 | **Authentification** | JWT (access + refresh token) · bcrypt |
 | **Emails** | Resend (formulaire de contact) |
 | **Infrastructure** | Docker Compose |
-| **Tests** | Jest + Supertest (API) · Postman (runbook manuel) |
+| **Tests** | Jest + Supertest (API) · Vitest + React Testing Library (front) · Postman (runbook manuel) |
 
 ## Architecture
 
@@ -265,6 +265,8 @@ erDiagram
 - Pages légales : mentions, confidentialité, cookies
 - Responsive mobile-first (375 / 768 / 1024 / 1440)
 
+> **Interface en français uniquement pour la V1.** La version bilingue français / anglais figurait au périmètre initial : elle est repoussée après la V1, la cliente n'ayant pas encore arbitré entre une traduction rédigée en interne et une traduction automatique. La structure de la base anticipe les deux scénarios.
+
 ### Dashboard administrateur
 
 - Authentification sécurisée (JWT access + refresh token)
@@ -339,7 +341,7 @@ sens-solidaire/
 │   │   │   └── admin/         # Pages du dashboard
 │   │   ├── services/          # api.js — appels HTTP centralisés
 │   │   └── utils/             # Constantes partagées (filtres, icônes, footerCta...)
-│   ├── tests/                  # Tests Vitest + React Testing Library
+│   ├── tests/                 # Tests Vitest + React Testing Library
 │   └── public/images/         # Images statiques, classées par contexte métier
 │
 ├── backend/                   # API Node.js / Express
@@ -355,13 +357,16 @@ sens-solidaire/
 │   │   └── seed.js            # Données de test
 │   └── tests/                 # Tests Jest + Supertest
 │
-├── docs/                       # Documentation du projet
+├── docs/                      # Documentation du projet — voir docs/README.md
+│   ├── README.md              # Sommaire de la documentation
 │   ├── JDB.md                 # Journal de bord quotidien
 │   ├── planning.md            # Sprint planning
+│   ├── veille.md              # Journal de veille sécurité
+│   ├── modif-en-cours-de-dev.md  # Écarts assumés par rapport aux guides initiaux
 │   ├── guide-de-style.md      # Design system
 │   └── test_postman_back.md   # Runbook de tests API
 │
-└── docker-compose.yml          # Orchestration des 3 services
+└── docker-compose.yml         # Orchestration des 3 services
 ```
 
 ## Tests
@@ -372,12 +377,14 @@ sens-solidaire/
 docker exec sensolidaire_backend npm test
 ```
 
-**Couverture** :
-- Santé de l'API et authentification admin
-- `POST /api/admin/missions` — création (201 / 400 / 401 / 409)
-- `PATCH /api/admin/missions/:id` — modification partielle
-- `DELETE /api/admin/missions/:id` — soft delete
-- `PATCH /api/admin/testimonials/:id/approve` et `/reject` — modération (200 / 404 / 400)
+**Couverture actuelle** — `tests/Missions.admin.test.js`, 11 cas :
+
+- Santé de l'API (`GET /api/health`) et authentification admin
+- `POST /api/admin/missions` — création (201) et cas d'erreur : 400 champ manquant, 400 type invalide, 401 sans token, 409 slug déjà pris
+- `PATCH /api/admin/missions/:id` — modification partielle (200) et id inexistant (404)
+- `DELETE /api/admin/missions/:id` — soft delete (200), ressource devenue inaccessible côté public (404), id inexistant (404)
+
+**Non encore couvert** : modération des témoignages, formulaire de contact, gestion des médias.
 
 ### Frontend — Vitest + React Testing Library
 
@@ -386,6 +393,7 @@ docker exec sensolidaire_frontend npm test
 ```
 
 **Couverture** :
+
 - `LignesToPuces` — fonction utilitaire pure (transformation texte → liste à puces)
 - `Button` — composant présentationnel (rendu, `onClick`, état `disabled`)
 - `TestimonialForm` — règle métier (bouton d'envoi bloqué sans consentement RGPD)
@@ -399,13 +407,14 @@ Un runbook complet est disponible dans [`docs/test_postman_back.md`](./docs/test
 
 | Type | Usage |
 |---|---|
-| **Jest + Supertest (backend)** | Tests automatisés sur les routes critiques (CRUD missions, modération) |
+| **Jest + Supertest (backend)** | Tests automatisés sur les routes critiques |
 | **Vitest + RTL (frontend)** | Fonctions pures, composants, règles métier UI, appels API mockés |
 | **Postman (manuel)** | Exploration et validation des nouveaux endpoints avant automatisation |
 
 ### Sécurité des dépendances
 
-Audit régulier via `npm audit` (frontend et backend) — 0 vulnérabilité connue à ce jour.
+Audit via `npm audit` (frontend et backend) avant chaque merge sur `dev`.
+Dernier audit : **[JJ/MM/2026]** — 0 vulnérabilité connue. Résultats consignés dans [`docs/veille.md`](./docs/veille.md).
 
 ## Équipe & rôles
 
@@ -415,6 +424,7 @@ Projet réalisé en binôme dans le cadre de la formation Holberton School (Thon
 |---|---|---|
 | **Développement Frontend** | Gwen Pichot (principal) · Alison Amblard (dashboard) | React, Tailwind, design system, intégration API |
 | **Développement Backend** | Alison Amblard (principal) · Gwen Pichot (certains items) | Node.js, Express, Prisma, base de données |
+| **Conception UX / UI** | Gwen Pichot | Personas, parcours utilisateurs, wireframes et maquettes Figma |
 | **Project Manager** | Gwen & Alison | Sprint planning, suivi d'avancement (voir `docs/JDB.md`, `docs/planning.md`) |
 | **Source Control Manager (SCM)** | Gwen & Alison | Gestion des branches, revue mutuelle avant merge sur `dev` |
 | **Quality Assurance (QA)** | Gwen & Alison | Tests manuels croisés, Postman, Jest, Vitest |
@@ -422,6 +432,8 @@ Projet réalisé en binôme dans le cadre de la formation Holberton School (Thon
 ### Répartition front/back
 
 La répartition principale (Gwen → frontend, Alison → backend) n'était pas cloisonnée : chacune a travaillé ponctuellement sur le périmètre de l'autre — Alison sur le front du dashboard admin, Gwen sur certains items backend — dans une logique d'apprentissage mutuel. Ces incursions se faisaient toujours en décalé (une seule personne à la fois sur un même périmètre), afin d'éviter les conflits Git et de garder une attribution claire des tâches.
+
+La conception d'interface (personas, parcours, wireframes, maquettes Figma) a été portée par Gwen ; Alison a intégré les maquettes du dashboard d'administration.
 
 ### Méthode de travail
 
@@ -433,18 +445,11 @@ La répartition principale (Gwen → frontend, Alison → backend) n'était pas 
 ## Liens
 
 - **Dépôt GitHub** (public) : [github.com/GwenP88/sens-solidaire](https://github.com/GwenP88/sens-solidaire)
+- **Sommaire de la documentation** : [`docs/README.md`](./docs/README.md)
 - **Journal de bord** : [`docs/JDB.md`](./docs/JDB.md)
+- **Journal de veille sécurité** : [`docs/veille.md`](./docs/veille.md)
 - **Sprint planning** : [`docs/planning.md`](./docs/planning.md)
 - **Design system** : [`docs/guide-de-style.md`](./docs/guide-de-style.md)
 - **Runbook de tests API** : [`docs/test_postman_back.md`](./docs/test_postman_back.md)
-
-### Documentation de conception
-
-- **Contexte & décisions** : [`docs/guide1-contexte-decisions.docx`](./docs/guide1-contexte-decisions.docx)
-- **Architecture générale** : [`docs/guide2-architecture-specs.docx`](./docs/guide2-architecture-specs.docx)
-- **Architecture frontend/backend** : [`docs/guide2-partie1-architecture-frontend-backend.docx`](./docs/guide2-partie1-architecture-frontend-backend.docx)
-- **Base de données & sécurité** : [`docs/guide2-partie2-bdd-securite.docx`](./docs/guide2-partie2-bdd-securite.docx)
-- **API, séquences & responsive** : [`docs/guide2-partie3-api-sequences-responsive.docx`](./docs/guide2-partie3-api-sequences-responsive.docx)
-- **Mise en place & livraison** : [`docs/guide3-mise-en-place-livraison.docx`](./docs/guide3-mise-en-place-livraison.docx)
 
 > **Environnement de production** : non déployé à ce stade — le déploiement est planifié en Phase 3 (septembre 2026), voir `docs/planning.md`.
