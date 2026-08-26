@@ -377,14 +377,24 @@ sens-solidaire/
 docker exec sensolidaire_backend npm test
 ```
 
-**Couverture actuelle** — `tests/Missions.admin.test.js`, 11 cas :
+**Couverture actuelle** — 3 fichiers, 20 cas au total :
 
+`tests/Missions.admin.test.js` (12 cas) :
 - Santé de l'API (`GET /api/health`) et authentification admin
 - `POST /api/admin/missions` — création (201) et cas d'erreur : 400 champ manquant, 400 type invalide, 401 sans token, 409 slug déjà pris
 - `PATCH /api/admin/missions/:id` — modification partielle (200) et id inexistant (404)
 - `DELETE /api/admin/missions/:id` — soft delete (200), ressource devenue inaccessible côté public (404), id inexistant (404)
 
-**Non encore couvert** : modération des témoignages, formulaire de contact, gestion des médias.
+`tests/Testimonials.admin.test.js` (5 cas) :
+- `PATCH /api/admin/testimonials/:id/approve` — jeton valide (200, statut vérifié en base) et id inexistant (404)
+- `PATCH /api/admin/testimonials/:id/reject` — sans jeton (401, statut inchangé en base)
+- signature JWT altérée (header/payload intacts) → 401, statut inchangé
+- mass assignment via le corps de la requête (`{ status: "rejected" }` sur `/approve`) → statut toujours forcé côté serveur
+
+`tests/Upload.security.test.js` (3 cas) — non-régression de la faille d'upload corrigée lors de l'audit sécurité :
+- tentative de path traversal via le nom de fichier (`../../../../../src/pwned.js`)
+- PDF envoyé sur la route publique (images seulement) → refus, pas un 500
+- `POST /api/admin/upload` sans jeton → 401
 
 ### Frontend — Vitest + React Testing Library
 

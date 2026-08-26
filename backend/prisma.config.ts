@@ -15,8 +15,11 @@ export default defineConfig({
     seed: "node ./prisma/seed.js",
   },
 
-  // Connexion à la base de données — lit DATABASE_URL dans le .env
+  // Connexion à la base de données pour les MIGRATIONS uniquement.
+  // Séparation des droits (voir prisma/roles.sql) :
+  //   - prisma.config.ts (ici)  → migrations → compte propriétaire (sensolidaire_owner)
+  //   - src/config/db.js        → runtime API → compte applicatif  (sensolidaire_app, DATABASE_URL)
   datasource: {
-    url: env("DATABASE_URL"),
+    url: env("MIGRATE_DATABASE_URL"),
   },
 })

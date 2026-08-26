@@ -522,7 +522,7 @@ const TESTIMONIALS = [
     {
       slug: 'newsletter-juin-2026',
       title: 'Newsletter Juin 2026',
-      content: 'Découvrez les dernières nouvelles de Sens Solidaire : nos missions en cours, les témoignages de volontaires et les actions menées sur le terrain au Kenya et au Sénégal.',
+      content: 'Découvrez les dernières nouvelles de Sens Solidaires : nos missions en cours, les témoignages de volontaires et les actions menées sur le terrain au Kenya et au Sénégal.',
       theme: 'Newsletter',
       date: new Date('2026-05-01'),
       image_url: '/images/media/placeholder-newsletter.png',

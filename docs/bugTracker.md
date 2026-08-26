@@ -23,6 +23,7 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 | BUG-11 | Port `3000` déjà occupé | Ancien process backend encore actif | `lsof -i :3000` puis `kill <PID>` | 🟡 | ✅ Résolu |
 | BUG-12 | `resend` disparaît après rebuild Docker | Package installé sans `--save`, non persisté dans `package.json` | Réinstallation avec `--save` | 🟠 | ✅ Résolu |
 | BUG-13 | Vulnérabilité `npm audit` (high) sur `vite` | Failles connues sur `vite` 8.0.0–8.0.15 (spécifiques Windows) | `npm audit fix` — 0 vulnérabilité restante | 🟠 | ✅ Résolu |
+| BUG-53 | `multer` et 12 autres paquets absents du conteneur backend | Volume anonyme `node_modules` créé lors d'un build antérieur à l'ajout de la dépendance : le conteneur ne reflétait plus le `package.json` | `docker exec sensolidaire_backend npm install` pour resynchroniser le volume | 🟠 | ✅ Résolu |
 
 ---
 
@@ -46,6 +47,7 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 | BUG-27 | Seed `PrismaClientValidationError` sur `countries` | Syntaxe tableau de strings utilisée au lieu d'une relation Prisma | `countries: { create: [{ country: 'Kenya' }] }` | 🟠 | ✅ Résolu |
 | BUG-28 | Seed `FieldAction` — erreur de contrainte FK au `deleteMany` | Ordre de suppression incorrect (parent supprimé avant les enfants) | Ordre corrigé : `tags` → `odds` → `media` → `fieldAction` | 🟠 | ✅ Résolu |
 | BUG-29 | Erreur de validation Prisma — relation `MissionReport` manquante | FK `mission_id` ajoutée côté `MissionReport` sans relation inverse `missionReports[]` sur `Mission` | Ajout du champ inverse sur le modèle `Mission` | 🟠 | ✅ Résolu |
+| BUG-52 | `seed.js` cassé — erreur de validation Prisma sur `location.upsert` | La migration `location_mission_many_to_many` a remplacé la FK `mission_id` par une relation N-N, mais les sept blocs `location.upsert` du seed passaient encore `mission_id: 1` | Remplacement par la syntaxe de relation `connect: { id: kenyaMission.id }` (id résolu par slug, pas codé en dur) — aucune migration modifiée | 🔴 | ✅ Résolu |
 
 ---
 
@@ -85,13 +87,6 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 
 ---
 
-## Récapitulatif
-
-# Blocs à coller dans `docs/bugTracker.md`
-
-## 1. Nouvelle section — à insérer avant `## Récapitulatif`
-
-```markdown
 ## Sécurité — audit du 26 août 2026
 
 Audit de sécurité mené sur la branche `dev` avant rédaction du dossier.
@@ -106,23 +101,9 @@ Cinq défauts identifiés et corrigés, trois dettes assumées et documentées.
 | BUG-49 | Injection HTML dans les emails du formulaire de contact | Les cinq champs du formulaire étaient interpolés bruts dans le corps HTML de l'email : un visiteur pouvait y injecter un lien de phishing paraissant venir de l'association | Fonction `escapeHtml` appliquée à tous les champs avant interpolation ; retours à la ligne reconvertis en `<br />` **après** échappement | 🟠 | ✅ Résolu |
 | BUG-50 | Consentement RGPD stocké en dur | `consent_given: true` codé en dur dans `submitTestimonial` : l'enregistrement affirmait un consentement au lieu d'enregistrer celui reçu | `consent_given: data.consent_given === true`, valeur transmise depuis le controller (RGPD art. 7.1 — l'enregistrement doit pouvoir prouver le consentement) | 🟠 | ✅ Résolu |
 | BUG-51 | Code mort dupliqué dans `authController.js` | `approveTestimonial` et `rejectTestimonial` dupliqués depuis `testimonialController.js` ; seules les versions de ce dernier étaient routées | Suppression de l'import et des deux fonctions après vérification par `grep` qu'aucun routeur ne les importait | 🟡 | ✅ Résolu |
-```
 
-## 2. Ligne à ajouter dans la section `Backend & Prisma`
+---
 
-```markdown
-| BUG-52 | `seed.js` cassé — erreur de validation Prisma sur `location.upsert` | La migration `location_mission_many_to_many` a remplacé la FK `mission_id` par une relation N-N, mais les sept blocs `location.upsert` du seed passaient encore `mission_id: 1` | Remplacement par la syntaxe de relation `connect: { id: 1 }` — aucune migration modifiée | 🔴 | ✅ Résolu |
-```
-
-## 3. Ligne à ajouter dans la section `Environnement & Docker`
-
-```markdown
-| BUG-53 | `multer` et 12 autres paquets absents du conteneur backend | Volume anonyme `node_modules` créé lors d'un build antérieur à l'ajout de la dépendance : le conteneur ne reflétait plus le `package.json` | `docker-compose down` + `up -d --build` pour repartir des `node_modules` de l'image | 🟠 | ✅ Résolu |
-```
-
-## 4. Nouvelle section — dettes assumées
-
-```markdown
 ## Dettes techniques assumées
 
 Défauts identifiés, **volontairement non corrigés** dans le périmètre V1. Chacun est
@@ -134,11 +115,9 @@ non exploitable en l'état actuel de l'application ; le correctif est planifié.
 | DETTE-02 | Aucune limitation de débit sur `POST /api/auth/login` ni sur l'upload public | Application non déployée, non exposée. Ajout d'une dépendance + configuration + tests hors budget | Avant toute mise en production |
 | DETTE-03 | Timing attack théorique sur le login : `bcrypt.compare` n'est appelé que si l'admin existe, ce qui crée un écart de temps de réponse mesurable entre « email inconnu » et « mot de passe faux » | Non exploitable : un seul compte admin, dont l'email est connu d'avance. Le correctif (hash factice systématique) est subtil et touche le chemin critique de l'authentification | Avec l'ouverture des comptes à plusieurs utilisateurs |
 | DETTE-04 | Le type des fichiers uploadés repose sur le MIME déclaré par le client, sans vérification du contenu réel | Le correctif BUG-46 ferme déjà le vecteur dangereux en imposant l'extension. La vérification par nombre magique est un durcissement, pas la faille | V2, avec le passage à un stockage externe |
-```
 
-## 5. Récapitulatif — à remplacer
+---
 
-```markdown
 ## Récapitulatif
 
 | Catégorie | Nombre de bugs | Tous résolus ? |
@@ -154,6 +133,3 @@ non exploitable en l'état actuel de l'application ; le correctif est planifié.
 **Aucun bug bloquant non résolu** dans le périmètre MVP.
 Quatre dettes techniques sont identifiées, documentées et non exploitables en l'état
 (voir section *Dettes techniques assumées*).
-```
-
-**Aucun bug bloquant non résolu** à ce jour dans le périmètre MVP.

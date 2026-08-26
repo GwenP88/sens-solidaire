@@ -36,7 +36,8 @@ services:
         condition: service_healthy
     environment:
       PORT: 3000
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/sensolidaire
+      DATABASE_URL: postgresql://sensolidaire_app:${DB_APP_PASSWORD}@postgres:5432/sensolidaire
+      MIGRATE_DATABASE_URL: postgresql://sensolidaire_owner:${DB_OWNER_PASSWORD}@postgres:5432/sensolidaire
       JWT_SECRET: change_this_secret_in_production
       JWT_REFRESH_SECRET: change_this_refresh_secret_in_production
       JWT_EXPIRES_IN: 15m
@@ -73,4 +74,3 @@ services:
 # ── Volumes persistants ─────────────────────────
 volumes:
   postgres_data:
-  
