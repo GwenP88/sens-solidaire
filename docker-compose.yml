@@ -39,7 +39,7 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/sensolidaire
       JWT_SECRET: change_this_secret_in_production
       JWT_REFRESH_SECRET: change_this_refresh_secret_in_production
-      JWT_EXPIRES_IN: 1d
+      JWT_EXPIRES_IN: 15m
       JWT_REFRESH_EXPIRES_IN: 7d
     ports:
       - "3000:3000"

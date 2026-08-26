@@ -57,7 +57,7 @@ const seed = async () => {
   // MissionFormPage). Elles servent uniquement d'ancrage pour rattacher des
   // témoignages par type sur la page Missions (sections codées en dur).
 
-  await prisma.mission.upsert({
+  const ancreServiceCivique = await prisma.mission.upsert({
     where: { slug: "ancre-service-civique" },
     update: {},
     create: {
@@ -70,7 +70,7 @@ const seed = async () => {
     },
   })
 
-  await prisma.mission.upsert({
+  const ancreGroupeJeunes = await prisma.mission.upsert({
     where: { slug: "ancre-groupe-jeunes" },
     update: {},
     create: {
@@ -83,7 +83,7 @@ const seed = async () => {
     },
   })
 
-  await prisma.mission.upsert({
+  const ancreCongeSolidaire = await prisma.mission.upsert({
     where: { slug: "ancre-conge-solidaire" },
     update: {},
     create: {
@@ -126,6 +126,16 @@ const seed = async () => {
   // 4 — LOCATIONS (Kenya + Sénégal)
   // ============================================================
 
+  // Missions Kenya + Sénégal : créées manuellement via le dashboard (voir
+  // note en tête de fichier), donc récupérées ici par slug plutôt que par
+  // un id codé en dur — l'id auto-incrémenté dépend de l'historique de la
+  // base et n'est pas garanti d'être 1 et 2.
+  const kenyaMission = await prisma.mission.findUnique({ where: { slug: "kenya" } })
+  const senegalMission = await prisma.mission.findUnique({ where: { slug: "senegal" } })
+  if (!kenyaMission || !senegalMission) {
+    throw new Error("Missions Kenya/Sénégal introuvables — à créer manuellement via le dashboard avant de lancer le seed.")
+  }
+
   // Petit helper — ajoute une galerie photo placeholder à une location
   const addLocationGallery = async (locationId) => {
     await prisma.media.deleteMany({ where: { entity_type: 'location', entity_id: locationId } })
@@ -151,7 +161,7 @@ const seed = async () => {
   const voiLocation = await prisma.location.upsert({
     where: { slug: "voi-kenya" },
     update: voiData,
-    create: { slug: "voi-kenya", mission_id: 1, ...voiData },
+    create: { slug: "voi-kenya", missions: { connect: { id: kenyaMission.id } }, ...voiData },
   })
   await addLocationGallery(voiLocation.id)
 
@@ -169,7 +179,7 @@ const seed = async () => {
   const lumoLocation = await prisma.location.upsert({
     where: { slug: "lumo-kenya" },
     update: lumoData,
-    create: { slug: "lumo-kenya", mission_id: 1, ...lumoData },
+    create: { slug: "lumo-kenya", missions: { connect: { id: kenyaMission.id } }, ...lumoData },
   })
   await addLocationGallery(lumoLocation.id)
 
@@ -187,7 +197,7 @@ const seed = async () => {
   const ttnpLocation = await prisma.location.upsert({
     where: { slug: "ttnp-kenya" },
     update: ttnpData,
-    create: { slug: "ttnp-kenya", mission_id: 1, ...ttnpData },
+    create: { slug: "ttnp-kenya", missions: { connect: { id: kenyaMission.id } }, ...ttnpData },
   })
   await addLocationGallery(ttnpLocation.id)
 
@@ -205,7 +215,7 @@ const seed = async () => {
   const ectLocation = await prisma.location.upsert({
     where: { slug: "elsa-conservation-trust-kenya" },
     update: ectData,
-    create: { slug: "elsa-conservation-trust-kenya", mission_id: 1, ...ectData },
+    create: { slug: "elsa-conservation-trust-kenya", missions: { connect: { id: kenyaMission.id } }, ...ectData },
   })
   await addLocationGallery(ectLocation.id)
 
@@ -222,7 +232,7 @@ const seed = async () => {
   const dtwLocation = await prisma.location.upsert({
     where: { slug: "diani-turtle-watch-kenya" },
     update: dtwData,
-    create: { slug: "diani-turtle-watch-kenya", mission_id: 1, ...dtwData },
+    create: { slug: "diani-turtle-watch-kenya", missions: { connect: { id: kenyaMission.id } }, ...dtwData },
   })
   await addLocationGallery(dtwLocation.id)
 
@@ -239,7 +249,7 @@ const seed = async () => {
   const ziguinchorLocation = await prisma.location.upsert({
     where: { slug: "ziguinchor-senegal" },
     update: ziguinchorData,
-    create: { slug: "ziguinchor-senegal", mission_id: 2, ...ziguinchorData },
+    create: { slug: "ziguinchor-senegal", missions: { connect: { id: senegalMission.id } }, ...ziguinchorData },
   })
   await addLocationGallery(ziguinchorLocation.id)
 
@@ -257,7 +267,7 @@ const seed = async () => {
   const agadaLocation = await prisma.location.upsert({
     where: { slug: "agada-senegal" },
     update: agadaData,
-    create: { slug: "agada-senegal", mission_id: 2, ...agadaData },
+    create: { slug: "agada-senegal", missions: { connect: { id: senegalMission.id } }, ...agadaData },
   })
   await addLocationGallery(agadaLocation.id)
 
@@ -268,27 +278,27 @@ const seed = async () => {
   // ============================================================
 
 const TESTIMONIALS = [
-    // ── Kenya (mission_id: 1) ──
-    { mission_id: 1, author_name: "Claire M.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: 1, author_name: "Julien D.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem. Duis augue quam, molestie vitae ullamcorper at non.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
+    // ── Kenya ──
+    { mission_id: kenyaMission.id, author_name: "Claire M.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
+    { mission_id: kenyaMission.id, author_name: "Julien D.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem. Duis augue quam, molestie vitae ullamcorper at non.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
 
-    // ── Sénégal (mission_id: 2) ──
-    { mission_id: 2, author_name: "Thomas B.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: 2, author_name: "Léa F.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada !", annee: 2024, status: "approved", show_homepage: true, consent_given: true },
+    // ── Sénégal ──
+    { mission_id: senegalMission.id, author_name: "Thomas B.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
+    { mission_id: senegalMission.id, author_name: "Léa F.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada !", annee: 2024, status: "approved", show_homepage: true, consent_given: true },
 
-    // ── Service civique — ancre (mission_id: 3) ──
-    { mission_id: 3, author_name: "Manon T.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: 3, author_name: "Hugo V.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem.", annee: 2025, status: "approved", show_homepage: false, consent_given: true },
-    { mission_id: 3, author_name: "Lycée International de Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: 3, author_name: "MJC Annemasse", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
+    // ── Service civique — ancre ──
+    { mission_id: ancreServiceCivique.id, author_name: "Manon T.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
+    { mission_id: ancreServiceCivique.id, author_name: "Hugo V.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem.", annee: 2025, status: "approved", show_homepage: false, consent_given: true },
+    { mission_id: ancreServiceCivique.id, author_name: "Lycée International de Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
+    { mission_id: ancreServiceCivique.id, author_name: "MJC Annemasse", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
 
-    // ── Groupe jeunes — ancre (mission_id: 4) ──
-    { mission_id: 4, author_name: "Lycée International de Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: 4, author_name: "MJC Annemasse", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
+    // ── Groupe jeunes — ancre ──
+    { mission_id: ancreGroupeJeunes.id, author_name: "Lycée International de Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
+    { mission_id: ancreGroupeJeunes.id, author_name: "MJC Annemasse", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
 
-    // ── Congé solidaire — ancre (mission_id: 5) ──
-    { mission_id: 5, author_name: "Équipe Decathlon Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem. Duis augue quam, molestie vitae ullamcorper at non.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: 5, author_name: "Marc L.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
+    // ── Congé solidaire — ancre ──
+    { mission_id: ancreCongeSolidaire.id, author_name: "Équipe Decathlon Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem. Duis augue quam, molestie vitae ullamcorper at non.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
+    { mission_id: ancreCongeSolidaire.id, author_name: "Marc L.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
   ]
 
   await prisma.testimonial.deleteMany({})

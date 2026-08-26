@@ -158,6 +158,18 @@ app.use((err, req, res, next) => {
   // En production on utiliserait un vrai logger (Winston, Pino...)
   console.error(`[ERROR] ${err.message}`)
 
+  // Multer lève ses propres erreurs (fichier trop gros, champ inattendu...)
+  // sans jamais poser err.status — sans ce mapping elles tombent dans le
+  // 500 par défaut ci-dessous, et un visiteur qui envoie juste un fichier
+  // trop lourd voit "erreur serveur" alors que c'est une erreur de sa part.
+  const MULTER_STATUS = {
+    LIMIT_FILE_SIZE: 413,
+    LIMIT_UNEXPECTED_FILE: 400,
+    LIMIT_FILE_COUNT: 400,
+    LIMIT_PART_COUNT: 400,
+  }
+  if (MULTER_STATUS[err.code]) err.status = MULTER_STATUS[err.code]
+
   // Utilise le status attaché à l'erreur par le service (ex: 401, 404)
   // Si pas de status défini → 500 Internal Server Error par défaut
   const status = err.status || 500

@@ -1,6 +1,8 @@
 // components/admin/ModerationCard.jsx
-// COMPOSANT PRÉSENTATIONNEL — aucun appel API ici.
-// Reçoit un témoignage + des fonctions d'action par props, et se contente d'afficher.
+// Purely presentational component — no API calls here.
+// Receives a testimonial plus action callbacks via props and just renders.
+// Design note: Dashboard.jsx owns the data and the API calls; this
+// component never fetches or mutates anything itself.
 
 import { FaCheck, FaXmark } from "react-icons/fa6";
 
