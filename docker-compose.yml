@@ -12,7 +12,7 @@ services:
     environment:
       POSTGRES_DB: sensolidaire
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
     ports:
       - "5432:5432"
     volumes:
@@ -38,8 +38,8 @@ services:
       PORT: 3000
       DATABASE_URL: postgresql://sensolidaire_app:${DB_APP_PASSWORD}@postgres:5432/sensolidaire
       MIGRATE_DATABASE_URL: postgresql://sensolidaire_owner:${DB_OWNER_PASSWORD}@postgres:5432/sensolidaire
-      JWT_SECRET: change_this_secret_in_production
-      JWT_REFRESH_SECRET: change_this_refresh_secret_in_production
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       JWT_EXPIRES_IN: 15m
       JWT_REFRESH_EXPIRES_IN: 7d
     ports:
