@@ -9,8 +9,11 @@ WORKDIR /app
 # (optimisation cache Docker — si package.json ne change pas, npm install est mis en cache)
 COPY package*.json ./
 
-# Installation des dépendances
-RUN npm install
+# npm ci installe EXACTEMENT les versions du package-lock.json.
+# npm install, lui, réinstalle les dernières versions compatibles avec les "^",
+# ce qui rend les builds non reproductibles : deux personnes qui construisent
+# la même image à une semaine d'écart n'obtiennent pas les mêmes dépendances.
+RUN npm ci
 
 # Copie du reste du code source (inclut prisma/schema.prisma)
 COPY . .

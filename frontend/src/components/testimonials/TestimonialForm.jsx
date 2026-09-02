@@ -1,6 +1,7 @@
 // TestimonialForm.jsx
-// Formulaire de soumission de témoignage — utilisé dans une modale
-// Le témoignage est soumis avec status "pending" et validé par l'admin avant publication
+// Testimonial submission form, used inside a modal.
+// Design note: submitted with status "pending" — nothing gets published
+// without admin review. The consent checkbox is mandatory.
 
 // ── React
 import { useState, useEffect } from 'react'

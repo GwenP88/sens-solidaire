@@ -1,6 +1,10 @@
 // src/services/testimonialService.js
-// Logique métier des témoignages (public + admin)
-// Interactions : Prisma (base de données)
+// Business logic for testimonials (public submission + admin moderation).
+// Handles: public listing/submission, admin listing, status updates, deletion.
+// Interactions: Prisma (database).
+// Design note: testimonials are HARD-deleted (GDPR art. 17), unlike missions
+// (soft delete) — they carry personal data (author_name, content), so the
+// row must actually disappear when erasure is requested.
 
 import prisma from "../config/db.js"
 
@@ -28,7 +32,10 @@ export const submitTestimonial = async (data) => {
       mission_id:   data.mission_id || null,
       avatar_url:   data.avatar_url || null,
       annee:        data.annee || null,
-      consent_given: true,
+      // Stores the value actually received, not a hardcoded true — the record
+      // must be able to PROVE consent was given (GDPR art. 7.1), and the
+      // controller already rejects the request upstream if it's missing.
+      consent_given: data.consent_given === true,
       status:       "pending",
     },
   })

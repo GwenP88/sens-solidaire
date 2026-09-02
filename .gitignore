@@ -24,3 +24,5 @@ backend/node_modules/.prisma/
 
 # Métadonnées Windows — créées lors du téléchargement de fichiers
 *.Zone.Identifier
+# Sauvegardes de base de données — contiennent des données personnelles
+backups/

@@ -4,25 +4,25 @@ API REST du site Sens Solidaires. Gère l'authentification admin, les missions, 
 
 ## Stack
 
-| Élément | Technologie |
-|---|---|
-| Runtime | Node.js (ESM — `"type": "module"`) |
-| Framework | Express 5 |
-| ORM | Prisma 7 (adaptateur `@prisma/adapter-pg`) |
-| Base de données | PostgreSQL |
-| Authentification | JWT (`jsonwebtoken`) + `bcrypt` |
-| Sécurité HTTP | `helmet`, `cors`, `cookie-parser` |
-| Emails | `resend` |
-| Tests | Jest + Supertest |
+| Élément        | Technologie                                 |
+| ---------------- | ------------------------------------------- |
+| Runtime          | Node.js (ESM —`"type": "module"`)        |
+| Framework        | Express 5                                   |
+| ORM              | Prisma 7 (adaptateur`@prisma/adapter-pg`) |
+| Base de données | PostgreSQL                                  |
+| Authentification | JWT (`jsonwebtoken`) + `bcrypt`         |
+| Sécurité HTTP  | `helmet`, `cors`, `cookie-parser`     |
+| Emails           | `resend`                                  |
+| Tests            | Jest + Supertest                            |
 
 ## Scripts disponibles
 
-| Commande | Rôle |
-|---|---|
-| `npm run dev` | Démarre le serveur avec rechargement automatique (`nodemon`) |
-| `npm start` | Démarre le serveur en mode production (sans rechargement) |
-| `npm test` | Lance les tests Jest + Supertest |
-| `npm run seed` | Remplit la base avec les données de test (`prisma/seed.js`) |
+| Commande         | Rôle                                                           |
+| ---------------- | --------------------------------------------------------------- |
+| `npm run dev`  | Démarre le serveur avec rechargement automatique (`nodemon`) |
+| `npm start`    | Démarre le serveur en mode production (sans rechargement)      |
+| `npm test`     | Lance les tests Jest + Supertest                                |
+| `npm run seed` | Remplit la base avec les données de test (`prisma/seed.js`)  |
 
 > En développement, ces commandes s'exécutent **dans le conteneur Docker** (`docker exec sensolidaire_backend npm run dev`), jamais directement sur la machine hôte.
 
@@ -60,39 +60,39 @@ Chaque ressource suit strictement ce découpage, dans cet ordre de responsabilit
 
 ### Routes publiques (sans authentification)
 
-| Méthode | Route | Rôle |
-|---|---|---|
-| GET | `/api/health` | Vérifie que le serveur répond |
-| GET | `/api/missions` | Liste des missions (filtres `?type=` et `?country=`) |
-| GET | `/api/missions/:slug` | Détail d'une mission (tarifs, lieux, témoignages, médias) |
-| GET | `/api/locations/:slug` | Détail d'un lieu partenaire |
-| GET | `/api/testimonials` | Témoignages validés |
-| POST | `/api/testimonials` | Soumission d'un témoignage (statut `pending`, RGPD requis) |
-| GET | `/api/team-members` | Membres de l'équipe (filtre `?category=`) |
-| GET | `/api/delegations` | Délégations internationales |
-| GET | `/api/activity-reports` | Rapports d'activité annuels |
-| GET | `/api/mission-reports` | Rapports de mission (filtres `?type=`, `?destination=`, `?annee=`) |
-| GET | `/api/partners` | Partenaires (logos) |
-| POST | `/api/contact` | Envoi du formulaire de contact (Resend) |
-| POST | `/api/auth/login` | Connexion admin — retourne un access token |
-| POST | `/api/auth/refresh` | Renouvelle l'access token via le cookie refresh |
+| Méthode | Route                     | Rôle                                                                   |
+| -------- | ------------------------- | ----------------------------------------------------------------------- |
+| GET      | `/api/health`           | Vérifie que le serveur répond                                         |
+| GET      | `/api/missions`         | Liste des missions (filtres`?type=` et `?country=`)                 |
+| GET      | `/api/missions/:slug`   | Détail d'une mission (tarifs, lieux, témoignages, médias)            |
+| GET      | `/api/locations/:slug`  | Détail d'un lieu partenaire                                            |
+| GET      | `/api/testimonials`     | Témoignages validés                                                   |
+| POST     | `/api/testimonials`     | Soumission d'un témoignage (statut`pending`, RGPD requis)            |
+| GET      | `/api/team-members`     | Membres de l'équipe (filtre`?category=`)                             |
+| GET      | `/api/delegations`      | Délégations internationales                                           |
+| GET      | `/api/activity-reports` | Rapports d'activité annuels                                            |
+| GET      | `/api/mission-reports`  | Rapports de mission (filtres`?type=`, `?destination=`, `?annee=`) |
+| GET      | `/api/partners`         | Partenaires (logos)                                                     |
+| POST     | `/api/contact`          | Envoi du formulaire de contact (Resend)                                 |
+| POST     | `/api/auth/login`       | Connexion admin — retourne un access token                             |
+| POST     | `/api/auth/refresh`     | Renouvelle l'access token via le cookie refresh                         |
 
 ### Routes admin (protégées par `authMiddleware`)
 
-| Méthode | Route | Rôle |
-|---|---|---|
-| POST | `/api/auth/logout` | Déconnexion — révoque la session |
-| GET | `/api/auth/verify` | Vérifie la validité du token courant |
-| GET | `/api/admin/missions` | Liste toutes les missions (actives + inactives) |
-| POST | `/api/admin/missions` | Création d'une mission |
-| PATCH | `/api/admin/missions/:id` | Modification partielle d'une mission |
-| DELETE | `/api/admin/missions/:id` | Suppression (soft delete) |
-| PUT | `/api/admin/missions/:id/pricing` | Remplace les tarifs d'une mission |
-| PUT | `/api/admin/missions/:id/media` | Remplace la galerie/le PDF d'une mission |
-| GET | `/api/admin/testimonials` | Liste des témoignages (filtre `?status=`) |
-| PATCH | `/api/admin/testimonials/:id/approve` | Valide un témoignage |
-| PATCH | `/api/admin/testimonials/:id/reject` | Refuse un témoignage (retire de la home) |
-| DELETE | `/api/admin/testimonials/:id` | Suppression définitive (droit à l'oubli RGPD) |
+| Méthode | Route                                   | Rôle                                           |
+| -------- | --------------------------------------- | ----------------------------------------------- |
+| POST     | `/api/auth/logout`                    | Déconnexion — révoque la session             |
+| GET      | `/api/auth/verify`                    | Vérifie la validité du token courant          |
+| GET      | `/api/admin/missions`                 | Liste toutes les missions (actives + inactives) |
+| POST     | `/api/admin/missions`                 | Création d'une mission                         |
+| PATCH    | `/api/admin/missions/:id`             | Modification partielle d'une mission            |
+| DELETE   | `/api/admin/missions/:id`             | Suppression (soft delete)                       |
+| PUT      | `/api/admin/missions/:id/pricing`     | Remplace les tarifs d'une mission               |
+| PUT      | `/api/admin/missions/:id/media`       | Remplace la galerie/le PDF d'une mission        |
+| GET      | `/api/admin/testimonials`             | Liste des témoignages (filtre`?status=`)     |
+| PATCH    | `/api/admin/testimonials/:id/approve` | Valide un témoignage                           |
+| PATCH    | `/api/admin/testimonials/:id/reject`  | Refuse un témoignage (retire de la home)       |
+| DELETE   | `/api/admin/testimonials/:id`         | Suppression définitive (droit à l'oubli RGPD) |
 
 ## Authentification
 
@@ -105,12 +105,12 @@ Chaque ressource suit strictement ce découpage, dans cet ordre de responsabilit
 
 Toutes les routes suivent la même convention de réponse :
 
-| Statut HTTP | Signification | Exemple de code métier |
-|---|---|---|
-| 400 | Requête invalide (champ manquant, format incorrect) | — |
-| 401 | Token absent ou invalide | — |
-| 404 | Ressource introuvable | `MISSION_NOT_FOUND`, `TESTIMONIAL_NOT_FOUND` |
-| 409 | Conflit (ex : slug déjà utilisé) | `SLUG_TAKEN` |
+| Statut HTTP | Signification                                        | Exemple de code métier                          |
+| ----------- | ---------------------------------------------------- | ------------------------------------------------ |
+| 400         | Requête invalide (champ manquant, format incorrect) | —                                               |
+| 401         | Token absent ou invalide                             | —                                               |
+| 404         | Ressource introuvable                                | `MISSION_NOT_FOUND`, `TESTIMONIAL_NOT_FOUND` |
+| 409         | Conflit (ex : slug déjà utilisé)                  | `SLUG_TAKEN`                                   |
 
 Le `errorHandler` global transmet le `code` métier au frontend (`{ error: true, message, code }`) — permet au frontend de réagir différemment selon le type d'erreur plutôt que de parser un message texte.
 
@@ -131,6 +131,7 @@ docker exec sensolidaire_backend npm run seed
 ```
 
 > **Prisma Studio non fonctionnel dans ce projet Docker** (bug connu Prisma v7). Pour consulter les données directement :
+>
 > ```bash
 > docker compose exec postgres psql -U postgres -d sensolidaire
 > ```

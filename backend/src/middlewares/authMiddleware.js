@@ -1,7 +1,15 @@
 // src/middlewares/authMiddleware.js
-// Middleware de protection des routes admin
-// S'exécute AVANT le controller sur toutes les routes /api/admin/*
-// Vérifie la validité du JWT et attache les infos admin à req.user
+// Route protection middleware — runs before the controller on every
+// /api/admin/* route.
+// Handles: verifying the JWT and attaching the admin's identity to req.user.
+// Interactions: utils/jwt.js (token verification).
+//
+// Design note — KNOWN, ACCEPTED TECH DEBT: this middleware checks
+// AUTHENTICATION only, never AUTHORIZATION — it never reads payload.role.
+// Not exploitable today because only a single role exists in the whole app.
+// This is documented and deliberately left unfixed for now; it MUST be
+// revisited before a second role is introduced, otherwise every admin route
+// would silently trust any authenticated user regardless of role.
 
 // Import de la fonction de vérification du token depuis utils/jwt.js
 import { verifyAccessToken } from "../utils/jwt.js"
