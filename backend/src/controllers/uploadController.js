@@ -12,7 +12,8 @@ const getFolderFromMimetype = (mimetype) => {
 }
 
 // ── UPLOAD PUBLIC ─────────────────────────────────────────────
-// POST /api/upload — utilisé par le formulaire témoignage
+// POST /api/upload — utilisé UNIQUEMENT par la photo du formulaire témoignage.
+// Une seule utilisation possible → type forcé en dur, jamais lu du client.
 export const handlePublicUpload = async (req, res, next) => {
   try {
     if (!req.file) {
@@ -20,7 +21,7 @@ export const handlePublicUpload = async (req, res, next) => {
     }
 
     const folder = getFolderFromMimetype(req.file.mimetype)
-    const url = await saveFile(req.file, folder)
+    const url = await saveFile(req.file, folder, 'avatar')
 
     return res.status(200).json({ url })
 
@@ -30,7 +31,9 @@ export const handlePublicUpload = async (req, res, next) => {
 }
 
 // ── UPLOAD ADMIN ──────────────────────────────────────────────
-// POST /api/admin/upload — utilisé par le dashboard (images, vidéos, PDF)
+// POST /api/admin/upload — dashboard. Le contexte d'usage (hero/gallery/
+// card/avatar) est fourni par le front dans req.body.type — la TAILLE
+// réelle, elle, reste décidée côté serveur (voir IMAGE_SIZES).
 export const handleAdminUpload = async (req, res, next) => {
   try {
     if (!req.file) {
@@ -38,7 +41,7 @@ export const handleAdminUpload = async (req, res, next) => {
     }
 
     const folder = getFolderFromMimetype(req.file.mimetype)
-    const url = await saveFile(req.file, folder)
+    const url = await saveFile(req.file, folder, req.body.type)
 
     // label optionnel — texte alternatif fourni par la cliente pour l'accessibilité
     return res.status(200).json({ url, label: req.body.label || null })

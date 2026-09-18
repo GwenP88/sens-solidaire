@@ -13,6 +13,7 @@
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
+import sharp from 'sharp'
 
 // Root uploads folder, at the backend root
 const UPLOADS_ROOT = path.resolve('public/uploads')
@@ -35,6 +36,15 @@ const EXTENSION_BY_MIMETYPE = {
   'application/pdf': '.pdf',
 }
 
+// Table des tailles cibles par contexte d'usage — jamais fournie par le
+// client, toujours résolue côté serveur à partir du `imageType` reçu.
+const IMAGE_SIZES = {
+  hero:    { width: 1920, quality: 80 },
+  gallery: { width: 1600, quality: 80 },
+  card:    { width: 800,  quality: 75 },
+  avatar:  { width: 400,  quality: 75 },
+}
+
 // Turns the client-supplied original name into a harmless display label,
 // never a path. path.basename() strips any directory component first (so
 // "../../../../x" becomes "x"), then the whitelist regex keeps only
@@ -52,36 +62,66 @@ const slugifyOriginalName = (originalName) => {
 }
 
 // ── SAVE A FILE ───────────────────────────────────────────────
-// Takes a Multer file (in-memory buffer) + the target subfolder.
-// Returns a relative URL to store in the DB (never an absolute URL!)
-export const saveFile = async (file, folder) => {
+// Prend un fichier Multer (buffer en mémoire) + le sous-dossier cible.
+// imageType (hero/gallery/card/avatar) n'est utilisé QUE pour les images —
+// il détermine la taille de redimensionnement (voir IMAGE_SIZES).
+// Retourne une URL relative à stocker en BDD (jamais une URL absolue).
+export const saveFile = async (file, folder, imageType) => {
+  // 1. Dossier cible autorisé ? (whitelist — voir commentaire ALLOWED_FOLDERS)
   if (!ALLOWED_FOLDERS.includes(folder)) {
     const error = new Error(`Invalid target folder: ${folder}`)
     error.status = 400
     throw error
   }
 
-  const extension = EXTENSION_BY_MIMETYPE[file.mimetype]
+  // 2. Nom de fichier sûr — slug du nom original + suffixe unique (anti-collision)
+  const slug = slugifyOriginalName(file.originalname)
+  const uniqueSuffix = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}`
+
+  // Buffer et extension par défaut — écrasés ci-dessous si c'est une image
+  let buffer = file.buffer
+  let extension = EXTENSION_BY_MIMETYPE[file.mimetype]
+
+  // 3. Images uniquement : redimensionnement + conversion WebP via Sharp
+  //    imageType vient du client, mais la TAILLE vient d'IMAGE_SIZES (serveur)
+  //    → même principe que pour l'extension : jamais confiance dans le client
+  if (folder === 'images') {
+    const sizeConfig = IMAGE_SIZES[imageType]
+
+    // imageType absent ou inconnu → on refuse plutôt que de deviner une taille
+    if (!sizeConfig) {
+      const error = new Error(`Type d'image invalide ou manquant : ${imageType}`)
+      error.status = 400
+      throw error
+    }
+
+    buffer = await sharp(file.buffer)
+      // withoutEnlargement : ne jamais agrandir une image plus petite que la cible
+      .resize({ width: sizeConfig.width, withoutEnlargement: true })
+      .webp({ quality: sizeConfig.quality })
+      .toBuffer()
+
+    // Peu importe le format d'origine (jpg/png/webp) : la sortie est toujours .webp
+    extension = '.webp'
+  }
+
+  // 4. Vidéos/PDF : si le mimetype n'était pas dans la table → type non supporté
   if (!extension) {
     const error = new Error(`Unsupported file type: ${file.mimetype}`)
     error.status = 400
     throw error
   }
 
-  const slug = slugifyOriginalName(file.originalname)
-  // Timestamp + short random suffix avoids collisions even for two files
-  // uploaded in the same millisecond with the same slug.
-  const uniqueName = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}-${slug}${extension}`
-
+  // 5. Écriture sur disque
+  const uniqueName = `${uniqueSuffix}-${slug}${extension}`
   const targetDir = path.join(UPLOADS_ROOT, folder)
   const targetPath = path.join(targetDir, uniqueName)
 
-  // The subfolder may not exist yet (fresh checkout, fresh volume).
+  // Le sous-dossier peut ne pas encore exister (checkout tout frais, volume neuf)
   await fs.promises.mkdir(targetDir, { recursive: true })
+  await fs.promises.writeFile(targetPath, buffer)
 
-  await fs.promises.writeFile(targetPath, file.buffer)
-
-  // Relative URL — the frontend prefixes it with API_URL when displaying it
+  // URL relative — le front ajoute API_URL devant pour l'affichage
   return `/uploads/${folder}/${uniqueName}`
 }
 
