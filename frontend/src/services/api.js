@@ -9,9 +9,12 @@ const API_URL = "/api"
 
 // authFetch — ajoute le token à chaque requête protégée du dashboard.
 // Au 1er 401 (access token expiré, 15 min), tente un refresh SILENCIEUX via
-// le cookie HTTP-Only avant de déconnecter — c'est tout l'intérêt d'avoir un
-// refresh token : la déconnexion ne devrait arriver qu'après 7 jours
-// d'inactivité, jamais en pleine saisie.
+// le cookie HTTP-Only avant de déconnecter.
+// Chaque appel réseau est protégé individuellement : si fetch() échoue avant
+// même d'obtenir une réponse (serveur injoignable, pas de connexion...), on
+// remplace le message brut du navigateur par un message compréhensible.
+const NETWORK_ERROR_MESSAGE = "Impossible de contacter le serveur. Vérifiez votre connexion et réessayez."
+
 const authFetch = async (url, options = {}) => {
   const token = localStorage.getItem("admin_token")
 
@@ -23,22 +26,38 @@ const authFetch = async (url, options = {}) => {
     },
   })
 
-  let response = await doFetch(token)
+  let response
+  try {
+    response = await doFetch(token)
+  } catch (err) {
+    if (err.name === 'AbortError') throw err   // navigation/démontage — pas une vraie panne réseau
+    throw new Error(NETWORK_ERROR_MESSAGE)
+  }
 
   if (response.status === 401) {
-    const refreshed = await fetch(`${API_URL}/auth/refresh`, {
-      method: "POST",
-      credentials: "include", // envoie le cookie refreshToken automatiquement
-    })
+    let refreshed
+    try {
+      refreshed = await fetch(`${API_URL}/auth/refresh`, {
+        method: "POST",
+        credentials: "include",
+      })
+    } catch (err) {
+      if (err.name === 'AbortError') throw err
+      throw new Error(NETWORK_ERROR_MESSAGE)
+    }
 
     if (refreshed.ok) {
       const { accessToken } = await refreshed.json()
       localStorage.setItem("admin_token", accessToken)
-      response = await doFetch(accessToken) // on rejoue la requête d'origine
+      try {
+        response = await doFetch(accessToken)
+      } catch (err) {
+        if (err.name === 'AbortError') throw err
+        throw new Error(NETWORK_ERROR_MESSAGE)
+      }
     }
   }
 
-  // Toujours 401 après la tentative de refresh → session vraiment invalide
   if (response.status === 401) {
     localStorage.removeItem("admin_token")
     window.location.href = "/admin/login"
