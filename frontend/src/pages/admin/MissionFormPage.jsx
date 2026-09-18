@@ -39,7 +39,6 @@ const VALID_TYPES = [
 const EMPTY_FORM = {
   title:             '',
   country:           '',
-  country_preposition: 'au',
   slug:              '',
   short_description: '',
   type:              'volontariat_individuel',  // ← seul type créable pour l'instant
@@ -143,7 +142,6 @@ function MissionFormPage() {
         setFormData({
           title:             mission.title             || '',
           country:           mission.country           || '',
-          country_preposition: mission.country_preposition || 'au',
           slug:              mission.slug              || '',
           short_description: mission.short_description || '',
           type:              mission.type              || '',
@@ -341,37 +339,21 @@ function MissionFormPage() {
         {/* ── BLOC 1 : Informations essentielles ── */}
         <FormSection
           title="Informations essentielles"
-          description="Affichées sur la card mission et dans le hero de la page détail."
+          description="Ces informations sont affichées sur la carte de la mission et en haut de sa page détaillée."
         >
-          {/* Ligne 1 — Titre, pleine largeur */}
-          <Field label="Titre" name="title" value={formData.title} onChange={handleChange} required />
-
-          {/* Ligne 2 — Préposition + Pays côte à côte */}
+          {/* Ligne 1 — Titre et pays */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-700">Préposition</label>
-              <select
-                name="country_preposition"
-                value={formData.country_preposition}
-                onChange={handleChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-              >
-                <option value="au">au (ex: au Kenya)</option>
-                <option value="en">en (ex: en France)</option>
-                <option value="à">à (ex: à Sumatra)</option>
-                <option value="aux">aux (ex: aux Philippines)</option>
-              </select>
-            </div>
+            <Field label="Titre de la mission" name="title" value={formData.title} onChange={handleChange} required />
             <Field
-              label="Pays" name="country" value={formData.country} onChange={handleChange} required
-              pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
+            label="Pays" name="country" value={formData.country} onChange={handleChange} required
+            pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
             />
           </div>
 
           {/* Ligne 3 — Slug, pleine largeur */}
           <Field
-            label="Slug" name="slug" value={formData.slug} onChange={handleChange} required
-            hint="utilisé dans l'URL" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement"
+            label="URL de la mission" name="slug" value={formData.slug} onChange={handleChange} required
+            hint="Partie de l’URL qui identifie la mission. Utilisez des mots-clés courts et descriptifs, séparés par des tirets. Ex. : volontariat-kenya-biodiversite" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement, sans espaces ni accents"
           />
 
           <div className="flex flex-col gap-1">
@@ -383,7 +365,7 @@ function MissionFormPage() {
               Description courte <span className="text-red-500">*</span>
               <span className="font-normal ml-1 text-xs">— {formData.short_description.length}/150 caractères</span>
             </label>
-            <p className="text-xs text-gray-400 -mt-0.5">Affichée sur la card et dans le hero de la page détail</p>
+            <p className="text-xs text-gray-400 -mt-0.5">Affichée sur la carte de la mission et en haut de sa page détaillée</p>
             <textarea
               name="short_description"
               value={formData.short_description}
@@ -401,8 +383,7 @@ function MissionFormPage() {
 
         {/* ── BLOC 2 : Photo hero ── */}
         <FormSection
-          title="Photo principale (hero)"
-          description="Affichée en haut de la page détail, à côté de l'introduction."
+          title="Photo principale"
         >
           <AdminFileUpload
             value={formData.hero_photo}
@@ -411,14 +392,14 @@ function MissionFormPage() {
             maxFiles={1}
             imageType="hero"
             showLabel={true}
-            helperText="Formats : JPG, PNG, WEBP. La légende sert de texte alternatif (accessibilité)."
+            helperText="Formats : JPG, JPEG, PNG, WEBP, AVIF, SVG. La légende décrit l’image pour l’accessibilité."
           />
         </FormSection>
 
         {/* ── BLOC 2 bis : Galerie ── */}
         <FormSection
           title="Galerie photo"
-          description="Jusqu'à 10 photos. La 1ère devient l'image du bloc 'La mission' sur la page détail, les 9 suivantes forment le carrousel. Indépendant du hero ci-dessus."
+          description="Jusqu’à 10 photos. La première illustre la présentation de la mission, les suivantes apparaissent dans la galerie en bas de page."
         >
           <AdminFileUpload
             value={formData.gallery_photos}
@@ -427,33 +408,29 @@ function MissionFormPage() {
             maxFiles={10}
             imageType="gallery"
             showLabel={true}
-            helperText="Formats : JPG, PNG, WEBP. La légende sert de texte alternatif (accessibilité)."
+            helperText="Formats : JPG, JPEG, PNG, WEBP, AVIF, SVG. La légende décrit l’image pour l’accessibilité."
           />
         </FormSection>
 
         {/* ── BLOC 3 : Contenu ── */}
         <FormSection
-          title="Contenu de la page détail"
-          description="Ces informations apparaissent sur la page mission détaillée."
+          title="Présentation de la mission"
         >
           <TextareaField
             label="Description longue" name="description"
             value={formData.description} onChange={handleChange}
-            rows={6} hint="Section 'La mission'"
+            rows={6} hint="Présentation détaillée de la mission et de ses objectifs"
           />
           <TextareaField
-            label="Section 'Votre rôle sur le terrain'" name="volunteer_role"
+            label="Rôle du volontaire'" name="volunteer_role"
             value={formData.volunteer_role} onChange={handleChange}
-            rows={10} hint="Une ligne = une puce affichée"
+            rows={10} hint="Un rôle par ligne. Chaque ligne sera affichée sous forme de puce."
           />
-          <p className="text-xs text-gray-300 -mt-2 italic">
-            La phrase d'introduction est fixe et s'affiche automatiquement.
-          </p>
         </FormSection>
 
         {/* ── BLOC 4 : Programme ── */}
         <FormSection
-          title="Section 'Programme de volontariat'"
+          title="Programme de volontariat"
           description="Colonne gauche : horaire ou jour. Colonne droite : activité."
         >
           <div className="flex flex-col gap-2">
@@ -486,7 +463,7 @@ function MissionFormPage() {
 
         {/* ── BLOC 5 : Tarifs & durées ── */}
         <FormSection
-          title="Tableau durée / prix"
+          title="Durées et tarifs"
           description="Colonne gauche : durée. Colonne droite : prix en €."
         >
           <div className="flex flex-col gap-2">
@@ -521,30 +498,30 @@ function MissionFormPage() {
 
         {/* ── BLOC 6 : Logistique ── */}
         <FormSection
-          title="Section 'Inclus/non inclus'"
-          description="une ligne = un item dans la liste inclus / non inclus."
+          title="Inclus / non inclus"
+          description="Un élément par ligne. Chaque ligne sera affichée sous forme de puce."
         >
           <TextareaField
             label="Ce qui est inclus" name="included"
             value={formData.included} onChange={handleChange}
-            rows={6} hint="Une ligne = un item — ex: Hébergement sur site"
+            rows={6}
           />
           <TextareaField
             label="Ce qui n'est pas inclus" name="not_include"
             value={formData.not_include} onChange={handleChange}
-            rows={6} hint="Une ligne = un item — ex: Billet d'avion (~700 €)"
+            rows={6}
           />
           <Field
             label="Lien HelloAsso" name="helloasso_url"
             value={formData.helloasso_url} onChange={handleChange}
-            hint="Bouton S'inscrire"
+            hint="Lien utilisé par le bouton « S’inscrire »."
           />
         </FormSection>
 
         {/* ── BLOC 7 : Comment partir ── */}
         <FormSection
-          title="Section 'Comment partir ?'"
-          description="Seule la première étape est à renseigner — les autres sont fixes pour toutes les missions."
+          title="Comment partir ?"
+          description="Seule la première étape est à renseigner. Les suivantes sont identiques pour toutes les missions."
         >
           <div className="flex flex-col gap-3">
 
@@ -580,23 +557,23 @@ function MissionFormPage() {
 
         {/* ── BLOC 8 : Infos pratiques ── */}
         <FormSection
-          title="Section 'Préparer votre départ'"
-          description="Une ligne = une puce affichée."
+          title="Préparer votre départ"
+          description="Informations utiles pour préparer le départ : santé, formalités et documents."
         >
           <TextareaField
             label='Infos santé' name="health_info"
             value={formData.health_info} onChange={handleChange}
-            rows={6} hint='Titre fixe : "Avant le départ : santé & prévention"'
+            rows={6} hint='Vaccins, traitements, condition physique ou autres précautions de santé. Un élément par ligne.'
           />
           <TextareaField
             label='Infos administratives' name="admin_info"
             value={formData.admin_info} onChange={handleChange}
-            rows={6} hint='Titre fixe : "Avant de prendre votre envol"'
+            rows={6} hint='Passeport, visa et autres formalités nécessaires au voyage. Un élément par ligne.'
           />
           <Field
-            label="Lien site du ministère" name="ministry_url"
+            label="Lien des recommandations officielles" name="ministry_url"
             value={formData.ministry_url} onChange={handleChange}
-            hint="Bouton Recommandations officielles"
+            hint="Lien vers les conseils aux voyageurs du ministère pour le pays concerné.s"
           />
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-gray-700">Guide du volontaire (PDF)</label>
@@ -605,8 +582,7 @@ function MissionFormPage() {
               onChange={(guide_pdf) => setFormData(prev => ({ ...prev, guide_pdf }))}
               accept="application/pdf"
               maxFiles={1}
-              showLabel={true}
-              helperText="Le libellé s'affiche sur le bouton de téléchargement (ex: Guide du volontaire Kenya)."
+              showLabel={false}
             />
           </div>
         </FormSection>
