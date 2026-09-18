@@ -10,7 +10,7 @@ function HeroPage({ image, title, subtitle, duration, price, age, country, tags 
   return (
     <div className="relative w-full h-80 md:h-96 lg:h-120 flex items-end padding-x hero-page-py">
 
-      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }}></div>
+      <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }}></div>
       <div className="absolute inset-0 bg-black/50"></div>
 
       {/* gap-xs gère l'espacement entre tous les enfants — text-eyebrow et text-lead
