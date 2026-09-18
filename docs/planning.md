@@ -213,6 +213,7 @@ Détail complet dans `docs/bugTracker.md`.
 | 109 | Corriger le doublon "Réserver le vol" | Confirmé dans le code : dans `MissionFormPage.jsx`, l'étape 1 du bloc "Comment partir" dit "Réserver votre vol", et l'étape 3 (fixe, `HOW_TO_GO_FIXED`) dit "Réserver vos billets d'avion et nous les envoyer" — redondant |
 | 110 | Prévoir compte admin + compte invité/service civique | Lié à la dette technique documentée dans `authMiddleware.js` (vérifie l'authentification, pas le rôle) — à concevoir avant d'introduire un 2ᵉ rôle, comme le précise déjà le commentaire du code |
 | 111 | Revoir mise en page `MissionDetail` — section inclus/non inclus + tableau durée/prix | Trop de blancs, visuellement pas satisfaisant selon toi — idée de mise en page à détailler ensemble |
+| 114 | Repérer tous les placeholders du site et les optimiser (taille + format) | Utiliser le pipeline Sharp/WebP fraîchement mis en place (#112) plutôt que de les repasser à la main |
 
 ### Bloc B — Dashboard CRUD manquant (le plus gros morceau)
 
