@@ -2,9 +2,9 @@
 // Composants de formulaire partagés — utilisés par MissionFormPage,
 // ServiceCiviqueFormPage, et tout futur formulaire admin.
 
-export function FormSection({ title, description, children }) {
+export function FormSection({ title, description, children, tone = 'bg-primary/5' }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`form-section flex flex-col gap-4 p-6 rounded-xl border border-gray-200 ${tone} transition-colors`}>
       <div className="border-b border-gray-200 pb-2">
         <h2 className="font-heading font-semibold text-base text-primary">{title}</h2>
         {description && <p className="text-xs text-gray-400 mt-0.5">{description}</p>}
