@@ -218,15 +218,7 @@ function MissionDetail() {
             <Button label="Voir toutes les actions →" variant="secondary" />
           </a>
         </div>
-
-        {actions.length === 0 ? (
-          <div className="flex items-center justify-center bg-surface-mid rounded-xl h-64">
-            <p className="text-body text-primary/40 italic text-center px-8">
-              Nous préparons actuellement la présentation des actions menées avec nos partenaires {mission.country_preposition || 'au'} {mission.country}.
-            </p>
-          </div>
-        ) : (
-          <Carousel
+        <Carousel
             items={actions.slice(0, 4)}
             showPagination={true}
             color="primary"
@@ -242,7 +234,6 @@ function MissionDetail() {
               />
             )}
           />
-        )}
       </section>
       )}
 
