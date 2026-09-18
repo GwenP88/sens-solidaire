@@ -10,7 +10,7 @@ const storage = multer.memoryStorage()
 
 // ── Filter: allowed file types ──
 const ALLOWED_TYPES = {
-  image: ['image/jpeg', 'image/png', 'image/webp'],
+  image: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/svg+xml'],
   video: ['video/mp4', 'video/webm'],
   document: ['application/pdf'],
 }
