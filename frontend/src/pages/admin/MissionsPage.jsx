@@ -119,7 +119,7 @@ function MissionsPage() {
   // La mission reste en base (récupérable) mais disparaît du site.
   const handleDelete = async (mission) => {
     const confirmed = window.confirm(
-      `Supprimer la mission "${mission.title}" ?\n\nCette action la masquera du site. Elle reste récupérable en base de données.`
+      `Mettre en pause la mission "${mission.title}" ?\n\nCette action la masquera du site. Elle reste récupérable en base de données.`
     )
     if (!confirmed) return
 
