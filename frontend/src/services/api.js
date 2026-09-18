@@ -7,33 +7,38 @@ const API_URL = "/api"
 
 // ── AUTH HELPERS ─────────────────────────────────────────────────────────────
 
-// Wrapper autour de fetch pour les appels admin authentifiés.
-// Rôle :
-//   1. Injecte automatiquement le Bearer token dans les headers.
-//   2. Intercepte les 401 (token expiré, invalide, révoqué) :
-//      → efface le token
-//      → redirige vers /admin/login
-//      → throw pour interrompre proprement la chaîne d'appels
-//
-// À NE PAS utiliser pour loginAdmin (produit l'auth, ne la consomme pas)
-// ni pour les fetch publics (pas de token à envoyer).
+// authFetch — ajoute le token à chaque requête protégée du dashboard.
+// Au 1er 401 (access token expiré, 15 min), tente un refresh SILENCIEUX via
+// le cookie HTTP-Only avant de déconnecter — c'est tout l'intérêt d'avoir un
+// refresh token : la déconnexion ne devrait arriver qu'après 7 jours
+// d'inactivité, jamais en pleine saisie.
 const authFetch = async (url, options = {}) => {
   const token = localStorage.getItem("admin_token")
 
-  // Merge des headers : ceux fournis par l'appelant priment sur les nôtres,
-  // sauf Authorization qu'on ajoute systématiquement.
-  const response = await fetch(url, {
+  const doFetch = (accessToken) => fetch(url, {
     ...options,
     headers: {
       ...(options.headers || {}),
-      "Authorization": `Bearer ${token}`,
+      "Authorization": `Bearer ${accessToken}`,
     },
   })
 
-  // Interception centralisée du 401 : session invalide → on dégage.
-  // Ordre critique : (1) supprimer le token, (2) rediriger, (3) throw.
-  // Sans le throw, l'appelant tenterait de lire response.ok sur undefined
-  // pendant les quelques ms avant que le navigateur ne charge /admin/login.
+  let response = await doFetch(token)
+
+  if (response.status === 401) {
+    const refreshed = await fetch(`${API_URL}/auth/refresh`, {
+      method: "POST",
+      credentials: "include", // envoie le cookie refreshToken automatiquement
+    })
+
+    if (refreshed.ok) {
+      const { accessToken } = await refreshed.json()
+      localStorage.setItem("admin_token", accessToken)
+      response = await doFetch(accessToken) // on rejoue la requête d'origine
+    }
+  }
+
+  // Toujours 401 après la tentative de refresh → session vraiment invalide
   if (response.status === 401) {
     localStorage.removeItem("admin_token")
     window.location.href = "/admin/login"
