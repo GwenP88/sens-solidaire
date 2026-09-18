@@ -75,6 +75,7 @@ const HOW_TO_GO_FIXED = [
   "Recevoir votre fiche mission à remplir à votre retour",
 ]
 
+const HOW_TO_GO_STEP1_LABEL = "Comparer et réserver vos vols"
 // ════════════════════════════════════════════════════════════════
 // COMPOSANT PRINCIPAL
 // ════════════════════════════════════════════════════════════════
@@ -237,7 +238,7 @@ function MissionFormPage() {
       // Reconstruction du tableau how_to_go complet (7 étapes)
       // Étape 1 = saisie libre, étapes 2-7 = texte fixe
       const howToGoFull = HOW_TO_GO_FIXED.map((fixed, i) =>
-        i === 0 ? formData.how_to_go_villes : fixed
+        i === 0 ? `${HOW_TO_GO_STEP1_LABEL} : ${formData.how_to_go_villes}` : fixed
       )
 
       // Hero — champ indépendant maintenant, plus de position à deviner
@@ -551,7 +552,7 @@ function MissionFormPage() {
             <div className="flex items-start gap-3">
               <span className="text-xs font-bold text-gray-400 w-6 shrink-0 text-center mt-2.5">01</span>
               <div className="flex flex-col gap-1 flex-1">
-                <p className="text-sm text-gray-500 font-medium">Réserver votre vol</p>
+                <p className="text-sm text-gray-500 font-medium">Comparer / Vérifier les vols</p>
                 <input
                   type="text"
                   name="how_to_go_villes"
