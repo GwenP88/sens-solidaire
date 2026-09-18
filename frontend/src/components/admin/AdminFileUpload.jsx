@@ -36,7 +36,7 @@ function AdminFileUpload({ value = [], onChange, accept = 'image/*', maxFiles = 
       const newItems = []
       for (const file of filesToUpload) {
         const result = await uploadAdminFile(file, '', imageType)
-        newItems.push({ file_url: result.url, label: '' })
+        newItems.push({ file_url: result.url, label: '', original_name: file.name })
       }
       onChange([...value, ...newItems])
     } catch (err) {
@@ -85,7 +85,7 @@ function AdminFileUpload({ value = [], onChange, accept = 'image/*', maxFiles = 
           )}
 
           {/* Champ légende/alt — optionnel selon showLabel */}
-          {showLabel && (
+          {showLabel ? (
             <input
               type="text"
               value={item.label || ''}
@@ -93,6 +93,10 @@ function AdminFileUpload({ value = [], onChange, accept = 'image/*', maxFiles = 
               placeholder={isImage ? "Légende / texte alternatif" : "Nom du document"}
               className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
+          ) : (
+            <span className="flex-1 text-sm text-gray-600 truncate">
+              {item.original_name || 'Fichier déjà importé'}
+            </span>
           )}
 
           {/* Réordonnancement — utile surtout pour la galerie (1ère image = hero) */}
