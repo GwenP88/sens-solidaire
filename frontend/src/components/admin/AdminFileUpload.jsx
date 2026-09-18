@@ -12,7 +12,7 @@
 import { useState } from 'react'
 import { uploadAdminFile } from '../../services/api'
 
-function AdminFileUpload({ value = [], onChange, accept = 'image/*', maxFiles = 10, showLabel = true, helperText }) {
+function AdminFileUpload({ value = [], onChange, accept = 'image/*', maxFiles = 10, showLabel = true, helperText, imageType }) {
 
   // Suivi des uploads en cours — évite de bloquer toute l'UI pendant l'envoi
   const [uploading, setUploading] = useState(false)
@@ -35,7 +35,7 @@ function AdminFileUpload({ value = [], onChange, accept = 'image/*', maxFiles = 
       // de saturer le serveur si la cliente sélectionne 10 photos d'un coup
       const newItems = []
       for (const file of filesToUpload) {
-        const result = await uploadAdminFile(file)
+        const result = await uploadAdminFile(file, '', imageType)
         newItems.push({ file_url: result.url, label: '' })
       }
       onChange([...value, ...newItems])

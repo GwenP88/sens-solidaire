@@ -56,9 +56,10 @@ const EMPTY_FORM = {
   admin_info:        '',
   is_active:         true,
   pricing:           [], // [{ duration_label, price }]
-  // Photos de la mission — la 1ère devient l'image principale (hero),
-  // les suivantes forment la galerie. [{ file_url, label }]
-  photos:            [],
+  // Photos de la mission — la 1ère est l'image principale (hero),
+  // les 10 suivantes forment la galerie. [{ file_url, label }]
+  hero_photo:        [],
+  gallery_photos:    [],
   // Guide du volontaire — 1 fichier max. [{ file_url, label }]
   guide_pdf:         [],
 }
@@ -123,11 +124,12 @@ function MissionFormPage() {
               .map(m => ({ file_url: m.file_url, label: m.label || '' }))
           : []
 
-        // Photos reconstituées — l'image principale existante en 1ère position,
-        // suivie de la galerie déjà enregistrée
-        const photos = mission.image_url
-          ? [{ file_url: mission.image_url, label: mission.image_alt || '' }, ...galerieMedia]
-          : galerieMedia
+          // Photo hero existante, si présente
+        const hero_photo = mission.image_url
+          ? [{ file_url: mission.image_url, label: mission.image_alt || '' }]
+          : []
+        // Galerie déjà enregistrée — indépendante du hero maintenant
+        const gallery_photos = galerieMedia
 
         // PDF guide du volontaire
         const pdfMedia = mission.media
@@ -156,7 +158,8 @@ function MissionFormPage() {
           admin_info:        mission.admin_info        || '',
           is_active:         mission.is_active         ?? true,
           pricing,
-          photos,
+          hero_photo,
+          gallery_photos,
           guide_pdf,
         })
       } catch (err) {
@@ -237,8 +240,8 @@ function MissionFormPage() {
         i === 0 ? formData.how_to_go_villes : fixed
       )
 
-      // La 1ère photo devient l'image principale (hero), les suivantes la galerie
-      const [heroPhoto, ...galeriePhotos] = formData.photos
+      // Hero — champ indépendant maintenant, plus de position à deviner
+      const heroPhoto = formData.hero_photo[0]
       const image_url = heroPhoto ? heroPhoto.file_url : ''
       const image_alt = heroPhoto ? heroPhoto.label : ''
 
@@ -251,7 +254,8 @@ function MissionFormPage() {
       }
       // Champs gérés séparément — on les retire du payload mission
       delete payload.pricing
-      delete payload.photos
+      delete payload.hero_photo
+      delete payload.gallery_photos
       delete payload.guide_pdf
       delete payload.how_to_go_villes
 
@@ -271,7 +275,7 @@ function MissionFormPage() {
       }
 
       // Sauvegarde des médias (galerie + PDF)
-      const images = galeriePhotos.map(p => ({ file_url: p.file_url, label: p.label || null }))
+      const images = formData.gallery_photos.map(p => ({ file_url: p.file_url, label: p.label || null }))
       const pdf = formData.guide_pdf[0]
         ? { file_url: formData.guide_pdf[0].file_url, label: formData.guide_pdf[0].label || 'Guide du volontaire' }
         : null
@@ -394,16 +398,33 @@ function MissionFormPage() {
 
         </FormSection>
 
-        {/* ── BLOC 2 : Photos de la mission (fusion image principale + galerie) ── */}
+        {/* ── BLOC 2 : Photo hero ── */}
         <FormSection
-          title="Photos de la mission"
-          description="La 1ère photo devient l'image principale (hero). Les suivantes forment la galerie de la page détail. Glissez les flèches pour réordonner."
+          title="Photo principale (hero)"
+          description="Affichée en haut de la page détail, à côté de l'introduction."
         >
           <AdminFileUpload
-            value={formData.photos}
-            onChange={(photos) => setFormData(prev => ({ ...prev, photos }))}
+            value={formData.hero_photo}
+            onChange={(hero_photo) => setFormData(prev => ({ ...prev, hero_photo }))}
+            accept="image/*"
+            maxFiles={1}
+            imageType="hero"
+            showLabel={true}
+            helperText="Formats : JPG, PNG, WEBP. La légende sert de texte alternatif (accessibilité)."
+          />
+        </FormSection>
+
+        {/* ── BLOC 2 bis : Galerie ── */}
+        <FormSection
+          title="Galerie photo"
+          description="Jusqu'à 10 photos. La 1ère devient l'image du bloc 'La mission' sur la page détail, les 9 suivantes forment le carrousel. Indépendant du hero ci-dessus."
+        >
+          <AdminFileUpload
+            value={formData.gallery_photos}
+            onChange={(gallery_photos) => setFormData(prev => ({ ...prev, gallery_photos }))}
             accept="image/*"
             maxFiles={10}
+            imageType="gallery"
             showLabel={true}
             helperText="Formats : JPG, PNG, WEBP. La légende sert de texte alternatif (accessibilité)."
           />

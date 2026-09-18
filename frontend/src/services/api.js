@@ -114,15 +114,18 @@ export const uploadFile = async (file) => {
 
 // ── UPLOAD DE FICHIERS (ADMIN) ────────────────────────────────────────────────
 
-// Upload admin — images, vidéos, PDF (dashboard, route protégée)
-// label optionnel — texte alternatif/légende fourni par la cliente
-export const uploadAdminFile = async (file, label = '') => {
+// Upload un fichier via le dashboard (protégé par auth).
+// type : 'hero' | 'gallery' | 'card' | 'avatar' — détermine la taille de
+// redimensionnement côté serveur (voir IMAGE_SIZES dans storageService.js).
+// Sans objet pour un PDF — le serveur ignore `type` hors dossier images.
+export const uploadAdminFile = async (file, label = '', type = '') => {
   const formData = new FormData()
   formData.append('file', file)
   if (label) formData.append('label', label)
+  if (type) formData.append('type', type)
 
   const response = await authFetch(`${API_URL}/admin/upload`, {
-    method: 'POST',
+    method: "POST",
     body: formData,
   })
 
