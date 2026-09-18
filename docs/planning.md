@@ -205,20 +205,22 @@ Détail complet dans `docs/bugTracker.md`.
 
 | # | Tâche | Détail |
 |---|---|---|
-| 112 | Upload dashboard — redimensionnement auto + conversion WebP à l'import | Reprend et priorise l'ex-tâche 77 (Sharp), déplacée du Bloc E ici : pré-requis pour saisir proprement les visuels des missions ci-dessous, sans avoir à tout refaire plus tard |
-| 113 | Saisir le contenu complet de toutes les missions existantes via le dashboard | Contenu figé une fois saisi (plus de changement après). Pré-requis pour pouvoir associer actions terrain, délégations, lieux et témoignages aux bonnes missions |
+| 112 | ✅ Upload dashboard — redimensionnement auto + conversion WebP à l'import | **Fait.** Sharp branché (tiers hero/gallery/card/avatar), photo hero et galerie séparées en 2 champs indépendants dans `MissionFormPage.jsx` (plus de risque lié au réordonnancement). Bonus : bug corrigé au passage — l'image du bloc "La mission" pointait vers le hero au lieu de la galerie |
+| 113 | ✅ Saisir le contenu complet de toutes les missions existantes via le dashboard | **Fait.** 5 missions volontariat individuel saisies (Kenya, Sénégal, Sumatra, Sri Lanka, Pérou), contenu et photos repris de l'ancien site sensolidaire.org |
 | 106 | Composant `Modal` dashboard réutilisable | Généraliser `ConfirmModal.jsx` (déjà utilisé pour la suppression/hard delete) pour qu'il serve aussi à la mise en pause |
 | 107 | Bouton pause/reprise mission → modale perso | ⚠️ En cours : le texte de confirmation a été corrigé ("Mettre en pause" au lieu de "Supprimer") mais c'est toujours `window.confirm()` natif dans `MissionsPage.jsx`, pas la modale perso. Le bouton doit aussi changer d'icône (pause ↔ play) selon `is_active` |
 | 108 | Retirer le bouton "Voir toutes les actions" — page Impact | — |
-| 109 | Corriger le doublon "Réserver le vol" | Confirmé dans le code : dans `MissionFormPage.jsx`, l'étape 1 du bloc "Comment partir" dit "Réserver votre vol", et l'étape 3 (fixe, `HOW_TO_GO_FIXED`) dit "Réserver vos billets d'avion et nous les envoyer" — redondant |
+| 109 | ✅ Corriger le doublon "Réserver le vol" | **Fait.** Étape 1 relabellisée "Comparer et réserver vos vols", et la page publique affiche maintenant ce libellé + les villes (au lieu des villes seules, sans contexte) |
 | 110 | Prévoir compte admin + compte invité/service civique | Lié à la dette technique documentée dans `authMiddleware.js` (vérifie l'authentification, pas le rôle) — à concevoir avant d'introduire un 2ᵉ rôle, comme le précise déjà le commentaire du code |
 | 111 | Revoir mise en page `MissionDetail` — section inclus/non inclus + tableau durée/prix | Trop de blancs, visuellement pas satisfaisant selon toi — idée de mise en page à détailler ensemble |
 | 114 | Repérer tous les placeholders du site et les optimiser (taille + format) | Utiliser le pipeline Sharp/WebP fraîchement mis en place (#112) plutôt que de les repasser à la main |
-| 115 | Description courte extraite automatiquement de la description longue | Cliente ne remplit qu'un seul champ. 3 options évaluées : 2 champs séparés (actuel) / coupure automatique à X caractères (risque de phrase coupée) / **un seul champ + marqueur de coupure manuel inséré par la cliente (type "Lire la suite" WordPress), avec repli sur la dernière phrase complète si pas de marqueur — option retenue**. Motif réutilisable pour TeamMember/EducationItem/MediaPost plus tard |
+| 115 | Description courte extraite automatiquement de la description longue | Cliente ne remplit qu'un seul champ. Option retenue : un seul champ + marqueur de coupure manuel inséré par la cliente (type "Lire la suite" WordPress), avec repli sur la dernière phrase complète si pas de marqueur. Motif réutilisable pour TeamMember/EducationItem/MediaPost plus tard |
 | 116 | Drag & drop pour réordonner la galerie dashboard | Remplace les flèches ▲▼ actuelles (`AdminFileUpload.jsx`), trop pénibles à l'usage. Prévoir une lib (`dnd-kit` ou `@hello-pangea/dnd`) plutôt que du drag & drop maison |
 | 117 | Gras / souligné dans les zones de texte du dashboard | Version light de l'éditeur riche (le TipTap complet reste au Backlog V2) — juste permettre à la cliente de mettre en forme localement dans les textarea existantes |
 | 118 | Lien vers le formulaire de contact — étape 2 "Comment partir" | Reproduire le lien "ICI" de l'ancien site. ⚠️ Cette étape n'est pas éditable via le dashboard (texte fixe `HOW_TO_GO_FIXED`, identique pour toutes les missions) — le lien se fait en JSX dans `MissionDetail.jsx` (vrai lien React Router vers `/contact`), pas via une zone de texte |
-| 119 | Retirer le champ légende/alt de l'upload hero dans le dashboard | Devenu inutile : le hero est passé en `aria-hidden="true"` (image décorative, le `<h1>` porte déjà l'info) — garder ce champ induirait la cliente en erreur en lui faisant croire qu'il sert à l'accessibilité |
+| 120 | Retirer le champ légende/alt de l'upload hero dans le dashboard | Devenu inutile : le hero est passé en `aria-hidden="true"` (image décorative, le `<h1>` porte déjà l'info) — garder ce champ induirait la cliente en erreur en lui faisant croire qu'il sert à l'accessibilité |
+| 121 | Bug alternance des couleurs de fond — `MissionDetail.jsx` (page publique) | Chaque section a une couleur fixe sans tenir compte des sections masquées (`show: ...`) — deux sections visibles adjacentes peuvent hériter de la même couleur et se retrouver collées sans séparation. Calculer la couleur selon l'ordre réel d'affichage parmi les sections visibles, pas une couleur figée par section |
+| 122 | Palette de couleurs dédiée au dashboard | Distincte de celle du site public, code couleur cohérent par domaine (missions = vert, témoignages = terracotta, etc.) plutôt que choisi au fil de l'eau. Le prop `tone` de `FormSection` (ajouté aujourd'hui) est déjà prêt à l'accueillir une fois cette palette définie |
 
 
 ### Bloc B — Dashboard CRUD manquant (le plus gros morceau)
@@ -296,7 +298,8 @@ Détail complet dans `docs/bugTracker.md`.
 | `MissionFieldAction` (many-to-many) | Relation explicite mission ↔ actions terrain, indépendante du filtre pays |
 | `mission_id` sur `MediaPost` | Publier un article directement rattaché à une mission |
 | **Seed non autonome (ajout 18/09)** | Les missions Kenya/Sénégal doivent être créées manuellement via le dashboard avant de pouvoir lancer le seed — limitation connue et documentée dans `seed.js`, jamais bloquante à ce jour mais à lever si le seed doit un jour tourner sans étape manuelle (ex. CI) |
-| Recadrage d'image côté dashboard | Permettre à la cliente de recadrer une photo après upload (ex: photo mal cadrée avec sujet coupé) — outil client-side avant l'upload, Sharp ne fait que redimensionner, pas de recadrage intelligent automatique |
+| **Recadrage d'image côté dashboard (ajout 18/09)** | Permettre à la cliente de recadrer une photo après upload (ex: photo mal cadrée avec sujet coupé) — outil client-side avant l'upload, Sharp ne fait que redimensionner, pas de recadrage intelligent automatique |
+| **HEIC non supporté par Sharp (ajout 18/09)** | Le binaire Sharp installé ne supporte que l'AVIF côté HEIF, pas le HEIC des iPhones (codec sous licence, absent du build précompilé). 2 options à trancher avec la cliente : réglage iPhone "Le plus compatible" (JPEG natif, zéro code) ou lib `heic-convert` en amont de Sharp |
 
 ---
 

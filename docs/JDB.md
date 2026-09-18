@@ -2419,18 +2419,42 @@ Plusieurs cards se fondaient dans leur fond de section (même couleur `bg-surfac
 
 ---
 
-### 18 septembre 2026 — Reprise post-pause, session upload Sharp/WebP + saisie contenu missions
+### 18 septembre 2026 — Reprise post-pause, sécurité, upload Sharp/WebP, saisie contenu missions
 
-**Fait :**
+**Synchronisation & environnement :**
+- Repo entièrement reparcouru (code réel, pas juste la doc) pour vérifier l'état d'avancement avant de repartir
+- Merge de l'audit sécurité d'Alison (`dev` → `dev-front`) : 7 failles corrigées (upload/path traversal, XSS stocké, JWT 7j→15min, injection HTML emails, RGPD, code mort, robustesse upload), séparation des droits PostgreSQL (2 comptes), 20 tests, doc complète
+- Remontée de l'environnement Docker avec les 2 comptes PostgreSQL séparés (`sensolidaire_owner` / `sensolidaire_app`) — **problème** : `.env` racine avec les mots de passe PostgreSQL restés vides malgré JWT renseigné → conteneur Postgres refusait de démarrer. **Solution** : valeurs manquantes complétées, espace parasite après `=` sur les lignes JWT retiré
+- **Problème** : seed impossible à relancer (`Missions Kenya/Sénégal introuvables`) → le seed actuel ("démo MR") attend que ces 2 missions existent déjà en base, créées manuellement via le dashboard. **Solution** : missions créées à la main (slugs `kenya`/`senegal` exacts), seed relancé avec succès. Limitation documentée au Backlog V2 pour la rendre autonome plus tard
+- Planning entièrement réécrit à partir d'un audit complet du repo (pas de la doc), pour repartir sur une base fiable en solo
+
+**Upload & images :**
 - Sharp/WebP branché sur l'upload dashboard (tiers hero/gallery/card/avatar) — tâche #112 clôturée
-- Split du champ photo mission en 2 champs indépendants (hero / galerie) dans `MissionFormPage.jsx`
-- Fix : alt de l'image "La mission" pointait sur le titre de la mission au lieu du label de la photo galerie
-- Fix : doublon 1ère photo galerie affichée à la fois dans "La mission" et dans le carrousel (`.slice(1)`)
-- Fix a11y : hero en image de fond CSS sans `alt` possible → `aria-hidden="true"` ajouté (décoratif, titre déjà en texte réel dans le `<h1>`)
-- Fix (hors planning) : déconnexion dashboard après 15 min pendant la saisie — `authFetch` ne tentait aucun refresh silencieux → ajout du refresh automatique via le cookie refresh token existant (aucun impact sur la sécurité, la durée du token n'a pas changé)
-- Début de la saisie réelle des missions (Kenya, Sénégal) + récupération du contenu et des photos de l'ancien site sensolidaire.org pour Sumatra, Sri Lanka, Pérou
+- Split du champ photo mission en 2 champs indépendants (hero / galerie) dans `MissionFormPage.jsx` — évite qu'une photo galerie réordonnée en position 1 hérite d'une taille hero insuffisante
+- Formats acceptés étendus : AVIF et SVG ajoutés en plus de JPG/JPEG/PNG/WEBP
+- **Problème** : HEIC (iPhone) non supporté par le build Sharp installé (seul l'AVIF l'est côté HEIF, codec HEIC sous licence absent du binaire précompilé) → laissé de côté, noté en Backlog V2 (réglage iPhone "Le plus compatible" vs lib `heic-convert`, à trancher avec la cliente)
+- Champ légende retiré de l'upload PDF (jugé inutile par Gwen) ; `AdminFileUpload.jsx` affiche désormais le nom du fichier original à la place quand `showLabel={false}`
 
-**Note libre (pas une tâche) :** mission test "panda géant" (id 6, créée pendant les tests Sharp) laissée en base pour l'instant, à supprimer plus tard, maintenue pour tests.
+**Fixes page mission publique (`MissionDetail.jsx`) :**
+- Alt de l'image "La mission" pointait sur le titre de la mission au lieu du label de la photo galerie → corrigé
+- Doublon 1ère photo galerie affichée à la fois dans "La mission" et dans le carrousel → corrigé (`.slice(1)`)
+- Fix a11y : hero en image de fond CSS sans `alt` possible → `aria-hidden="true"` ajouté (décoratif, titre déjà en texte réel dans le `<h1>`)
+- Nettoyage d'un ternaire mort dans la section "Impact terrain" (code inatteignable) — comportement inchangé, la section reste masquée si 0 action, cohérent avec le reste de la page
+- Étape 1 "Comment partir" affichait les villes brutes sans libellé, contrairement aux étapes 2-7 → ajout d'un libellé fixe concaténé aux villes à la sauvegarde — tâche #109 clôturée
+
+**Fixes dashboard :**
+- Page Impact publique : bouton "Voir toutes les actions" retiré (pointait vers sa propre page)
+- Champ `country_preposition` retiré du formulaire Mission — devenu inutile après le nettoyage Impact terrain (le Service Civique le garde, lui, toujours utile)
+- Fix (hors planning) : déconnexion dashboard après 15 min pendant la saisie — `authFetch` ne tentait aucun refresh silencieux → ajout du refresh automatique via le cookie refresh token existant (aucun impact sur la sécurité, la durée du token n'a pas changé)
+- **Problème** : message d'erreur "Failed to fetch" (brut navigateur) affiché à la cliente en cas de panne réseau → remplacé par un message compréhensible dans `authFetch`
+- **Régression introduite par le fix précédent, détectée et corrigée le jour même** : le nouveau `catch` générique avalait aussi les `AbortError` légitimes (navigation avant fin de requête, StrictMode), cassant le garde-fou silencieux de `MissionsPage.jsx` → plus aucune mission ne chargeait. `AbortError` explicitement laissé remonter tel quel dans les 3 blocs `catch` d'`authFetch`
+- `FormSection` (`FormElements.jsx`) : ajout d'un prop `tone` (défaut `bg-primary/5`) — tous les blocs du formulaire mission encadrés et sur fond vert uniforme, sans alternance blanc/vert (plusieurs allers-retours avant d'arriver à ce résultat)
+
+**Contenu :**
+- Saisie complète des 5 missions volontariat individuel (Kenya, Sénégal, Sumatra, Sri Lanka, Pérou) via le dashboard — tâche #113 clôturée
+- Contenu et photos repris de l'ancien site sensolidaire.org (5 pages parcourues, images téléchargées via `wget` en local puis uploadées)
+
+**Note libre (pas une tâche) :** mission test "panda géant" (id 6, créée pendant les tests Sharp) laissée en base pour l'instant, à supprimer plus tard.
 
 ---
 
