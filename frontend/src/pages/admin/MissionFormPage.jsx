@@ -299,7 +299,7 @@ function MissionFormPage() {
   // ════════════════════════════════════════════════════════════════
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10">
+    <div className="max-w-4xl mx-auto py-10">
 
       {/* ── En-tête ── */}
       <div className="flex items-center justify-between mb-8">
