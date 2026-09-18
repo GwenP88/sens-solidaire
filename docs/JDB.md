@@ -2410,12 +2410,27 @@ Plusieurs cards se fondaient dans leur fond de section (même couleur `bg-surfac
 
 ---
 
-#### 🔵 À faire — identifié aujourd'hui
+#### 🔵 À faire — identifié 
 
 - **CRUD dashboard pour Location, Delegation, TeamMember, FieldAction** — briques de base utilisées par Mission, actuellement seed-only. Bloquant rencontré plusieurs fois (pas de préposition sur Delegation, pas de gestion des lieux Côte d'Ivoire). Priorité proposée pour la prochaine session.
 - Missions.jsx — remplacer le contenu Service Civique encore statique par un carrousel de vraies cards cliquables vers `/service-civique/:slug`
 - Navbar — dropdown "Nos missions" à étendre pour inclure Service Civique dynamique
 - Réponse client toujours en attente : Côte d'Ivoire active ou non (questions C2/C3, doc questions-cliente.md)
+
+---
+
+### 18 septembre 2026 — Reprise post-pause, session upload Sharp/WebP + saisie contenu missions
+
+**Fait :**
+- Sharp/WebP branché sur l'upload dashboard (tiers hero/gallery/card/avatar) — tâche #112 clôturée
+- Split du champ photo mission en 2 champs indépendants (hero / galerie) dans `MissionFormPage.jsx`
+- Fix : alt de l'image "La mission" pointait sur le titre de la mission au lieu du label de la photo galerie
+- Fix : doublon 1ère photo galerie affichée à la fois dans "La mission" et dans le carrousel (`.slice(1)`)
+- Fix a11y : hero en image de fond CSS sans `alt` possible → `aria-hidden="true"` ajouté (décoratif, titre déjà en texte réel dans le `<h1>`)
+- Fix (hors planning) : déconnexion dashboard après 15 min pendant la saisie — `authFetch` ne tentait aucun refresh silencieux → ajout du refresh automatique via le cookie refresh token existant (aucun impact sur la sécurité, la durée du token n'a pas changé)
+- Début de la saisie réelle des missions (Kenya, Sénégal) + récupération du contenu et des photos de l'ancien site sensolidaire.org pour Sumatra, Sri Lanka, Pérou
+
+**Note libre (pas une tâche) :** mission test "panda géant" (id 6, créée pendant les tests Sharp) laissée en base pour l'instant, à supprimer plus tard, maintenue pour tests.
 
 ---
 
