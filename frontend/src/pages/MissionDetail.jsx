@@ -129,7 +129,7 @@ function MissionDetail() {
             </div>
             <div className="w-full lg:w-1/3 shrink-0">
               <img
-                src={mission.image_url || '/images/placeholders/placeholder-galerie-1.png'}
+                src={mission.media?.find(m => m.file_type === 'image')?.file_url || '/images/placeholders/placeholder-galerie-1.png'}
                 alt={mission.image_alt || mission.title}
                 className="w-full h-72 object-cover rounded-xl"
               />
