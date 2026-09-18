@@ -485,7 +485,14 @@ function MissionDetail() {
             items={mission.testimonials}
             showPagination={true}
             color="surface"
-            renderSlide={(t) => <TestimonialCard {...t} />}
+            renderSlide={(t) => (
+              <TestimonialCard
+                quote={t.content}
+                name={t.author_name}
+                mission={t.mission?.title || ''}
+                avatar={t.avatar_url || undefined}
+              />
+            )}
           />
         </section>
       )}
