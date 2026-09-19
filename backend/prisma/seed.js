@@ -454,27 +454,27 @@ const TESTIMONIALS = [
 
   const TEAM_MEMBERS = [
     // ── Direction ──
-    { nom: "Delphine Thibaut", role: "Fondatrice et Chargée des Programmes", description: "Master administratrice S.I. Institut Bioforce — Ancienne guide spécialisée Afrique", avatar_url: "/images/placeholders/avatar-women.png", category: "direction", display_order: 1 },
-    { nom: "Arya Monchauzou", role: "Chargée des projets des Alpes-Maritimes", description: "Master Risques et Environnement", avatar_url: "/images/placeholders/avatar-women.png", category: "direction", display_order: 2 },
-    { nom: "Amna Labidi", role: "Chargée de mission Service Civique", description: "Licence Sciences de la vie — Master biologie (en cours)", avatar_url: "/images/placeholders/avatar-women.png", category: "direction", display_order: 3 },
-    { nom: "Emile Augsburger", role: "Chargé de mission Service Civique", description: "Ingénieur écologue HES-SO", avatar_url: "/images/placeholders/avatar-men.png", category: "direction", display_order: 4 },
+    { nom: "Delphine Thibaut", role: "Fondatrice et Chargée des Programmes", description: "Master administratrice S.I. Institut Bioforce — Ancienne guide spécialisée Afrique", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "direction", display_order: 1 },
+    { nom: "Arya Monchauzou", role: "Chargée des projets des Alpes-Maritimes", description: "Master Risques et Environnement", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "direction", display_order: 2 },
+    { nom: "Amna Labidi", role: "Chargée de mission Service Civique", description: "Licence Sciences de la vie — Master biologie (en cours)", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "direction", display_order: 3 },
+    { nom: "Emile Augsburger", role: "Chargé de mission Service Civique", description: "Ingénieur écologue HES-SO", avatar_url: "/images/placeholders/placeholder-avatar-men.png", category: "direction", display_order: 4 },
 
     // ── Bureau ──
-    { nom: "Elodie Tisserand", role: "Présidente", description: "Management de projets culturels et innovation — Chargée des projets d'éducation populaire.", avatar_url: "/images/placeholders/avatar-women.png", category: "bureau", display_order: 1 },
-    { nom: "Hervé Caffin", role: "Trésorier", description: "Responsable affaires transition énergétique Paris — Ancien chargé de mission pour Energie Solidaire au Burkina Faso.", avatar_url: "/images/placeholders/avatar-men.png", category: "bureau", display_order: 2 },
-    { nom: "Lynda Tabet", role: "Secrétaire", description: "Coach professionnel — Professeur de Yoga — Coordinatrice projets Transition Bien-être.", avatar_url: "/images/placeholders/avatar-women.png", category: "bureau", display_order: 3 },
+    { nom: "Elodie Tisserand", role: "Présidente", description: "Management de projets culturels et innovation — Chargée des projets d'éducation populaire.", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "bureau", display_order: 1 },
+    { nom: "Hervé Caffin", role: "Trésorier", description: "Responsable affaires transition énergétique Paris — Ancien chargé de mission pour Energie Solidaire au Burkina Faso.", avatar_url: "/images/placeholders/placeholder-avatar-men.png", category: "bureau", display_order: 2 },
+    { nom: "Lynda Tabet", role: "Secrétaire", description: "Coach professionnel — Professeur de Yoga — Coordinatrice projets Transition Bien-être.", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "bureau", display_order: 3 },
     // ── CA ──
-    { nom: "Ingrid von Anthoni", role: "Chargée des plaidoyers sur le massacre des éléphants", avatar_url: "/images/placeholders/avatar-women.png", category: "ca", display_order: 1 },
-    { nom: "Virginie Blumet", role: "Manager International Business Finance WWF", avatar_url: "/images/placeholders/avatar-women.png", category: "ca", display_order: 2 },
-    { nom: "Emilie della-guardia", role: "Professeure de Science et Vie de la Terre", avatar_url: "/images/placeholders/avatar-women.png", category: "ca", display_order: 3 },
-    { nom: "Crystel Cantariti", role: "Professeure des écoles", avatar_url: "/images/placeholders/avatar-women.png", category: "ca", display_order: 4 },
-    { nom: "Marc Olivier", role: "Consultant, professeur en ethnobotanique", avatar_url: "/images/placeholders/avatar-men.png", category: "ca", display_order: 5 },
-    { nom: "Coralie Pinchart", role: "Master 2 économie de développement à l'International", avatar_url: "/images/placeholders/avatar-women.png", category: "ca", display_order: 6 },
+    { nom: "Ingrid von Anthoni", role: "Chargée des plaidoyers sur le massacre des éléphants", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 1 },
+    { nom: "Virginie Blumet", role: "Manager International Business Finance WWF", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 2 },
+    { nom: "Emilie della-guardia", role: "Professeure de Science et Vie de la Terre", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 3 },
+    { nom: "Crystel Cantariti", role: "Professeure des écoles", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 4 },
+    { nom: "Marc Olivier", role: "Consultant, professeur en ethnobotanique", avatar_url: "/images/placeholders/placeholder-avatar-men.png", category: "ca", display_order: 5 },
+    { nom: "Coralie Pinchart", role: "Master 2 économie de développement à l'International", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 6 },
     // ── Également à nos côtés ──
-    { nom: "Gwen Pichot", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/avatar-women.png", category: "egalement", display_order: 1 },
-    { nom: "Alison Amblard", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/avatar-women.png", category: "egalement", display_order: 2 },
+    { nom: "Gwen Pichot", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "egalement", display_order: 1 },
+    { nom: "Alison Amblard", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "egalement", display_order: 2 },
     { nom: "Thierry Montalban", role: "Agence de communication", avatar_url: "/images/placeholders/avatar-men.png", category: "egalement", display_order: 3 },
-    { nom: "Sabine Jerome", role: "Comptabilité", avatar_url: "/images/placeholders/avatar-women.png", category: "egalement", display_order: 4 },
+    { nom: "Sabine Jerome", role: "Comptabilité", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "egalement", display_order: 4 },
   ]
 
   await prisma.teamMember.deleteMany({})
@@ -525,7 +525,7 @@ const TESTIMONIALS = [
       content: 'Découvrez les dernières nouvelles de Sens Solidaires : nos missions en cours, les témoignages de volontaires et les actions menées sur le terrain au Kenya et au Sénégal.',
       theme: 'Newsletter',
       date: new Date('2026-05-01'),
-      image_url: '/images/media/placeholder-newsletter.png',
+      image_url: null,
       external_url: 'https://www.sensolidaire.org/wp-content/uploads/2026/05/NEWSLETTER-Juin-26-3.pdf',
     },
     {
@@ -543,7 +543,7 @@ const TESTIMONIALS = [
       content: 'Willy Rovelli a partagé son expérience de congé solidaire au Kenya avec Sens Solidaires.',
       theme: 'Ils parlent de nous',
       date: new Date('2024-06-01'),
-      image_url: '/images/Willy_Rovelli.png',
+      image_url: null,
       external_url: 'https://www.instagram.com/stories/highlights/18049986517744153/',
       is_active: true,
       show_homepage: true,
