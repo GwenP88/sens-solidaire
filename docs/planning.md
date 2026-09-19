@@ -1,7 +1,7 @@
 # Planning de développement — Sens Solidaires
 *Pichot Gwen & Amblard Alison (jusqu'à fin août) · Pichot Gwen seule à partir du 18/09/2026*
 *Holberton School — Thonon-les-Bains*
-*Mise à jour : 18 septembre 2026 — reprise post-pause, Alison en alternance, audit complet du repo effectué avant réécriture de ce planning*
+*Mise à jour : 19 septembre 2026 — session upload Sharp/WebP, réorganisation images, description courte auto, refonte galerie décidée
 
 **Légende** : ✅ Terminé · ⚠️ Partiel · 🔵 À faire · 🔴 Bloqué
 **Devs (historique)** : Gwen (frontend + design) · Alison (backend + BDD) · Ensemble = tâches communes
@@ -207,21 +207,24 @@ Détail complet dans `docs/bugTracker.md`.
 |---|---|---|
 | 112 | ✅ Upload dashboard — redimensionnement auto + conversion WebP à l'import | **Fait.** Sharp branché (tiers hero/gallery/card/avatar), photo hero et galerie séparées en 2 champs indépendants dans `MissionFormPage.jsx` (plus de risque lié au réordonnancement). Bonus : bug corrigé au passage — l'image du bloc "La mission" pointait vers le hero au lieu de la galerie |
 | 113 | ✅ Saisir le contenu complet de toutes les missions existantes via le dashboard | **Fait.** 5 missions volontariat individuel saisies (Kenya, Sénégal, Sumatra, Sri Lanka, Pérou), contenu et photos repris de l'ancien site sensolidaire.org |
-| 106 | Composant `Modal` dashboard réutilisable | Généraliser `ConfirmModal.jsx` (déjà utilisé pour la suppression/hard delete) pour qu'il serve aussi à la mise en pause |
-| 107 | Bouton pause/reprise mission → modale perso | ⚠️ En cours : le texte de confirmation a été corrigé ("Mettre en pause" au lieu de "Supprimer") mais c'est toujours `window.confirm()` natif dans `MissionsPage.jsx`, pas la modale perso. Le bouton doit aussi changer d'icône (pause ↔ play) selon `is_active` |
-| 108 | Retirer le bouton "Voir toutes les actions" — page Impact | — |
+| 106 | ✅ Composant `Modal` dashboard réutilisable | **Fait.** `ConfirmModal.jsx` généralisé avec un prop `variant` (`danger` rouge / `default` vert), défaut inchangé pour la suppression |
+| 107 | ✅ Bouton pause/reprise mission → modale perso | **Fait.** Modale perso branchée (variant `default`), icône dynamique pause/play selon `is_active` dans `DashboardTable.jsx` |
+| 108 | ✅ Retirer le bouton "Voir toutes les actions" — page Impact | **Fait** — il pointait vers sa propre page. Le même bouton sur la Home reste, lui, légitime (renvoie vers Impact) |
 | 109 | ✅ Corriger le doublon "Réserver le vol" | **Fait.** Étape 1 relabellisée "Comparer et réserver vos vols", et la page publique affiche maintenant ce libellé + les villes (au lieu des villes seules, sans contexte) |
-| 110 | Prévoir compte admin + compte invité/service civique | Lié à la dette technique documentée dans `authMiddleware.js` (vérifie l'authentification, pas le rôle) — à concevoir avant d'introduire un 2ᵉ rôle, comme le précise déjà le commentaire du code |
-| 111 | Revoir mise en page `MissionDetail` — section inclus/non inclus + tableau durée/prix | Trop de blancs, visuellement pas satisfaisant selon toi — idée de mise en page à détailler ensemble |
-| 114 | Repérer tous les placeholders du site et les optimiser (taille + format) | Utiliser le pipeline Sharp/WebP fraîchement mis en place (#112) plutôt que de les repasser à la main |
-| 115 | Description courte extraite automatiquement de la description longue | Cliente ne remplit qu'un seul champ. Option retenue : un seul champ + marqueur de coupure manuel inséré par la cliente (type "Lire la suite" WordPress), avec repli sur la dernière phrase complète si pas de marqueur. Motif réutilisable pour TeamMember/EducationItem/MediaPost plus tard |
-| 116 | Drag & drop pour réordonner la galerie dashboard | Remplace les flèches ▲▼ actuelles (`AdminFileUpload.jsx`), trop pénibles à l'usage. Prévoir une lib (`dnd-kit` ou `@hello-pangea/dnd`) plutôt que du drag & drop maison |
+| 111 | ✅ Revoir mise en page `MissionDetail` — section inclus/non inclus + tableau durée/prix | **Fait.** Grille à 4 colonnes cassée séparée en 3 blocs indépendants (tarifs/inclus/non-inclus, CTA, répartition frais), fonds colorés vert/terracotta sur inclus/non-inclus |
+| 114 | ✅ Repérer tous les placeholders du site et les optimiser (taille + format) | **Fait**, bien plus large que prévu : réorganisation complète de `public/images/` en 3 catégories (placeholders/logo-partners/design), suppression de ~3,3Mo de fichiers morts (`lieux-missions/`, restes `missions/` non utilisés, `Willy_Rovelli.png`), script `optimize-placeholders.js` réutilisable (filtré sur "placeholder" uniquement — les logos ne se compressent pas forcément bien en WebP), 14 placeholders convertis (jusqu'à -95%), et **tous les chemins codés en dur dans `seed.js` corrigés** (81 lignes touchées en base : Delegation, Media, FieldAction, TeamMember, EducationItem, MediaPost) |
+| 115 | ✅ Description courte extraite automatiquement de la description longue | **Fait.** Marqueur `---` (au lieu de `[COUPURE]`), calculé côté backend à l'enregistrement, aperçu en direct dans le dashboard. Le marqueur reste en base (pas nettoyé) pour rester éditable, retiré uniquement à l'affichage public. Motif réutilisable pour TeamMember/EducationItem/MediaPost plus tard |
+| 116 | ~~Drag & drop galerie~~ → **refonte plus large décidée le 19/09** (voir #124-127 ci-dessous) — le drag & drop devient inutile dans la nouvelle architecture |
 | 117 | Gras / souligné dans les zones de texte du dashboard | Version light de l'éditeur riche (le TipTap complet reste au Backlog V2) — juste permettre à la cliente de mettre en forme localement dans les textarea existantes |
 | 118 | Lien vers le formulaire de contact — étape 2 "Comment partir" | Reproduire le lien "ICI" de l'ancien site. ⚠️ Cette étape n'est pas éditable via le dashboard (texte fixe `HOW_TO_GO_FIXED`, identique pour toutes les missions) — le lien se fait en JSX dans `MissionDetail.jsx` (vrai lien React Router vers `/contact`), pas via une zone de texte |
 | 120 | Retirer le champ légende/alt de l'upload hero dans le dashboard | Devenu inutile : le hero est passé en `aria-hidden="true"` (image décorative, le `<h1>` porte déjà l'info) — garder ce champ induirait la cliente en erreur en lui faisant croire qu'il sert à l'accessibilité |
 | 121 | Bug alternance des couleurs de fond — `MissionDetail.jsx` (page publique) | Chaque section a une couleur fixe sans tenir compte des sections masquées (`show: ...`) — deux sections visibles adjacentes peuvent hériter de la même couleur et se retrouver collées sans séparation. Calculer la couleur selon l'ordre réel d'affichage parmi les sections visibles, pas une couleur figée par section |
-| 122 | Palette de couleurs dédiée au dashboard | Distincte de celle du site public, code couleur cohérent par domaine (missions = vert, témoignages = terracotta, etc.) plutôt que choisi au fil de l'eau. Le prop `tone` de `FormSection` (ajouté aujourd'hui) est déjà prêt à l'accueillir une fois cette palette définie |
-
+| 122 | Palette de couleurs dédiée au dashboard | Distincte de celle du site public, code couleur cohérent par domaine (missions = vert, témoignages = terracotta, etc.) plutôt que choisi au fil de l'eau. Le prop `tone` de `FormSection` (ajouté aujourd'hui) est déjà prêt à l'accueillir une fois cette palette définie. **À revoir aussi à ce moment-là** : les 2 variantes de `ConfirmModal.jsx` (`danger` en rouge, `default` en `green-600` — posé provisoirement le temps de définir la vraie palette) |
+| 123 | Navigation par ancre sur `MissionFormPage.jsx` | 8 blocs à scroller intégralement aujourd'hui même pour une petite modif ponctuelle. Réutiliser le composant `AnchorNav` déjà existant côté public (`MissionDetail.jsx`) plutôt que d'en refaire un — un lien par bloc (`FormSection`), qui scrolle jusqu'à la section |
+| 124 | Refonte galerie — migration BDD | Ajouter `illustration_url` / `illustration_alt` sur `Mission` (même principe que le hero actuel — champ dédié, plus la 1ère photo de la galerie). Ajouter un champ "forcer l'affichage" sur `Media` (même mécanique que `show_homepage` des témoignages) |
+| 125 | Refonte galerie — `MissionFormPage.jsx` simplifié | Un seul champ photo, 2 images obligatoires : position 1 = hero, position 2 = illustration. Flèches ▲▼ existantes suffisent (2 photos seulement). Bloc galerie retiré entièrement de ce formulaire |
+| 126 | Refonte galerie — nouvelle page dashboard "Galerie" | Dropdown pour choisir la mission (tous types confondus : individuel, service civique, congé solidaire, groupe jeunes — tous dans la même table `Mission`). Upload libre, case "forcer l'affichage" par photo. Affichage public = photos forcées + complétées par les plus récentes, dans la limite de 10 |
+| 127 | Passer de 10 à 15-20 photos par galerie publique | **Dépend de #69 (lazy loading, Bloc D)** — sans lui, les 10 photos actuelles se chargent déjà toutes au chargement de la page ; en ajouter plus sans lazy loading aggraverait le problème qu'on cherche justement à éviter |
 
 ### Bloc B — Dashboard CRUD manquant (le plus gros morceau)
 
@@ -232,8 +235,8 @@ Détail complet dans `docs/bugTracker.md`.
 | 55 | CRUD TeamMember (admin) | Ex-tâche 55 |
 | 57 | CRUD FieldAction + pays + tags (admin) | Ex-tâche 57 |
 | 56 | CRUD ActivityReport (admin) | Ex-tâche 56 |
-| 54 | CRUD MediaPost / articles (admin) | Partie non faite de l'ex-tâche 54 (le média d'**une mission**, lui, est déjà fait) |
-| 58 | Dashboard responsive mobile | Ex-tâche 58 |
+| 54 | CRUD MediaPost / articles (admin) | Partie non faite de l'ex-tâche 54 (le média d'**une mission**, lui, est déjà fait). **Prévoir la possibilité d'antidater un post** (`date` éditable, pas juste la date de création) — nécessaire pour migrer les anciens articles de l'ancien site sensolidaire.org avec leur vraie date de publication |
+| 58 | Dashboard responsive mobile | Ex-tâche 58. Prévu initialement pour la modération témoignages uniquement — **étendre aussi à la création d'un post média/actualité depuis le téléphone**, pour que la cliente puisse publier en direct sans devoir attendre d'être sur ordinateur |
 | 61 | Tests d'intégration | Ex-tâche 61 — **règle : chaque CRUD ci-dessus s'accompagne de son test au moment où il est codé**, pas d'un rattrapage global à la fin |
 
 ### Bloc C — Page Éducation & sensibilisation
@@ -299,7 +302,9 @@ Détail complet dans `docs/bugTracker.md`.
 | `mission_id` sur `MediaPost` | Publier un article directement rattaché à une mission |
 | **Seed non autonome (ajout 18/09)** | Les missions Kenya/Sénégal doivent être créées manuellement via le dashboard avant de pouvoir lancer le seed — limitation connue et documentée dans `seed.js`, jamais bloquante à ce jour mais à lever si le seed doit un jour tourner sans étape manuelle (ex. CI) |
 | **Recadrage d'image côté dashboard (ajout 18/09)** | Permettre à la cliente de recadrer une photo après upload (ex: photo mal cadrée avec sujet coupé) — outil client-side avant l'upload, Sharp ne fait que redimensionner, pas de recadrage intelligent automatique |
+| **Récupérer tous les PDF de l'ancien site (ajout 19/09)** | Guides du volontaire, rapports d'activité, rapports de mission... à réintégrer dans le nouveau site une fois le dashboard complet (Bloc B) — pas avant, pour ne pas re-uploader deux fois si l'organisation change entre-temps |
 | **HEIC non supporté par Sharp (ajout 18/09)** | Le binaire Sharp installé ne supporte que l'AVIF côté HEIF, pas le HEIC des iPhones (codec sous licence, absent du build précompilé). 2 options à trancher avec la cliente : réglage iPhone "Le plus compatible" (JPEG natif, zéro code) ou lib `heic-convert` en amont de Sharp |
+| **Compte admin + compte invité/service civique (déplacé du Bloc A)** | Nécessite de définir avec la cliente les permissions exactes du rôle invité avant tout développement — actuellement aucune interface n'existe pour créer un 2ᵉ compte, seul l'admin seedé existe. `authMiddleware.js` vérifie déjà le rôle (`role !== "admin"` → 403) mais figé sur une seule valeur, à faire évoluer une fois les permissions décidées |
 
 ---
 

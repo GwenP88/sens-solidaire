@@ -2458,4 +2458,42 @@ Plusieurs cards se fondaient dans leur fond de section (même couleur `bg-surfac
 
 ---
 
+### 19 septembre 2026 — Modale pause/reprise, mise en page coût/durée, réorganisation complète des images, description courte auto, refonte galerie (décision)
+
+**Dashboard :**
+- `ConfirmModal.jsx` généralisé avec un prop `variant` (`danger` rouge / `default` vert) — réutilisable au-delà de la suppression
+- Bouton pause/reprise mission : `window.confirm()` natif remplacé par la modale perso, icône dynamique pause↔play selon `is_active` (`DashboardTable.jsx`)
+- Hard delete mission : vérifié en détail — tarifs et médias supprimés avec la mission (composition), témoignages seulement détachés (`mission_id: null`, jamais supprimés — cohérent avec le consentement RGPD donné pour le témoignage lui-même, pas pour l'existence de la mission). Fichiers physiques des médias **restent orphelins sur le disque** au hard delete — noté au Bloc A
+- Page Impact publique : bouton "Voir toutes les actions" retiré (pointait vers sa propre page) — celui de la Home reste, légitime
+- `MissionDetail.jsx` : nettoyage d'un ternaire mort dans la section Impact terrain (code inatteignable, comportement inchangé — la section reste masquée si 0 action, choix confirmé volontairement, cohérent avec le reste de la page)
+- Champ `country_preposition` retiré du formulaire Mission (devenu inutile après le nettoyage ci-dessus) — conservé côté Service Civique, toujours utilisé là-bas
+
+**Mise en page `MissionDetail` — section coût/durée (#111) :**
+- Grille à 4 colonnes cassée (héritée d'une fusion ratée) séparée en 3 blocs indépendants : tarifs/inclus/non-inclus (3 colonnes), CTA (2 colonnes), répartition des frais
+- Plusieurs itérations sur le style Inclus/Non-inclus (fond plein vert/terracotta jugé too much → bordure gauche testée et écartée → fond plein conservé mais fond des CTA retiré pour rééquilibrer l'écran)
+- `MissionFormPage.jsx` : double padding avec `DashboardLayout.jsx` corrigé (`mx-auto` retiré puis `max-w-4xl` avec `mx-auto` remis, au choix de Gwen)
+
+**Formats d'upload étendus :**
+- AVIF et SVG ajoutés en plus de JPG/PNG/WEBP (`uploadMiddleware.js`) — HEIC laissé de côté, Sharp ne le supporte pas nativement (seul l'AVIF l'est côté HEIF), noté en Backlog V2
+
+**Réorganisation complète de `public/images/` (parti de #114, très élargi) :**
+- Investigation : `lieux-missions/` (11 fichiers) confirmé 100% mort, 9/12 fichiers de `missions/` morts (restes d'avant le pipeline Sharp), `Willy_Rovelli.png` vivant via seed (`MediaPost`)
+- Nouvelle arborescence à 3 catégories : `placeholders/` (fallbacks génériques), `logo-partners/` (inchangé), `design/` (hero, ui, contact, illustrations mission-types — choix esthétiques assumés, jamais remplacés par upload cliente)
+- Script `optimize-placeholders.js` (Sharp) créé, corrigé une fois pour ne filtrer que sur "placeholder" dans le nom (1er run avait aussi converti logos et design par erreur — repéré car certains logos étaient **plus lourds** après conversion WebP, pas plus légers)
+- **Cascade de bugs découverts et corrigés** : plusieurs `image_url` codés en dur en base (seed) pointant vers d'anciens chemins, jamais mis à jour au fil des renommages manuels de Gwen — touché Willy Rovelli, newsletter, tous les avatars équipe (17 lignes), délégations, actions terrain, éducation, galeries (81 lignes au total). Fix méthodique : correction directe en base (`$executeRawUnsafe`, `REPLACE()`) + correction du `seed.js` pour que ça ne revienne pas au prochain reseed
+- Méthode de vérification mise en place : script one-liner qui compare chaque chemin `/images/...` référencé dans le code au disque réel, signale les chemins cassés — réutilisé plusieurs fois dans la session, toujours revenu vide à la fin
+- 14 placeholders convertis en WebP (jusqu'à -95%, ex: newsletter 2,2Mo → 140Ko)
+
+**Description courte automatique (#115) :**
+- Un seul champ description, marqueur `---` optionnel pour contrôler le point de coupure, repli sur la dernière phrase complète sinon
+- Bug détecté puis corrigé le jour même : le marqueur était nettoyé du texte à la sauvegarde, donc invisible au rechargement du formulaire → le point de coupure choisi se perdait à chaque réédition. Fix : le marqueur reste en base, retiré uniquement à l'affichage public (`MissionDetail.jsx`)
+- Testé et validé sur les 5 missions (avec et sans marqueur)
+
+**Décision d'architecture — refonte galerie (pas encore codée, planifiée #124-127) :**
+- Constat de Gwen : gérer la galerie dans `MissionFormPage` mélange 2 responsabilités différentes (édition du contenu texte vs gestion des photos)
+- Nouvelle architecture décidée : `MissionFormPage` garde 2 photos obligatoires (hero + illustration, flèches existantes suffisantes) ; nouvelle page dashboard "Galerie" dédiée, sélection de la mission par dropdown (tous types confondus, même table `Mission`), affichage public = photos forcées manuellement + complétées par les plus récentes (limite 10 pour l'instant, dépendant du lazy loading #69 avant de monter à 15-20)
+- Drag & drop (#116) devient obsolète dans cette nouvelle architecture, remplacé par un tri automatique par date
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
