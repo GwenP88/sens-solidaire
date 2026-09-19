@@ -11,7 +11,7 @@
 
 function BaseOverlayCard({
   image,
-  fallbackImage = '/images/placeholders/placeholder-action-1.png',
+  fallbackImage = '/images/placeholders/placeholder-action-1.webp',
   height = 'h-[240px] md:h-[200px] lg:h-[260px] xl:h-[300px]',
   overlayClassName = 'bg-black/45',
   className = '',

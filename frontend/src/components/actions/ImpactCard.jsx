@@ -12,7 +12,7 @@ function ImpactCard({ title, description, tags, slug, country, image, odds }) {
   return (
     <BaseContentCard
       image={image}
-      fallbackImage="/images/placeholders/placeholder-action-1.png"
+      fallbackImage="/images/placeholders/placeholder-action-1.webp"
       alt={title}
       bg="bg-accent-2"
       className="text-surface"

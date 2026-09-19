@@ -24,7 +24,7 @@ function EducationCard({ item }) {
     <BaseContentCard
       image={item.image_url}
       bg="bg-surface-mid"
-      fallbackImage="/images/placeholders/placeholder-educ-1.png"
+      fallbackImage="/images/placeholders/placeholder-educ-1.webp"
       alt={item.title}
     >
 

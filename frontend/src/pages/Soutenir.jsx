@@ -105,7 +105,7 @@ function Soutenir() {
 
           <div className="overflow-hidden rounded-3xl">
             <img
-              src='/images/placeholders/placeholder-galerie-1.png'
+              src='/images/placeholders/placeholder-galerie-1.webp'
               alt="Projet soutenu sur le terrain"
               className="w-full h-[360px] lg:h-[460px] object-cover"
             />
@@ -152,7 +152,7 @@ function Soutenir() {
             {/* Don */}
             <article id="don" className="bg-surface-mid rounded-3xl overflow-hidden flex flex-col">
               <img
-                src='/images/placeholders/placeholder-galerie-2.png'
+                src='/images/placeholders/placeholder-galerie-2.webp'
                 alt="Faire un don"
                 className="w-full h-56 object-cover"
               />
@@ -202,7 +202,7 @@ function Soutenir() {
             {/* Adhésion */}
             <article id="adhesion" className="bg-primary rounded-3xl overflow-hidden flex flex-col">
               <img
-                src='/images/placeholders/placeholder-galerie-3.png'
+                src='/images/placeholders/placeholder-galerie-3.webp'
                 alt="Adhérer à l'association"
                 className="w-full h-56 object-cover"
               />
@@ -289,7 +289,7 @@ function Soutenir() {
 
           <div className="overflow-hidden rounded-3xl">
             <img
-              src="/images/placeholders/placeholder-rapport-activite.png"
+              src="/images/placeholders/placeholder-rapport-activite.webp"
               alt="Rapport d'activité"
               className="w-full h-72 lg:h-96 object-cover"
             />

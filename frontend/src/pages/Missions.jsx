@@ -258,7 +258,7 @@ function Missions() {
           audience="Pour les volontaires individuels"
           description="Vivez une expérience utile, authentique et accessible à tous."
           decorImage="/images/design/ui/one-line-1.png"
-          image="/images/placeholders/placeholder-photo.png"
+          image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Volontariat individuel"
           introSlot={
             <>
@@ -311,7 +311,7 @@ function Missions() {
           audience="Pour les 16 à 25 ans"
           description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
           decorImage="/images/design/ui/one-line-2.png"
-          image="/images/placeholders/placeholder-photo.png"
+          image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Service civique"
           introSlot={
             <>
@@ -415,7 +415,7 @@ function Missions() {
           audience="Pour les lycées, MJC et structures de jeunesse"
           description="Organisez une mission solidaire au Kenya ou au Sénégal et faites vivre à votre groupe une expérience éducative et interculturelle unique."
           decorImage="/images/design/ui/one-line-3.png"
-          image="/images/placeholders/placeholder-photo.png"
+          image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Mission groupe jeunes"
           introSlot={
             <p className="text-body text-primary/80">
@@ -537,7 +537,7 @@ function Missions() {
           audience="Pour les salariés et les entreprises"
           description="Une expérience humaine forte pour les salariés et un engagement concret pour les entreprises."
           decorImage="/images/design/ui/one-line-4.png"
-          image="/images/placeholders/placeholder-photo.png"
+          image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Congé solidaire"
           introSlot={
             <p className="text-body text-primary/80">

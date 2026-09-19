@@ -39,7 +39,7 @@ function RapportsActivite() {
               annee={r.annee}
               type="Rapport d'activité"
               pdf_url={r.url}
-              image="/images/placeholders/placeholder-rapport-activite.png"
+              image="/images/placeholders/placeholder-rapport-activite.webp"
               bg="bg-primary"
             />
           ))}

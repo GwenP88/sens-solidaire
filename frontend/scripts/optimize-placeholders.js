@@ -20,6 +20,7 @@ const walkAndConvert = async (dir) => {
     }
 
     if (!entry.name.toLowerCase().endsWith('.png')) continue
+    if (!entry.name.toLowerCase().includes('placeholder')) continue
 
     const webpPath = fullPath.replace(/\.png$/i, '.webp')
     const before = (await fs.stat(fullPath)).size

@@ -15,7 +15,7 @@ function ModerationCard({ testimonial, onApprove, onReject }) {
 
         {/* Photo réelle si elle existe, sinon placeholder de Gwen (fallback ||) */}
         <img
-          src={testimonial.avatar_url || "/images/placeholders/placeholder-testimonials.png"}
+          src={testimonial.avatar_url || "/images/placeholders/placeholder-testimonials.webp"}
           alt={testimonial.author_name}
           className="w-12 h-12 rounded-full object-cover shrink-0"
         />

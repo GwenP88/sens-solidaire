@@ -162,7 +162,7 @@ useEffect(() => {
           </div>
           <div className="w-full md:w-2/5 shrink-0">
             <img
-              src="/images/placeholders/placeholder-rapport-activite.png"
+              src="/images/placeholders/placeholder-rapport-activite.webp"
               alt="Rapport d'activité"
               className="w-full h-64 object-cover rounded-2xl"
             />

@@ -34,10 +34,10 @@ const ANCHOR_SECTIONS = [
 
 // ── Placeholders galerie correspondances
 const GALLERY_CORRESPONDANCES = [
-  '/images/placeholders/placeholder-galerie-1.png',
-  '/images/placeholders/placeholder-galerie-2.png',
-  '/images/placeholders/placeholder-galerie-3.png',
-  '/images/placeholders/placeholder-galerie-4.png',
+  '/images/placeholders/placeholder-galerie-1.webp',
+  '/images/placeholders/placeholder-galerie-2.webp',
+  '/images/placeholders/placeholder-galerie-3.webp',
+  '/images/placeholders/placeholder-galerie-4.webp',
 ]
 
 // ── Composant sidebar réutilisable — même structure pour les 3 sections

@@ -19,7 +19,7 @@ function RapportCard({ auteur, annee, destination, type, pdf_url, image, bg = 'b
       {/* ── Zone image ── */}
       <div className="w-full h-40 overflow-hidden shrink-0">
         <img
-          src={image || '/images/placeholders/placeholder-rapport-mission.png'}
+          src={image || '/images/placeholders/placeholder-rapport-mission.webp'}
           alt={`Rapport ${auteur}`}
           className="w-full h-full object-cover"
         />

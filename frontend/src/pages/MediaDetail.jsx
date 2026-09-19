@@ -83,7 +83,7 @@ function MediaDetail() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image={post.image_url || (post.theme === 'Newsletter' ? '/images/placeholders/placeholder-newsletter.png' : '/images/placeholders/placeholder-photo.png')}
+        image={post.image_url || (post.theme === 'Newsletter' ? '/images/placeholders/placeholder-newsletter.webp' : '/images/placeholders/placeholder-photo.webp')}
         title={post.title}
       />
 

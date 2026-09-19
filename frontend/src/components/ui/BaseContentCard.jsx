@@ -1,6 +1,6 @@
 function BaseContentCard({
   image,
-  fallbackImage = '/images/placeholders/placeholder-action-1.png',
+  fallbackImage = '/images/placeholders/placeholder-action-1.webp',
   alt = '',
   bg = 'bg-surface',
   height = 'h-[440px] md:h-[260px] lg:h-[480px]',

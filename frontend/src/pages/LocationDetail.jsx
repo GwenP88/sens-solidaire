@@ -57,7 +57,7 @@ function LocationDetail() {
 
       {/* ── Hero immersif — image du lieu + titre + pays si disponible ── */}
       <HeroPage
-        image={location.image_url || '/images/placeholders/placeholder-action-1.png'}
+        image={location.image_url || '/images/placeholders/placeholder-action-1.webp'}
         title={location.name}
         country={location.country || null}
       />
@@ -182,7 +182,7 @@ function LocationDetail() {
                   <img
                     src={m.file_url}
                     alt=""
-                    onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.png' }}
+                    onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.webp' }}
                     className="w-full h-56 object-cover"
                   />
                 </div>
@@ -198,7 +198,7 @@ function LocationDetail() {
                   <img
                     src={m.file_url}
                     alt=""
-                    onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.png' }}
+                    onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.webp' }}
                     className="w-full h-full object-cover"
                   />
                 </div>
