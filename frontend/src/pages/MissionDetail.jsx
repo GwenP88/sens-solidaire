@@ -245,10 +245,11 @@ function MissionDetail() {
             Choisissez la durée de séjour qui correspond le mieux à vos disponibilités et à votre projet d'engagement.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-md items-stretch">
+          {/* Tableau tarifs + Inclus + Non inclus — 3 colonnes égales */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-md items-stretch">
 
             {/* Tableau tarifs */}
-            <div className="flex flex-col bg-surface rounded-xl p-4 xl:col-span-1">
+            <div className="flex flex-col bg-surface rounded-xl p-4">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-surface-dark">
@@ -279,71 +280,71 @@ function MissionDetail() {
               </table>
             </div>
 
-            {/* Inclus / non inclus */}
-            <div className="flex flex-col justify-between self-stretch gap-md xl:col-span-2">
-              {mission.included && (
-                <div>
-                  <h3 className="h3-style text-primary flex items-center gap-xs mb-0">
-                    <IconCheck className="text-accent-2" /> Inclus
-                  </h3>
-                  <LignesToPuces texte={mission.included} />
-                </div>
-              )}
-              {mission.not_include && (
-                <div>
-                  <h3 className="h3-style text-primary flex items-center gap-xs mb-0">
-                    <IconTimes className="text-accent" /> Non inclus
-                  </h3>
-                  <LignesToPuces texte={mission.not_include} />
-                </div>
-              )}
-            </div>
-
-            {/* CTAs */}
-            <div className="col-span-1 md:col-span-2 xl:col-span-1 h-full flex flex-col md:flex-row xl:flex-col gap-sm justify-between">
-              <div className="bg-surface rounded-xl p-4 flex flex-col gap-sm flex-1">
-                <h3 className="h3-style text-primary mb-0">Prêt à vous engager ?</h3>
-                <a href={mission.helloasso_url} target="_blank" rel="noopener noreferrer" className="block w-full">
-                  <Button label="Je pars en mission →" variant="primary" fullWidth />
-                </a>
-              </div>
-              <div className="bg-surface rounded-xl p-4 flex flex-col gap-sm flex-1">
-                <h3 className="h3-style text-primary mb-0">Besoin de plus d'informations ?</h3>
-                <a href="/contact">
-                  <Button label="Nous contacter →" variant="secondary" fullWidth />
-                </a>
-              </div>
-            </div>
-
-            {/* Répartition des frais */}
-           <div className="col-span-1 md:col-span-2 xl:col-span-4 grid grid-cols-1 md:grid-cols-3 gap-md pt-6 border-t border-surface-dark">
-              <div className="flex flex-col gap-sm">
-                <h3 className="h3-style text-primary mb-0">À quoi servent les frais de mission ?</h3>
-                <p className="text-body text-primary/60">
-                  Chez Sens Solidaires, nous avons à cœur de vous informer en toute transparence sur l'utilisation des fonds qui soutiennent nos actions sur le terrain.
-                </p>
-              </div>
+            {/* Inclus */}
+            {mission.included && (
               <div className="bg-accent-2/10 rounded-xl p-4">
-                <p className="text-stat text-accent-2">30 – 40 %</p>
-                <p className="text-body text-primary/60 mt-2">
-                  Préparation des missions, accompagnement des volontaires, suivi des projets et fonctionnement de l'association.
-                </p>
+                <h3 className="h3-style text-primary flex items-center gap-xs mb-0">
+                  <IconCheck className="text-accent-2" /> Inclus
+                </h3>
+                <LignesToPuces texte={mission.included} />
               </div>
-              <div className="bg-accent-2/10 rounded-xl p-4">
-                <p className="text-stat text-accent-2">60 – 70 %</p>
-                <p className="text-body text-primary/60 mt-2">
-                  Reversés aux partenaires locaux : hébergement, repas, transports, équipes locales et projets terrain.
-                </p>
-              </div>
-            </div>
+            )}
 
-            {/* Mention fiscale */}
-            <div className="col-span-1 md:col-span-2 xl:col-span-4">
-              <p className="text-mention text-primary/40">
-                Conformément aux articles 200 et 238 bis du CGI, 66 % du montant engagé est déductible de vos impôts. Un reçu fiscal vous sera délivré à l'issue de votre mission.
+            {/* Non inclus */}
+            {mission.not_include && (
+              <div className="bg-accent/10 rounded-xl p-4">
+                <h3 className="h3-style text-primary flex items-center gap-xs mb-0">
+                  <IconTimes className="text-accent" /> Non inclus
+                </h3>
+                <LignesToPuces texte={mission.not_include} />
+              </div>
+            )}
+
+          </div>
+
+          {/* CTAs — 2 colonnes égales */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-md mt-6">
+            <div className="p-4 flex flex-col gap-sm">
+              <h3 className="h3-style text-primary mb-0">Prêt à vous engager ?</h3>
+              <a href={mission.helloasso_url} target="_blank" rel="noopener noreferrer" className="block w-full">
+                <Button label="Je pars en mission →" variant="primary" fullWidth />
+              </a>
+            </div>
+            <div className="p-4 flex flex-col gap-sm">
+              <h3 className="h3-style text-primary mb-0">Besoin de plus d'informations ?</h3>
+              <a href="/contact">
+                <Button label="Nous contacter →" variant="secondary" fullWidth />
+              </a>
+            </div>
+          </div>
+
+          {/* Répartition des frais */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-md pt-6 mt-6 border-t border-surface-dark">
+            <div className="flex flex-col gap-sm">
+              <h3 className="h3-style text-primary mb-0">À quoi servent les frais de mission ?</h3>
+              <p className="text-body text-primary/60">
+                Chez Sens Solidaires, nous avons à cœur de vous informer en toute transparence sur l'utilisation des fonds qui soutiennent nos actions sur le terrain.
+              </p>
+            </div>
+            <div className="bg-accent-2/10 rounded-xl p-4">
+              <p className="text-stat text-accent-2">30 – 40 %</p>
+              <p className="text-body text-primary/60 mt-2">
+                Préparation des missions, accompagnement des volontaires, suivi des projets et fonctionnement de l'association.
+              </p>
+            </div>
+            <div className="bg-accent-2/10 rounded-xl p-4">
+              <p className="text-stat text-accent-2">60 – 70 %</p>
+              <p className="text-body text-primary/60 mt-2">
+                Reversés aux partenaires locaux : hébergement, repas, transports, équipes locales et projets terrain.
               </p>
             </div>
           </div>
+
+          {/* Mention fiscale — plus de col-span, c'est un bloc isolé maintenant, pas dans une grille à 4 colonnes */}
+          <p className="text-mention text-primary/40 mt-6">
+            Conformément aux articles 200 et 238 bis du CGI, 66 % du montant engagé est déductible de vos impôts. Un reçu fiscal vous sera délivré à l'issue de votre mission.
+          </p>
+
         </section>
       )}
 
