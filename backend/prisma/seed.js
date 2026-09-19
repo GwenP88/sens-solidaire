@@ -27,10 +27,10 @@ const seed = async () => {
   // uploadés. Permet de montrer l'emplacement des galeries en démo sans
   // avoir à télécharger des dizaines d'images fictives.
   const GALLERY_PLACEHOLDERS = [
-    '/images/placeholders/placeholder-galerie-1.png',
-    '/images/placeholders/placeholder-galerie-2.png',
-    '/images/placeholders/placeholder-galerie-3.png',
-    '/images/placeholders/placeholder-galerie-4.png',
+    '/images/placeholders/placeholder-galerie-1.webp',
+    '/images/placeholders/placeholder-galerie-2.webp',
+    '/images/placeholders/placeholder-galerie-3.webp',
+    '/images/placeholders/placeholder-galerie-4.webp',
   ]
 
   // ============================================================
@@ -105,19 +105,19 @@ const seed = async () => {
   await prisma.delegation.deleteMany({})
 
   const delegLumo = await prisma.delegation.create({
-    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "LUMO Community Wildlife Conservancy", contacts: "Denis (coordinateur), Ernest (chargé des projets biodiversité) et les 22 Rangers", display_order: 1 },
+    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "LUMO Community Wildlife Conservancy", contacts: "Denis (coordinateur), Ernest (chargé des projets biodiversité) et les 22 Rangers", display_order: 1 },
   })
   const delegTtnp = await prisma.delegation.create({
-    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "Taita Taveta National Polytechnic", contacts: "Kefa Okari (Coordinateur des missions, professeur de français), Madeline Nabwire (directrice du département de tourisme)", display_order: 2 },
+    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "Taita Taveta National Polytechnic", contacts: "Kefa Okari (Coordinateur des missions, professeur de français), Madeline Nabwire (directrice du département de tourisme)", display_order: 2 },
   })
   const delegElsa = await prisma.delegation.create({
-    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "Elsa Conservation Trust", contacts: "Antony — Coordinateur des missions", display_order: 3 },
+    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "Elsa Conservation Trust", contacts: "Antony — Coordinateur des missions", display_order: 3 },
   })
   const delegAgada = await prisma.delegation.create({
-    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "ONG AGADA", contacts: "François Bassene et Penda Diémé", display_order: 4 },
+    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "ONG AGADA", contacts: "François Bassene et Penda Diémé", display_order: 4 },
   })
   await prisma.delegation.create({
-    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/placeholders/placeholder-delegation.png", lieu: "Campement de l'Ile d'Effrane", contacts: "Mamadou Ndiaye", display_order: 5 },
+    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "Campement de l'Ile d'Effrane", contacts: "Mamadou Ndiaye", display_order: 5 },
   })
 
   console.log("Délégations créées (5)")
@@ -141,9 +141,9 @@ const seed = async () => {
     await prisma.media.deleteMany({ where: { entity_type: 'location', entity_id: locationId } })
     await prisma.media.createMany({
       data: [
-        { entity_type: 'location', entity_id: locationId, file_url: '/images/placeholders/placeholder-galerie-1.png', file_type: 'image', display_order: 1 },
-        { entity_type: 'location', entity_id: locationId, file_url: '/images/placeholders/placeholder-galerie-2.png', file_type: 'image', display_order: 2 },
-        { entity_type: 'location', entity_id: locationId, file_url: '/images/placeholders/placeholder-galerie-3.png', file_type: 'image', display_order: 3 },
+        { entity_type: 'location', entity_id: locationId, file_url: '/images/placeholders/placeholder-galerie-1.webp', file_type: 'image', display_order: 1 },
+        { entity_type: 'location', entity_id: locationId, file_url: '/images/placeholders/placeholder-galerie-2.webp', file_type: 'image', display_order: 2 },
+        { entity_type: 'location', entity_id: locationId, file_url: '/images/placeholders/placeholder-galerie-3.webp', file_type: 'image', display_order: 3 },
       ]
     })
   }
@@ -153,7 +153,7 @@ const seed = async () => {
     name: "Voi",
     country: "Kenya",
     description: "Voi est une ville située dans le comté de Taita-Taveta, aux portes du Parc national de Tsavo Est. C'est le point de départ de nos missions de protection de la faune sauvage au Kenya.",
-    image_url: "/images/placeholders/placeholder-galerie-1.png",
+    image_url: "/images/placeholders/placeholder-galerie-1.webp",
     map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15931.2071768332!2d38.54641188963989!3d-3.3984885449885964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18392955840748c1%3A0x612879b76e474c69!2sVoi%2C%20Kenya!5e0!3m2!1sen!2sfr!4v1783003244824!5m2!1sen!2sfr",
     website_url: null,
     is_active: true,
@@ -170,7 +170,7 @@ const seed = async () => {
     name: "LUMO Community Wildlife Conservancy",
     country: "Kenya",
     description: "LUMO a vu le jour en 1997, d'un protocole d'entente entre trois ranchs de la zone des Taita Hills afin de lutter contre le braconnage et de protéger la diversité biologique kényane. Lumo fait partie du corridor historique de migration des éléphants reliant l'écosystème Tsavo aux collines de Shimba.",
-    image_url: "/images/placeholders/placeholder-galerie-2.png",
+    image_url: "/images/placeholders/placeholder-galerie-2.webp",
     map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.506650684568!2d38.1950834105512!3d-3.4692507964905737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1838e44717c2d29d%3A0x94b99ab36036edac!2sLumo%20Community%20Wildlife%20Conservancy!5e0!3m2!1sen!2sfr!4v1783003373372!5m2!1sen!2sfr",
     website_url: "https://lumoconservancy.com/",
     delegation_id: delegLumo.id,
@@ -188,7 +188,7 @@ const seed = async () => {
     name: "Taita Taveta National Polytechnic",
     country: "Kenya",
     description: "Établissement d'enseignement supérieur de la ville de Voi, aux portes du Parc Tsavo. Cette université possède un pôle dédié au tourisme avec lequel nous travaillons particulièrement. Le campus est très engagé pour la biodiversité et possède sa propre pépinière.",
-    image_url: "/images/placeholders/placeholder-galerie-3.png",
+    image_url: "/images/placeholders/placeholder-galerie-3.webp",
     map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.8655631167626!2d38.57651901055072!3d-3.3830053965774107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18392bfa98bf3af3%3A0xdbb9428c85b95a3c!2sTaita%20Taveta%20National%20Polytechnic%2C%20Voi!5e0!3m2!1sen!2sfr!4v1783003480686!5m2!1sen!2sfr",
     website_url: null,
     delegation_id: delegTtnp.id,
@@ -206,7 +206,7 @@ const seed = async () => {
     name: "Elsa Conservation Trust",
     country: "Kenya",
     description: "La Elsa Conservation Trust a fait don de millions de dollars à des projets de conservation de la vie sauvage, aidant à créer les parcs kenyans de Meru, Samburu, Shaba, Kora et Hells Gate. Le centre offre un environnement propice à la recherche ornithologique avec 450 espèces d'oiseaux recensées.",
-    image_url: "/images/placeholders/placeholder-galerie-4.png",
+    image_url: "/images/placeholders/placeholder-galerie-4.webp",
     map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3086.1469911782483!2d36.31317642592106!3d-0.814968236091608!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182938fec8ba611d%3A0x9c93221648e498ad!2sElsamere%20Conservation%20Centre!5e0!3m2!1sen!2sfr!4v1783003508532!5m2!1sen!2sfr",
     website_url: null,
     delegation_id: delegElsa.id,
@@ -224,7 +224,7 @@ const seed = async () => {
     name: "Diani Turtle Watch",
     country: "Kenya",
     description: "Diani Turtle Watch, créé en 2012, travaille avec une équipe de 14 observateurs couvrant 50 km sur la côte sud du Kenya. Les principales espèces suivies sont les tortues vertes et les tortues imbriquées. Il sensibilise les communautés locales, les écoles et les touristes aux espèces menacées.",
-    image_url: "/images/placeholders/placeholder-galerie-1.png",
+    image_url: "/images/placeholders/placeholder-galerie-1.webp",
     map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3978.445318644362!2d39.569509510555534!3d-4.327148895628687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18404953574d39e9%3A0x76f7b649b72d4c05!2sDiani%20Turtle%20Watch!5e0!3m2!1sen!2sfr!4v1783003553259!5m2!1sen!2sfr",
     website_url: null,
     is_active: true,
@@ -241,7 +241,7 @@ const seed = async () => {
     name: "Ziguinchor",
     country: "Sénégal",
     description: "Ziguinchor est la capitale de la Casamance, région au sud du Sénégal connue pour sa verdure exceptionnelle et sa culture riche. Nos missions de développement communautaire s'y déroulent dans un cadre chaleureux, au contact direct des familles locales.",
-    image_url: "/images/placeholders/placeholder-galerie-2.png",
+    image_url: "/images/placeholders/placeholder-galerie-2.webp",
     map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31154.710103122015!2d-16.294826054807107!3d12.559899910713627!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee793dbd0cbdc17%3A0x25b90fb2e17e99df!2sZiguinchor%2C%20Senegal!5e0!3m2!1sen!2sfr!4v1783003576053!5m2!1sen!2sfr",
     website_url: null,
     is_active: true,
@@ -258,7 +258,7 @@ const seed = async () => {
     name: "ONG AGADA",
     country: "Sénégal",
     description: "AGADA (Agir Autrement pour le Développement en Afrique), basée à Ziguinchor en Casamance, œuvre pour le développement d'activités économiques locales. Investie depuis plus de 30 ans, elle soutient le reboisement de la mangrove, l'agriculture durable et la protection d'espèces patrimoniales comme le lamantin.",
-    image_url: "/images/placeholders/placeholder-galerie-3.png",
+    image_url: "/images/placeholders/placeholder-galerie-3.webp",
     map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3894.3059138975273!2d-16.269258789351788!3d12.562068987665677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee791db8464e97b%3A0xa482f94cddde02ca!2sAgir%20Autrement%20pour%20le%20D%C3%A9veloppement%20de%20l&#39;Afrique%20(AGADA)!5e0!3m2!1sen!2sfr!4v1783003612281!5m2!1sen!2sfr",
     website_url: null,
     delegation_id: delegAgada.id,
@@ -317,7 +317,7 @@ const TESTIMONIALS = [
       description: 'Depuis plus de 10 ans, l\'association soutient les rangers du sanctuaire LUMO dans leur mission de lutte contre le braconnage.',
       content: `Depuis plus de 10 ans, l'association investit ses efforts au sanctuaire de LUMO, frontalier du Parc Tsavo, pour soutenir les rangers dans leur mission de lutte contre le braconnage.\n\nSoutien aux patrouilles, relevés de données sur la faune, entretien du matériel et du camp de base, nos volontaires ont régulièrement contribué à la vie du sanctuaire et à la protection de la vie animale.`,
       countries: ['Kenya'],
-      image_url: '/images/placeholders/placeholder-galerie-3.png',
+      image_url: '/images/placeholders/placeholder-galerie-3.webp',
       tags: ['Environnement', 'Biodiversité'],
       odds: [15, 16],
       gallery: GALLERY_PLACEHOLDERS,
@@ -328,7 +328,7 @@ const TESTIMONIALS = [
       description: 'Projet mené avec les élèves du TTNP de Voi pour améliorer la production durable et diffuser les connaissances sur l\'agroécologie.',
       content: `Ce projet mené conjointement avec les élèves du TTNP de Voi vise à améliorer la production durable de cultures et de produits d'origine animale. Les objectifs spécifiques sont : utiliser la ferme pour diffuser les connaissances sur l'agriculture transformatrice en adoptant l'agroécologie, créer un environnement microclimatique pour atténuer les impacts climatiques, et adopter la diversification de la production.`,
       countries: ['Kenya'],
-      image_url: '/images/placeholders/placeholder-galerie-2.png',
+      image_url: '/images/placeholders/placeholder-galerie-2.webp',
       tags: ['Agriculture', 'Éducation'],
       odds: [2, 13, 15],
       gallery: GALLERY_PLACEHOLDERS,
@@ -339,7 +339,7 @@ const TESTIMONIALS = [
       description: 'Lors de la journée nationale du "Tree Planting Day", les lycéens ont planté plus de 186 arbres au TTNP aux côtés des étudiants kényans.',
       content: `Grâce à l'aide de notre volontaire ethnobotaniste et des rangers, les élèves ont planté 70 arbres à LUMO dont des Neem, Flamboyants, Jacarandas, Lauriers roses, Acacias niloticas et Cassia siema.\n\nAu TTNP, lors de la journée nationale du "Tree Planting Day", les élèves ont planté plus de 186 arbres, dont East Africa Yellow Wood, Sycamore Fig, Brachylaena huillensis, Croton megalicarpus et African Cherry.\n\nCe reboisement contribue directement à la restauration des écosystèmes locaux et à la lutte contre la sécheresse qui frappe sévèrement la région.`,
       countries: ['Kenya'],
-      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      image_url: '/images/placeholders/placeholder-galerie-1.webp',
       tags: ['Environnement', 'Biodiversité', 'Groupe jeunes'],
       odds: [13, 15, 17],
       gallery: GALLERY_PLACEHOLDERS,
@@ -352,7 +352,7 @@ const TESTIMONIALS = [
       description: 'En partenariat avec l\'association AGADA, installation de potagers dans les établissements scolaires de Casamance.',
       content: `Avec ce projet nous avons développé des échanges entre deux écoles primaires, quatre collèges et deux lycées de la Métropole de Nice et des établissements de la Casamance au Sénégal sur le thème de la consommation responsable. Nous avons installé, en partenariat avec l'association sénégalaise AGADA, des potagers dans les établissements dans le but de former les élèves à la production et à la consommation responsable. Les élèves de CEM Kénia ont mis en place un projet de jardin potager de 150m² dont la production abondante a permis d'ouvrir une boutique. Cette boutique est un moyen privilégié pour initier les élèves au monde de l'entrepreneuriat.`,
       countries: ['Sénégal'],
-      image_url: '/images/placeholders/placeholder-galerie-4.png',
+      image_url: '/images/placeholders/placeholder-galerie-4.webp',
       tags: ['Agriculture', 'Éducation'],
       odds: [3, 12, 15],
       gallery: GALLERY_PLACEHOLDERS,
@@ -363,7 +363,7 @@ const TESTIMONIALS = [
       description: 'Chaque saison des pluies, Sens Solidaires et AGADA s\'engagent dans des campagnes de reboisement de la mangrove pour protéger les côtes et préserver la biodiversité.',
       content: `La mangrove joue un rôle clé dans la protection des côtes. Elle agit comme un rempart naturel contre la montée des eaux, offre un habitat à une grande diversité d'espèces, limite l'érosion côtière et la salinisation des sols. Sa préservation est donc essentielle.\n\nDepuis plusieurs années, Sens Solidaires et AGADA s'engagent chaque saison des pluies dans des campagnes de reboisement. Ce processus est relativement simple : il suffit de planter des propagules, les graines rigides et allongées du palétuvier.\n\nUne sensibilisation accrue de la population est également indispensable. La mangrove est souvent détruite pour la production de bois de chauffe ou la fabrication de meubles. Il est crucial de réguler ces pratiques en limitant la coupe aux arbres âgés et en mettant en place des solutions durables alternatives. Les élèves du CEM Kénia participent activement au reboisement dans le village de Niambalang.`,
       countries: ['Sénégal'],
-      image_url: '/images/placeholders/placeholder-galerie-1.png',
+      image_url: '/images/placeholders/placeholder-galerie-1.webp',
       tags: ['Environnement', 'Biodiversité'],
       odds: [13, 14, 15],
       gallery: GALLERY_PLACEHOLDERS,
@@ -374,7 +374,7 @@ const TESTIMONIALS = [
       description: 'Installation de kits de filtration dans l\'école Djibélor de Ziguinchor pour garantir un accès à l\'eau potable à 1 700 élèves.',
       content: `Au Sénégal, seulement 40% des écoles environ ont accès à l'eau potable. L'école Djibélor est un établissement qui accueille 1 700 élèves de niveau maternelle et primaire. Les enfants en bas âge représentent l'une des populations les plus fragiles et sensibles aux maladies liées à l'eau.\n\nL'installation de filtres à eau permet aux enfants mais aussi au personnel de boire en toute sécurité l'eau de l'école. Les kits ORISA, fournis par Fonte de Vivo, sont très faciles à installer et purifient l'eau grâce à une série de filtres.\n\nL'acquisition de ces kits permet à l'école de Djibélor de prévenir les maladies transmises par l'eau pour l'ensemble des personnes présentes dans l'établissement.`,
       countries: ['Sénégal'],
-      image_url: '/images/placeholders/placeholder-galerie-2.png',
+      image_url: '/images/placeholders/placeholder-galerie-2.webp',
       tags: ['Accès à l\'eau', 'Éducation'],
       odds: [3, 4, 6],
       gallery: GALLERY_PLACEHOLDERS,
@@ -454,27 +454,27 @@ const TESTIMONIALS = [
 
   const TEAM_MEMBERS = [
     // ── Direction ──
-    { nom: "Delphine Thibaut", role: "Fondatrice et Chargée des Programmes", description: "Master administratrice S.I. Institut Bioforce — Ancienne guide spécialisée Afrique", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "direction", display_order: 1 },
-    { nom: "Arya Monchauzou", role: "Chargée des projets des Alpes-Maritimes", description: "Master Risques et Environnement", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "direction", display_order: 2 },
-    { nom: "Amna Labidi", role: "Chargée de mission Service Civique", description: "Licence Sciences de la vie — Master biologie (en cours)", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "direction", display_order: 3 },
-    { nom: "Emile Augsburger", role: "Chargé de mission Service Civique", description: "Ingénieur écologue HES-SO", avatar_url: "/images/placeholders/placeholder-avatar-men.png", category: "direction", display_order: 4 },
+    { nom: "Delphine Thibaut", role: "Fondatrice et Chargée des Programmes", description: "Master administratrice S.I. Institut Bioforce — Ancienne guide spécialisée Afrique", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "direction", display_order: 1 },
+    { nom: "Arya Monchauzou", role: "Chargée des projets des Alpes-Maritimes", description: "Master Risques et Environnement", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "direction", display_order: 2 },
+    { nom: "Amna Labidi", role: "Chargée de mission Service Civique", description: "Licence Sciences de la vie — Master biologie (en cours)", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "direction", display_order: 3 },
+    { nom: "Emile Augsburger", role: "Chargé de mission Service Civique", description: "Ingénieur écologue HES-SO", avatar_url: "/images/placeholders/placeholder-avatar-men.webp", category: "direction", display_order: 4 },
 
     // ── Bureau ──
-    { nom: "Elodie Tisserand", role: "Présidente", description: "Management de projets culturels et innovation — Chargée des projets d'éducation populaire.", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "bureau", display_order: 1 },
-    { nom: "Hervé Caffin", role: "Trésorier", description: "Responsable affaires transition énergétique Paris — Ancien chargé de mission pour Energie Solidaire au Burkina Faso.", avatar_url: "/images/placeholders/placeholder-avatar-men.png", category: "bureau", display_order: 2 },
-    { nom: "Lynda Tabet", role: "Secrétaire", description: "Coach professionnel — Professeur de Yoga — Coordinatrice projets Transition Bien-être.", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "bureau", display_order: 3 },
+    { nom: "Elodie Tisserand", role: "Présidente", description: "Management de projets culturels et innovation — Chargée des projets d'éducation populaire.", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "bureau", display_order: 1 },
+    { nom: "Hervé Caffin", role: "Trésorier", description: "Responsable affaires transition énergétique Paris — Ancien chargé de mission pour Energie Solidaire au Burkina Faso.", avatar_url: "/images/placeholders/placeholder-avatar-men.webp", category: "bureau", display_order: 2 },
+    { nom: "Lynda Tabet", role: "Secrétaire", description: "Coach professionnel — Professeur de Yoga — Coordinatrice projets Transition Bien-être.", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "bureau", display_order: 3 },
     // ── CA ──
-    { nom: "Ingrid von Anthoni", role: "Chargée des plaidoyers sur le massacre des éléphants", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 1 },
-    { nom: "Virginie Blumet", role: "Manager International Business Finance WWF", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 2 },
-    { nom: "Emilie della-guardia", role: "Professeure de Science et Vie de la Terre", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 3 },
-    { nom: "Crystel Cantariti", role: "Professeure des écoles", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 4 },
-    { nom: "Marc Olivier", role: "Consultant, professeur en ethnobotanique", avatar_url: "/images/placeholders/placeholder-avatar-men.png", category: "ca", display_order: 5 },
-    { nom: "Coralie Pinchart", role: "Master 2 économie de développement à l'International", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "ca", display_order: 6 },
+    { nom: "Ingrid von Anthoni", role: "Chargée des plaidoyers sur le massacre des éléphants", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 1 },
+    { nom: "Virginie Blumet", role: "Manager International Business Finance WWF", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 2 },
+    { nom: "Emilie della-guardia", role: "Professeure de Science et Vie de la Terre", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 3 },
+    { nom: "Crystel Cantariti", role: "Professeure des écoles", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 4 },
+    { nom: "Marc Olivier", role: "Consultant, professeur en ethnobotanique", avatar_url: "/images/placeholders/placeholder-avatar-men.webp", category: "ca", display_order: 5 },
+    { nom: "Coralie Pinchart", role: "Master 2 économie de développement à l'International", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 6 },
     // ── Également à nos côtés ──
-    { nom: "Gwen Pichot", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "egalement", display_order: 1 },
-    { nom: "Alison Amblard", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "egalement", display_order: 2 },
-    { nom: "Thierry Montalban", role: "Agence de communication", avatar_url: "/images/placeholders/avatar-men.png", category: "egalement", display_order: 3 },
-    { nom: "Sabine Jerome", role: "Comptabilité", avatar_url: "/images/placeholders/placeholder-avatar-women.png", category: "egalement", display_order: 4 },
+    { nom: "Gwen Pichot", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "egalement", display_order: 1 },
+    { nom: "Alison Amblard", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "egalement", display_order: 2 },
+    { nom: "Thierry Montalban", role: "Agence de communication", avatar_url: "/images/placeholders/avatar-men.webp", category: "egalement", display_order: 3 },
+    { nom: "Sabine Jerome", role: "Comptabilité", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "egalement", display_order: 4 },
   ]
 
   await prisma.teamMember.deleteMany({})
@@ -534,7 +534,7 @@ const TESTIMONIALS = [
       content: 'Intervention de Delphine Thibaut au micro de Ségolène Alunni dans son émission Personnalités remarquables sur France Bleu, afin de promouvoir les départs en congé de solidarité et les projets de l\'association au Kenya.',
       theme: 'Interview & radio',
       date: new Date('2022-01-01'),
-      image_url: '/images/placeholders/placeholder-photo.png',
+      image_url: '/images/placeholders/placeholder-photo.webp',
       external_url: 'https://www.francebleu.fr/emissions/18-19-personnalites-remarquables',
     },
     {
@@ -554,7 +554,7 @@ const TESTIMONIALS = [
       content: 'Article de Nice-matin du 28 novembre 2020 sur le festival des solidarités et les interventions de Sens Solidaires dans les écoles élémentaires niçoises.',
       theme: 'Revue de presse',
       date: new Date('2020-11-28'),
-      image_url: '/images/placeholders/placeholder-photo.png',
+      image_url: '/images/placeholders/placeholder-photo.webp',
       external_url: null,
     },
     {
@@ -563,7 +563,7 @@ const TESTIMONIALS = [
       content: 'Novembre 2016 : Exposition des linogravures de Felix Richard sur le papier en bouse d\'éléphant du Sri Lanka. 25 euros le tableau encadré, l\'argent retourne directement à la Fabrique du papier pour maintenir son développement.',
       theme: 'Vie de l\'association',
       date: new Date('2016-11-01'),
-      image_url: '/images/placeholders/placeholder-photo.png',
+      image_url: '/images/placeholders/placeholder-photo.webp',
       external_url: null,
     },
     {
@@ -572,7 +572,7 @@ const TESTIMONIALS = [
       content: 'Stand d\'informations pour les jeunes désireux de s\'engager en mission de service civique à l\'international avec nous, au Sénégal ou au Kenya.',
       theme: 'Événement',
       date: new Date('2023-01-01'),
-      image_url: '/images/placeholders/placeholder-photo.png',
+      image_url: '/images/placeholders/placeholder-photo.webp',
       external_url: null,
     },
   ]
@@ -593,7 +593,7 @@ const TESTIMONIALS = [
       content: `Le savais-tu ? Le plus grand mammifère terrestre est menacé d'extinction avec plus de 25 000 individus tués en 2019. Pourtant cet animal joue un rôle clé dans l'écosystème. Cet atelier permet aux élèves de découvrir le monde fascinant des éléphants, leur rôle dans la biodiversité et les menaces qui pèsent sur leur survie. À travers des jeux pédagogiques et des supports visuels, les élèves développent leur sens de la solidarité et leur conscience environnementale.`,
       type: 'Atelier',
       public: 'primaire',
-      image_url: '/images/placeholders/placeholder-educ-1.png',
+      image_url: '/images/placeholders/placeholder-educ-1.webp',
       external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/01/Plaquette-atelier-marque-page-elephant.pdf',
     },
     {
@@ -603,7 +603,7 @@ const TESTIMONIALS = [
       content: `Le savais-tu ? On estime qu'environ 10% de la vie océanique est identifiée à ce jour. Avec le dérèglement climatique des espèces que nous ne connaissons pas encore ont sûrement déjà disparues. Ce jeu de 7 familles pédagogique permet aux élèves de découvrir les différents écosystèmes de la mer Méditerranée, leurs habitants et les menaces qui pèsent sur eux. Un outil ludique pour sensibiliser à la protection des océans.`,
       type: 'Atelier',
       public: 'primaire',
-      image_url: '/images/placeholders/placeholder-educ-1.png',
+      image_url: '/images/placeholders/placeholder-educ-1.webp',
       external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/01/plaquette-ATELIERS-jeu-de-7-familles.pdf',
     },
     {
@@ -613,7 +613,7 @@ const TESTIMONIALS = [
       content: `Le savais-tu ? Les forêts tropicales primaires abritent l'essentiel de la biodiversité terrestre : 70% des espèces végétales et 80% des espèces vertébrées. Cet atelier invite les élèves à explorer les forêts primaires du monde, comprendre leur importance pour la planète et découvrir les menaces qui pèsent sur ces écosystèmes uniques. Un voyage au cœur de la biodiversité.`,
       type: 'Atelier',
       public: 'primaire',
-      image_url: '/images/placeholders/placeholder-educ-1.png',
+      image_url: '/images/placeholders/placeholder-educ-1.webp',
       external_url: 'https://www.sensolidaire.org/wp-content/uploads/2025/01/Plaquette-atelier-forets-primaires.pdf',
     },
     {
@@ -623,7 +623,7 @@ const TESTIMONIALS = [
       content: `Découvrez avec nous les 17 ODD pour un monde plus juste, plus durable et plus solidaire. Grâce à différents jeux pédagogiques nous aborderons les notions de vivre ensemble, de stéréotypes, mais aussi différents types d'inégalités à travers le monde. Nous intervenons dans vos locaux (avec notre matériel) ou nous pouvons vous réserver une salle appropriée dans nos bureaux.`,
       type: 'Atelier',
       public: 'college_lycee,adultes',
-      image_url: '/images/placeholders/placeholder-educ-1.png',
+      image_url: '/images/placeholders/placeholder-educ-1.webp',
       external_url: 'https://www.sensolidaire.org/wp-content/uploads/2018/06/sengagerdanslasolidarit%C3%A9.pdf',
     },
   ]
