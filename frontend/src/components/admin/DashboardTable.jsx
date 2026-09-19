@@ -2,7 +2,7 @@
 // Tableau générique réutilisable pour toutes les sections admin.
 // Ne contient AUCUNE logique métier — uniquement de l'affichage + délégation d'actions.
 
-import { FiEdit2, FiPause, FiTrash2 } from 'react-icons/fi'
+import { FiEdit2, FiPause, FiPlay, FiTrash2 } from 'react-icons/fi'
 
 // columns : [{ key, label, render?: (row) => ReactNode }]
 // data    : tableau d'objets (doit contenir keyField, "id" par défaut)
@@ -50,11 +50,13 @@ function DashboardTable({ columns, data, onEdit, onDelete, onHardDelete, keyFiel
                   </button>
                   <button
                     onClick={() => onDelete(row)}
-                    className="p-1.5 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded"
-                    aria-label={`Mettre en pause ${row[keyField]}`}
-                    title="Rendre invisible (réversible)"
+                    className={`p-1.5 text-gray-400 rounded ${
+                      row.is_active ? 'hover:text-orange-600 hover:bg-orange-50' : 'hover:text-green-600 hover:bg-green-50'
+                    }`}
+                    aria-label={row.is_active ? `Mettre en pause ${row[keyField]}` : `Reprendre ${row[keyField]}`}
+                    title={row.is_active ? 'Rendre invisible (réversible)' : 'Rendre de nouveau visible'}
                   >
-                    <FiPause size={16} />
+                    {row.is_active ? <FiPause size={16} /> : <FiPlay size={16} />}
                   </button>
                   {onHardDelete && (
                     <button

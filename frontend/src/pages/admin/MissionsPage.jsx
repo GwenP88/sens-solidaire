@@ -15,7 +15,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // ── API
-import { fetchAdminMissions, deleteMission, hardDeleteMission } from '../../services/api'
+import { fetchAdminMissions, updateMission, deleteMission, hardDeleteMission } from '../../services/api'
 
 // ── Composants admin
 import DashboardTable from '../../components/admin/DashboardTable'
@@ -61,6 +61,7 @@ function MissionsPage() {
   const [loading,  setLoading]  = useState(true)
   const [error,    setError]    = useState(null)
   const [missionToHardDelete, setMissionToHardDelete] = useState(null)
+  const [missionToTogglePause, setMissionToTogglePause] = useState(null)
 
 
   // ── Chargement initial ──────────────────────────────────────
@@ -117,18 +118,25 @@ function MissionsPage() {
   // ── Suppression ─────────────────────────────────────────────
   // Soft delete : is_active passe à false côté backend.
   // La mission reste en base (récupérable) mais disparaît du site.
-  const handleDelete = async (mission) => {
-    const confirmed = window.confirm(
-      `Mettre en pause la mission "${mission.title}" ?\n\nCette action la masquera du site. Elle reste récupérable en base de données.`
-    )
-    if (!confirmed) return
+    // Ouvre la modale (pause ou reprise, selon l'état actuel)
+  const handleTogglePause = (mission) => {
+    setMissionToTogglePause(mission)
+  }
 
+  // Exécute la pause (soft delete) ou la reprise (is_active: true) après confirmation
+  const confirmTogglePause = async () => {
     try {
-      await deleteMission(mission.id)
+      if (missionToTogglePause.is_active) {
+        await deleteMission(missionToTogglePause.id)
+      } else {
+        await updateMission(missionToTogglePause.id, { is_active: true })
+      }
       await reloadMissions()
     } catch (err) {
-      console.error('Erreur suppression mission :', err)
-      alert('Échec de la suppression. Réessaie.')
+      console.error('Erreur pause/reprise mission :', err)
+      alert('Échec de l\'opération. Réessaie.')
+    } finally {
+      setMissionToTogglePause(null)
     }
   }
 
@@ -189,17 +197,32 @@ const confirmHardDelete = async () => {
         columns={COLUMNS}
         data={missions}
         onEdit={handleEdit}
-        onDelete={handleDelete}
+        onDelete={handleTogglePause}
         onHardDelete={handleHardDelete} 
       />
 
       {missionToHardDelete && (
         <ConfirmModal
-          title="Supprimer définitivement"
-          message={`Voulez-vous supprimer définitivement la mission "${missionToHardDelete.title}" ?\n\nCette action est irréversible. La mission, ses tarifs et toutes les photos associées seront supprimés définitivement.\n\nLes lieux partenaires utilisés par d'autres missions ne seront pas supprimés.`}
+          title="Supprimer définitivement la mission ?"
+          message={`Cette action est irréversible. La mission "${missionToHardDelete.title}", ses tarifs et toutes les photos associées seront définitivement supprimés. ?\n\nLes lieux partenaires utilisés par d’autres missions seront conservés.`}
           confirmLabel="Supprimer définitivement"
           onConfirm={confirmHardDelete}
           onCancel={() => setMissionToHardDelete(null)}
+        />
+      )}
+
+      {missionToTogglePause && (
+        <ConfirmModal
+          variant="default"
+          title={missionToTogglePause.is_active ? 'Mettre la mission en pause ?' : 'Réactiver la mission ?'}
+          message={
+            missionToTogglePause.is_active
+              ? `La mission "${missionToTogglePause.title}" ne sera plus visible sur le site. \n\nVous pourrez la réactiver à tout moment.`
+              : `La mission "${missionToTogglePause.title}" sera de nouveau visible sur le site.`
+          }
+          confirmLabel={missionToTogglePause.is_active ? 'Mettre en pause' : 'Reprendre'}
+          onConfirm={confirmTogglePause}
+          onCancel={() => setMissionToTogglePause(null)}
         />
       )}
     </div>
