@@ -23,6 +23,9 @@ import {
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
 import { FormSection, Field, TextareaField } from '../../components/admin/FormElements'
 
+// ── Composants utils
+import { previewShortDescription } from '../../utils/shortDescription'
+
 
 // ════════════════════════════════════════════════════════════════
 // CONSTANTES
@@ -40,7 +43,6 @@ const EMPTY_FORM = {
   title:             '',
   country:           '',
   slug:              '',
-  short_description: '',
   type:              'volontariat_individuel',  // ← seul type créable pour l'instant
   description:       '',
   volunteer_role:    '',
@@ -146,7 +148,6 @@ function MissionFormPage() {
           title:             mission.title             || '',
           country:           mission.country           || '',
           slug:              mission.slug              || '',
-          short_description: mission.short_description || '',
           type:              mission.type              || '',
           description:       mission.description       || '',
           volunteer_role:    mission.volunteer_role    || '',
@@ -194,7 +195,7 @@ function MissionFormPage() {
     if (!formData.title.trim())             newErrors.title             = "Le titre est obligatoire."
     if (!formData.country.trim())           newErrors.country           = "Le pays est obligatoire."
     if (!formData.slug.trim())              newErrors.slug              = "Le slug est obligatoire."
-    if (!formData.short_description.trim()) newErrors.short_description = "La description courte est obligatoire."
+    if (!formData.description.trim())       newErrors.description       = "La description est obligatoire."
     return newErrors
   }
 
@@ -296,6 +297,7 @@ function MissionFormPage() {
     <p className="text-gray-400 text-sm italic p-8">Chargement de la mission...</p>
   )
 
+  const shortDescriptionPreview = previewShortDescription(formData.description)
 
   // ════════════════════════════════════════════════════════════════
   // RENDU
@@ -359,29 +361,6 @@ function MissionFormPage() {
             hint="Partie de l’URL qui identifie la mission. Utilisez des mots-clés courts et descriptifs, séparés par des tirets. Ex. : volontariat-kenya-biodiversite" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement, sans espaces ni accents"
           />
 
-          <div className="flex flex-col gap-1">
-            <label className={`text-sm font-medium ${
-              formData.short_description.length >= 140 ? 'text-red-500' :
-              formData.short_description.length >= 120 ? 'text-orange-500' :
-              'text-gray-700'
-            }`}>
-              Description courte <span className="text-red-500">*</span>
-              <span className="font-normal ml-1 text-xs">— {formData.short_description.length}/150 caractères</span>
-            </label>
-            <p className="text-xs text-gray-400 -mt-0.5">Affichée sur la carte de la mission et en haut de sa page détaillée</p>
-            <textarea
-              name="short_description"
-              value={formData.short_description}
-              onChange={handleChange}
-              maxLength={150}
-              rows={3}
-              className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-y font-mono ${
-                fieldErrors.short_description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-primary/30'
-              }`}
-            />
-            {fieldErrors.short_description && <span className="text-xs text-red-500">{fieldErrors.short_description}</span>}
-          </div>
-
         </FormSection>
 
         {/* ── BLOC 2 : Photo hero ── */}
@@ -419,11 +398,32 @@ function MissionFormPage() {
         <FormSection
           title="Présentation de la mission"
         >
-          <TextareaField
-            label="Description longue" name="description"
-            value={formData.description} onChange={handleChange}
-            rows={6} hint="Présentation détaillée de la mission et de ses objectifs"
-          />
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">
+              Description longue <span className="text-red-500">*</span>
+            </label>
+            <p className="text-xs text-gray-400 -mt-0.5">
+              Astuce : insère <code className="bg-gray-100 px-1 rounded">---</code> à l'endroit où tu veux que le résumé s'arrête (sinon coupé automatiquement à la fin de la dernière phrase complète).
+            </p>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              rows={6}
+              className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-y ${
+                fieldErrors.description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-primary/30'
+              }`}
+            />
+            {fieldErrors.description && <span className="text-xs text-red-500">{fieldErrors.description}</span>}
+            {formData.description && (
+              <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <p className="text-xs font-medium text-gray-500 mb-1">
+                  Aperçu de la description courte (carte + hero) — {shortDescriptionPreview.length}/150 caractères
+                </p>
+                <p className="text-sm text-gray-700 italic">{shortDescriptionPreview}</p>
+              </div>
+            )}
+          </div>
           <TextareaField
             label="Rôle du volontaire'" name="volunteer_role"
             value={formData.volunteer_role} onChange={handleChange}

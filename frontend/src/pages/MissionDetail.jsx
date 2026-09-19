@@ -121,7 +121,7 @@ function MissionDetail() {
           <h2 className="h2-style text-primary">{mission.title}</h2>
           <div className="flex flex-col lg:flex-row gap-lg items-start">
             <div className="flex flex-col gap-md w-full lg:w-2/3">
-              <p className="text-body text-primary/80">{mission.description}</p>
+              <p className="text-body text-primary/80">{mission.description?.replace('---', '').trim()}</p>
               <h3 className="h3-style text-primary mb-0">De nombreux volontaires ont déjà sauté le pas…</h3>
               <p className="text-body text-primary/80">
                 Découvrez la satisfaction de participer à des projets porteurs de sens. Que vous soyez étudiant, en activité ou retraité, aucun diplôme particulier n'est requis : nous recherchons avant tout des personnes motivées, ouvertes aux autres et désireuses de s'engager.

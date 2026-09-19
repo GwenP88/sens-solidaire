@@ -6,6 +6,7 @@
 // delete would break testimonials that reference a mission via mission_id.
 
 import prisma from "../config/db.js"
+import { deriveShortDescription } from '../utils/shortDescription.js'
 
 // ── FIND ALL ─────────────────────────────────────────────────────────────────
 // Récupère toutes les missions actives avec filtres optionnels
@@ -134,6 +135,7 @@ export const findBySlug = async (slug) => {
 // Retourne  : la mission créée
 // Throw     : 409 si le slug existe déjà (contrainte @unique violée)
 export const create = async (data) => {
+  const { shortDescription } = deriveShortDescription(data.description)
   try {
     const mission = await prisma.mission.create({
       data: {
@@ -147,7 +149,7 @@ export const create = async (data) => {
         country:           data.country,
         country_preposition: data.country_preposition,
         slug:              data.slug,
-        short_description: data.short_description,
+        short_description: shortDescription,
         type:              data.type, // défaut en base, mais validé en amont
 
         // — Champs OPTIONNELS —
@@ -194,6 +196,10 @@ export const create = async (data) => {
 // Retourne   : la mission mise à jour
 // Throw      : 404 si l'id n'existe pas · 409 si le nouveau slug est déjà pris
 export const update = async (id, data) => {
+  if (data.description !== undefined) {
+    const { shortDescription } = deriveShortDescription(data.description)
+    data = { ...data, short_description: shortDescription }
+  }
   try {
     const mission = await prisma.mission.update({
       where: { id },   // on cible par l'id (stable), pas le slug
