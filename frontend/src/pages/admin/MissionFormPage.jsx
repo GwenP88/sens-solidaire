@@ -74,7 +74,7 @@ const HOW_TO_GO_FIXED = [
   "Recevoir votre fiche mission à remplir à votre retour",
 ]
 
-const HOW_TO_GO_STEP1_LABEL = "Comparer et réserver vos vols"
+const HOW_TO_GO_STEP1_LABEL = "Comparer et vérifier les vols"
 // ════════════════════════════════════════════════════════════════
 // COMPOSANT PRINCIPAL
 // ════════════════════════════════════════════════════════════════
@@ -102,11 +102,14 @@ function MissionFormPage() {
         let programme = []
         try { programme = mission.programme ? JSON.parse(mission.programme) : [] } catch {}
 
-        // Parsing how_to_go — on récupère uniquement l'étape 1 (les villes)
+        // Parsing how_to_go — on récupère l'étape 1, en retirant le label
+        // qu'on lui a préfixé à la sauvegarde (sinon il se réempile à chaque édition)
         let how_to_go_villes = ''
         try {
           const parsed = mission.how_to_go ? JSON.parse(mission.how_to_go) : []
-          how_to_go_villes = parsed[0] || ''
+          const step1 = parsed[0] || ''
+          const prefix = `${HOW_TO_GO_STEP1_LABEL} : `
+          how_to_go_villes = step1.startsWith(prefix) ? step1.slice(prefix.length) : step1
         } catch {}
 
         // Pricing trié par display_order
