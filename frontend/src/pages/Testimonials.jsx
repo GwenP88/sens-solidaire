@@ -65,7 +65,7 @@ function Testimonials() {
     <div className="bg-surface min-h-screen">
 
       <HeroPage
-        image="/images/missions/groupe-jeune-2.jpg"
+        image="/images/design/groupe-jeune-2.jpg"
         title="Paroles de volontaires"
         subtitle="Ils sont partis, ils ont vécu l'aventure. Découvrez leurs récits et rapports de mission."
       />

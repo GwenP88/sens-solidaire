@@ -19,7 +19,7 @@ const buttons = FOOTER_CTA_BUTTONS[resolvedRoute] || FOOTER_CTA_BUTTONS.default
   return (
     <div
       className="relative w-full h-auto min-h-64 md:h-96 flex items-end padding-x p-6 md:p-16"
-      style={{ backgroundImage: `url(/images/hero/hero-footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      style={{ backgroundImage: `url(/images/design/hero/hero-footer.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative flex flex-col gap-sm">

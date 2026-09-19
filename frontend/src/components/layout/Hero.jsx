@@ -6,7 +6,7 @@ import Button from '../ui/Button'
 
 function Hero() {
   return (
-    <section className="relative w-full h-screen flex items-end" style={{ backgroundImage: `url(/images/hero/hero-home.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <section className="relative w-full h-screen flex items-end" style={{ backgroundImage: `url(/images/design/hero/hero-home.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       {/* Overlay sombre */}
       <div className="absolute inset-0 bg-black/50"></div>
       {/* gap-sm gère l'espacement entre tous les enfants — text-eyebrow et text-lead

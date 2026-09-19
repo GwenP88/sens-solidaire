@@ -46,7 +46,7 @@ function Soutenir() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero/hero-home.jpg"
+        image="/images/design/hero/hero-home.jpg"
         title="Soutenir des actions utiles, concrètes et durables"
         subtitle="Chaque don, chaque adhésion permet de faire vivre des projets solidaires sur le terrain, aux côtés des volontaires et des communautés locales."
       />
@@ -289,7 +289,7 @@ function Soutenir() {
 
           <div className="overflow-hidden rounded-3xl">
             <img
-              src="/images/equipe-et-rapports-activites/rapport-activite.png"
+              src="/images/placeholders/placeholder-rapport-activite.png"
               alt="Rapport d'activité"
               className="w-full h-72 lg:h-96 object-cover"
             />

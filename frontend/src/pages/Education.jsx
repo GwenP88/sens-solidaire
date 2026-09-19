@@ -112,7 +112,7 @@ function Education() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero/hero-education.jpg"
+        image="/images/design/hero/hero-education.jpg"
         title="Éducation & Sensibilisation"
         subtitle="Nous intervenons dans les écoles, collèges et lycées pour sensibiliser les jeunes à la biodiversité et au développement durable."
       />

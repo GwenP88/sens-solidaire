@@ -26,7 +26,7 @@ function MediaCard({ title, content, theme, date, image_url, slug, external_url 
       {/* Image — hauteur fixe en portrait, largeur fixe en paysage, shrink-0 dans les deux cas */}
       <div className="w-full h-48 md:w-64 md:h-full lg:w-full lg:h-48 shrink-0 overflow-hidden">
         <img
-          src={image_url || '/images/hero/hero-missions.jpg'}
+          src={image_url || (theme === 'Newsletter' ? '/images/placeholders/placeholder-newsletter.png' : '/images/placeholders/placeholder-photo.png')}
           alt={title}
           className="w-full h-full object-cover"
         />

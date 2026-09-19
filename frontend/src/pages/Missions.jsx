@@ -212,7 +212,7 @@ function Missions() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero/hero-missions.jpg"
+        image="/images/design/hero/hero-missions.jpg"
         title="Partez en mission et agissez concrètement"
         subtitle="Parce que l'engagement est ouvert à tous, nos missions s'adaptent à chaque profil : seul, à deux, en groupe, en famille ou avec votre entreprise, vivez une expérience humaine et solidaire au service de la biodiversité."
       />
@@ -257,7 +257,7 @@ function Missions() {
           title="Je pars en mission individuelle"
           audience="Pour les volontaires individuels"
           description="Vivez une expérience utile, authentique et accessible à tous."
-          decorImage="/images/ui/one-line-1.png"
+          decorImage="/images/design/ui/one-line-1.png"
           image="/images/placeholders/placeholder-photo.png"
           imageAlt="Volontariat individuel"
           introSlot={
@@ -310,7 +310,7 @@ function Missions() {
           title="Je m'engage en Service Civique à l'international"
           audience="Pour les 16 à 25 ans"
           description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
-          decorImage="/images/ui/one-line-2.png"
+          decorImage="/images/design/ui/one-line-2.png"
           image="/images/placeholders/placeholder-photo.png"
           imageAlt="Service civique"
           introSlot={
@@ -414,7 +414,7 @@ function Missions() {
           title="Je pars avec mon groupe"
           audience="Pour les lycées, MJC et structures de jeunesse"
           description="Organisez une mission solidaire au Kenya ou au Sénégal et faites vivre à votre groupe une expérience éducative et interculturelle unique."
-          decorImage="/images/ui/one-line-3.png"
+          decorImage="/images/design/ui/one-line-3.png"
           image="/images/placeholders/placeholder-photo.png"
           imageAlt="Mission groupe jeunes"
           introSlot={
@@ -536,7 +536,7 @@ function Missions() {
           title="J'agis avec mon entreprise"
           audience="Pour les salariés et les entreprises"
           description="Une expérience humaine forte pour les salariés et un engagement concret pour les entreprises."
-          decorImage="/images/ui/one-line-4.png"
+          decorImage="/images/design/ui/one-line-4.png"
           image="/images/placeholders/placeholder-photo.png"
           imageAlt="Congé solidaire"
           introSlot={

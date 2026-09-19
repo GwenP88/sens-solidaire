@@ -56,7 +56,7 @@ useEffect(() => {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/hero/hero-home.jpg"
+        image="/images/design/hero/hero-home.jpg"
         title="À propos de Sens Solidaires"
         subtitle="Voyager, rencontrer, partager et agir pour un monde plus solidaire."
       />
@@ -77,7 +77,7 @@ useEffect(() => {
           </div>
           <div className="w-full xl:w-2/5 shrink-0">
             <img
-              src="/images/missions/groupe-jeune-2.jpg"
+              src="/images/design/groupe-jeune-2.jpg"
               alt="Sens Solidaires sur le terrain"
               className="w-full h-96 object-cover rounded-2xl"
             />
@@ -162,7 +162,7 @@ useEffect(() => {
           </div>
           <div className="w-full md:w-2/5 shrink-0">
             <img
-              src="/images/equipe-et-rapports-activites/rapport-activite.png"
+              src="/images/placeholders/placeholder-rapport-activite.png"
               alt="Rapport d'activité"
               className="w-full h-64 object-cover rounded-2xl"
             />
