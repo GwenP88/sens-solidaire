@@ -2520,7 +2520,18 @@ Plusieurs cards se fondaient dans leur fond de section (même couleur `bg-surfac
 
 **Décision notée pour plus tard (#128)** : fusionner l'onglet sidebar "Service Civique" dans "Missions" (renommé), avec filtres type/pays/actif — techniquement peu coûteux, le backend renvoie déjà tous les types sans filtre
 
-**Discussion, pas retenue** : modale de confirmation à la suppression d'une photo dans la galerie — jugée pas nécessaire pour l'instant, la suppression n'est effective qu'à l'enregistrement, pas au clic sur ×
+**Pas retenue** : modale de confirmation à la suppression d'une photo dans la galerie — jugée pas nécessaire pour l'instant, la suppression n'est effective qu'à l'enregistrement, pas au clic sur ×
+
+**Palette de couleurs dédiée au dashboard**
+Système de couleurs fonctionnel (pas par page) : `dash-action` bleu (navigation/actions), `dash-editorial` violet (médias/galerie), `dash-success` teal (actif/publié), `dash-warning` orange (attention/temporaire), `dash-danger` rouge. Plus 3 tons de gris accessibles (`dash-title`/`dash-text`/`dash-legend`) — `gray-400`, utilisé partout jusque-là, échouait le contraste WCAG AA minimum (2.8:1 vs 4.5:1 requis).
+
+Variables posées comme couleurs nommées dans `index.css` (`@theme`, Tailwind v4) — même mécanisme que `primary`/`accent` déjà utilisés côté site public. Appliqué à ~16 fichiers (sidebar avec logo à la place de l'emoji 🌍, formulaires Mission/Service Civique, Galerie, tables, modales, upload, AnchorNav dashboard) via une commande `sed` globale sur `pages/admin/` et `components/admin/`. `LoginAdmin.jsx` volontairement épargné (page vitrine avant le dashboard, garde le vert du site).
+
+Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune référence), noté pour suppression plus tard (#129). Flèches ▲▼ de `AdminFileUpload.jsx` (texte brut) remplacées par de vraies icônes (`react-icons/fi`).
+
+**Autres tâches Bloc A faites dans la foulée** :
+- Lien vers le formulaire de contact sur l'étape 2 "Comment partir" (#118)
+- Navigation par ancre sur `MissionFormPage.jsx` (#123) — réutilise `AnchorNav` existant, variante `dashboard` créée pour l'occasion
 
 ---
 
