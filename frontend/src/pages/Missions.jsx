@@ -293,7 +293,7 @@ function Missions() {
               slug={mission.slug}
               title={mission.title}
               description={mission.short_description}
-              image={mission.image_url}
+              image={mission.photo_hero_url}
               badge={TYPE_LABELS[mission.type]}
               duration={getDuration(mission.pricing)}
               ctaLabel="En savoir plus →"

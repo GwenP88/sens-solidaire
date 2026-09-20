@@ -197,7 +197,7 @@ export const createMission = async (req, res, next) => {
       title, country, country_preposition, slug, short_description, type,
       description, volunteer_role, programme, included, not_include,
       admin_info, ministry_url, health_info, helloasso_url,
-      image_url, image_alt, how_to_go,
+      photo_hero_url, photo_hero_alt, photo_section_url, photo_section_alt, how_to_go,
       age_min, age_max, duration_label, role_france, role_etranger, competences, candidater_url, info_service_civique_url,
     } = req.body
 
@@ -245,7 +245,7 @@ export const createMission = async (req, res, next) => {
       title, country, country_preposition, slug, short_description, type,
       description, volunteer_role, programme, included, not_include,
       admin_info, ministry_url, health_info, helloasso_url,
-      image_url, how_to_go, image_alt,
+      photo_hero_url, photo_hero_alt, photo_section_url, photo_section_alt, how_to_go,
       age_min, age_max, duration_label, role_france, role_etranger, competences, candidater_url, info_service_civique_url,
     })
 
@@ -282,7 +282,7 @@ export const updateMission = async (req, res, next) => {
       "title", "country", "country_preposition", "slug", "short_description", "type",
       "description", "volunteer_role", "programme", "included", "not_include",
       "admin_info", "ministry_url", "health_info", "helloasso_url",
-      "image_url", "how_to_go", "is_active", "image_alt",
+      "photo_hero_url", "photo_hero_alt", "photo_section_url", "photo_section_alt", "how_to_go", "is_active",
       "age_min", "age_max", "duration_label", "role_france", "role_etranger", "competences", "candidater_url", "info_service_civique_url",
     ]
     for (const champ of allowed) {

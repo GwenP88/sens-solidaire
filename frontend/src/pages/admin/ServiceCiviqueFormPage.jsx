@@ -83,8 +83,8 @@ function ServiceCiviqueFormPage() {
           : []
 
         // Photos reconstituées — l'image principale existante en 1ère position
-        const photos = mission.image_url
-          ? [{ file_url: mission.image_url, label: mission.image_alt || '' }, ...galerieMedia]
+        const photos = mission.photo_hero_url
+          ? [{ file_url: mission.photo_hero_url, label: mission.photo_hero_alt || '' }, ...galerieMedia]
           : galerieMedia
 
         setFormData({
@@ -160,8 +160,8 @@ function ServiceCiviqueFormPage() {
     try {
       // La 1ère photo devient l'image principale (hero), les suivantes la galerie
       const [heroPhoto, ...galeriePhotos] = formData.photos
-      const image_url = heroPhoto ? heroPhoto.file_url : ''
-      const image_alt = heroPhoto ? heroPhoto.label : ''
+      const photo_hero_url = heroPhoto ? heroPhoto.file_url : ''
+      const photo_hero_alt = heroPhoto ? heroPhoto.label : ''
 
       const payload = {
         title:             formData.title,
@@ -181,8 +181,8 @@ function ServiceCiviqueFormPage() {
         candidater_url:    formData.candidater_url,
         info_service_civique_url: formData.info_service_civique_url,
         is_active:         formData.is_active,
-        image_url,
-        image_alt,
+        photo_hero_url,
+        photo_hero_alt,
       }
 
       let missionId

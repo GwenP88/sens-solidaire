@@ -106,7 +106,7 @@ function MissionDetail() {
 
       {/* ── Hero immersif avec prix et durée ── */}
       <HeroPage
-        image={mission.image_url}
+        image={mission.photo_hero_url}
         title={mission.title}
         subtitle={mission.short_description}
         duration={getDuration(mission.pricing)}
@@ -129,8 +129,8 @@ function MissionDetail() {
             </div>
             <div className="w-full lg:w-1/3 shrink-0">
               <img
-                src={mission.media?.find(m => m.file_type === 'image')?.file_url || '/images/placeholders/placeholder-galerie-1.webp'}
-                alt={mission.media?.find(m => m.file_type === 'image')?.label || mission.title}
+                src={mission.photo_section_url || '/images/placeholders/placeholder-galerie-1.webp'}
+                alt={mission.photo_section_alt || mission.title}
                 className="w-full h-72 object-cover rounded-xl"
               />
             </div>
@@ -496,7 +496,7 @@ function MissionDetail() {
           Explorez la mission à travers les images de nos volontaires et découvrez l'environnement, les projets et les expériences qui vous attendent sur le terrain.
         </p>
         <Carousel
-          items={mission.media?.filter(m => m.file_type === 'image').slice(1) || []}
+          items={mission.media?.filter(m => m.file_type === 'image') || []}
           showPagination={true}
           color="primary"
           renderSlide={(item) => (

@@ -110,11 +110,22 @@ export const findBySlug = async (slug) => {
     throw error
   }
 
-  // Récupère les médias liés à cette mission (galerie + PDF)
-  const media = await prisma.media.findMany({
+  // Médias liés à cette mission — PDF (toujours affiché) + galerie
+  // (photos "forcées" + les plus récentes, dans la limite de 10 au total)
+  const allMedia = await prisma.media.findMany({
     where: { entity_type: 'mission', entity_id: mission.id },
-    orderBy: { display_order: 'asc' },
+    orderBy: { created_at: 'desc' },
   })
+
+  const pdfMedia = allMedia.filter(m => m.file_type === 'pdf')
+  const images = allMedia.filter(m => m.file_type === 'image')
+  const forcedImages = images.filter(m => m.force_display)
+  const recentImages = images.filter(m => !m.force_display) // déjà triées par date, la plus récente en premier
+
+  const remainingSlots = Math.max(0, 10 - forcedImages.length)
+  const displayedImages = [...forcedImages, ...recentImages.slice(0, remainingSlots)]
+
+  const media = [...pdfMedia, ...displayedImages]
 
   // Formatage des témoignages pour correspondre aux props de TestimonialCard
   return {
@@ -162,8 +173,10 @@ export const create = async (data) => {
         ministry_url:      data.ministry_url,
         health_info:       data.health_info,
         helloasso_url:     data.helloasso_url,
-        image_url:         data.image_url,
-        image_alt:         data.image_alt,
+        photo_hero_url:    data.photo_hero_url,
+        photo_hero_alt:    data.photo_hero_alt,
+        photo_section_url: data.photo_section_url,
+        photo_section_alt: data.photo_section_alt,
         how_to_go:         data.how_to_go,
         age_min:           data.age_min,
         age_max:           data.age_max,

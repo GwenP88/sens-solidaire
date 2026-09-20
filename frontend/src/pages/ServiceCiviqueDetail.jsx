@@ -101,7 +101,7 @@ function ServiceCiviqueDetail() {
 
       {/* ── Hero immersif avec âge et durée ── */}
       <HeroPage
-        image={mission.image_url}
+        image={mission.photo_hero_url}
         title={mission.title}
         subtitle={mission.short_description}
         duration={mission.duration_label}
@@ -132,8 +132,8 @@ function ServiceCiviqueDetail() {
           </div>
           <div className="w-full lg:w-1/3 shrink-0">
             <img
-              src={mission.image_url || '/images/placeholders/placeholder-galerie-1.webp'}
-              alt={mission.image_alt || mission.title}
+              src={mission.photo_hero_url || '/images/placeholders/placeholder-galerie-1.webp'}
+              alt={mission.photo_hero_alt || mission.title}
               className="w-full h-72 object-cover rounded-xl"
             />
           </div>

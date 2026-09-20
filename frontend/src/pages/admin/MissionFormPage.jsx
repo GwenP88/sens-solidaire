@@ -57,10 +57,9 @@ const EMPTY_FORM = {
   admin_info:        '',
   is_active:         true,
   pricing:           [], // [{ duration_label, price }]
-  // Photos de la mission — la 1ère est l'image principale (hero),
-  // les 10 suivantes forment la galerie. [{ file_url, label }]
-  hero_photo:        [],
-  gallery_photos:    [],
+  // 2 photos obligatoires : position 1 = hero, position 2 = section "La mission".
+  // Les flèches ▲▼ du composant suffisent pour réordonner seulement 2 photos.
+  mission_photos:    [],
   // Guide du volontaire — 1 fichier max. [{ file_url, label }]
   guide_pdf:         [],
 }
@@ -121,20 +120,14 @@ function MissionFormPage() {
               .map(p => ({ duration_label: p.duration_label, price: String(p.price) }))
           : []
 
-        // Galerie — médias de type image, triés
-        const galerieMedia = mission.media
-          ? mission.media
-              .filter(m => m.file_type === 'image')
-              .sort((a, b) => a.display_order - b.display_order)
-              .map(m => ({ file_url: m.file_url, label: m.label || '' }))
-          : []
-
-          // Photo hero existante, si présente
-        const hero_photo = mission.image_url
-          ? [{ file_url: mission.image_url, label: mission.image_alt || '' }]
-          : []
-        // Galerie déjà enregistrée — indépendante du hero maintenant
-        const gallery_photos = galerieMedia
+        // 2 photos reconstituées depuis les champs dédiés (plus de galerie ici)
+        const mission_photos = []
+        if (mission.photo_hero_url) {
+          mission_photos.push({ file_url: mission.photo_hero_url, label: mission.photo_hero_alt || '' })
+        }
+        if (mission.photo_section_url) {
+          mission_photos.push({ file_url: mission.photo_section_url, label: mission.photo_section_alt || '' })
+        }
 
         // PDF guide du volontaire
         const pdfMedia = mission.media
@@ -161,8 +154,7 @@ function MissionFormPage() {
           admin_info:        mission.admin_info        || '',
           is_active:         mission.is_active         ?? true,
           pricing,
-          hero_photo,
-          gallery_photos,
+          mission_photos,
           guide_pdf,
         })
       } catch (err) {
@@ -196,6 +188,7 @@ function MissionFormPage() {
     if (!formData.country.trim())           newErrors.country           = "Le pays est obligatoire."
     if (!formData.slug.trim())              newErrors.slug              = "Le slug est obligatoire."
     if (!formData.description.trim())       newErrors.description       = "La description est obligatoire."
+    if (formData.mission_photos.length < 2) newErrors.mission_photos = "2 photos sont obligatoires (hero + illustration)."
     return newErrors
   }
 
@@ -243,22 +236,21 @@ function MissionFormPage() {
         i === 0 ? `${HOW_TO_GO_STEP1_LABEL} : ${formData.how_to_go_villes}` : fixed
       )
 
-      // Hero — champ indépendant maintenant, plus de position à deviner
-      const heroPhoto = formData.hero_photo[0]
-      const image_url = heroPhoto ? heroPhoto.file_url : ''
-      const image_alt = heroPhoto ? heroPhoto.label : ''
+      // photo : hero et section "la mission"
+      const [heroPhoto, sectionPhoto] = formData.mission_photos
 
       const payload = {
         ...formData,
-        image_url,
-        image_alt,
+        photo_hero_url:    heroPhoto ? heroPhoto.file_url : '',
+        photo_hero_alt:    heroPhoto ? heroPhoto.label : '',
+        photo_section_url: sectionPhoto ? sectionPhoto.file_url : '',
+        photo_section_alt: sectionPhoto ? sectionPhoto.label : '',
         programme: JSON.stringify(formData.programme),
         how_to_go: JSON.stringify(howToGoFull),
       }
       // Champs gérés séparément — on les retire du payload mission
       delete payload.pricing
-      delete payload.hero_photo
-      delete payload.gallery_photos
+      delete payload.mission_photos
       delete payload.guide_pdf
       delete payload.how_to_go_villes
 
@@ -277,12 +269,11 @@ function MissionFormPage() {
         await updateMissionPricing(missionId, formData.pricing)
       }
 
-      // Sauvegarde des médias (galerie + PDF)
-      const images = formData.gallery_photos.map(p => ({ file_url: p.file_url, label: p.label || null }))
+      // Sauvegarde du PDF uniquement — la galerie n'est plus gérée ici
       const pdf = formData.guide_pdf[0]
         ? { file_url: formData.guide_pdf[0].file_url, label: formData.guide_pdf[0].label || 'Guide du volontaire' }
         : null
-      await updateMissionMedia(missionId, images, pdf)
+      await updateMissionMedia(missionId, undefined, pdf)
 
       navigate('/admin/missions')
     } catch (err) {
@@ -363,35 +354,21 @@ function MissionFormPage() {
 
         </FormSection>
 
-        {/* ── BLOC 2 : Photo hero ── */}
+        {/* ── BLOC 2 : Photos ── */}
         <FormSection
-          title="Photo principale"
+          title="Photos"
+          description="2 photos obligatoires. La première est affichée en haut de la page, la seconde illustre la section « La mission ». Utilisez les flèches pour modifier leur ordre."
         >
           <AdminFileUpload
-            value={formData.hero_photo}
-            onChange={(hero_photo) => setFormData(prev => ({ ...prev, hero_photo }))}
+            value={formData.mission_photos}
+            onChange={(mission_photos) => setFormData(prev => ({ ...prev, mission_photos }))}
             accept="image/*"
-            maxFiles={1}
+            maxFiles={2}
             imageType="hero"
             showLabel={true}
-            helperText="Formats : JPG, JPEG, PNG, WEBP, AVIF, SVG. La légende décrit l’image pour l’accessibilité."
+            helperText="Formats : JPG, JPEG, PNG, WEBP, AVIF, SVG. La légende décrit l'image pour l'accessibilité."
           />
-        </FormSection>
-
-        {/* ── BLOC 2 bis : Galerie ── */}
-        <FormSection
-          title="Galerie photo"
-          description="Jusqu’à 10 photos. La première illustre la présentation de la mission, les suivantes apparaissent dans la galerie en bas de page."
-        >
-          <AdminFileUpload
-            value={formData.gallery_photos}
-            onChange={(gallery_photos) => setFormData(prev => ({ ...prev, gallery_photos }))}
-            accept="image/*"
-            maxFiles={10}
-            imageType="gallery"
-            showLabel={true}
-            helperText="Formats : JPG, JPEG, PNG, WEBP, AVIF, SVG. La légende décrit l’image pour l’accessibilité."
-          />
+          {fieldErrors.mission_photos && <span className="text-xs text-red-500">{fieldErrors.mission_photos}</span>}
         </FormSection>
 
         {/* ── BLOC 3 : Contenu ── */}
