@@ -30,8 +30,10 @@ model Mission {
   updated_at        DateTime         @updatedAt
   type              String           @default("volontariat_individuel")
   short_description String
-  image_url         String?
-  image_alt         String?
+  photo_hero_url    String?
+  photo_hero_alt    String?
+  photo_section_url String?
+  photo_section_alt String?
   how_to_go         String?
   age_min           String?   // Service Civique — âge minimum, texte libre (ex: "16 ans")
   age_max           String?   // Service Civique — âge maximum, texte libre (ex: "25 ans (30 en situation de handicap)")
@@ -146,6 +148,7 @@ model Media {
   file_type     String
   label         String?  // optionnel — utilisé pour les liens externes
   display_order Int      @default(0)
+  force_display Boolean  @default(false)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 }
