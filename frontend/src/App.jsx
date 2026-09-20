@@ -46,6 +46,7 @@ import MissionsPage from './pages/admin/MissionsPage'
 import MissionFormPage from './pages/admin/MissionFormPage'
 import ServiceCiviquePage from './pages/admin/ServiceCiviquePage'
 import ServiceCiviqueFormPage from './pages/admin/ServiceCiviqueFormPage'
+import GaleriePage from './pages/admin/GaleriePage'
 
 //  ── Pages lieux
 import LocationDetail from './pages/LocationDetail'
@@ -118,6 +119,7 @@ function App() {
           <Route path="missions" element={<MissionsPage />} />
           <Route path="missions/new" element={<MissionFormPage />} />
           <Route path="missions/:id/edit" element={<MissionFormPage />} />
+          <Route path="galerie" element={<GaleriePage />} />
           <Route path="service-civique" element={<ServiceCiviquePage />} />
           <Route path="service-civique/new" element={<ServiceCiviqueFormPage />} />
           <Route path="service-civique/:id/edit" element={<ServiceCiviqueFormPage />} />

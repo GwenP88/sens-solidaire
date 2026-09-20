@@ -16,6 +16,7 @@ import {
   FiMail,
   FiSettings,
   FiLogOut,
+  FiImage,
 } from 'react-icons/fi'
 
 // Source unique de vérité pour la nav — modifier ici seulement.
@@ -30,7 +31,7 @@ const navItems = [
     iconActive: 'text-emerald-600',
   },
   {
-    label: 'Missions individuelles',
+    label: 'Missions',
     path: '/admin/missions',
     icon: FiGlobe,
     activeClass: 'bg-emerald-50 text-emerald-700',
@@ -40,6 +41,13 @@ const navItems = [
     label: 'Service Civique',
     path: '/admin/service-civique',
     icon: FiFlag,
+    activeClass: 'bg-emerald-50 text-emerald-700',
+    iconActive: 'text-emerald-600',
+  },
+  {
+    label: 'Galerie',
+    path: '/admin/galerie',
+    icon: FiImage,
     activeClass: 'bg-emerald-50 text-emerald-700',
     iconActive: 'text-emerald-600',
   },
