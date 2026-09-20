@@ -140,7 +140,7 @@ function ServiceCiviqueFormPage() {
   }
 
   if (loading) return (
-    <p className="text-gray-400 text-sm italic p-8">Chargement de la mission...</p>
+    <p className="text-dash-legend text-sm italic p-8">Chargement de la mission...</p>
   )
 
   // ── Soumission ──
@@ -221,22 +221,22 @@ function ServiceCiviqueFormPage() {
         <div>
           <button
             onClick={() => navigate('/admin/service-civique')}
-            className="text-sm text-gray-400 hover:text-primary mb-1 flex items-center gap-1"
+            className="text-sm text-dash-legend hover:text-dash-action mb-1 flex items-center gap-1"
           >
             ← Retour au Service Civique
           </button>
-          <h1 className="font-heading font-bold text-2xl text-primary">
+          <h1 className="font-heading font-bold text-2xl text-dash-title">
             {isEditing ? 'Modifier la mission Service Civique' : 'Créer une mission Service Civique'}
           </h1>
         </div>
         {isEditing && (
-          <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-dash-legend cursor-pointer">
             <input
               type="checkbox"
               name="is_active"
               checked={formData.is_active}
               onChange={handleChange}
-              className="w-4 h-4 accent-primary"
+              className="w-4 h-4 accent-dash-success"
             />
             Mission active
           </label>
@@ -266,12 +266,12 @@ function ServiceCiviqueFormPage() {
           {/* Ligne 2 — Préposition + Pays côte à côte */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-700">Préposition</label>
+              <label className="text-sm font-medium text-dash-text">Préposition</label>
               <select
                 name="country_preposition"
                 value={formData.country_preposition}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
               >
                 <option value="au">au (ex: au Kenya)</option>
                 <option value="en">en (ex: en France)</option>
@@ -298,12 +298,12 @@ function ServiceCiviqueFormPage() {
             <label className={`text-sm font-medium ${
               formData.short_description.length >= 140 ? 'text-red-500' :
               formData.short_description.length >= 120 ? 'text-orange-500' :
-              'text-gray-700'
+              'text-dash-text'
             }`}>
               Description courte <span className="text-red-500">*</span>
               <span className="font-normal ml-1 text-xs">— {formData.short_description.length}/150 caractères</span>
             </label>
-            <p className="text-xs text-gray-400 -mt-0.5">Affichée sur la card et dans le hero de la page détail</p>
+            <p className="text-xs text-dash-legend -mt-0.5">Affichée sur la card et dans le hero de la page détail</p>
             <textarea
               name="short_description"
               value={formData.short_description}
@@ -311,7 +311,7 @@ function ServiceCiviqueFormPage() {
               maxLength={150}
               rows={3}
               className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-y font-mono ${
-                fieldErrors.short_description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-primary/30'
+                fieldErrors.short_description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
               }`}
             />
             {fieldErrors.short_description && <span className="text-xs text-red-500">{fieldErrors.short_description}</span>}
@@ -408,14 +408,14 @@ function ServiceCiviqueFormPage() {
           <button
             type="button"
             onClick={() => navigate('/admin/service-civique')}
-            className="px-5 py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            className="px-5 py-2 text-sm text-dash-legend hover:text-dash-text hover:bg-gray-100 rounded-lg transition-colors"
           >
             Annuler
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-2 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
+            className="px-6 py-2 text-sm font-medium bg-dash-action text-white rounded-lg hover:bg-dash-action/90 disabled:opacity-50 transition-colors"
           >
             {submitting
               ? 'Enregistrement...'

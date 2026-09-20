@@ -8,7 +8,7 @@
 import { useState, useEffect } from 'react'
 
 // ── Router
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 // ── API
 import { fetchMissionBySlug, fetchFieldActions } from '../services/api'
@@ -100,6 +100,22 @@ function MissionDetail() {
     { label: "Témoignages",       id: "temoignages",     show: mission.testimonials?.length > 0 },
     { label: "Galerie",           id: "galerie",         show: mission.media?.filter(m => m.file_type === 'image').length > 0 },
   ].filter(s => s.show)
+
+  // Étape 2 "Comment partir" a besoin d'un vrai lien vers /contact — les
+  // 6 autres étapes restent du texte brut simple.
+  const renderStepText = (step, i) => {
+    if (i === 1) {
+      return (
+        <>
+          Une question ? Écrivez-nous à{' '}
+          <a href="mailto:contact@sensolidaires.org" className="underline">contact@sensolidaires.org</a>
+          {' '}ou utilisez notre{' '}
+          <Link to="/contact" className="underline">formulaire de contact</Link>.
+        </>
+      )
+    }
+    return step
+  }
 
   return (
     <div className="bg-surface min-h-screen">
@@ -369,7 +385,7 @@ function MissionDetail() {
                         <Icon className="text-primary/80 text-xl" />
                       </div>
                       <p className="text-eyebrow text-primary/80 text-center">{String(i + 1).padStart(2, '0')}</p>
-                      <p className="text-caption text-primary/60 text-center leading-tight">{step}</p>
+                      <p className="text-caption text-primary/60 text-center leading-tight">{renderStepText(step, i)}</p>
                     </div>
                     {i < howToGoSteps.length - 1 && (
                       <span className="text-primary/40 text-lg mt-4 shrink-0">→</span>
@@ -391,7 +407,7 @@ function MissionDetail() {
                       <Icon className="text-primary/80 text-xl" />
                     </div>
                     <p className="text-eyebrow text-primary/80 text-center">{String(i + 1).padStart(2, '0')}</p>
-                    <p className="text-caption text-primary/60 text-center leading-tight">{step}</p>
+                    <p className="text-caption text-primary/60 text-center leading-tight">{renderStepText(step, i)}</p>
                   </div>
                   {i < howToGoSteps.length - 1 && (
                     <span className="text-primary/40 text-lg mt-4 shrink-0">→</span>

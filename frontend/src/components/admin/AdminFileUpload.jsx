@@ -16,6 +16,7 @@
 //                     dont l'ordre d'affichage public est automatique, pas manuel)
 
 import { useState } from 'react'
+import { FiChevronUp, FiChevronDown } from 'react-icons/fi'
 import { uploadAdminFile } from '../../services/api'
 
 function AdminFileUpload({
@@ -119,8 +120,8 @@ function AdminFileUpload({
               <span
                 className={
                   layout === 'grid'
-                    ? 'w-full h-32 flex items-center justify-center bg-gray-100 rounded text-xs text-gray-400'
-                    : 'w-14 h-10 flex items-center justify-center bg-gray-100 rounded shrink-0 text-xs text-gray-400'
+                    ? 'w-full h-32 flex items-center justify-center bg-gray-100 rounded text-xs text-dash-legend'
+                    : 'w-14 h-10 flex items-center justify-center bg-gray-100 rounded shrink-0 text-xs text-dash-legend'
                 }
               >
                 PDF
@@ -135,7 +136,7 @@ function AdminFileUpload({
                   onChange={e => handleLabelChange(i, e.target.value)}
                   placeholder="Légende / texte alternatif"
                   rows={2}
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-dash-text resize-none focus:outline-none focus:ring-2 focus:ring-dash-action/30"
                 />
               ) : (
                 <input
@@ -143,11 +144,11 @@ function AdminFileUpload({
                   value={item.label || ''}
                   onChange={e => handleLabelChange(i, e.target.value)}
                   placeholder={isImage ? "Légende / texte alternatif" : "Nom du document"}
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-dash-text flex-1 focus:outline-none focus:ring-2 focus:ring-dash-action/30"
                 />
               )
             ) : (
-              <span className="flex-1 text-sm text-gray-600 truncate">
+              <span className="flex-1 text-sm text-dash-legend truncate">
                 {item.original_name || 'Fichier déjà importé'}
               </span>
             )}
@@ -159,12 +160,12 @@ function AdminFileUpload({
             <div className={layout === 'grid' ? 'flex items-center justify-between' : 'contents'}>
 
               {showForceDisplay && (
-                <label className="flex items-center gap-1.5 text-xs text-gray-500 shrink-0 cursor-pointer">
+                <label className="flex items-center gap-1.5 text-xs text-dash-legend shrink-0 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={item.force_display || false}
                     onChange={() => handleForceDisplayChange(i)}
-                    className="w-4 h-4 accent-primary"
+                    className="w-4 h-4 accent-dash-success"
                   />
                   Toujours afficher
                 </label>
@@ -173,14 +174,18 @@ function AdminFileUpload({
               {allowReorder && maxFiles > 1 && (
                 <div className="flex flex-col shrink-0">
                   <button type="button" onClick={() => handleMove(i, -1)} disabled={i === 0}
-                    className="text-gray-300 hover:text-primary disabled:opacity-20 text-xs leading-none">▲</button>
+                    className="text-gray-300 hover:text-dash-action disabled:opacity-20 leading-none">
+                    <FiChevronUp size={14} />
+                  </button>
                   <button type="button" onClick={() => handleMove(i, 1)} disabled={i === value.length - 1}
-                    className="text-gray-300 hover:text-primary disabled:opacity-20 text-xs leading-none">▼</button>
+                    className="text-gray-300 hover:text-dash-action disabled:opacity-20 leading-none">
+                    <FiChevronDown size={14} />
+                  </button>
                 </div>
               )}
 
               <button type="button" onClick={() => handleRemove(i)}
-                className="text-gray-300 hover:text-red-500 text-xl shrink-0 transition-colors">×</button>
+                className="text-gray-300 hover:text-dash-danger text-xl shrink-0 transition-colors">×</button>
             </div>
           </div>
         ))}
@@ -188,7 +193,7 @@ function AdminFileUpload({
 
       {/* ── Zone de sélection ── */}
       {value.length < maxFiles && (
-        <label className="text-sm text-primary hover:text-primary/70 border border-dashed border-primary/30 rounded-lg px-4 py-2 transition-colors cursor-pointer text-center">
+        <label className="text-sm text-dash-action hover:text-dash-action/70 border border-dashed border-dash-action/30 rounded-lg px-4 py-2 transition-colors cursor-pointer text-center">
           {uploading ? 'Envoi en cours...' : '+ Ajouter un fichier'}
           <input
             type="file"
@@ -201,8 +206,8 @@ function AdminFileUpload({
         </label>
       )}
 
-      {helperText && <span className="text-xs text-gray-400">{helperText}</span>}
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {helperText && <span className="text-xs text-dash-legend">{helperText}</span>}
+      {error && <span className="text-xs text-dash-danger">{error}</span>}
 
     </div>
   )

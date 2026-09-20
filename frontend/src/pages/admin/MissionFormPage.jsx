@@ -19,9 +19,10 @@ import {
   updateMissionMedia,
 } from '../../services/api'
 
-// ── Composants admin
+// ── Composants 
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
 import { FormSection, Field, TextareaField } from '../../components/admin/FormElements'
+import AnchorNav from '../../components/navigation/AnchorNav'
 
 // ── Composants utils
 import { previewShortDescription } from '../../utils/shortDescription'
@@ -76,6 +77,17 @@ const HOW_TO_GO_FIXED = [
 ]
 
 const HOW_TO_GO_STEP1_LABEL = "Comparer et vérifier les vols"
+
+const FORM_SECTIONS = [
+  { label: "Infos",            id: "informations" },
+  { label: "Photos",           id: "photos" },
+  { label: "Présentation",     id: "presentation" },
+  { label: "Programme",        id: "programme" },
+  { label: "Tarifs",           id: "tarifs" },
+  { label: "Logistique",       id: "logistique" },
+  { label: "Comment partir",   id: "comment-partir" },
+  { label: "Infos pratiques",  id: "infos-pratiques" },
+]
 // ════════════════════════════════════════════════════════════════
 // COMPOSANT PRINCIPAL
 // ════════════════════════════════════════════════════════════════
@@ -285,7 +297,7 @@ function MissionFormPage() {
   }
 
   if (loading) return (
-    <p className="text-gray-400 text-sm italic p-8">Chargement de la mission...</p>
+    <p className="text-dash-legend text-sm italic p-8">Chargement de la mission...</p>
   )
 
   const shortDescriptionPreview = previewShortDescription(formData.description)
@@ -295,29 +307,29 @@ function MissionFormPage() {
   // ════════════════════════════════════════════════════════════════
 
   return (
-    <div className="max-w-4xl mx-auto py-10">
+    <div className="max-w-4xl mx-auto py-16">
 
       {/* ── En-tête ── */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <button
             onClick={() => navigate('/admin/missions')}
-            className="text-sm text-gray-400 hover:text-primary mb-1 flex items-center gap-1"
+            className="text-sm text-dash-legend hover:text-dash-action mb-6 flex items-center gap-1"
           >
             ← Retour aux missions
           </button>
-          <h1 className="font-heading font-bold text-2xl text-primary">
+          <h1 className="font-heading font-bold text-2xl text-dash-title">
             {isEditing ? 'Modifier la mission' : 'Créer une mission'}
           </h1>
         </div>
         {isEditing && (
-          <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-dash-legend cursor-pointer">
             <input
               type="checkbox"
               name="is_active"
               checked={formData.is_active}
               onChange={handleChange}
-              className="w-4 h-4 accent-primary"
+              className="w-4 h-4 accent-dash-success"
             />
             Mission active
           </label>
@@ -330,10 +342,13 @@ function MissionFormPage() {
         </div>
       )}
 
+      <AnchorNav sections={FORM_SECTIONS} variant="dashboard" />
+
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-10">
 
         {/* ── BLOC 1 : Informations essentielles ── */}
         <FormSection
+          id="informations"
           title="Informations essentielles"
           description="Ces informations sont affichées sur la carte de la mission et en haut de sa page détaillée."
         >
@@ -356,6 +371,7 @@ function MissionFormPage() {
 
         {/* ── BLOC 2 : Photos ── */}
         <FormSection
+          id="photos"
           title="Photos"
           description="2 photos obligatoires. La première est affichée en haut de la page, la seconde illustre la section « La mission ». Utilisez les flèches pour modifier leur ordre."
         >
@@ -373,13 +389,14 @@ function MissionFormPage() {
 
         {/* ── BLOC 3 : Contenu ── */}
         <FormSection
+          id="presentation"
           title="Présentation de la mission"
         >
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-dash-text">
               Description longue <span className="text-red-500">*</span>
             </label>
-            <p className="text-xs text-gray-400 -mt-0.5">
+            <p className="text-xs text-dash-legend -mt-0.5">
               Astuce : insère <code className="bg-gray-100 px-1 rounded">---</code> à l'endroit où tu veux que le résumé s'arrête (sinon coupé automatiquement à la fin de la dernière phrase complète).
             </p>
             <textarea
@@ -388,16 +405,16 @@ function MissionFormPage() {
               onChange={handleChange}
               rows={6}
               className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-y ${
-                fieldErrors.description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-primary/30'
+                fieldErrors.description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
               }`}
             />
             {fieldErrors.description && <span className="text-xs text-red-500">{fieldErrors.description}</span>}
             {formData.description && (
               <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="text-xs font-medium text-gray-500 mb-1">
+                <p className="text-xs font-medium text-dash-legend mb-1">
                   Aperçu de la description courte (carte + hero) — {shortDescriptionPreview.length}/150 caractères
                 </p>
-                <p className="text-sm text-gray-700 italic">{shortDescriptionPreview}</p>
+                <p className="text-sm text-dash-text italic">{shortDescriptionPreview}</p>
               </div>
             )}
           </div>
@@ -410,6 +427,7 @@ function MissionFormPage() {
 
         {/* ── BLOC 4 : Programme ── */}
         <FormSection
+          id="programme"
           title="Programme de volontariat"
           description="Colonne gauche : horaire ou jour. Colonne droite : activité."
         >
@@ -421,14 +439,14 @@ function MissionFormPage() {
                   value={step.label}
                   onChange={e => handleProgrammeChange(i, 'label', e.target.value)}
                   placeholder="8h00"
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-28 shrink-0 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-28 shrink-0 focus:outline-none focus:ring-2 focus:ring-dash-action/30"
                 />
                 <input
                   type="text"
                   value={step.content}
                   onChange={e => handleProgrammeChange(i, 'content', e.target.value)}
                   placeholder="Description de l'activité"
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-dash-action/30"
                 />
                 <button type="button" onClick={() => removeProgrammeLine(i)}
                   className="text-gray-300 hover:text-red-500 text-xl shrink-0 transition-colors">×</button>
@@ -436,13 +454,14 @@ function MissionFormPage() {
             ))}
           </div>
           <button type="button" onClick={addProgrammeLine}
-            className="text-sm text-primary hover:text-primary/70 border border-dashed border-primary/30 rounded-lg px-4 py-2 transition-colors">
+            className="text-sm text-dash-action hover:text-dash-action/70 border border-dashed border-dash-action/30 rounded-lg px-4 py-2 transition-colors">
             + Ajouter une ligne
           </button>
         </FormSection>
 
         {/* ── BLOC 5 : Tarifs & durées ── */}
         <FormSection
+          id="tarifs"
           title="Durées et tarifs"
           description="Colonne gauche : durée. Colonne droite : prix en €."
         >
@@ -454,7 +473,7 @@ function MissionFormPage() {
                   value={line.duration_label}
                   onChange={e => handlePricingChange(i, 'duration_label', e.target.value)}
                   placeholder="10 jours"
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-dash-action/30"
                 />
                 <input
                   type="number"
@@ -462,22 +481,23 @@ function MissionFormPage() {
                   onChange={e => handlePricingChange(i, 'price', e.target.value)}
                   placeholder="1175"
                   min="0"
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-28 shrink-0 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-28 shrink-0 focus:outline-none focus:ring-2 focus:ring-dash-action/30"
                 />
-                <span className="text-sm text-gray-400 shrink-0">€</span>
+                <span className="text-sm text-dash-legend shrink-0">€</span>
                 <button type="button" onClick={() => removePricingLine(i)}
                   className="text-gray-300 hover:text-red-500 text-xl shrink-0 transition-colors">×</button>
               </div>
             ))}
           </div>
           <button type="button" onClick={addPricingLine}
-            className="text-sm text-primary hover:text-primary/70 border border-dashed border-primary/30 rounded-lg px-4 py-2 transition-colors">
+            className="text-sm text-dash-action hover:text-dash-action/70 border border-dashed border-dash-action/30 rounded-lg px-4 py-2 transition-colors">
             + Ajouter une durée
           </button>
         </FormSection>
 
         {/* ── BLOC 6 : Logistique ── */}
         <FormSection
+          id="logistique"
           title="Inclus / non inclus"
           description="Un élément par ligne. Chaque ligne sera affichée sous forme de puce."
         >
@@ -500,6 +520,7 @@ function MissionFormPage() {
 
         {/* ── BLOC 7 : Comment partir ── */}
         <FormSection
+          id="comment-partir"
           title="Comment partir ?"
           description="Seule la première étape est à renseigner. Les suivantes sont identiques pour toutes les missions."
         >
@@ -507,16 +528,16 @@ function MissionFormPage() {
 
             {/* Étape 1 — modifiable */}
             <div className="flex items-start gap-3">
-              <span className="text-xs font-bold text-gray-400 w-6 shrink-0 text-center mt-2.5">01</span>
+              <span className="text-xs font-bold text-dash-legend w-6 shrink-0 text-center mt-2.5">01</span>
               <div className="flex flex-col gap-1 flex-1">
-                <p className="text-sm text-gray-500 font-medium">Comparer / Vérifier les vols</p>
+                <p className="text-sm text-dash-legend font-medium">Comparer / Vérifier les vols</p>
                 <input
                   type="text"
                   name="how_to_go_villes"
                   value={formData.how_to_go_villes}
                   onChange={handleChange}
                   placeholder="ex: Paris › Nairobi ou Paris › Mombasa"
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
                 />
               </div>
             </div>
@@ -524,10 +545,10 @@ function MissionFormPage() {
             {/* Étapes 2-7 — fixes, affichées en lecture seule */}
             {HOW_TO_GO_FIXED.slice(1).map((texte, i) => (
               <div key={i} className="flex items-center gap-3 opacity-40">
-                <span className="text-xs font-bold text-gray-400 w-6 shrink-0 text-center">
+                <span className="text-xs font-bold text-dash-legend w-6 shrink-0 text-center">
                   {String(i + 2).padStart(2, '0')}
                 </span>
-                <p className="text-sm text-gray-500 flex-1">{texte}</p>
+                <p className="text-sm text-dash-legend flex-1">{texte}</p>
                 <span className="text-xs text-gray-300 shrink-0 italic">fixe</span>
               </div>
             ))}
@@ -537,6 +558,7 @@ function MissionFormPage() {
 
         {/* ── BLOC 8 : Infos pratiques ── */}
         <FormSection
+          id="infos-pratiques"
           title="Préparer votre départ"
           description="Informations utiles pour préparer le départ : santé, formalités et documents."
         >
@@ -556,7 +578,7 @@ function MissionFormPage() {
             hint="Lien vers les conseils aux voyageurs du ministère pour le pays concerné.s"
           />
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Guide du volontaire (PDF)</label>
+            <label className="text-sm font-medium text-dash-text">Guide du volontaire (PDF)</label>
             <AdminFileUpload
               value={formData.guide_pdf}
               onChange={(guide_pdf) => setFormData(prev => ({ ...prev, guide_pdf }))}
@@ -568,18 +590,18 @@ function MissionFormPage() {
         </FormSection>
 
         {/* ── Actions — barre collante en bas de l'écran, toujours accessible sans scroller ── */}
-        <div className="sticky bottom-0 -mx-6 px-6 py-4 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] flex items-center justify-between">
+        <div className="fixed bottom-0 left-0 right-0 md:left-64 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] px-6 py-4 flex items-center justify-between z-10">
           <button
             type="button"
             onClick={() => navigate('/admin/missions')}
-            className="px-5 py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            className="px-5 py-2 text-sm text-dash-legend hover:text-dash-text hover:bg-gray-100 rounded-lg transition-colors"
           >
             Annuler
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-2 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
+            className="px-6 py-2 text-sm font-medium bg-dash-action text-white rounded-lg hover:bg-dash-action/90 disabled:opacity-50 transition-colors"
           >
             {submitting
               ? 'Enregistrement...'

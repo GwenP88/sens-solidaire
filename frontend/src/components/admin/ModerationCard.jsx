@@ -22,18 +22,18 @@ function ModerationCard({ testimonial, onApprove, onReject }) {
 
         <div className="flex-1">
           <p className="font-semibold">{testimonial.author_name}</p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-dash-legend">
             {testimonial.mission?.title} — {testimonial.mission?.country}
           </p>
         </div>
 
-        <time className="text-xs text-gray-400">
+        <time className="text-xs text-dash-legend">
           {new Date(testimonial.created_at).toLocaleDateString("fr-FR")}
         </time>
       </div>
 
       {/* ── Le témoignage ── */}
-      <p className="text-gray-700 italic">"{testimonial.content}"</p>
+      <p className="text-dash-text italic">"{testimonial.content}"</p>
 
       {/* ── Actions ── */}
       <div className="flex items-center gap-2">

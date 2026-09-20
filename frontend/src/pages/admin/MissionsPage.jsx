@@ -39,8 +39,8 @@ const COLUMNS = [
     render: (row) => (
       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
         row.is_active
-          ? 'bg-green-100 text-green-700'
-          : 'bg-gray-100 text-gray-500'
+          ? 'bg-dash-success/10 text-dash-success'
+          : 'bg-dash-warning/10 text-dash-warning'
       }`}>
         {row.is_active ? 'Active' : 'Inactive'}
       </span>
@@ -164,7 +164,7 @@ const confirmHardDelete = async () => {
   // ── États de chargement / erreur ────────────────────────────
 
   if (loading) return (
-    <p className="text-gray-400 text-sm italic">Chargement des missions...</p>
+    <p className="text-dash-legend text-sm italic">Chargement des missions...</p>
   )
 
   if (error) return (
@@ -179,12 +179,12 @@ const confirmHardDelete = async () => {
 
       {/* ── En-tête ── */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-heading font-bold text-2xl text-gray-900">
+        <h1 className="font-heading font-bold text-2xl text-dash-title">
           Missions
         </h1>
         <button
           onClick={handleCreate}
-          className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary/90 transition-colors"
+          className="px-4 py-2 bg-dash-action text-white text-sm rounded-lg hover:bg-dash-action/90 transition-colors"
         >
           + Ajouter une mission
         </button>

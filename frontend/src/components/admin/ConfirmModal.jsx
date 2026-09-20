@@ -5,12 +5,16 @@
 
 const VARIANT_STYLES = {
   danger: {
-    title: 'text-red-600',
-    button: 'bg-red-600 hover:bg-red-700',
+    title: 'text-dash-danger',
+    button: 'bg-dash-danger hover:bg-dash-danger/90',
   },
-  default: {
-    title: 'text-green-600',
-    button: 'bg-green-600 hover:bg-green-700',
+  warning: {
+    title: 'text-dash-warning',
+    button: 'bg-dash-warning hover:bg-dash-warning/90',
+  },
+  success: {
+    title: 'text-dash-success',
+    button: 'bg-dash-success hover:bg-dash-success/90',
   },
 }
 
@@ -23,13 +27,13 @@ function ConfirmModal({ title, message, confirmLabel = 'Confirmer', onConfirm, o
         <h2 className={`font-heading font-bold text-lg text-center mb-6 ${styles.title}`}>
           {title}
         </h2>
-        <p className="text-sm text-gray-600 mb-6 whitespace-pre-line">
+        <p className="text-sm text-dash-legend mb-6 whitespace-pre-line">
           {message}
         </p>
         <div className="flex justify-end gap-2">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+            className="px-4 py-2 text-sm text-dash-legend hover:bg-gray-100 rounded-lg"
           >
             Annuler
           </button>

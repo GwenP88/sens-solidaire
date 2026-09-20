@@ -27,85 +27,85 @@ const navItems = [
     path: '/admin',
     end: true, // évite que ce lien reste actif sur /admin/missions etc.
     icon: FiHome,
-    activeClass: 'bg-emerald-50 text-emerald-700',
-    iconActive: 'text-emerald-600',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Missions',
     path: '/admin/missions',
     icon: FiGlobe,
-    activeClass: 'bg-emerald-50 text-emerald-700',
-    iconActive: 'text-emerald-600',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Service Civique',
     path: '/admin/service-civique',
     icon: FiFlag,
-    activeClass: 'bg-emerald-50 text-emerald-700',
-    iconActive: 'text-emerald-600',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Galerie',
     path: '/admin/galerie',
     icon: FiImage,
-    activeClass: 'bg-emerald-50 text-emerald-700',
-    iconActive: 'text-emerald-600',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Témoignages',
     path: '/admin/temoignages',
     icon: FiMessageCircle,
-    activeClass: 'bg-blue-50 text-blue-700',
-    iconActive: 'text-blue-600',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Actions éducatives',
     path: '/admin/ateliers',
     icon: FiBookOpen,
-    activeClass: 'bg-indigo-50 text-indigo-800',
-    iconActive: 'text-indigo-800',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Médias & actualités',
     path: '/admin/medias',
     icon: FiFileText,
-    activeClass: 'bg-orange-50 text-orange-700',
-    iconActive: 'text-orange-600',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'À propos',
     path: '/admin/a-propos',
     icon: FiUsers,
-    activeClass: 'bg-purple-50 text-purple-700',
-    iconActive: 'text-purple-600',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Projets réalisés',
     path: '/admin/actions-terrain', // chemin conservé du cahier des charges
     icon: FiMapPin,
-    activeClass: 'bg-violet-50 text-violet-700',
-    iconActive: 'text-violet-600',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Soutenir',
-    path: '/admin/soutenir', // 👀 à confirmer — pas dans le tableau d'origine
+    path: '/admin/soutenir', // à confirmer — pas dans le tableau d'origine
     icon: FiHeart,
-    activeClass: 'bg-red-50 text-red-700',
-    iconActive: 'text-red-500',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Contact',
     path: '/admin/contact',
     icon: FiMail,
-    activeClass: 'bg-teal-50 text-teal-700',
-    iconActive: 'text-teal-600',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
   {
     label: 'Paramètres',
     path: '/admin/parametres',
     icon: FiSettings,
-    activeClass: 'bg-gray-100 text-gray-700',
-    iconActive: 'text-gray-500',
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
   },
 ]
 
@@ -114,8 +114,8 @@ function DashboardSidebar({ onLogout }) {
     <aside className="hidden md:flex w-64 h-screen bg-white border-r border-gray-200 flex-col fixed left-0 top-0 z-20">
 
       <div className="flex items-center gap-2 px-6 py-6">
-        <span className="text-2xl">🌍</span>
-        <span className="font-heading font-bold text-lg text-gray-900">
+        <img src="/logo.png" alt="Sens Solidaires" className="h-12" />
+        <span className="font-heading font-bold text-lg text-dash-title">
           Sens Solidaires
         </span>
       </div>
@@ -128,13 +128,13 @@ function DashboardSidebar({ onLogout }) {
             end={end}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                isActive ? activeClass : 'text-gray-600 hover:bg-gray-50'
+                isActive ? activeClass : 'text-dash-legend hover:bg-gray-50'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <Icon size={18} className={isActive ? iconActive : 'text-gray-400'} />
+                <Icon size={18} className={isActive ? iconActive : 'text-dash-legend'} />
                 <span>{label}</span>
               </>
             )}
@@ -144,7 +144,7 @@ function DashboardSidebar({ onLogout }) {
 
       <button
         onClick={onLogout}
-        className="flex items-center gap-3 px-3 py-2.5 mx-3 mb-6 rounded-lg text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+        className="flex items-center gap-3 px-3 py-2.5 mx-3 mb-6 rounded-lg text-sm font-medium text-dash-legend hover:bg-dash-danger/10 hover:text-dash-danger transition-colors"
       >
         <FiLogOut size={18} />
         <span>Déconnexion</span>

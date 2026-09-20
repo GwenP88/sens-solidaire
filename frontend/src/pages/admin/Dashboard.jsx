@@ -63,7 +63,7 @@ function Dashboard() {
 
   // Cas 1 : en cours de chargement
   if (loading) {
-    return <div className="p-12 font-body text-primary">Chargement...</div>
+    return <div className="p-12 font-body text-dash-title">Chargement...</div>
   }
 
   // Cas 2 : une erreur s'est produite
@@ -73,7 +73,7 @@ function Dashboard() {
 
    // Cas 3 : données chargées → on affiche
   return (
-    <div className="p-12 font-body text-primary">
+    <div className="p-12 font-body text-dash-title">
       <h1 className="font-heading font-bold text-2xl mb-4">Dashboard admin</h1>
       <p className="mb-6">Témoignages à modérer : {testimonials.length}</p>
 

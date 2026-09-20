@@ -85,16 +85,16 @@ function GaleriePage() {
 
   return (
     <div className="max-w-4xl mx-auto py-10">
-      <h1 className="font-heading font-bold text-2xl text-primary mb-8">Galerie photo</h1>
+      <h1 className="font-heading font-bold text-2xl text-dash-title mb-8">Galerie photo</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
 
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-700">Domaine</label>
+          <label className="text-sm font-medium text-dash-text">Domaine</label>
           <select
             value={domaine}
             onChange={e => setDomaine(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
           >
             {DOMAINES.map(d => (
               <option key={d.value} value={d.value} disabled={d.disabled}>
@@ -105,11 +105,11 @@ function GaleriePage() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-700">Type de mission</label>
+          <label className="text-sm font-medium text-dash-text">Type de mission</label>
           <select
             value={type}
             onChange={e => setType(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
           >
             {TYPES.map(t => (
               <option key={t.value} value={t.value} disabled={t.disabled}>
@@ -120,12 +120,12 @@ function GaleriePage() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-700">Pays</label>
+          <label className="text-sm font-medium text-dash-text">Pays</label>
           <select
             value={selectedMissionId}
             onChange={e => setSelectedMissionId(e.target.value)}
             disabled={loading || missions.length === 0}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
           >
             <option value="">{loading ? 'Chargement...' : 'Choisir un pays'}</option>
             {missions.map(m => (
@@ -140,7 +140,7 @@ function GaleriePage() {
         <div className="flex flex-col gap-4">
 
           {loadingGallery ? (
-            <p className="text-gray-400 text-sm italic">Chargement de la galerie...</p>
+            <p className="text-dash-legend text-sm italic">Chargement de la galerie...</p>
           ) : (
             <>
               <AdminFileUpload
@@ -157,7 +157,7 @@ function GaleriePage() {
               />
 
               {saveMessage && (
-                <p className={`text-sm ${saveMessage.type === 'error' ? 'text-red-500' : 'text-emerald-600'}`}>
+                <p className={`text-sm ${saveMessage.type === 'error' ? 'text-dash-danger' : 'text-dash-success'}`}>
                   {saveMessage.text}
                 </p>
               )}
@@ -165,7 +165,7 @@ function GaleriePage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="self-start px-6 py-2 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                className="self-start px-6 py-2 text-sm font-medium bg-dash-editorial text-white rounded-lg hover:bg-dash-editorial/90 disabled:opacity-50 transition-colors"
               >
                 {saving ? 'Enregistrement...' : 'Enregistrer la galerie'}
               </button>

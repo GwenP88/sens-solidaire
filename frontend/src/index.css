@@ -27,6 +27,15 @@
   --color-surface-mid:  #e8dfd1;
   --color-surface-dark: #d9cbb8;
 
+  --color-dash-action:    #2563EB;  /* Action principale / navigation */
+  --color-dash-editorial: #7C3AED;  /* Médias / contenu éditorial */
+  --color-dash-success:   #14B8A6;  /* Actif / publié / succès */
+  --color-dash-warning:   #F97316;  /* Attention / temporaire */
+  --color-dash-danger:    #DC2626;  /* Danger / erreur */
+  --color-dash-title:  #111827;  /* Titres, gray-900 */
+  --color-dash-text:   #374151;  /* Texte courant, labels — gray-700 */
+  --color-dash-legend: #4B5563;  /* Texte secondaire, aide, légendes — gray-600 (accessible, contrairement à gray-400) */
+
   /* Palette 3 — Bleu marine / Terracotta / Lagon (non active)
   --color-primary:      #1A3A4A;
   --color-accent:       #A44A2F;
