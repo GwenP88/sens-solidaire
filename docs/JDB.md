@@ -2496,4 +2496,32 @@ Plusieurs cards se fondaient dans leur fond de section (même couleur `bg-surfac
 
 ---
 
+### 20 septembre 2026 — Refonte complète de la galerie (#124-127)
+
+**Migration BDD :**
+- Renommage `image_url`/`image_alt` → `photo_hero_url`/`photo_hero_alt` sur `Mission`, ajout de `photo_section_url`/`photo_section_alt` (nouvelle photo dédiée à la section "La mission", plus liée à la galerie) et `force_display` sur `Media`
+- **Problème** : `prisma migrate dev` refusé (`P3014`, permission denied to create database) — conséquence directe de la séparation des droits PostgreSQL faite par Alison (`sensolidaire_owner` n'a volontairement pas le droit `CREATEDB`, nécessaire à la shadow database de Prisma). **Solution** : migration écrite en SQL brut (`ALTER TABLE ... RENAME COLUMN`, jamais de perte de données) + `prisma migrate deploy` (n'a pas besoin de shadow database). Vérifié après coup : les 6 missions ont bien conservé leurs photos hero
+
+**Backend — `MissionFormPage` simplifié :**
+- `missionController.js` + `missionService.js` : champs renommés partout (create + update)
+- `MissionDetail.jsx`, `Missions.jsx`, `ServiceCiviqueDetail.jsx`, `ServiceCiviqueFormPage.jsx` : mis à jour pour lire les nouveaux noms de champs (Service Civique non restructuré, juste renommé — reste hors scope pour l'instant)
+- **Bug détecté avant qu'il ne cause de dégâts** : `updateMissionMedia` effaçait toute la galerie à chaque sauvegarde du formulaire mission (même pour un simple changement de titre), `images` avait une valeur par défaut `[]`. Rendu vraiment optionnel (`undefined` = ne touche à rien), pareil pour `pdf`
+
+**Nouvelle page dashboard "Galerie" :**
+- 3 sélecteurs en cascade (Domaine → Type → Pays), Service Civique/Groupe jeunes/Congé solidaire/Éducation visibles mais désactivés ("bientôt disponible") — prêt pour l'extension future sans reconstruction
+- `AdminFileUpload.jsx` étendu : `layout` (list/grid), `allowReorder`, `showForceDisplay` — toutes avec des valeurs par défaut identiques à avant, aucune régression sur les usages existants (2 photos mission, PDF)
+- Légende en `textarea` (2 lignes) plutôt qu'`input` en mode grille, sur demande
+
+**Tri automatique par date — 2 bugs trouvés et corrigés en cours de route :**
+- `upsertMedia` (vide + recrée tout à chaque sauvegarde) aurait remis à zéro le `created_at` de toutes les anciennes photos à chaque édition de galerie, rendant le tri "plus récentes" absurde après 2-3 sauvegardes. **Solution** : nouvelle fonction `syncGalleryImages` qui compare l'existant à l'envoyé — met à jour label/force_display sans toucher `created_at`, ne crée que les vraies nouveautés
+- Photo la plus récente absente du carrousel public malgré un backend qui la renvoyait bien en premier (vérifié via `curl` direct sur l'API, hors cache navigateur) → un `.slice(1)` oublié dans `MissionDetail.jsx` (hérité de l'ancien système où la 1ère photo galerie doublait aussi comme illustration "La mission") sautait systématiquement la plus récente. Retiré, n'avait plus lieu d'être depuis que "La mission" a son propre champ dédié
+
+**Logique de sélection publique (`findBySlug`)** : photos "forcées" + complétées par les plus récentes (triées par `created_at desc`), plafonné à 10 — implémentée et vérifiée en base + via l'API directement
+
+**Décision notée pour plus tard (#128)** : fusionner l'onglet sidebar "Service Civique" dans "Missions" (renommé), avec filtres type/pays/actif — techniquement peu coûteux, le backend renvoie déjà tous les types sans filtre
+
+**Discussion, pas retenue** : modale de confirmation à la suppression d'une photo dans la galerie — jugée pas nécessaire pour l'instant, la suppression n'est effective qu'à l'enregistrement, pas au clic sur ×
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
