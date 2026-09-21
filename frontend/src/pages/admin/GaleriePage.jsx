@@ -2,9 +2,10 @@
 // GaleriePage.jsx
 // Gestion centralisée des galeries photo — dashboard admin.
 // 3 sélecteurs en cascade : Domaine → Type → Pays.
-// Pour l'instant : seul Domaine=Missions / Type=Volontariat individuel
-// est actif — les autres options existent dans l'interface mais sont
-// désactivées, prêtes pour une extension future (#124-128).
+// "Pays" propose aussi "Tous les pays" — vue combinée en lecture/gestion
+// seule (case "Toujours afficher" + suppression), pas d'upload possible
+// dans ce mode (impossible de savoir à quelle mission rattacher une
+// nouvelle photo sans avoir choisi un pays précis).
 // ════════════════════════════════════════════════════════════════
 
 import { useState, useEffect } from 'react'
@@ -18,7 +19,7 @@ const DOMAINES = [
 
 const TYPES = [
   { value: 'volontariat_individuel', label: 'Volontariat individuel' },
-  { value: 'service_civique', label: 'Service Civique', disabled: true },
+  { value: 'service_civique', label: 'Service Civique' },
   { value: 'groupe_jeunes', label: 'Groupe jeunes', disabled: true },
   { value: 'conge_solidaire', label: 'Congé solidaire', disabled: true },
 ]
@@ -29,26 +30,34 @@ function GaleriePage() {
   const [missions, setMissions] = useState([])
   const [selectedMissionId, setSelectedMissionId] = useState('')
   const [loading, setLoading] = useState(true)
+
+  // ── Mode "un seul pays" ──
   const [galleryPhotos, setGalleryPhotos] = useState([])
   const [loadingGallery, setLoadingGallery] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState(null)
+
+  // ── Mode "Tous les pays" ──
+  const [allPhotos, setAllPhotos] = useState([]) // [{ ...media, country, missionId }]
+  const [loadingAll, setLoadingAll] = useState(false)
+
+  const isAllCountries = selectedMissionId === 'all'
 
   // Charge toutes les missions du type sélectionné, pour peupler le sélecteur pays
   useEffect(() => {
     setLoading(true)
     fetchAdminMissions()
       .then(data => {
-        setMissions(data.filter(m => m.type === type))
+        setMissions(data.filter(m => m.type === type && !m.slug.startsWith('ancre-')))
         setSelectedMissionId('')
       })
       .catch(() => setMissions([]))
       .finally(() => setLoading(false))
   }, [type])
 
-  // Charge la galerie existante dès qu'une mission est sélectionnée
+  // Mode "un seul pays" — charge la galerie de la mission choisie
   useEffect(() => {
-    if (!selectedMissionId) {
+    if (!selectedMissionId || isAllCountries) {
       setGalleryPhotos([])
       return
     }
@@ -65,6 +74,33 @@ function GaleriePage() {
       .finally(() => setLoadingGallery(false))
   }, [selectedMissionId])
 
+  // Mode "Tous les pays" — charge et combine la galerie de toutes les missions du type
+  useEffect(() => {
+    if (!isAllCountries) {
+      setAllPhotos([])
+      return
+    }
+    setLoadingAll(true)
+    Promise.all(missions.map(m => fetchAdminMissionById(m.id)))
+      .then(fullMissions => {
+        const combined = fullMissions.flatMap(mission =>
+          (mission.media || [])
+            .filter(m => m.file_type === 'image')
+            .map(m => ({
+              file_url: m.file_url,
+              label: m.label || '',
+              force_display: m.force_display || false,
+              country: mission.country,
+              missionId: mission.id,
+            }))
+        )
+        setAllPhotos(combined)
+      })
+      .catch(() => setAllPhotos([]))
+      .finally(() => setLoadingAll(false))
+  }, [selectedMissionId, missions])
+
+  // ── Mode "un seul pays" — enregistrement groupé (bouton) ──
   const handleSave = async () => {
     setSaving(true)
     setSaveMessage(null)
@@ -83,9 +119,49 @@ function GaleriePage() {
     }
   }
 
+  // ── Mode "Tous les pays" — chaque action s'enregistre immédiatement,
+  //    sur la mission d'origine de la photo concernée uniquement ──
+  const saveOnePhotoChange = async (missionId, updatedPhotosForThisMission) => {
+    const images = updatedPhotosForThisMission.map(p => ({
+      file_url: p.file_url,
+      label: p.label || null,
+      force_display: p.force_display || false,
+    }))
+    await updateMissionMedia(missionId, images)
+  }
+
+  const handleToggleForceDisplay = async (photo) => {
+    const updated = allPhotos.map(p =>
+      p.file_url === photo.file_url ? { ...p, force_display: !p.force_display } : p
+    )
+    setAllPhotos(updated)
+
+    const thisMissionPhotos = updated.filter(p => p.missionId === photo.missionId)
+    try {
+      await saveOnePhotoChange(photo.missionId, thisMissionPhotos)
+    } catch (err) {
+      alert("Échec de l'enregistrement. Réessaie.")
+    }
+  }
+
+  const handleDeletePhoto = async (photo) => {
+    const confirmed = window.confirm(`Supprimer cette photo de la galerie ${photo.country} ?`)
+    if (!confirmed) return
+
+    const updated = allPhotos.filter(p => p.file_url !== photo.file_url)
+    setAllPhotos(updated)
+
+    const thisMissionPhotos = updated.filter(p => p.missionId === photo.missionId)
+    try {
+      await saveOnePhotoChange(photo.missionId, thisMissionPhotos)
+    } catch (err) {
+      alert("Échec de la suppression. Réessaie.")
+    }
+  }
+
   return (
     <div className="max-w-4xl mx-auto py-10">
-      <h1 className="font-heading font-bold text-2xl text-dash-title mb-8">Galerie photo</h1>
+      <h1 className="font-heading font-bold text-2xl text-dash-title mb-8">Galeries photos</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
 
@@ -128,6 +204,7 @@ function GaleriePage() {
             className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
           >
             <option value="">{loading ? 'Chargement...' : 'Choisir un pays'}</option>
+            {missions.length > 1 && <option value="all">Tous les pays</option>}
             {missions.map(m => (
               <option key={m.id} value={m.id}>{m.country}</option>
             ))}
@@ -136,9 +213,9 @@ function GaleriePage() {
 
       </div>
 
-      {selectedMissionId && (
+      {/* ── Mode "un seul pays" ── */}
+      {selectedMissionId && !isAllCountries && (
         <div className="flex flex-col gap-4">
-
           {loadingGallery ? (
             <p className="text-dash-legend text-sm italic">Chargement de la galerie...</p>
           ) : (
@@ -153,15 +230,13 @@ function GaleriePage() {
                 showForceDisplay={true}
                 layout="grid"
                 allowReorder={false}
-                helperText="Formats : JPG, JPEG, PNG, WEBP, AVIF, SVG. Cochez « Toujours afficher » pour conserver une photo dans la galerie. Sinon, les 10 photos les plus récentes sont affichées automatiquement."
+                helperText="Formats : JPG, JPEG, PNG, WEBP, AVIF, SVG. Cochez « Toujours afficher » pour qu’une photo reste visible sur le site. Sinon, les 10 photos les plus récentes sont affichées automatiquement."
               />
-
               {saveMessage && (
                 <p className={`text-sm ${saveMessage.type === 'error' ? 'text-dash-danger' : 'text-dash-success'}`}>
                   {saveMessage.text}
                 </p>
               )}
-
               <button
                 onClick={handleSave}
                 disabled={saving}
@@ -171,7 +246,47 @@ function GaleriePage() {
               </button>
             </>
           )}
+        </div>
+      )}
 
+      {/* ── Mode "Tous les pays" — consultation/gestion, pas d'upload ── */}
+      {isAllCountries && (
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-dash-legend italic">
+            Les photos de tous les pays sont affichées ici. Pour ajouter une photo, sélectionnez d'abord un pays.
+          </p>
+          {loadingAll ? (
+            <p className="text-dash-legend text-sm italic">Chargement...</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {allPhotos.map((photo, i) => (
+                <div key={photo.file_url} className="flex flex-col gap-2 border border-gray-200 rounded-lg p-3">
+                  <img src={photo.file_url} alt="" className="w-full h-32 object-cover rounded" />
+                  <span className="text-sm text-dash-text truncate">{photo.label || 'Sans légende'}</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <label className="flex items-center gap-1.5 text-xs text-dash-legend cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={photo.force_display}
+                        onChange={() => handleToggleForceDisplay(photo)}
+                        className="w-4 h-4 accent-dash-success"
+                      />
+                      Toujours afficher
+                    </label>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-dash-editorial/10 text-dash-editorial whitespace-nowrap">
+                      {photo.country}
+                    </span>
+                    <button
+                      onClick={() => handleDeletePhoto(photo)}
+                      className="text-gray-300 hover:text-dash-danger text-xl shrink-0"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
