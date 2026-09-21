@@ -33,13 +33,14 @@ function MissionSteps({ title = 'Comment ça fonctionne ?', steps, bgCard = 'bg-
                 {step.description}
               </p>
 
-              {/* Liste de points */}
-              <ul className="flex flex-col gap-xs">
-                {step.list.map(item => (
-                  <li key={item} className="text-body text-primary/60">- {item}</li>
-                ))}
-              </ul>
-
+              {/* Liste de points — optionnelle */}
+              {step.list && (
+                <ul className="flex flex-col gap-xs">
+                  {step.list.map(item => (
+                    <li key={item} className="text-body text-primary/60">- {item}</li>
+                  ))}
+                </ul>
+              )} 
             </div>
           )
         })}

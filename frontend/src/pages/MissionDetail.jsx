@@ -89,7 +89,11 @@ function MissionDetail() {
   // Récupère le PDF guide du volontaire depuis les médias de la mission
   const guidePdf = mission.media?.find(m => m.file_type === 'pdf')
 
-  const anchorSections = [
+  // Source unique — sert à la fois à la nav d'ancres et à la couleur de fond
+  // de chaque section. fixedBg = couleur volontairement figée (témoignages,
+  // mise en avant), mais la section compte quand même dans le rythme
+  // d'alternance des sections voisines.
+  const SECTIONS = [
     { label: "La mission",        id: "description",     show: !!mission.description },
     { label: "Rôle & Programme",  id: "role-programme",  show: !!mission.volunteer_role || programmeSteps.length > 0 },
     { label: "Lieux partenaires", id: "lieux",           show: mission.locations?.length > 0 },
@@ -97,9 +101,22 @@ function MissionDetail() {
     { label: "Coût & durée",      id: "cout",            show: mission.pricing?.length > 0 },
     { label: "Comment partir",    id: "comment-partir",  show: howToGoSteps.length > 0 },
     { label: "Infos pratiques",   id: "infos-pratiques", show: !!mission.health_info || !!mission.admin_info },
-    { label: "Témoignages",       id: "temoignages",     show: mission.testimonials?.length > 0 },
+    { label: "Témoignages",       id: "temoignages",     show: mission.testimonials?.length > 0, fixedBg: 'bg-accent-2' },
     { label: "Galerie",           id: "galerie",         show: mission.media?.filter(m => m.file_type === 'image').length > 0 },
-  ].filter(s => s.show)
+  ]
+
+  const anchorSections = SECTIONS.filter(s => s.show)
+
+  // Alterne bg-surface / bg-surface-mid uniquement parmi les sections
+  // visibles — évite que 2 sections adjacentes affichées se retrouvent
+  // avec la même couleur quand une section intermédiaire est masquée.
+  const sectionBg = {}
+  let toggle = false
+  SECTIONS.forEach(s => {
+    if (!s.show) return
+    sectionBg[s.id] = s.fixedBg || (toggle ? 'bg-surface' : 'bg-surface-mid')
+    toggle = !toggle
+  })
 
   // Étape 2 "Comment partir" a besoin d'un vrai lien vers /contact — les
   // 6 autres étapes restent du texte brut simple.
@@ -133,7 +150,7 @@ function MissionDetail() {
 
       {/* ── Description ── */}
       {mission.description && (
-        <section id="description" className="padding-y padding-x bg-surface-mid">
+        <section id="description" className={`padding-y padding-x ${sectionBg['description']}`}>
           <h2 className="h2-style text-primary">{mission.title}</h2>
           <div className="flex flex-col lg:flex-row gap-lg items-start">
             <div className="flex flex-col gap-md w-full lg:w-2/3">
@@ -156,7 +173,7 @@ function MissionDetail() {
 
       {/* ── Rôle du volontaire + Programme ── */}
       {(mission.volunteer_role || programmeSteps.length > 0) && (
-        <section id="role-programme" className="padding-y padding-x bg-surface">
+        <section id="role-programme" className={`padding-y padding-x ${sectionBg['role-programme']}`}>
           <div className="flex flex-col lg:flex-row gap-lg items-start">
 
             {/* ── Rôle du volontaire ── */}
@@ -202,7 +219,7 @@ function MissionDetail() {
 
       {/* ── Lieux partenaires ── */}
       {mission.locations?.length > 0 && (
-        <section id="lieux" className="padding-y padding-x bg-surface-mid">
+        <section id="lieux" className={`padding-y padding-x ${sectionBg['lieux']}`}>
           <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-sm mb-6">
             <div>
               <h2 className="h2-style text-primary">Nos lieux partenaires</h2>
@@ -222,7 +239,7 @@ function MissionDetail() {
 
       {/* ── Impact terrain — masquée si aucune action ── */}
       {actions.length > 0 && (
-      <section id="impact" className="padding-y padding-x bg-surface">
+      <section id="impact" className={`padding-y padding-x ${sectionBg['impact']}`}>
         <div className="flex flex-col xl:flex-row items-start justify-between gap-sm mb-8">
           <div className="flex flex-col gap-xs max-w-4xl">
             <h2 className="h2-style text-primary">Votre impact sur le terrain</h2>
@@ -255,7 +272,7 @@ function MissionDetail() {
 
       {/* ── Coût & durée ── */}
       {mission.pricing?.length > 0 && (
-        <section id="cout" className="padding-y padding-x bg-surface-mid">
+        <section id="cout" className={`padding-y padding-x ${sectionBg['cout']}`}>
           <h2 className="h2-style text-primary">Durée du séjour & participation</h2>
           <p className="text-body text-primary/60 mb-8">
             Choisissez la durée de séjour qui correspond le mieux à vos disponibilités et à votre projet d'engagement.
@@ -366,7 +383,7 @@ function MissionDetail() {
 
       {/* ── Comment partir — 7 étapes fixes avec icônes ── */}
       {howToGoSteps.length > 0 && (
-        <section id="comment-partir" className="padding-y padding-x bg-surface">
+        <section id="comment-partir" className={`padding-y padding-x ${sectionBg['comment-partir']}`}>
           <h2 className="h2-style text-primary">Comment partir ?</h2>
           <p className="text-body text-primary/60 mb-8">
             Nous accueillons des volontaires toute l'année. Ensemble, nous définissons la période de départ la plus adaptée à votre projet, à vos disponibilités et aux besoins de nos partenaires.
@@ -421,7 +438,7 @@ function MissionDetail() {
 
       {/* ── Infos pratiques ── */}
       {(mission.health_info || mission.admin_info) && (
-        <section id="infos-pratiques" className="padding-y padding-x bg-surface-mid">
+        <section id="infos-pratiques" className={`padding-y padding-x ${sectionBg['infos-pratiques']}`}>
           <h2 className="h2-style text-primary">Préparer votre départ</h2>
           <p className="text-body text-primary/60 mb-8">
             Pour vivre cette expérience dans les meilleures conditions, prenez le temps de préparer votre départ grâce à nos recommandations et informations pratiques.
@@ -477,7 +494,7 @@ function MissionDetail() {
 
       {/* ── Témoignages ── */}
       {mission.testimonials?.length > 0 && (
-        <section id="temoignages" className="padding-y padding-x bg-accent-2">
+        <section id="temoignages" className={`padding-y padding-x ${sectionBg['temoignages']}`}>
           <div className="flex flex-col lg:flex-row items-start justify-between gap-sm mb-8">
             <div>
               <h2 className="h2-style text-surface">Ils ont vécu l'aventure, découvrez leurs témoignages</h2>
@@ -506,7 +523,7 @@ function MissionDetail() {
       )}
 
       {/* ── Galerie photos ── */}
-      <section id="galerie" className="padding-y padding-x bg-surface-mid">
+      <section id="galerie" className={`padding-y padding-x ${sectionBg['galerie']}`}>
         <h2 className="h2-style text-primary">Plongez dans l'aventure</h2>
         <p className="text-body text-primary/60 mb-8">
           Explorez la mission à travers les images de nos volontaires et découvrez l'environnement, les projets et les expériences qui vous attendent sur le terrain.

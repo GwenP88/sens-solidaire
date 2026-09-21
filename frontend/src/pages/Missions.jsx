@@ -139,19 +139,16 @@ function Missions() {
       icon: IconFrance,
       title: 'Mission en France',
       description: 'Pendant plusieurs mois, sur Nice ou Annemasse, vous animez des actions de sensibilisation au développement durable et découvrez le fonctionnement de l\'association avant votre mission à l\'international',
-      list: ['Animation d\'ateliers pédagogiques', 'Promotion des projets de l\'association', 'Préparation au départ'],
     },
     {
       icon: IconAbroad,
       title: 'Mission à l\'étranger',
       description: 'Vous rejoignez l\'une de nos délégations au Kenya, au Sénégal ou en Côte d\'Ivoire pour participer à des projets concrets de préservation de la biodiversité et d\'éducation.',
-      list: ['Protection de l\'environnement', 'Actions éducatives', 'Vie avec les partenaires locaux'],
     },
     {
       icon: IconGrow,
       title: 'Une expérience unique',
       description: 'Cette expérience vous permet de gagner en autonomie, de travailler en équipe et de développer des compétences valorisées dans votre parcours personnel et professionnel.',
-      list: ['Gestion de projet', 'Coopération internationale', 'Travail en équipe'],
     },
   ]
 
@@ -344,7 +341,7 @@ function Missions() {
             <div className="mt-12 bg-primary rounded-2xl p-6 lg:p-10">
               <h3 className="h3-style text-surface mb-0">Ils ont vécu l'aventure</h3>
               <p className="text-body text-surface/60 mb-8">
-                Découvrez les retours de nos volontaires en service civique au Kenya, au Sénégal et en Côte d'Ivoire.
+                Découvrez les retours de nos volontaires en service civique.
               </p>
               <Carousel
                 items={testimonialsServiceCivique}
@@ -399,7 +396,7 @@ function Missions() {
               showPagination={true}
               color="primary"
               renderSlide={(_, i) => (
-                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.png`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
+                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.webp`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
               )}
             />
           </div>
@@ -520,7 +517,7 @@ function Missions() {
               showPagination={true}
               color="primary"
               renderSlide={(_, i) => (
-                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.png`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
+                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.webp`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
               )}
             />
           </div>
@@ -616,7 +613,7 @@ function Missions() {
               showPagination={true}
               color="primary"
               renderSlide={(_, i) => (
-                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.png`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
+                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.webp`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
               )}
             />
           </div>

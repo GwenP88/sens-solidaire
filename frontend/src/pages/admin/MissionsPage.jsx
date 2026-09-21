@@ -1,21 +1,21 @@
 // ════════════════════════════════════════════════════════════════
 // pages/admin/MissionsPage.jsx
-// Page dashboard — liste et gestion des missions (CRUD)
-// Responsabilités :
-//   - charger et afficher toutes les missions (actives + inactives)
-//   - naviguer vers la page de création (/admin/missions/new)
-//   - naviguer vers la page d'édition  (/admin/missions/:id/edit)
-//   - gérer la suppression (soft delete) avec confirmation
+// Page dashboard — liste et gestion de TOUTES les missions (tous types),
+// avec filtres type/pays/statut. Fusion de l'ancienne page "Missions
+// individuelles" et de "Service Civique" (#128) — même table Mission
+// en base, juste des formulaires d'édition différents selon le type.
+// Les 3 missions "ancres" (service civique/groupe jeunes/congé solidaire,
+// non éditables, slug préfixé "ancre-") sont exclues de la liste.
 // ════════════════════════════════════════════════════════════════
 
 // ── React
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 // ── Router
 import { useNavigate } from 'react-router-dom'
 
 // ── API
-import { fetchAdminMissions, updateMission, deleteMission, hardDeleteMission } from '../../services/api'
+import { fetchAdminMissions, deleteMission, hardDeleteMission } from '../../services/api'
 
 // ── Composants admin
 import DashboardTable from '../../components/admin/DashboardTable'
@@ -24,15 +24,19 @@ import ConfirmModal from '../../components/admin/ConfirmModal'
 
 // ════════════════════════════════════════════════════════════════
 // CONFIGURATION DES COLONNES
-// Définit ce qu'affiche DashboardTable — un objet par colonne.
-// render() est optionnel : permet de personnaliser l'affichage
-// (badge coloré, date formatée, etc.) sans toucher à DashboardTable.
 // ════════════════════════════════════════════════════════════════
+
+const TYPE_LABELS = {
+  volontariat_individuel: 'Volontariat individuel',
+  service_civique:        'Service Civique',
+  groupe_jeunes:           'Groupe jeunes',
+  conge_solidaire:         'Congé solidaire',
+}
 
 const COLUMNS = [
   { key: 'title',   label: 'Titre' },
   { key: 'country', label: 'Pays'  },
-  { key: 'type',    label: 'Type'  },
+  { key: 'type',    label: 'Type', render: (row) => TYPE_LABELS[row.type] || row.type },
   {
     key: 'is_active',
     label: 'Statut',
@@ -57,26 +61,28 @@ function MissionsPage() {
   const navigate = useNavigate()
 
   // ── États ──
-  const [missions, setMissions] = useState([])
+  const [allMissions, setAllMissions] = useState([])
   const [loading,  setLoading]  = useState(true)
   const [error,    setError]    = useState(null)
   const [missionToHardDelete, setMissionToHardDelete] = useState(null)
-  const [missionToTogglePause, setMissionToTogglePause] = useState(null)
 
+  // ── Filtres ──
+  const [typeFilter, setTypeFilter] = useState('all')
+  const [countryFilter, setCountryFilter] = useState('all')
+  const [statusFilter, setStatusFilter] = useState('all')
 
   // ── Chargement initial ──────────────────────────────────────
-  // AbortController : annule le fetch si l'utilisateur navigue
-  // avant la fin du chargement → évite un setState sur composant
-  // démonté (warning React + fuite mémoire potentielle).
   useEffect(() => {
     const controller = new AbortController()
 
     const load = async () => {
       try {
         const data = await fetchAdminMissions(controller.signal)
-        setMissions(data.filter(m => m.type === 'volontariat_individuel'))
+        // Exclut les 3 missions "ancres" — jamais éditables, servent
+        // uniquement à rattacher des témoignages
+        setAllMissions(data.filter(m => !m.slug.startsWith('ancre-')))
       } catch (err) {
-        if (err.name === 'AbortError') return // navigation avant fin du fetch — silencieux
+        if (err.name === 'AbortError') return
         console.error('Erreur chargement missions :', err)
         setError('Impossible de charger les missions.')
       } finally {
@@ -85,144 +91,166 @@ function MissionsPage() {
     }
 
     load()
-
-    // Nettoyage : annule le fetch au démontage du composant
     return () => controller.abort()
   }, [])
 
-
   // ── Rechargement ponctuel ───────────────────────────────────
-  // Appelé après une suppression pour resynchroniser l'affichage.
-  // Pas d'AbortController ici : c'est un appel déclenché par une
-  // action utilisateur, pas lié au cycle de vie du composant.
   const reloadMissions = async () => {
     try {
       const data = await fetchAdminMissions()
-      setMissions(data.filter(m => m.type === 'volontariat_individuel'))
+      setAllMissions(data.filter(m => !m.slug.startsWith('ancre-')))
     } catch (err) {
       console.error('Erreur rechargement missions :', err)
       setError('Impossible de recharger les missions.')
     }
   }
 
+  // ── Pays disponibles — dynamique, dépend des missions chargées ──
+  const availableCountries = useMemo(() => {
+    const countries = new Set(allMissions.map(m => m.country))
+    return [...countries].sort()
+  }, [allMissions])
 
-  // ── Navigation ──────────────────────────────────────────────
+  // ── Application des filtres ─────────────────────────────────
+  const missions = allMissions.filter(m => {
+    if (typeFilter !== 'all' && m.type !== typeFilter) return false
+    if (countryFilter !== 'all' && m.country !== countryFilter) return false
+    if (statusFilter === 'active' && !m.is_active) return false
+    if (statusFilter === 'inactive' && m.is_active) return false
+    return true
+  })
 
-  // Bouton "+ Ajouter" → page de création
-  const handleCreate = () => navigate('/admin/missions/new')
+  // ── Navigation — création (2 chemins, formulaires distincts) ──
+  const handleCreateIndividuel = () => navigate('/admin/missions/new')
+  const handleCreateServiceCivique = () => navigate('/admin/service-civique/new')
 
-  // Bouton crayon → page d'édition avec l'id de la mission
-  const handleEdit = (mission) => navigate(`/admin/missions/${mission.id}/edit`)
-
-
-  // ── Suppression ─────────────────────────────────────────────
-  // Soft delete : is_active passe à false côté backend.
-  // La mission reste en base (récupérable) mais disparaît du site.
-    // Ouvre la modale (pause ou reprise, selon l'état actuel)
-  const handleTogglePause = (mission) => {
-    setMissionToTogglePause(mission)
+  // ── Navigation — édition (dépend du type) ───────────────────
+  const handleEdit = (mission) => {
+    if (mission.type === 'volontariat_individuel') {
+      navigate(`/admin/missions/${mission.id}/edit`)
+    } else {
+      navigate(`/admin/service-civique/${mission.id}/edit`)
+    }
   }
 
-  // Exécute la pause (soft delete) ou la reprise (is_active: true) après confirmation
-  const confirmTogglePause = async () => {
+  // ── Suppression (soft delete) ───────────────────────────────
+  const handleDelete = async (mission) => {
+    const confirmed = window.confirm(
+      `Supprimer la mission "${mission.title}" ?\n\nCette action la masquera du site. Elle reste récupérable en base de données.`
+    )
+    if (!confirmed) return
+
     try {
-      if (missionToTogglePause.is_active) {
-        await deleteMission(missionToTogglePause.id)
-      } else {
-        await updateMission(missionToTogglePause.id, { is_active: true })
-      }
+      await deleteMission(mission.id)
       await reloadMissions()
     } catch (err) {
-      console.error('Erreur pause/reprise mission :', err)
-      alert('Échec de l\'opération. Réessaie.')
-    } finally {
-      setMissionToTogglePause(null)
+      console.error('Erreur suppression mission :', err)
+      alert('Échec de la suppression. Réessaie.')
     }
   }
 
   // ── Suppression définitive ──────────────────────────────────
-// Hard delete : la mission ET ses données dépendantes (tarifs, médias)
-// sont effacées de la base. IRRÉVERSIBLE.
-// Ouvre la modale de confirmation
-const handleHardDelete = (mission) => {
-  setMissionToHardDelete(mission)
-}
-
-// Exécute la suppression définitive après confirmation dans la modale
-const confirmHardDelete = async () => {
-  try {
-    await hardDeleteMission(missionToHardDelete.id)
-    await reloadMissions()
-  } catch (err) {
-    console.error('Erreur suppression définitive :', err)
-    alert('Échec de la suppression définitive. Réessaie.')
-  } finally {
-    setMissionToHardDelete(null)
+  const handleHardDelete = (mission) => {
+    setMissionToHardDelete(mission)
   }
-}
+
+  const confirmHardDelete = async () => {
+    try {
+      await hardDeleteMission(missionToHardDelete.id)
+      await reloadMissions()
+    } catch (err) {
+      console.error('Erreur suppression définitive :', err)
+      alert('Échec de la suppression définitive. Réessaie.')
+    } finally {
+      setMissionToHardDelete(null)
+    }
+  }
 
   // ── États de chargement / erreur ────────────────────────────
-
   if (loading) return (
     <p className="text-dash-legend text-sm italic">Chargement des missions...</p>
   )
 
   if (error) return (
-    <p className="text-red-600 text-sm">{error}</p>
+    <p className="text-dash-danger text-sm">{error}</p>
   )
 
-
   // ── Rendu ───────────────────────────────────────────────────
-
   return (
     <div>
 
       {/* ── En-tête ── */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
         <h1 className="font-heading font-bold text-2xl text-dash-title">
           Missions
         </h1>
-        <button
-          onClick={handleCreate}
-          className="px-4 py-2 bg-dash-action text-white text-sm rounded-lg hover:bg-dash-action/90 transition-colors"
+        <div className="flex gap-2">
+          <button
+            onClick={handleCreateIndividuel}
+            className="px-4 py-2 bg-dash-action text-white text-sm rounded-lg hover:bg-dash-action/90 transition-colors"
+          >
+            + Volontariat individuel
+          </button>
+          <button
+            onClick={handleCreateServiceCivique}
+            className="px-4 py-2 bg-dash-editorial text-white text-sm rounded-lg hover:bg-dash-editorial/90 transition-colors"
+          >
+            + Service Civique
+          </button>
+        </div>
+      </div>
+
+      {/* ── Filtres ── */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+        <select
+          value={typeFilter}
+          onChange={e => setTypeFilter(e.target.value)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
         >
-          + Ajouter une mission
-        </button>
+          <option value="all">Tous les types</option>
+          {Object.entries(TYPE_LABELS).map(([value, label]) => (
+            <option key={value} value={value}>{label}</option>
+          ))}
+        </select>
+
+        <select
+          value={countryFilter}
+          onChange={e => setCountryFilter(e.target.value)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+        >
+          <option value="all">Tous les pays</option>
+          {availableCountries.map(c => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+
+        <select
+          value={statusFilter}
+          onChange={e => setStatusFilter(e.target.value)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+        >
+          <option value="all">Tous les statuts</option>
+          <option value="active">Actives</option>
+          <option value="inactive">Inactives</option>
+        </select>
       </div>
 
       {/* ── Tableau des missions ── */}
-      {/* DashboardTable est générique : on lui passe les colonnes,
-          les données et les callbacks — il ne connaît pas le métier. */}
       <DashboardTable
         columns={COLUMNS}
         data={missions}
         onEdit={handleEdit}
-        onDelete={handleTogglePause}
-        onHardDelete={handleHardDelete} 
+        onDelete={handleDelete}
+        onHardDelete={handleHardDelete}
       />
 
       {missionToHardDelete && (
         <ConfirmModal
-          title="Supprimer définitivement la mission ?"
-          message={`Cette action est irréversible. La mission "${missionToHardDelete.title}", ses tarifs et toutes les photos associées seront définitivement supprimés. ?\n\nLes lieux partenaires utilisés par d’autres missions seront conservés.`}
+          title="Supprimer définitivement"
+          message={`Voulez-vous supprimer définitivement la mission "${missionToHardDelete.title}" ?\n\nCette action est irréversible. La mission, ses tarifs et toutes les photos associées seront supprimés définitivement.\n\nLes lieux partenaires utilisés par d'autres missions ne seront pas supprimés.`}
           confirmLabel="Supprimer définitivement"
           onConfirm={confirmHardDelete}
           onCancel={() => setMissionToHardDelete(null)}
-        />
-      )}
-
-      {missionToTogglePause && (
-        <ConfirmModal
-          variant="default"
-          title={missionToTogglePause.is_active ? 'Mettre la mission en pause ?' : 'Réactiver la mission ?'}
-          message={
-            missionToTogglePause.is_active
-              ? `La mission "${missionToTogglePause.title}" ne sera plus visible sur le site. \n\nVous pourrez la réactiver à tout moment.`
-              : `La mission "${missionToTogglePause.title}" sera de nouveau visible sur le site.`
-          }
-          confirmLabel={missionToTogglePause.is_active ? 'Mettre en pause' : 'Reprendre'}
-          onConfirm={confirmTogglePause}
-          onCancel={() => setMissionToTogglePause(null)}
         />
       )}
     </div>
