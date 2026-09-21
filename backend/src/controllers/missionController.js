@@ -5,7 +5,7 @@
 // Ne contient AUCUNE logique métier — tout est délégué à missionService.js
 
 // Import des fonctions du service missions
-import { findAll, findAllForAdmin, findById, findBySlug, create, update, softDelete, hardDelete } from "../services/missionService.js"
+import { findAll, findAllForAdmin, findById, findBySlug, create, update, softDelete, hardDelete, findServiceCiviqueGallery } from "../services/missionService.js"
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
@@ -21,7 +21,7 @@ const VALID_TYPES = [
 // Regex pour valider un nom de pays
 // Autorise : lettres (avec accents), espaces, tirets
 // Interdit : chiffres, <, >, ", ', ;, ( ) etc. → bloque les tentatives XSS
-const COUNTRY_REGEX = /^[a-zA-ZÀ-ÿ\s-]+$/
+const COUNTRY_REGEX = /^[a-zA-ZÀ-ÿ\s'-]+$/
 
 // Regex pour valider un slug
 // Un slug ne contient que des lettres minuscules, chiffres et tirets
@@ -206,7 +206,6 @@ export const createMission = async (req, res, next) => {
     if (!title)  missing.push("title")
     if (!country)  missing.push("country")
     if (!slug)   missing.push("slug")
-    if (!short_description)  missing.push("short_description")
     
     if (missing.length > 0){
       return res.status(400).json({
@@ -365,6 +364,16 @@ export const hardDeleteMission = async (req, res, next) => {
       mission,
     })
 
+  } catch (error) {
+    next(error)
+  }
+}
+
+// GET /api/missions/service-civique/gallery
+export const getServiceCiviqueGallery = async (req, res, next) => {
+  try {
+    const media = await findServiceCiviqueGallery()
+    return res.status(200).json({ media })
   } catch (error) {
     next(error)
   }

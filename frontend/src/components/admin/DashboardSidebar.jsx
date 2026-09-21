@@ -38,13 +38,6 @@ const navItems = [
     iconActive: 'text-dash-action',
   },
   {
-    label: 'Service Civique',
-    path: '/admin/service-civique',
-    icon: FiFlag,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
     label: 'Galerie',
     path: '/admin/galerie',
     icon: FiImage,

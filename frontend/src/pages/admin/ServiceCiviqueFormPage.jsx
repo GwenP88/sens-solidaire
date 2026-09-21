@@ -1,114 +1,65 @@
 // ════════════════════════════════════════════════════════════════
 // ServiceCiviqueFormPage.jsx
-// Page de création et d'édition d'une mission Service Civique — dashboard admin
-// Détecte le mode via useParams : id présent = édition, absent = création
+// Création / édition d'une "carte pays" Service Civique
+// (titre, pays, description, 1 photo — réutilise la table Mission,
+// type: 'service_civique_pays'). Pas de slug visible : généré
+// automatiquement, la cliente ne le gère jamais.
 // ════════════════════════════════════════════════════════════════
 
-// ── React
 import { useState, useEffect } from 'react'
-
-// ── Router
 import { useParams, useNavigate } from 'react-router-dom'
-
-// ── API
 import {
   fetchAdminMissionById,
   createMission,
   updateMission,
-  updateMissionMedia,
 } from '../../services/api'
-
-// ── Composants admin
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
 import { FormSection, Field, TextareaField } from '../../components/admin/FormElements'
+import { previewShortDescription } from '../../utils/shortDescription'
 
-
-// ════════════════════════════════════════════════════════════════
-// CONSTANTES
-// ════════════════════════════════════════════════════════════════
-
-// État initial du formulaire — type figé, pas de select (page dédiée)
 const EMPTY_FORM = {
-  title:             '',
-  country:           '',
-  country_preposition: 'au',
-  slug:              '',
-  short_description: '',
-  type:              'service_civique',
-  description:       '',
-  age_min:           '',
-  age_max:           '',
-  duration_label:    '',
-  admin_info:        '', // paragraphe "Infos pratiques" — texte libre
-  role_france:       '',
-  role_etranger:     '',
-  competences:         '',
-  candidater_url:    '',
-  info_service_civique_url: '',
-  is_active:         true,
-  // Photos — la 1ère devient l'image principale (hero), les suivantes la galerie
-  photos:            [],
+  title: '',
+  country: '',
+  description: '',
+  photo: [], // [{ file_url, label }] — 1 seule photo, carte + modale
 }
 
-
-// ════════════════════════════════════════════════════════════════
-// COMPOSANT PRINCIPAL
-// ════════════════════════════════════════════════════════════════
+// Génère un slug technique à partir du titre + pays — jamais affiché,
+// juste pour satisfaire la contrainte unique de la table Mission.
+const slugify = (text) =>
+  text
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // retire les accents
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
 
 function ServiceCiviqueFormPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const isEditing = Boolean(id)
 
-  const [formData, setFormData]       = useState(EMPTY_FORM)
-  const [loading, setLoading]         = useState(isEditing)
-  const [error, setError]             = useState(null)
+  const [formData, setFormData] = useState(EMPTY_FORM)
+  const [loading, setLoading] = useState(isEditing)
+  const [error, setError] = useState(null)
   const [fieldErrors, setFieldErrors] = useState({})
-  const [submitting, setSubmitting]   = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
-  // ── Chargement en mode édition ──
   useEffect(() => {
     if (!isEditing) return
 
     const load = async () => {
       try {
         const mission = await fetchAdminMissionById(id)
-
-        // Galerie — médias de type image, triés
-        const galerieMedia = mission.media
-          ? mission.media
-              .filter(m => m.file_type === 'image')
-              .sort((a, b) => a.display_order - b.display_order)
-              .map(m => ({ file_url: m.file_url, label: m.label || '' }))
-          : []
-
-        // Photos reconstituées — l'image principale existante en 1ère position
-        const photos = mission.photo_hero_url
-          ? [{ file_url: mission.photo_hero_url, label: mission.photo_hero_alt || '' }, ...galerieMedia]
-          : galerieMedia
-
         setFormData({
-          title:             mission.title             || '',
-          country:           mission.country           || '',
-          country_preposition: mission.country_preposition || 'au',
-          slug:              mission.slug              || '',
-          short_description: mission.short_description || '',
-          type:              'service_civique',
-          description:       mission.description       || '',
-          age_min:           mission.age_min || '',
-          age_max:           mission.age_max || '',
-          duration_label:    mission.duration_label     || '',
-          admin_info:        mission.admin_info         || '',
-          role_france:       mission.role_france         || '',
-          role_etranger:     mission.role_etranger       || '',
-          competences:       mission.competences         || '',
-          candidater_url:    mission.candidater_url      || '',
-          info_service_civique_url: mission.info_service_civique_url || '',
-          is_active:         mission.is_active ?? true,
-          photos,
+          title: mission.title || '',
+          country: mission.country || '',
+          description: mission.description || '',
+          photo: mission.photo_hero_url
+            ? [{ file_url: mission.photo_hero_url, label: mission.photo_hero_alt || '' }]
+            : [],
         })
       } catch (err) {
-        setError("Impossible de charger la mission.")
+        setError("Impossible de charger cette carte.")
       } finally {
         setLoading(false)
       }
@@ -117,33 +68,23 @@ function ServiceCiviqueFormPage() {
     load()
   }, [id, isEditing])
 
-  // ── Handler champs simples ──
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
-    if (fieldErrors[name]) {
-      setFieldErrors(prev => ({ ...prev, [name]: null }))
-    }
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+    if (fieldErrors[name]) setFieldErrors(prev => ({ ...prev, [name]: null }))
   }
 
-  // ── Validation — champs obligatoires ──
   const validate = () => {
     const newErrors = {}
-    if (!formData.title.trim())             newErrors.title             = "Le titre est obligatoire."
-    if (!formData.country.trim())           newErrors.country           = "Le pays est obligatoire."
-    if (!formData.slug.trim())              newErrors.slug              = "Le slug est obligatoire."
-    if (!formData.short_description.trim()) newErrors.short_description = "La description courte est obligatoire."
+    if (!formData.title.trim())       newErrors.title = "Le titre est obligatoire."
+    if (!formData.country.trim())     newErrors.country = "Le pays est obligatoire."
+    if (!formData.description.trim()) newErrors.description = "La description est obligatoire."
+    if (formData.photo.length < 1)    newErrors.photo = "Une photo est obligatoire."
     return newErrors
   }
 
-  if (loading) return (
-    <p className="text-dash-legend text-sm italic p-8">Chargement de la mission...</p>
-  )
+  const shortDescriptionPreview = previewShortDescription(formData.description)
 
-  // ── Soumission ──
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
@@ -151,97 +92,54 @@ function ServiceCiviqueFormPage() {
     const validationErrors = validate()
     if (Object.keys(validationErrors).length > 0) {
       setFieldErrors(validationErrors)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
 
     setSubmitting(true)
 
     try {
-      // La 1ère photo devient l'image principale (hero), les suivantes la galerie
-      const [heroPhoto, ...galeriePhotos] = formData.photos
-      const photo_hero_url = heroPhoto ? heroPhoto.file_url : ''
-      const photo_hero_alt = heroPhoto ? heroPhoto.label : ''
+      const photo = formData.photo[0]
 
       const payload = {
-        title:             formData.title,
-        country:           formData.country,
-        country_preposition: formData.country_preposition,
-        slug:              formData.slug,
-        short_description: formData.short_description,
-        type:              'service_civique',
-        description:       formData.description,
-        age_min:           formData.age_min || null,
-        age_max:           formData.age_max || null,
-        duration_label:    formData.duration_label,
-        admin_info:        formData.admin_info,
-        role_france:       formData.role_france,
-        role_etranger:     formData.role_etranger,
-        competences:       formData.competences,
-        candidater_url:    formData.candidater_url,
-        info_service_civique_url: formData.info_service_civique_url,
-        is_active:         formData.is_active,
-        photo_hero_url,
-        photo_hero_alt,
+        title: formData.title,
+        country: formData.country,
+        description: formData.description,
+        type: 'service_civique',
+        slug: `service-civique-${slugify(formData.title)}-${slugify(formData.country)}`,
+        photo_hero_url: photo.file_url,
+        photo_hero_alt: photo.label || '',
       }
-
-      let missionId
 
       if (isEditing) {
         await updateMission(Number(id), payload)
-        missionId = Number(id)
       } else {
-        const created = await createMission(payload)
-        missionId = created.id
+        await createMission(payload)
       }
 
-      // Sauvegarde des médias (galerie uniquement — pas de PDF pour Service Civique)
-      const images = galeriePhotos.map(p => ({ file_url: p.file_url, label: p.label || null }))
-      await updateMissionMedia(missionId, images, null)
-
-      navigate('/admin/service-civique')
+      navigate('/admin/missions')
     } catch (err) {
       setError(err.message)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     } finally {
       setSubmitting(false)
     }
   }
 
-
-  // ════════════════════════════════════════════════════════════════
-  // RENDU
-  // ════════════════════════════════════════════════════════════════
+  if (loading) return (
+    <p className="text-dash-legend text-sm italic p-8">Chargement...</p>
+  )
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10">
+    <div className="max-w-3xl mx-auto py-10">
 
-      {/* ── En-tête ── */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <button
-            onClick={() => navigate('/admin/service-civique')}
-            className="text-sm text-dash-legend hover:text-dash-action mb-1 flex items-center gap-1"
-          >
-            ← Retour au Service Civique
-          </button>
-          <h1 className="font-heading font-bold text-2xl text-dash-title">
-            {isEditing ? 'Modifier la mission Service Civique' : 'Créer une mission Service Civique'}
-          </h1>
-        </div>
-        {isEditing && (
-          <label className="flex items-center gap-2 text-sm text-dash-legend cursor-pointer">
-            <input
-              type="checkbox"
-              name="is_active"
-              checked={formData.is_active}
-              onChange={handleChange}
-              className="w-4 h-4 accent-dash-success"
-            />
-            Mission active
-          </label>
-        )}
-      </div>
+      <button
+        onClick={() => navigate('/admin/missions')}
+        className="text-sm text-dash-legend hover:text-dash-action mb-1 flex items-center gap-1"
+      >
+        ← Retour aux missions
+      </button>
+      <h1 className="font-heading font-bold text-2xl text-dash-title mb-8">
+        {isEditing ? 'Modifier la carte pays' : 'Ajouter une carte pays'}
+      </h1>
 
       {error && (
         <div className="mb-6 p-4 bg-red-50 text-red-700 text-sm rounded-lg border border-red-200">
@@ -251,163 +149,55 @@ function ServiceCiviqueFormPage() {
 
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-10">
 
-        {/* ── BLOC 1 : Informations essentielles ── */}
-        <FormSection
-          title="Informations essentielles"
-          description="Affichées sur la card mission et dans le hero de la page détail."
-        >
-          {/* Ligne 1 — Titre, pleine largeur */}
-          <Field
-            label="Titre" name="title" value={formData.title} onChange={handleChange}
-            required error={fieldErrors.title}
-            hint="ex: Service Civique au Kenya"
-          />
-
-          {/* Ligne 2 — Préposition + Pays côte à côte */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-dash-text">Préposition</label>
-              <select
-                name="country_preposition"
-                value={formData.country_preposition}
-                onChange={handleChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
-              >
-                <option value="au">au (ex: au Kenya)</option>
-                <option value="en">en (ex: en France)</option>
-                <option value="à">à (ex: à Sumatra)</option>
-                <option value="aux">aux (ex: aux Philippines)</option>
-              </select>
-            </div>
-
-            <Field
-              label="Pays" name="country" value={formData.country} onChange={handleChange}
-              required pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
-              error={fieldErrors.country}
-            />
-          </div>
-
-          {/* Ligne 3 — Slug, pleine largeur */}
-          <Field
-            label="Slug" name="slug" value={formData.slug} onChange={handleChange}
-            required hint="utilisé dans l'URL" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement"
-            error={fieldErrors.slug}
-          />
+        <FormSection title="Informations">
+          <Field label="Titre" name="title" value={formData.title} onChange={handleChange} required />
+          <Field label="Pays" name="country" value={formData.country} onChange={handleChange} required />
 
           <div className="flex flex-col gap-1">
-            <label className={`text-sm font-medium ${
-              formData.short_description.length >= 140 ? 'text-red-500' :
-              formData.short_description.length >= 120 ? 'text-orange-500' :
-              'text-dash-text'
-            }`}>
-              Description courte <span className="text-red-500">*</span>
-              <span className="font-normal ml-1 text-xs">— {formData.short_description.length}/150 caractères</span>
+            <label className="text-sm font-medium text-dash-text">
+              Description <span className="text-red-500">*</span>
             </label>
-            <p className="text-xs text-dash-legend -mt-0.5">Affichée sur la card et dans le hero de la page détail</p>
+            <p className="text-xs text-dash-legend -mt-0.5">
+              Astuce : insère <code className="bg-gray-100 px-1 rounded">---</code> à l'endroit où tu veux que le résumé (carte) s'arrête.
+            </p>
             <textarea
-              name="short_description"
-              value={formData.short_description}
+              name="description"
+              value={formData.description}
               onChange={handleChange}
-              maxLength={150}
-              rows={3}
-              className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-y font-mono ${
-                fieldErrors.short_description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
+              rows={6}
+              className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-y ${
+                fieldErrors.description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
               }`}
             />
-            {fieldErrors.short_description && <span className="text-xs text-red-500">{fieldErrors.short_description}</span>}
+            {fieldErrors.description && <span className="text-xs text-red-500">{fieldErrors.description}</span>}
+            {formData.description && (
+              <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <p className="text-xs font-medium text-dash-legend mb-1">
+                  Aperçu de la carte — {shortDescriptionPreview.length}/150 caractères
+                </p>
+                <p className="text-sm text-dash-text italic">{shortDescriptionPreview}</p>
+              </div>
+            )}
           </div>
         </FormSection>
 
-        {/* ── BLOC 2 : Photos de la mission ── */}
-        <FormSection
-          title="Photos de la mission"
-          description="La 1ère photo devient l'image principale (hero). Les suivantes forment la galerie de la page détail."
-        >
+        <FormSection title="Photo">
           <AdminFileUpload
-            value={formData.photos}
-            onChange={(photos) => setFormData(prev => ({ ...prev, photos }))}
+            value={formData.photo}
+            onChange={(photo) => setFormData(prev => ({ ...prev, photo }))}
             accept="image/*"
-            maxFiles={10}
+            maxFiles={1}
+            imageType="hero"
             showLabel={true}
-            helperText="Formats : JPG, PNG, WEBP. La légende sert de texte alternatif (accessibilité)."
+            helperText="Une seule photo — utilisée à la fois en fond de carte et dans la fenêtre détail."
           />
+          {fieldErrors.photo && <span className="text-xs text-red-500">{fieldErrors.photo}</span>}
         </FormSection>
 
-        {/* ── BLOC 3 : Infos du hero (âge / durée) ── */}
-        <FormSection
-          title="Barre d'infos du hero"
-          description="Affichées sous le titre, sur la page détail."
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Field
-              label="Âge minimum" name="age_min" value={formData.age_min} onChange={handleChange}
-              hint="ex: 16"
-            />
-            <Field
-              label="Âge maximum" name="age_max" value={formData.age_max} onChange={handleChange}
-              hint="ex: 25 (30 en situation de handicap)"
-            />
-          </div>
-          <Field
-            label="Durée" name="duration_label" value={formData.duration_label} onChange={handleChange}
-            hint="ex: 6 à 12 mois"
-          />
-        </FormSection>
-
-        {/* ── BLOC 4 : Infos pratiques ── */}
-        <FormSection
-          title="Section 'Infos pratiques'"
-          description="Paragraphe libre affiché sur la page détail (indemnité, conditions, etc.)."
-        >
-          <TextareaField
-            label="Texte" name="admin_info"
-            value={formData.admin_info} onChange={handleChange}
-            rows={6} hint="Rédigez librement — indemnité, conditions, ce que vous souhaitez."
-          />
-          <Field
-            label="Lien du bouton 'Candidater'" name="candidater_url"
-            value={formData.candidater_url} onChange={handleChange}
-            hint="ex: https://www.service-civique.gouv.fr/"
-          />
-          <p className="text-xs text-gray-300 -mt-2 italic">
-            Le bouton "Nous contacter" est fixe (contact@sensolidaires.org) et ne nécessite aucune saisie.
-          </p>
-          <Field
-            label="Lien 'Comprendre le Service Civique'" name="info_service_civique_url"
-            value={formData.info_service_civique_url} onChange={handleChange}
-            hint="ex: https://www.service-civique.gouv.fr/comprendre-le-service-civique"
-          />
-        </FormSection>
-
-        {/* ── BLOC 5 : Votre rôle (2 colonnes) ── */}
-        <FormSection
-          title="Section 'Votre rôle'"
-          description="Une ligne = une puce affichée dans chaque colonne."
-        >
-          <div className="grid gap-4">
-            <TextareaField
-              label="Mission en France" name="role_france"
-              value={formData.role_france} onChange={handleChange}
-              rows={8}
-            />
-            <TextareaField
-              label="Mission à l'étranger" name="role_etranger"
-              value={formData.role_etranger} onChange={handleChange}
-              rows={8}
-            />
-            <TextareaField
-            label="Compétences développées" name="competences"
-            value={formData.competences} onChange={handleChange}
-            rows={6} hint="Une ligne = une puce affichée"
-          />
-          </div>
-        </FormSection>
-
-        {/* ── Actions — barre collante en bas de l'écran ── */}
-        <div className="sticky bottom-0 -mx-6 px-6 py-4 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <button
             type="button"
-            onClick={() => navigate('/admin/service-civique')}
+            onClick={() => navigate('/admin/missions')}
             className="px-5 py-2 text-sm text-dash-legend hover:text-dash-text hover:bg-gray-100 rounded-lg transition-colors"
           >
             Annuler
@@ -415,12 +205,9 @@ function ServiceCiviqueFormPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-2 text-sm font-medium bg-dash-action text-white rounded-lg hover:bg-dash-action/90 disabled:opacity-50 transition-colors"
+            className="px-6 py-2 text-sm font-medium bg-dash-editorial text-white rounded-lg hover:bg-dash-editorial/90 disabled:opacity-50 transition-colors"
           >
-            {submitting
-              ? 'Enregistrement...'
-              : isEditing ? 'Enregistrer les modifications' : 'Créer la mission'
-            }
+            {submitting ? 'Enregistrement...' : isEditing ? 'Enregistrer' : 'Créer la carte'}
           </button>
         </div>
 

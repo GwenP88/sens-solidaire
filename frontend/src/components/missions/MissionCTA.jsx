@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 // ── Composants UI
 import Button from '../ui/Button'
 
-function MissionCTA({ primaryAction, testimonialsUrl, contactUrl = '/contact' }) {
+function MissionCTA({ primaryAction, secondaryAction, contactUrl = '/contact' }) {
   return (
     <div className="flex flex-col sm:flex-row gap-sm w-full">
 
@@ -23,10 +23,16 @@ function MissionCTA({ primaryAction, testimonialsUrl, contactUrl = '/contact' })
         )
       )}
 
-      {testimonialsUrl && (
-        <Link to={testimonialsUrl} className="flex-1">
-          <Button label="Voir les témoignages →" variant="secondary" fullWidth />
-        </Link>
+      {secondaryAction && (
+        secondaryAction.external ? (
+          <a href={secondaryAction.href} target="_blank" rel="noopener noreferrer" className="flex-1">
+            <Button label={secondaryAction.label} variant="secondary" fullWidth />
+          </a>
+        ) : (
+          <Link to={secondaryAction.href} className="flex-1">
+            <Button label={secondaryAction.label} variant="secondary" fullWidth />
+          </Link>
+        )
       )}
 
       <Link to={contactUrl} className="flex-1">

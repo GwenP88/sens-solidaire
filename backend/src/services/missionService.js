@@ -313,3 +313,32 @@ export const hardDelete = async (id) => {
     throw error
   }
 }
+
+// ── FIND SERVICE CIVIQUE GALLERY ────────────────────────────────────────────
+// Combine les galeries de toutes les missions Service Civique actives (tous
+// pays confondus) — photos "forcées" + complétées par les plus récentes,
+// plafonné à 10. Les ancres (non éditables) sont exclues.
+export const findServiceCiviqueGallery = async (limit = 10) => {
+  const missions = await prisma.mission.findMany({
+    where: {
+      type: 'service_civique',
+      is_active: true,
+      NOT: { slug: { startsWith: 'ancre-' } },
+    },
+    select: { id: true },
+  })
+
+  const missionIds = missions.map(m => m.id)
+  if (missionIds.length === 0) return []
+
+  const allMedia = await prisma.media.findMany({
+    where: { entity_type: 'mission', entity_id: { in: missionIds }, file_type: 'image' },
+    orderBy: { created_at: 'desc' },
+  })
+
+  const forced = allMedia.filter(m => m.force_display)
+  const recent = allMedia.filter(m => !m.force_display)
+  const remainingSlots = Math.max(0, limit - forced.length)
+
+  return [...forced, ...recent.slice(0, remainingSlots)]
+}

@@ -440,3 +440,12 @@ export const updateMissionMedia = async (id, images, pdf) => {
   }
   return await response.json()
 }
+
+// GET /api/missions/service-civique/gallery — galerie combinée de tous les
+// pays Service Civique (photos forcées + plus récentes, plafonné à 10)
+export const fetchServiceCiviqueGallery = async () => {
+  const response = await fetch(`${API_URL}/missions/service-civique/gallery`)
+  if (!response.ok) throw new Error("Impossible de charger la galerie Service Civique.")
+  const data = await response.json()
+  return data.media
+}

@@ -7,6 +7,8 @@ import Carousel from '../ui/Carousel'
 import MissionInfoBar from './MissionInfoBar'
 import MissionCTA from './MissionCTA'
 import MissionSteps from './MissionSteps'
+import SubsectionEyebrow from './SubsectionEyebrow'
+import { IconPin } from '../../utils/icons'
 
 function MissionSection({
   // ── Identité de la section
@@ -25,7 +27,7 @@ function MissionSection({
   imageAlt,
   infoBarItems,
   primaryAction,
-  testimonialsUrl,
+  secondaryAction,
 
   // ── Steps
   stepsTitle,
@@ -72,7 +74,7 @@ function MissionSection({
           {/* CTAs */}
           <MissionCTA
             primaryAction={primaryAction}
-            testimonialsUrl={testimonialsUrl}
+            secondaryAction={secondaryAction}
           />
         </div>
 
@@ -97,7 +99,9 @@ function MissionSection({
       {carouselItems && carouselItems.length > 0 && (
         <div className="mt-8">
           {carouselTitle && (
-            <h3 className="h3-style text-primary mb-2">{carouselTitle}</h3>
+            <>
+              <SubsectionEyebrow label="Où partir en mission ?" />
+            </>
           )}
           {carouselSubtitle && (
             <p className="text-body text-primary/60 mb-8">{carouselSubtitle}</p>

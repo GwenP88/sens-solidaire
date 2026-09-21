@@ -4,7 +4,7 @@
 
 import { IoPerson } from 'react-icons/io5'
 import { IoIosPin } from 'react-icons/io'
-import { FiClock } from 'react-icons/fi'
+import { FiClock, FiImage } from 'react-icons/fi'
 import { BiCoinStack } from 'react-icons/bi'
 import { GiFrance } from 'react-icons/gi'
 import { FaHandshakeSimple } from "react-icons/fa6";
@@ -23,6 +23,7 @@ export const IconAbroad = FaPlaneDeparture   // mission à l'étranger
 export const IconGrow = FaHandHoldingHeart   // grandir, s'engager
 export const IconBuilding = FaRegBuilding    // corporate
 export const IconHand = FaHandshakeSimple    // partenariat
+export const IconGallery = FiImage  // galerie photo
 
 // Icônes Inclus / non inclus - page détail mission
 export const IconCheck = FaRegCheckCircle

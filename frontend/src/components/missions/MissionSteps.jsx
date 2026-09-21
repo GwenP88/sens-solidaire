@@ -1,14 +1,14 @@
 // MissionSteps.jsx
 // Bloc "Comment ça fonctionne" — 3 étapes avec icône, numéro, titre, description et liste
 
+import SubsectionEyebrow from './SubsectionEyebrow'
+
 function MissionSteps({ title = 'Comment ça fonctionne ?', steps, bgCard = 'bg-white' }) {
   return (
     <div>
 
       {/* Titre de la section — h3-style porte sa propre marge, pas de mb- en dur */}
-      <h3 className="h3-style text-primary text-center">
-        {title}
-      </h3>
+      <SubsectionEyebrow label="Comment ça fonctionne ?" />
 
       {/* Grille 3 colonnes desktop — 1 colonne autres */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-md items-stretch mt-8">

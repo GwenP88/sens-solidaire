@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
 // ── API ──
-import { fetchMissions, fetchTestimonials, fetchFieldActions } from '../services/api'
+import { fetchMissions, fetchTestimonials, fetchFieldActions, fetchServiceCiviqueGallery } from '../services/api'
 
 // ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
@@ -18,11 +18,13 @@ import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import FilterChips from '../components/navigation/FilterChips'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Modal from '../components/ui/Modal'
 
 // ── Composants métier ──
 import ImpactCard from '../components/actions/ImpactCard'
 import MissionCard from '../components/missions/MissionCard'
 import MissionSection from '../components/missions/MissionSection'
+import SubsectionEyebrow from '../components/missions/SubsectionEyebrow'
 import TestimonialCard from '../components/testimonials/TestimonialCard'
 
 // ── Utils
@@ -31,7 +33,7 @@ import { FILTERS_MISSION_TYPE } from '../utils/filters'
 import {
   IconPerson, IconClock, IconPin, IconMoney,
   IconFrance, IconAbroad, IconGrow, IconBuilding,
-  IconHand, IconPeople, IconHeart, IconLeaf, IconPayment
+  IconHand, IconPeople, IconHeart, IconLeaf, IconPayment, IconGallery
 } from '../utils/icons'
 
 function Missions() {
@@ -40,54 +42,16 @@ function Missions() {
   const [error, setError] = useState(null)
   const [testimonials, setTestimonials] = useState([])
   const [actions, setActions] = useState([])
+  const [selectedCountryCard, setSelectedCountryCard] = useState(null)
+  const [serviceCiviqueGallery, setServiceCiviqueGallery] = useState([])
   const [searchParams] = useSearchParams()
   const [activeFilter, setActiveFilter] = useState(searchParams.get('filter') || null)
   const filtersRef = useRef(null)
 
   // Listes de pays fixes par section — pas de lien BDD direct type↔pays
-  const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal']
+  const COUNTRIES_SERVICE_CIVIQUE = ['Kenya', 'Sénégal', 'Côte D\'Ivoire']
   const COUNTRIES_GROUPE_JEUNES   = ['Kenya', 'Sénégal']
   const COUNTRIES_CONGE_SOLIDAIRE = ['Kenya', 'Sénégal']
-
-  const LIEUX_MISSION_SERVICE_CIVIQUE = [
-  {
-    pays: 'Au Kenya',
-    bullets: [
-      "Auprès de notre partenaire local l'école polytechnique de Taita Taveta, vous participerez à la vie quotidienne du campus, notamment auprès des étudiants en tourisme et les appuierez dans leur apprentissage du français.",
-      "Vous suivrez et développerez les projets de l'association sur place avec différents partenaires engagés pour la préservation de l'environnement, notamment autour d'un projet de potager agroécologique avec le club biodiversité des étudiants.",
-      "Au sanctuaire de LUMO, au cœur du Parc Tsavo, vous suivrez l'avancée du projet de sentier botanique.",
-      "Vous accueillerez également les volontaires français en mission courte et apporterez les correspondances scolaires de France aux jeunes Kényans et les aiderez à écrire leur réponse.",
-      "Cette mission vous permettra de mettre en pratique votre anglais !",
-    ],
-    liens: [
-      { label: 'le TTNP', slug: 'ttnp-kenya' },
-      { label: 'LUMO', slug: 'lumo-kenya' },
-    ],
-  },
-  {
-    pays: 'Au Sénégal',
-    bullets: [
-      "Auprès de l'association sénégalaise AGADA, dans la région de la Casamance, vous suivrez et participerez à leurs activités sur le terrain, notamment les actions de reboisement de la mangrove et d'agriculture durable.",
-      "Vous apporterez les correspondances françaises aux élèves sénégalais et les aiderez à répondre.",
-      "Vous réaliserez le suivi d'après-projet de la construction d'un puits et de l'utilisation de kits de filtration de l'eau, et ferez un diagnostic des besoins des communautés locales.",
-      "Vous accueillerez les groupes de volontaires de l'association.",
-    ],
-    liens: [
-      { label: 'AGADA', slug: 'agada-senegal' },
-    ],
-  },
-  {
-    pays: "En Côte d'Ivoire",
-    bullets: [
-      "À Abidjan, capitale du pays, vous soutiendrez les actions de l'institut Georges Aristide et de l'association Zéro Plastique AZEP.",
-      "Vous appuierez la distribution de la correspondance scolaire Nice-Abidjan et la rédaction des réponses.",
-      "Vous proposerez des ateliers de sensibilisation au développement durable pour les élèves des écoles partenaires.",
-      "Vous réaliserez un état des lieux des activités du partenaire ivoirien et de l'accueil des volontaires pour de futurs projets : nettoyage du littoral, reboisement de la mangrove, diagnostic de la production de l'attiéké par les ateliers de femmes, traitement des déchets plastiques.",
-      "Vous serez un membre actif d'AZEP et mobiliserez la communauté des jeunes pour lutter contre la pollution plastique et la pollution de la lagune Ébrié.",
-    ],
-    liens: [], // pas de Location en base — en attente de confirmation cliente (C2/C3)
-  },
-]
 
   const handleFilter = (value) => {
     setActiveFilter(value)
@@ -128,6 +92,10 @@ function Missions() {
     }
   }, [])
 
+  useEffect(() => {
+    fetchServiceCiviqueGallery().then(setServiceCiviqueGallery).catch(console.error)
+  }, [])
+
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (error) return <p className="text-body text-accent p-12">Erreur : {error}</p>
 
@@ -137,17 +105,17 @@ function Missions() {
   const stepsServiceCivique = [
     {
       icon: IconFrance,
-      title: 'Mission en France',
-      description: 'Pendant plusieurs mois, sur Nice ou Annemasse, vous animez des actions de sensibilisation au développement durable et découvrez le fonctionnement de l\'association avant votre mission à l\'international',
+      title: 'Une première partie en France',
+      description: 'À Nice ou Annemasse, vous animez des actions de sensibilisation au développement durable et découvrez le fonctionnement de l\'association avant votre mission à l\'international.',
     },
     {
       icon: IconAbroad,
-      title: 'Mission à l\'étranger',
+      title: 'Puis une immersion à l\'étranger',
       description: 'Vous rejoignez l\'une de nos délégations au Kenya, au Sénégal ou en Côte d\'Ivoire pour participer à des projets concrets de préservation de la biodiversité et d\'éducation.',
     },
     {
       icon: IconGrow,
-      title: 'Une expérience unique',
+      title: 'Développer de nouvelles compétences',
       description: 'Cette expérience vous permet de gagner en autonomie, de travailler en équipe et de développer des compétences valorisées dans votre parcours personnel et professionnel.',
     },
   ]
@@ -156,48 +124,41 @@ function Missions() {
     {
       icon: IconFrance,
       title: 'Construire un projet collectif',
-      description: 'Nous accompagnons les jeunes et les encadrants afin de préparer la mission dans les meilleures conditions.',
-      list: ['Réunion de préparation avec les encadrants', 'Échanges avec les partenaires locaux', 'Organisation logistique et administrative'],
+      description: 'Nous accompagnons les jeunes et leurs encadrants dans la préparation pédagogique, logistique et administrative de la mission, en lien avec nos partenaires locaux.',
     },
     {
       icon: IconAbroad,
-      title: 'Une immersion de 10 jours au Kenya ou au Sénégal',
-      description: 'Les jeunes participent à des actions concrètes tout en découvrant une nouvelle culture',
-      list: ['Actions environnementales', 'Rencontres locales', 'Découverte du territoire'],
+      title: 'Vivre une immersion de 10 jours',
+      description: 'Au Kenya ou au Sénégal, les jeunes participent à des actions concrètes avec nos partenaires locaux, rencontrent les communautés et découvrent le territoire et sa culture.',
     },
     {
       icon: IconGrow,
       title: 'Partager et poursuivre l\'engagement',
-      description: 'Au retour, les participants valorisent leur expérience auprès de leur établissement et de leur entourage.',
-      list: ['Restitution auprès de l\'établissement', 'Rédaction du rapport de mission', 'Sensibilisation des pairs'],
+      description: 'Au retour, les participants partagent leur expérience au sein de leur établissement et auprès de leur entourage afin de valoriser le projet et de sensibiliser à leur tour.',
     },
   ]
 
   const stepsCongeSolidaire = [
     {
       icon: IconBuilding,
-      title: 'Construire un projet adapté',
-      description: 'Nous définissons ensemble une mission correspondant aux compétences des participants et aux besoins du terrain.',
-      list: ['Analyse des besoins', 'Choix du projet', 'Préparation logistique'],
+      title: 'Construire votre mission',
+      description: 'Nous construisons avec l’entreprise une mission adaptée aux profils et aux compétences des participants, en lien avec les besoins identifiés par nos partenaires locaux.',
     },
     {
       icon: IconLeaf,
-      title: 'Agir au Kenya, au Sénégal ou à Sumatra',
-      description: 'Vous rejoignez l\'une de nos délégations au Kenya, au Sénégal ou à Sumatra afin de mettre vos compétences au service de projets portés par nos partenaires locaux.',
-      list: ['Immersion locale', 'Partage de compétences', 'Accompagnement par l\'association'],
+      title: 'S’engager sur le terrain',
+      description: 'Les participants rejoignent nos partenaires au Kenya ou au Sénégal et prennent part à leurs projets aux côtés des équipes et des communautés locales.',
     },
     {
       icon: IconHand,
-      title: 'Valoriser l\'engagement',
-      description: 'Nous accompagnons l\'entreprise dans la valorisation de son engagement et de son impact.',
-      list: ['Rapport de mission', 'Communication RSE', 'Avantage fiscal'],
+      title: 'Partager et valoriser l’expérience',
+      description: 'Au retour, l’expérience vécue peut être partagée avec les équipes et valorisée au sein de l’entreprise dans le cadre de sa démarche RSE.',
     },
   ]
 
   // Témoignages filtrés par type de mission — utilisés pour masquer les galeries si vides
   const testimonialsGroupeJeunes = testimonials.filter(t => t.mission?.type === 'groupe_jeunes')
   const testimonialsCongeSolidaire = testimonials.filter(t => t.mission?.type === 'conge_solidaire')
-
   const testimonialsServiceCivique = testimonials.filter(t => t.mission?.type === 'service_civique')
 
   const actionsServiceCivique  = actions.filter(a => a.countries?.some(c => COUNTRIES_SERVICE_CIVIQUE.includes(c.country)))
@@ -211,19 +172,18 @@ function Missions() {
       <HeroPage
         image="/images/design/hero/hero-missions.jpg"
         title="Partez en mission et agissez concrètement"
-        subtitle="Parce que l'engagement est ouvert à tous, nos missions s'adaptent à chaque profil : seul, à deux, en groupe, en famille ou avec votre entreprise, vivez une expérience humaine et solidaire au service de la biodiversité."
+        subtitle="Parce que l'engagement est ouvert à tous, nos missions s'adaptent à chaque profil : seul, à deux, en groupe, en famille ou avec votre entreprise, vivez une expérience humaine et solidaire au service de projets utiles et durables."
       />
 
       {/* ── Bloc orientation — quelle mission est faite pour vous ? ── */}
       <section className="padding-y padding-x bg-surface-mid">
         <h2 className="h2-style text-primary">Quelle mission est faite pour vous ?</h2>
-        {/* gap-sm : entre les cards d'orientation */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-sm">
           {[
             { icon: IconPerson,   situation: 'Vous souhaitez partir seul, à deux ou en petit groupe pour participer concrètement à un projet solidaire ?', label: 'Volontariat individuel', filter: 'individuel' },
             { icon: IconClock,    situation: 'Vous avez entre 16 et 25 ans et recherchez une expérience citoyenne riche de sens ?', label: 'Service Civique', filter: 'service_civique' },
             { icon: IconPeople,   situation: 'Vous représentez un lycée ou une structure jeunesse et souhaitez organiser un projet collectif ?', label: 'Mission de groupe', filter: 'groupe_jeunes' },
-            { icon: IconBuilding, situation: 'Vous êtes salarié et souhaitez donner du sens à vos congés en vous engageant dans un projet solidaire à impact positif ?', label: 'Congé solidaire', filter: 'conge_solidaire' },
+            { icon: IconBuilding, situation: 'Vous êtes salarié et souhaitez donner du sens à vos congés en vous engageant dans un projet solidaire ?', label: 'Congé solidaire', filter: 'conge_solidaire' },
           ].map(item => {
             const Icon = item.icon
             return (
@@ -245,6 +205,7 @@ function Missions() {
       <div ref={filtersRef} className="py-4 px-4 lg:px-24 bg-primary flex justify-center lg:justify-start">
         <FilterChips filters={FILTERS_MISSION_TYPE} active={activeFilter} onChange={handleFilter} variant="dark" />
       </div>
+      
 
       {/* ── Section Volontariat individuel ── */}
       {(activeFilter === null || activeFilter === 'individuel') && (
@@ -257,32 +218,31 @@ function Missions() {
           decorImage="/images/design/ui/one-line-1.png"
           image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Volontariat individuel"
+          carouselTitle="Où partir ?"
+          carouselSubtitle="Découvrez les missions à l'international proposées selon les destinations."
           introSlot={
             <>
               <p className="text-body text-primary/80">
                 Partir en mission avec Sens Solidaires, c'est soutenir des projets menés toute l'année avec nos partenaires locaux au Kenya, au Sénégal, au Pérou, au Sri Lanka et à Sumatra.
               </p>
-
               <p className="text-body text-primary/80">
                 Pendant 10 jours à 4 semaines, vous découvrez une autre culture tout en participant à des actions concrètes au service des communautés locales. <strong className="text-primary/70">Aucune compétence particulière n'est demandée</strong> : votre motivation et votre envie de vous engager sont l'essentiel.
               </p>
-
               <p className="text-body text-primary/80">
-                Chaque mission est aussi une expérience humaine unique, riche en rencontres, en partage de compétences et en découvertes culturelles et environnementales.
+                Chaque mission est aussi une expérience humaine unique, riche en rencontres, en échanges et en découvertes.
               </p>
-
               <p className="text-mention text-primary/60">
                 Les frais engagés pour votre mission peuvent ouvrir droit à une réduction d'impôt de 66 % (selon la législation en vigueur). Un reçu fiscal est délivré à l'issue de votre mission.
               </p>
             </>
           }
           infoBarItems={[
-            { icon: IconPerson,  label: 'Individuel ou groupe' },
+            { icon: IconPerson,  label: 'Seul, à deux ou en petit groupe' },
             { icon: IconClock,   label: '10 jours à 4 semaines' },
             { icon: IconPayment, label: 'à partir de 1175€' },
             { icon: IconMoney,   label: 'Réduction d\'impôt 66 %' },
           ]}
-          testimonialsUrl="/temoignages"
+          secondaryAction={{ label: "Voir les témoignages →", href: "/temoignages?type=individuel" }}
           carouselItems={missionVolontariat}
           carouselSlidesPerView={3}
           renderSlide={(mission) => (
@@ -330,21 +290,57 @@ function Missions() {
             { icon: IconMoney,  label: 'Indemnité mensuelle' },
           ]}
           primaryAction={{ label: 'Candidater →', href: 'https://www.service-civique.gouv.fr/', external: true }}
-          testimonialsUrl="/temoignages?type=service_civique"
+          secondaryAction={{
+            label: "Plus d'informations →",
+            href: "https://www.service-civique.gouv.fr/comprendre-le-service-civique",
+            external: true,
+          }}
           stepsTitle="Comment ça fonctionne ?"
           steps={stepsServiceCivique}
           bgCard="bg-white"
         >
 
+          {/* Destinations — une card par pays réellement créé côté dashboard */}
+          {missionServiceCivique.length > 0 && (
+            <div className="mt-12">
+              <SubsectionEyebrow label="Où partir en mission ?" />
+              <p className="text-body text-primary/60 mb-8">
+                Découvrez les missions à l'international proposées selon les destinations.
+              </p>
+              <Carousel
+                items={missionServiceCivique}
+                showPagination={true}
+                color="primary"
+                renderSlide={(mission) => (
+                  <MissionCard
+                    image={mission.photo_hero_url}
+                    badge="Service civique"
+                    title={mission.title}
+                    description={mission.short_description}
+                    ctaLabel="En savoir plus →"
+                    onClick={() => setSelectedCountryCard(mission)}
+                  />
+                )}
+              />
+            </div>
+          )}
+
           {/* Témoignages — masqué si aucun témoignage approuvé pour ce type */}
           {testimonialsServiceCivique.length > 0 && (
             <div className="mt-12 bg-primary rounded-2xl p-6 lg:p-10">
-              <h3 className="h3-style text-surface mb-0">Ils ont vécu l'aventure</h3>
-              <p className="text-body text-surface/60 mb-8">
-                Découvrez les retours de nos volontaires en service civique.
-              </p>
+              <div className="flex flex-col lg:flex-row items-start justify-between gap-sm mb-8">
+                <div>
+                  <h3 className="h3-style text-surface mb-0">Ils ont vécu l'aventure</h3>
+                  <p className="text-body text-surface/60">
+                    Découvrez les retours de nos volontaires en service civique.
+                  </p>
+                </div>
+                <Link to="/temoignages?type=service_civique">
+                  <Button label="Voir tous les témoignages →" variant="primary" />
+                </Link>
+              </div>
               <Carousel
-                items={testimonialsServiceCivique}
+                items={testimonialsServiceCivique.slice(0, 10)}
                 showPagination={true}
                 color="surface"
                 renderSlide={(t) => (
@@ -362,12 +358,12 @@ function Missions() {
           {/* Actions terrain — masqué si aucune action dans ces pays */}
           {actionsServiceCivique.length > 0 && (
             <div className="mt-12">
-              <h3 className="h3-style text-primary mb-0">Notre impact sur le terrain</h3>
+              <SubsectionEyebrow label="Notre impact sur le terrain" />
               <p className="text-body text-primary/60 mb-8">
                 Découvrez quelques-unes des actions menées avec nos partenaires locaux.
               </p>
               <Carousel
-                items={actionsServiceCivique.slice(0, 4)}
+                items={actionsServiceCivique.slice(0, 6)}
                 showPagination={true}
                 color="primary"
                 renderSlide={(action) => (
@@ -385,21 +381,42 @@ function Missions() {
             </div>
           )}
 
-          {/* Galerie photos — toujours visible, emplacement réservé */}
-          <div className="mt-12">
-            <h3 className="h3-style text-primary mb-0">Quelques instants sur le terrain</h3>
-            <p className="text-body text-primary/60 mb-8">
-              Un aperçu des moments vécus lors de nos missions — la galerie sera enrichie au fil des prochains départs.
-            </p>
-            <Carousel
-              items={[1, 2, 3, 4]}
-              showPagination={true}
-              color="primary"
-              renderSlide={(_, i) => (
-                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.webp`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
-              )}
-            />
-          </div>
+          {/* Galerie photos — combinée de tous les pays Service Civique */}
+          {serviceCiviqueGallery.length > 0 && (
+            <div className="mt-12">
+              <SubsectionEyebrow label="Des images au cœur de l’action" />
+              <p className="text-body text-primary/60 mb-8">
+                Un aperçu des moments vécus lors de nos missions.
+              </p>
+              <Carousel
+                items={serviceCiviqueGallery}
+                showPagination={true}
+                color="primary"
+                renderSlide={(item) => (
+                  <img src={item.file_url} alt={item.label || ''} className="w-full h-56 object-cover rounded-xl" />
+                )}
+              />
+            </div>
+          )}
+
+          {selectedCountryCard && (
+            <Modal
+              isOpen={true}
+              onClose={() => setSelectedCountryCard(null)}
+              title={selectedCountryCard.title}
+            >
+              <div className="flex flex-col lg:flex-row gap-md">
+                <img
+                  src={selectedCountryCard.photo_hero_url}
+                  alt={selectedCountryCard.photo_hero_alt || selectedCountryCard.title}
+                  className="w-full lg:w-[280px] h-64 object-cover rounded-xl shrink-0"
+                />
+                <p className="text-body text-primary/80 whitespace-pre-line lg:w-2/3">
+                  {selectedCountryCard.description?.replace('---', '').trim()}
+                </p>
+              </div>
+            </Modal>
+          )}
         </MissionSection>
       )}
 
@@ -425,7 +442,7 @@ function Missions() {
             { icon: IconPin,    label: 'Kenya ou Sénégal' },
             { icon: IconHeart,  label: 'Projet éducatif' },
           ]}
-          testimonialsUrl="/temoignages?type=groupe_jeune"
+          secondaryAction={{ label: "Voir les témoignages →", href: "/temoignages?type=groupe_jeunes" }}
           stepsTitle="Une mission en trois temps"
           steps={stepsGroupeJeunes}
           bgCard="bg-surface-mid"
@@ -436,14 +453,12 @@ function Missions() {
             <p className="text-body text-primary/60 mb-8">
               Retrouvez les dossiers de présentation détaillés pour découvrir les objectifs pédagogiques, le déroulement des missions, les conditions de participation et les informations pratiques.
             </p>
-            {/* gap-md : entre les deux cards PDF */}
             <div className="flex flex-col sm:flex-row gap-md">
               {[
                 { title: "Mission groupe — Kenya",   size: "1,2 Mo" },
                 { title: "Mission groupe — Sénégal", size: "1,2 Mo" },
               ].map(pdf => (
                 <div key={pdf.title} className="flex items-center justify-between bg-surface-mid rounded-xl px-6 py-4 flex-1">
-                  {/* gap-sm : entre icône PDF et texte */}
                   <div className="flex items-center gap-sm">
                     <span className="text-eyebrow text-primary/40">PDF</span>
                     <div>
@@ -460,12 +475,19 @@ function Missions() {
           {/* Témoignages — masqué si aucun témoignage approuvé pour ce type de mission */}
           {testimonialsGroupeJeunes.length > 0 && (
             <div className="mt-12 bg-primary rounded-2xl p-6 lg:p-10">
-              <h3 className="h3-style text-surface mb-0">Ils ont vécu l'aventure</h3>
-              <p className="text-body text-surface/60 mb-8">
-                Rencontres, découvertes, projets de terrain, moments de partage... découvrez quelques souvenirs de nos missions de groupe au Kenya et au Sénégal.
-              </p>
+              <div className="flex flex-col lg:flex-row items-start justify-between gap-sm mb-8">
+                <div>
+                  <h3 className="h3-style text-surface mb-0">Ils ont vécu l'aventure</h3>
+                  <p className="text-body text-surface/60">
+                    Rencontres, découvertes, projets de terrain, moments de partage... découvrez quelques souvenirs de nos missions de groupe au Kenya et au Sénégal.
+                  </p>
+                </div>
+                <Link to="/temoignages?type=groupe_jeunes">
+                  <Button label="Voir tous les témoignages →" variant="primary" />
+                </Link>
+              </div>
               <Carousel
-                items={testimonialsGroupeJeunes}
+                items={testimonialsGroupeJeunes.slice(0, 10)}
                 showPagination={true}
                 color="surface"
                 renderSlide={(t) => (
@@ -480,15 +502,15 @@ function Missions() {
             </div>
           )}
 
-        {/* Actions terrain — masqué si aucune action dans ces pays */}
+          {/* Actions terrain — masqué si aucune action dans ces pays */}
           {actionsGroupeJeunes.length > 0 && (
             <div className="mt-12">
-              <h3 className="h3-style text-primary mb-0">Notre impact sur le terrain</h3>
+              <SubsectionEyebrow label="Notre impact sur le terrain" />
               <p className="text-body text-primary/60 mb-8">
                 Découvrez quelques-unes des actions menées avec nos partenaires locaux.
               </p>
               <Carousel
-                items={actionsGroupeJeunes.slice(0, 4)}
+                items={actionsGroupeJeunes.slice(0, 6)}
                 showPagination={true}
                 color="primary"
                 renderSlide={(action) => (
@@ -508,9 +530,9 @@ function Missions() {
 
           {/* Galerie photos — toujours visible, emplacement réservé */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-0">Quelques instants sur le terrain</h3>
+            <SubsectionEyebrow label="Des images au cœur de l’action" />
             <p className="text-body text-primary/60 mb-8">
-              Un aperçu des moments vécus lors de nos missions — la galerie sera enrichie au fil des prochains départs.
+              Un aperçu des moments vécus lors de nos missions.
             </p>
             <Carousel
               items={[1, 2, 3, 4]}
@@ -537,9 +559,15 @@ function Missions() {
           image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Congé solidaire"
           introSlot={
-            <p className="text-body text-primary/80">
-              Le congé solidaire permet à un salarié de s'engager temporairement auprès d'une association tout en conservant son statut professionnel. Pour les entreprises, c'est également une opportunité de renforcer leur démarche RSE, développer l'engagement des équipes et soutenir des actions à impact positif.
-            </p>
+            <>
+              <p className="text-body text-primary/80">
+                Le congé solidaire permet aux salariés de consacrer une partie de leurs congés à une mission de solidarité internationale. Avec Sens Solidaires, ils rejoignent des projets menés avec nos partenaires locaux et mettent leur temps, leur énergie et leurs compétences au service d'actions concrètes sur le terrain. C'est aussi l'occasion de découvrir un nouvel environnement, de partager des savoir-faire et de vivre une expérience humaine et interculturelle forte.
+              </p>
+
+              <p className="text-body text-primary/80">
+                Pour l'entreprise, le congé solidaire permet de soutenir des projets utiles tout en donnant aux collaborateurs la possibilité de s'engager concrètement. Il s'inscrit dans une démarche RSE et contribue à développer l'engagement des équipes, à valoriser leurs compétences et à donner une dimension collective aux actions de solidarité portées par l'entreprise.
+              </p>
+            </>
           }
           infoBarItems={[
             { icon: IconBuilding, label: 'Salariés & entreprises' },
@@ -548,7 +576,7 @@ function Missions() {
             { icon: IconMoney,    label: 'Réduction d\'impôt 60 %' },
           ]}
           primaryAction={{ label: 'En savoir plus →', href: 'https://france-volontaires.org/le-conge-de-solidarite-internationale/', external: true }}
-          testimonialsUrl="/temoignages?type=conge_solidaire"
+          secondaryAction={{ label: "Voir les témoignages →", href: "/temoignages?type=conge_solidaire" }}
           stepsTitle="Comment ça fonctionne ?"
           steps={stepsCongeSolidaire}
           bgCard="bg-surface"
@@ -556,12 +584,19 @@ function Missions() {
           {/* Témoignages — masqué si aucun témoignage approuvé pour ce type de mission */}
           {testimonialsCongeSolidaire.length > 0 && (
             <div className="mt-12 bg-primary rounded-2xl p-6 lg:p-10">
-              <h3 className="h3-style text-surface mb-0">Des collaborateurs engagés sur le terrain</h3>
-              <p className="text-body text-surface/60 mb-8">
-                Découvrez quelques moments vécus lors de nos missions solidaires réalisées avec des entreprises partenaires au Kenya et au Sénégal.
-              </p>
+              <div className="flex flex-col lg:flex-row items-start justify-between gap-sm mb-8">
+                <div>
+                  <h3 className="h3-style text-surface mb-0">Des collaborateurs engagés sur le terrain</h3>
+                  <p className="text-body text-surface/60">
+                    Découvrez quelques moments vécus lors de nos missions solidaires réalisées avec des entreprises partenaires au Kenya et au Sénégal.
+                  </p>
+                </div>
+                <Link to="/temoignages?type=conge_solidaire">
+                  <Button label="Voir tous les témoignages →" variant="primary" />
+                </Link>
+              </div>
               <Carousel
-                items={testimonialsCongeSolidaire}
+                items={testimonialsCongeSolidaire.slice(0, 10)}
                 showPagination={true}
                 color="surface"
                 renderSlide={(t) => (
@@ -576,15 +611,15 @@ function Missions() {
             </div>
           )}
 
-        {/* Actions terrain — masqué si aucune action dans ces pays */}
+          {/* Actions terrain — masqué si aucune action dans ces pays */}
           {actionsCongeSolidaire.length > 0 && (
             <div className="mt-12">
-              <h3 className="h3-style text-primary mb-0">Notre impact sur le terrain</h3>
+              <SubsectionEyebrow label="Notre impact sur le terrain" />
               <p className="text-body text-primary/60 mb-8">
                 Découvrez quelques-unes des actions menées avec nos partenaires locaux.
               </p>
               <Carousel
-                items={actionsCongeSolidaire.slice(0, 4)}
+                items={actionsCongeSolidaire.slice(0, 6)}
                 showPagination={true}
                 color="primary"
                 renderSlide={(action) => (
@@ -604,9 +639,9 @@ function Missions() {
 
           {/* Galerie photos — toujours visible, emplacement réservé */}
           <div className="mt-12">
-            <h3 className="h3-style text-primary mb-0">Quelques instants sur le terrain</h3>
+            <SubsectionEyebrow label="Des images au cœur de l’action" />
             <p className="text-body text-primary/60 mb-8">
-              Un aperçu des moments vécus lors de nos missions — la galerie sera enrichie au fil des prochains départs.
+              Un aperçu des moments vécus lors de nos missions.
             </p>
             <Carousel
               items={[1, 2, 3, 4]}
