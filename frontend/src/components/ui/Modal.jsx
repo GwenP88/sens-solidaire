@@ -1,5 +1,6 @@
 // Modal.jsx
 // Modale générique réutilisable — s'ouvre/ferme via prop isOpen + onClose
+// size : 'default' (défaut, lg→2xl→6xl) | 'small' (lg fixe, pour un contenu léger)
 
 // ── React
 import { useEffect } from 'react'
@@ -7,7 +8,17 @@ import { useEffect } from 'react'
 // ── Icônes
 import { IoCloseOutline } from 'react-icons/io5'
 
-function Modal({ isOpen, onClose, title, children }) {
+const SIZE_CLASSES = {
+  default: 'max-w-lg md:max-w-2xl lg:max-w-6xl',
+  small: 'max-w-lg',
+}
+
+const TITLE_SIZE_CLASSES = {
+  default: 'h2-style',
+  small: 'h3-style',
+}
+
+function Modal({ isOpen, onClose, title, children, size = 'default' }) {
 
   // ── Fermeture avec la touche Échap
   useEffect(() => {
@@ -33,15 +44,15 @@ function Modal({ isOpen, onClose, title, children }) {
     >
       {/* Contenu — stoppe la propagation du clic */}
       <div 
-        className="bg-surface rounded-2xl shadow-xl w-full max-w-lg md:max-w-2xl lg:max-w-6xl p-8 relative max-h-[90vh] overflow-y-auto"
+        className={`bg-surface rounded-2xl shadow-xl w-full ${SIZE_CLASSES[size]} p-8 relative max-h-[90vh] overflow-y-auto`}
         onClick={e => e.stopPropagation()}
       >
-        {/* Header — h2-style porte margin-bottom: 2rem, pas de mb- en dur */}
-        <div className="flex items-center justify-between">
-          <h2 className="h2-style text-primary">{title}</h2>
+        {/* Header — bouton fermer en position absolue pour pouvoir centrer le titre */}
+        <div className="relative mb-4">
+          <h2 className={`${TITLE_SIZE_CLASSES[size]} text-primary text-center pr-8`}>{title}</h2>
           <button
             onClick={onClose}
-            className="text-primary/40 hover:text-primary transition-colors"
+            className="absolute top-0 right-0 text-primary/40 hover:text-primary transition-colors"
             aria-label="Fermer"
           >
             <IoCloseOutline className="text-2xl" />

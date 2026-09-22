@@ -16,6 +16,7 @@ import HeroPage from '../components/layout/HeroPage'
 // ── Composants UI
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import Modal from '../components/ui/Modal'
 
 // ── Utils
 import { IconPin, IconGlobe, IconPerson } from '../utils/icons'
@@ -27,6 +28,7 @@ function LocationDetail() {
   const [location, setLocation] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [showDelegationModal, setShowDelegationModal] = useState(false)
   const [searchParams] = useSearchParams()
   const fromSlug = searchParams.get('from')
   const originMission = location?.missions?.find(m => m.slug === fromSlug)
@@ -94,14 +96,15 @@ function LocationDetail() {
                 ))}
               </div>
 
-              {/* Encart "Notre mission ici" */}
-              <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
-                <h3 className="h3-style text-primary mb-0">Notre mission ici</h3>
-                <p className="text-body text-primary/70">
-                  Les volontaires Sens Solidaires interviennent directement avec les équipes de ce partenaire local.
-                  Chaque action menée sur place s'inscrit dans une démarche durable et en lien étroit avec les communautés.
-                </p>
-              </div>
+              {/* Encart "Notre mission ici" — masqué si aucun contenu saisi */}
+              {location.mission_ss && (
+                <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
+                  <h3 className="h3-style text-primary mb-0">Notre mission ici</h3>
+                  <p className="text-body text-primary/70">
+                    {location.mission_ss}
+                  </p>
+                </div>
+              )}
 
             </div>
 
@@ -119,6 +122,13 @@ function LocationDetail() {
                       <IconPerson className="text-accent shrink-0 mt-0.5" />
                       <p className="text-body text-primary/80">{location.delegation.contacts}</p>
                     </div>
+                    <button
+                      onClick={() => setShowDelegationModal(true)}
+                      className="flex items-center gap-xs link-cta text-accent hover:text-accent/80"
+                    >
+                      <IconPerson className="shrink-0" />
+                      Voir la délégation →
+                    </button>
                   </div>
                 )}
 
@@ -207,6 +217,24 @@ function LocationDetail() {
           )}
 
         </section>
+      )}
+
+      {showDelegationModal && location.delegation && (
+        <Modal
+          isOpen={true}
+          onClose={() => setShowDelegationModal(false)}
+          title={location.delegation.lieu}
+          size="small"
+        >
+          <img
+            src={location.delegation.image_url}
+            alt={location.delegation.lieu}
+            className="w-full aspect-video object-cover rounded-xl mb-4"
+          />
+          <p className="text-body text-primary/80 text-center whitespace-pre-line">
+            {location.delegation.contacts}
+          </p>
+        </Modal>
       )}
 
       {/* ── ScrollToTop — bouton flottant, suit le scroll sur toute la page ── */}
