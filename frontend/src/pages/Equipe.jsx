@@ -11,13 +11,22 @@ import { fetchTeamMembers, fetchDelegations } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
+import AnchorNav from '../components/navigation/AnchorNav'
 
 // ── Composants métier
 import TeamMemberCard from '../components/team/TeamMemberCard'
 import DelegationCard from '../components/team/DelegationCard'
+
+// ── Sections de l'AnchorNav
+const ANCHOR_SECTIONS = [
+  { label: "Direction",                id: "direction"   },
+  { label: "Bureau",                   id: "bureau"      },
+  { label: "Conseil d'administration", id: "ca"          },
+  { label: "Également à nos côtés",    id: "egalement"   },
+  { label: "Délégations",              id: "delegations" },
+]
 
 function Equipe() {
   // ── État local — membres par catégorie + délégations
@@ -46,8 +55,11 @@ function Equipe() {
         subtitle="Des femmes et des hommes engagés, en France et à l'international, pour un monde plus juste et la protection de la biodiversité."
       />
 
-      {/* ── Direction — cards larges ── */}
-      <Section title="Direction">
+      {/* ── Navigation par ancre ── */}
+      <AnchorNav sections={ANCHOR_SECTIONS} variant="dark" />
+
+      {/* ── Direction — cards larges, 3 colonnes ── */}
+      <Section title="Direction" id="direction">
         <div className="grid-cards-3">
           {direction.map(m => (
             <TeamMemberCard
@@ -62,8 +74,8 @@ function Equipe() {
         </div>
       </Section>
 
-      {/* ── Bureau — cards larges, fond inversé ── */}
-      <Section title="Membres du bureau" bg="bg-surface-mid">
+      {/* ── Bureau — cards larges, 3 colonnes, fond inversé ── */}
+      <Section title="Membres du bureau" bg="bg-surface-mid" id="bureau">
         <div className="grid-cards-3">
           {bureau.map(m => (
             <TeamMemberCard
@@ -79,57 +91,51 @@ function Equipe() {
         </div>
       </Section>
 
-      {/* ── Conseil d'administration — carousel ── */}
-      <Section title="Conseil d'administration">
-        <Carousel
-          items={ca}
-          renderSlide={(m) => (
+      {/* ── Conseil d'administration — cards compactes, 4 colonnes ── */}
+      <Section title="Conseil d'administration" id="ca">
+        <div className="grid-cards-4">
+          {ca.map(m => (
             <TeamMemberCard
+              key={m.id}
               variant="small"
               nom={m.nom}
               role={m.role}
               avatar={m.avatar_url}
             />
-          )}
-          showPagination={true}
-          color="primary"
-        />
+          ))}
+        </div>
       </Section>
 
-      {/* ── Également à nos côtés — carousel ── */}
-      <Section title="Également à nos côtés" bg="bg-surface-mid">
-        <Carousel
-          items={egalement}
-          renderSlide={(m) => (
+      {/* ── Également à nos côtés — cards compactes, 4 colonnes, fond inversé ── */}
+      <Section title="Également à nos côtés" bg="bg-surface-mid" id="egalement">
+        <div className="grid-cards-4">
+          {egalement.map(m => (
             <TeamMemberCard
+              key={m.id}
               variant="small"
               nom={m.nom}
               role={m.role}
               avatar={m.avatar_url}
               bg="bg-surface"
             />
-          )}
-          showPagination={true}
-          color="primary"
-        />
+          ))}
+        </div>
       </Section>
 
-      {/* ── Délégations — carousel ── */}
-      <Section title="Nos délégations et partenaires terrain">
-        <Carousel
-          items={delegations}
-          renderSlide={(d) => (
+      {/* ── Délégations — cards immersives, 4 colonnes ── */}
+      <Section title="Nos délégations et partenaires terrain" id="delegations">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-md">
+          {delegations.map(d => (
             <DelegationCard
+              key={d.id}
               pays={d.pays}
               flag={`https://flagcdn.com/w40/${d.flag_code}.png`}
               image={d.image_url}
               lieu={d.lieu}
               contacts={d.contacts}
             />
-          )}
-          showPagination={true}
-          color="primary"
-        />
+          ))}
+        </div>
       </Section>
 
       <ScrollToTop />
