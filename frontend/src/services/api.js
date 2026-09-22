@@ -5,7 +5,8 @@
 // URL de base de l'API — variable d'env Vite en priorité, fallback localhost
 const API_URL = "/api"
 
-// ── AUTH HELPERS ─────────────────────────────────────────────────────────────
+// ── AUTH & INFRASTRUCTURE ─────────────────────────────────────────────────
+// Fonctions bas niveau réutilisées par tous les appels protégés du dashboard.
 
 // authFetch — ajoute le token à chaque requête protégée du dashboard.
 // Au 1er 401 (access token expiré, 15 min), tente un refresh SILENCIEUX via
@@ -67,8 +68,6 @@ const authFetch = async (url, options = {}) => {
   return response
 }
 
-// ── AUTH ADMIN ───────────────────────────────────────────────────────────────
-
 // Connexion admin : envoie email + password, récupère l'access token.
 // credentials: "include" → indispensable pour que le navigateur accepte
 // le cookie HTTP-Only (refresh token) renvoyé par le back.
@@ -93,7 +92,13 @@ export const loginAdmin = async (email, password) => {
 }
 
 
-// ── MISSIONS ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// PUBLIC
+// Endpoints accessibles sans authentification — consommés par le site vitrine.
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── MISSIONS ─────────────────────────────────────────────────────────────
+// Volontariat individuel et Service Civique — lecture seule côté public.
 
 // Récupère toutes les missions actives
 // Paramètres optionnels : filters = { type, country }
@@ -113,7 +118,17 @@ export const fetchMissionBySlug = async (slug) => {
   return data.mission
 }
 
-// ── UPLOAD DE FICHIERS ───────────────────────────────────────────────────────
+// GET /api/missions/service-civique/gallery — galerie combinée de tous les
+// pays Service Civique (photos forcées + plus récentes, plafonné à 10)
+export const fetchServiceCiviqueGallery = async () => {
+  const response = await fetch(`${API_URL}/missions/service-civique/gallery`)
+  if (!response.ok) throw new Error("Impossible de charger la galerie Service Civique.")
+  const data = await response.json()
+  return data.media
+}
+
+// ── UPLOAD DE FICHIERS (visiteur) ───────────────────────────────────────────
+// Upload sans authentification, utilisé uniquement par le formulaire témoignage.
 
 // Upload public d'une image (utilisé par le formulaire témoignage visiteur)
 // Contrairement aux autres appels, le body est un FormData — pas de JSON.stringify,
@@ -136,7 +151,172 @@ export const uploadFile = async (file) => {
   return data.url
 }
 
-// ── UPLOAD DE FICHIERS (ADMIN) ────────────────────────────────────────────────
+// ── TÉMOIGNAGES ──────────────────────────────────────────────────────────
+// Lecture publique des témoignages validés + soumission par un visiteur.
+
+// Récupère tous les témoignages validés
+export const fetchTestimonials = async () => {
+  const response = await fetch(`${API_URL}/testimonials`)
+  if (!response.ok) throw new Error("Impossible de charger les témoignages. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// Soumet un nouveau témoignage
+export const submitTestimonial = async (data) => {
+  const response = await fetch(`${API_URL}/testimonials`, {
+    method: 'POST',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+  if (!response.ok) throw new Error("L'envoi du témoignage a échoué. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// ── ACTIONS SUR LE TERRAIN ───────────────────────────────────────────────
+// Actions affichées sur la page Notre Impact, listées puis détaillées.
+
+// Récupère les actions terrain, filtrables par pays
+export const fetchFieldActions = async (country = null) => {
+  const params = country ? `?country=${encodeURIComponent(country)}` : ''
+  const response = await fetch(`${API_URL}/field-actions${params}`)
+  if (!response.ok) throw new Error("Impossible de charger les actions terrain. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// Récupère une action terrain complète par son slug
+export const fetchFieldActionBySlug = async (slug) => {
+  const response = await fetch(`${API_URL}/field-actions/${slug}`)
+  if (!response.ok) throw new Error(`Action terrain introuvable (slug : ${slug})`)
+  return await response.json()
+}
+
+// ── MÉDIAS ET ACTUALITÉS ─────────────────────────────────────────────────
+// Articles publiés par l'association, listés puis détaillés.
+
+// Récupère tous les articles publiés
+export const fetchMediaPosts = async () => {
+  const response = await fetch(`${API_URL}/media-posts`)
+  if (!response.ok) throw new Error("Impossible de charger les médias et actualités. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// Récupère un article complet par son slug
+export const fetchMediaPostBySlug = async (slug) => {
+  const response = await fetch(`${API_URL}/media-posts/${slug}`)
+  if (!response.ok) throw new Error(`Article introuvable (slug : ${slug})`)
+  return await response.json()
+}
+
+// ── ÉDUCATION ET SENSIBILISATION ─────────────────────────────────────────
+// Ateliers pédagogiques proposés aux écoles, listés puis détaillés.
+
+// Récupère tous les ateliers éducatifs
+export const fetchEducationItems = async () => {
+  const response = await fetch(`${API_URL}/education-items`)
+  if (!response.ok) throw new Error("Impossible de charger les ateliers éducatifs. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// Récupère un atelier complet par son slug
+export const fetchEducationItemBySlug = async (slug) => {
+  const response = await fetch(`${API_URL}/education-items/${slug}`)
+  if (!response.ok) throw new Error(`Atelier introuvable (slug : ${slug})`)
+  return await response.json()
+}
+
+// ── MEMBRES DE L'ÉQUIPE ──────────────────────────────────────────────────
+// Direction, bureau, conseil d'administration, affichés sur la page Équipe.
+
+// Récupère les membres de l'équipe, filtrables par catégorie et limitables en nombre
+export const fetchTeamMembers = async (category = null, limit = null) => {
+  const params = new URLSearchParams()
+  if (category) params.append('category', category)
+  if (limit) params.append('limit', limit)
+  const response = await fetch(`${API_URL}/team-members?${params}`)
+  if (!response.ok) throw new Error("Impossible de charger les membres de l'équipe. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// ── RAPPORTS D'ACTIVITÉ ───────────────────────────────────────────────────
+// Rapports annuels PDF affichés sur la page Rapports d'activité.
+
+// Récupère tous les rapports d'activité
+export const fetchActivityReports = async () => {
+  const response = await fetch(`${API_URL}/activity-reports`)
+  if (!response.ok) throw new Error("Impossible de charger les rapports d'activité. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// ── LIEUX ─────────────────────────────────────────────────────────────────
+// Lieux partenaires associés aux missions, affichés sur les pages mission et lieu.
+
+// Récupère les lieux correspondant à une liste de pays
+export const fetchLocationsByCountry = async (countries) => {
+  const params = new URLSearchParams({ country: countries.join(',') })
+  const response = await fetch(`${API_URL}/locations?${params}`)
+  if (!response.ok) throw new Error("Impossible de charger les lieux partenaires.")
+  const data = await response.json()
+  return data.locations
+}
+
+// Récupère un lieu complet par son slug
+export const fetchLocationBySlug = async (slug) => {
+  const response = await fetch(`${API_URL}/locations/${slug}`)
+  if (!response.ok) throw new Error(`Lieu introuvable (slug : ${slug})`)
+  return await response.json()
+}
+
+// ── DÉLÉGATIONS ──────────────────────────────────────────────────────────
+// Délégations nationales affichées sur la page Équipe.
+
+// Récupère toutes les délégations
+export const fetchDelegations = async () => {
+  const response = await fetch(`${API_URL}/delegations`)
+  if (!response.ok) throw new Error("Impossible de charger les délégations. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// ── RAPPORTS DE MISSION ───────────────────────────────────────────────────
+// Comptes-rendus rédigés par les volontaires à leur retour de mission.
+
+// Récupère les rapports de mission, filtrables (ex: par pays)
+export const fetchMissionReports = async (filters = {}) => {
+  const params = new URLSearchParams(filters)
+  const response = await fetch(`${API_URL}/mission-reports?${params}`)
+  if (!response.ok) throw new Error("Impossible de charger les rapports de mission. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// ── PARTENAIRES ──────────────────────────────────────────────────────────
+// Logos partenaires affichés sur la page À propos.
+
+// Récupère tous les partenaires
+export const fetchPartners = async () => {
+  const response = await fetch(`${API_URL}/partners`)
+  if (!response.ok) throw new Error("Impossible de charger les partenaires. Vérifiez votre connexion ou réessayez.")
+  return await response.json()
+}
+
+// ── GALERIES PAR TYPE (Groupe jeunes, Congé de solidarité — pas de mission) ─
+// Pas de sélection de pays pour ces 2 types : une seule galerie par type,
+// pas rattachée à une mission (voir galleryController.js côté backend).
+
+// Récupère la galerie publique d'un type (Groupe jeunes ou Congé de solidarité)
+export const fetchTypeGallery = async (type) => {
+  const response = await fetch(`${API_URL}/gallery/${type}`)
+  if (!response.ok) throw new Error("Impossible de charger la galerie.")
+  const data = await response.json()
+  return data.media
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ADMIN
+// Endpoints protégés par JWT (via authFetch) — consommés par le dashboard.
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── UPLOAD DE FICHIERS ───────────────────────────────────────────────────
+// Upload authentifié via le dashboard — images et PDF.
 
 // Upload un fichier via le dashboard (protégé par auth).
 // type : 'hero' | 'gallery' | 'card' | 'avatar' — détermine la taille de
@@ -161,132 +341,8 @@ export const uploadAdminFile = async (file, label = '', type = '') => {
   return await response.json() // { url, label }
 }
 
-// ── TÉMOIGNAGES ──────────────────────────────────────────────────────────────
-
-// Récupère tous les témoignages validés
-export const fetchTestimonials = async () => {
-  const response = await fetch(`${API_URL}/testimonials`)
-  if (!response.ok) throw new Error("Impossible de charger les témoignages. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-// Soumet un nouveau témoignage
-export const submitTestimonial = async (data) => {
-  const response = await fetch(`${API_URL}/testimonials`, {
-    method: 'POST',
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  })
-  if (!response.ok) throw new Error("L'envoi du témoignage a échoué. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-// ── ACTIONS SUR LE TERRAIN ───────────────────────────────────────────────────
-
-export const fetchFieldActions = async (country = null) => {
-  const params = country ? `?country=${encodeURIComponent(country)}` : ''
-  const response = await fetch(`${API_URL}/field-actions${params}`)
-  if (!response.ok) throw new Error("Impossible de charger les actions terrain. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-export const fetchFieldActionBySlug = async (slug) => {
-  const response = await fetch(`${API_URL}/field-actions/${slug}`)
-  if (!response.ok) throw new Error(`Action terrain introuvable (slug : ${slug})`)
-  return await response.json()
-}
-
-// ── MÉDIAS ET ACTUALITÉS ─────────────────────────────────────────────────────
-
-export const fetchMediaPosts = async () => {
-  const response = await fetch(`${API_URL}/media-posts`)
-  if (!response.ok) throw new Error("Impossible de charger les médias et actualités. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-export const fetchMediaPostBySlug = async (slug) => {
-  const response = await fetch(`${API_URL}/media-posts/${slug}`)
-  if (!response.ok) throw new Error(`Article introuvable (slug : ${slug})`)
-  return await response.json()
-}
-
-// ── ÉDUCATION ET SENSIBILISATION ─────────────────────────────────────────────
-
-export const fetchEducationItems = async () => {
-  const response = await fetch(`${API_URL}/education-items`)
-  if (!response.ok) throw new Error("Impossible de charger les ateliers éducatifs. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-export const fetchEducationItemBySlug = async (slug) => {
-  const response = await fetch(`${API_URL}/education-items/${slug}`)
-  if (!response.ok) throw new Error(`Atelier introuvable (slug : ${slug})`)
-  return await response.json()
-}
-
-// ── MEMBRES DE L'ÉQUIPE ──────────────────────────────────────────────────────
-
-export const fetchTeamMembers = async (category = null, limit = null) => {
-  const params = new URLSearchParams()
-  if (category) params.append('category', category)
-  if (limit) params.append('limit', limit)
-  const response = await fetch(`${API_URL}/team-members?${params}`)
-  if (!response.ok) throw new Error("Impossible de charger les membres de l'équipe. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-// ── RAPPORTS D'ACTIVITÉ ──────────────────────────────────────────────────────
-
-export const fetchActivityReports = async () => {
-  const response = await fetch(`${API_URL}/activity-reports`)
-  if (!response.ok) throw new Error("Impossible de charger les rapports d'activité. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-// ── LIEUX DE MISSIONS ──────────────────────────────────────────────────────
-
-export const fetchLocationsByCountry = async (countries) => {
-  const params = new URLSearchParams({ country: countries.join(',') })
-  const response = await fetch(`${API_URL}/locations?${params}`)
-  if (!response.ok) throw new Error("Impossible de charger les lieux partenaires.")
-  const data = await response.json()
-  return data.locations
-}
-
-// ── DÉLÉGATIONS ──────────────────────────────────────────────────────────────
-
-export const fetchDelegations = async () => {
-  const response = await fetch(`${API_URL}/delegations`)
-  if (!response.ok) throw new Error("Impossible de charger les délégations. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-// ── RAPPORTS DE MISSION ──────────────────────────────────────────────────────
-
-export const fetchMissionReports = async (filters = {}) => {
-  const params = new URLSearchParams(filters)
-  const response = await fetch(`${API_URL}/mission-reports?${params}`)
-  if (!response.ok) throw new Error("Impossible de charger les rapports de mission. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-// ── PARTENAIRES ──────────────────────────────────────────────────────────────
-
-export const fetchPartners = async () => {
-  const response = await fetch(`${API_URL}/partners`)
-  if (!response.ok) throw new Error("Impossible de charger les partenaires. Vérifiez votre connexion ou réessayez.")
-  return await response.json()
-}
-
-// ── LIEUX LIÉS AUX MISSIONS ──────────────────────────────────────────────────
-
-export const fetchLocationBySlug = async (slug) => {
-  const response = await fetch(`${API_URL}/locations/${slug}`)
-  if (!response.ok) throw new Error(`Lieu introuvable (slug : ${slug})`)
-  return await response.json()
-}
-
-// ── ADMIN — TÉMOIGNAGES ──────────────────────────────────────────────────────
+// ── TÉMOIGNAGES ──────────────────────────────────────────────────────────
+// Modération dashboard : lecture de tous les statuts, approbation, refus.
 
 // Récupère les témoignages pour la modération.
 // status optionnel : "pending" | "approved" | "rejected" | undefined (= tous)
@@ -334,7 +390,8 @@ export const rejectTestimonial = async (id) => {
   return await response.json()
 }
 
-// ── ADMIN — MISSIONS ─────────────────────────────────────────────────────────
+// ── MISSIONS ─────────────────────────────────────────────────────────────
+// CRUD complet des missions, plus tarifs et médias associés.
 
 // Récupère TOUTES les missions (actives + inactives) pour le dashboard admin.
 export const fetchAdminMissions = async (signal) => {
@@ -441,18 +498,8 @@ export const updateMissionMedia = async (id, images, pdf) => {
   return await response.json()
 }
 
-// GET /api/missions/service-civique/gallery — galerie combinée de tous les
-// pays Service Civique (photos forcées + plus récentes, plafonné à 10)
-export const fetchServiceCiviqueGallery = async () => {
-  const response = await fetch(`${API_URL}/missions/service-civique/gallery`)
-  if (!response.ok) throw new Error("Impossible de charger la galerie Service Civique.")
-  const data = await response.json()
-  return data.media
-}
-
-// ── GALERIES PAR TYPE (Groupe jeunes, Congé solidaire — pas de mission) ────
-// Pas de sélection de pays pour ces 2 types : une seule galerie par type,
-// pas rattachée à une mission (voir galleryController.js côté backend).
+// ── GALERIES PAR TYPE (Groupe jeunes, Congé de solidarité) ─────────────────
+// Édition dashboard des galeries sans mission associée (voir bloc public équivalent).
 
 // Récupère toutes les photos de la galerie d'un type (admin — pas juste le
 // top 10 public, pour pouvoir tout éditer)
@@ -478,16 +525,10 @@ export const updateTypeGalleryMedia = async (type, images) => {
   return await response.json()
 }
 
-// ── GALERIE PUBLIQUE PAR TYPE (Groupe jeunes, Congé solidaire) ──────────────
-export const fetchTypeGallery = async (type) => {
-  const response = await fetch(`${API_URL}/gallery/${type}`)
-  if (!response.ok) throw new Error("Impossible de charger la galerie.")
-  const data = await response.json()
-  return data.media
-}
+// ── LOCATIONS ────────────────────────────────────────────────────────────
+// CRUD complet des lieux partenaires, plus leur galerie photo et statut actif/inactif.
 
-// ── ADMIN — LOCATIONS ────────────────────────────────────────────────────
-
+// Récupère tous les lieux (actifs + inactifs) pour le dashboard admin
 export const fetchAdminLocations = async () => {
   const response = await authFetch(`${API_URL}/admin/locations`)
   if (!response.ok) throw new Error("Impossible de charger les lieux.")
@@ -495,6 +536,7 @@ export const fetchAdminLocations = async () => {
   return data.locations
 }
 
+// Récupère un lieu par son id pour le formulaire d'édition
 export const fetchAdminLocationById = async (id) => {
   const response = await authFetch(`${API_URL}/admin/locations/${id}`)
   if (!response.ok) throw new Error("Impossible de charger ce lieu.")
@@ -502,6 +544,7 @@ export const fetchAdminLocationById = async (id) => {
   return data.location
 }
 
+// Crée un nouveau lieu
 export const createLocation = async (locationData) => {
   const response = await authFetch(`${API_URL}/admin/locations`, {
     method: 'POST',
@@ -516,6 +559,7 @@ export const createLocation = async (locationData) => {
   return data.location
 }
 
+// Met à jour partiellement un lieu existant
 export const updateLocation = async (id, locationData) => {
   const response = await authFetch(`${API_URL}/admin/locations/${id}`, {
     method: 'PATCH',
@@ -530,6 +574,7 @@ export const updateLocation = async (id, locationData) => {
   return data.location
 }
 
+// Remplace la galerie photo d'un lieu
 export const updateLocationMedia = async (id, images) => {
   const response = await authFetch(`${API_URL}/admin/locations/${id}/media`, {
     method: 'PUT',
@@ -543,6 +588,7 @@ export const updateLocationMedia = async (id, images) => {
   return await response.json()
 }
 
+// Active ou désactive un lieu (pause/reprise, sans le supprimer)
 export const toggleLocationActive = async (id, is_active) => {
   const response = await authFetch(`${API_URL}/admin/locations/${id}/toggle`, {
     method: 'PATCH',
@@ -553,6 +599,7 @@ export const toggleLocationActive = async (id, is_active) => {
   return await response.json()
 }
 
+// Supprime DÉFINITIVEMENT un lieu (hard delete) — irréversible.
 export const hardDeleteLocation = async (id) => {
   const response = await authFetch(`${API_URL}/admin/locations/${id}`, {
     method: 'DELETE',
@@ -561,10 +608,11 @@ export const hardDeleteLocation = async (id) => {
   return await response.json()
 }
 
-// ── ADMIN — DELEGATIONS ──────────────────────────────────────────────────
+// ── DELEGATIONS ──────────────────────────────────────────────────────────
 // Utilisées à la fois par l'onglet Équipe et par le panneau déplié du
 // formulaire Lieu — mêmes fonctions, même ligne en base dans les deux cas.
 
+// Récupère une délégation par son id pour le formulaire d'édition
 export const fetchAdminDelegationById = async (id) => {
   const response = await authFetch(`${API_URL}/admin/delegations/${id}`)
   if (!response.ok) throw new Error("Impossible de charger cette délégation.")
@@ -572,6 +620,7 @@ export const fetchAdminDelegationById = async (id) => {
   return data.delegation
 }
 
+// Crée une nouvelle délégation
 export const createDelegation = async (delegationData) => {
   const response = await authFetch(`${API_URL}/admin/delegations`, {
     method: 'POST',
@@ -586,6 +635,7 @@ export const createDelegation = async (delegationData) => {
   return data.delegation
 }
 
+// Met à jour partiellement une délégation existante
 export const updateDelegation = async (id, delegationData) => {
   const response = await authFetch(`${API_URL}/admin/delegations/${id}`, {
     method: 'PATCH',
@@ -600,7 +650,10 @@ export const updateDelegation = async (id, delegationData) => {
   return data.delegation
 }
 
-// ── ADMIN — LISTE DES PAYS (pour le <datalist> du formulaire lieu/délégation)
+// ── LISTE DES PAYS (pour le <datalist> du formulaire lieu/délégation) ──────
+// Alimente l'autocomplétion pays, partagée par Mission, Service Civique et Lieu.
+
+// Récupère la liste des noms de pays (FR) pour alimenter le <datalist>
 export const fetchCountryNames = async () => {
   const response = await authFetch(`${API_URL}/admin/countries`)
   if (!response.ok) throw new Error("Impossible de charger la liste des pays.")

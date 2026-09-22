@@ -3,80 +3,56 @@
 // Assemble tous les middlewares et routes dans le bon ordre
 // L'ordre d'initialisation est critique — ne pas modifier
 
-// Import du framework Express
+// ── DÉPENDANCES EXTERNES ─────────────────────────────────────────────────────
+// Packages npm utilisés par le serveur — sécurité, réseau, cookies.
 import express from "express"
+import helmet from "helmet"       // Sécurise les headers HTTP (clickjacking, fingerprinting...)
+import cors from "cors"           // Autorise le frontend à appeler l'API en cross-origin
+import cookieParser from "cookie-parser" // Permet de lire req.cookies (refresh token)
 
-// Helmet sécurise automatiquement les headers HTTP
-// Ex : empêche le clickjacking, masque la technologie utilisée, etc.
-import helmet from "helmet"
-
-// CORS autorise le frontend (localhost:5173) à appeler l'API
-// Sans ça, le navigateur bloque toutes les requêtes cross-origin
-import cors from "cors"
-
-// Cookie-parser permet à Express de lire req.cookies
-// Nécessaire pour lire le refresh token stocké dans le cookie HTTP-Only
-import cookieParser from "cookie-parser"
-
-// Import du router d'authentification
+// ── ROUTES PUBLIQUES ──────────────────────────────────────────────────────────
+// Endpoints accessibles sans authentification — consommés par le site public.
 import authRouter from "./routes/auth.js"
-// Import du router de missions 
 import missionsRouter from "./routes/missions.js"
-// Import du router témoignages
 import testimonialRouter from "./routes/testimonialRoutes.js"
-// Import du router contact
 import contactRouter from "./routes/contactRoutes.js"
-// Import du router admin CUD(Create, update, delete)
-import adminMissionRoutes from "./routes/adminMissionRoutes.js"
-// Import du router actions/impact
-import fieldActionRouter from './routes/fieldActionRoutes.js'
-// Import médias/actualités
-import mediaPostRouter from './routes/mediaPostRoutes.js'
-// Import éducation et sensibilisations
-import educationItemRouter from './routes/educationItemRoutes.js'
-// Import équipe
-import teamMemberRouter from './routes/teamMemberRoutes.js'
-// Import rapports d'activités
-import activityReportRouter from './routes/activityReportRoutes.js'
-// Import délégation
-import delegationRouter from './routes/delegationRoutes.js'
-// Import rapports de missions
-import missionReportRouter from './routes/missionReportRoutes.js'
-// Import logos partenaires
-import partnerRouter from './routes/partnerRoutes.js'
-// Import lieux des missions
-import locationRouter from './routes/locationRoutes.js'
-// ── Import du router testimonials
-import adminTestimonialRoutes from "./routes/adminTestimonialRoutes.js"
-// ── Import des routers upload
+import fieldActionRouter from "./routes/fieldActionRoutes.js"
+import mediaPostRouter from "./routes/mediaPostRoutes.js"
+import educationItemRouter from "./routes/educationItemRoutes.js"
+import teamMemberRouter from "./routes/teamMemberRoutes.js"
+import activityReportRouter from "./routes/activityReportRoutes.js"
+import delegationRouter from "./routes/delegationRoutes.js"
+import missionReportRouter from "./routes/missionReportRoutes.js"
+import partnerRouter from "./routes/partnerRoutes.js"
+import locationRouter from "./routes/locationRoutes.js"
 import uploadRoutes from "./routes/uploadRoutes.js"
+import galleryRouter from "./routes/galleryRoutes.js"
+
+// ── ROUTES ADMIN (protégées) ─────────────────────────────────────────────────
+// Endpoints réservés au dashboard — chaque routeur vérifie le JWT en interne.
+import adminMissionRoutes from "./routes/adminMissionRoutes.js"
+import adminTestimonialRoutes from "./routes/adminTestimonialRoutes.js"
 import adminUploadRoutes from "./routes/adminUploadRoutes.js"
-// ── Import des routers galerie
-import galleryRouter from './routes/galleryRoutes.js'
-import adminGalleryRoutes from './routes/adminGalleryRoutes.js'
-// ── Import des routers admin pour lieux et délégation
-import adminLocationRoutes from './routes/adminLocationRoutes.js'
-import adminDelegationRoutes from './routes/adminDelegationRoutes.js'
-import adminCountryRoutes from './routes/adminCountryRoutes.js'
+import adminGalleryRoutes from "./routes/adminGalleryRoutes.js"
+import adminLocationRoutes from "./routes/adminLocationRoutes.js"
+import adminDelegationRoutes from "./routes/adminDelegationRoutes.js"
+import adminCountryRoutes from "./routes/adminCountryRoutes.js"
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
-
-// Crée l'instance Express — c'est l'application
+// Crée l'instance de l'application — point de départ de tout le reste.
 const app = express()
 
 
 // ── MIDDLEWARES GLOBAUX ──────────────────────────────────────────────────────
 // Exécutés sur TOUTES les requêtes, dans cet ordre précis
 
-// 1. Helmet EN PREMIER — sécurise les headers avant tout traitement
+// Helmet EN PREMIER — sécurise les headers avant tout traitement
 app.use(helmet())
 
-// 2. CORS — autorise uniquement le frontend à appeler l'API
-// origin : seul localhost:5173 (Vite) est autorisé en développement
+// CORS — origin : accepte localhost (Vite), ngrok et IP locale (tests mobile)
 // credentials : true → autorise l'envoi des cookies (refresh token)
 app.use(cors({
-  // Accepte localhost, ngrok et IP locale pour les tests mobile
   origin: (origin, callback) => {
     const allowed = [
       process.env.FRONTEND_URL || "http://localhost:5173",
@@ -93,22 +69,18 @@ app.use(cors({
   credentials: true
 }))
 
-// 3. Cookie-parser — parse les cookies entrants
-// Doit être AVANT les routes pour que req.cookies soit disponible
+// Cookie-parser AVANT les routes — pour que req.cookies soit disponible
 app.use(cookieParser())
 
-// 4. Express JSON — parse le body des requêtes en JSON
-// Sans ça, req.body serait undefined
+// Parse le body des requêtes en JSON — sans ça, req.body serait undefined
 app.use(express.json())
 
-// 5. Fichiers statiques — dossier uploads accessible publiquement
-// Permet d'accéder à un fichier uploadé via son URL relative (ex: /uploads/images/photo.jpg)
+// Fichiers statiques — dossier uploads accessible publiquement
+// Ex: /uploads/images/photo.jpg
 app.use('/uploads', express.static('public/uploads'))
 
 
-// ── ROUTES ───────────────────────────────────────────────────────────────────
-
-// Route de santé — permet de vérifier que le serveur tourne
+// ── ROUTE DE SANTÉ ────────────────────────────────────────────────────────────
 // Utilisée par Docker healthcheck et les outils de monitoring
 app.get("/api/health", (req, res) => {
   res.status(200).json({
@@ -117,50 +89,47 @@ app.get("/api/health", (req, res) => {
   })
 })
 
-// Route d'authentification — préfixe /api/auth
-// Ex : POST /api/auth/login, GET /api/auth/verify...
+
+// ── ROUTES PUBLIQUES ──────────────────────────────────────────────────────────
+// Montées sans middleware d'authentification.
 app.use("/api/auth", authRouter)
-// Route missions — préfixe /api/missions
-// Ex : GET /api/missions, GET /api/missions/:slug
 app.use("/api/missions", missionsRouter)
-// Route témoignages
 app.use("/api/testimonials", testimonialRouter)
-// Route contact
 app.use("/api/contact", contactRouter)
-// Route admin missions (écriture, protégées)
-app.use("/api/admin/missions", adminMissionRoutes)
-// Route actions/impact
 app.use('/api/field-actions', fieldActionRouter)
-// Route médias/actualités
 app.use('/api/media-posts', mediaPostRouter)
-// Route éducation et sensibilisations
 app.use('/api/education-items', educationItemRouter)
-// Route équipe
 app.use('/api/team-members', teamMemberRouter)
-// Route rapports d'activité
 app.use('/api/activity-reports', activityReportRouter)
-// Route délégation
 app.use('/api/delegations', delegationRouter)
-// Route rapports de mission
 app.use('/api/mission-reports', missionReportRouter)
-// Routelogos partenaires
 app.use('/api/partners', partnerRouter)
-// Route lieux des missions 
 app.use('/api/locations', locationRouter)
-// Route upload public — formulaire témoignage
 app.use('/api/upload', uploadRoutes)
-// Route upload admin — dashboard
-app.use('/api/admin/upload', adminUploadRoutes)
-// Le préfixe /api/admin/testimonials est ajouté ICI.
-// → dans le fichier de routes, router.get("/") devient GET /api/admin/testimonials
-app.use("/api/admin/testimonials", adminTestimonialRoutes)
-// Route galerie et galerie admin — dashboard
 app.use('/api/gallery', galleryRouter)
+
+
+// ── ROUTES ADMIN (protégées) ──────────────────────────────────────────────────
+// Montées derrière authMiddleware (vérifié dans chaque routeur, pas ici).
+app.use("/api/admin/missions", adminMissionRoutes)
+app.use("/api/admin/testimonials", adminTestimonialRoutes)
+app.use("/api/admin/upload", adminUploadRoutes)
 app.use('/api/admin/gallery', adminGalleryRoutes)
 app.use('/api/admin/locations', adminLocationRoutes)
 app.use('/api/admin/delegations', adminDelegationRoutes)
 app.use('/api/admin/countries', adminCountryRoutes)
 
+
+// ── ROUTE NON TROUVÉE (404) ───────────────────────────────────────────────────
+// Doit être APRÈS toutes les routes — n'est atteint que si aucune n'a matché
+// Format JSON cohérent avec le middleware d'erreurs ci-dessous
+app.use((req, res) => {
+  res.status(404).json({
+    error: true,
+    message: "Route non trouvée",
+    status: 404
+  })
+})
 
 
 // ── MIDDLEWARE ERREURS ───────────────────────────────────────────────────────
