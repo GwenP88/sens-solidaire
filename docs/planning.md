@@ -208,6 +208,8 @@ A voir : congé solidaire doit devenir congé de solidarité dnas le site visibl
 
 faire en sorte que le bloc info pratique prenne toute la hauteur en focntion des deux bloc de gauche pour éviter les trous en bas de page, avec contenu espacé et reparti sur toute la heur du bloc info pratiques
 
+migrer les vraies donnée du site pour mission et délégation : supprimer les donnés inutile en seed? 
+
 ### Bloc C — Page Éducation & sensibilisation
 
 | # | Dev | Tâche | Statut |
