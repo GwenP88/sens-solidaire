@@ -485,3 +485,125 @@ export const fetchTypeGallery = async (type) => {
   const data = await response.json()
   return data.media
 }
+
+// ── ADMIN — LOCATIONS ────────────────────────────────────────────────────
+
+export const fetchAdminLocations = async () => {
+  const response = await authFetch(`${API_URL}/admin/locations`)
+  if (!response.ok) throw new Error("Impossible de charger les lieux.")
+  const data = await response.json()
+  return data.locations
+}
+
+export const fetchAdminLocationById = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/locations/${id}`)
+  if (!response.ok) throw new Error("Impossible de charger ce lieu.")
+  const data = await response.json()
+  return data.location
+}
+
+export const createLocation = async (locationData) => {
+  const response = await authFetch(`${API_URL}/admin/locations`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(locationData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la création du lieu.")
+  }
+  const data = await response.json()
+  return data.location
+}
+
+export const updateLocation = async (id, locationData) => {
+  const response = await authFetch(`${API_URL}/admin/locations/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(locationData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la mise à jour du lieu.")
+  }
+  const data = await response.json()
+  return data.location
+}
+
+export const updateLocationMedia = async (id, images) => {
+  const response = await authFetch(`${API_URL}/admin/locations/${id}/media`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ images }),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la mise à jour des photos.")
+  }
+  return await response.json()
+}
+
+export const toggleLocationActive = async (id, is_active) => {
+  const response = await authFetch(`${API_URL}/admin/locations/${id}/toggle`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ is_active }),
+  })
+  if (!response.ok) throw new Error("Échec du changement de statut.")
+  return await response.json()
+}
+
+export const hardDeleteLocation = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/locations/${id}`, {
+    method: 'DELETE',
+  })
+  if (!response.ok) throw new Error("Échec de la suppression.")
+  return await response.json()
+}
+
+// ── ADMIN — DELEGATIONS ──────────────────────────────────────────────────
+// Utilisées à la fois par l'onglet Équipe et par le panneau déplié du
+// formulaire Lieu — mêmes fonctions, même ligne en base dans les deux cas.
+
+export const fetchAdminDelegationById = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/delegations/${id}`)
+  if (!response.ok) throw new Error("Impossible de charger cette délégation.")
+  const data = await response.json()
+  return data.delegation
+}
+
+export const createDelegation = async (delegationData) => {
+  const response = await authFetch(`${API_URL}/admin/delegations`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(delegationData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la création de la délégation.")
+  }
+  const data = await response.json()
+  return data.delegation
+}
+
+export const updateDelegation = async (id, delegationData) => {
+  const response = await authFetch(`${API_URL}/admin/delegations/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(delegationData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la mise à jour de la délégation.")
+  }
+  const data = await response.json()
+  return data.delegation
+}
+
+// ── ADMIN — LISTE DES PAYS (pour le <datalist> du formulaire lieu/délégation)
+export const fetchCountryNames = async () => {
+  const response = await authFetch(`${API_URL}/admin/countries`)
+  if (!response.ok) throw new Error("Impossible de charger la liste des pays.")
+  const data = await response.json()
+  return data.countries
+}
