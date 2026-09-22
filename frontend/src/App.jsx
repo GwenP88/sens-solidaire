@@ -47,6 +47,8 @@ import MissionFormPage from './pages/admin/MissionFormPage'
 import ServiceCiviquePage from './pages/admin/ServiceCiviquePage'
 import ServiceCiviqueFormPage from './pages/admin/ServiceCiviqueFormPage'
 import GaleriePage from './pages/admin/GaleriePage'
+import LocationsPage from './pages/admin/LocationsPage'
+import LocationFormPage from './pages/admin/LocationFormPage'
 
 //  ── Pages lieux
 import LocationDetail from './pages/LocationDetail'
@@ -123,6 +125,9 @@ function App() {
           <Route path="service-civique" element={<ServiceCiviquePage />} />
           <Route path="service-civique/new" element={<ServiceCiviqueFormPage />} />
           <Route path="service-civique/:id/edit" element={<ServiceCiviqueFormPage />} />
+          <Route path="lieux" element={<LocationsPage />} />
+          <Route path="lieux/new" element={<LocationFormPage />} />
+          <Route path="lieux/:id/edit" element={<LocationFormPage />} />
           
           {/* missions, ateliers, medias, a-propos, actions-terrain, soutenir,
               contact, parametres : routes à ajouter au fur et à mesure des composants */}

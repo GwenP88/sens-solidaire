@@ -46,14 +46,18 @@ import missionReportRouter from './routes/missionReportRoutes.js'
 import partnerRouter from './routes/partnerRoutes.js'
 // Import lieux des missions
 import locationRouter from './routes/locationRoutes.js'
-// ── Import du router testimonials ──
+// ── Import du router testimonials
 import adminTestimonialRoutes from "./routes/adminTestimonialRoutes.js"
-// ── Import des routers upload ──
+// ── Import des routers upload
 import uploadRoutes from "./routes/uploadRoutes.js"
 import adminUploadRoutes from "./routes/adminUploadRoutes.js"
-// ── Import des routers galerie ──
+// ── Import des routers galerie
 import galleryRouter from './routes/galleryRoutes.js'
 import adminGalleryRoutes from './routes/adminGalleryRoutes.js'
+// ── Import des routers admin pour lieux et délégation
+import adminLocationRoutes from './routes/adminLocationRoutes.js'
+import adminDelegationRoutes from './routes/adminDelegationRoutes.js'
+import adminCountryRoutes from './routes/adminCountryRoutes.js'
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -153,6 +157,10 @@ app.use("/api/admin/testimonials", adminTestimonialRoutes)
 // Route galerie et galerie admin — dashboard
 app.use('/api/gallery', galleryRouter)
 app.use('/api/admin/gallery', adminGalleryRoutes)
+app.use('/api/admin/locations', adminLocationRoutes)
+app.use('/api/admin/delegations', adminDelegationRoutes)
+app.use('/api/admin/countries', adminCountryRoutes)
+
 
 
 // ── MIDDLEWARE ERREURS ───────────────────────────────────────────────────────

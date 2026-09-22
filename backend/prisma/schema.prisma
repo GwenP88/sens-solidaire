@@ -74,6 +74,7 @@ model Location {
   name            String
   country         String
   description     String
+  mission_ss      String?
   image_url       String?
   map_url         String?
   website_url     String?

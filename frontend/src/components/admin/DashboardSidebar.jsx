@@ -37,6 +37,13 @@ const navItems = [
     activeClass: 'bg-dash-action/10 text-dash-action',
     iconActive: 'text-dash-action',
   },
+    {
+    label: 'Lieux et délégations',
+    path: '/admin/lieux',
+    icon: FiMapPin,
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
+  },
   {
     label: 'Galerie',
     path: '/admin/galerie',
