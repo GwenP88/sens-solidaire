@@ -2500,7 +2500,6 @@ Plusieurs cards se fondaient dans leur fond de section (même couleur `bg-surfac
 
 **Migration BDD :**
 - Renommage `image_url`/`image_alt` → `photo_hero_url`/`photo_hero_alt` sur `Mission`, ajout de `photo_section_url`/`photo_section_alt` (nouvelle photo dédiée à la section "La mission", plus liée à la galerie) et `force_display` sur `Media`
-- **Problème** : `prisma migrate dev` refusé (`P3014`, permission denied to create database) — conséquence directe de la séparation des droits PostgreSQL faite par Alison (`sensolidaire_owner` n'a volontairement pas le droit `CREATEDB`, nécessaire à la shadow database de Prisma). **Solution** : migration écrite en SQL brut (`ALTER TABLE ... RENAME COLUMN`, jamais de perte de données) + `prisma migrate deploy` (n'a pas besoin de shadow database). Vérifié après coup : les 6 missions ont bien conservé leurs photos hero
 
 **Backend — `MissionFormPage` simplifié :**
 - `missionController.js` + `missionService.js` : champs renommés partout (create + update)
@@ -2532,6 +2531,32 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 **Autres tâches Bloc A faites dans la foulée** :
 - Lien vers le formulaire de contact sur l'étape 2 "Comment partir" (#118)
 - Navigation par ancre sur `MissionFormPage.jsx` (#123) — réutilise `AnchorNav` existant, variante `dashboard` créée pour l'occasion
+
+---
+
+### 21 septembre 2026 — Fusion Missions/Service Civique, refonte complète Service Civique
+
+**#121 — Alternance des couleurs `MissionDetail.jsx` :** source unique partagée entre la nav d'ancres et le calcul de couleur — alterne uniquement parmi les sections réellement visibles, plus de couleur figée par section.
+
+**#128 — Fusion Missions/Service Civique :** `MissionsPage.jsx` réécrite (filtres type/pays/statut, exclusion explicite des missions "ancres" par préfixe de slug), 2 boutons de création distincts dans l'en-tête. `ServiceCiviquePage.jsx` devient code mort (sidebar retirée).
+
+**Refonte Service Civique (#131) — chantier principal de la journée :**
+- Nouveau modèle retenu : pas de nouvelle table, réutilisation de `Mission` (`type: service_civique`) pour les cartes pays — cohérent avec l'architecture existante, évite de dupliquer la logique de description courte automatique
+- `ServiceCiviqueFormPage.jsx` vidé de son ancien contenu (âge, rôle France/étranger...) et remplacé par un petit formulaire dédié : titre, pays, description (marqueur `---` réutilisé), 1 photo (hero + section), slug auto-généré et cathé
+- Carrousel "Où partir ?" + modale (photo 280px fixe + description, disposition responsive 1/3-2/3) sur `Missions.jsx`
+- Galerie combinée : nouvel endpoint `GET /api/missions/service-civique/gallery` (`findServiceCiviqueGallery`), agrège les galeries de toutes les missions Service Civique actives, règle forcées + récentes plafonné à 10 — réutilise le pattern déjà en place pour une mission seule
+- `GaleriePage.jsx` : type Service Civique réactivé, nouveau mode "Tous les pays" (vue combinée lecture/gestion, badge pays par photo, chaque action s'enregistre immédiatement sur la mission d'origine — pas de bouton "Enregistrer" global possible avec des photos de missions différentes)
+- `TestimonialForm.jsx` étendu : sélection du pays pour Service Civique, même logique que le volontariat individuel
+- Carrousels témoignages/actions/galerie plafonnés (10/6/10, triés par date déjà côté backend)
+- Nouveau composant `SubsectionEyebrow.jsx` — repère visuel (label centré + ligne) au-dessus de Destinations/Impact terrain/Galerie/Déroulement
+
+**Bugs corrigés en cours de route :**
+- `COUNTRY_REGEX` rejetait l'apostrophe ("Côte d'Ivoire") — corrigée pour l'accepter
+- `groupe_jeune` (singulier) vs `groupe_jeunes` (pluriel, la vraie valeur attendue par le filtre témoignages) — lien cassé corrigé
+- Placeholder galerie `.png` construit dynamiquement (`placeholder-galerie-${i+1}.png`) oublié lors de la conversion WebP — échappait aux recherches de texte classiques
+- Ancre "Service civique" repassée à `is_active: true` par erreur pendant les tests (doublon Kenya visible publiquement et dans le sélecteur pays du dashboard) — repassée à `false`, pas supprimée (témoignages potentiellement encore rattachés)
+
+**Noté pour plus tard :** #132 (contenu générique de la page éditable par la cliente, V2), #133 (galerie Groupe jeunes/Congé solidaire — pas de vraies missions par pays pour ces types, missions sur-mesure ; réutiliser l'ancre existante comme point d'attache galerie, sur le même principe que pour les témoignages).
 
 ---
 

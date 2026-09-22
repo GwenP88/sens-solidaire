@@ -1,37 +1,31 @@
 # Planning de développement — Sens Solidaires
 *Pichot Gwen & Amblard Alison (jusqu'à fin août) · Pichot Gwen seule à partir du 18/09/2026*
 *Holberton School — Thonon-les-Bains*
-*Mise à jour : 20 septembre 2026 — palette dashboard, refonte galerie, lien contact, navigation par ancre*
 
-**Légende** : ✅ Terminé · ⚠️ Partiel · 🔵 À faire · 🔴 Bloqué
-**Devs (historique)** : Gwen (frontend + design) · Alison (backend + BDD) · Ensemble = tâches communes
+**Légende** : ✅ Fait · 🔵 Partiel · ❌ Pas fait
 
 ---
 
-## Phase 1 — 28 mai › 3 juillet 2026 : MVP ✅ LIVRÉ
+## Phase 1 — MVP (28 mai › 3 juillet 2026)
 
----
-
-### S1 — 28 › 30 mai · Initialisation ✅
+### S1 — 28 › 30 mai · Initialisation
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 01 | Gwen | Repo GitHub + monorepo + branches | ✅ |
-| 02 | Gwen | React + Tailwind CSS v4 + Vite + React Router | ✅ |
-| 03 | Alison | Node.js + Express + route /api/health | ✅ |
-| 04 | Alison | PostgreSQL + Prisma v7 + tables MVP | ✅ |
-| 05 | Ensemble | Docker Compose + Dockerfiles dev | ✅ |
-| 06 | Ensemble | .env + .gitignore + test docker compose up | ✅ |
+| 1 | Gwen | Repo GitHub + monorepo + branches | ✅ |
+| 2 | Gwen | React + Tailwind CSS v4 + Vite + React Router | ✅ |
+| 3 | Alison | Node.js + Express + route /api/health | ✅ |
+| 4 | Alison | PostgreSQL + Prisma v7 + tables MVP | ✅ |
+| 5 | Ensemble | Docker Compose + Dockerfiles dev | ✅ |
+| 6 | Ensemble | .env + .gitignore + test docker compose up | ✅ |
 
----
-
-### S2 — 2 › 6 juin · Fondations frontend + Auth backend ✅
+### S2 — 2 › 6 juin · Fondations frontend + Auth backend
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 07 | Gwen | Système de composants Figma complet | ✅ |
-| 08 | Gwen | Page Accueil assemblée dans Figma | ✅ |
-| 09 | Gwen | Tailwind — design system (palette, typographie, utilities) | ✅ |
+| 7 | Gwen | Système de composants Figma complet | ✅ |
+| 8 | Gwen | Page Accueil assemblée dans Figma | ✅ |
+| 9 | Gwen | Tailwind — design system | ✅ |
 | 10 | Gwen | Composants de base : Button, Badge, Modal | ✅ |
 | 11 | Gwen | Layout global : Navbar + Footer + Outlet | ✅ |
 | 12 | Gwen | Page Accueil statique | ✅ |
@@ -42,283 +36,236 @@
 | 17 | Alison | Seed BDD — données de test | ✅ |
 | 18 | Ensemble | Test connexion front ↔ back + Docker | ✅ |
 
----
-
-### S3 — 9 › 13 juin · Missions ✅
+### S3 — 9 › 13 juin · Missions
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
 | 19 | Gwen | Page Accueil connectée API | ✅ |
 | 20 | Gwen | Page /missions — 4 sections + filtres + AnchorNav | ✅ |
-| 21 | Gwen | Page /missions/:slug — détail mission complet | ✅ |
+| 21 | Gwen | Page /missions/:slug — détail mission | ✅ |
 | 22 | Alison | Seed BDD — données réalistes | ✅ |
-| 23 | Alison | GET /api/missions (liste + filtres) | ✅ |
-| 24 | Alison | GET /api/missions/:slug + pricing + locations + testimonials | ✅ |
+| 23 | Alison | GET /api/missions | ✅ |
+| 24 | Alison | GET /api/missions/:slug complet | ✅ |
 | 25 | Alison | Service + Controller missions | ✅ |
 
----
-
-### S4 — 16 › 20 juin · Témoignages + Contact + Pages secondaires ✅
+### S4 — 16 › 20 juin · Témoignages + Contact + Pages secondaires
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 26 | Gwen | Page /temoignages — filtres, grille, modale soumission | ✅ |
+| 26 | Gwen | Page /temoignages | ✅ |
 | 27 | Gwen | GET + POST /api/testimonials | ✅ |
 | 28 | Gwen | Page /contact + ContactForm + RGPD | ✅ |
 | 29 | Gwen | POST /api/contact + Resend | ✅ |
-| 30 | Gwen | Pages légales : mentions, confidentialité, cookies | ✅ |
-| 31 | Gwen | Page /soutenir — refonte narrative + section émotionnelle | ✅ |
-| 32 | Gwen | Page /rapports-activite — grille PDFs | ✅ |
+| 30 | Gwen | Pages légales | ✅ |
+| 31 | Gwen | Page /soutenir | ✅ |
+| 32 | Gwen | Page /rapports-activite | ✅ |
 | 33 | Gwen | Page /a-propos | ✅ |
 | 34 | Gwen | Page /equipe | ✅ |
 | 35 | Alison | CRUD /api/admin/missions (back) | ✅ |
 | 36 | Alison | Dashboard admin — sidebar + layout + routes protégées | ✅ |
-| 37 | Alison | PATCH /api/admin/testimonials/:id — modération | ✅ |
-| 38 | Ensemble | Flux complet : soumission → modération → affichage | ✅ |
+| 37 | Alison | PATCH modération témoignages | ✅ |
+| 38 | Ensemble | Flux soumission → modération → affichage | ✅ |
 
----
-
-### S5 — 23 › 27 juin · Dashboard + Responsive ✅
+### S5 — 23 › 27 juin · Dashboard + Responsive
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
 | 39 | Alison | Dashboard : CRUD missions front | ✅ |
 | 40 | Alison | Dashboard : modération témoignages | ✅ |
 | 41 | Alison | Dashboard : routage email contact | ✅ |
-| 42 | Gwen | Responsive mobile-first toutes pages MVP (375 / 768 / 1024 / 1440) | ✅ |
-| 43 | Gwen | Harmonisation CSS — gap scale, utilities, Section/CTASection | ✅ |
+| 42 | Gwen | Responsive mobile-first toutes pages MVP | ✅ |
+| 43 | Gwen | Harmonisation CSS | ✅ |
 
----
-
-### S6 — 30 juin › 3 juillet · Sprint final MVP ✅
+### S6 — 30 juin › 3 juillet · Sprint final MVP
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 44 | Gwen | Migration pages restantes : LocationDetail, MediaDetail, MediaEtActualites, MissionDetail, Missions, Soutenir | ✅ |
-| 45 | Gwen | LocationDetail enrichi — contacts délégation FK, iframe Google Maps, galerie | ✅ |
-| 46 | Gwen | BDD — 5 migrations : delegation_id, map_url, website_url, show_homepage, FieldActionCountry | ✅ |
-| 47 | Gwen | Seed refacto — délégations avant locations, pays multi-valeurs, show_homepage | ✅ |
-| 48 | Gwen | FooterCta dynamique par route — suppression CTASection sur toutes les pages | ✅ |
-| 49 | Gwen | Education.jsx refonte — ODD + AnchorNav + sections Éco-École/Correspondances/Ateliers | ✅ |
-| 50 | Gwen | Renommage "Sens Solidaire" → "Sens Solidaires" (grep + sed, 23 occurrences) | ✅ |
-| 51 | Gwen | Home — CTA témoignage + section Actualités show_homepage + logos partenaires | ✅ |
+| 44 | Gwen | Migration pages restantes | ✅ |
+| 45 | Gwen | LocationDetail enrichi | ✅ |
+| 46 | Gwen | BDD — 5 migrations | ✅ |
+| 47 | Gwen | Seed refacto | ✅ |
+| 48 | Gwen | FooterCta dynamique par route | ✅ |
+| 49 | Gwen | Education.jsx refonte | ✅ |
+| 50 | Gwen | Renommage "Sens Solidaire" → "Sens Solidaires" | ✅ |
+| 51 | Gwen | Home — CTA + actualités + logos partenaires | ✅ |
 | 52 | Ensemble | Merge dev-front → dev | ✅ |
-| 62 | Gwen | Navbar dropdown missions dynamique — 2 colonnes (destinations API + S'engager autrement statique) | ✅ |
-| 63 | Gwen | `MissionFormPage` — page formulaire CRUD complet (9 blocs, création + édition) | ✅ |
-| 64 | Gwen | Back — `pricingService` + `mediaService` + routes `PUT /:id/pricing` et `PUT /:id/media` | ✅ |
-| 65 | Gwen | `MissionDetail` refonte complète — puces `LignesToPuces`, programme JSON, AnchorNav dynamique, galerie BDD | ✅ |
-| 66 | Gwen | Seed reformaté — `volunteer_role`, `health_info`, `admin_info`, `included`, `not_include` en texte brut `\n`, `programme` en JSON | ✅ |
-| 53 | Ensemble | 🎯 LIVRAISON MVP — 3 juillet 2026 | ✅ |
+| 53 | Ensemble | 🎯 LIVRAISON MVP | ✅ |
+| 54 | Gwen | Navbar dropdown missions dynamique | ✅ |
+| 55 | Gwen | MissionFormPage complet (9 blocs) | ✅ |
+| 56 | Gwen | pricingService + mediaService + routes | ✅ |
+| 57 | Gwen | MissionDetail refonte complète | ✅ |
+| 58 | Gwen | Seed reformaté (texte brut + JSON) | ✅ |
 
 ---
 
-## Phase 2 — 7 juillet › 1er août 2026 : Dashboard complet + Finitions front
-
----
+## Phase 2 — Dashboard complet + finitions (7 juillet › 1er août 2026)
 
 ### S7 — 7 › 11 juillet · Dashboard étendu
 
-| # | Dev | Tâche | Statut d'origine | **Statut vérifié 18/09 (audit repo)** |
-|---|---|---|---|---|
-| 54 | Alison | Dashboard : gestion médias (upload image, show_homepage) | ⚠️ Partiel | ⚠️ **Confirmé partiel** — `PUT /api/admin/missions/:id/media` fonctionne pour les médias **d'une mission**. Aucun CRUD pour les articles (`MediaPost`) en tant qu'entité autonome |
-| 55 | Alison | Dashboard : gestion équipe (CRUD membres) | 🔵 | 🔵 **Confirmé non fait** — `teamMemberRoutes.js` en lecture seule (GET uniquement), aucune route admin |
-| 56 | Alison | Dashboard : gestion rapports d'activité | 🔵 | 🔵 **Confirmé non fait** — même constat, lecture seule |
-| 57 | Alison | Dashboard : CRUD actions terrain + pays + tags | 🔵 | 🔵 **Confirmé non fait** — même constat |
-| 58 | Alison | Dashboard : responsive | 🔵 | 🔵 **Confirmé non fait** — `DashboardSidebar.jsx` : sidebar explicitement masquée en mobile (commentaire dans le code) |
-| 59 | Alison | APIs restantes : locations, équipe | 🔵 | 🔵 **Confirmé non fait** — `locationRoutes.js`, `delegationRoutes.js`, etc. : GET public uniquement, aucune route POST/PATCH/DELETE protégée |
-| 60 | Gwen | Upload Multer | 🔵 | ✅ **Fait** (non marqué à l'époque) — `adminUploadRoutes.js` + `uploadController.js` + `AdminFileUpload.jsx`, validation stricte du type de fichier (héritée de l'audit sécurité) |
-| 61 | Alison | Tests d'intégration dashboard | 🔵 | ⚠️ **Partiel** — missions + témoignages + upload couverts (20 tests Jest/Supertest dans `backend/tests/`). Rien pour les futurs CRUD équipe/locations/etc. (normal, ils n'existent pas encore) |
-| 62 | Gwen | Navbar dropdown missions dynamique — 2 colonnes (destinations API + S'engager autrement statique) | ✅ | ✅ Confirmé |
-| 63 | Gwen | `MissionFormPage` — page formulaire CRUD complet (9 blocs, création + édition) | ✅ | ✅ Confirmé |
-| 64 | Gwen | Back — `pricingService` + `mediaService` + routes `PUT /:id/pricing` et `PUT /:id/media` | ✅ | ✅ Confirmé |
-| 65 | Gwen | `MissionDetail` refonte complète — puces `LignesToPuces`, programme JSON, AnchorNav dynamique, galerie BDD | ✅ | ✅ Confirmé |
-| 66 | Gwen | Seed reformaté — `volunteer_role`, `health_info`, `admin_info`, `included`, `not_include` en texte brut `\n`, `programme` en JSON | ✅ | ✅ Confirmé |
-
----
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 59 | Alison | Dashboard : gestion médias | 🔵 |
+| 60 | Alison | Dashboard : gestion équipe (CRUD) | ❌ |
+| 61 | Alison | Dashboard : gestion rapports d'activité | ❌ |
+| 62 | Alison | Dashboard : CRUD actions terrain + pays + tags | ❌ |
+| 63 | Alison | Dashboard : responsive | ❌ |
+| 64 | Alison | APIs restantes : locations, équipe | ❌ |
+| 65 | Gwen | Upload Multer | ✅ |
+| 66 | Alison | Tests d'intégration dashboard | 🔵 |
 
 ### S7 (suite) — 5 juillet · Documentation, qualité & dette technique
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 92 | Gwen & Alison | README.md complet — architecture, BDD (5 domaines), fonctionnalités, installation, tests, équipe | ✅ |
-| 93 | Alison | Ajout FK `mission_id` sur `MissionReport` (relation vers `Mission`, optionnelle) + migration Prisma | ✅ |
-| 94 | Gwen | Extraction `LignesToPuces` en composant réutilisable (`components/ui/`) | ✅ |
-| 95 | Gwen | Setup Vitest + React Testing Library (config `vite.config.js`, `setupTests.js`) | ✅ |
-| 96 | Gwen | Tests unitaires frontend : `LignesToPuces`, `Button`, `TestimonialForm`, `LoginAdmin` (avec mock API) | ✅ |
-| 97 | Gwen | Résolution vulnérabilité `npm audit` (vite) — frontend, 0 vulnérabilité restante | ✅ |
-
----
+| 67 | Gwen & Alison | README.md complet | ✅ |
+| 68 | Alison | FK mission_id sur MissionReport | ✅ |
+| 69 | Gwen | Extraction LignesToPuces réutilisable | ✅ |
+| 70 | Gwen | Setup Vitest + React Testing Library | ✅ |
+| 71 | Gwen | Tests unitaires frontend | ✅ |
+| 72 | Gwen | Résolution vulnérabilité npm audit | ✅ |
 
 ### S8 — 14 › 18 juillet · Finitions front + freeze
 
-| # | Dev | Tâche | Statut d'origine | **Statut vérifié 18/09 (audit repo)** |
-|---|---|---|---|---|
-| 67 | Gwen | Accessibilité basique — alt, aria-label, focus-visible | 🔵 | 🔵 **Confirmé non fait** — plusieurs pages sans aucun `alt` (Équipe, Rapports d'activité, Témoignages, pages légales, Médias et actualités...) |
-| 68 | Gwen | SEO basique — SEOHead (title, meta, Open Graph) par page | 🔵 | 🔵 **Confirmé non fait** — composant `SEOHead` inexistant dans le repo |
-| 69 | Gwen | Lazy loading — `loading="lazy"` sur toutes les images cards/grilles | 🔵 | 🔵 **Confirmé quasi pas fait** — 1 seule occurrence sur tout le site |
-| 70 | Gwen | `maxLength={280}` sur textarea témoignage dashboard | 🔵 | 🔵 À vérifier/faire |
-| 71 | Gwen | Buffer API — auto-draft réseaux sociaux à la publication (V2) | 🔵 | 🔵 Toujours V2, non prioritaire |
-| 72 | Gwen | `PageLayout` — factoriser bg-surface + ScrollToTop + HeroPage | 🔵 | 🔵 **Confirmé non fait** — composant inexistant |
-| 73 | Ensemble | Corrections bugs post-recette | 🔵 | — |
-| 74 | Ensemble | 🧊 Code freezé — pause estivale (18 juillet) | 🔵 | ✅ (fait, historique) |
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 73 | Gwen | Accessibilité basique | ❌ |
+| 74 | Gwen | SEO basique (SEOHead) | ❌ |
+| 75 | Gwen | Lazy loading | ❌ |
+| 76 | Gwen | maxLength 280 textarea témoignage | 🔵 |
+| 77 | Gwen | Buffer API (V2) | ❌ |
+| 78 | Gwen | PageLayout — factorisation | ❌ |
+| 79 | Ensemble | Corrections bugs post-recette | ❌ |
+| 80 | Ensemble | Code freeze — pause estivale (18 juillet) | ✅ |
 
----
-
-### S9 — 1er août · Reprise post-pause — Hard delete + Lieux partagés + Service Civique dashboard
-
-| # | Dev | Tâche | Statut d'origine | **Statut vérifié 18/09 (audit repo)** |
-|---|---|---|---|---|
-| 98 | Gwen | Hard delete missions — transaction + dashboard (pause/suppression définitive) | ✅ | ✅ **Confirmé** — `hardDelete()` dans `missionService.js`, transaction Prisma (pricing + media + mission supprimés ensemble) |
-| 99 | Gwen | Location ↔ Mission — migration many-to-many | ✅ | ✅ Confirmé |
-| 100 | Gwen | ServiceCiviqueFormPage + ServiceCiviquePage (dashboard complet) | ✅ | ✅ Confirmé — fichiers présents et fonctionnels |
-| 101 | Gwen | ServiceCiviqueDetail.jsx — page publique complète | ✅ | ✅ Confirmé |
-| 102 | Gwen | country_preposition — champ éditable (Mission + Service Civique) | ✅ | ✅ Confirmé (non re-vérifié champ par champ) |
-| 103 | Gwen | Champs competences + info_service_civique_url | ✅ | ✅ Confirmé (idem) |
-| 104 | Gwen | Garde-fou type sur MissionDetail/ServiceCiviqueDetail | ✅ | ✅ Confirmé (idem) |
-| 105 | Gwen | FormElements.jsx — extraction composants formulaire partagés | ✅ | ✅ Confirmé — fichier présent |
-
----
-
-## Pause estivale — Août 2026 🧊
-
-Code freezé côté développement produit. En parallèle : **Alison a mené un audit de sécurité complet sur `dev`** (26 août), mergé dans `dev-front` le 18 septembre sans conflit.
-
-### Sécurité — Audit du 26 août (Alison) — résumé
-
-7 failles corrigées : upload/path traversal, XSS stocké via upload, durée JWT (7j → 15min), injection HTML dans les emails de contact, consentement RGPD codé en dur, code mort dupliqué (`authController.js`), robustesse upload (400/413 au lieu de 500). Plus : séparation des droits PostgreSQL (2 comptes — `sensolidaire_owner` migrations / `sensolidaire_app` runtime), 20 tests (vs 12 avant), documentation complète (schéma physique, procédure sauvegarde/restauration, diagrammes de séquence, veille technologique).
-
-**4 dettes techniques assumées et documentées** (non bloquantes en V1) :
-- `authMiddleware` vérifie l'authentification mais pas l'autorisation fine par rôle (un seul rôle existe aujourd'hui) → **directement lié au point "compte admin + compte invité" du 18/09, voir Bloc A ci-dessous**
-- Pas de rate limiting sur le login ni l'upload public
-- Timing attack théorique sur le login (non exploitable : un seul compte admin)
-- Type de fichier upload basé sur le MIME déclaré, pas le contenu réel (le vecteur dangereux est déjà fermé par ailleurs)
-
-Détail complet dans `docs/bugTracker.md`.
-
----
-
-## Phase 3 — Développement solo (à partir du 18 septembre 2026)
-
-*Alison a débuté son alternance — développement produit repris en solo par Gwen. Réorganisé par blocs de priorité plutôt que par semaines calendaires fixes, avec la soutenance DWWM (23-27 novembre) comme horizon. Contient les points UX relevés le 18/09 en parcourant le site.*
-
-### Bloc A — UX dashboard (petits points relevés le 18/09 — rapides, à faire en premier)
+### S9 — 1er août · Reprise post-pause
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 106 | Gwen | Composant `Modal` dashboard réutilisable | ✅ **Fait.** `ConfirmModal.jsx` généralisé avec un prop `variant` (`danger` rouge / `default` vert), défaut inchangé pour la suppression |
-| 107 | Gwen | Bouton pause/reprise mission → modale perso | ✅ **Fait.** Modale perso branchée, icône dynamique pause/play selon `is_active` dans `DashboardTable.jsx` |
-| 108 | Gwen | Retirer le bouton "Voir toutes les actions" — page Impact | ✅ **Fait** — il pointait vers sa propre page. Le même bouton sur la Home reste, lui, légitime (renvoie vers Impact) |
-| 109 | Gwen | Corriger le doublon "Réserver le vol" | ✅ **Fait.** Étape 1 relabellisée "Comparer et réserver vos vols", la page publique affiche ce libellé + les villes (au lieu des villes seules, sans contexte) |
-| 111 | Gwen | Revoir mise en page `MissionDetail` — section inclus/non inclus + tableau durée/prix | ✅ **Fait.** Grille à 4 colonnes cassée séparée en 3 blocs indépendants (tarifs/inclus/non-inclus, CTA, répartition frais), fonds colorés vert/terracotta sur inclus/non-inclus |
-| 112 | Gwen | Upload dashboard — redimensionnement auto + conversion WebP à l'import | ✅ **Fait.** Sharp branché (tiers hero/gallery/card/avatar), photo hero et galerie séparées en 2 champs indépendants dans `MissionFormPage.jsx`. Bonus : bug corrigé au passage — l'image du bloc "La mission" pointait vers le hero au lieu de la galerie |
-| 113 | Gwen | Saisir le contenu complet de toutes les missions existantes via le dashboard | ✅ **Fait.** 5 missions volontariat individuel saisies (Kenya, Sénégal, Sumatra, Sri Lanka, Pérou), contenu et photos repris de l'ancien site sensolidaire.org |
-| 114 | Gwen | Repérer tous les placeholders du site et les optimiser (taille + format) | ✅ **Fait**, bien plus large que prévu : réorganisation complète de `public/images/` en 3 catégories (placeholders/logo-partners/design), suppression de ~3,3Mo de fichiers morts, script `optimize-placeholders.js` réutilisable, 14 placeholders convertis (jusqu'à -95%), tous les chemins codés en dur dans `seed.js` corrigés (81 lignes touchées en base) |
-| 115 | Gwen | Description courte extraite automatiquement de la description longue | ✅ **Fait.** Marqueur `---`, calculé côté backend à l'enregistrement, aperçu en direct dans le dashboard. Motif réutilisable pour TeamMember/EducationItem/MediaPost plus tard |
-| 116 | Gwen | ~~Drag & drop galerie~~ | ➡️ Remplacé par la refonte galerie #124-127 — le drag & drop devient inutile dans la nouvelle architecture |
-| 117 | Gwen | ~~Gras / souligné dans les zones de texte du dashboard~~ | ❌ **Annulé, remplacé par du plus ambitieux** — la version light ne suffira pas pour de vrais articles (Médias & Actus). Éditeur TipTap complet à prévoir avec le CRUD MediaPost (Bloc B, #54) |
-| 118 | Gwen | Lien vers le formulaire de contact — étape 2 "Comment partir" | ✅ **Fait.** Lien React Router vers `/contact`, texte reformulé ("Une question ? Écrivez-nous à... ou utilisez notre formulaire de contact.") — "ICI" évité comme texte de lien (accessibilité) |
-| 120 | Gwen | ~~Retirer le champ légende/alt de l'upload hero dans le dashboard~~ | ❌ **Annulé** — hero et section "La mission" partagent un seul champ (`mission_photos`), la légende reste utile pour la section même si elle ne sert à rien pour le hero (`aria-hidden`) |
-| 121 | Gwen | Bug alternance des couleurs de fond — `MissionDetail.jsx` (page publique) | ✅ **Fait.** Couleur calculée selon l'ordre réel d'affichage parmi les sections visibles (source unique partagée avec la nav d'ancres), plus de couleur figée par section |
-| 122 | Gwen | Palette de couleurs dédiée au dashboard | ✅ **Fait.** Système fonctionnel : `dash-action` bleu (navigation/actions), `dash-editorial` violet (médias/galerie), `dash-success` teal (actif/publié), `dash-warning` orange (attention/temporaire), `dash-danger` rouge. + 3 tons de gris accessibles (`dash-title`/`dash-text`/`dash-legend`, `gray-400` échouait WCAG AA). Appliqué à ~16 fichiers, logo remplace l'emoji sidebar. `LoginAdmin.jsx` gardé en vert (page vitrine) |
-| 123 | Gwen | Navigation par ancre sur `MissionFormPage.jsx` | ✅ **Fait.** Réutilise `AnchorNav` existant (variante `dashboard` créée), scroll direct vers chaque bloc |
-| 124 | Gwen | Refonte galerie — migration BDD | ✅ **Fait.** `image_url`/`image_alt` renommés en `photo_hero_url`/`photo_hero_alt` (migration SQL brut, `prisma migrate dev` bloqué par les droits restreints volontaires de `sensolidaire_owner`). Ajout de `photo_section_url`/`photo_section_alt` et `force_display` sur `Media` |
-| 125 | Gwen | Refonte galerie — `MissionFormPage.jsx` simplifié | ✅ **Fait.** Un seul champ photo, 2 images obligatoires (hero + section "La mission"), flèches existantes pour réordonner. Bloc galerie retiré entièrement |
-| 126 | Gwen | Refonte galerie — nouvelle page dashboard "Galerie" | ✅ **Fait.** `GaleriePage.jsx` — 3 sélecteurs (Domaine/Type/Pays), upload en grille avec case "Toujours afficher", tri automatique par date. `AdminFileUpload.jsx` étendu (`layout`, `allowReorder`, `showForceDisplay`) |
-| 127 | Gwen | Passer de 10 à 15-20 photos par galerie publique | 🔵 **Dépend de #69** (lazy loading, Bloc D). Logique de sélection (forcées + récentes) déjà en place dans `findBySlug`, ne reste qu'à changer la limite |
-| 128 | Gwen | Fusionner l'onglet "Service Civique" dans "Missions" (sidebar) | ✅ **Fait.** Un seul onglet "Missions", filtres type/pays/statut, les 3 missions "ancres" exclues explicitement (slug `ancre-*`). Formulaires d'édition restés séparés (`MissionFormPage`/`ServiceCiviqueFormPage`) |
-| 129 | Gwen | Supprimer `components/admin/MissionForm.jsx` | 🔵 Code mort confirmé (aucune référence), repéré pendant le chantier palette — pas encore supprimé |
-| 130 | Gwen | Pré-remplir `EMPTY_FORM` — tarifs standards + inclus/non-inclus | 🔵 Décidé le 18/09, jamais implémenté. 4 lignes de tarifs standards + textes inclus/non-inclus standards, tous modifiables/supprimables à la création |
-| 131 | Gwen | Refonte Service Civique | ⚠️ **Partiellement fait le 21/09.** Fait : cartes pays dynamiques (réutilise `Mission`), carrousel "Où partir ?" + modale sur `Missions.jsx`, `ServiceCiviqueFormPage.jsx` dédié (titre/pays/description/1 photo, slug auto-généré caché), boutons "Voir tous les témoignages" sur les 3 carrousels. Reste à faire : rendre éditable le contenu générique de la page (voir #132), supprimer les 3 missions "ancres" démo une fois les témoignages vérifiés (ancre service civique repassée en `is_active: false` le 21/09 après activation accidentelle) |
-| 132 | Gwen | Rendre éditable par la cliente le contenu générique de la page Missions (titre, description, stats, "Comment ça fonctionne ?") | 🔵 Aujourd'hui codé en dur dans `Missions.jsx` (4 sections). Envisagé pour une V2 — pas prioritaire tant que le contenu reste stable |
-| 133 | Galerie photo pour Groupe jeunes et Congé solidaire (pas de cards par pays, missions sur-mesure) | Contrairement à Service Civique (3 vraies missions par pays), ces 2 types restent des missions à la carte — pas de destinations fixes à créer. Réutiliser l'ancre existante de chaque type comme point d'attache unique pour la galerie (même rôle que pour les témoignages aujourd'hui) : dans `GaleriePage.jsx`, réactiver "Groupe jeunes"/"Congé solidaire" dans le sélecteur type, adapter le filtre d'exclusion des ancres pour qu'il ne s'applique qu'à Service Civique (`!m.slug.startsWith('ancre-') || type !== 'service_civique'`). Côté public, généraliser `findServiceCiviqueGallery` en fonction paramétrée par type, réutilisable pour les 3 |
+| 81 | Gwen | Hard delete missions (transaction) | ✅ |
+| 82 | Gwen | Location ↔ Mission many-to-many | ✅ |
+| 83 | Gwen | ServiceCiviqueFormPage + ServiceCiviquePage | ✅ |
+| 84 | Gwen | ServiceCiviqueDetail.jsx (page publique) | ✅ |
+| 85 | Gwen | country_preposition éditable | ✅ |
+| 86 | Gwen | Champs competences + info_service_civique_url | ✅ |
+| 87 | Gwen | Garde-fou type Mission/ServiceCiviqueDetail | ✅ |
+| 88 | Gwen | FormElements.jsx — composants formulaire partagés | ✅ |
 
-### Bloc B — Dashboard CRUD manquant (le plus gros morceau)
+### Pause estivale — Août 2026
 
-| # | Tâche | Origine |
-|---|---|---|
-| 59 | CRUD Location (admin) — routes + service + front dashboard | Ex-tâche 59 ("APIs restantes : locations, équipe") |
-| — | CRUD Delegation (admin) | Nouveau — pas de # d'origine, identifié dans le Backlog V2 (01/08), jamais entré dans une semaine numérotée |
-| 55 | CRUD TeamMember (admin) | Ex-tâche 55 |
-| 57 | CRUD FieldAction + pays + tags (admin) | Ex-tâche 57 |
-| 56 | CRUD ActivityReport (admin) | Ex-tâche 56 |
-| 54 | CRUD MediaPost / articles (admin) | Partie non faite de l'ex-tâche 54 (le média d'**une mission**, lui, est déjà fait). **Prévoir la possibilité d'antidater un post** (`date` éditable, pas juste la date de création) — nécessaire pour migrer les anciens articles de l'ancien site sensolidaire.org avec leur vraie date de publication |
-| 58 | Dashboard responsive mobile | Ex-tâche 58. Prévu initialement pour la modération témoignages uniquement — **étendre aussi à la création d'un post média/actualité depuis le téléphone**, pour que la cliente puisse publier en direct sans devoir attendre d'être sur ordinateur |
-| 61 | Tests d'intégration | Ex-tâche 61 — **règle : chaque CRUD ci-dessus s'accompagne de son test au moment où il est codé**, pas d'un rattrapage global à la fin |
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 89 | Alison | Audit sécurité 26/08 (7 failles, droits BDD séparés) | ✅ |
+
+---
+
+## Phase 3 — Développement solo (à partir du 18/09/2026)
+
+### Bloc A — UX dashboard
+
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 90 | Gwen | Modal dashboard réutilisable | ✅ |
+| 91 | Gwen | Bouton pause/reprise → modale perso | ✅ |
+| 92 | Gwen | Retirer bouton "Voir toutes les actions" (Impact) | ✅ |
+| 93 | Gwen | Corriger doublon "Réserver le vol" | ✅ |
+| 94 | Gwen | Revoir mise en page MissionDetail (inclus/tarifs) | ✅ |
+| 95 | Gwen | Upload dashboard — redimensionnement + WebP | ✅ |
+| 96 | Gwen | Saisir contenu des 5 missions existantes | ✅ |
+| 97 | Gwen | Optimiser tous les placeholders | ✅ |
+| 98 | Gwen | Description courte auto (marqueur `---`) | ✅ |
+| 99 | Gwen | ~~Drag & drop galerie (annulé, absorbé ailleurs)~~ | ✅ |
+| 100 | Gwen | ~~Gras/souligné dashboard (annulé, remplacé par TipTap)~~ | ✅ |
+| 101 | Gwen | Lien formulaire contact — étape "Comment partir" | ✅ |
+| 102 | Gwen | ~~Retirer légende upload hero (annulé, utile si inversion des deux images uploadée entre hero et illustration section mission)~~ | ✅ |
+| 103 | Gwen | Bug alternance couleurs MissionDetail | ✅ |
+| 104 | Gwen | Palette de couleurs dédiée au dashboard | ✅ |
+| 105 | Gwen | Navigation par ancre MissionFormPage | ✅ |
+| 106 | Gwen | Refonte galerie — migration BDD | ✅ |
+| 107 | Gwen | Refonte galerie — MissionFormPage simplifié | ✅ |
+| 108 | Gwen | Refonte galerie — nouvelle page Galerie dashboard | ✅ |
+| 109 | Gwen | Passer de 10 à 15-20 photos galerie publique (à voir avec la cliente) | 🔵 |
+| 110 | Gwen | Fusionner Service Civique dans Missions (sidebar) | ✅ |
+| 111 | Gwen | Supprimer MissionForm.jsx (code mort) | ❌ |
+| 112 | Gwen | Pré-remplir tarifs/inclus standards | ❌ |
+| 113 | Gwen | Refonte Service Civique (cartes pays, galerie combinée) | 🔵 |
+| 114 | Gwen | Contenu générique page Missions éditable (V2) | ❌ |
+| 115 | Gwen | Galerie Groupe jeunes / Congé solidaire | ❌ |
+
+### Bloc B — Dashboard CRUD manquant
+
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 116 | Gwen | CRUD Location (admin) | ❌ |
+| 117 | Gwen | CRUD Delegation (admin) | ❌ |
+| 118 | Gwen | CRUD TeamMember (admin) | ❌ |
+| 119 | Gwen | CRUD FieldAction + pays + tags (admin) | ❌ |
+| 120 | Gwen | CRUD ActivityReport (admin) | ❌ |
+| 121 | Gwen | CRUD MediaPost / articles (admin) | ❌ |
+| 122 | Gwen | Dashboard responsive mobile | ❌ |
+| 123 | Gwen | Tests d'intégration (au fil de chaque CRUD) | ❌ |
 
 ### Bloc C — Page Éducation & sensibilisation
 
-| # | Tâche |
-|---|---|
-| 119 | Refonte contenu dynamique (actuellement en dur) + gestion dashboard |
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 124 | Gwen | Refonte contenu dynamique + gestion dashboard | ❌ |
 
-### Bloc D — Finitions front (S8, reportées)
-
-| # | Tâche |
-|---|---|
-| 67 | Accessibilité basique — alt, aria-label, focus-visible |
-| 68 | SEO basique — `SEOHead` |
-| 69 | Lazy loading |
-| 70 | `maxLength={280}` textarea témoignage |
-| 72 | `PageLayout` — factorisation |
-
-### Bloc E — Polishing + SEO avancé (ex-Sept. S1 du planning initial)
+### Bloc D — Finitions front
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 75 | Gwen | Audit Lighthouse — objectif > 90 | 🔵 |
-| 76 | Gwen | Optimisations WebP + images production | 🔵 |
-| 77 | ~~Alison → à reprendre seule~~ | ~~Upload Sharp — redimensionnement auto WebP~~ | ➡️ Déplacé et priorisé en Bloc A #112 |
-| 78 | Gwen | Bilingue FR/EN — react-i18next (si décision cliente) | 🔵 |
-| 79 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | 🔵 |
-| 80 | Ensemble → seule | Seed BDD — contenus réels finaux fournis par la cliente | 🔵 |
-| 81 | Ensemble → seule | Relecture complète tous les textes avec la cliente | 🔵 |
+| 125 | Gwen | Accessibilité basique | ❌ |
+| 126 | Gwen | SEO basique (SEOHead) | ❌ |
+| 127 | Gwen | Lazy loading | ❌ |
+| 128 | Gwen | maxLength 280 textarea témoignage | 🔵 |
+| 129 | Gwen | PageLayout — factorisation | ❌ |
 
-### Bloc F — Déploiement & livraison (ex-Sept. S2/S3 du planning initial)
+### Bloc E — Polishing + SEO avancé
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 82 | Gwen | Dockerfile production (multi-stage build) | 🔵 |
-| 83 | Gwen | VPS + Docker + Nginx + SSL (Let's Encrypt) | 🔵 |
-| 84 | Alison → à reprendre seule | Variables d'env production + secrets | 🔵 |
-| 85 | Alison → à reprendre seule | Migration BDD production | 🔵 |
-| 86 | Ensemble → seule | UptimeRobot monitoring + tests HTTPS | 🔵 |
-| 87 | Ensemble → seule | Tests complets en production | 🔵 |
-| 88 | Ensemble → seule | Guide utilisateur dashboard (PDF) | 🔵 |
-| 89 | Ensemble → seule | Remise des accès à la cliente | 🔵 |
-| 90 | Ensemble → seule | Corrections finales | 🔵 |
-| 91 | Ensemble → seule | 🎉 LIVRAISON OFFICIELLE | 🔵 |
+| 130 | Gwen | Audit Lighthouse (objectif > 90) | ❌ |
+| 131 | Gwen | Optimisations WebP + images production | ❌ |
+| 132 | Gwen | Bilingue FR/EN (react-i18next, si décision cliente) | ❌ |
+| 133 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | ❌ |
+| 134 | Gwen | Seed BDD — contenus réels finaux | ❌ |
+| 135 | Gwen | Relecture complète des textes avec la cliente | ❌ |
+
+### Bloc F — Déploiement & livraison
+
+| # | Dev | Tâche | Statut |
+|---|---|---|---|
+| 136 | Gwen | Dockerfile production (multi-stage) | ❌ |
+| 137 | Gwen | VPS + Docker + Nginx + SSL | ❌ |
+| 138 | Gwen | Variables d'env production + secrets | ❌ |
+| 139 | Gwen | Migration BDD production | ❌ |
+| 140 | Gwen | UptimeRobot monitoring + tests HTTPS | ❌ |
+| 141 | Gwen | Tests complets en production | ❌ |
+| 142 | Gwen | Guide utilisateur dashboard (PDF) | ❌ |
+| 143 | Gwen | Remise des accès à la cliente | ❌ |
+| 144 | Gwen | Corrections finales | ❌ |
+| 145 | Gwen | 🎉 LIVRAISON OFFICIELLE | ❌ |
 
 ---
 
 ## Backlog V2 — Post-livraison
 
-| Fonctionnalité | Description |
-|---|---|
-| CRUD dashboard Location/Delegation/TeamMember/FieldAction | Briques de base actuellement seed-only, utilisées par Mission — priorité identifiée le 01/08, **détaillé en Bloc B ci-dessus** |
-| Buffer API | Auto-draft réseaux sociaux à la publication d'un article |
-| Instagram oEmbed | Embed posts du feed Instagram (nécessite app Meta) |
-| `latitude` / `longitude` sur Location | Embed Google Maps propre (remplace iframe URL) |
-| `location_id` FK sur Delegation | Architecture bidirectionnelle Delegation ↔ Location |
-| Sélection manuelle actions terrain home | Dashboard + champ BDD |
-| TipTap — éditeur riche | HTML riche pour MissionDetail, LocationDetail, EducationDetail |
-| Compteurs StatsBar depuis dashboard | La cliente peut modifier les chiffres clés |
-| Suisse vs France éducation | Filtrage des ateliers par zone géographique |
-| Congé solidaire Sumatra | Ajouter destination dans la section congé solidaire |
-| `MissionFieldAction` (many-to-many) | Relation explicite mission ↔ actions terrain, indépendante du filtre pays |
-| `mission_id` sur `MediaPost` | Publier un article directement rattaché à une mission |
-| **Seed non autonome (ajout 18/09)** | Les missions Kenya/Sénégal doivent être créées manuellement via le dashboard avant de pouvoir lancer le seed — limitation connue et documentée dans `seed.js`, jamais bloquante à ce jour mais à lever si le seed doit un jour tourner sans étape manuelle (ex. CI) |
-| **Recadrage d'image côté dashboard (ajout 18/09)** | Permettre à la cliente de recadrer une photo après upload (ex: photo mal cadrée avec sujet coupé) — outil client-side avant l'upload, Sharp ne fait que redimensionner, pas de recadrage intelligent automatique |
-| **Récupérer tous les PDF de l'ancien site (ajout 19/09)** | Guides du volontaire, rapports d'activité, rapports de mission... à réintégrer dans le nouveau site une fois le dashboard complet (Bloc B) — pas avant, pour ne pas re-uploader deux fois si l'organisation change entre-temps |
-| **HEIC non supporté par Sharp (ajout 18/09)** | Le binaire Sharp installé ne supporte que l'AVIF côté HEIF, pas le HEIC des iPhones (codec sous licence, absent du build précompilé). 2 options à trancher avec la cliente : réglage iPhone "Le plus compatible" (JPEG natif, zéro code) ou lib `heic-convert` en amont de Sharp |
-| **Compte admin + compte invité/service civique (déplacé du Bloc A)** | Nécessite de définir avec la cliente les permissions exactes du rôle invité avant tout développement — actuellement aucune interface n'existe pour créer un 2ᵉ compte, seul l'admin seedé existe. `authMiddleware.js` vérifie déjà le rôle (`role !== "admin"` → 403) mais figé sur une seule valeur, à faire évoluer une fois les permissions décidées |
-
----
-
-## Récapitulatif
-
-| Phase | Période | Livrable | Statut |
+| # | Dev | Tâche | Statut |
 |---|---|---|---|
-| Phase 1 — MVP | 28 mai › 3 juillet | MVP + dashboard fonctionnels | ✅ Livré |
-| Phase 2 — Dashboard complet | 7 juillet › 1er août | Site quasi-complet | ⚠️ Partiel — sécurité et S9 faits, dashboard CRUD (Bloc B) et finitions (Bloc D) restants |
-| Sécurité — audit Alison | 26 août, mergé 18/09 | Failles corrigées, droits BDD séparés | ✅ Fait |
-| Phase 3 — Solo (Blocs A à F) | À partir du 18/09 | Site en production | 🔵 À faire |
+| 146 | Gwen | CRUD dashboard Location/Delegation/TeamMember/FieldAction | ❌ |
+| 147 | Gwen | Buffer API — auto-draft réseaux sociaux | ❌ |
+| 148 | Gwen | Instagram oEmbed | ❌ |
+| 149 | Gwen | latitude/longitude sur Location | ❌ |
+| 150 | Gwen | location_id FK sur Delegation | ❌ |
+| 151 | Gwen | Sélection manuelle actions terrain home | ❌ |
+| 152 | Gwen | TipTap — éditeur riche | ❌ |
+| 153 | Gwen | Compteurs StatsBar depuis dashboard | ❌ |
+| 154 | Gwen | Suisse vs France éducation (filtrage zone) | ❌ |
+| 155 | Gwen | Congé solidaire Sumatra | ❌ |
+| 156 | Gwen | MissionFieldAction (many-to-many) | ❌ |
+| 157 | Gwen | mission_id sur MediaPost | ❌ |
+| 158 | Gwen | Seed non autonome (dépendance création manuelle) | ❌ |
+| 159 | Gwen | Recadrage d'image côté dashboard | ❌ |
+| 160 | Gwen | Récupérer tous les PDF de l'ancien site | ❌ |
+| 161 | Gwen | HEIC non supporté par Sharp | ❌ |
+| 162 | Gwen | Compte admin + compte invité (rôles) | ❌ |
