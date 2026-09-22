@@ -51,6 +51,9 @@ import adminTestimonialRoutes from "./routes/adminTestimonialRoutes.js"
 // ── Import des routers upload ──
 import uploadRoutes from "./routes/uploadRoutes.js"
 import adminUploadRoutes from "./routes/adminUploadRoutes.js"
+// ── Import des routers galerie ──
+import galleryRouter from './routes/galleryRoutes.js'
+import adminGalleryRoutes from './routes/adminGalleryRoutes.js'
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -147,6 +150,9 @@ app.use('/api/admin/upload', adminUploadRoutes)
 // Le préfixe /api/admin/testimonials est ajouté ICI.
 // → dans le fichier de routes, router.get("/") devient GET /api/admin/testimonials
 app.use("/api/admin/testimonials", adminTestimonialRoutes)
+// Route galerie et galerie admin — dashboard
+app.use('/api/gallery', galleryRouter)
+app.use('/api/admin/gallery', adminGalleryRoutes)
 
 
 // ── MIDDLEWARE ERREURS ───────────────────────────────────────────────────────

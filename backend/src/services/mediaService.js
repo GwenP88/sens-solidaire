@@ -78,3 +78,20 @@ export const syncGalleryImages = async (entityType, entityId, items) => {
     }
   }
 }
+
+// ── FIND TYPE GALLERY ────────────────────────────────────────────────────
+// Galerie générique par type (Groupe jeunes, Congé solidaire...) — pas de
+// mission derrière, juste entity_type = le type, entity_id = 0 fixe.
+// Mêmes règles que pour une mission : forcées + plus récentes, plafonné à 10.
+export const findTypeGallery = async (type, limit = 10) => {
+  const allMedia = await prisma.media.findMany({
+    where: { entity_type: type, entity_id: 0, file_type: 'image' },
+    orderBy: { created_at: 'desc' },
+  })
+
+  const forced = allMedia.filter(m => m.force_display)
+  const recent = allMedia.filter(m => !m.force_display)
+  const remainingSlots = Math.max(0, limit - forced.length)
+
+  return [...forced, ...recent.slice(0, remainingSlots)]
+}

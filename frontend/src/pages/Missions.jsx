@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
 // ── API ──
-import { fetchMissions, fetchTestimonials, fetchFieldActions, fetchServiceCiviqueGallery } from '../services/api'
+import { fetchMissions, fetchTestimonials, fetchFieldActions, fetchServiceCiviqueGallery, fetchTypeGallery } from '../services/api'
 
 // ── Composants layout
 import HeroPage from '../components/layout/HeroPage'
@@ -44,6 +44,8 @@ function Missions() {
   const [actions, setActions] = useState([])
   const [selectedCountryCard, setSelectedCountryCard] = useState(null)
   const [serviceCiviqueGallery, setServiceCiviqueGallery] = useState([])
+  const [groupeJeunesGallery, setGroupeJeunesGallery] = useState([])
+  const [congeSolidaireGallery, setCongeSolidaireGallery] = useState([])
   const [searchParams] = useSearchParams()
   const [activeFilter, setActiveFilter] = useState(searchParams.get('filter') || null)
   const filtersRef = useRef(null)
@@ -94,6 +96,14 @@ function Missions() {
 
   useEffect(() => {
     fetchServiceCiviqueGallery().then(setServiceCiviqueGallery).catch(console.error)
+  }, [])
+
+  useEffect(() => {
+    fetchTypeGallery('groupe_jeunes').then(setGroupeJeunesGallery).catch(console.error)
+  }, [])
+
+  useEffect(() => {
+    fetchTypeGallery('conge_solidaire').then(setCongeSolidaireGallery).catch(console.error)
   }, [])
 
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
@@ -529,20 +539,22 @@ function Missions() {
           )}
 
           {/* Galerie photos — toujours visible, emplacement réservé */}
-          <div className="mt-12">
-            <SubsectionEyebrow label="Des images au cœur de l’action" />
-            <p className="text-body text-primary/60 mb-8">
-              Un aperçu des moments vécus lors de nos missions.
-            </p>
-            <Carousel
-              items={[1, 2, 3, 4]}
-              showPagination={true}
-              color="primary"
-              renderSlide={(_, i) => (
-                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.webp`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
-              )}
-            />
-          </div>
+          {groupeJeunesGallery.length > 0 && (
+            <div className="mt-12">
+              <SubsectionEyebrow label="Des images au cœur de l’action" />
+              <p className="text-body text-primary/60 mb-8">
+                Un aperçu des moments vécus lors de nos missions.
+              </p>
+              <Carousel
+                items={groupeJeunesGallery}
+                showPagination={true}
+                color="primary"
+                renderSlide={(item) => (
+                  <img src={item.file_url} alt={item.label || ''} className="w-full h-56 object-cover rounded-xl" />
+                )}
+              />
+            </div>
+          )}
 
         </MissionSection>
       )}
@@ -638,20 +650,22 @@ function Missions() {
           )}
 
           {/* Galerie photos — toujours visible, emplacement réservé */}
-          <div className="mt-12">
-            <SubsectionEyebrow label="Des images au cœur de l’action" />
-            <p className="text-body text-primary/60 mb-8">
-              Un aperçu des moments vécus lors de nos missions.
-            </p>
-            <Carousel
-              items={[1, 2, 3, 4]}
-              showPagination={true}
-              color="primary"
-              renderSlide={(_, i) => (
-                <img src={`/images/placeholders/placeholder-galerie-${i + 1}.webp`} alt="" aria-hidden="true" className="w-full h-56 object-cover rounded-xl" />
-              )}
-            />
-          </div>
+          {congeSolidaireGallery.length > 0 && (
+            <div className="mt-12">
+              <SubsectionEyebrow label="Des images au cœur de l’action" />
+              <p className="text-body text-primary/60 mb-8">
+                Un aperçu des moments vécus lors de nos missions.
+              </p>
+              <Carousel
+                items={congeSolidaireGallery}
+                showPagination={true}
+                color="primary"
+                renderSlide={(item) => (
+                  <img src={item.file_url} alt={item.label || ''} className="w-full h-56 object-cover rounded-xl" />
+                )}
+              />
+            </div>
+          )}
 
         </MissionSection>
       )}

@@ -6,10 +6,17 @@
 // seule (case "Toujours afficher" + suppression), pas d'upload possible
 // dans ce mode (impossible de savoir à quelle mission rattacher une
 // nouvelle photo sans avoir choisi un pays précis).
+// Groupe jeunes / Congé solidaire n'ont PAS de notion de pays — une seule
+// galerie par type, pas rattachée à une mission (voir galleryController.js
+// côté backend) — le sélecteur "Pays" est masqué pour ces 2 types, l'éditeur
+// s'ouvre directement.
 // ════════════════════════════════════════════════════════════════
 
 import { useState, useEffect } from 'react'
-import { fetchAdminMissions, fetchAdminMissionById, updateMissionMedia } from '../../services/api'
+import {
+  fetchAdminMissions, fetchAdminMissionById, updateMissionMedia,
+  fetchAdminTypeGallery, updateTypeGalleryMedia,
+} from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
 
 const DOMAINES = [
@@ -20,9 +27,12 @@ const DOMAINES = [
 const TYPES = [
   { value: 'volontariat_individuel', label: 'Volontariat individuel' },
   { value: 'service_civique', label: 'Service Civique' },
-  { value: 'groupe_jeunes', label: 'Groupe jeunes', disabled: true },
-  { value: 'conge_solidaire', label: 'Congé solidaire', disabled: true },
+  { value: 'groupe_jeunes', label: 'Groupe jeunes' },
+  { value: 'conge_solidaire', label: 'Congé solidaire' },
 ]
+
+// Types sans notion de pays — une seule galerie, pas de mission derrière
+const TYPE_ONLY_TYPES = ['groupe_jeunes', 'conge_solidaire']
 
 function GaleriePage() {
   const [domaine, setDomaine] = useState('missions')
@@ -31,7 +41,7 @@ function GaleriePage() {
   const [selectedMissionId, setSelectedMissionId] = useState('')
   const [loading, setLoading] = useState(true)
 
-  // ── Mode "un seul pays" ──
+  // ── Mode "un seul pays" ET mode "galerie par type" — même éditeur, source différente ──
   const [galleryPhotos, setGalleryPhotos] = useState([])
   const [loadingGallery, setLoadingGallery] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -41,10 +51,18 @@ function GaleriePage() {
   const [allPhotos, setAllPhotos] = useState([]) // [{ ...media, country, missionId }]
   const [loadingAll, setLoadingAll] = useState(false)
 
+  const isTypeOnlyGallery = TYPE_ONLY_TYPES.includes(type)
   const isAllCountries = selectedMissionId === 'all'
 
-  // Charge toutes les missions du type sélectionné, pour peupler le sélecteur pays
+  // Charge toutes les missions du type sélectionné, pour peupler le sélecteur
+  // pays — inutile pour les types sans pays (Groupe jeunes/Congé solidaire)
   useEffect(() => {
+    if (isTypeOnlyGallery) {
+      setMissions([])
+      setSelectedMissionId('')
+      setLoading(false)
+      return
+    }
     setLoading(true)
     fetchAdminMissions()
       .then(data => {
@@ -57,8 +75,8 @@ function GaleriePage() {
 
   // Mode "un seul pays" — charge la galerie de la mission choisie
   useEffect(() => {
-    if (!selectedMissionId || isAllCountries) {
-      setGalleryPhotos([])
+    if (isTypeOnlyGallery || !selectedMissionId || isAllCountries) {
+      if (!isTypeOnlyGallery) setGalleryPhotos([])
       return
     }
     setLoadingGallery(true)
@@ -73,6 +91,21 @@ function GaleriePage() {
       .catch(() => setGalleryPhotos([]))
       .finally(() => setLoadingGallery(false))
   }, [selectedMissionId])
+
+  // Mode "galerie par type" (Groupe jeunes/Congé solidaire) — charge dès que
+  // le type change, pas d'étape "pays" à attendre
+  useEffect(() => {
+    if (!isTypeOnlyGallery) return
+    setLoadingGallery(true)
+    setSaveMessage(null)
+    fetchAdminTypeGallery(type)
+      .then(media => {
+        const photos = media.map(m => ({ file_url: m.file_url, label: m.label || '', force_display: m.force_display || false }))
+        setGalleryPhotos(photos)
+      })
+      .catch(() => setGalleryPhotos([]))
+      .finally(() => setLoadingGallery(false))
+  }, [type])
 
   // Mode "Tous les pays" — charge et combine la galerie de toutes les missions du type
   useEffect(() => {
@@ -100,7 +133,7 @@ function GaleriePage() {
       .finally(() => setLoadingAll(false))
   }, [selectedMissionId, missions])
 
-  // ── Mode "un seul pays" — enregistrement groupé (bouton) ──
+  // ── Enregistrement groupé (bouton) — branche selon le mode ──
   const handleSave = async () => {
     setSaving(true)
     setSaveMessage(null)
@@ -110,7 +143,11 @@ function GaleriePage() {
         label: p.label || null,
         force_display: p.force_display || false,
       }))
-      await updateMissionMedia(selectedMissionId, images)
+      if (isTypeOnlyGallery) {
+        await updateTypeGalleryMedia(type, images)
+      } else {
+        await updateMissionMedia(selectedMissionId, images)
+      }
       setSaveMessage({ type: 'success', text: 'Galerie enregistrée.' })
     } catch (err) {
       setSaveMessage({ type: 'error', text: err.message })
@@ -195,26 +232,36 @@ function GaleriePage() {
           </select>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-dash-text">Pays</label>
-          <select
-            value={selectedMissionId}
-            onChange={e => setSelectedMissionId(e.target.value)}
-            disabled={loading || missions.length === 0}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
-          >
-            <option value="">{loading ? 'Chargement...' : 'Choisir un pays'}</option>
-            {missions.length > 1 && <option value="all">Tous les pays</option>}
-            {missions.map(m => (
-              <option key={m.id} value={m.id}>{m.country}</option>
-            ))}
-          </select>
-        </div>
+        {/* Pas de sélecteur "Pays" pour Groupe jeunes/Congé solidaire — une seule galerie */}
+        {isTypeOnlyGallery ? (
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-dash-text">Pays</label>
+            <p className="text-sm text-dash-legend italic px-3 py-2">
+              Pas de pays pour ce type de mission
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-dash-text">Pays</label>
+            <select
+              value={selectedMissionId}
+              onChange={e => setSelectedMissionId(e.target.value)}
+              disabled={loading || missions.length === 0}
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+            >
+              <option value="">{loading ? 'Chargement...' : 'Choisir un pays'}</option>
+              {missions.length > 1 && <option value="all">Tous les pays</option>}
+              {missions.map(m => (
+                <option key={m.id} value={m.id}>{m.country}</option>
+              ))}
+            </select>
+          </div>
+        )}
 
       </div>
 
-      {/* ── Mode "un seul pays" ── */}
-      {selectedMissionId && !isAllCountries && (
+      {/* ── Éditeur — "galerie par type" OU "un seul pays" (même composant) ── */}
+      {(isTypeOnlyGallery || (selectedMissionId && !isAllCountries)) && (
         <div className="flex flex-col gap-4">
           {loadingGallery ? (
             <p className="text-dash-legend text-sm italic">Chargement de la galerie...</p>
