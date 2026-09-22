@@ -204,6 +204,10 @@
 | 123 | Gwen | Tests d'intégration (au fil de chaque CRUD) | ❌ |
 | 114 | Gwen | Contenu générique page Missions éditable | ❌ |
 
+A voir : congé solidaire doit devenir congé de solidarité dnas le site visible, les modales pour la suppression de photos dans la galerie, revoir le fichier app.js, app.jsx et api.js (ordre, commentaire....), ajouter un menu + ancre pour la page notre équipe +/- notre association? + ajout de video! (dans le carrousel, reconnaissable avec un symbole play devant la video, pas de démarrage automatique, si le user clic sur le play, ouverture de la video apr dessus type modal, pas de modification de format, si la video est en portrait elle reste, idem en paysage)
+
+faire en sorte que le bloc info pratique prenne toute la hauteur en focntion des deux bloc de gauche pour éviter les trous en bas de page, avec contenu espacé et reparti sur toute la heur du bloc info pratiques
+
 ### Bloc C — Page Éducation & sensibilisation
 
 | # | Dev | Tâche | Statut |
