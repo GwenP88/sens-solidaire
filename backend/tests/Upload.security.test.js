@@ -60,7 +60,7 @@ describe("POST /api/upload — path traversal via le nom de fichier", () => {
       const absolutePath = path.join(process.cwd(), "public", res.body.url)
       const uploadsRoot = path.resolve("public/uploads")
       expect(absolutePath.startsWith(uploadsRoot + path.sep)).toBe(true)
-      expect(path.extname(absolutePath)).toBe(".png")
+      expect(path.extname(absolutePath)).toBe(".webp")
 
       createdFiles.push(absolutePath)
     }

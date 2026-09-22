@@ -3,6 +3,7 @@
 // Prisma v7 utilise le nouveau "client engine" qui nécessite un adaptateur pg
 // @prisma/adapter-pg fait le lien entre Prisma et PostgreSQL
 
+import "dotenv/config"
 // Import du package pg pour créer le pool de connexions
 import pg from "pg"
 
