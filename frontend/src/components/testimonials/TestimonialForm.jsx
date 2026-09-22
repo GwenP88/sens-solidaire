@@ -55,7 +55,7 @@ function TestimonialForm({ onClose }) {
     if (!form.prenom.trim())  newErrors.prenom  = "Le prénom est obligatoire."
     if (!form.nom.trim())     newErrors.nom     = "Le nom est obligatoire."
     if (!form.type)           newErrors.type    = "Sélectionnez un type de mission."
-    if (form.type === 'individuel' && !form.destination) {
+    if ((form.type === 'individuel' || form.type === 'service_civique') && !form.destination) {
       newErrors.destination = "Sélectionnez une destination."
     }
     if (!form.quote.trim())   newErrors.quote   = "Le témoignage est obligatoire."
@@ -99,16 +99,17 @@ function TestimonialForm({ onClose }) {
     }
   }
 
-  // Récupère dynamiquement les missions individuelles actives
-  // (même logique que le dropdown navbar) — se met à jour à chaque nouvelle mission créée
-  // On garde les missions entières (id + country) pour pouvoir résoudre mission_id à la soumission
+  // Récupère dynamiquement les missions actives du type sélectionné — seuls
+  // "individuel" et "service_civique" ont plusieurs pays à choisir. Se
+  // recharge à chaque changement de type.
   useEffect(() => {
-    fetchMissions({ type: 'volontariat_individuel' })
-      .then(missions => {
-        setDestinations(missions)
-      })
+    if (form.type !== 'individuel' && form.type !== 'service_civique') return
+
+    const apiType = form.type === 'individuel' ? 'volontariat_individuel' : 'service_civique'
+    fetchMissions({ type: apiType })
+      .then(missions => setDestinations(missions))
       .catch(console.error)
-  }, [])
+  }, [form.type])
 
   // Libère l'URL de prévisualisation quand elle n'est plus utilisée (évite une fuite mémoire)
   useEffect(() => {
@@ -164,15 +165,15 @@ function TestimonialForm({ onClose }) {
           <option value="">Sélectionnez un type</option>
           <option value="individuel">Volontariat individuel</option>
           <option value="service_civique">Service civique</option>
-          <option value="groupe_jeune">Groupe jeune</option>
+          <option value="groupe_jeunes">Groupe jeune</option>
           <option value="conge_solidaire">Congé solidaire</option>
         </select>
         {errors.type && <span className="text-caption text-red-500">{errors.type}</span>}
       </div>
 
-      {/* Menu déroulant destination — affiché uniquement pour le volontariat individuel */}
+      {/* Menu déroulant destination — affiché uniquement pour le volontariat individuel et le service civique */}
       {/* value = id de la mission (résolu directement en mission_id à la soumission) */}
-      {form.type === 'individuel' && (
+      {(form.type === 'individuel' || form.type === 'service_civique') && (
         <div className="flex flex-col gap-xs">
           <label className="text-eyebrow text-primary/60 mb-0">Destination *</label>
           <select
