@@ -62,10 +62,10 @@ const MISSION_TYPES = [
   },
   {
     slug: 'conge-solidaire',
-    title: 'Partir en congé solidaire',
+    title: 'Partir en congé de solidarité',
     description: 'Donnez du sens à vos congés en vivant une expérience solidaire unique, au service de la biodiversité et des communautés locales.',
     image: '/images/design/conge-solidaire-2.jpg',
-    badge: 'Congé solidaire',
+    badge: 'Congé de solidarité',
     duration: '10 jours à 4 semaines',
     ctaLabel: 'Découvrir →',
     ctaUrl: '/missions?filter=conge_solidaire',

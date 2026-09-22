@@ -26,7 +26,7 @@ export const FILTERS_MISSION_TYPE = [
   { label: "Volontariat individuel", value: "individuel" },
   { label: "Service civique", value: "service_civique" },
   { label: "Groupe jeunes", value: "groupe_jeunes" },
-  { label: "Congé solidaire", value: "conge_solidaire" },
+  { label: "Congé de solidarité", value: "conge_solidaire" },
 ]
 
 // ── Public cible — page Éducation & Sensibilisation ──

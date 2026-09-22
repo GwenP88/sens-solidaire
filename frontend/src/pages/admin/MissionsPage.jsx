@@ -4,7 +4,7 @@
 // avec filtres type/pays/statut. Fusion de l'ancienne page "Missions
 // individuelles" et de "Service Civique" (#128) — même table Mission
 // en base, juste des formulaires d'édition différents selon le type.
-// Les 3 missions "ancres" (service civique/groupe jeunes/congé solidaire,
+// Les 3 missions "ancres" (service civique/groupe jeunes/congé de solidarité,
 // non éditables, slug préfixé "ancre-") sont exclues de la liste.
 // ════════════════════════════════════════════════════════════════
 
@@ -30,7 +30,7 @@ const TYPE_LABELS = {
   volontariat_individuel: 'Volontariat individuel',
   service_civique:        'Service Civique',
   groupe_jeunes:           'Groupe jeunes',
-  conge_solidaire:         'Congé solidaire',
+  conge_solidaire:         'Congé de solidarité',
 }
 
 const COLUMNS = [

@@ -6,7 +6,7 @@
 // seule (case "Toujours afficher" + suppression), pas d'upload possible
 // dans ce mode (impossible de savoir à quelle mission rattacher une
 // nouvelle photo sans avoir choisi un pays précis).
-// Groupe jeunes / Congé solidaire n'ont PAS de notion de pays — une seule
+// Groupe jeunes / Congé de solidarité n'ont PAS de notion de pays — une seule
 // galerie par type, pas rattachée à une mission (voir galleryController.js
 // côté backend) — le sélecteur "Pays" est masqué pour ces 2 types, l'éditeur
 // s'ouvre directement.
@@ -28,7 +28,7 @@ const TYPES = [
   { value: 'volontariat_individuel', label: 'Volontariat individuel' },
   { value: 'service_civique', label: 'Service Civique' },
   { value: 'groupe_jeunes', label: 'Groupe jeunes' },
-  { value: 'conge_solidaire', label: 'Congé solidaire' },
+  { value: 'conge_solidaire', label: 'Congé de solidarité' },
 ]
 
 // Types sans notion de pays — une seule galerie, pas de mission derrière
@@ -55,7 +55,7 @@ function GaleriePage() {
   const isAllCountries = selectedMissionId === 'all'
 
   // Charge toutes les missions du type sélectionné, pour peupler le sélecteur
-  // pays — inutile pour les types sans pays (Groupe jeunes/Congé solidaire)
+  // pays — inutile pour les types sans pays (Groupe jeunes/Congé de solidarité)
   useEffect(() => {
     if (isTypeOnlyGallery) {
       setMissions([])
@@ -92,7 +92,7 @@ function GaleriePage() {
       .finally(() => setLoadingGallery(false))
   }, [selectedMissionId])
 
-  // Mode "galerie par type" (Groupe jeunes/Congé solidaire) — charge dès que
+  // Mode "galerie par type" (Groupe jeunes/Congé de solidarité) — charge dès que
   // le type change, pas d'étape "pays" à attendre
   useEffect(() => {
     if (!isTypeOnlyGallery) return
@@ -232,7 +232,7 @@ function GaleriePage() {
           </select>
         </div>
 
-        {/* Pas de sélecteur "Pays" pour Groupe jeunes/Congé solidaire — une seule galerie */}
+        {/* Pas de sélecteur "Pays" pour Groupe jeunes/Congé de solidarité — une seule galerie */}
         {isTypeOnlyGallery ? (
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-dash-text">Pays</label>

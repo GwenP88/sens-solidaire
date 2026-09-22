@@ -16,7 +16,7 @@ function MissionCard({ image, badge, title, description, duration, slug, ctaLabe
     'Volontariat individuel': '#2F8A3A',
     'Service civique': '#1D6FA4',
     'Groupe jeunes': '#8B5E3C',
-    'Congé solidaire': '#8B6914',
+    'Congé de solidarité': '#8B6914',
   }
 
   const content = (

@@ -141,7 +141,7 @@ function ContactForm() {
           <option value="Mission volontariat">Mission de volontariat</option>
           <option value="Service civique">Service civique</option>
           <option value="Voyage groupe jeune">Voyage groupe jeune</option>
-          <option value="Congé solidaire">Congé solidaire</option>
+          <option value="Congé de solidarité">Congé de solidarité</option>
           <option value="Don">Faire un don</option>
           <option value="Partenariat">Partenariat</option>
           <option value="Autre">Autre</option>

@@ -82,7 +82,7 @@ function TestimonialForm({ onClose }) {
 
       // mission_id : uniquement pour le volontariat individuel, où l'utilisateur
       // choisit une destination précise (1 pays = 1 mission active, cf. vérification BDD).
-      // Les autres types (service civique, groupe jeune, congé solidaire) ne sont pas
+      // Les autres types (service civique, groupe jeune, congé de solidarité) ne sont pas
       // rattachés à une mission précise pour l'instant → null (à valider si besoin d'évoluer).
       await submitTestimonial({
         author_name: `${form.prenom} ${form.nom}`,
@@ -166,7 +166,7 @@ function TestimonialForm({ onClose }) {
           <option value="individuel">Volontariat individuel</option>
           <option value="service_civique">Service civique</option>
           <option value="groupe_jeunes">Groupe jeune</option>
-          <option value="conge_solidaire">Congé solidaire</option>
+          <option value="conge_solidaire">Congé de solidarité</option>
         </select>
         {errors.type && <span className="text-caption text-red-500">{errors.type}</span>}
       </div>

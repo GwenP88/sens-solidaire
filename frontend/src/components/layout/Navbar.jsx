@@ -36,7 +36,7 @@ const APROPOS = [
 const ENGAGEMENTS = [
   { label: "Service Civique",  filter: "service_civique" },
   { label: "Groupe jeunes",    filter: "groupe_jeunes"   },
-  { label: "Congé solidaire",  filter: "conge_solidaire" },
+  { label: "Congé de solidarité",  filter: "conge_solidaire" },
 ]
 
 

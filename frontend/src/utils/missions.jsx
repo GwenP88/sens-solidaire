@@ -13,5 +13,5 @@ export const TYPE_LABELS = {
   volontariat_individuel: 'Volontariat individuel',
   service_civique: 'Service civique',
   groupe_jeunes: 'Groupe jeunes',
-  conge_solidaire: 'Congé solidaire',
+  conge_solidaire: 'Congé de solidarité',
 }
