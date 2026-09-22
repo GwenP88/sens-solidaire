@@ -12,6 +12,7 @@ import {
   fetchAdminMissionById,
   createMission,
   updateMission,
+  fetchCountryNames
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
 import { FormSection, Field, TextareaField } from '../../components/admin/FormElements'
@@ -43,6 +44,7 @@ function ServiceCiviqueFormPage() {
   const [error, setError] = useState(null)
   const [fieldErrors, setFieldErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
+  const [countryNames, setCountryNames] = useState([])
 
   useEffect(() => {
     if (!isEditing) return
@@ -67,6 +69,11 @@ function ServiceCiviqueFormPage() {
 
     load()
   }, [id, isEditing])
+
+  useEffect(() => {
+    fetchCountryNames().then(setCountryNames).catch(console.error)
+  }, [])
+
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -149,9 +156,13 @@ function ServiceCiviqueFormPage() {
 
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-10">
 
+        <datalist id="country-list">
+          {countryNames.map(name => <option key={name} value={name} />)}
+        </datalist>
+
         <FormSection title="Informations">
           <Field label="Titre" name="title" value={formData.title} onChange={handleChange} required />
-          <Field label="Pays" name="country" value={formData.country} onChange={handleChange} required />
+          <Field label="Pays" name="country" value={formData.country} onChange={handleChange} required list="country-list" autoComplete="off" />
 
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-dash-text">

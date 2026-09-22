@@ -17,6 +17,7 @@ import {
   updateMission,
   updateMissionPricing,
   updateMissionMedia,
+  fetchCountryNames,
 } from '../../services/api'
 
 // ── Composants 
@@ -36,7 +37,7 @@ const VALID_TYPES = [
   { value: 'volontariat_individuel', label: 'Volontariat individuel' },
   { value: 'service_civique',        label: 'Service Civique'        },
   { value: 'groupe_jeunes',          label: 'Groupe jeunes'          },
-  { value: 'conge_solidaire',        label: 'Congé solidaire'        },
+  { value: 'conge_solidaire',        label: 'Congé de solidarité'        },
 ]
 
 // État initial du formulaire
@@ -114,6 +115,7 @@ function MissionFormPage() {
   const [error, setError]           = useState(null)
   const [fieldErrors, setFieldErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
+  const [countryNames, setCountryNames] = useState([])
 
   // ── Chargement en mode édition ──
   useEffect(() => {
@@ -190,6 +192,10 @@ function MissionFormPage() {
 
     load()
   }, [id, isEditing])
+
+  useEffect(() => {
+    fetchCountryNames().then(setCountryNames).catch(console.error)
+  }, [])
 
   // ── Handlers champs simples ──
   const handleChange = (e) => {
@@ -358,6 +364,10 @@ function MissionFormPage() {
 
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-10">
 
+        <datalist id="country-list">
+          {countryNames.map(name => <option key={name} value={name} />)}
+        </datalist>
+
         {/* ── BLOC 1 : Informations essentielles ── */}
         <FormSection
           id="informations"
@@ -366,11 +376,11 @@ function MissionFormPage() {
         >
           {/* Ligne 1 — Titre et pays */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Field label="Titre de la mission" name="title" value={formData.title} onChange={handleChange} required />
-            <Field
+          <Field
             label="Pays" name="country" value={formData.country} onChange={handleChange} required
             pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
-            />
+            list="country-list" autoComplete="off"
+          />
           </div>
 
           {/* Ligne 3 — Slug, pleine largeur */}

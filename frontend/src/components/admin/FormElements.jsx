@@ -15,7 +15,7 @@ export function FormSection({ title, description, children, tone = 'bg-dash-acti
 }
 
 // error : message de validation à afficher sous le champ (texte rouge)
-export function Field({ label, name, value, onChange, required, hint, pattern, title: fieldTitle, error }) {
+export function Field({ label, name, value, onChange, required, hint, pattern, title: fieldTitle, error, autoComplete, list }) {
   return (
     <div className="flex flex-col gap-1">
       <label className="text-sm font-medium text-dash-text">
@@ -29,6 +29,8 @@ export function Field({ label, name, value, onChange, required, hint, pattern, t
         onChange={onChange}
         pattern={pattern}
         title={fieldTitle}
+        autoComplete={autoComplete}
+        list={list}
         className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
           error ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
         }`}

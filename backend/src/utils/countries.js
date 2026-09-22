@@ -20,4 +20,4 @@ export const getAllCountryNames = () => Object.keys(COUNTRY_NAME_TO_CODE).sort()
 
 // Retrouve le code ISO à partir du nom exact du pays (tel que choisi dans le
 // <datalist>) — retourne null si le nom ne correspond à rien de connu
-export const getCountryCode = (name) => COUNTRY_NAME_TO_CODE[name] || null
+export const getCountryCode = (name) => (COUNTRY_NAME_TO_CODE[name] || null)?.toLowerCase() ?? null

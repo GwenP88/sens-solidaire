@@ -45,7 +45,6 @@ function LocationFormPage() {
   const [countryNames, setCountryNames] = useState([])
   const [showDelegationPanel, setShowDelegationPanel] = useState(false)
   const [delegationId, setDelegationId] = useState(null)
-  const [delegationCountry, setDelegationCountry] = useState('')
   const [delegationPhoto, setDelegationPhoto] = useState([])
   const [delegationContacts, setDelegationContacts] = useState('')
   const [fieldErrors, setFieldErrors] = useState({})
@@ -76,7 +75,6 @@ function LocationFormPage() {
 
         if (location.delegation) {
           setDelegationId(location.delegation.id)
-          setDelegationCountry(location.delegation.pays || '')
           setDelegationPhoto(location.delegation.image_url ? [{ file_url: location.delegation.image_url, label: '' }] : [])
           setDelegationContacts(location.delegation.contacts || '')
         }
@@ -148,8 +146,8 @@ function LocationFormPage() {
       let finalDelegationId = delegationId
       if (showDelegationPanel) {
         const delegationPayload = {
-          pays: delegationCountry,
-          lieu: `Délégation nationale — ${delegationCountry}`,
+          pays: formData.country,
+          lieu: `Délégation nationale — ${formData.country}`,
           image_url: delegationPhoto[0]?.file_url || '',
           contacts: delegationContacts,
         }
@@ -222,9 +220,16 @@ function LocationFormPage() {
 
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-10">
 
+        <datalist id="country-list">
+          {countryNames.map(name => <option key={name} value={name} />)}
+        </datalist>
+
         <FormSection title="Informations">
           <Field label="Titre" name="name" value={formData.name} onChange={handleChange} required />
-          <Field label="Pays" name="country" value={formData.country} onChange={handleChange} required />
+          <Field
+            label="Pays" name="country" value={formData.country} onChange={handleChange} required
+            list="country-list" autoComplete="off"
+          />
           <TextareaField
             label="Description" name="description"
             value={formData.description} onChange={handleChange}
@@ -292,17 +297,12 @@ function LocationFormPage() {
                 <label className="text-sm font-medium text-dash-text">Titre</label>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-dash-legend whitespace-nowrap">Délégation nationale —</span>
-                  <input
-                    type="text"
-                    list="country-list"
-                    value={delegationCountry}
-                    onChange={e => setDelegationCountry(e.target.value)}
-                    placeholder="Choisis un pays"
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-dash-action/30"
-                  />
-                  <datalist id="country-list">
-                    {countryNames.map(name => <option key={name} value={name} />)}
-                  </datalist>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-dash-text">Titre</label>
+                    <p className="text-sm text-dash-text">
+                      Délégation nationale — {formData.country || <span className="text-dash-legend italic">renseigne le pays du lieu ci-dessus</span>}
+                    </p>
+                  </div>
                 </div>
               </div>
 
