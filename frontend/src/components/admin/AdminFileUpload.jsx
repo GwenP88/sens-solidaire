@@ -28,6 +28,7 @@ function AdminFileUpload({
   helperText,
   imageType,
   showForceDisplay = false,
+  showHeroSelector = false,
   layout = 'list',
   allowReorder = true,
 }) {
@@ -81,6 +82,12 @@ function AdminFileUpload({
   const handleForceDisplayChange = (index) => {
     const updated = [...value]
     updated[index] = { ...updated[index], force_display: !updated[index].force_display }
+    onChange(updated)
+  }
+
+  // ── Sélectionne LA photo hero (radio — une seule à la fois) ──
+  const handleSetHero = (index) => {
+    const updated = value.map((item, i) => ({ ...item, is_hero: i === index }))
     onChange(updated)
   }
 
@@ -158,6 +165,19 @@ function AdminFileUpload({
                 'contents' en mode liste (n'affecte pas l'alignement existant),
                 flex justify-between en mode grille (case à gauche, croix à droite) */}
             <div className={layout === 'grid' ? 'flex items-center justify-between' : 'contents'}>
+
+              {showHeroSelector && (
+                <label className="flex items-center gap-1.5 text-xs text-dash-legend shrink-0 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="hero-selector"
+                    checked={item.is_hero || false}
+                    onChange={() => handleSetHero(i)}
+                    className="w-4 h-4 accent-dash-action"
+                  />
+                  Photo hero
+                </label>
+              )}
 
               {showForceDisplay && (
                 <label className="flex items-center gap-1.5 text-xs text-dash-legend shrink-0 cursor-pointer">
