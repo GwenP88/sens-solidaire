@@ -194,8 +194,8 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 116 | Gwen | CRUD Location (admin) | ❌ |
-| 117 | Gwen | CRUD Delegation (admin) | ❌ |
+| 116 | Gwen | CRUD Location (admin) | ✅ |
+| 117 | Gwen | CRUD Delegation (admin) | ✅ |
 | 118 | Gwen | CRUD TeamMember (admin) | ❌ |
 | 119 | Gwen | CRUD FieldAction + pays + tags (admin) | ❌ |
 | 120 | Gwen | CRUD ActivityReport (admin) | ❌ |
