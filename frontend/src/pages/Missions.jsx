@@ -152,17 +152,17 @@ function Missions() {
     {
       icon: IconBuilding,
       title: 'Construire votre mission',
-      description: 'Nous construisons avec l’entreprise une mission adaptée aux profils et aux compétences des participants, en lien avec les besoins identifiés par nos partenaires locaux.',
+      description: 'La mission est construite à partir des besoins identifiés par le partenaire local et des compétences professionnelles que le salarié peut mobiliser pour y répondre.',
     },
     {
       icon: IconLeaf,
       title: 'S’engager sur le terrain',
-      description: 'Les participants rejoignent nos partenaires au Kenya ou au Sénégal et prennent part à leurs projets aux côtés des équipes et des communautés locales.',
+      description: 'Le salarié rejoint un partenaire au Kenya ou au Sénégal pour une mission de courte durée centrée sur le partage et le renforcement de compétences.',
     },
     {
       icon: IconHand,
       title: 'Partager et valoriser l’expérience',
-      description: 'Au retour, l’expérience vécue peut être partagée avec les équipes et valorisée au sein de l’entreprise dans le cadre de sa démarche RSE.',
+      description: 'Au retour, l’expérience et les compétences mobilisées peuvent être partagées avec les équipes et valorisées dans la démarche d’engagement ou de RSE de l’entreprise.',
     },
   ]
 
@@ -193,7 +193,7 @@ function Missions() {
             { icon: IconPerson,   situation: 'Vous souhaitez partir seul, à deux ou en petit groupe pour participer concrètement à un projet solidaire ?', label: 'Volontariat individuel', filter: 'individuel' },
             { icon: IconClock,    situation: 'Vous avez entre 16 et 25 ans et recherchez une expérience citoyenne riche de sens ?', label: 'Service Civique', filter: 'service_civique' },
             { icon: IconPeople,   situation: 'Vous représentez un lycée ou une structure jeunesse et souhaitez organiser un projet collectif ?', label: 'Mission de groupe', filter: 'groupe_jeunes' },
-            { icon: IconBuilding, situation: 'Vous êtes salarié et souhaitez donner du sens à vos congés en vous engageant dans un projet solidaire ?', label: 'Congé solidaire', filter: 'conge_solidaire' },
+            { icon: IconBuilding, situation: 'Votre entreprise souhaite permettre à ses salariés de mettre leurs compétences au service d’un projet de solidarité internationale ?', label: 'Congé de solidarité', filter: 'conge_solidaire' },
           ].map(item => {
             const Icon = item.icon
             return (
@@ -242,7 +242,7 @@ function Missions() {
                 Chaque mission est aussi une expérience humaine unique, riche en rencontres, en échanges et en découvertes.
               </p>
               <p className="text-mention text-primary/60">
-                Les frais engagés pour votre mission peuvent ouvrir droit à une réduction d'impôt de 66 % (selon la législation en vigueur). Un reçu fiscal est délivré à l'issue de votre mission.
+                Les frais engagés pour votre mission peuvent ouvrir droit à une réduction d'impôt de 66 % (selon la législation en vigueur). Un reçu fiscal est délivré à l'issue de votre mission. Si vous êtes salarié, le Congé de Solidarité Internationale (CSI) peut, sous certaines conditions, vous permettre de vous absenter de votre emploi pour participer à une mission d'entraide à l'étranger.
               </p>
             </>
           }
@@ -252,6 +252,7 @@ function Missions() {
             { icon: IconPayment, label: 'à partir de 1175€' },
             { icon: IconMoney,   label: 'Réduction d\'impôt 66 %' },
           ]}
+          primaryAction={{ label: 'En savoir plus sur le CSI →', href: 'https://france-volontaires.org/le-conge-de-solidarite-internationale/', external: true }}
           secondaryAction={{ label: "Voir les témoignages →", href: "/temoignages?type=individuel" }}
           carouselItems={missionVolontariat}
           carouselSlidesPerView={3}
@@ -301,7 +302,7 @@ function Missions() {
           ]}
           primaryAction={{ label: 'Candidater →', href: 'https://www.service-civique.gouv.fr/', external: true }}
           secondaryAction={{
-            label: "Plus d'informations →",
+            label: "En savoir plus sur le Service Civique →",
             href: "https://www.service-civique.gouv.fr/comprendre-le-service-civique",
             external: true,
           }}
@@ -437,13 +438,13 @@ function Missions() {
           bg="bg-surface"
           title="Je pars avec mon groupe"
           audience="Pour les lycées, MJC et structures de jeunesse"
-          description="Organisez une mission solidaire au Kenya ou au Sénégal et faites vivre à votre groupe une expérience éducative et interculturelle unique."
+          description="Construisez avec votre établissement ou votre structure jeunesse un projet collectif de solidarité internationale au Kenya ou au Sénégal."
           decorImage="/images/design/ui/one-line-3.png"
           image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Mission groupe jeunes"
           introSlot={
             <p className="text-body text-primary/80">
-              Nous accompagnons les établissements scolaires, les MJC, les centres sociaux et les structures jeunesse dans l'organisation de missions solidaires au Kenya ou au Sénégal. Pendant 10 jours, les jeunes découvrent une autre culture, participent à des actions concrètes sur le terrain et développent leur ouverture au monde.
+              Nous accompagnons les établissements scolaires, les MJC, les centres sociaux et les structures jeunesse dans la construction de projets collectifs au Kenya ou au Sénégal. Préparée avec les encadrants et nos partenaires locaux, la mission associe découverte interculturelle, rencontres et participation à des actions concrètes liées aux projets menés sur le terrain. Pendant 10 jours, les jeunes vivent une expérience éducative qui favorise l'ouverture au monde, la coopération et l'engagement solidaire.
             </p>
           }
           infoBarItems={[
@@ -452,6 +453,7 @@ function Missions() {
             { icon: IconPin,    label: 'Kenya ou Sénégal' },
             { icon: IconHeart,  label: 'Projet éducatif' },
           ]}
+          primaryAction={{ label: "Découvrir le voyage d'une classe au Sénégal →", href: "https://ersge.ch/blog-stage-2026/", external: true }}
           secondaryAction={{ label: "Voir les témoignages →", href: "/temoignages?type=groupe_jeunes" }}
           stepsTitle="Une mission en trois temps"
           steps={stepsGroupeJeunes}
@@ -559,7 +561,7 @@ function Missions() {
         </MissionSection>
       )}
 
-      {/* ── Section Congé solidaire ── */}
+      {/* ── Section Congé de solidarité ── */}
       {(activeFilter === null || activeFilter === 'conge_solidaire') && (
         <MissionSection
           id="conge-solidaire"
@@ -569,25 +571,25 @@ function Missions() {
           description="Une expérience humaine forte pour les salariés et un engagement concret pour les entreprises."
           decorImage="/images/design/ui/one-line-4.png"
           image="/images/placeholders/placeholder-photo.webp"
-          imageAlt="Congé solidaire"
+          imageAlt="Congé de solidarité"
           introSlot={
             <>
               <p className="text-body text-primary/80">
-                Le congé solidaire permet aux salariés de consacrer une partie de leurs congés à une mission de solidarité internationale. Avec Sens Solidaires, ils rejoignent des projets menés avec nos partenaires locaux et mettent leur temps, leur énergie et leurs compétences au service d'actions concrètes sur le terrain. C'est aussi l'occasion de découvrir un nouvel environnement, de partager des savoir-faire et de vivre une expérience humaine et interculturelle forte.
+                Le Congé de Solidarité permet à des salariés ou à des agents de collectivités en activité de mettre leurs compétences professionnelles au service d'une mission répondant aux besoins d'un partenaire local. La mission est construite dans le cadre d'un partenariat entre l'organisme d'envoi, la structure qui soutient le départ et l'organisation d'accueil.
               </p>
 
               <p className="text-body text-primary/80">
-                Pour l'entreprise, le congé solidaire permet de soutenir des projets utiles tout en donnant aux collaborateurs la possibilité de s'engager concrètement. Il s'inscrit dans une démarche RSE et contribue à développer l'engagement des équipes, à valoriser leurs compétences et à donner une dimension collective aux actions de solidarité portées par l'entreprise.
+                Le départ est financé en tout ou partie par l'employeur, le comité d'entreprise ou la fondation d'entreprise ; le salarié peut compléter le financement si nécessaire. Avec Sens Solidaires, ces missions sont proposées au Kenya ou au Sénégal et visent à renforcer les compétences de nos partenaires locaux tout en donnant aux salariés l'occasion de mobiliser leur savoir-faire dans un autre contexte professionnel et culturel.
               </p>
             </>
           }
           infoBarItems={[
             { icon: IconBuilding, label: 'Salariés & entreprises' },
-            { icon: IconClock,    label: '10 jours à 4 semaines' },
+            { icon: IconClock,    label: '2 à 3 semaines' },
             { icon: IconPin,      label: 'Kenya ou Sénégal' },
-            { icon: IconMoney,    label: 'Réduction d\'impôt 60 %' },
+            { icon: IconMoney,    label: 'Financement entreprise' },
           ]}
-          primaryAction={{ label: 'En savoir plus →', href: 'https://france-volontaires.org/le-conge-de-solidarite-internationale/', external: true }}
+          primaryAction={{ label: 'En savoir plus sur le Congé de Solidarité →', href: 'https://france-volontaires.org/le-conge-de-solidarite-internationale/', external: true }}
           secondaryAction={{ label: "Voir les témoignages →", href: "/temoignages?type=conge_solidaire" }}
           stepsTitle="Comment ça fonctionne ?"
           steps={stepsCongeSolidaire}
