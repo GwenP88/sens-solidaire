@@ -2560,4 +2560,34 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 
 ---
 
+### 22 septembre 2026 — Bloc A clos, démarrage Bloc B (CRUD Location complet)
+
+**Fin du Bloc A :**
+- #111 : suppression de `MissionForm.jsx` (code mort confirmé, aucune référence)
+- #112 : `EMPTY_FORM` pré-rempli — 4 tarifs standards (10j/1175€, 2sem/1500€, 3sem/2000€, 4sem/2500€) + textes inclus/non-inclus standards, à la création uniquement
+- #113 (vraiment terminée cette fois — une tentative précédente avait été annoncée faite sans être appliquée) : `TestimonialForm.jsx` propose le sélecteur de pays pour Service Civique (même logique que le volontariat individuel). Les 3 missions "ancres" démo supprimées via `hardDelete` (témoignages fictifs détachés proprement, pas perdus)
+- #115 : galerie pour Groupe jeunes et Congé solidaire — **architecture différente** de Service Civique : pas de missions par pays (missions "sur-mesure", pas de destinations fixes), donc galerie générique par type sans mission derrière (`entity_type: 'groupe_jeunes'`/`'conge_solidaire'`, `entity_id: 0` fixe). Nouveau circuit complet : `findTypeGallery`/`syncGalleryImages` (service), `galleryController.js`, routes publique + admin dédiées, `GaleriePage.jsx` avec un mode "galerie par type" (pas de sélecteur pays), carrousels publics branchés
+
+**Démarrage Bloc B — CRUD Location (complet en une session) :**
+- Décision de conception en amont, plusieurs itérations avec Gwen : formulaire Lieu avec galerie photo (radio "hero" plutôt que case à cocher classique — une seule sélection possible), description, champ facultatif "mission de Sens Solidaires", lien Maps, cases à cocher pour associer des missions existantes (relation many-to-many `Mission↔Location` déjà construite début août, réutilisée telle quelle), et un panneau "Ajouter/Modifier une délégation" qui se déplie dans le même formulaire (écrit sur la **même** ligne `Delegation` que l'onglet Équipe le fera plus tard)
+- Utilitaire pays : `i18n-iso-countries` (250 pays, noms FR + code ISO), champ pays en `<datalist>` (auto-complétion native, pas de long menu déroulant à parcourir) — résout à la fois la saisie pénible et le risque de faute de frappe (type "Côte D'Ivoire" vs "Côte d'Ivoire" rencontré plusieurs fois cette semaine)
+- Titre délégation figé : "Délégation nationale — [pays]", pas de champ libre
+- `AdminFileUpload.jsx` étendu : nouveau mode `showHeroSelector` (radio, réutilisable pour d'autres CRUD futurs)
+- Backend complet : `locationService.js`/`delegationService.js` (create/update/toggleActive/hardDelete), controllers, routes admin protégées
+- Dashboard : `LocationsPage.jsx` (liste + pause/reprise avec modale, comme les missions) et `LocationFormPage.jsx`
+
+**Bug corrigé au passage (même famille que celui trouvé sur les missions il y a quelques jours) :** `LocationDetail.jsx` faisait `images.slice(1)` sur la galerie en supposant que la 1ère photo dupliquait le hero — alors que le hero vient d'un champ séparé (`image_url`) depuis toujours. Retiré, n'avait plus lieu d'être.
+
+**Oubli détecté et corrigé en cours de route :** le champ `mission_ss` n'existait pas en base (migration manquante) ni dans `locationService.js` — aurait causé une perte silencieuse de données si pas rattrapé avant le premier test.
+
+**Modale délégation publique :** bouton "Voir la délégation" dans le bloc infos pratiques du lieu, `Modal.jsx` rendu configurable (prop `size`, `'default'` inchangé pour la modale Service Civique déjà existante, `'small'` pour celle-ci) — plusieurs allers-retours sur le format (image en `aspect-video`, titre centré, marge).
+
+**Découverte d'architecture, pas résolue aujourd'hui, notée en #163 :** `Location.delegation_id` est un lien unique (1 lieu = 1 délégation max) — insuffisant pour afficher plusieurs "cards" délégation/personnes sur un même lieu (cas réel trouvé sur l'ancien site : plusieurs personnes rattachées à un même lieu, ex. Sri Lanka). Faudra passer cette relation en many-to-many. Pour l'instant, saisie manuelle avec une seule délégation par lieu, pas bloquant.
+
+**Note de contenu (pas technique) :** vérification faite par Gwen sur les rôles réels de "Nalaka" et "Sara" (Sri Lanka) via les anciens rapports de mission avant saisie — évite d'attribuer par erreur un statut officiel non confirmé. Solution retenue : montage photo des 2 personnes pour la card délégation du lieu Millennium Elephant Foundation, en attendant #163.
+
+**Session terminée sur `git commit` + `push` (pas de merge vers `dev` aujourd'hui, sur demande de Gwen) — saisie manuelle du contenu Lieux/Délégations prévue l'après-midi même, en dehors du dashboard.**
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
