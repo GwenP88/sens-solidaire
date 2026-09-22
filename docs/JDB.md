@@ -2565,11 +2565,11 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 **Fin du Bloc A :**
 - #111 : suppression de `MissionForm.jsx` (code mort confirmé, aucune référence)
 - #112 : `EMPTY_FORM` pré-rempli — 4 tarifs standards (10j/1175€, 2sem/1500€, 3sem/2000€, 4sem/2500€) + textes inclus/non-inclus standards, à la création uniquement
-- #113 (vraiment terminée cette fois — une tentative précédente avait été annoncée faite sans être appliquée) : `TestimonialForm.jsx` propose le sélecteur de pays pour Service Civique (même logique que le volontariat individuel). Les 3 missions "ancres" démo supprimées via `hardDelete` (témoignages fictifs détachés proprement, pas perdus)
+- #113  `TestimonialForm.jsx` propose le sélecteur de pays pour Service Civique (même logique que le volontariat individuel). Les 3 missions "ancres" démo supprimées via `hardDelete` (témoignages fictifs détachés proprement, pas perdus)
 - #115 : galerie pour Groupe jeunes et Congé solidaire — **architecture différente** de Service Civique : pas de missions par pays (missions "sur-mesure", pas de destinations fixes), donc galerie générique par type sans mission derrière (`entity_type: 'groupe_jeunes'`/`'conge_solidaire'`, `entity_id: 0` fixe). Nouveau circuit complet : `findTypeGallery`/`syncGalleryImages` (service), `galleryController.js`, routes publique + admin dédiées, `GaleriePage.jsx` avec un mode "galerie par type" (pas de sélecteur pays), carrousels publics branchés
 
 **Démarrage Bloc B — CRUD Location (complet en une session) :**
-- Décision de conception en amont, plusieurs itérations avec Gwen : formulaire Lieu avec galerie photo (radio "hero" plutôt que case à cocher classique — une seule sélection possible), description, champ facultatif "mission de Sens Solidaires", lien Maps, cases à cocher pour associer des missions existantes (relation many-to-many `Mission↔Location` déjà construite début août, réutilisée telle quelle), et un panneau "Ajouter/Modifier une délégation" qui se déplie dans le même formulaire (écrit sur la **même** ligne `Delegation` que l'onglet Équipe le fera plus tard)
+- Décision de conception en amont : formulaire Lieu avec galerie photo (radio "hero" plutôt que case à cocher classique — une seule sélection possible), description, champ facultatif "mission de Sens Solidaires avec ce lieux", lien Maps, cases à cocher pour associer des missions existantes (relation many-to-many `Mission↔Location` déjà construite début août, réutilisée telle quelle), et un panneau "Ajouter/Modifier une délégation" qui se déplie dans le même formulaire (écrit sur la **même** ligne `Delegation` que l'onglet Équipe le fera plus tard)
 - Utilitaire pays : `i18n-iso-countries` (250 pays, noms FR + code ISO), champ pays en `<datalist>` (auto-complétion native, pas de long menu déroulant à parcourir) — résout à la fois la saisie pénible et le risque de faute de frappe (type "Côte D'Ivoire" vs "Côte d'Ivoire" rencontré plusieurs fois cette semaine)
 - Titre délégation figé : "Délégation nationale — [pays]", pas de champ libre
 - `AdminFileUpload.jsx` étendu : nouveau mode `showHeroSelector` (radio, réutilisable pour d'autres CRUD futurs)
@@ -2582,11 +2582,37 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 
 **Modale délégation publique :** bouton "Voir la délégation" dans le bloc infos pratiques du lieu, `Modal.jsx` rendu configurable (prop `size`, `'default'` inchangé pour la modale Service Civique déjà existante, `'small'` pour celle-ci) — plusieurs allers-retours sur le format (image en `aspect-video`, titre centré, marge).
 
-**Découverte d'architecture, pas résolue aujourd'hui, notée en #163 :** `Location.delegation_id` est un lien unique (1 lieu = 1 délégation max) — insuffisant pour afficher plusieurs "cards" délégation/personnes sur un même lieu (cas réel trouvé sur l'ancien site : plusieurs personnes rattachées à un même lieu, ex. Sri Lanka). Faudra passer cette relation en many-to-many. Pour l'instant, saisie manuelle avec une seule délégation par lieu, pas bloquant.
+**Bug flag délégation (Kenya) :** le drapeau s'affichait en icône d'erreur sur les cards délégation créées via le dashboard. Cause : `getCountryCode()` (utilitaire pays côté backend) renvoie le code ISO en majuscule (`"KE"`), mais `flagcdn.com` est sensible à la casse et attend du minuscule (`ke.png`). Les délégations du seed fonctionnaient (codées en dur en minuscule), celles créées aujourd'hui via `delegationService.js` cassaient. Fix : `getCountryCode()` renvoie désormais systématiquement en minuscule.
 
-**Note de contenu (pas technique) :** vérification faite par Gwen sur les rôles réels de "Nalaka" et "Sara" (Sri Lanka) via les anciens rapports de mission avant saisie — évite d'attribuer par erreur un statut officiel non confirmé. Solution retenue : montage photo des 2 personnes pour la card délégation du lieu Millennium Elephant Foundation, en attendant #163.
+**Harmonisation des champs Pays sur les 4 formulaires (Lieu, Mission, Service Civique, et le champ délégation du formulaire Lieu) :**
+- `autoComplete="off"` ajouté partout — sans ça, le navigateur mélange son propre historique de saisie (toutes pages confondues, `name="country"` partagé) avec les suggestions du `<datalist>`
+- Composant `Field` (`FormElements.jsx`) étendu pour transmettre les props `autoComplete` et `list`
+- `<datalist id="country-list">` déplacé hors du bloc conditionnel délégation dans `LocationFormPage.jsx` (n'existait pas tant que le panneau délégation n'était pas déplié)
+- `MissionFormPage.jsx` et `ServiceCiviqueFormPage.jsx` ne chargeaient pas du tout la liste des pays (`fetchCountryNames`) — ajouté sur les deux, avec leur propre `<datalist>`
 
-**Session terminée sur `git commit` + `push` (pas de merge vers `dev` aujourd'hui, sur demande de Gwen) — saisie manuelle du contenu Lieux/Délégations prévue l'après-midi même, en dehors du dashboard.**
+**Simplification délégation :** suppression du champ pays dédié à la délégation (`delegationCountry`) dans `LocationFormPage.jsx` — la délégation est toujours au même pays que son lieu, donc plus de risque de désaccord entre les deux (ex. lieu = "Kenya", délégation = "kenya" mal tapé). Le titre et le `flag_code` de la délégation utilisent désormais directement `formData.country`.
+
+**Renommage "Congé solidaire" → "Congé de solidarité"** sur tout le site public : `Home.jsx`, `Navbar.jsx`, `ContactForm.jsx`, `TestimonialForm.jsx`, `MissionCard.jsx`, `utils/missions.jsx`, `utils/filters.js`, `services/api.js` (commentaires), `GaleriePage.jsx`, `MissionsPage.jsx` — remplacement global via `sed`, valeurs internes (`conge_solidaire`, `conge-solidaire`) non touchées.
+
+**Page Équipe — ajout d'une navigation par ancre + suppression des carousels :**
+- `AnchorNav` (variant `dark`) ajouté sous le Hero, avec `id` sur les 5 sections (Direction, Bureau, CA, Également à nos côtés, Délégations)
+- Carousels retirés au profit de grilles CSS pures : Direction/Bureau restent en `grid-cards-3` (inchangé), CA/Également passent en `grid-cards-4`
+- Section Délégations : grille sur-mesure (`1 → 2 → 3 → 4` colonnes selon breakpoint, différente de `grid-cards-4` à la demande de Gwen) + hauteur de `DelegationCard` progressive (`h-40` mobile → `h-56` desktop) pour accompagner le rétrécissement des cards
+
+**Réorganisation de `app.js`, `App.jsx` et `api.js` (lisibilité, pas de changement fonctionnel) :**
+- `app.js` : imports groupés (dépendances externes / routes publiques / routes admin), routes admin regroupées ensemble (étaient éparpillées), ajout d'un handler 404 explicite en JSON (absent auparavant)
+- `App.jsx` : `LocationDetail` remonté avec les pages Missions (était isolé en bas du fichier), routes admin sous-commentées par section
+- `api.js` : fonctions publiques et admin séparées en 2 grandes parties (étaient mélangées), les 2 blocs "lieux" dupliqués fusionnés en un seul, une ligne d'explication ajoutée devant chaque bloc et devant chaque export
+- Vérifié via `curl` après coup : `/api/health` (200), `/api/missions` (200), `/api/admin/missions` sans token (401 JSON propre), route inexistante (404 JSON propre, confirme le nouveau handler)
+
+**Audit sécurité des dépendances (préparation dossier RNCP + veille sécurité) :**
+- `npm audit` sur le backend : 16 vulnérabilités détectées (1 faible, 5 modérées, 10 élevées)
+- `npm audit fix` exécuté — mise à jour automatique des dépendances corrigeables sans changement majeur incompatible
+- Après correction : 4 vulnérabilités élevées restantes, toutes issues de dépendances transitives liées à Prisma (`deepmerge-ts`, `mysql2`) — pas de package utilisé directement dans le code applicatif. Risques signalés de type déni de service (DoS)
+- `npm audit fix --force` proposé par npm **volontairement refusé** : aurait forcé un downgrade majeur de Prisma (7.8.0 → 6.19.3), risque de régressions important pour un gain non prioritaire
+- Suite de tests relancée dans Docker après `npm audit fix` : 3 suites, 20/20 tests passés, aucune régression détectée
+- Audit à la racine du projet : 0 vulnérabilité — les 4 alertes restantes concernent uniquement l'arbre de dépendances du backend
+- **Décision à conserver :** correction maîtrisée (`npm audit fix` + tests de non-régression) plutôt que `--force`. Les 4 vulnérabilités transitives restantes sont connues, non urgentes, à ré-analyser si les dépendances Prisma ou `package-lock.json` backend changent — refaire `npm audit` à ce moment-là pour vérifier si elles sont toujours présentes avant de reprendre ces chiffres.
 
 ---
 

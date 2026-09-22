@@ -196,6 +196,9 @@
 |---|---|---|---|
 | 116 | Gwen | CRUD Location (admin) | ✅ |
 | 117 | Gwen | CRUD Delegation (admin) | ✅ |
+| 117A | Gwen | Réintégrer en base les vraies données Lieux/Délégations via le dashboard | ❌ |
+| 117B | Gwen | Nettoyer `seed.js` (bloc Délégations + références `delegation_id`) | ❌ |
+| 117C | Gwen | Page Lieu détail — bloc infos pratiques étiré sur toute la hauteur des 2 blocs de gauche (contenu réparti, plus de trou en bas) | ❌ |
 | 118 | Gwen | CRUD TeamMember (admin) | ❌ |
 | 119 | Gwen | CRUD FieldAction + pays + tags (admin) | ❌ |
 | 120 | Gwen | CRUD ActivityReport (admin) | ❌ |
@@ -203,12 +206,7 @@
 | 122 | Gwen | Dashboard responsive mobile | ❌ |
 | 123 | Gwen | Tests d'intégration (au fil de chaque CRUD) | ❌ |
 | 114 | Gwen | Contenu générique page Missions éditable | ❌ |
-
-A voir : congé solidaire doit devenir congé de solidarité dnas le site visible, les modales pour la suppression de photos dans la galerie, revoir le fichier app.js, app.jsx et api.js (ordre, commentaire....), ajouter un menu + ancre pour la page notre équipe +/- notre association? + ajout de video! (dans le carrousel, reconnaissable avec un symbole play devant la video, pas de démarrage automatique, si le user clic sur le play, ouverture de la video apr dessus type modal, pas de modification de format, si la video est en portrait elle reste, idem en paysage)
-
-faire en sorte que le bloc info pratique prenne toute la hauteur en focntion des deux bloc de gauche pour éviter les trous en bas de page, avec contenu espacé et reparti sur toute la heur du bloc info pratiques
-
-migrer les vraies donnée du site pour mission et délégation : supprimer les donnés inutile en seed? 
+| 114A | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) | ❌ |
 
 ### Bloc C — Page Éducation & sensibilisation
 
