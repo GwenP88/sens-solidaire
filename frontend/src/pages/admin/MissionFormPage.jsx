@@ -48,8 +48,15 @@ const EMPTY_FORM = {
   description:       '',
   volunteer_role:    '',
   programme:         [],
-  included:          '',
-  not_include:       '',
+  included: `Hébergement
+  Restauration
+  Déplacements sur place
+  Encadrement par nos équipes et partenaires locaux`,
+  not_include: `Adhésion à l'association (25 €)
+  Billets d'avion (prix à ajuster selon la destination)
+  Assurance voyage
+  Frais de visa
+  Vaccins et frais de pharmacie`,
   // Comment partir — un seul champ modifiable : les villes
   how_to_go_villes:  '',
   helloasso_url:     '',
@@ -57,7 +64,12 @@ const EMPTY_FORM = {
   health_info:       '',
   admin_info:        '',
   is_active:         true,
-  pricing:           [], // [{ duration_label, price }]
+  pricing: [
+    { duration_label: '10 jours',   price: '1175' },
+    { duration_label: '2 semaines', price: '1500' },
+    { duration_label: '3 semaines', price: '2000' },
+    { duration_label: '4 semaines', price: '2500' },
+  ], // [{ duration_label, price }]
   // 2 photos obligatoires : position 1 = hero, position 2 = section "La mission".
   // Les flèches ▲▼ du composant suffisent pour réordonner seulement 2 photos.
   mission_photos:    [],
