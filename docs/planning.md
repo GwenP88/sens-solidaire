@@ -183,13 +183,12 @@
 | 106 | Gwen | Refonte galerie — migration BDD | ✅ |
 | 107 | Gwen | Refonte galerie — MissionFormPage simplifié | ✅ |
 | 108 | Gwen | Refonte galerie — nouvelle page Galerie dashboard | ✅ |
-| 109 | Gwen | Passer de 10 à 15-20 photos galerie publique (à voir avec la cliente) | 🔵 |
+| 109 | Gwen | ~~Passer de 10 à 15-20 photos galerie publique (à voir avec la cliente)~~ | 🔵 |
 | 110 | Gwen | Fusionner Service Civique dans Missions (sidebar) | ✅ |
-| 111 | Gwen | Supprimer MissionForm.jsx (code mort) | ❌ |
-| 112 | Gwen | Pré-remplir tarifs/inclus standards | ❌ |
-| 113 | Gwen | Refonte Service Civique (cartes pays, galerie combinée) | 🔵 |
-| 114 | Gwen | Contenu générique page Missions éditable (V2) | ❌ |
-| 115 | Gwen | Galerie Groupe jeunes / Congé solidaire | ❌ |
+| 111 | Gwen | Supprimer MissionForm.jsx (code mort) | ✅ |
+| 112 | Gwen | Pré-remplir tarifs/inclus standards | ✅ |
+| 113 | Gwen | formulaire témoigange avec pays service civique et ancres demo à supprimer | ✅ |
+| 115 | Gwen | Galerie Groupe jeunes / Congé solidaire | ✅ |
 
 ### Bloc B — Dashboard CRUD manquant
 
@@ -203,6 +202,7 @@
 | 121 | Gwen | CRUD MediaPost / articles (admin) | ❌ |
 | 122 | Gwen | Dashboard responsive mobile | ❌ |
 | 123 | Gwen | Tests d'intégration (au fil de chaque CRUD) | ❌ |
+| 114 | Gwen | Contenu générique page Missions éditable | ❌ |
 
 ### Bloc C — Page Éducation & sensibilisation
 
@@ -217,6 +217,7 @@
 | 125 | Gwen | Accessibilité basique | ❌ |
 | 126 | Gwen | SEO basique (SEOHead) | ❌ |
 | 127 | Gwen | Lazy loading | ❌ |
+| 109 | Gwen | Passer de 10 à 15-20 photos galerie publique (à voir avec la cliente) | 🔵 |
 | 128 | Gwen | maxLength 280 textarea témoignage | 🔵 |
 | 129 | Gwen | PageLayout — factorisation | ❌ |
 
