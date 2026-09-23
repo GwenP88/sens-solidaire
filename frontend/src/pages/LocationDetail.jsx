@@ -21,6 +21,18 @@ import Modal from '../components/ui/Modal'
 // ── Utils
 import { IconPin, IconGlobe, IconPerson } from '../utils/icons'
 
+// Construit l'URL d'intégration à partir de ce que la cliente a collé.
+// Accepte : un lien Google Maps normal (@lat,lng extrait automatiquement)
+// ou, par rétrocompatibilité, l'ancien format d'intégration déjà complet.
+function buildMapEmbedUrl(url) {
+  if (!url) return null
+  if (url.includes('/maps/embed')) return url
+  const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
+  if (!match) return null
+  const [, lat, lng] = match
+  return `https://www.google.com/maps?q=${lat},${lng}&output=embed`
+}
+
 function LocationDetail() {
   // ── État local — lieu + chargement + erreur
   // delegation est maintenant inclus directement dans location via l'API
@@ -152,9 +164,9 @@ function LocationDetail() {
                 <div className="flex flex-col gap-xs">
                   <span className="text-eyebrow text-primary/40">Localisation</span>
 
-                  {location.map_url ? (
+                  {buildMapEmbedUrl(location.map_url) ? (
                     <iframe
-                      src={location.map_url}
+                      src={buildMapEmbedUrl(location.map_url)}
                       width="100%"
                       height="200"
                       style={{ border: 0 }}
@@ -227,8 +239,9 @@ function LocationDetail() {
           size="small"
         >
           <img
-            src={location.delegation.image_url}
+            src={location.delegation.image_url || '/images/placeholders/placeholder-delegation.webp'}
             alt={location.delegation.lieu}
+            onError={e => { e.target.src = '/images/placeholders/placeholder-delegation.webp' }}
             className="w-full aspect-video object-cover rounded-xl mb-4"
           />
           <p className="text-body text-primary/80 text-center whitespace-pre-line">
