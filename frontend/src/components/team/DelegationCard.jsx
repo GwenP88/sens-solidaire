@@ -9,6 +9,7 @@ function DelegationCard({ pays, flag, image, lieu, contacts }) {
   return (
     <BaseOverlayCard
       image={image}
+      fallbackImage="/images/placeholders/placeholder-delegation.webp"
       height="h-40 md:h-44 lg:h-52 xl:h-56"
       overlayClassName="bg-black/40"
       className="rounded-2xl"
