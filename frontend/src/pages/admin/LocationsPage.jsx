@@ -15,7 +15,9 @@ const COLUMNS = [
   {
     key: 'delegation',
     label: 'Délégation',
-    render: (row) => row.delegation ? row.delegation.lieu : <span className="text-dash-legend">—</span>,
+    render: (row) => row.delegation?.contacts
+      ? row.delegation.contacts
+      : <span className="text-dash-legend italic">Pas de délégation complétée</span>,
   },
   {
     key: 'is_active',
