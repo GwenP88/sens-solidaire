@@ -196,7 +196,7 @@
 |---|---|---|---|
 | 116 | Gwen | CRUD Location (admin) | ✅ |
 | 117 | Gwen | CRUD Delegation (admin) | ✅ |
-| 117A | Gwen | Réintégrer en base les vraies données Lieux/Délégations via le dashboard | ❌ |
+| 117A | Gwen | Réintégrer en base les vraies données Lieux/Délégations via le dashboard | ✅ |
 | 117B | Gwen | Nettoyer `seed.js` (bloc Délégations + références `delegation_id`) | ❌ |
 | 117C | Gwen | Page Lieu détail — bloc infos pratiques étiré sur toute la hauteur des 2 blocs de gauche (contenu réparti, plus de trou en bas) | ❌ |
 | 118 | Gwen | CRUD TeamMember (admin) | ❌ |
@@ -261,6 +261,7 @@
 | 147 | Gwen | Buffer API — auto-draft réseaux sociaux | ❌ |
 | 148 | Gwen | Instagram oEmbed | ❌ |
 | 149 | Gwen | latitude/longitude sur Location | ❌ |
+| 149A | Gwen | embed Google Maps propre | ❌ |
 | 150 | Gwen | location_id FK sur Delegation | ❌ |
 | 151 | Gwen | Sélection manuelle actions terrain home | ❌ |
 | 152 | Gwen | TipTap — éditeur riche | ❌ |

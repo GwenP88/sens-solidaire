@@ -2616,4 +2616,29 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 
 ---
 
+### 23 septembre 2026 — Fixes délégation/lieu (flag, photo facultative, image_alt) + simplification Google Maps
+
+**Bug flag délégation persistant (suite du fix d'hier) :**
+- `DelegationCard.jsx` affichait le mauvais placeholder en l'absence de photo (`placeholder-action-1.webp` au lieu de `placeholder-delegation.webp`) — cause : aucun `fallbackImage` transmis à `BaseOverlayCard`, qui retombait sur son défaut générique. Corrigé en passant `fallbackImage="/images/placeholders/placeholder-delegation.webp"` explicitement.
+- Photo rendue réellement facultative à la **création** d'une délégation — `delegationController.js` (`createDelegation`) exigeait `image_url` en plus de `pays`/`lieu`, bloquant toute création sans photo. Condition retirée (`updateDelegation` n'avait déjà aucune validation, donc déjà facultative en modification).
+
+**Ajout d'une croix pour vider la description délégation :** même pattern que la croix de suppression de photo (`AdminFileUpload`) — un clic sur `×` vide `delegationContacts` instantanément, sans confirmation ni appel réseau (rien n'est envoyé tant que le formulaire entier n'est pas soumis).
+
+**Audit complet des champs `alt` manquants — tous les modèles avec image (8 au total) :**
+- Seul `Location` avait un vrai trou (aucune colonne `image_alt`, contrairement à `Mission` qui a déjà `photo_hero_alt`/`photo_section_alt`)
+- `Delegation`, `TeamMember`, `Partner` : pas de colonne dédiée, mais alt déjà couvert par un champ texte obligatoire existant (`lieu`, `nom`, `name`) — décision : pas d'ajout, redondant
+- `FieldAction`, `MediaPost`, `EducationItem` : même logique (`alt={title}` déjà en place côté front) — pas de CRUD dashboard encore construit pour ces 3, donc pas de champ ajouté pour l'instant
+- **Migration `image_alt` sur `Location`** — faite en SQL brut (méthode habituelle, cf. procédure ci-dessous), reliée à `locationService.js` (`create`/`update`) et au formulaire (chargement + sauvegarde de la légende photo hero)
+- Vérifié : le hero public (`LocationDetail.jsx`, via `HeroPage`) est un fond CSS `aria-hidden="true"`, pas une balise `<img>` — aucune modification nécessaire côté page publique, le champ sert pour l'instant à l'accessibilité du dashboard et à un usage futur (SEO/Open Graph)
+
+**Simplification Google Maps (`LocationDetail.jsx`) :** le champ `map_url` exigeait jusqu'ici l'URL technique d'intégration (`.../maps/embed?pb=...`), obtenue uniquement via Partager → Intégrer une carte → copier le HTML → extraire le `src` — trop technique pour la cliente. Remplacé par une extraction automatique des coordonnées GPS (`@lat,lng`) depuis n'importe quel lien Google Maps "normal" copié depuis la barre d'adresse — la cliente n'a plus qu'à chercher le lieu et coller l'URL telle quelle. Ancien format `pb=` toujours supporté (rétrocompatibilité), et repli silencieux sur "Localisation à renseigner" si aucune coordonnée n'est trouvée dans le lien collé.
+
+**Limite connue de cette solution, notée sur #149 (déjà au backlog V2) :** en extrayant seulement les coordonnées, le bouton "Ouvrir dans Maps" de la carte perd le nom/la fiche du lieu (avis, horaires...) — Google régénère un lien générique sur les coordonnées seules. Précision de localisation inchangée (exacte), seul le clic vers la fiche complète est concerné. Le site web du lieu reste renseigné à côté, jugé suffisant pour l'instant.
+
+**Colonne "Délégation" — dashboard `LocationsPage.jsx` :** affichait `delegation.lieu` (souvent juste "Délégation nationale — Kenya", peu informatif). Change pour afficher `delegation.contacts` (le champ "Description" du formulaire) si rempli, sinon message explicite en italique "Pas de délégation complétée" plutôt qu'un simple tiret — distingue mieux "pas de délégation" de "délégation créée mais description vide".
+
+**Ajout de Sumatra comme pays personnalisé (`countries.js`) :** Sumatra n'est pas un pays reconnu ISO (île d'Indonésie), donc absente de la vraie liste utilisée pour le `<datalist>`. Ajout d'un objet `CUSTOM_ENTRIES` fusionné à la liste ISO, rattachant Sumatra au code `ID` (Indonésie) pour que le `flag_code` reste cohérent si jamais utilisée sur une délégation.
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
