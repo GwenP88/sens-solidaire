@@ -8,12 +8,22 @@ import frLocale from 'i18n-iso-countries/langs/fr.json' with { type: 'json' }
 
 countries.registerLocale(frLocale)
 
-// { "Kenya": "KE", "Sénégal": "SN", ... } — tous les pays du monde en français
-const COUNTRY_NAME_TO_CODE = countries.getNames('fr', { select: 'official' })
-  ? Object.fromEntries(
-      Object.entries(countries.getNames('fr')).map(([code, name]) => [name, code])
-    )
-  : {}
+// Entrées personnalisées — pas des pays officiels (îles, régions), mais
+// utilisées comme "pays" dans certaines missions. Rattachées au code ISO
+// du pays réel, pour que le drapeau (flag_code) reste cohérent.
+const CUSTOM_ENTRIES = {
+  Sumatra: 'ID', // île d'Indonésie
+}
+
+// { "Kenya": "KE", "Sénégal": "SN", ..., "Sumatra": "ID" } — pays ISO + entrées perso
+const COUNTRY_NAME_TO_CODE = {
+  ...(countries.getNames('fr', { select: 'official' })
+    ? Object.fromEntries(
+        Object.entries(countries.getNames('fr')).map(([code, name]) => [name, code])
+      )
+    : {}),
+  ...CUSTOM_ENTRIES,
+}
 
 // Liste triée des noms de pays — pour peupler le <datalist> côté front
 export const getAllCountryNames = () => Object.keys(COUNTRY_NAME_TO_CODE).sort()
