@@ -69,7 +69,7 @@ function LocationFormPage() {
         const location = await fetchAdminLocationById(id)
 
         const photos = [
-          ...(location.image_url ? [{ file_url: location.image_url, label: '', is_hero: true }] : []),
+          ...(location.image_url ? [{ file_url: location.image_url, label: location.image_alt || '', is_hero: true }] : []),
           ...(location.gallery || []).map(m => ({ file_url: m.file_url, label: m.label || '', is_hero: false })),
         ]
 
@@ -170,6 +170,7 @@ function LocationFormPage() {
         map_url: formData.map_url,
         website_url: formData.website_url,
         image_url: heroPhoto.file_url,
+        image_alt: heroPhoto.label || null,
         mission_ids: formData.mission_ids,
         delegation_id: finalDelegationId,
         slug: `${slugify(formData.name)}-${slugify(formData.country)}`,
@@ -261,7 +262,13 @@ function LocationFormPage() {
         </FormSection>
 
         <FormSection title="Infos pratiques">
-          <Field label="Lien Google Maps" name="map_url" value={formData.map_url} onChange={handleChange} />
+          <Field
+            label="Lien Google Maps"
+            name="map_url"
+            value={formData.map_url}
+            onChange={handleChange}
+            hint="Cherche le lieu sur Google Maps, copie l'URL de la barre d'adresse et colle-la ici"
+          />
           <Field label="Site web (facultatif)" name="website_url" value={formData.website_url} onChange={handleChange} />
         </FormSection>
 
@@ -287,7 +294,9 @@ function LocationFormPage() {
             onClick={() => setShowDelegationPanel(prev => !prev)}
             className="self-start px-4 py-2 text-sm font-medium border border-dash-action text-dash-action rounded-lg hover:bg-dash-action/10 transition-colors"
           >
-            {delegationId ? 'Modifier la délégation' : 'Ajouter une délégation'}
+            {showDelegationPanel
+              ? 'Fermer'
+              : delegationId ? 'Modifier la délégation' : 'Ajouter une délégation'}
           </button>
 
           {showDelegationPanel && (
@@ -295,15 +304,9 @@ function LocationFormPage() {
 
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium text-dash-text">Titre</label>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-dash-legend whitespace-nowrap">Délégation nationale —</span>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-dash-text">Titre</label>
-                    <p className="text-sm text-dash-text">
-                      Délégation nationale — {formData.country || <span className="text-dash-legend italic">renseigne le pays du lieu ci-dessus</span>}
-                    </p>
-                  </div>
-                </div>
+                <p className="text-sm text-dash-text">
+                  Délégation nationale — {formData.country || <span className="text-dash-legend italic">renseigne le pays du lieu ci-dessus</span>}
+                </p>
               </div>
 
               <div className="flex flex-col gap-1">
@@ -318,14 +321,27 @@ function LocationFormPage() {
                 />
               </div>
 
-              <TextareaField
-                label="Description"
-                hint="Indiquez les noms/prénoms des personnes présentes."
-                name="delegation_contacts"
-                value={delegationContacts}
-                onChange={e => setDelegationContacts(e.target.value)}
-                rows={3}
-              />
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-dash-text">Description</label>
+                  <button
+                    type="button"
+                    onClick={() => setDelegationContacts('')}
+                    className="text-gray-300 hover:text-dash-danger text-xl leading-none transition-colors"
+                    aria-label="Effacer la description"
+                  >
+                    ×
+                  </button>
+                </div>
+                <p className="text-xs text-dash-legend -mt-0.5">Indiquez les noms/prénoms des personnes présentes.</p>
+                <textarea
+                  name="delegation_contacts"
+                  value={delegationContacts}
+                  onChange={e => setDelegationContacts(e.target.value)}
+                  rows={3}
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+                />
+              </div>
             </div>
           )}
         </FormSection>

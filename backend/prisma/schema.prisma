@@ -76,6 +76,7 @@ model Location {
   description     String
   mission_ss      String?
   image_url       String?
+  image_alt       String?
   map_url         String?
   website_url     String?
   is_active       Boolean     @default(true)
