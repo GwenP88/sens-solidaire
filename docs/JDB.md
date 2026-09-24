@@ -2641,4 +2641,39 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 
 ---
 
+### 24 septembre 2026 — CRUD Équipe/Rapports d'activité/Partenaires, CRUD Témoignages étendu, CRUD Rapports de mission, AnchorNav À propos
+
+**Tâches #117B et #117C clôturées en ouverture de session :**
+- #117B — nettoyage `seed.js` (bloc Locations, dernier bloc encore couplé au dashboard)
+- #117C — page Lieu détail : bloc "Infos pratiques" en `lg:sticky` (au lieu d'un `h-full` forcé qui créait des vides disproportionnés sur les descriptions courtes) ; "Notre mission ici" repositionné dans la colonne gauche (sous la description) plutôt qu'en ligne séparée pleine largeur ; bug `.slice(1)` sur la galerie corrigé (une ancienne hypothèse "1ère photo = doublon du hero" plus vraie depuis longtemps, amputait systématiquement la première photo importée)
+
+**Chantier "Association & partenaires" (nouvel onglet dashboard, page `AProposPage.jsx`) — tâches #118/#119/#120 :**
+- CRUD complet **TeamMember** : formulaire unique (photo facultative avec placeholder dédié `placeholder-avatar.webp`, nom/prénom, rôle, description facultative, catégorie en boutons radio obligatoires). Réutilise le pattern pause/reprise + suppression définitive déjà établi
+- CRUD complet **ActivityReport** (année + lien PDF, contrainte `@unique` sur année gérée proprement en 409)
+- CRUD complet **Partner** — présentation en grille de cartes façon logo (statut / logo sur fond blanc cadré / nom / indicateur URL renseignée ou non / actions), pas un tableau classique. Alt automatique `Logo de [nom]` sans toucher au modèle. Ajout d'un lien cliquable vers le site du partenaire sur la page d'accueil publique (`Home.jsx`), si renseigné
+- **Délégations** : extension (`findAllForAdmin`) puis **retrait complet** de la page — jugée peu utile une fois testée (lecture seule, pas de vraie valeur ajoutée par rapport au formulaire Lieu où elles sont déjà gérées). Code associé nettoyé des deux côtés (route, controller, service, `api.js`, composant modale supprimé)
+- Bug corrigé au passage : `delegationService.js` (`update`) recalculait `flag_code` même quand `pays` n'était pas fourni — aurait cassé le drapeau à chaque modification photo/contacts depuis "À propos" avant son retrait
+- Nom de l'onglet : "À propos" jugé trop vague une fois regroupé → renommé **"Association & partenaires"**
+
+**Chantier Témoignages (#121, partie 1) :**
+- Nouvelle page dédiée `/admin/temoignages-rapports` ("Témoignages & rapports de mission"), remplace l'ancien accès direct à `Dashboard.jsx` (qui reste dans le code, non branché, en attente de devenir un raccourci de la future vraie page d'accueil dashboard — décision actée : construire d'abord tous les onglets, réfléchir à l'accueil ensuite)
+- **Modification** d'un témoignage existant : volontairement limitée à la **mission** (+ case "Sur l'accueil", déplacée directement sur la card plutôt que dans la modale) — nom, contenu, date et photo restent en lecture seule, appartiennent au volontaire
+- **Création directe** par la cliente (ex: extrait d'un rapport de mission) : publiée immédiatement (statut `approved`), tous les champs saisissables y compris une nouvelle **date au mois près** (migration `mois` ajoutée à côté d'`annee`, capturée automatiquement à la soumission publique comme `annee`)
+- Filtres statut/type/pays + pagination "Afficher plus" côté liste, bloc "À modérer" toujours visible en haut indépendamment des filtres
+- Approbation/refus désormais réversibles dans les deux sens (erreur de modération rattrapable), avec confirmation à chaque changement de statut
+- Suppression RGPD (déjà existante) conservée telle quelle
+
+**Chantier Rapports de mission (#121, partie 2) :**
+- CRUD complet construit de zéro (rien n'existait côté admin) — auteur, type (menu déroulant), destination (dépendante du type, réutilise `fetchMissions` comme le formulaire témoignage), année, PDF (upload)
+- Présentation en grille de cartes (statut + année en haut, auteur, type — pays, actions) — pas d'image par carte, le placeholder est unique et fixe pour tous les rapports
+- **Bug corrigé en cours de route** : `"groupe_jeune"` (singulier) utilisé dans les rapports de mission depuis le début, alors que le filtre public attend `"groupe_jeunes"` (pluriel) — les rapports Groupe jeunes n'ont donc **jamais** remonté correctement sur le filtre public jusqu'à aujourd'hui. Harmonisé partout (seed + formulaire).
+
+**Nettoyage seed.js (en fin de session)** : retrait des blocs Témoignages et Rapports de mission — plus aucune de ces deux ressources n'est gérée par le seed, tout passe par le dashboard ou le flux public.
+
+**Page publique À propos (`APropos.jsx`)** : ajout d'un `AnchorNav` (5 ancres — Notre histoire / Nos valeurs / Nos champs d'activité / Notre équipe / Rapport d'activité), même pattern que les autres pages longues du site.
+
+**Tâche notée pour une prochaine session (#168)** : les boutons "Voir tous les témoignages" (`MissionDetail.jsx`/`ServiceCiviqueDetail.jsx`) doivent pointer vers `/temoignages?type=X&destination=Y` selon la mission d'origine, plutôt qu'un lien fixe non filtré — inclut la correction d'un bug préexistant du filtre type sur les témoignages publics (`item.type` inexistant, la vraie valeur est `item.mission.type`).
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
