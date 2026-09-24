@@ -199,10 +199,9 @@
 | 117A | Gwen | Réintégrer en base les vraies données Lieux/Délégations via le dashboard | ✅ |
 | 117B | Gwen | Nettoyer `seed.js` (délégation, ancres, lieux) | ✅ |
 | 117C | Gwen | Page Lieu détail — bloc infos pratiques étiré sur toute la hauteur des 2 blocs de gauche (contenu réparti, plus de trou en bas) | ✅ |
-| 117D | Gwen | pourquoi quand jarrive sur certaine page, jarrive en bas de la page | ✅ |
 | 118 | Gwen | CRUD TeamMember (admin) | ✅ |
 | 119 | Gwen | CRUD ActivityReport (admin) | ✅ |
-| 119A | Gwen | remplir le site : team et rapport d'activité | ✅ |
+| 119A | Gwen | remplir le site : team et rapport d'activité | ❌ |
 | 120 | Gwen | CRUD Logo/partenaire (admin) | ✅ |
 | 120A | Gwen | remplir le site : logo | ✅ |
 | 121 | Gwen | CRUD Testimonial + rapport de mission (admin) | ❌ |
@@ -215,10 +214,9 @@
 | 125 | Gwen | Dashboard responsive mobile | ❌ |
 | 126 | Gwen | Tests d'intégration | ❌ |
 
-a noter :
-vérifier les liens vers témoiganges et raport de mission en focntion ds missions! doit filter dempblé sur la bonne mission!
-anchor nav pour la page notre association
-pourquoi ne pas faire un link vers la page lieux délégation pour rediriger vers la bonne page du dashboard?
+BUGS A GERER
+Boutons "Voir tous les témoignages/rapports" (MissionDetail/ServiceCiviqueDetail) → lien pré-filtré `/temoignages?type=X&destination=Y` selon la mission d'origine (année laissée vide). Inclut fix bug filtre type témoignages (`item.type` → `item.mission.type`)
+
 
 ### Bloc C — Page Éducation & sensibilisation
 
