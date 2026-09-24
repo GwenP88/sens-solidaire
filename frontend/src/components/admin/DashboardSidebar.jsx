@@ -52,27 +52,6 @@ const navItems = [
     iconActive: 'text-dash-action',
   },
   {
-    label: 'Témoignages',
-    path: '/admin/temoignages',
-    icon: FiMessageCircle,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Actions éducatives',
-    path: '/admin/ateliers',
-    icon: FiBookOpen,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Médias & actualités',
-    path: '/admin/medias',
-    icon: FiFileText,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
     label: 'Association & partenaires',
     path: '/admin/a-propos',
     icon: FiUsers,
@@ -80,30 +59,9 @@ const navItems = [
     iconActive: 'text-dash-action',
   },
   {
-    label: 'Projets réalisés',
-    path: '/admin/actions-terrain', // chemin conservé du cahier des charges
-    icon: FiMapPin,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Soutenir',
-    path: '/admin/soutenir', // à confirmer — pas dans le tableau d'origine
-    icon: FiHeart,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Contact',
-    path: '/admin/contact',
-    icon: FiMail,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Paramètres',
-    path: '/admin/parametres',
-    icon: FiSettings,
+    label: 'Témoignages & rapports',
+    path: '/admin/temoignages-rapports',
+    icon: FiMessageCircle,
     activeClass: 'bg-dash-action/10 text-dash-action',
     iconActive: 'text-dash-action',
   },

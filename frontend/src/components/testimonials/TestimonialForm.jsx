@@ -90,6 +90,7 @@ function TestimonialForm({ onClose }) {
         mission_id: form.destination ? Number(form.destination) : null,
         avatar_url: avatarUrl,
         annee: new Date().getFullYear(),
+        mois: new Date().getMonth() + 1,
         consent_given: form.rgpd,
       })
       setSubmitted(true)

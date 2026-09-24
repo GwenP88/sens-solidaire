@@ -64,6 +64,7 @@ import LocationsPage from './pages/admin/LocationsPage'
 import LocationFormPage from './pages/admin/LocationFormPage'
 import TeamMemberFormPage from './pages/admin/TeamMemberFormPage'
 import AProposPage from './pages/admin/AProposPage'
+import TemoignagesRapportsPage from './pages/admin/TemoignagesRapportsPage'
 
 function App() {
   return (
@@ -136,7 +137,7 @@ function App() {
           <Route index element={<div>Vue d'ensemble — à construire</div>} />
 
           {/* Témoignages */}
-          <Route path="temoignages" element={<Dashboard />} />
+          <Route path="temoignages-rapports" element={<TemoignagesRapportsPage />} />
 
           {/* Missions */}
           <Route path="missions" element={<MissionsPage />} />
