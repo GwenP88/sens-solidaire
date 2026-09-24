@@ -156,23 +156,7 @@ const seed = async () => {
   console.log(`FieldActions créées (${FIELD_ACTIONS.length})`)
 
   // ============================================================
-  // 3 — ACTIVITY REPORTS
-  // ============================================================
-
-  const ACTIVITY_REPORTS = [
-    { annee: 2024, url: "https://www.sensolidaire.org/wp-content/uploads/2025/06/Rapport-dactivites-2024-1.pdf" },
-    { annee: 2023, url: "https://www.sensolidaire.org/wp-content/uploads/2024/07/Rapport-des-activites-2023.pdf" },
-    { annee: 2022, url: "https://www.sensolidaire.org/wp-content/uploads/2023/11/Rapport-dactivites-2022.pdf" },
-    { annee: 2021, url: "https://www.sensolidaire.org/wp-content/uploads/2023/04/rapport-annuel-2021.pdf" },
-    { annee: 2020, url: "https://www.sensolidaire.org/wp-content/uploads/2021/05/rapportmoral-2020.pdf" },
-  ]
-
-  await prisma.activityReport.deleteMany({})
-  await prisma.activityReport.createMany({ data: ACTIVITY_REPORTS })
-  console.log(`ActivityReports créés (${ACTIVITY_REPORTS.length})`)
-
-  // ============================================================
-  // 4 — RAPPORTS DE MISSION
+  // 3 — RAPPORTS DE MISSION
   // ============================================================
 
   const MISSION_REPORTS = [
@@ -192,41 +176,9 @@ const seed = async () => {
   await prisma.missionReport.createMany({ data: MISSION_REPORTS })
   console.log(`MissionReports créés (${MISSION_REPORTS.length})`)
 
-  // ============================================================
-  // 5 — MEMBRES DE L'ÉQUIPE
-  // ============================================================
-
-  const TEAM_MEMBERS = [
-    // ── Direction ──
-    { nom: "Delphine Thibaut", role: "Fondatrice et Chargée des Programmes", description: "Master administratrice S.I. Institut Bioforce — Ancienne guide spécialisée Afrique", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "direction", display_order: 1 },
-    { nom: "Arya Monchauzou", role: "Chargée des projets des Alpes-Maritimes", description: "Master Risques et Environnement", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "direction", display_order: 2 },
-    { nom: "Amna Labidi", role: "Chargée de mission Service Civique", description: "Licence Sciences de la vie — Master biologie (en cours)", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "direction", display_order: 3 },
-    { nom: "Emile Augsburger", role: "Chargé de mission Service Civique", description: "Ingénieur écologue HES-SO", avatar_url: "/images/placeholders/placeholder-avatar-men.webp", category: "direction", display_order: 4 },
-
-    // ── Bureau ──
-    { nom: "Elodie Tisserand", role: "Présidente", description: "Management de projets culturels et innovation — Chargée des projets d'éducation populaire.", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "bureau", display_order: 1 },
-    { nom: "Hervé Caffin", role: "Trésorier", description: "Responsable affaires transition énergétique Paris — Ancien chargé de mission pour Energie Solidaire au Burkina Faso.", avatar_url: "/images/placeholders/placeholder-avatar-men.webp", category: "bureau", display_order: 2 },
-    { nom: "Lynda Tabet", role: "Secrétaire", description: "Coach professionnel — Professeur de Yoga — Coordinatrice projets Transition Bien-être.", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "bureau", display_order: 3 },
-    // ── CA ──
-    { nom: "Ingrid von Anthoni", role: "Chargée des plaidoyers sur le massacre des éléphants", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 1 },
-    { nom: "Virginie Blumet", role: "Manager International Business Finance WWF", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 2 },
-    { nom: "Emilie della-guardia", role: "Professeure de Science et Vie de la Terre", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 3 },
-    { nom: "Crystel Cantariti", role: "Professeure des écoles", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 4 },
-    { nom: "Marc Olivier", role: "Consultant, professeur en ethnobotanique", avatar_url: "/images/placeholders/placeholder-avatar-men.webp", category: "ca", display_order: 5 },
-    { nom: "Coralie Pinchart", role: "Master 2 économie de développement à l'International", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "ca", display_order: 6 },
-    // ── Également à nos côtés ──
-    { nom: "Gwen Pichot", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "egalement", display_order: 1 },
-    { nom: "Alison Amblard", role: "Développeuse Web - Projet étudiant - Holberton School", description: "Thonon-les-Bains", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "egalement", display_order: 2 },
-    { nom: "Thierry Montalban", role: "Agence de communication", avatar_url: "/images/placeholders/avatar-men.webp", category: "egalement", display_order: 3 },
-    { nom: "Sabine Jerome", role: "Comptabilité", avatar_url: "/images/placeholders/placeholder-avatar-women.webp", category: "egalement", display_order: 4 },
-  ]
-
-  await prisma.teamMember.deleteMany({})
-  await prisma.teamMember.createMany({ data: TEAM_MEMBERS })
-  console.log(`TeamMembers créés (${TEAM_MEMBERS.length})`)
 
   // ============================================================
-  // 6 — LOGOS PARTENAIRES
+  // 4 — LOGOS PARTENAIRES
   // ============================================================
 
   const PARTNERS = [
@@ -259,7 +211,7 @@ const seed = async () => {
   console.log(`Partners créés (${PARTNERS.length})`)
 
   // ============================================================
-  // 7 — ARTICLES : MÉDIAS ET ACTUALITÉS
+  // 5 — ARTICLES : MÉDIAS ET ACTUALITÉS
   // ============================================================
 
   const MEDIA_POSTS = [
@@ -326,7 +278,7 @@ const seed = async () => {
   console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
 
   // ============================================================
-  // 8 — ÉDUCATION ET SENSIBILISATION
+  // 6 — ÉDUCATION ET SENSIBILISATION
   // ============================================================
 
   const EDUCATION_ITEMS = [
@@ -386,9 +338,7 @@ const seed = async () => {
   console.log(`Password           : ${process.env.ADMIN_PASSWORD}`)
   console.log("─────────────────────────────────────────")
   console.log(`FieldActions       : ${FIELD_ACTIONS.length}`)
-  console.log(`ActivityReports    : ${ACTIVITY_REPORTS.length}`)
   console.log(`MissionReports     : ${MISSION_REPORTS.length}`)
-  console.log(`TeamMembers        : ${TEAM_MEMBERS.length}`)
   console.log(`Partners           : ${PARTNERS.length}`)
   console.log(`MediaPosts         : ${MEDIA_POSTS.length}`)
   console.log(`EducationItems     : ${EDUCATION_ITEMS.length}`)
