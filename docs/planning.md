@@ -202,7 +202,7 @@
 | 117D | Gwen | pourquoi quand jarrive sur certaine page, jarrive en bas de la page | ✅ |
 | 118 | Gwen | CRUD TeamMember (admin) | ✅ |
 | 119 | Gwen | CRUD ActivityReport (admin) | ✅ |
-| 119A | Gwen | remplir le site : team et rapport d'activité | ❌ |
+| 119A | Gwen | remplir le site : team et rapport d'activité | ✅ |
 | 120 | Gwen | CRUD Logo/partenaire (admin) | ❌ |
 | 120A | Gwen | remplir le site : logo | ❌ |
 | 121 | Gwen | CRUD Testimonial + rapport de mission (admin) | ❌ |
@@ -218,6 +218,7 @@
 a noter :
 vérifier les liens vers témoiganges et raport de mission en focntion ds missions! doit filter dempblé sur la bonne mission!
 anchor nav pour la page notre association
+pourquoi ne pas faire un link vers la page lieux délégation pour rediriger vers la bonne page du dashboard?
 
 ### Bloc C — Page Éducation & sensibilisation
 
@@ -301,3 +302,4 @@ anchor nav pour la page notre association
 | 164 | Gwen | Récupérer tous les PDF de l'ancien site | ❌ |
 | 165 | Gwen | HEIC non supporté par Sharp | ❌ |
 | 166 | Gwen | Compte admin + compte invité (rôles) | ❌ |
+| 167 | Gwen | Tooltips stylées dashboard (au lieu du title natif du navigateur) | ❌ |
