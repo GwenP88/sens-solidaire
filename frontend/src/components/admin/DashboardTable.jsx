@@ -48,16 +48,18 @@ function DashboardTable({ columns, data, onEdit, onDelete, onHardDelete, keyFiel
                   >
                     <FiEdit2 size={16} />
                   </button>
-                  <button
-                    onClick={() => onDelete(row)}
-                    className={`p-1.5 text-dash-legend rounded ${
-                      row.is_active ? 'hover:text-dash-warning hover:bg-dash-warning/10' : 'hover:text-dash-success hover:bg-dash-success/10'
-                    }`}
-                    aria-label={row.is_active ? `Mettre en pause ${row[keyField]}` : `Reprendre ${row[keyField]}`}
-                    title={row.is_active ? 'Rendre invisible (réversible)' : 'Rendre de nouveau visible'}
-                  >
-                    {row.is_active ? <FiPause size={16} /> : <FiPlay size={16} />}
-                  </button>
+                  {onDelete && (
+                    <button
+                      onClick={() => onDelete(row)}
+                      className={`p-1.5 text-dash-legend rounded ${
+                        row.is_active ? 'hover:text-dash-warning hover:bg-dash-warning/10' : 'hover:text-dash-success hover:bg-dash-success/10'
+                      }`}
+                      aria-label={row.is_active ? `Mettre en pause ${row[keyField]}` : `Reprendre ${row[keyField]}`}
+                      title={row.is_active ? 'Rendre invisible (réversible)' : 'Rendre de nouveau visible'}
+                    >
+                      {row.is_active ? <FiPause size={16} /> : <FiPlay size={16} />}
+                    </button>
+                  )}
                   {onHardDelete && (
                     <button
                       onClick={() => onHardDelete(row)}

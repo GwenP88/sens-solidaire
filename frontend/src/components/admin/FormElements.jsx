@@ -40,12 +40,24 @@ export function Field({ label, name, value, onChange, required, hint, pattern, t
   )
 }
 
-export function TextareaField({ label, name, value, onChange, required, rows = 4, hint, error }) {
+export function TextareaField({ label, name, value, onChange, required, rows = 4, hint, error, clearable }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-dash-text">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium text-dash-text">
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+        {clearable && (
+          <button
+            type="button"
+            onClick={() => onChange({ target: { name, value: '' } })}
+            className="text-gray-300 hover:text-dash-danger text-xl leading-none transition-colors"
+            aria-label={`Effacer ${label}`}
+          >
+            ×
+          </button>
+        )}
+      </div>
       {hint && <p className="text-xs text-dash-legend -mt-0.5">{hint}</p>}
       <textarea
         name={name}

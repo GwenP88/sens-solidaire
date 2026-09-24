@@ -620,6 +620,14 @@ export const fetchAdminDelegationById = async (id) => {
   return data.delegation
 }
 
+// Récupère toutes les délégations pour la liste dans l'onglet "À propos"
+export const fetchAdminDelegations = async () => {
+  const response = await authFetch(`${API_URL}/admin/delegations`)
+  if (!response.ok) throw new Error("Impossible de charger les délégations.")
+  const data = await response.json()
+  return data.delegations
+}
+
 // Crée une nouvelle délégation
 export const createDelegation = async (delegationData) => {
   const response = await authFetch(`${API_URL}/admin/delegations`, {
@@ -659,4 +667,142 @@ export const fetchCountryNames = async () => {
   if (!response.ok) throw new Error("Impossible de charger la liste des pays.")
   const data = await response.json()
   return data.countries
+}
+
+// ── TEAM MEMBERS ─────────────────────────────────────────────────────────
+// CRUD complet des membres de l'équipe, plus statut actif/inactif.
+
+// Récupère tous les membres (actifs + inactifs) pour le dashboard admin
+export const fetchAdminTeamMembers = async () => {
+  const response = await authFetch(`${API_URL}/admin/team-members`)
+  if (!response.ok) throw new Error("Impossible de charger les membres de l'équipe.")
+  const data = await response.json()
+  return data.members
+}
+
+// Récupère un membre par son id pour le formulaire d'édition
+export const fetchAdminTeamMemberById = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/team-members/${id}`)
+  if (!response.ok) throw new Error("Impossible de charger ce membre.")
+  const data = await response.json()
+  return data.member
+}
+
+// Crée un nouveau membre
+export const createTeamMember = async (memberData) => {
+  const response = await authFetch(`${API_URL}/admin/team-members`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(memberData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la création du membre.")
+  }
+  const data = await response.json()
+  return data.member
+}
+
+// Met à jour partiellement un membre existant
+export const updateTeamMember = async (id, memberData) => {
+  const response = await authFetch(`${API_URL}/admin/team-members/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(memberData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la mise à jour du membre.")
+  }
+  const data = await response.json()
+  return data.member
+}
+
+// Active ou désactive un membre (pause/reprise, sans le supprimer)
+export const toggleTeamMemberActive = async (id, is_active) => {
+  const response = await authFetch(`${API_URL}/admin/team-members/${id}/toggle`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ is_active }),
+  })
+  if (!response.ok) throw new Error("Échec du changement de statut.")
+  return await response.json()
+}
+
+// Supprime DÉFINITIVEMENT un membre (hard delete) — irréversible.
+export const hardDeleteTeamMember = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/team-members/${id}`, {
+    method: 'DELETE',
+  })
+  if (!response.ok) throw new Error("Échec de la suppression.")
+  return await response.json()
+}
+
+// ── ACTIVITY REPORTS ──────────────────────────────────────────────────────
+// CRUD complet des rapports d'activité annuels (PDF), plus statut actif/inactif.
+
+// Récupère tous les rapports (actifs + inactifs) pour le dashboard admin
+export const fetchAdminActivityReports = async () => {
+  const response = await authFetch(`${API_URL}/admin/activity-reports`)
+  if (!response.ok) throw new Error("Impossible de charger les rapports d'activité.")
+  const data = await response.json()
+  return data.reports
+}
+
+// Récupère un rapport par son id pour le formulaire d'édition
+export const fetchAdminActivityReportById = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/activity-reports/${id}`)
+  if (!response.ok) throw new Error("Impossible de charger ce rapport.")
+  const data = await response.json()
+  return data.report
+}
+
+// Crée un nouveau rapport
+export const createActivityReport = async (reportData) => {
+  const response = await authFetch(`${API_URL}/admin/activity-reports`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(reportData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la création du rapport.")
+  }
+  const data = await response.json()
+  return data.report
+}
+
+// Met à jour partiellement un rapport existant
+export const updateActivityReport = async (id, reportData) => {
+  const response = await authFetch(`${API_URL}/admin/activity-reports/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(reportData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la mise à jour du rapport.")
+  }
+  const data = await response.json()
+  return data.report
+}
+
+// Active ou désactive un rapport (pause/reprise, sans le supprimer)
+export const toggleActivityReportActive = async (id, is_active) => {
+  const response = await authFetch(`${API_URL}/admin/activity-reports/${id}/toggle`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ is_active }),
+  })
+  if (!response.ok) throw new Error("Échec du changement de statut.")
+  return await response.json()
+}
+
+// Supprime DÉFINITIVEMENT un rapport (hard delete) — irréversible.
+export const hardDeleteActivityReport = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/activity-reports/${id}`, {
+    method: 'DELETE',
+  })
+  if (!response.ok) throw new Error("Échec de la suppression.")
+  return await response.json()
 }

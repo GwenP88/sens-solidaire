@@ -374,34 +374,15 @@ function LocationFormPage() {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-dash-text">
-                    Contacts sur place
-                  </label>
-
-                  <button
-                    type="button"
-                    onClick={() => setDelegationContacts('')}
-                    className="text-gray-300 hover:text-dash-danger text-xl leading-none transition-colors"
-                    aria-label="Effacer les contacts"
-                  >
-                    ×
-                  </button>
-                </div>
-
-                <p className="text-xs text-dash-legend -mt-0.5">
-                  Indiquez les noms des personnes référentes sur place.
-                </p>
-
-                <textarea
-                  name="delegation_contacts"
-                  value={delegationContacts}
-                  onChange={e => setDelegationContacts(e.target.value)}
-                  rows={3}
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-dash-action/30"
-                />
-              </div>
+              <TextareaField
+                label="Description"
+                hint="Indiquez les noms/prénoms des personnes présentes."
+                name="delegation_contacts"
+                value={delegationContacts}
+                onChange={e => setDelegationContacts(e.target.value)}
+                rows={3}
+                clearable
+              />
 
             </div>
           )}

@@ -62,6 +62,8 @@ import ServiceCiviqueFormPage from './pages/admin/ServiceCiviqueFormPage'
 import GaleriePage from './pages/admin/GaleriePage'
 import LocationsPage from './pages/admin/LocationsPage'
 import LocationFormPage from './pages/admin/LocationFormPage'
+import TeamMemberFormPage from './pages/admin/TeamMemberFormPage'
+import AProposPage from './pages/admin/AProposPage'
 
 function App() {
   return (
@@ -151,11 +153,18 @@ function App() {
           <Route path="lieux/new" element={<LocationFormPage />} />
           <Route path="lieux/:id/edit" element={<LocationFormPage />} />
 
+          {/* Équipe */}
+          <Route path="equipe/new" element={<TeamMemberFormPage />} />
+          <Route path="equipe/:id/edit" element={<TeamMemberFormPage />} />
+
+          {/* À propos (équipe, délégations, rapports d'activité) */}
+          <Route path="a-propos" element={<AProposPage />} />
+          <Route path="a-propos/equipe/new" element={<TeamMemberFormPage />} />
+          <Route path="a-propos/equipe/:id/edit" element={<TeamMemberFormPage />} />
+
           {/* Galerie */}
           <Route path="galerie" element={<GaleriePage />} />
 
-          {/* À ajouter au fur et à mesure : équipe, actions-terrain, médias,
-              rapports d'activité, a-propos, soutenir, contact, paramètres */}
         </Route>
 
       </Routes>
