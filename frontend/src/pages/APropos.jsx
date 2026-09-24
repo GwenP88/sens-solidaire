@@ -16,6 +16,7 @@ import ScrollToTop from '../components/ui/ScrollToTop'
 import Section from '../components/ui/Section'
 import TeamMemberCard from '../components/team/TeamMemberCard'
 import Carousel from '../components/ui/Carousel'
+import AnchorNav from '../components/navigation/AnchorNav'
 
 // ── Utils
 import { IconHeart, IconGlobe, IconPeople, IconLeaf, IconGuide } from '../utils/icons'
@@ -35,6 +36,14 @@ const ACTIVITES = [
   { titre: "Éducation", description: "Nous accompagnons les jeunes dans la découverte des enjeux environnementaux grâce à des activités ludiques et participatives : ateliers pédagogiques, jeux, projets de correspondance et actions de sensibilisation adaptées à chaque âge." },
   { titre: "Solidarité", description: "Nous permettons à des volontaires de s'engager sur le terrain aux côtés de nos partenaires locaux. Ces expériences favorisent le partage de compétences, les rencontres humaines et une véritable ouverture sur le monde." },
   { titre: "Information", description: "Nous suivons avec attention les questions environnementales et le respect des réglementations afin d'informer, sensibiliser et encourager chacun à devenir acteur de la protection de notre planète." },
+]
+
+const ANCHOR_SECTIONS = [
+  { label: 'Notre histoire', id: 'histoire' },
+  { label: 'Nos valeurs', id: 'valeurs' },
+  { label: 'Nos champs d\'activité', id: 'champs-activite' },
+  { label: 'Notre équipe', id: 'equipe' },
+  { label: 'Rapport d\'activité', id: 'rapport-activite' },
 ]
 
 function APropos() {
@@ -61,8 +70,10 @@ useEffect(() => {
         subtitle="Voyager, rencontrer, partager et agir pour un monde plus solidaire."
       />
 
+      <AnchorNav sections={ANCHOR_SECTIONS} />
+
       {/* ── Notre histoire — texte + image ── */}
-      <Section eyebrow="Notre histoire" title={<>Une aventure humaine et solidaire <span className="text-accent-2">depuis 2007</span></>}>
+      <Section eyebrow="Notre histoire" id="histoire" title={<>Une aventure humaine et solidaire <span className="text-accent-2">depuis 2007</span></>}>
         <div className="flex flex-col xl:flex-row gap-lg items-center">
           <div className="flex flex-col gap-sm flex-1">
             <p className="text-body text-primary/80">
@@ -86,7 +97,7 @@ useEffect(() => {
       </Section>
 
       {/* ── Nos valeurs — scroll horizontal jusqu'à 1024, grille en 1280+ ── */}
-      <Section title="Nos valeurs" bg="bg-surface-mid">
+      <Section title="Nos valeurs" id="valeurs" bg="bg-surface-mid">
         {/* ── Mobile + 768 + 1024 — scroll horizontal avec dégradé ── */}
         <div className="relative xl:hidden">
           <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-surface-mid to-transparent z-10 pointer-events-none" />
@@ -114,7 +125,7 @@ useEffect(() => {
       </Section>
 
       {/* ── Champs d'activité — grille 2 colonnes ── */}
-      <Section title="Nos champs d'activité" subtitle="Nous accompagnons les communautés locales dans la planification et l'exécution de leurs projets, en répondant à leurs besoins et en s'adaptant à leur culture.">
+      <Section title="Nos champs d'activité" id="champs-activite" subtitle="Nous accompagnons les communautés locales dans la planification et l'exécution de leurs projets, en répondant à leurs besoins et en s'adaptant à leur culture.">
         <div className="grid-cards-2">
           {ACTIVITES.map(a => (
             <div key={a.titre} className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
@@ -129,6 +140,7 @@ useEffect(() => {
       <Section
         bg="bg-surface-mid"
         eyebrow="L'équipe engagée"
+        id="equipe"
         title={<>Celles et ceux qui font vivre <span className="text-accent-2">Sens Solidaires</span></>}
         subtitle="Une équipe passionnée et engagée sur le terrain comme au quotidien."
         cta={{ label: "Découvrir toute l'équipe →", href: "/equipe" }}
@@ -150,7 +162,7 @@ useEffect(() => {
       </Section>
 
       {/* ── Transparence — texte + image + lien rapports ── */}
-      <Section eyebrow="Notre engagement" title="Transparence et confiance">
+      <Section eyebrow="Notre engagement" id="rapport-activite" title="Transparence et confiance">
         <div className="flex flex-col md:flex-row gap-lg items-center">
           <div className="flex flex-col gap-sm flex-1">
             <p className="text-body text-primary/80">
