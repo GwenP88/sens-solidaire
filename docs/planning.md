@@ -203,8 +203,8 @@
 | 118 | Gwen | CRUD TeamMember (admin) | ✅ |
 | 119 | Gwen | CRUD ActivityReport (admin) | ✅ |
 | 119A | Gwen | remplir le site : team et rapport d'activité | ✅ |
-| 120 | Gwen | CRUD Logo/partenaire (admin) | ❌ |
-| 120A | Gwen | remplir le site : logo | ❌ |
+| 120 | Gwen | CRUD Logo/partenaire (admin) | ✅ |
+| 120A | Gwen | remplir le site : logo | ✅ |
 | 121 | Gwen | CRUD Testimonial + rapport de mission (admin) | ❌ |
 | 121A | Gwen | remplir le site : rapport de mission et témoignages| ❌ |
 | 122 | Gwen | CRUD FieldAction + pays + tags (admin) | ❌ |
@@ -303,3 +303,4 @@ pourquoi ne pas faire un link vers la page lieux délégation pour rediriger ver
 | 165 | Gwen | HEIC non supporté par Sharp | ❌ |
 | 166 | Gwen | Compte admin + compte invité (rôles) | ❌ |
 | 167 | Gwen | Tooltips stylées dashboard (au lieu du title natif du navigateur) | ❌ |
+| 168 | Gwen | Scroll restauré au mauvais endroit sur F5 (pages avec chargement API/images dynamique, ex: Home) | ❌ |
