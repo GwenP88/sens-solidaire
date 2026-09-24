@@ -39,6 +39,7 @@ import adminDelegationRoutes from "./routes/adminDelegationRoutes.js"
 import adminCountryRoutes from "./routes/adminCountryRoutes.js"
 import adminTeamMemberRoutes from "./routes/adminTeamMemberRoutes.js"
 import adminActivityReportRoutes from "./routes/adminActivityReportRoutes.js"
+import adminPartnerRoutes from "./routes/adminPartnerRoutes.js"
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -122,6 +123,7 @@ app.use('/api/admin/delegations', adminDelegationRoutes)
 app.use('/api/admin/countries', adminCountryRoutes)
 app.use('/api/admin/team-members', adminTeamMemberRoutes)
 app.use('/api/admin/activity-reports', adminActivityReportRoutes)
+app.use('/api/admin/partners', adminPartnerRoutes)
 
 
 // ── ROUTE NON TROUVÉE (404) ───────────────────────────────────────────────────
