@@ -33,7 +33,7 @@ const seed = async () => {
   ]
 
   // ============================================================
-  // 1 — ADMIN
+  // ADMIN
   // ============================================================
 
   const password_hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
@@ -50,7 +50,7 @@ const seed = async () => {
   console.log(`Admin : ${admin.email}`)
 
   // ============================================================
-  // 2 — ACTIONS SUR LE TERRAIN (Kenya + Sénégal uniquement)
+  // ACTIONS SUR LE TERRAIN (Kenya + Sénégal uniquement)
   // ============================================================
 
   const FIELD_ACTIONS = [
@@ -156,7 +156,7 @@ const seed = async () => {
   console.log(`FieldActions créées (${FIELD_ACTIONS.length})`)
 
   // ============================================================
-  // 3 — RAPPORTS DE MISSION
+  // RAPPORTS DE MISSION
   // ============================================================
 
   const MISSION_REPORTS = [
@@ -178,40 +178,7 @@ const seed = async () => {
 
 
   // ============================================================
-  // 4 — LOGOS PARTENAIRES
-  // ============================================================
-
-  const PARTNERS = [
-    { name: "Ville de Nice", logo_url: "/images/logo-partners/ville-nice.png", display_order: 1 },
-    { name: "Alpes-Maritimes", logo_url: "/images/logo-partners/alpes-maritimes.png", display_order: 2 },
-    { name: "Annemasse", logo_url: "/images/logo-partners/annemasse.png", display_order: 3 },
-    { name: "Eco-Ecole", logo_url: "/images/logo-partners/eco-ecole.png", display_order: 4 },
-    { name: "Festival des Solidarités", logo_url: "/images/logo-partners/festival-solidarites.png", display_order: 5 },
-    { name: "Fonds Jacques Martel", logo_url: "/images/logo-partners/fonds-jacques-martel.png", display_order: 6 },
-    { name: "FONJEP", logo_url: "/images/logo-partners/fonjep.png", display_order: 7 },
-    { name: "France Volontaires", logo_url: "/images/logo-partners/france-volontaires.png", display_order: 8 },
-    { name: "Haute-Savoie", logo_url: "/images/logo-partners/haute-savoie.png", display_order: 9 },
-    { name: "IUCN", logo_url: "/images/logo-partners/iucn.png", display_order: 10 },
-    { name: "Jeunesse et Sport", logo_url: "/images/logo-partners/jeunesse-sport.jpg", display_order: 11 },
-    { name: "Métropole Nice Côte d'Azur", logo_url: "/images/logo-partners/metropole-nice.png", display_order: 12 },
-    { name: "Ministère des Affaires Étrangères", logo_url: "/images/logo-partners/ministere-affaires-etrangeres.png", display_order: 13 },
-    { name: "Ministère de l'Éducation", logo_url: "/images/logo-partners/ministere-education.png", display_order: 14 },
-    { name: "PNUE", logo_url: "/images/logo-partners/pnue.png", display_order: 15 },
-    { name: "Service Civique", logo_url: "/images/logo-partners/service-civique.png", display_order: 16 },
-    { name: "Territoires Solidaires", logo_url: "/images/logo-partners/territoires-solidaires.png", display_order: 17 },
-    { name: "AFD", logo_url: "/images/logo-partners/afd.png", display_order: 18 },
-    { name: "Ambassade de France au Kenya", logo_url: "/images/logo-partners/ambassade-france-kenya.png", display_order: 19 },
-    { name: "TTNP", logo_url: "/images/logo-partners/ttnp.jpeg", display_order: 20 },
-    { name: "AGADA", logo_url: "/images/logo-partners/agada.jpeg", display_order: 21 },
-    { name: "Ecole Rudolf Steiner Genève", logo_url: "/images/logo-partners/ecole-steiner-geneve.jpeg", display_order: 22 },
-  ]
-
-  await prisma.partner.deleteMany({})
-  await prisma.partner.createMany({ data: PARTNERS })
-  console.log(`Partners créés (${PARTNERS.length})`)
-
-  // ============================================================
-  // 5 — ARTICLES : MÉDIAS ET ACTUALITÉS
+  // ARTICLES : MÉDIAS ET ACTUALITÉS
   // ============================================================
 
   const MEDIA_POSTS = [
@@ -278,7 +245,7 @@ const seed = async () => {
   console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
 
   // ============================================================
-  // 6 — ÉDUCATION ET SENSIBILISATION
+  // ÉDUCATION ET SENSIBILISATION
   // ============================================================
 
   const EDUCATION_ITEMS = [
@@ -339,7 +306,6 @@ const seed = async () => {
   console.log("─────────────────────────────────────────")
   console.log(`FieldActions       : ${FIELD_ACTIONS.length}`)
   console.log(`MissionReports     : ${MISSION_REPORTS.length}`)
-  console.log(`Partners           : ${PARTNERS.length}`)
   console.log(`MediaPosts         : ${MEDIA_POSTS.length}`)
   console.log(`EducationItems     : ${EDUCATION_ITEMS.length}`)
   console.log("─────────────────────────────────────────")
