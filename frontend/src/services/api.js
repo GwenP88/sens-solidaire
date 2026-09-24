@@ -620,14 +620,6 @@ export const fetchAdminDelegationById = async (id) => {
   return data.delegation
 }
 
-// Récupère toutes les délégations pour la liste dans l'onglet "À propos"
-export const fetchAdminDelegations = async () => {
-  const response = await authFetch(`${API_URL}/admin/delegations`)
-  if (!response.ok) throw new Error("Impossible de charger les délégations.")
-  const data = await response.json()
-  return data.delegations
-}
-
 // Crée une nouvelle délégation
 export const createDelegation = async (delegationData) => {
   const response = await authFetch(`${API_URL}/admin/delegations`, {
@@ -801,6 +793,75 @@ export const toggleActivityReportActive = async (id, is_active) => {
 // Supprime DÉFINITIVEMENT un rapport (hard delete) — irréversible.
 export const hardDeleteActivityReport = async (id) => {
   const response = await authFetch(`${API_URL}/admin/activity-reports/${id}`, {
+    method: 'DELETE',
+  })
+  if (!response.ok) throw new Error("Échec de la suppression.")
+  return await response.json()
+}
+
+// ── PARTNERS ─────────────────────────────────────────────────────────────
+// CRUD complet des logos partenaires, plus statut actif/inactif.
+
+// Récupère tous les partenaires (actifs + inactifs) pour le dashboard admin
+export const fetchAdminPartners = async () => {
+  const response = await authFetch(`${API_URL}/admin/partners`)
+  if (!response.ok) throw new Error("Impossible de charger les partenaires.")
+  const data = await response.json()
+  return data.partners
+}
+
+// Récupère un partenaire par son id pour le formulaire d'édition
+export const fetchAdminPartnerById = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/partners/${id}`)
+  if (!response.ok) throw new Error("Impossible de charger ce partenaire.")
+  const data = await response.json()
+  return data.partner
+}
+
+// Crée un nouveau partenaire
+export const createPartner = async (partnerData) => {
+  const response = await authFetch(`${API_URL}/admin/partners`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(partnerData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la création du partenaire.")
+  }
+  const data = await response.json()
+  return data.partner
+}
+
+// Met à jour partiellement un partenaire existant
+export const updatePartner = async (id, partnerData) => {
+  const response = await authFetch(`${API_URL}/admin/partners/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(partnerData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la mise à jour du partenaire.")
+  }
+  const data = await response.json()
+  return data.partner
+}
+
+// Active ou désactive un partenaire (pause/reprise, sans le supprimer)
+export const togglePartnerActive = async (id, is_active) => {
+  const response = await authFetch(`${API_URL}/admin/partners/${id}/toggle`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ is_active }),
+  })
+  if (!response.ok) throw new Error("Échec du changement de statut.")
+  return await response.json()
+}
+
+// Supprime DÉFINITIVEMENT un partenaire (hard delete) — irréversible.
+export const hardDeletePartner = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/partners/${id}`, {
     method: 'DELETE',
   })
   if (!response.ok) throw new Error("Échec de la suppression.")

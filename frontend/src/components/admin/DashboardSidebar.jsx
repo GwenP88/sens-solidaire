@@ -38,7 +38,7 @@ const navItems = [
     iconActive: 'text-dash-action',
   },
     {
-    label: 'Lieux et délégations',
+    label: 'Lieux & délégations',
     path: '/admin/lieux',
     icon: FiMapPin,
     activeClass: 'bg-dash-action/10 text-dash-action',
@@ -73,7 +73,7 @@ const navItems = [
     iconActive: 'text-dash-action',
   },
   {
-    label: 'À propos',
+    label: 'Association & partenaires',
     path: '/admin/a-propos',
     icon: FiUsers,
     activeClass: 'bg-dash-action/10 text-dash-action',

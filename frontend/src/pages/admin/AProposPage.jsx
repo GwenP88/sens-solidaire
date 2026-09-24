@@ -7,19 +7,20 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   fetchAdminTeamMembers, toggleTeamMemberActive, hardDeleteTeamMember,
-  fetchAdminDelegations,
   fetchAdminActivityReports, toggleActivityReportActive, hardDeleteActivityReport,
+  fetchAdminPartners, togglePartnerActive, hardDeletePartner,
 } from '../../services/api'
 import AnchorNav from '../../components/navigation/AnchorNav'
 import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
-import DelegationEditModal from '../../components/admin/DelegationEditModal'
 import ActivityReportEditModal from '../../components/admin/ActivityReportEditModal'
+import PartnerEditModal from '../../components/admin/PartnerEditModal'
+import { FiEdit2, FiPause, FiPlay, FiTrash2, FiCheck, FiX } from 'react-icons/fi'
 
 const ANCHOR_SECTIONS = [
   { label: 'Équipe', id: 'equipe' },
-  { label: 'Délégations', id: 'delegations' },
   { label: "Rapports d'activité", id: 'rapports' },
+  { label: 'Partenaires', id: 'partenaires' },
 ]
 
 const CATEGORY_LABELS = {
@@ -50,11 +51,6 @@ const TEAM_COLUMNS = [
   },
 ]
 
-const DELEGATION_COLUMNS = [
-  { key: 'lieu', label: 'Titre' },
-  { key: 'pays', label: 'Pays' },
-]
-
 const REPORT_COLUMNS = [
   { key: 'annee', label: 'Année' },
   {
@@ -79,6 +75,30 @@ const REPORT_COLUMNS = [
   },
 ]
 
+const PARTNER_COLUMNS = [
+  {
+    key: 'logo_url',
+    label: 'Logo',
+    render: (row) => row.logo_url ? (
+      <img src={row.logo_url} alt={`Logo de ${row.name}`} className="h-10 w-auto object-contain" />
+    ) : (
+      <span className="text-dash-legend text-xs italic">Aucun</span>
+    ),
+  },
+  { key: 'name', label: 'Nom' },
+  {
+    key: 'is_active',
+    label: 'Statut',
+    render: (row) => (
+      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+        row.is_active ? 'bg-dash-success/10 text-dash-success' : 'bg-dash-warning/10 text-dash-warning'
+      }`}>
+        {row.is_active ? 'Actif' : 'Inactif'}
+      </span>
+    ),
+  },
+]
+
 function AProposPage() {
   const navigate = useNavigate()
 
@@ -89,11 +109,6 @@ function AProposPage() {
   const [memberToTogglePause, setMemberToTogglePause] = useState(null)
   const [memberToHardDelete, setMemberToHardDelete] = useState(null)
 
-  // ── Délégations ─────────────────────────────────────────────────────────
-  const [delegations, setDelegations] = useState([])
-  const [delegationsLoading, setDelegationsLoading] = useState(true)
-  const [editingDelegation, setEditingDelegation] = useState(null)
-
   // ── Rapports d'activité ─────────────────────────────────────────────────
   const [reports, setReports] = useState([])
   const [reportsLoading, setReportsLoading] = useState(true)
@@ -102,6 +117,14 @@ function AProposPage() {
   const [reportToTogglePause, setReportToTogglePause] = useState(null)
   const [reportToHardDelete, setReportToHardDelete] = useState(null)
 
+  // ── Partenaires ─────────────────────────────────────────────────────────
+  const [partners, setPartners] = useState([])
+  const [partnersLoading, setPartnersLoading] = useState(true)
+  const [partnerModalOpen, setPartnerModalOpen] = useState(false)
+  const [editingPartner, setEditingPartner] = useState(null) // null = création
+  const [partnerToTogglePause, setPartnerToTogglePause] = useState(null)
+  const [partnerToHardDelete, setPartnerToHardDelete] = useState(null)
+
   const loadMembers = async () => {
     try {
       setMembers(await fetchAdminTeamMembers())
@@ -109,16 +132,6 @@ function AProposPage() {
       console.error('Erreur chargement équipe :', err)
     } finally {
       setMembersLoading(false)
-    }
-  }
-
-  const loadDelegations = async () => {
-    try {
-      setDelegations(await fetchAdminDelegations())
-    } catch (err) {
-      console.error('Erreur chargement délégations :', err)
-    } finally {
-      setDelegationsLoading(false)
     }
   }
 
@@ -132,10 +145,20 @@ function AProposPage() {
     }
   }
 
+  const loadPartners = async () => {
+    try {
+      setPartners(await fetchAdminPartners())
+    } catch (err) {
+      console.error('Erreur chargement partenaires :', err)
+    } finally {
+      setPartnersLoading(false)
+    }
+  }
+
   useEffect(() => {
     loadMembers()
-    loadDelegations()
     loadReports()
+    loadPartners()
   }, [])
 
   // ── Actions Équipe ──────────────────────────────────────────────────────
@@ -188,9 +211,32 @@ function AProposPage() {
     }
   }
 
+  // ── Actions Partenaires ─────────────────────────────────────────────────
+  const confirmPartnerTogglePause = async () => {
+    try {
+      await togglePartnerActive(partnerToTogglePause.id, !partnerToTogglePause.is_active)
+      await loadPartners()
+    } catch (err) {
+      alert('Échec du changement de statut. Réessaie.')
+    } finally {
+      setPartnerToTogglePause(null)
+    }
+  }
+
+  const confirmPartnerHardDelete = async () => {
+    try {
+      await hardDeletePartner(partnerToHardDelete.id)
+      await loadPartners()
+    } catch (err) {
+      alert('Échec de la suppression. Réessaie.')
+    } finally {
+      setPartnerToHardDelete(null)
+    }
+  }
+
   return (
     <div>
-      <h1 className="font-heading font-bold text-2xl text-dash-title mb-6">À propos</h1>
+      <h1 className="font-heading font-bold text-2xl text-dash-title mb-6">Association & partenaires</h1>
 
       <AnchorNav sections={ANCHOR_SECTIONS} variant="dashboard" />
 
@@ -230,26 +276,6 @@ function AProposPage() {
         )}
       </section>
 
-      {/* ── Section Délégations ── */}
-      <section id="delegations" className="mt-12">
-        <h2 className="font-heading font-semibold text-lg text-dash-title mb-2">Délégations</h2>
-        <p className="text-sm text-dash-legend mb-4">
-          Pour ajouter une nouvelle délégation, rendez-vous dans l'onglet « Lieux et délégations », puis ouvrez
-          le lieu concerné. La délégation sera automatiquement associée au bon pays. Depuis cette page, vous
-          pouvez uniquement modifier la photo et les personnes référentes d'une délégation existante.
-        </p>
-
-        {delegationsLoading ? (
-          <p className="text-dash-legend text-sm italic">Chargement...</p>
-        ) : (
-          <DashboardTable
-            columns={DELEGATION_COLUMNS}
-            data={delegations}
-            onEdit={(d) => setEditingDelegation(d)}
-          />
-        )}
-      </section>
-
       {/* ── Section Rapports d'activité ── */}
       <section id="rapports" className="mt-12">
         <div className="flex items-center justify-between mb-4">
@@ -275,16 +301,87 @@ function AProposPage() {
         )}
       </section>
 
+      {/* ── Section Partenaires ── */}
+      <section id="partenaires" className="mt-12">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-heading font-semibold text-lg text-dash-title">Partenaires</h2>
+          <button
+            onClick={() => { setEditingPartner(null); setPartnerModalOpen(true) }}
+            className="px-4 py-2 bg-dash-action text-white text-sm rounded-lg hover:bg-dash-action/90 transition-colors"
+          >
+            + Ajouter un partenaire
+          </button>
+        </div>
+
+        {partnersLoading ? (
+          <p className="text-dash-legend text-sm italic">Chargement...</p>
+        ) : partners.length === 0 ? (
+          <p className="text-dash-legend text-sm py-8 text-center">Aucun partenaire pour le moment.</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {partners.map(p => (
+              <div key={p.id} className="border border-gray-200 rounded-lg p-3 flex flex-col gap-4">
+
+                <span className={`self-start px-2 py-0.5 rounded-full text-xs font-medium ${
+                  p.is_active ? 'bg-dash-success/10 text-dash-success' : 'bg-dash-warning/10 text-dash-warning'
+                }`}>
+                  {p.is_active ? 'Actif' : 'Inactif'}
+                </span>
+
+                <div className="h-16 w-full bg-white border border-gray-200 rounded-lg flex items-center justify-center p-2">
+                  {p.logo_url ? (
+                    <img src={p.logo_url} alt={`Logo de ${p.name}`} className="max-h-full max-w-full object-contain" />
+                  ) : (
+                    <span className="text-dash-legend text-xs italic">Aucun logo</span>
+                  )}
+                </div>
+
+                <p className="text-sm text-dash-text font-medium truncate" title={p.name}>{p.name}</p>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => { setEditingPartner(p); setPartnerModalOpen(true) }}
+                      className="p-1.5 text-dash-legend hover:text-dash-action hover:bg-dash-action/10 rounded"
+                      aria-label={`Modifier ${p.name}`}
+                    >
+                      <FiEdit2 size={16} />
+                    </button>
+                    <button
+                      onClick={() => setPartnerToTogglePause(p)}
+                      className={`p-1.5 text-dash-legend rounded ${
+                        p.is_active ? 'hover:text-dash-warning hover:bg-dash-warning/10' : 'hover:text-dash-success hover:bg-dash-success/10'
+                      }`}
+                      aria-label={p.is_active ? `Mettre en pause ${p.name}` : `Reprendre ${p.name}`}
+                    >
+                      {p.is_active ? <FiPause size={16} /> : <FiPlay size={16} />}
+                    </button>
+                    <button
+                      onClick={() => setPartnerToHardDelete(p)}
+                      className="p-1.5 text-dash-legend hover:text-dash-danger hover:bg-dash-danger/10 rounded"
+                      aria-label={`Supprimer définitivement ${p.name}`}
+                    >
+                      <FiTrash2 size={16} />
+                    </button>
+                  </div>
+
+                  <span className="flex items-center gap-1 text-xs text-dash-legend" title={p.website_url ? p.website_url : 'Aucun site web renseigné'}>
+                    URL
+                    {p.website_url ? (
+                      <FiCheck className="text-dash-success" size={14} />
+                    ) : (
+                      <FiX className="text-dash-danger" size={14} />
+                    )}
+                  </span>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
       {/* ── Modales ── */}
-
-      {editingDelegation && (
-        <DelegationEditModal
-          delegation={editingDelegation}
-          onClose={() => setEditingDelegation(null)}
-          onSaved={() => { setEditingDelegation(null); loadDelegations() }}
-        />
-      )}
-
       {reportModalOpen && (
         <ActivityReportEditModal
           report={editingReport}
@@ -340,6 +437,39 @@ function AProposPage() {
           confirmLabel="Supprimer définitivement"
           onConfirm={confirmReportHardDelete}
           onCancel={() => setReportToHardDelete(null)}
+        />
+      )}
+
+      {partnerModalOpen && (
+        <PartnerEditModal
+          partner={editingPartner}
+          onClose={() => setPartnerModalOpen(false)}
+          onSaved={() => { setPartnerModalOpen(false); loadPartners() }}
+        />
+      )}
+
+      {partnerToTogglePause && (
+        <ConfirmModal
+          variant={partnerToTogglePause.is_active ? 'warning' : 'success'}
+          title={partnerToTogglePause.is_active ? 'Mettre en pause' : 'Réactiver'}
+          message={
+            partnerToTogglePause.is_active
+              ? `Mettre en pause "${partnerToTogglePause.name}" ?\n\nIl deviendra invisible sur le site, mais reste récupérable.`
+              : `Réactiver "${partnerToTogglePause.name}" ?\n\nIl redeviendra visible sur le site.`
+          }
+          confirmLabel={partnerToTogglePause.is_active ? 'Mettre en pause' : 'Réactiver'}
+          onConfirm={confirmPartnerTogglePause}
+          onCancel={() => setPartnerToTogglePause(null)}
+        />
+      )}
+
+      {partnerToHardDelete && (
+        <ConfirmModal
+          title="Supprimer définitivement"
+          message={`Voulez-vous supprimer définitivement "${partnerToHardDelete.name}" ?\n\nCette action est irréversible.`}
+          confirmLabel="Supprimer définitivement"
+          onConfirm={confirmPartnerHardDelete}
+          onCancel={() => setPartnerToHardDelete(null)}
         />
       )}
 

@@ -233,13 +233,22 @@ function Home() {
         cta={{ label: "En savoir plus sur nous →", href: "/a-propos" }}
       >
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-md items-center">
-          {partners.map(partner => (
-            <div key={partner.id} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24 p-1">
+          {partners.map(partner => {
+            const logo = (
               <img 
-                src={partner.logo_url} alt={partner.name}
+                src={partner.logo_url} alt={`Logo de ${partner.name}`}
                 className="w-full h-full object-contain p-2" />
-            </div>
-          ))}
+            )
+            return (
+              <div key={partner.id} className="flex items-center justify-center bg-white rounded-xl shadow-sm h-24 p-1">
+                {partner.website_url ? (
+                  <a href={partner.website_url} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">
+                    {logo}
+                  </a>
+                ) : logo}
+              </div>
+            )
+          })}
         </div>
       </Section>
 
