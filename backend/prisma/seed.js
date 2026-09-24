@@ -156,28 +156,6 @@ const seed = async () => {
   console.log(`FieldActions créées (${FIELD_ACTIONS.length})`)
 
   // ============================================================
-  // RAPPORTS DE MISSION
-  // ============================================================
-
-  const MISSION_REPORTS = [
-    { auteur: "Joelle", destination: "kenya", type: "individuel", annee: 2025, pdf_url: "/pdfs/rapports/joelle-kenya-2025.pdf" },
-    { auteur: "Armand", destination: "kenya", type: "individuel", annee: 2024, pdf_url: "/pdfs/rapports/armand-kenya-2024.pdf" },
-    { auteur: "Amna", destination: "senegal", type: "individuel", annee: 2025, pdf_url: "/pdfs/rapports/amna-senegal-2025.pdf" },
-    { auteur: "Tilla", destination: "senegal", type: "individuel", annee: 2024, pdf_url: "/pdfs/rapports/tilla-senegal-2024.pdf" },
-    { auteur: "Kimberley", destination: null, type: "service_civique", annee: 2025, pdf_url: "/pdfs/rapports/kimberley-service-civique-2025.pdf" },
-    { auteur: "Cyril", destination: null, type: "service_civique", annee: 2024, pdf_url: "/pdfs/rapports/cyril-service-civique-2024.pdf" },
-    { auteur: "École Internationale de Fuveau", destination: null, type: "groupe_jeune", annee: 2018, pdf_url: "/pdfs/rapports/ecole-fuveau-srilanka-2018.pdf" },
-    { auteur: "École Internationale de Nice", destination: null, type: "groupe_jeune", annee: 2017, pdf_url: "/pdfs/rapports/ecole-nice-srilanka-2017.pdf" },
-    { auteur: "Jean-Yves, Loïc & Christian", destination: null, type: "conge_solidaire", annee: 2016, pdf_url: "/pdfs/rapports/jeanyves-loic-christian-perou-2016.pdf" },
-    { auteur: "Équipe Décathlon Nice", destination: null, type: "conge_solidaire", annee: 2023, pdf_url: "/pdfs/rapports/decathlon-nice-conge-solidaire-2023.pdf" },
-  ]
-
-  await prisma.missionReport.deleteMany({})
-  await prisma.missionReport.createMany({ data: MISSION_REPORTS })
-  console.log(`MissionReports créés (${MISSION_REPORTS.length})`)
-
-
-  // ============================================================
   // ARTICLES : MÉDIAS ET ACTUALITÉS
   // ============================================================
 
@@ -305,7 +283,6 @@ const seed = async () => {
   console.log(`Password           : ${process.env.ADMIN_PASSWORD}`)
   console.log("─────────────────────────────────────────")
   console.log(`FieldActions       : ${FIELD_ACTIONS.length}`)
-  console.log(`MissionReports     : ${MISSION_REPORTS.length}`)
   console.log(`MediaPosts         : ${MEDIA_POSTS.length}`)
   console.log(`EducationItems     : ${EDUCATION_ITEMS.length}`)
   console.log("─────────────────────────────────────────")
