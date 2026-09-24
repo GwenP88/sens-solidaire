@@ -27,9 +27,13 @@ import { IconPin, IconGlobe, IconPerson } from '../utils/icons'
 function buildMapEmbedUrl(url) {
   if (!url) return null
   if (url.includes('/maps/embed')) return url
+
   const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
+
   if (!match) return null
+
   const [, lat, lng] = match
+
   return `https://www.google.com/maps?q=${lat},${lng}&output=embed`
 }
 
@@ -42,10 +46,14 @@ function LocationDetail() {
   const [error, setError] = useState(null)
   const [showDelegationModal, setShowDelegationModal] = useState(false)
   const [searchParams] = useSearchParams()
-  const fromSlug = searchParams.get('from')
-  const originMission = location?.missions?.find(m => m.slug === fromSlug)
 
-  // ── Chargement du lieu depuis l'API — delegation inclus via include Prisma
+  const fromSlug = searchParams.get('from')
+  const originMission = location?.missions?.find(
+    mission => mission.slug === fromSlug
+  )
+
+  // ── Chargement du lieu depuis l'API
+  // delegation inclus via include Prisma
   useEffect(() => {
     fetchLocationBySlug(slug)
       .then(data => setLocation(data))
@@ -54,86 +62,137 @@ function LocationDetail() {
   }, [slug])
 
   // ── États de chargement et d'erreur
-  if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
-  if (error || !location) return (
-    <div className="p-12 text-center">
-      <p className="text-body text-primary/50 italic">Lieu introuvable.</p>
-      <a href="/missions" className="link-inline text-accent">← Retour aux missions</a>
-    </div>
-  )
+  if (loading) {
+    return (
+      <p className="text-body text-primary/50 italic p-12">
+        Chargement...
+      </p>
+    )
+  }
 
-  // ── Médias — galerie sans la première image (utilisée dans le hero)
-  const images = location.gallery || []
-  const extraImages = images.slice(1)
+  if (error || !location) {
+    return (
+      <div className="p-12 text-center">
+        <p className="text-body text-primary/50 italic">
+          Lieu introuvable.
+        </p>
+
+        <a
+          href="/missions"
+          className="link-inline text-accent"
+        >
+          ← Retour aux missions
+        </a>
+      </div>
+    )
+  }
+
+  // ── Médias — galerie sans la première image utilisée dans le hero
+  const extraImages = location.gallery || []
 
   return (
     <div className="bg-surface min-h-screen">
 
-      {/* ── Hero immersif — image du lieu + titre + pays si disponible ── */}
+      {/* ── Hero immersif — image du lieu + titre + pays ── */}
       <HeroPage
-        image={location.image_url || '/images/placeholders/placeholder-action-1.webp'}
+        image={
+          location.image_url ||
+          '/images/placeholders/placeholder-action-1.webp'
+        }
         title={location.name}
         country={location.country || null}
       />
 
-      {/* ── Contenu principal — 2 colonnes à partir de lg ── */}
+      {/* ── Contenu principal ── */}
       <section className="padding-y padding-x bg-surface">
-        <div className="flex flex-col gap-md">
 
-          {/* Lien retour — mission parente si disponible, sinon liste missions */}
+        <div className="flex flex-col gap-lg">
+
+          {/* ── Lien retour ── */}
           {originMission ? (
-            <a href={`/missions/${originMission.slug}`} className="link-nav text-primary/50 hover:text-primary">
+            <a
+              href={`/missions/${originMission.slug}`}
+              className="link-nav text-primary/50 hover:text-primary"
+            >
               ← Retour à la mission {originMission.title}
             </a>
           ) : (
-            <a href="/missions" className="link-nav text-primary/50 hover:text-primary">
+            <a
+              href="/missions"
+              className="link-nav text-primary/50 hover:text-primary"
+            >
               ← Retour aux missions
             </a>
           )}
 
-          {/* Layout 2 colonnes — description à gauche, card infos à droite */}
-          {/* gap-lg : entre deux grands blocs — responsive via @media dans index.css */}
-          <div className="flex flex-col lg:flex-row gap-lg items-start">
+          {/* ── Contenu en deux colonnes sur desktop ── */}
+          <div className="flex flex-col lg:flex-row gap-lg">
 
-            {/* ── Colonne gauche — description + encart mission ── */}
-            <div className="flex-1 flex flex-col gap-md">
+            {/* ── Colonne principale ── */}
+            <div className="flex-1 flex flex-col gap-lg">
 
-              <h2 className="h2-style text-primary">À propos de ce lieu</h2>
+              {/* ── Présentation du lieu ── */}
+              <div className="flex flex-col gap-md">
 
-              {/* Description — découpage par double saut de ligne */}
-              {/* gap-sm : entre les paragraphes */}
-              <div className="flex flex-col gap-sm">
-                {location.description.split('\n\n').map((para, i) => (
-                  <p key={i} className="text-body text-primary/80">{para}</p>
-                ))}
+                <h2 className="h2-style text-primary">
+                  À propos de ce lieu
+                </h2>
+
+                {/* Description — découpage par double saut de ligne */}
+                <div className="flex flex-col gap-sm">
+                  {location.description.split('\n\n').map((para, i) => (
+                    <p
+                      key={i}
+                      className="text-body text-primary/80"
+                    >
+                      {para}
+                    </p>
+                  ))}
+                </div>
+
               </div>
 
-              {/* Encart "Notre mission ici" — masqué si aucun contenu saisi */}
+              {/* ── Mission de Sens Solidaires sur ce lieu ── */}
+              {/* Affichée uniquement si le contenu existe */}
               {location.mission_ss && (
-                <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
-                  <h3 className="h3-style text-primary mb-0">Notre mission ici</h3>
-                  <p className="text-body text-primary/70">
+                <div className="rounded-2xl p-6 flex flex-col gap-sm">
+
+                  <h3 className="h3-style text-accent mb-0">
+                    La mission de Sens Solidaires
+                  </h3>
+
+                  <p className="text-body text-primary/70 border-l-4 border-accent pl-4">
                     {location.mission_ss}
                   </p>
+
                 </div>
               )}
 
             </div>
 
-            {/* ── Colonne droite — card informations pratiques ── */}
-            <div className="w-full lg:w-1/3 shrink-0">
+            {/* ── Colonne informations pratiques ── */}
+            <div className="w-full lg:w-1/3 shrink-0 lg:sticky lg:top-24 lg:self-start">
+
               <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-md">
 
-                <h3 className="h3-style text-primary mb-0">Informations pratiques</h3>
+                <h3 className="h3-style text-primary mb-0">
+                  Informations pratiques
+                </h3>
 
-                {/* Contacts — inclus directement via location.delegation (FK BDD) */}
+                {/* ── Contacts sur place ── */}
                 {location.delegation?.contacts && (
                   <div className="flex flex-col gap-xs">
-                    <span className="text-eyebrow text-primary/40">Sur place</span>
+
+                    <span className="text-eyebrow text-primary/40">
+                      Contact sur place
+                    </span>
+
                     <div className="flex items-start gap-xs">
-                      <IconPerson className="text-accent shrink-0 mt-0.5" />
-                      <p className="text-body text-primary/80">{location.delegation.contacts}</p>
+                      <p className="text-body text-primary/80">
+                        {location.delegation.contacts}
+                      </p>
                     </div>
+
                     <button
                       onClick={() => setShowDelegationModal(true)}
                       className="flex items-center gap-xs link-cta text-accent hover:text-accent/80"
@@ -141,28 +200,37 @@ function LocationDetail() {
                       <IconPerson className="shrink-0" />
                       Voir la délégation →
                     </button>
+
                   </div>
                 )}
 
-                {/* Site web — location.website_url, champ optionnel pas encore en BDD */}
+                {/* ── Site web ── */}
                 {location.website_url && (
-                <div className="flex flex-col gap-xs">
-                  <span className="text-eyebrow text-primary/40">Site web</span>
-                  <a
-                    href={location.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-xs link-cta text-accent hover:text-accent/80"
-                  >
-                    <IconGlobe className="shrink-0" />
-                    Visiter le site →
-                  </a>
-                </div>
-              )}
+                  <div className="flex flex-col gap-xs">
 
-                {/* Localisation — lien carte ou placeholder */}
+                    <span className="text-eyebrow text-primary/40">
+                      Site web
+                    </span>
+
+                    <a
+                      href={location.website_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-xs link-cta text-accent hover:text-accent/80"
+                    >
+                      <IconGlobe className="shrink-0" />
+                      Visiter le site →
+                    </a>
+
+                  </div>
+                )}
+
+                {/* ── Localisation ── */}
                 <div className="flex flex-col gap-xs">
-                  <span className="text-eyebrow text-primary/40">Localisation</span>
+
+                  <span className="text-eyebrow text-primary/40">
+                    Localisation
+                  </span>
 
                   {buildMapEmbedUrl(location.map_url) ? (
                     <iframe
@@ -177,52 +245,76 @@ function LocationDetail() {
                     />
                   ) : (
                     <div className="bg-surface rounded-xl p-4 text-center">
+
                       <IconPin className="text-primary/20 text-2xl mx-auto mb-1" />
-                      <p className="text-caption text-primary/40 italic">Localisation à renseigner</p>
+
+                      <p className="text-caption text-primary/40 italic">
+                        Localisation à renseigner
+                      </p>
+
                     </div>
                   )}
+
                 </div>
 
               </div>
+
             </div>
 
           </div>
+
         </div>
+
       </section>
 
-      {/* ── Galerie photos — masquée s'il n'y a pas d'images supplémentaires ── */}
+      {/* ── Galerie photos ── */}
+      {/* Masquée s'il n'y a pas d'images supplémentaires */}
       {extraImages.length > 0 && (
         <section className="padding-y padding-x bg-surface-mid">
 
-          {/* h2-style porte déjà margin-bottom: 2rem — pas de mb- en dur */}
-          <h2 className="h2-style text-primary">Galerie photos</h2>
+          <h2 className="h2-style text-primary">
+            Galerie photos
+          </h2>
 
           {extraImages.length <= 2 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
-              {extraImages.map((m, i) => (
-                <div key={i} className="overflow-hidden rounded-xl">
+
+              {extraImages.map((media, i) => (
+                <div
+                  key={i}
+                  className="overflow-hidden rounded-xl"
+                >
                   <img
-                    src={m.file_url}
+                    src={media.file_url}
                     alt=""
-                    onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.webp' }}
+                    onError={e => {
+                      e.target.src =
+                        '/images/placeholders/placeholder-action-1.webp'
+                    }}
                     className="w-full h-56 object-cover"
                   />
                 </div>
               ))}
+
             </div>
           ) : (
             <Carousel
               items={extraImages}
               showPagination={true}
               color="primary"
-              renderSlide={(m) => (
+              renderSlide={media => (
                 <div className="w-full h-56 overflow-hidden rounded-xl">
+
                   <img
-                    src={m.file_url}
+                    src={media.file_url}
                     alt=""
-                    onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.webp' }}
+                    onError={e => {
+                      e.target.src =
+                        '/images/placeholders/placeholder-action-1.webp'
+                    }}
                     className="w-full h-full object-cover"
                   />
+
                 </div>
               )}
             />
@@ -231,6 +323,7 @@ function LocationDetail() {
         </section>
       )}
 
+      {/* ── Modal délégation ── */}
       {showDelegationModal && location.delegation && (
         <Modal
           isOpen={true}
@@ -238,19 +331,28 @@ function LocationDetail() {
           title={location.delegation.lieu}
           size="small"
         >
+
           <img
-            src={location.delegation.image_url || '/images/placeholders/placeholder-delegation.webp'}
+            src={
+              location.delegation.image_url ||
+              '/images/placeholders/placeholder-delegation.webp'
+            }
             alt={location.delegation.lieu}
-            onError={e => { e.target.src = '/images/placeholders/placeholder-delegation.webp' }}
+            onError={e => {
+              e.target.src =
+                '/images/placeholders/placeholder-delegation.webp'
+            }}
             className="w-full aspect-video object-cover rounded-xl mb-4"
           />
+
           <p className="text-body text-primary/80 text-center whitespace-pre-line">
             {location.delegation.contacts}
           </p>
+
         </Modal>
       )}
 
-      {/* ── ScrollToTop — bouton flottant, suit le scroll sur toute la page ── */}
+      {/* ── Bouton retour en haut ── */}
       <ScrollToTop />
 
     </div>

@@ -116,9 +116,9 @@ function LocationFormPage() {
 
   const validate = () => {
     const newErrors = {}
-    if (!formData.name.trim())        newErrors.name = "Le titre est obligatoire."
+    if (!formData.name.trim())        newErrors.name = "Le nom du lieu partenaire est obligatoire."
     if (!formData.country.trim())     newErrors.country = "Le pays est obligatoire."
-    if (!formData.description.trim()) newErrors.description = "La description est obligatoire."
+    if (!formData.description.trim()) newErrors.description = "La présentation du lieu partenaire est obligatoire."
     if (formData.photos.length < 1)   newErrors.photos = "Au moins une photo est obligatoire."
     if (formData.photos.length > 0 && !formData.photos.some(p => p.is_hero)) {
       newErrors.photos = "Sélectionnez une photo principale."
@@ -209,6 +209,7 @@ function LocationFormPage() {
       >
         ← Retour aux lieux
       </button>
+
       <h1 className="font-heading font-bold text-2xl text-dash-title mb-8">
         {isEditing ? 'Modifier le lieu' : 'Ajouter un lieu'}
       </h1>
@@ -225,27 +226,51 @@ function LocationFormPage() {
           {countryNames.map(name => <option key={name} value={name} />)}
         </datalist>
 
-        <FormSection title="Informations">
-          <Field label="Titre" name="name" value={formData.name} onChange={handleChange} required />
+        <FormSection
+          title="Informations"
+          description="Présentez le lieu ou la structure partenaire et les actions menées par Sens Solidaires sur place."
+        >
           <Field
-            label="Pays" name="country" value={formData.country} onChange={handleChange} required
-            list="country-list" autoComplete="off"
+            label="Nom du lieu partenaire"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            hint="Indiquez le nom du lieu, de l'association ou de la structure partenaire."
           />
+
+          <Field
+            label="Pays"
+            name="country"
+            value={formData.country}
+            onChange={handleChange}
+            required
+            list="country-list"
+            autoComplete="off"
+          />
+
           <TextareaField
-            label="Description" name="description"
-            value={formData.description} onChange={handleChange}
+            label="Présentation du lieu partenaire"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
             rows={5}
+            hint="Présentez la structure partenaire, son rôle, ses activités et son environnement."
           />
+
           <TextareaField
-            label="Mission de Sens Solidaires liées au lieux (facultatif)" name="mission_ss"
-            value={formData.mission_ss} onChange={handleChange}
+            label="Actions de Sens Solidaires sur place (facultatif)"
+            name="mission_ss"
+            value={formData.mission_ss}
+            onChange={handleChange}
             rows={4}
+            hint="Décrivez les actions réalisées sur place par Sens Solidaires et ses volontaires."
           />
         </FormSection>
 
         <FormSection
           title="Photos"
-          description="Sélectionnez la photo principale de la fiche. Les autres photos seront affichées dans la galerie."
+          description="Ajoutez les photos du lieu. Sélectionnez celle qui sera utilisée comme image principale de la fiche ; les autres seront affichées dans la galerie."
         >
           <AdminFileUpload
             value={formData.photos}
@@ -258,37 +283,65 @@ function LocationFormPage() {
             layout="grid"
             allowReorder={false}
           />
-          {fieldErrors.photos && <span className="text-xs text-red-500">{fieldErrors.photos}</span>}
+
+          {fieldErrors.photos && (
+            <span className="text-xs text-red-500">
+              {fieldErrors.photos}
+            </span>
+          )}
         </FormSection>
 
-        <FormSection title="Infos pratiques">
+        <FormSection
+          title="Informations pratiques"
+          description="Ajoutez les informations permettant aux visiteurs de localiser le partenaire et d'accéder à son site internet."
+        >
           <Field
-            label="Lien Google Maps"
+            label="Localisation Google Maps"
             name="map_url"
             value={formData.map_url}
             onChange={handleChange}
-            hint="Cherche le lieu sur Google Maps, copie l'URL de la barre d'adresse et colle-la ici"
+            hint="Recherchez le lieu sur Google Maps, copiez l'URL affichée dans la barre d'adresse de votre navigateur, puis collez-la ici."
           />
-          <Field label="Site web (facultatif)" name="website_url" value={formData.website_url} onChange={handleChange} />
+
+          <Field
+            label="Site web (facultatif)"
+            name="website_url"
+            value={formData.website_url}
+            onChange={handleChange}
+            hint="Collez l'adresse complète du site internet du lieu ou de la structure partenaire."
+          />
         </FormSection>
 
-        <FormSection title="Missions associées" description="Coche la ou les missions liées à ce lieu.">
+        <FormSection
+          title="Missions associées"
+          description="Sélectionnez la ou les fiches mission du site auxquelles ce lieu partenaire doit être rattaché."
+        >
           <div className="flex flex-col gap-2">
             {allMissions.map(mission => (
-              <label key={mission.id} className="flex items-center gap-2 text-sm text-dash-text cursor-pointer">
+              <label
+                key={mission.id}
+                className="flex items-center gap-2 text-sm text-dash-text cursor-pointer"
+              >
                 <input
                   type="checkbox"
                   checked={formData.mission_ids.includes(mission.id)}
                   onChange={() => handleMissionToggle(mission.id)}
                   className="w-4 h-4 accent-dash-action"
                 />
-                {mission.title} <span className="text-dash-legend">({mission.country})</span>
+
+                {mission.title}
+                <span className="text-dash-legend">
+                  ({mission.country})
+                </span>
               </label>
             ))}
           </div>
         </FormSection>
 
-        <FormSection title="Délégation">
+        <FormSection
+          title="Référents sur place"
+          description="Ajoutez les informations des personnes référentes sur place qui accompagnent les actions et assurent le lien avec Sens Solidaires."
+        >
           <button
             type="button"
             onClick={() => setShowDelegationPanel(prev => !prev)}
@@ -296,21 +349,21 @@ function LocationFormPage() {
           >
             {showDelegationPanel
               ? 'Fermer'
-              : delegationId ? 'Modifier la délégation' : 'Ajouter une délégation'}
+              : delegationId ? 'Modifier les référents' : 'Ajouter des référents'}
           </button>
 
           {showDelegationPanel && (
             <div className="flex flex-col gap-4 mt-4 p-4 border border-gray-200 rounded-lg">
 
               <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-dash-text">Titre</label>
-                <p className="text-sm text-dash-text">
-                  Délégation nationale — {formData.country || <span className="text-dash-legend italic">renseigne le pays du lieu ci-dessus</span>}
-                </p>
-              </div>
+                <label className="text-sm font-medium text-dash-text">
+                  Photo des référents
+                </label>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-dash-text">Photo</label>
+                <p className="text-xs text-dash-legend">
+                  Ajoutez une photo des personnes référentes sur place (facultatif).
+                </p>
+
                 <AdminFileUpload
                   value={delegationPhoto}
                   onChange={setDelegationPhoto}
@@ -323,17 +376,24 @@ function LocationFormPage() {
 
               <div className="flex flex-col gap-1">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-dash-text">Description</label>
+                  <label className="text-sm font-medium text-dash-text">
+                    Contacts sur place
+                  </label>
+
                   <button
                     type="button"
                     onClick={() => setDelegationContacts('')}
                     className="text-gray-300 hover:text-dash-danger text-xl leading-none transition-colors"
-                    aria-label="Effacer la description"
+                    aria-label="Effacer les contacts"
                   >
                     ×
                   </button>
                 </div>
-                <p className="text-xs text-dash-legend -mt-0.5">Indiquez les noms/prénoms des personnes présentes.</p>
+
+                <p className="text-xs text-dash-legend -mt-0.5">
+                  Indiquez les noms des personnes référentes sur place.
+                </p>
+
                 <textarea
                   name="delegation_contacts"
                   value={delegationContacts}
@@ -342,11 +402,13 @@ function LocationFormPage() {
                   className="border border-gray-300 rounded-lg px-3 py-2 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-dash-action/30"
                 />
               </div>
+
             </div>
           )}
         </FormSection>
 
         <div className="flex items-center justify-between">
+
           <button
             type="button"
             onClick={() => navigate('/admin/lieux')}
@@ -354,13 +416,19 @@ function LocationFormPage() {
           >
             Annuler
           </button>
+
           <button
             type="submit"
             disabled={submitting}
             className="px-6 py-2 text-sm font-medium bg-dash-action text-white rounded-lg hover:bg-dash-action/90 disabled:opacity-50 transition-colors"
           >
-            {submitting ? 'Enregistrement...' : isEditing ? 'Enregistrer' : 'Créer le lieu'}
+            {submitting
+              ? 'Enregistrement...'
+              : isEditing
+                ? 'Enregistrer'
+                : 'Créer le lieu'}
           </button>
+
         </div>
 
       </form>
