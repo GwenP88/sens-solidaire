@@ -197,44 +197,45 @@
 | 116 | Gwen | CRUD Location (admin) | ✅ |
 | 117 | Gwen | CRUD Delegation (admin) | ✅ |
 | 117A | Gwen | Réintégrer en base les vraies données Lieux/Délégations via le dashboard | ✅ |
-| 117B | Gwen | Nettoyer `seed.js` (bloc Délégations + références `delegation_id`) | ❌ |
-| 117C | Gwen | Page Lieu détail — bloc infos pratiques étiré sur toute la hauteur des 2 blocs de gauche (contenu réparti, plus de trou en bas) | ❌ |
+| 117B | Gwen | Nettoyer `seed.js` (délégation, ancres, lieux) | ✅ |
+| 117C | Gwen | Page Lieu détail — bloc infos pratiques étiré sur toute la hauteur des 2 blocs de gauche (contenu réparti, plus de trou en bas) | ✅ |
+| 117D | Gwen | pourquoi quand jarrive sur certaine page, jarrive en bas de la page | ✅ |
 | 118 | Gwen | CRUD TeamMember (admin) | ❌ |
-| 119 | Gwen | CRUD FieldAction + pays + tags (admin) | ❌ |
-| 120 | Gwen | CRUD ActivityReport (admin) | ❌ |
-| 121 | Gwen | CRUD MediaPost / articles (admin) | ❌ |
-| 122 | Gwen | Dashboard responsive mobile | ❌ |
-| 123 | Gwen | Tests d'intégration (au fil de chaque CRUD) | ❌ |
-| 114 | Gwen | Contenu générique page Missions éditable | ❌ |
-| 114A | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) | ❌ |
+| 119 | Gwen | CRUD ActivityReport (admin) | ❌ |
+| 120 | Gwen | CRUD Testimonial + rapport de mission (admin) | ❌ |
+| 121 | Gwen | CRUD FieldAction + pays + tags (admin) | ❌ |
+| 122 | Gwen | CRUD MediaPost / articles (admin) | ❌ |
+| 123 | Gwen | Dashboard responsive mobile | ❌ |
+| 124 | Gwen | Tests d'intégration (au fil de chaque CRUD) | ❌ |
 
 ### Bloc C — Page Éducation & sensibilisation
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 124 | Gwen | Refonte contenu dynamique + gestion dashboard | ❌ |
+| 125 | Gwen | Refonte contenu dynamique + gestion dashboard | ❌ |
 
 ### Bloc D — Finitions front
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 125 | Gwen | Accessibilité basique | ❌ |
-| 126 | Gwen | SEO basique (SEOHead) | ❌ |
-| 127 | Gwen | Lazy loading | ❌ |
+| 126 | Gwen | Accessibilité basique | ❌ |
+| 127 | Gwen | SEO basique (SEOHead) | ❌ |
+| 128 | Gwen | Lazy loading | ❌ |
 | 109 | Gwen | Passer de 10 à 15-20 photos galerie publique (à voir avec la cliente) | 🔵 |
-| 128 | Gwen | maxLength 280 textarea témoignage | 🔵 |
-| 129 | Gwen | PageLayout — factorisation | ❌ |
+| 109A | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) | ❌ |
+| 109B | Gwen | Optimisations WebP + images production | ❌ |
+| 129 | Gwen | maxLength 280 textarea témoignage | 🔵 |
+| 130 | Gwen | PageLayout — factorisation | ❌ |
+| 131 | Gwen | Contenu générique page Missions éditable | ❌ |
 
 ### Bloc E — Polishing + SEO avancé
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 130 | Gwen | Audit Lighthouse (objectif > 90) | ❌ |
-| 131 | Gwen | Optimisations WebP + images production | ❌ |
-| 132 | Gwen | Bilingue FR/EN (react-i18next, si décision cliente) | ❌ |
-| 133 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | ❌ |
-| 134 | Gwen | Seed BDD — contenus réels finaux | ❌ |
-| 135 | Gwen | Relecture complète des textes avec la cliente | ❌ |
+| 132 | Gwen | Audit Lighthouse (objectif > 90) | ❌ |
+| 133 | Gwen | Bilingue FR/EN (react-i18next, si décision cliente) | ❌ |
+| 134 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | ❌ |
+| 135 | Gwen | Seed BDD — contenus réels finaux | ❌ |
 
 ### Bloc F — Déploiement & livraison
 
@@ -250,6 +251,18 @@
 | 143 | Gwen | Remise des accès à la cliente | ❌ |
 | 144 | Gwen | Corrections finales | ❌ |
 | 145 | Gwen | 🎉 LIVRAISON OFFICIELLE | ❌ |
+
+---
+
+> ⚠️ **Point d'attention — Données & déploiement (à ne pas oublier)**
+>
+> - Les données saisies actuellement (missions, lieux, délégations, témoignages...) vivent dans PostgreSQL via `DATABASE_URL` — le dashboard n'est qu'une interface, pas un stockage à part.
+> - **Une migration Prisma ≠ un transfert de données.** Appliquer les migrations en production recrée la STRUCTURE des tables (schéma), mais ne transfère jamais le contenu (missions, lieux, textes...) — deux opérations totalement distinctes.
+> - Base actuelle : PostgreSQL en local (conteneur Docker, host `postgres`), persistée via le volume `postgres_data` — les données survivent à un `docker compose down` + `up`, mais **pas** à une suppression volontaire du volume (`down -v` ou équivalent). Ne jamais faire ça sans y penser à deux fois.
+> - Au déploiement, la base de production sera une **base neuve**, distincte de celle en local — le contenu actuel ne s'y retrouve pas tout seul.
+> - **Plan retenu pour #139 (Migration BDD production)** : export de la base PostgreSQL locale actuelle → création/config de la base de prod → application des migrations (structure) → import des données exportées. Étape par étape, jamais en une seule commande automatique.
+>
+> **Pour l'instant** : rien à changer dans la façon de travailler — continuer de remplir le dashboard normalement, rien n'est perdu. Juste garder ce plan en tête le jour venu.
 
 ---
 
