@@ -1,12 +1,13 @@
 // ============================================================
 // prisma/seed.js
 // ============================================================
-// Rôle : peupler la base de données avec des données de test
-//        pour la démo MR — version allégée
+// Rôle : peupler la base de données avec le contenu fixe (non géré par le
+//        dashboard) : admin, actions terrain, rapports, équipe, partenaires,
+//        articles, éducation.
 //
-// VERSION TEMPORAIRE — seul l'admin + contenu fixe sont créés ici.
-//    Missions Kenya + Sénégal créées manuellement via le dashboard
-//    (voir mission_id 1 et 2 utilisés ci-dessous pour Locations/Témoignages).
+// Missions, Locations, Délégations et Témoignages ne sont PLUS gérés par ce
+// seed — tout passe par le dashboard (CRUD) ou le vrai flux de soumission
+// (témoignages visiteurs). Un reseed ne touche donc jamais à ces données.
 //
 // Exécution (depuis la racine du projet) :
 //   docker-compose exec backend node prisma/seed.js
@@ -17,15 +18,13 @@ import bcrypt from "bcrypt"
 import prisma from "../src/config/db.js"
 
 const seed = async () => {
-  console.log("Démarrage du seed (démo MR)...")
+  console.log("Démarrage du seed...")
 
   // ============================================================
   // CONSTANTES PARTAGÉES
   // ============================================================
-  // Placeholders de galerie — réutilisés pour les locations, field actions,
-  // et tout ce qui a besoin de photos factices sans avoir de vrais fichiers
-  // uploadés. Permet de montrer l'emplacement des galeries en démo sans
-  // avoir à télécharger des dizaines d'images fictives.
+  // Placeholders de galerie — réutilisés pour les field actions, et tout ce
+  // qui a besoin de photos factices sans avoir de vrais fichiers uploadés.
   const GALLERY_PLACEHOLDERS = [
     '/images/placeholders/placeholder-galerie-1.webp',
     '/images/placeholders/placeholder-galerie-2.webp',
@@ -51,262 +50,7 @@ const seed = async () => {
   console.log(`Admin : ${admin.email}`)
 
   // ============================================================
-  // 2 — MISSIONS ANCRES (service civique, groupe jeunes, congé solidaire)
-  // ============================================================
-  // ⚠️ Ces 3 missions ne sont PAS gérables via le dashboard (type masqué dans
-  // MissionFormPage). Elles servent uniquement d'ancrage pour rattacher des
-  // témoignages par type sur la page Missions (sections codées en dur).
-
-  const ancreServiceCivique = await prisma.mission.upsert({
-    where: { slug: "ancre-service-civique" },
-    update: {},
-    create: {
-      slug: "ancre-service-civique",
-      type: "service_civique",
-      title: "Service civique — ancre démo",
-      country: "Kenya",
-      short_description: "Mission ancre pour rattacher les témoignages service civique.",
-      is_active: false, // jamais affichée seule, ni dans les listes publiques filtrées
-    },
-  })
-
-  const ancreGroupeJeunes = await prisma.mission.upsert({
-    where: { slug: "ancre-groupe-jeunes" },
-    update: {},
-    create: {
-      slug: "ancre-groupe-jeunes",
-      type: "groupe_jeunes",
-      title: "Groupe jeunes — ancre démo",
-      country: "Kenya & Sénégal",
-      short_description: "Mission ancre pour rattacher les témoignages groupe jeunes.",
-      is_active: false,
-    },
-  })
-
-  const ancreCongeSolidaire = await prisma.mission.upsert({
-    where: { slug: "ancre-conge-solidaire" },
-    update: {},
-    create: {
-      slug: "ancre-conge-solidaire",
-      type: "conge_solidaire",
-      title: "Congé solidaire — ancre démo",
-      country: "Kenya & Sénégal",
-      short_description: "Mission ancre pour rattacher les témoignages congé solidaire.",
-      is_active: false,
-    },
-  })
-
-  console.log("Missions ancres créées (3 — service civique, groupe jeunes, congé solidaire)")
-
-  // ============================================================
-  // 3 — DÉLÉGATIONS (avant les locations, pour récupérer les IDs)
-  // ============================================================
-
-  await prisma.delegation.deleteMany({})
-
-  const delegLumo = await prisma.delegation.create({
-    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "LUMO Community Wildlife Conservancy", contacts: "Denis (coordinateur), Ernest (chargé des projets biodiversité) et les 22 Rangers", display_order: 1 },
-  })
-  const delegTtnp = await prisma.delegation.create({
-    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "Taita Taveta National Polytechnic", contacts: "Kefa Okari (Coordinateur des missions, professeur de français), Madeline Nabwire (directrice du département de tourisme)", display_order: 2 },
-  })
-  const delegElsa = await prisma.delegation.create({
-    data: { pays: "Kenya", flag_code: "ke", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "Elsa Conservation Trust", contacts: "Antony — Coordinateur des missions", display_order: 3 },
-  })
-  const delegAgada = await prisma.delegation.create({
-    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "ONG AGADA", contacts: "François Bassene et Penda Diémé", display_order: 4 },
-  })
-  await prisma.delegation.create({
-    data: { pays: "Sénégal", flag_code: "sn", image_url: "/images/placeholders/placeholder-delegation.webp", lieu: "Campement de l'Ile d'Effrane", contacts: "Mamadou Ndiaye", display_order: 5 },
-  })
-
-  console.log("Délégations créées (5)")
-
-  // ============================================================
-  // 4 — LOCATIONS (Kenya + Sénégal)
-  // ============================================================
-
-  // Missions Kenya + Sénégal : créées manuellement via le dashboard (voir
-  // note en tête de fichier), donc récupérées ici par slug plutôt que par
-  // un id codé en dur — l'id auto-incrémenté dépend de l'historique de la
-  // base et n'est pas garanti d'être 1 et 2.
-  const kenyaMission = await prisma.mission.findUnique({ where: { slug: "kenya" } })
-  const senegalMission = await prisma.mission.findUnique({ where: { slug: "senegal" } })
-  if (!kenyaMission || !senegalMission) {
-    throw new Error("Missions Kenya/Sénégal introuvables — à créer manuellement via le dashboard avant de lancer le seed.")
-  }
-
-  // Petit helper — ajoute une galerie photo placeholder à une location
-  const addLocationGallery = async (locationId) => {
-    await prisma.media.deleteMany({ where: { entity_type: 'location', entity_id: locationId } })
-    await prisma.media.createMany({
-      data: [
-        { entity_type: 'location', entity_id: locationId, file_url: '/images/placeholders/placeholder-galerie-1.webp', file_type: 'image', display_order: 1 },
-        { entity_type: 'location', entity_id: locationId, file_url: '/images/placeholders/placeholder-galerie-2.webp', file_type: 'image', display_order: 2 },
-        { entity_type: 'location', entity_id: locationId, file_url: '/images/placeholders/placeholder-galerie-3.webp', file_type: 'image', display_order: 3 },
-      ]
-    })
-  }
-
-  // ── Voi — pas de délégation directe ───────────────────────
-  const voiData = {
-    name: "Voi",
-    country: "Kenya",
-    description: "Voi est une ville située dans le comté de Taita-Taveta, aux portes du Parc national de Tsavo Est. C'est le point de départ de nos missions de protection de la faune sauvage au Kenya.",
-    image_url: "/images/placeholders/placeholder-galerie-1.webp",
-    map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15931.2071768332!2d38.54641188963989!3d-3.3984885449885964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18392955840748c1%3A0x612879b76e474c69!2sVoi%2C%20Kenya!5e0!3m2!1sen!2sfr!4v1783003244824!5m2!1sen!2sfr",
-    website_url: null,
-    is_active: true,
-  }
-  const voiLocation = await prisma.location.upsert({
-    where: { slug: "voi-kenya" },
-    update: voiData,
-    create: { slug: "voi-kenya", missions: { connect: { id: kenyaMission.id } }, ...voiData },
-  })
-  await addLocationGallery(voiLocation.id)
-
-  // ── LUMO Community Wildlife Conservancy ────────────────────
-  const lumoData = {
-    name: "LUMO Community Wildlife Conservancy",
-    country: "Kenya",
-    description: "LUMO a vu le jour en 1997, d'un protocole d'entente entre trois ranchs de la zone des Taita Hills afin de lutter contre le braconnage et de protéger la diversité biologique kényane. Lumo fait partie du corridor historique de migration des éléphants reliant l'écosystème Tsavo aux collines de Shimba.",
-    image_url: "/images/placeholders/placeholder-galerie-2.webp",
-    map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.506650684568!2d38.1950834105512!3d-3.4692507964905737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1838e44717c2d29d%3A0x94b99ab36036edac!2sLumo%20Community%20Wildlife%20Conservancy!5e0!3m2!1sen!2sfr!4v1783003373372!5m2!1sen!2sfr",
-    website_url: "https://lumoconservancy.com/",
-    delegation_id: delegLumo.id,
-    is_active: true,
-  }
-  const lumoLocation = await prisma.location.upsert({
-    where: { slug: "lumo-kenya" },
-    update: lumoData,
-    create: { slug: "lumo-kenya", missions: { connect: { id: kenyaMission.id } }, ...lumoData },
-  })
-  await addLocationGallery(lumoLocation.id)
-
-  // ── Taita Taveta National Polytechnic ──────────────────────
-  const ttnpData = {
-    name: "Taita Taveta National Polytechnic",
-    country: "Kenya",
-    description: "Établissement d'enseignement supérieur de la ville de Voi, aux portes du Parc Tsavo. Cette université possède un pôle dédié au tourisme avec lequel nous travaillons particulièrement. Le campus est très engagé pour la biodiversité et possède sa propre pépinière.",
-    image_url: "/images/placeholders/placeholder-galerie-3.webp",
-    map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.8655631167626!2d38.57651901055072!3d-3.3830053965774107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18392bfa98bf3af3%3A0xdbb9428c85b95a3c!2sTaita%20Taveta%20National%20Polytechnic%2C%20Voi!5e0!3m2!1sen!2sfr!4v1783003480686!5m2!1sen!2sfr",
-    website_url: null,
-    delegation_id: delegTtnp.id,
-    is_active: true,
-  }
-  const ttnpLocation = await prisma.location.upsert({
-    where: { slug: "ttnp-kenya" },
-    update: ttnpData,
-    create: { slug: "ttnp-kenya", missions: { connect: { id: kenyaMission.id } }, ...ttnpData },
-  })
-  await addLocationGallery(ttnpLocation.id)
-
-  // ── Elsa Conservation Trust ────────────────────────────────
-  const ectData = {
-    name: "Elsa Conservation Trust",
-    country: "Kenya",
-    description: "La Elsa Conservation Trust a fait don de millions de dollars à des projets de conservation de la vie sauvage, aidant à créer les parcs kenyans de Meru, Samburu, Shaba, Kora et Hells Gate. Le centre offre un environnement propice à la recherche ornithologique avec 450 espèces d'oiseaux recensées.",
-    image_url: "/images/placeholders/placeholder-galerie-4.webp",
-    map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3086.1469911782483!2d36.31317642592106!3d-0.814968236091608!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182938fec8ba611d%3A0x9c93221648e498ad!2sElsamere%20Conservation%20Centre!5e0!3m2!1sen!2sfr!4v1783003508532!5m2!1sen!2sfr",
-    website_url: null,
-    delegation_id: delegElsa.id,
-    is_active: true,
-  }
-  const ectLocation = await prisma.location.upsert({
-    where: { slug: "elsa-conservation-trust-kenya" },
-    update: ectData,
-    create: { slug: "elsa-conservation-trust-kenya", missions: { connect: { id: kenyaMission.id } }, ...ectData },
-  })
-  await addLocationGallery(ectLocation.id)
-
-  // ── Diani Turtle Watch — pas de délégation ─────────────────
-  const dtwData = {
-    name: "Diani Turtle Watch",
-    country: "Kenya",
-    description: "Diani Turtle Watch, créé en 2012, travaille avec une équipe de 14 observateurs couvrant 50 km sur la côte sud du Kenya. Les principales espèces suivies sont les tortues vertes et les tortues imbriquées. Il sensibilise les communautés locales, les écoles et les touristes aux espèces menacées.",
-    image_url: "/images/placeholders/placeholder-galerie-1.webp",
-    map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3978.445318644362!2d39.569509510555534!3d-4.327148895628687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18404953574d39e9%3A0x76f7b649b72d4c05!2sDiani%20Turtle%20Watch!5e0!3m2!1sen!2sfr!4v1783003553259!5m2!1sen!2sfr",
-    website_url: null,
-    is_active: true,
-  }
-  const dtwLocation = await prisma.location.upsert({
-    where: { slug: "diani-turtle-watch-kenya" },
-    update: dtwData,
-    create: { slug: "diani-turtle-watch-kenya", missions: { connect: { id: kenyaMission.id } }, ...dtwData },
-  })
-  await addLocationGallery(dtwLocation.id)
-
-  // ── Ziguinchor — pas de délégation directe ─────────────────
-  const ziguinchorData = {
-    name: "Ziguinchor",
-    country: "Sénégal",
-    description: "Ziguinchor est la capitale de la Casamance, région au sud du Sénégal connue pour sa verdure exceptionnelle et sa culture riche. Nos missions de développement communautaire s'y déroulent dans un cadre chaleureux, au contact direct des familles locales.",
-    image_url: "/images/placeholders/placeholder-galerie-2.webp",
-    map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31154.710103122015!2d-16.294826054807107!3d12.559899910713627!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee793dbd0cbdc17%3A0x25b90fb2e17e99df!2sZiguinchor%2C%20Senegal!5e0!3m2!1sen!2sfr!4v1783003576053!5m2!1sen!2sfr",
-    website_url: null,
-    is_active: true,
-  }
-  const ziguinchorLocation = await prisma.location.upsert({
-    where: { slug: "ziguinchor-senegal" },
-    update: ziguinchorData,
-    create: { slug: "ziguinchor-senegal", missions: { connect: { id: senegalMission.id } }, ...ziguinchorData },
-  })
-  await addLocationGallery(ziguinchorLocation.id)
-
-  // ── ONG AGADA ──────────────────────────────────────────────
-  const agadaData = {
-    name: "ONG AGADA",
-    country: "Sénégal",
-    description: "AGADA (Agir Autrement pour le Développement en Afrique), basée à Ziguinchor en Casamance, œuvre pour le développement d'activités économiques locales. Investie depuis plus de 30 ans, elle soutient le reboisement de la mangrove, l'agriculture durable et la protection d'espèces patrimoniales comme le lamantin.",
-    image_url: "/images/placeholders/placeholder-galerie-3.webp",
-    map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3894.3059138975273!2d-16.269258789351788!3d12.562068987665677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee791db8464e97b%3A0xa482f94cddde02ca!2sAgir%20Autrement%20pour%20le%20D%C3%A9veloppement%20de%20l&#39;Afrique%20(AGADA)!5e0!3m2!1sen!2sfr!4v1783003612281!5m2!1sen!2sfr",
-    website_url: null,
-    delegation_id: delegAgada.id,
-    is_active: true,
-  }
-  const agadaLocation = await prisma.location.upsert({
-    where: { slug: "agada-senegal" },
-    update: agadaData,
-    create: { slug: "agada-senegal", missions: { connect: { id: senegalMission.id } }, ...agadaData },
-  })
-  await addLocationGallery(agadaLocation.id)
-
-  console.log("Locations créées (7) avec galerie photo")
-
-  // ============================================================
-  // 5 — TÉMOIGNAGES (3 par mission — contenu fictif, tailles variées)
-  // ============================================================
-
-const TESTIMONIALS = [
-    // ── Kenya ──
-    { mission_id: kenyaMission.id, author_name: "Claire M.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: kenyaMission.id, author_name: "Julien D.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem. Duis augue quam, molestie vitae ullamcorper at non.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-
-    // ── Sénégal ──
-    { mission_id: senegalMission.id, author_name: "Thomas B.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: senegalMission.id, author_name: "Léa F.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada !", annee: 2024, status: "approved", show_homepage: true, consent_given: true },
-
-    // ── Service civique — ancre ──
-    { mission_id: ancreServiceCivique.id, author_name: "Manon T.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: ancreServiceCivique.id, author_name: "Hugo V.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem.", annee: 2025, status: "approved", show_homepage: false, consent_given: true },
-    { mission_id: ancreServiceCivique.id, author_name: "Lycée International de Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: ancreServiceCivique.id, author_name: "MJC Annemasse", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
-
-    // ── Groupe jeunes — ancre ──
-    { mission_id: ancreGroupeJeunes.id, author_name: "Lycée International de Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: ancreGroupeJeunes.id, author_name: "MJC Annemasse", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
-
-    // ── Congé solidaire — ancre ──
-    { mission_id: ancreCongeSolidaire.id, author_name: "Équipe Decathlon Nice", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor, sem dui bibendum ex, vel pulvinar odio neque sed lorem. Duis augue quam, molestie vitae ullamcorper at non.", annee: 2025, status: "approved", show_homepage: true, consent_given: true },
-    { mission_id: ancreCongeSolidaire.id, author_name: "Marc L.", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada auctor nisl, in ullamcorper odio fringilla malesuada. Fusce hendrerit, felis non ultricies tempor!", annee: 2024, status: "approved", show_homepage: false, consent_given: true },
-  ]
-
-  await prisma.testimonial.deleteMany({})
-  await prisma.testimonial.createMany({ data: TESTIMONIALS })
-  console.log(`Témoignages créés (${TESTIMONIALS.length})`)
-
-  // ============================================================
-  // 6 — ACTIONS SUR LE TERRAIN (Kenya + Sénégal uniquement)
+  // 2 — ACTIONS SUR LE TERRAIN (Kenya + Sénégal uniquement)
   // ============================================================
 
   const FIELD_ACTIONS = [
@@ -412,7 +156,7 @@ const TESTIMONIALS = [
   console.log(`FieldActions créées (${FIELD_ACTIONS.length})`)
 
   // ============================================================
-  // 7 — ACTIVITY REPORTS
+  // 3 — ACTIVITY REPORTS
   // ============================================================
 
   const ACTIVITY_REPORTS = [
@@ -428,7 +172,7 @@ const TESTIMONIALS = [
   console.log(`ActivityReports créés (${ACTIVITY_REPORTS.length})`)
 
   // ============================================================
-  // 8 — RAPPORTS DE MISSION
+  // 4 — RAPPORTS DE MISSION
   // ============================================================
 
   const MISSION_REPORTS = [
@@ -449,7 +193,7 @@ const TESTIMONIALS = [
   console.log(`MissionReports créés (${MISSION_REPORTS.length})`)
 
   // ============================================================
-  // 9 — MEMBRES DE L'ÉQUIPE
+  // 5 — MEMBRES DE L'ÉQUIPE
   // ============================================================
 
   const TEAM_MEMBERS = [
@@ -482,7 +226,7 @@ const TESTIMONIALS = [
   console.log(`TeamMembers créés (${TEAM_MEMBERS.length})`)
 
   // ============================================================
-  // 10 — LOGOS PARTENAIRES
+  // 6 — LOGOS PARTENAIRES
   // ============================================================
 
   const PARTNERS = [
@@ -515,7 +259,7 @@ const TESTIMONIALS = [
   console.log(`Partners créés (${PARTNERS.length})`)
 
   // ============================================================
-  // 11 — ARTICLES : MÉDIAS ET ACTUALITÉS
+  // 7 — ARTICLES : MÉDIAS ET ACTUALITÉS
   // ============================================================
 
   const MEDIA_POSTS = [
@@ -582,7 +326,7 @@ const TESTIMONIALS = [
   console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
 
   // ============================================================
-  // 12 — ÉDUCATION ET SENSIBILISATION
+  // 8 — ÉDUCATION ET SENSIBILISATION
   // ============================================================
 
   const EDUCATION_ITEMS = [
@@ -636,15 +380,11 @@ const TESTIMONIALS = [
   // RÉCAP FINAL
   // ============================================================
   console.log("")
-  console.log("Seed (démo MR) terminé avec succès !")
+  console.log("Seed terminé avec succès !")
   console.log("─────────────────────────────────────────")
   console.log(`Admin              : admin@sensolidaire.org`)
   console.log(`Password           : ${process.env.ADMIN_PASSWORD}`)
   console.log("─────────────────────────────────────────")
-  console.log("Missions ancres    : 3 (service civique, groupe jeunes, congé solidaire)")
-  console.log("Délégations        : 5")
-  console.log("Locations          : 7")
-  console.log(`Témoignages        : ${TESTIMONIALS.length}`)
   console.log(`FieldActions       : ${FIELD_ACTIONS.length}`)
   console.log(`ActivityReports    : ${ACTIVITY_REPORTS.length}`)
   console.log(`MissionReports     : ${MISSION_REPORTS.length}`)
@@ -653,7 +393,7 @@ const TESTIMONIALS = [
   console.log(`MediaPosts         : ${MEDIA_POSTS.length}`)
   console.log(`EducationItems     : ${EDUCATION_ITEMS.length}`)
   console.log("─────────────────────────────────────────")
-  console.log("Rappel : missions Kenya + Sénégal créées via le dashboard, pas par ce seed.")
+  console.log("Missions, Locations, Délégations et Témoignages : gérés via le dashboard / le flux de soumission, jamais par ce seed.")
   console.log("⚠️  Changer le mot de passe admin AVANT la mise en production !")
 }
 
