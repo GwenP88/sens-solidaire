@@ -200,57 +200,68 @@
 | 117B | Gwen | Nettoyer `seed.js` (délégation, ancres, lieux) | ✅ |
 | 117C | Gwen | Page Lieu détail — bloc infos pratiques étiré sur toute la hauteur des 2 blocs de gauche (contenu réparti, plus de trou en bas) | ✅ |
 | 117D | Gwen | pourquoi quand jarrive sur certaine page, jarrive en bas de la page | ✅ |
-| 118 | Gwen | CRUD TeamMember (admin) | ❌ |
-| 119 | Gwen | CRUD ActivityReport (admin) | ❌ |
-| 120 | Gwen | CRUD Testimonial + rapport de mission (admin) | ❌ |
-| 121 | Gwen | CRUD FieldAction + pays + tags (admin) | ❌ |
-| 122 | Gwen | CRUD MediaPost / articles (admin) | ❌ |
-| 123 | Gwen | Dashboard responsive mobile | ❌ |
-| 124 | Gwen | Tests d'intégration (au fil de chaque CRUD) | ❌ |
+| 118 | Gwen | CRUD TeamMember (admin) | ✅ |
+| 119 | Gwen | CRUD ActivityReport (admin) | ✅ |
+| 119A | Gwen | remplir le site : team et rapport d'activité | ❌ |
+| 120 | Gwen | CRUD Logo/partenaire (admin) | ❌ |
+| 120A | Gwen | remplir le site : logo | ❌ |
+| 121 | Gwen | CRUD Testimonial + rapport de mission (admin) | ❌ |
+| 121A | Gwen | remplir le site : rapport de mission et témoignages| ❌ |
+| 122 | Gwen | CRUD FieldAction + pays + tags (admin) | ❌ |
+| 122A | Gwen | remplir le site : actions terrain| ❌ |
+| 123 | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) | ❌ |
+| 124 | Gwen | CRUD MediaPost / articles (admin) | ❌ |
+| 124A | Gwen | remplir le site : blog | ❌ |
+| 125 | Gwen | Dashboard responsive mobile | ❌ |
+| 126 | Gwen | Tests d'intégration | ❌ |
+
+a noter :
+vérifier les liens vers témoiganges et raport de mission en focntion ds missions! doit filter dempblé sur la bonne mission!
+anchor nav pour la page notre association
 
 ### Bloc C — Page Éducation & sensibilisation
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 125 | Gwen | Refonte contenu dynamique + gestion dashboard | ❌ |
+| 127 | Gwen | Refonte contenu dynamique | ❌ |
+| 127A | Gwen | CRUD gestion dashboard | ❌ |
+| 127B | Gwen | remplir la section| ❌ |
+| 127C | Gwen | Tests d'intégration  | ❌ |
 
 ### Bloc D — Finitions front
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 126 | Gwen | Accessibilité basique | ❌ |
-| 127 | Gwen | SEO basique (SEOHead) | ❌ |
-| 128 | Gwen | Lazy loading | ❌ |
-| 109 | Gwen | Passer de 10 à 15-20 photos galerie publique (à voir avec la cliente) | 🔵 |
-| 109A | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) | ❌ |
-| 109B | Gwen | Optimisations WebP + images production | ❌ |
-| 129 | Gwen | maxLength 280 textarea témoignage | 🔵 |
-| 130 | Gwen | PageLayout — factorisation | ❌ |
-| 131 | Gwen | Contenu générique page Missions éditable | ❌ |
+| 128 | Gwen | Accessibilité basique | ❌ |
+| 129 | Gwen | SEO basique (SEOHead) | ❌ |
+| 130 | Gwen | Lazy loading | ❌ |
+| 131 | Gwen | Optimisations WebP + images production | ❌ |
+| 132 | Gwen | maxLength 280 textarea témoignage | 🔵 |
+| 133 | Gwen | PageLayout — factorisation | ❌ |
 
 ### Bloc E — Polishing + SEO avancé
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 132 | Gwen | Audit Lighthouse (objectif > 90) | ❌ |
-| 133 | Gwen | Bilingue FR/EN (react-i18next, si décision cliente) | ❌ |
-| 134 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | ❌ |
-| 135 | Gwen | Seed BDD — contenus réels finaux | ❌ |
+| 134 | Gwen | Audit Lighthouse (objectif > 90) | ❌ |
+| 135 | Gwen | Bilingue FR/EN (react-i18next, si décision cliente) | ❌ |
+| 136 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | ❌ |
+| 137 | Gwen | Seed BDD — contenus réels finaux | ❌ |
 
 ### Bloc F — Déploiement & livraison
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 136 | Gwen | Dockerfile production (multi-stage) | ❌ |
-| 137 | Gwen | VPS + Docker + Nginx + SSL | ❌ |
-| 138 | Gwen | Variables d'env production + secrets | ❌ |
-| 139 | Gwen | Migration BDD production | ❌ |
-| 140 | Gwen | UptimeRobot monitoring + tests HTTPS | ❌ |
-| 141 | Gwen | Tests complets en production | ❌ |
-| 142 | Gwen | Guide utilisateur dashboard (PDF) | ❌ |
-| 143 | Gwen | Remise des accès à la cliente | ❌ |
-| 144 | Gwen | Corrections finales | ❌ |
-| 145 | Gwen | 🎉 LIVRAISON OFFICIELLE | ❌ |
+| 138 | Gwen | Dockerfile production (multi-stage) | ❌ |
+| 139 | Gwen | VPS + Docker + Nginx + SSL | ❌ |
+| 140 | Gwen | Variables d'env production + secrets | ❌ |
+| 141 | Gwen | Migration BDD production | ❌ |
+| 142 | Gwen | UptimeRobot monitoring + tests HTTPS | ❌ |
+| 143 | Gwen | Tests complets en production | ❌ |
+| 144 | Gwen | Guide utilisateur dashboard (PDF) | ❌ |
+| 145 | Gwen | Remise des accès à la cliente | ❌ |
+| 146 | Gwen | Corrections finales | ❌ |
+| 147 | Gwen | 🎉 LIVRAISON OFFICIELLE | ❌ |
 
 ---
 
@@ -270,21 +281,23 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 146 | Gwen | CRUD dashboard Location/Delegation/TeamMember/FieldAction | ❌ |
-| 147 | Gwen | Buffer API — auto-draft réseaux sociaux | ❌ |
-| 148 | Gwen | Instagram oEmbed | ❌ |
-| 149 | Gwen | latitude/longitude sur Location | ❌ |
-| 149A | Gwen | embed Google Maps propre | ❌ |
-| 150 | Gwen | location_id FK sur Delegation | ❌ |
-| 151 | Gwen | Sélection manuelle actions terrain home | ❌ |
-| 152 | Gwen | TipTap — éditeur riche | ❌ |
-| 153 | Gwen | Compteurs StatsBar depuis dashboard | ❌ |
-| 154 | Gwen | Suisse vs France éducation (filtrage zone) | ❌ |
-| 155 | Gwen | Congé solidaire Sumatra | ❌ |
-| 156 | Gwen | MissionFieldAction (many-to-many) | ❌ |
-| 157 | Gwen | mission_id sur MediaPost | ❌ |
-| 158 | Gwen | Seed non autonome (dépendance création manuelle) | ❌ |
-| 159 | Gwen | Recadrage d'image côté dashboard | ❌ |
-| 160 | Gwen | Récupérer tous les PDF de l'ancien site | ❌ |
-| 161 | Gwen | HEIC non supporté par Sharp | ❌ |
-| 162 | Gwen | Compte admin + compte invité (rôles) | ❌ |
+
+| 148 | Gwen | Passer de 10 à 15-20 photos galerie publique (à voir avec la cliente) | 🔵 |
+| 149 | Gwen | Contenu générique éditable | ❌ |
+| 150 | Gwen | Buffer API — auto-draft réseaux sociaux | ❌ |
+| 151 | Gwen | Instagram oEmbed | ❌ |
+| 152 | Gwen | latitude/longitude sur Location | ❌ |
+| 153 | Gwen | embed Google Maps propre | ❌ |
+| 154 | Gwen | location_id FK sur Delegation | ❌ |
+| 155 | Gwen | Sélection manuelle actions terrain home | ❌ |
+| 156 | Gwen | TipTap — éditeur riche | ❌ |
+| 157 | Gwen | Compteurs StatsBar depuis dashboard | ❌ |
+| 158 | Gwen | Suisse vs France éducation (filtrage zone) | ❌ |
+| 159 | Gwen | Congé solidaire Sumatra | ❌ |
+| 160 | Gwen | MissionFieldAction (many-to-many) | ❌ |
+| 161 | Gwen | mission_id sur MediaPost | ❌ |
+| 162 | Gwen | Seed non autonome (dépendance création manuelle) | ❌ |
+| 163 | Gwen | Recadrage d'image côté dashboard | ❌ |
+| 164 | Gwen | Récupérer tous les PDF de l'ancien site | ❌ |
+| 165 | Gwen | HEIC non supporté par Sharp | ❌ |
+| 166 | Gwen | Compte admin + compte invité (rôles) | ❌ |
