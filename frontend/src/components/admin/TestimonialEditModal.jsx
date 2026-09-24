@@ -64,7 +64,7 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
 
   const handleSave = async () => {
     if (!isEditing && (!authorName.trim() || !content.trim())) {
-      setError("Nom et témoignage sont obligatoires.")
+      setError("Le nom du volontaire et le témoignage sont obligatoires.")
       return
     }
     if (needsDestination && !missionId) {
@@ -109,7 +109,12 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
       )}
 
       {isEditing ? (
-        // ── Lecture seule — nom, témoignage, date, photo (appartiennent au volontaire) ──
+      <>
+        <p className="text-xs text-dash-legend">
+          Ce témoignage a été envoyé par un volontaire. Les informations ci-dessous
+          correspondent à sa contribution et ne peuvent pas être modifiées.
+        </p>
+
         <div className="flex flex-col gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
           <div>
             <span className="text-xs text-dash-legend">Nom</span>
@@ -131,11 +136,14 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
             <img src={testimonial.avatar_url} alt={testimonial.author_name} className="w-16 h-16 rounded-full object-cover" />
           )}
         </div>
+      </>
       ) : (
         // ── Modifiable — création uniquement ──
         <>
           <Field
-            label="Nom" name="author_name" value={authorName}
+            label="Nom du volontaire"
+            name="author_name"
+            value={authorName}
             onChange={e => setAuthorName(e.target.value)}
             required
           />
@@ -145,10 +153,11 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
             onChange={e => setContent(e.target.value.slice(0, 280))}
             rows={4}
             clearable
+            hint="Saisissez le témoignage tel qu'il doit apparaître sur le site."
           />
           <div className="flex gap-2">
             <div className="flex flex-col gap-1 flex-1">
-              <label className="text-sm font-medium text-dash-text">Mois (facultatif)</label>
+              <label className="text-sm font-medium text-dash-text">Mois de la mission (facultatif)</label>
               <select
                 value={mois}
                 onChange={e => setMois(e.target.value)}
@@ -159,12 +168,15 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
               </select>
             </div>
             <Field
-              label="Année (facultatif)" name="annee" value={annee}
+              label="Année de la mission (facultatif)" name="annee" value={annee}
               onChange={e => setAnnee(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-dash-text">Photo (facultatif)</label>
+            <p className="text-xs text-dash-legend">
+              Ajoutez une photo du volontaire. Sans photo, l’avatar par défaut sera utilisé.
+            </p>
             <AdminFileUpload
               value={photo}
               onChange={setPhoto}
@@ -196,6 +208,9 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
       {needsDestination && (
         <div className="flex flex-col gap-1">
           <label className="text-sm font-medium text-dash-text">Destination</label>
+          <p className="text-xs text-dash-legend">
+            Sélectionnez le pays dans lequel la mission a été réalisée.
+          </p>
           <select
             value={missionId}
             onChange={e => setMissionId(e.target.value)}
