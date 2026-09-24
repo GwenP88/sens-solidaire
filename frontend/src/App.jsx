@@ -5,6 +5,7 @@
 // ── Router ───────────────────────────────────────────────────────────────
 // react-router-dom — gère les URLs et la navigation sans rechargement de page.
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import RouteScrollReset from './components/navigation/RouteScrollReset'
 
 // ── Layout global ────────────────────────────────────────────────────────
 // Wrapper Navbar + Footer, appliqué à toutes les pages publiques via <Outlet>.
@@ -66,6 +67,8 @@ function App() {
   return (
     // ── BrowserRouter — active la gestion des URLs dans toute l'application
     <BrowserRouter>
+
+      <RouteScrollReset />
 
       <Routes>
 
