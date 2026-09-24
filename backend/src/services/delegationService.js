@@ -9,13 +9,6 @@ export const getDelegations = async () => {
   })
 }
 
-// ── FIND ALL FOR ADMIN — pour la liste dans l'onglet "À propos" ────────────
-export const findAllForAdmin = async () => {
-  return prisma.delegation.findMany({
-    include: { locations: { select: { id: true, name: true } } },
-    orderBy: { display_order: 'asc' },
-  })
-}
 
 // ── FIND BY ID (ADMIN) — pour le formulaire d'édition ──────────────────────
 export const findById = async (id) => {

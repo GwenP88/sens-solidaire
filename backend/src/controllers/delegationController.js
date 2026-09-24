@@ -1,6 +1,6 @@
 // delegationController.js
 import { getDelegations } from '../services/delegationService.js'
-import { findById, create, update, findAllForAdmin } from '../services/delegationService.js'
+import { findById, create, update } from '../services/delegationService.js'
 
 export const getDelegationsController = async (req, res) => {
   try {
@@ -18,16 +18,6 @@ export const getDelegationByIdAdmin = async (req, res, next) => {
     const delegation = await findById(Number(req.params.id))
     if (!delegation) return res.status(404).json({ error: true, message: "Délégation introuvable." })
     return res.status(200).json({ delegation })
-  } catch (error) {
-    next(error)
-  }
-}
-
-// GET /api/admin/delegations
-export const getAllDelegationsAdmin = async (req, res, next) => {
-  try {
-    const delegations = await findAllForAdmin()
-    return res.status(200).json({ delegations })
   } catch (error) {
     next(error)
   }
