@@ -9,6 +9,8 @@ import {
   submitTestimonial,         // public — soumission d'un témoignage
   findAllForAdmin,           // admin  — liste complète (modération)
   updateStatus,              // admin  — approve / reject
+  update,                    // admin  — modifier un témoignage
+  adminCreate,               // admin  — créer un témoignage (publié direct)
   remove,                    // admin  — hard delete RGPD
 } from "../services/testimonialService.js"
 
@@ -34,7 +36,7 @@ export const getTestimonials = async (req, res) => {
 // POST /api/testimonials — soumission d'un témoignage
 export const createTestimonial = async (req, res) => {
   try {
-    const { author_name, content, mission_id, annee, avatar_url, consent_given } = req.body
+    const { author_name, content, mission_id, annee, mois, avatar_url, consent_given } = req.body
 
     if (!author_name || !content) {
       return res.status(400).json({ error: 'Nom et témoignage obligatoires' })
@@ -48,7 +50,7 @@ export const createTestimonial = async (req, res) => {
       return res.status(400).json({ error: 'Consentement RGPD obligatoire' })
     }
 
-    const testimonial = await submitTestimonial({ author_name, content, mission_id, annee, avatar_url, consent_given })
+    const testimonial = await submitTestimonial({ author_name, content, mission_id, annee, mois, avatar_url, consent_given })
     res.status(201).json(testimonial)
   } catch (err) {
     console.error('[ERROR]', err.message)
@@ -56,36 +58,39 @@ export const createTestimonial = async (req, res) => {
   }
 }
 
-
 // ── GET ALL TESTIMONIALS (ADMIN) ──────────────────────────────────────────────
 // GET /api/admin/testimonials
 // Route PROTÉGÉE : montée derrière authMiddleware (token valide).
 // Query param optionnel : ?status=pending
 //   /api/admin/testimonials                  → tous les témoignages (tous statuts)
 //   /api/admin/testimonials?status=pending   → uniquement la file de modération
+// GET /api/admin/testimonials
+// Query params optionnels : ?status=pending&type=individuel&country=Kenya&limit=10&offset=0
 export const getAdminTestimonials = async (req, res, next) => {
   try {
-    const { status } = req.query
+    const { status, type, country, limit, offset } = req.query
 
-    // Validation du paramètre "status" — optionnel, validé seulement s'il est fourni
-    if (status !== undefined) {
-      if (!VALID_STATUSES.includes(status)) {
-        return res.status(400).json({
-          error: true,
-          message: `Statut invalide. Valeurs acceptées : ${VALID_STATUSES.join(', ')}`,
-        })
-      }
+    if (status !== undefined && !VALID_STATUSES.includes(status)) {
+      return res.status(400).json({
+        error: true,
+        message: `Statut invalide. Valeurs acceptées : ${VALID_STATUSES.join(', ')}`,
+      })
     }
 
     const filters = {
-      status, // undefined si non fourni → le service ne filtre pas
+      status,
+      type,
+      country,
+      limit: limit ? Number(limit) : undefined,
+      offset: offset ? Number(offset) : undefined,
     }
 
-    const testimonials = await findAllForAdmin(filters)
+    const { testimonials, total } = await findAllForAdmin(filters)
 
     return res.status(200).json({
       success: true,
       testimonials,
+      total,
     })
   } catch (error) {
     next(error)
@@ -104,6 +109,35 @@ export const approveTestimonial = async (req, res, next) => {
     const testimonial = await updateStatus(id, 'approved')
 
     return res.status(200).json({ success: true, testimonial })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ── UPDATE TESTIMONIAL (ADMIN) ────────────────────────────────────────────
+// PATCH /api/admin/testimonials/:id
+export const updateTestimonial = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: true, message: 'Id invalide' })
+    }
+    const testimonial = await update(id, req.body)
+    return res.status(200).json({ success: true, testimonial })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ── ADMIN CREATE TESTIMONIAL ──────────────────────────────────────────────
+// POST /api/admin/testimonials
+export const createAdminTestimonial = async (req, res, next) => {
+  try {
+    if (!req.body.author_name || !req.body.content) {
+      return res.status(400).json({ error: true, message: "Nom et témoignage sont obligatoires." })
+    }
+    const testimonial = await adminCreate(req.body)
+    return res.status(201).json({ success: true, testimonial })
   } catch (error) {
     next(error)
   }

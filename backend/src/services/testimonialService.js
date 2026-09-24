@@ -32,6 +32,7 @@ export const submitTestimonial = async (data) => {
       mission_id:   data.mission_id || null,
       avatar_url:   data.avatar_url || null,
       annee:        data.annee || null,
+      mois:         data.mois || null,
       // Stores the value actually received, not a hardcoded true — the record
       // must be able to PROVE consent was given (GDPR art. 7.1), and the
       // controller already rejects the request upstream if it's missing.
@@ -41,22 +42,36 @@ export const submitTestimonial = async (data) => {
   })
 }
 
-// ── FIND ALL FOR ADMIN ───────────────────────────────────────────────────────
-// Récupère les témoignages pour l'espace admin (TOUS les statuts).
-// L'admin voit aussi pending et rejected, car c'est ce qu'il doit modérer.
+// ── FIND ALL FOR ADMIN — modération + liste filtrée/paginée ─────────────────
+// filters : { status?, type?, country?, limit = 10, offset = 0 }
+// type/country filtrent sur la mission liée (relation Mission).
 export const findAllForAdmin = async (filters = {}) => {
   const where = {}
   if (filters.status) where.status = filters.status
+  if (filters.type || filters.country) {
+    where.mission = {
+      ...(filters.type && { type: filters.type }),
+      ...(filters.country && { country: filters.country }),
+    }
+  }
 
-  const testimonials = await prisma.testimonial.findMany({
-    where,
-    include: {
-      mission: { select: { id: true, title: true } },
-    },
-    orderBy: { created_at: "asc" }, // file de modération FIFO
-  })
+  const limit = filters.limit || 10
+  const offset = filters.offset || 0
 
-  return testimonials
+  const [testimonials, total] = await Promise.all([
+    prisma.testimonial.findMany({
+      where,
+      include: {
+        mission: { select: { id: true, title: true, type: true, country: true } },
+      },
+      orderBy: { created_at: "desc" },
+      skip: offset,
+      take: limit,
+    }),
+    prisma.testimonial.count({ where }),
+  ])
+
+  return { testimonials, total }
 }
 
 // ── UPDATE STATUS (ADMIN) ─────────────────────────────────────────────────────
@@ -108,3 +123,47 @@ export const remove = async (id) => {
   }
 }
 
+// ── UPDATE (ADMIN) — modifie n'importe quel champ, y compris mission_id ────
+export const update = async (id, data) => {
+  try {
+    return await prisma.testimonial.update({
+      where: { id },
+      data: {
+        author_name: data.author_name,
+        content: data.content,
+        mission_id: data.mission_id,
+        annee: data.annee,
+        mois: data.mois,
+        avatar_url: data.avatar_url,
+        show_homepage: data.show_homepage,
+      },
+    })
+  } catch (error) {
+    if (error.code === 'P2025') {
+      const err = new Error("Témoignage introuvable.")
+      err.status = 404
+      err.code = 'TESTIMONIAL_NOT_FOUND'
+      throw err
+    }
+    throw error
+  }
+}
+
+// ── ADMIN CREATE — créé par la cliente, publié directement ─────────────────
+// Contrairement à submitTestimonial (public), statut forcé "approved" —
+// la cliente valide le contenu en même temps qu'elle le crée.
+export const adminCreate = async (data) => {
+  return await prisma.testimonial.create({
+    data: {
+      author_name: data.author_name,
+      content: data.content,
+      mission_id: data.mission_id || null,
+      annee: data.annee || null,
+      mois: data.mois || null,
+      avatar_url: data.avatar_url || null,
+      consent_given: true,
+      status: "approved",
+      show_homepage: data.show_homepage === true,
+    },
+  })
+}
