@@ -376,11 +376,16 @@ function MissionFormPage() {
         >
           {/* Ligne 1 — Titre et pays */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Field
-            label="Pays" name="country" value={formData.country} onChange={handleChange} required
-            pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
-            list="country-list" autoComplete="off"
-          />
+            <Field
+              label="Titre" name="title" value={formData.title} onChange={handleChange} required
+              error={fieldErrors.title}
+            />
+            <Field
+              label="Pays" name="country" value={formData.country} onChange={handleChange} required
+              pattern="[a-zA-ZÀ-ÿ\s\-&]+" title="Lettres, espaces, tirets et & uniquement"
+              list="country-list" autoComplete="off"
+              error={fieldErrors.country}
+            />
           </div>
 
           {/* Ligne 3 — Slug, pleine largeur */}

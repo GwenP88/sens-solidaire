@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchAdminMissions, deleteMission, hardDeleteMission } from '../../services/api'
+import { fetchAdminMissions, deleteMission, updateMission, hardDeleteMission } from '../../services/api'
 import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
 
@@ -34,6 +34,7 @@ function ServiceCiviquePage() {
   const [loading,  setLoading]  = useState(true)
   const [error,    setError]    = useState(null)
   const [missionToHardDelete, setMissionToHardDelete] = useState(null)
+  const [missionToTogglePause, setMissionToTogglePause] = useState(null)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -68,18 +69,23 @@ function ServiceCiviquePage() {
   const handleCreate = () => navigate('/admin/service-civique/new')
   const handleEdit = (mission) => navigate(`/admin/service-civique/${mission.id}/edit`)
 
-  const handleDelete = async (mission) => {
-    const confirmed = window.confirm(
-      `Rendre invisible la mission "${mission.title}" ?\n\nElle disparaîtra du site mais reste récupérable.`
-    )
-    if (!confirmed) return
+  const handleDelete = (mission) => {
+    setMissionToTogglePause(mission)
+  }
 
+  const confirmTogglePause = async () => {
     try {
-      await deleteMission(mission.id)
+      if (missionToTogglePause.is_active) {
+        await deleteMission(missionToTogglePause.id)
+      } else {
+        await updateMission(missionToTogglePause.id, { is_active: true })
+      }
       await reloadMissions()
     } catch (err) {
-      console.error('Erreur suppression mission :', err)
-      alert('Échec de la suppression. Réessaie.')
+      console.error('Erreur changement de statut :', err)
+      alert('Échec du changement de statut. Réessaie.')
+    } finally {
+      setMissionToTogglePause(null)
     }
   }
 
@@ -129,6 +135,21 @@ function ServiceCiviquePage() {
           confirmLabel="Supprimer définitivement"
           onConfirm={confirmHardDelete}
           onCancel={() => setMissionToHardDelete(null)}
+        />
+      )}
+
+      {missionToTogglePause && (
+        <ConfirmModal
+          variant={missionToTogglePause.is_active ? 'warning' : 'success'}
+          title={missionToTogglePause.is_active ? 'Mettre en pause' : 'Réactiver'}
+          message={
+            missionToTogglePause.is_active
+              ? `Mettre en pause la mission "${missionToTogglePause.title}" ?\n\nElle disparaîtra du site, mais reste récupérable.`
+              : `Réactiver la mission "${missionToTogglePause.title}" ?\n\nElle redeviendra visible sur le site.`
+          }
+          confirmLabel={missionToTogglePause.is_active ? 'Mettre en pause' : 'Réactiver'}
+          onConfirm={confirmTogglePause}
+          onCancel={() => setMissionToTogglePause(null)}
         />
       )}
     </div>
