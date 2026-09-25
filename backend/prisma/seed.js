@@ -21,18 +21,6 @@ const seed = async () => {
   console.log("Démarrage du seed...")
 
   // ============================================================
-  // CONSTANTES PARTAGÉES
-  // ============================================================
-  // Placeholders de galerie — réutilisés pour les field actions, et tout ce
-  // qui a besoin de photos factices sans avoir de vrais fichiers uploadés.
-  const GALLERY_PLACEHOLDERS = [
-    '/images/placeholders/placeholder-galerie-1.webp',
-    '/images/placeholders/placeholder-galerie-2.webp',
-    '/images/placeholders/placeholder-galerie-3.webp',
-    '/images/placeholders/placeholder-galerie-4.webp',
-  ]
-
-  // ============================================================
   // ADMIN
   // ============================================================
 
@@ -48,112 +36,6 @@ const seed = async () => {
     }
   })
   console.log(`Admin : ${admin.email}`)
-
-  // ============================================================
-  // ACTIONS SUR LE TERRAIN (Kenya + Sénégal uniquement)
-  // ============================================================
-
-  const FIELD_ACTIONS = [
-    // ── KENYA ──
-    {
-      slug: 'patrouilles-rangers-lumo',
-      title: 'Patrouilles avec les rangers du sanctuaire LUMO',
-      description: 'Depuis plus de 10 ans, l\'association soutient les rangers du sanctuaire LUMO dans leur mission de lutte contre le braconnage.',
-      content: `Depuis plus de 10 ans, l'association investit ses efforts au sanctuaire de LUMO, frontalier du Parc Tsavo, pour soutenir les rangers dans leur mission de lutte contre le braconnage.\n\nSoutien aux patrouilles, relevés de données sur la faune, entretien du matériel et du camp de base, nos volontaires ont régulièrement contribué à la vie du sanctuaire et à la protection de la vie animale.`,
-      countries: ['Kenya'],
-      image_url: '/images/placeholders/placeholder-galerie-3.webp',
-      tags: ['Environnement', 'Biodiversité'],
-      odds: [15, 16],
-      gallery: GALLERY_PLACEHOLDERS,
-    },
-    {
-      slug: 'potager-agro-ecologique-ttnp',
-      title: 'Potager agro-écologique face à la sécheresse',
-      description: 'Projet mené avec les élèves du TTNP de Voi pour améliorer la production durable et diffuser les connaissances sur l\'agroécologie.',
-      content: `Ce projet mené conjointement avec les élèves du TTNP de Voi vise à améliorer la production durable de cultures et de produits d'origine animale. Les objectifs spécifiques sont : utiliser la ferme pour diffuser les connaissances sur l'agriculture transformatrice en adoptant l'agroécologie, créer un environnement microclimatique pour atténuer les impacts climatiques, et adopter la diversification de la production.`,
-      countries: ['Kenya'],
-      image_url: '/images/placeholders/placeholder-galerie-2.webp',
-      tags: ['Agriculture', 'Éducation'],
-      odds: [2, 13, 15],
-      gallery: GALLERY_PLACEHOLDERS,
-    },
-    {
-      slug: 'reboisement-ttnp-kenya',
-      title: 'Action de reboisement au TTNP — 186 arbres plantés',
-      description: 'Lors de la journée nationale du "Tree Planting Day", les lycéens ont planté plus de 186 arbres au TTNP aux côtés des étudiants kényans.',
-      content: `Grâce à l'aide de notre volontaire ethnobotaniste et des rangers, les élèves ont planté 70 arbres à LUMO dont des Neem, Flamboyants, Jacarandas, Lauriers roses, Acacias niloticas et Cassia siema.\n\nAu TTNP, lors de la journée nationale du "Tree Planting Day", les élèves ont planté plus de 186 arbres, dont East Africa Yellow Wood, Sycamore Fig, Brachylaena huillensis, Croton megalicarpus et African Cherry.\n\nCe reboisement contribue directement à la restauration des écosystèmes locaux et à la lutte contre la sécheresse qui frappe sévèrement la région.`,
-      countries: ['Kenya'],
-      image_url: '/images/placeholders/placeholder-galerie-1.webp',
-      tags: ['Environnement', 'Biodiversité', 'Groupe jeunes'],
-      odds: [13, 15, 17],
-      gallery: GALLERY_PLACEHOLDERS,
-    },
-
-    // ── SÉNÉGAL ──
-    {
-      slug: 'jardins-potagers-senegal',
-      title: 'Jardins potagers et consommation responsable',
-      description: 'En partenariat avec l\'association AGADA, installation de potagers dans les établissements scolaires de Casamance.',
-      content: `Avec ce projet nous avons développé des échanges entre deux écoles primaires, quatre collèges et deux lycées de la Métropole de Nice et des établissements de la Casamance au Sénégal sur le thème de la consommation responsable. Nous avons installé, en partenariat avec l'association sénégalaise AGADA, des potagers dans les établissements dans le but de former les élèves à la production et à la consommation responsable. Les élèves de CEM Kénia ont mis en place un projet de jardin potager de 150m² dont la production abondante a permis d'ouvrir une boutique. Cette boutique est un moyen privilégié pour initier les élèves au monde de l'entrepreneuriat.`,
-      countries: ['Sénégal'],
-      image_url: '/images/placeholders/placeholder-galerie-4.webp',
-      tags: ['Agriculture', 'Éducation'],
-      odds: [3, 12, 15],
-      gallery: GALLERY_PLACEHOLDERS,
-    },
-    {
-      slug: 'reboisement-mangrove-senegal',
-      title: 'Reboisement de la mangrove en Casamance',
-      description: 'Chaque saison des pluies, Sens Solidaires et AGADA s\'engagent dans des campagnes de reboisement de la mangrove pour protéger les côtes et préserver la biodiversité.',
-      content: `La mangrove joue un rôle clé dans la protection des côtes. Elle agit comme un rempart naturel contre la montée des eaux, offre un habitat à une grande diversité d'espèces, limite l'érosion côtière et la salinisation des sols. Sa préservation est donc essentielle.\n\nDepuis plusieurs années, Sens Solidaires et AGADA s'engagent chaque saison des pluies dans des campagnes de reboisement. Ce processus est relativement simple : il suffit de planter des propagules, les graines rigides et allongées du palétuvier.\n\nUne sensibilisation accrue de la population est également indispensable. La mangrove est souvent détruite pour la production de bois de chauffe ou la fabrication de meubles. Il est crucial de réguler ces pratiques en limitant la coupe aux arbres âgés et en mettant en place des solutions durables alternatives. Les élèves du CEM Kénia participent activement au reboisement dans le village de Niambalang.`,
-      countries: ['Sénégal'],
-      image_url: '/images/placeholders/placeholder-galerie-1.webp',
-      tags: ['Environnement', 'Biodiversité'],
-      odds: [13, 14, 15],
-      gallery: GALLERY_PLACEHOLDERS,
-    },
-    {
-      slug: 'filtres-eau-ecole-djibelor',
-      title: 'Installation de filtres à eau — école Djibélor',
-      description: 'Installation de kits de filtration dans l\'école Djibélor de Ziguinchor pour garantir un accès à l\'eau potable à 1 700 élèves.',
-      content: `Au Sénégal, seulement 40% des écoles environ ont accès à l'eau potable. L'école Djibélor est un établissement qui accueille 1 700 élèves de niveau maternelle et primaire. Les enfants en bas âge représentent l'une des populations les plus fragiles et sensibles aux maladies liées à l'eau.\n\nL'installation de filtres à eau permet aux enfants mais aussi au personnel de boire en toute sécurité l'eau de l'école. Les kits ORISA, fournis par Fonte de Vivo, sont très faciles à installer et purifient l'eau grâce à une série de filtres.\n\nL'acquisition de ces kits permet à l'école de Djibélor de prévenir les maladies transmises par l'eau pour l'ensemble des personnes présentes dans l'établissement.`,
-      countries: ['Sénégal'],
-      image_url: '/images/placeholders/placeholder-galerie-2.webp',
-      tags: ['Accès à l\'eau', 'Éducation'],
-      odds: [3, 4, 6],
-      gallery: GALLERY_PLACEHOLDERS,
-    },
-  ]
-
-  // ── Suppression dans l'ordre des contraintes FK ────────────
-  await prisma.fieldActionTag.deleteMany({})
-  await prisma.fieldActionODD.deleteMany({})
-  await prisma.fieldActionCountry.deleteMany({})
-  await prisma.fieldAction.deleteMany({})
-
-  for (const action of FIELD_ACTIONS) {
-    const { tags, odds, countries, gallery, ...actionData } = action
-    const created = await prisma.fieldAction.create({
-      data: {
-        ...actionData,
-        tags:      { create: tags.map(tag => ({ tag })) },
-        odds:      { create: odds.map(n => ({ odd_number: n })) },
-        countries: { create: countries.map(c => ({ country: c })) },
-      },
-    })
-    await prisma.media.deleteMany({ where: { entity_type: 'field_action', entity_id: created.id } })
-    await prisma.media.createMany({
-      data: gallery.map((url, i) => ({
-        entity_type: 'field_action',
-        entity_id: created.id,
-        file_url: url,
-        file_type: 'image',
-        display_order: i,
-      }))
-    })
-  }
-
-  console.log(`FieldActions créées (${FIELD_ACTIONS.length})`)
 
   // ============================================================
   // ARTICLES : MÉDIAS ET ACTUALITÉS
@@ -282,7 +164,6 @@ const seed = async () => {
   console.log(`Admin              : admin@sensolidaire.org`)
   console.log(`Password           : ${process.env.ADMIN_PASSWORD}`)
   console.log("─────────────────────────────────────────")
-  console.log(`FieldActions       : ${FIELD_ACTIONS.length}`)
   console.log(`MediaPosts         : ${MEDIA_POSTS.length}`)
   console.log(`EducationItems     : ${EDUCATION_ITEMS.length}`)
   console.log("─────────────────────────────────────────")
