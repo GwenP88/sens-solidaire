@@ -50,7 +50,7 @@ function ImpactDetail() {
       <HeroPage
         image={action.image_url}
         title={action.title}
-        country={action.country}
+        country={action.countries?.map(c => c.country).join(', ')}
         tags={action.tags?.map(t => t.tag)}
       />
 
@@ -58,11 +58,10 @@ function ImpactDetail() {
       <section className="padding-y padding-x bg-surface">
 
         {/* Lien retour + titre */}
-        <div className="flex flex-col gap-sm">
+        <div className="flex flex-col gap-sm py-4">
           <a href="/notre-impact" className="link-nav text-primary/50 hover:text-primary">
             ← Retour aux actions
           </a>
-          <h2 className="h2-style text-primary">{action.description}</h2>
         </div>
 
         {/* Grid texte + aside sticky */}
@@ -70,6 +69,7 @@ function ImpactDetail() {
 
           {/* Colonne texte — 2/3 */}
           <div className="lg:col-span-2 flex flex-col gap-sm">
+            <h2 className="h2-style text-primary">{action.description}</h2>
             {action.content.split('\n\n').map((para, i) => (
               <p key={i} className="text-body text-primary/80">{para}</p>
             ))}

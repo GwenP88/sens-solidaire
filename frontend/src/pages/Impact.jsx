@@ -53,7 +53,7 @@ function NotreImpact() {
   // ── Filtrage combiné — par tag thématique ET par pays
   const filteredActions = actions.filter(a => {
     if (activeFilter && !a.tags.some(t => t.tag === activeFilter)) return false
-    if (filters.country && !a.country.includes(filters.country)) return false
+    if (filters.country && !a.countries.some(c => c.country === filters.country)) return false
     return true
   })
 
@@ -124,7 +124,7 @@ function NotreImpact() {
                 image={action.image_url}
                 tags={action.tags.map(t => t.tag)}
                 odds={action.odds.map(o => o.odd_number)}
-                country={action.country}
+                country={action.countries.map(c => c.country).join(', ')}
               />
             ))}
           </div>
