@@ -204,15 +204,16 @@
 | 119A | Gwen | remplir le site : team et rapport d'activité | ❌ |
 | 120 | Gwen | CRUD Logo/partenaire (admin) | ✅ |
 | 120A | Gwen | remplir le site : logo | ✅ |
-| 121 | Gwen | CRUD Testimonial + rapport de mission (admin) | ❌ |
+| 121 | Gwen | CRUD Testimonial + rapport de mission (admin) | ✅ |
 | 121A | Gwen | remplir le site : rapport de mission et témoignages| ❌ |
-| 122 | Gwen | CRUD FieldAction + pays + tags (admin) | ❌ |
+| 122 | Gwen | CRUD FieldAction + pays + tags (admin) | ✅ |
 | 122A | Gwen | remplir le site : actions terrain| ❌ |
 | 123 | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) | ❌ |
 | 124 | Gwen | CRUD MediaPost / articles (admin) | ❌ |
 | 124A | Gwen | remplir le site : blog | ❌ |
 | 125 | Gwen | Dashboard responsive mobile | ❌ |
 | 126 | Gwen | Tests d'intégration | ❌ |
+| 170 | Gwen | Filtres pays dynamiques sur /notre-impact et /temoignages (dérivés des vraies données en base — missions + actions terrain) au lieu de FILTERS_COUNTRY figée dans utils/filters.js — nouvelle route publique pays réellement utilisés | ❌ |
 
 BUGS A GERER
 Boutons "Voir tous les témoignages/rapports" (MissionDetail/ServiceCiviqueDetail) → lien pré-filtré `/temoignages?type=X&destination=Y` selon la mission d'origine (année laissée vide). Inclut fix bug filtre type témoignages (`item.type` → `item.mission.type`)
@@ -302,3 +303,5 @@ Boutons "Voir tous les témoignages/rapports" (MissionDetail/ServiceCiviqueDetai
 | 166 | Gwen | Compte admin + compte invité (rôles) | ❌ |
 | 167 | Gwen | Tooltips stylées dashboard (au lieu du title natif du navigateur) | ❌ |
 | 168 | Gwen | Scroll restauré au mauvais endroit sur F5 (pages avec chargement API/images dynamique, ex: Home) | ❌ |
+| 169 | Gwen | Découper api.js en plusieurs fichiers par domaine (services/api/missions.js, locations.js, etc. + client.js commun pour authFetch) — pas nécessaire mais plus propre/maintenable pour un vrai projet (+ autre fichier de + de 300-500 lignes selon les bonnes pratiques) | ❌ |
+| 170 | Gwen | Fabrique générique createResourceApi('team-members') pour générer les 6 fonctions CRUD standard (fetch/create/update/toggle/hardDelete) au lieu de les dupliquer par domaine — plus avancé, pas nécessaire pour la taille actuelle du projet | ❌ |
