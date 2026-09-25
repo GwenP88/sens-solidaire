@@ -39,14 +39,18 @@ export const FILTERS_EDUCATION_PUBLIC = [
 
 // ── Catégories ODD — page Notre Impact (FilterChips) ──
 // Mapping ODD → catégorie géré séparément dans utils/odds.js (ODD_TO_CATEGORY)
+// Les `value` doivent correspondre EXACTEMENT aux valeurs de ODD_TO_CATEGORY.
 export const FILTERS_ACTION_TAGS = [
   { label: "Tous les thèmes", value: null },
   { label: "Biodiversité", value: "Biodiversité" },
   { label: "Solidarité", value: "Solidarité" },
-  { label: "Éducation", value: "Éducation et sensibilisation" },
-  { label: "Développement local", value: "Développement local" },
+  { label: "Alimentation", value: "Alimentation" },
+  { label: "Santé", value: "Santé" },
+  { label: "Éducation", value: "Éducation" },
+  { label: "Égalité", value: "Egalité" },
+  { label: "Développement", value: "Développement" },
   { label: "Coopération", value: "Coopération" },
-  { label: "Climat & Ressources", value: "Climat & Ressources" },
+  { label: "Environnement", value: "Environnement" },
 ]
 
 // ── Thème — page Médias & Actualités ──
