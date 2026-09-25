@@ -215,8 +215,9 @@
 | 126 | Gwen | Tests d'intégration | ❌ |
 | 170 | Gwen | Filtres pays dynamiques sur /notre-impact et /temoignages (dérivés des vraies données en base — missions + actions terrain) au lieu de FILTERS_COUNTRY figée dans utils/filters.js — nouvelle route publique pays réellement utilisés | ❌ |
 
-BUGS A GERER
-Boutons "Voir tous les témoignages/rapports" (MissionDetail/ServiceCiviqueDetail) → lien pré-filtré `/temoignages?type=X&destination=Y` selon la mission d'origine (année laissée vide). Inclut fix bug filtre type témoignages (`item.type` → `item.mission.type`)
+A REVOIR :
+ajouter le bouton poster un témoiganges sur la page témoignages
+revoir le gap variant sans témoignages + hauteur de la section
 
 
 ### Bloc C — Page Éducation & sensibilisation

@@ -2676,4 +2676,42 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 
 ---
 
+### 25 septembre 2026 — CRUD FieldAction complet (#122), fix structurel Testimonial.type, unification filtre dashboard, CTA "Racontez-nous" partout
+
+**Tâche #122 — CRUD Actions terrain (admin), le plus gros chantier du jour :**
+- `utils/odds.js` (front + nouveau back) : mapping ODD→catégorie passé de 6 à 9 thèmes plus précis (Biodiversité, Solidarité, Alimentation, Santé, Éducation, Egalité, Développement, Coopération, Environnement), typo ODD 13 corrigée, `FILTERS_ACTION_TAGS` mis à jour en conséquence
+- **Tags entièrement automatisés** : la cliente ne coche que des ODD, les tags/thèmes affichés publiquement (`FieldActionTag`) sont déduits côté backend (`deriveTagsFromOdds`) — plus aucune saisie manuelle de tags dans le formulaire
+- CRUD backend complet (`fieldActionService.js`/`Controller`/`adminFieldActionRoutes.js`) avec gestion `countries`/`odds`/galerie (`Media` polymorphe)
+- **Bug corrigé au passage** : `FieldAction.countries` (relation réelle, plusieurs pays possibles) n'était jamais chargé dans les requêtes publiques, et le front utilisait un `action.country` (singulier) qui n'a jamais existé — `action.country` était donc toujours `undefined`, le filtre pays de `/notre-impact` ne fonctionnait tout simplement pas. Corrigé dans le service (include `countries`) et dans `Impact.jsx`/`ImpactDetail.jsx` (jointure `countries.map(...).join(', ')`)
+- Formulaire (`FieldActionFormPage.jsx`) : photo hero + galerie unifiées en un seul upload avec sélecteur radio (même pattern que Lieux), description/contenu fusionnés en un seul textarea scindé via marqueur `---` (limite 150 caractères pour le H2, contrairement à Mission qui duplique — ici le texte est vraiment scindé, rien avant `---` ne se retrouve dans le contenu), pays en champ + `<datalist>` + étiquettes retirables (plusieurs pays possibles), grille ODD visuelle avec les vraies icônes officielles ONU (redimensionnées, 5→9 colonnes responsive)
+- Sidebar : lien "Projets réalisés" (déjà présent, pointait déjà vers `/admin/actions-terrain`) — icône `FiFlag` branchée
+- Seed nettoyé du bloc `FIELD_ACTIONS`
+
+**Bugs découverts et corrigés en testant, sans rapport direct avec FieldAction :**
+- `MissionsPage.jsx` / `ServiceCiviquePage.jsx` — pause/reprise utilisait encore l'ancien `window.confirm()` (jamais migré vers `ConfirmModal` comme les pages plus récentes) ; découverte en testant qu'en plu que réactiver une mission en pause ne faisait rien (`deleteMission` ne fait que désactiver, aucune vraie bascule n'existait). Les deux pages migrées vers `ConfirmModal` avec une vraie bascule dans les deux sens (`deleteMission` / `updateMission(id, {is_active: true})`)
+- Deux missions avec un pays mal orthographié en base (`"kenya"` minuscule, `"Sri-Lanka"` avec tiret au lieu de `"Sri Lanka"`) — corrigées manuellement via le dashboard, empêchaient ces missions de remonter sur les filtres publics
+
+**Boutons "Voir tous les témoignages" pré-filtrés  :**
+- `MissionDetail.jsx` / `ServiceCiviqueDetail.jsx` : lien construit dynamiquement (`/temoignages?type=X&destination=Y`) selon la mission affichée, avec conversion forme courte/longue du type
+- ⚠️ **`MissionDetail.jsx` entièrement fait, `ServiceCiviqueDetail.jsx` reste à faire** (même traitement prévu : import Modal/TestimonialForm, state `modalOpen`, restructuration de la section témoignages pour rester visible même sans témoignage, CTA sur fond `accent-2`) — à reprendre en premier la prochaine session
+
+**Découverte structurelle majeure — `Testimonial` n'avait pas de champ `type` propre :**
+- Tout le filtrage (public et admin) reposait uniquement sur `mission?.type` — fonctionnait tant que les missions "ancres" existaient pour Service Civique/Groupe jeunes/Congé solidaire. Une fois ces ancres supprimées du seed (session d'avant-hier), tout témoignage Groupe jeunes/Congé solidaire créé avec `mission_id: null` devenait invisible partout (aucun moyen de savoir à quel type il appartenait)
+- **Fix** : migration `Testimonial.type` ajoutée, remplie systématiquement à la soumission (publique et admin), peu importe si une mission est liée ou non
+- Mis à jour partout où c'était nécessaire : `testimonialService.js` (3 fonctions), `testimonialController.js`, `TestimonialForm.jsx` (public), `TestimonialEditModal.jsx` (admin — type désormais obligatoire à la création, pré-rempli en édition en priorisant `testimonial.type` sur l'ancien `mission?.type`), `Missions.jsx` (3 filtres de section), `findAllForAdmin` (filtre directement sur `testimonial.type` au lieu de passer par la mission)
+- Card dashboard : affiche désormais le type (`REPORT_TYPE_LABELS[t.type]`) plutôt que "Aucune mission liée" quand il n'y a pas de mission
+- Tous les témoignages fictifs du seed/tests supprimés de la base (`DELETE FROM "Testimonial"`) une fois le système validé de bout en bout
+
+**Dashboard — page "Témoignages & rapports de mission" (`TemoignagesRapportsPage.jsx`) :**
+- Filtre unifié pour les 2 sections : Vue (Tous/Témoignages/Rapports) / Statut (visible seulement si Vue = Témoignages) / Type / Pays
+- Rapports de mission désormais filtrables par type et pays (filtrage front, pas d'appel API par filtre — liste déjà entièrement chargée)
+- Bloc "À modérer" sorti des sections conditionnelles — reste visible en permanence, peu importe le filtre Vue actif
+- Lien "Voir le PDF →" ajouté sur les cards rapports, aligné à droite sur la ligne des actions
+
+**CTA public "Vous êtes partis en mission ? Racontez-nous →" :**
+- `Testimonials.jsx` — le `Modal`/`TestimonialForm` existaient déjà dans le fichier mais **aucun bouton ne les déclenchait** ; bouton ajouté sous la barre de filtres
+- `MissionDetail.jsx` — section témoignages restructurée : titre + carrousel + CTA si des témoignages existent, sinon un bloc compact sur fond `accent-2` (section entière, pas juste une div) avec les 2 CTA côte à côte ("Racontez-nous" + "Voir tous les témoignages") — visible même sans aucun témoignage pour cette mission
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
