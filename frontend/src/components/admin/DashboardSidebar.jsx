@@ -37,6 +37,13 @@ const navItems = [
     activeClass: 'bg-dash-action/10 text-dash-action',
     iconActive: 'text-dash-action',
   },
+  {
+    label: 'Projets réalisés',
+    path: '/admin/actions-terrain',
+    icon: FiFlag,
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
+  },
     {
     label: 'Lieux & délégations',
     path: '/admin/lieux',

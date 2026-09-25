@@ -978,3 +978,86 @@ export const hardDeleteMissionReport = async (id) => {
   if (!response.ok) throw new Error("Échec de la suppression.")
   return await response.json()
 }
+
+// ── FIELD ACTIONS ────────────────────────────────────────────────────────
+// CRUD complet des actions terrain — tags déduits des ODD côté backend.
+
+// Récupère toutes les actions (actives + inactives) pour le dashboard admin
+export const fetchAdminFieldActions = async () => {
+  const response = await authFetch(`${API_URL}/admin/field-actions`)
+  if (!response.ok) throw new Error("Impossible de charger les actions terrain.")
+  const data = await response.json()
+  return data.actions
+}
+
+// Récupère une action par son id pour le formulaire d'édition
+export const fetchAdminFieldActionById = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/field-actions/${id}`)
+  if (!response.ok) throw new Error("Impossible de charger cette action.")
+  const data = await response.json()
+  return data.action
+}
+
+// Crée une nouvelle action
+export const createFieldAction = async (actionData) => {
+  const response = await authFetch(`${API_URL}/admin/field-actions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(actionData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la création de l'action.")
+  }
+  const data = await response.json()
+  return data.action
+}
+
+// Met à jour partiellement une action existante
+export const updateFieldAction = async (id, actionData) => {
+  const response = await authFetch(`${API_URL}/admin/field-actions/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(actionData),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la mise à jour de l'action.")
+  }
+  const data = await response.json()
+  return data.action
+}
+
+// Remplace la galerie photo d'une action
+export const updateFieldActionMedia = async (id, images) => {
+  const response = await authFetch(`${API_URL}/admin/field-actions/${id}/media`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ images }),
+  })
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message || "Échec de la mise à jour des photos.")
+  }
+  return await response.json()
+}
+
+// Active ou désactive une action (pause/reprise, sans la supprimer)
+export const toggleFieldActionActive = async (id, is_active) => {
+  const response = await authFetch(`${API_URL}/admin/field-actions/${id}/toggle`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ is_active }),
+  })
+  if (!response.ok) throw new Error("Échec du changement de statut.")
+  return await response.json()
+}
+
+// Supprime DÉFINITIVEMENT une action (hard delete) — irréversible.
+export const hardDeleteFieldAction = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/field-actions/${id}`, {
+    method: 'DELETE',
+  })
+  if (!response.ok) throw new Error("Échec de la suppression.")
+  return await response.json()
+}

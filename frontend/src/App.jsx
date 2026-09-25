@@ -65,6 +65,8 @@ import LocationFormPage from './pages/admin/LocationFormPage'
 import TeamMemberFormPage from './pages/admin/TeamMemberFormPage'
 import AProposPage from './pages/admin/AProposPage'
 import TemoignagesRapportsPage from './pages/admin/TemoignagesRapportsPage'
+import FieldActionsPage from './pages/admin/FieldActionsPage'
+import FieldActionFormPage from './pages/admin/FieldActionFormPage'
 
 function App() {
   return (
@@ -165,6 +167,11 @@ function App() {
 
           {/* Galerie */}
           <Route path="galerie" element={<GaleriePage />} />
+
+          {/* Actions terrain */}
+          <Route path="actions-terrain" element={<FieldActionsPage />} />
+          <Route path="actions-terrain/new" element={<FieldActionFormPage />} />
+          <Route path="actions-terrain/:id/edit" element={<FieldActionFormPage />} />
 
         </Route>
 
