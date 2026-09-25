@@ -91,6 +91,7 @@ function TestimonialForm({ onClose }) {
         avatar_url: avatarUrl,
         annee: new Date().getFullYear(),
         mois: new Date().getMonth() + 1,
+        type: form.type,
         consent_given: form.rgpd,
       })
       setSubmitted(true)

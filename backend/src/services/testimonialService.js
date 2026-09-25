@@ -33,9 +33,7 @@ export const submitTestimonial = async (data) => {
       avatar_url:   data.avatar_url || null,
       annee:        data.annee || null,
       mois:         data.mois || null,
-      // Stores the value actually received, not a hardcoded true — the record
-      // must be able to PROVE consent was given (GDPR art. 7.1), and the
-      // controller already rejects the request upstream if it's missing.
+      type:         data.type || null,
       consent_given: data.consent_given === true,
       status:       "pending",
     },
@@ -48,12 +46,8 @@ export const submitTestimonial = async (data) => {
 export const findAllForAdmin = async (filters = {}) => {
   const where = {}
   if (filters.status) where.status = filters.status
-  if (filters.type || filters.country) {
-    where.mission = {
-      ...(filters.type && { type: filters.type }),
-      ...(filters.country && { country: filters.country }),
-    }
-  }
+  if (filters.type) where.type = filters.type
+  if (filters.country) where.mission = { country: filters.country }
 
   const limit = filters.limit || 10
   const offset = filters.offset || 0
@@ -134,6 +128,7 @@ export const update = async (id, data) => {
         mission_id: data.mission_id,
         annee: data.annee,
         mois: data.mois,
+        type: data.type,
         avatar_url: data.avatar_url,
         show_homepage: data.show_homepage,
       },
@@ -160,6 +155,7 @@ export const adminCreate = async (data) => {
       mission_id: data.mission_id || null,
       annee: data.annee || null,
       mois: data.mois || null,
+      type: data.type || null,
       avatar_url: data.avatar_url || null,
       consent_given: true,
       status: "approved",

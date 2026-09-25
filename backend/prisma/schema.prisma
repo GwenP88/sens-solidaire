@@ -99,6 +99,7 @@ model Testimonial {
   avatar_url    String?  // photo du volontaire
   annee         Int?     // année de la mission
   mois          Int?     // mois de la mission (1-12)
+  type          String?  // individuel, service_civique, groupe_jeunes, conge_solidaire
   status        String   @default("pending")
   show_homepage Boolean  @default(false)
   consent_given Boolean  @default(false)

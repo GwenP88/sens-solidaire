@@ -4,6 +4,7 @@
 // ════════════════════════════════════════════════════════════════
 
 import { useState, useEffect } from 'react'
+import { FiEdit2, FiPause, FiPlay, FiTrash2 } from 'react-icons/fi'
 import {
   fetchAdminTestimonials, approveTestimonial, rejectTestimonial, hardDeleteTestimonial, updateTestimonial,
   fetchAdminMissionReports, toggleMissionReportActive, hardDeleteMissionReport,
@@ -13,7 +14,6 @@ import ConfirmModal from '../../components/admin/ConfirmModal'
 import TestimonialEditModal from '../../components/admin/TestimonialEditModal'
 import MissionReportEditModal from '../../components/admin/MissionReportEditModal'
 import { FILTERS_MISSION_TYPE, FILTERS_COUNTRY } from '../../utils/filters'
-import { FiEdit2, FiPause, FiPlay, FiTrash2 } from 'react-icons/fi'
 
 const ANCHOR_SECTIONS = [
   { label: 'Témoignages', id: 'temoignages' },
@@ -32,11 +32,6 @@ const STATUS_STYLES = {
   rejected: 'bg-dash-danger/10 text-dash-danger',
 }
 
-const MONTHS = [
-  '', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
-]
-
 const REPORT_TYPE_LABELS = {
   individuel: 'Volontariat individuel',
   service_civique: 'Service civique',
@@ -44,26 +39,35 @@ const REPORT_TYPE_LABELS = {
   conge_solidaire: 'Congé solidaire',
 }
 
+const MONTHS = [
+  '', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
+]
+
 const PAGE_SIZE = 10
 
 function TemoignagesRapportsPage() {
-  const [testimonials, setTestimonials] = useState([])
-  const [total, setTotal] = useState(0)
-  const [loading, setLoading] = useState(true)
-
-  const [statusFilter, setStatusFilter] = useState('')
+  // ── Filtres partagés — vue / statut / type / pays ────────────────────────
+  const [vueFilter, setVueFilter] = useState('')       // '' | 'temoignages' | 'rapports'
+  const [statusFilter, setStatusFilter] = useState('') // pertinent uniquement pour les témoignages
   const [typeFilter, setTypeFilter] = useState('')
   const [countryFilter, setCountryFilter] = useState('')
   const [limit, setLimit] = useState(PAGE_SIZE)
 
-  // ── Témoignages ─────────────────────────────────────────────────
+  const showTemoignages = !vueFilter || vueFilter === 'temoignages'
+  const showRapports = !vueFilter || vueFilter === 'rapports'
+
+  // ── Témoignages ───────────────────────────────────────────────────────
+  const [testimonials, setTestimonials] = useState([])
+  const [total, setTotal] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [pendingTestimonials, setPendingTestimonials] = useState([])
   const [editingTestimonial, setEditingTestimonial] = useState(null)
   const [creatingTestimonial, setCreatingTestimonial] = useState(false)
   const [testimonialToDelete, setTestimonialToDelete] = useState(null)
   const [statusChangeTarget, setStatusChangeTarget] = useState(null)
-  const [pendingTestimonials, setPendingTestimonials] = useState([])
 
-  // ── Rapports de mission ─────────────────────────────────────────────────
+  // ── Rapports de mission ──────────────────────────────────────────────
   const [reports, setReports] = useState([])
   const [reportsLoading, setReportsLoading] = useState(true)
   const [reportModalOpen, setReportModalOpen] = useState(false)
@@ -117,10 +121,24 @@ function TemoignagesRapportsPage() {
     loadReports()
   }, [])
 
+  // Rapports — pas de filtre côté API, on filtre ici (type/pays partagés avec les témoignages)
+  const filteredReports = reports.filter(r => {
+    if (typeFilter && r.type !== typeFilter) return false
+    if (countryFilter && r.destination?.toLowerCase() !== countryFilter.toLowerCase()) return false
+    return true
+  })
+
   // Revenir à la 1ère page quand un filtre change
   const handleFilterChange = (setter) => (e) => {
     setLimit(PAGE_SIZE)
     setter(e.target.value)
+  }
+
+  const handleVueChange = (e) => {
+    const value = e.target.value
+    setVueFilter(value)
+    setLimit(PAGE_SIZE)
+    if (value !== 'temoignages') setStatusFilter('') // le filtre statut ne s'applique qu'aux témoignages
   }
 
   const confirmStatusChange = async () => {
@@ -202,7 +220,7 @@ function TemoignagesRapportsPage() {
 
       <div className="flex items-center justify-between text-xs text-dash-legend">
         <span>
-          {t.mission ? `${t.mission.title} — ${t.mission.country}` : 'Aucune mission liée'}
+          {t.mission ? `${t.mission.title} — ${t.mission.country}` : (REPORT_TYPE_LABELS[t.type] || 'Type non renseigné')}
           {(t.mois || t.annee) && ` · ${t.mois ? MONTHS[t.mois] : ''} ${t.annee || ''}`}
         </span>
         <label className="flex items-center gap-1 text-dash-action cursor-pointer">
@@ -212,7 +230,7 @@ function TemoignagesRapportsPage() {
             onChange={() => handleToggleHomepage(t)}
             className="w-3.5 h-3.5 accent-dash-action"
           />
-          Afficher sur la page d'accueil
+          Sur l'accueil
         </label>
       </div>
 
@@ -256,30 +274,19 @@ function TemoignagesRapportsPage() {
 
       <AnchorNav sections={ANCHOR_SECTIONS} variant="dashboard" />
 
-      {/* ── Section Témoignages ── */}
-      <section id="temoignages" className="mt-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-heading font-semibold text-lg text-dash-title">Témoignages</h2>
-          <button
-            onClick={() => setCreatingTestimonial(true)}
-            className="px-4 py-2 bg-dash-action text-white text-sm rounded-lg hover:bg-dash-action/90 transition-colors"
-          >
-            + Ajouter un témoignage
-          </button>
-        </div>
+      {/* ── Filtres partagés ── */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mt-8 mb-4">
+        <select
+          value={vueFilter}
+          onChange={handleVueChange}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+        >
+          <option value="">Tous les types</option>
+          <option value="temoignages">Témoignages</option>
+          <option value="rapports">Rapports de mission</option>
+        </select>
 
-        {pendingTestimonials.length > 0 && (
-          <div className="mb-6 p-4 bg-dash-warning/5 border border-dash-warning/30 rounded-lg">
-            <h3 className="text-sm font-semibold text-dash-warning mb-3">
-              Témoignages en attente de validation ({pendingTestimonials.length})
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {pendingTestimonials.map(t => renderTestimonialCard(t))}
-            </div>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+        {vueFilter === 'temoignages' && (
           <select
             value={statusFilter}
             onChange={handleFilterChange(setStatusFilter)}
@@ -290,130 +297,158 @@ function TemoignagesRapportsPage() {
               <option key={value} value={value}>{label}</option>
             ))}
           </select>
-
-          <select
-            value={typeFilter}
-            onChange={handleFilterChange(setTypeFilter)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
-          >
-            <option value="">Toutes les missions</option>
-            {FILTERS_MISSION_TYPE.filter(f => f.value !== null).map(f => (
-              <option key={f.value} value={f.value}>{f.label}</option>
-            ))}
-          </select>
-
-          <select
-            value={countryFilter}
-            onChange={handleFilterChange(setCountryFilter)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
-          >
-            <option value="">Tous les pays</option>
-            {FILTERS_COUNTRY.filter(f => f.value !== null).map(f => (
-              <option key={f.value} value={f.value}>{f.label}</option>
-            ))}
-          </select>
-        </div>
-
-
-        {loading ? (
-          <p className="text-dash-legend text-sm italic">Chargement...</p>
-        ) : testimonials.length === 0 ? (
-          <p className="text-dash-legend text-sm py-8 text-center">Aucun témoignage pour ces critères.</p>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {testimonials.map(t => renderTestimonialCard(t))}
-            </div>
-
-            {testimonials.length < total && (
-              <button
-                onClick={() => setLimit(prev => prev + PAGE_SIZE)}
-                className="mt-4 w-full py-2 text-sm text-dash-action border border-dash-action rounded-lg hover:bg-dash-action/10 transition-colors"
-              >
-                Afficher plus ({testimonials.length}/{total})
-              </button>
-            )}
-          </>
         )}
-      </section>
+
+        <select
+          value={typeFilter}
+          onChange={handleFilterChange(setTypeFilter)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+        >
+          <option value="">Toutes les missions</option>
+          {FILTERS_MISSION_TYPE.filter(f => f.value !== null).map(f => (
+            <option key={f.value} value={f.value}>{f.label}</option>
+          ))}
+        </select>
+
+        <select
+          value={countryFilter}
+          onChange={handleFilterChange(setCountryFilter)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+        >
+          <option value="">Tous les pays</option>
+          {FILTERS_COUNTRY.filter(f => f.value !== null).map(f => (
+            <option key={f.value} value={f.value}>{f.label}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* ── Section Témoignages ── */}
+      {pendingTestimonials.length > 0 && (
+        <div className="mb-6 p-4 bg-dash-warning/5 border border-dash-warning/30 rounded-lg">
+          <h3 className="text-sm font-semibold text-dash-warning mb-3">
+            À modérer ({pendingTestimonials.length})
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {pendingTestimonials.map(t => renderTestimonialCard(t))}
+          </div>
+        </div>
+      )}
+
+      {showTemoignages && (
+        <section id="temoignages" className="mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-heading font-semibold text-lg text-dash-title">Témoignages</h2>
+            <button
+              onClick={() => setCreatingTestimonial(true)}
+              className="px-4 py-2 bg-dash-action text-white text-sm rounded-lg hover:bg-dash-action/90 transition-colors"
+            >
+              + Ajouter un témoignage
+            </button>
+          </div>
+
+          {loading ? (
+            <p className="text-dash-legend text-sm italic">Chargement...</p>
+          ) : testimonials.length === 0 ? (
+            <p className="text-dash-legend text-sm py-8 text-center">Aucun témoignage pour ces critères.</p>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {testimonials.map(t => renderTestimonialCard(t))}
+              </div>
+
+              {testimonials.length < total && (
+                <button
+                  onClick={() => setLimit(prev => prev + PAGE_SIZE)}
+                  className="mt-4 w-full py-2 text-sm text-dash-action border border-dash-action rounded-lg hover:bg-dash-action/10 transition-colors"
+                >
+                  Afficher plus ({testimonials.length}/{total})
+                </button>
+              )}
+            </>
+          )}
+        </section>
+      )}
 
       {/* ── Section Rapports de mission ── */}
-      <section id="rapports" className="mt-12">
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div>
-            <h2 className="font-heading font-semibold text-lg text-dash-title">
-              Rapports de mission
-            </h2>
-            <p className="text-sm text-dash-legend mt-1">
-              Ajoutez et gérez les rapports rédigés à la suite des missions.
-              Les rapports actifs sont visibles et téléchargeables sur le site.
-            </p>
+      {showRapports && (
+        <section id="rapports" className="mt-12">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-heading font-semibold text-lg text-dash-title">Rapports de mission</h2>
+            <button
+              onClick={() => { setEditingReport(null); setReportModalOpen(true) }}
+              className="px-4 py-2 bg-dash-action text-white text-sm rounded-lg hover:bg-dash-action/90 transition-colors"
+            >
+              + Ajouter un rapport
+            </button>
           </div>
 
-          <button
-            onClick={() => { setEditingReport(null); setReportModalOpen(true) }}
-            className="px-4 py-2 bg-dash-action text-white text-sm rounded-lg hover:bg-dash-action/90 transition-colors shrink-0"
-          >
-            + Ajouter un rapport
-          </button>
-        </div>
+          {reportsLoading ? (
+            <p className="text-dash-legend text-sm italic">Chargement...</p>
+          ) : filteredReports.length === 0 ? (
+            <p className="text-dash-legend text-sm py-8 text-center">Aucun rapport pour ces critères.</p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {filteredReports.map(r => (
+                <div key={r.id} className="border border-gray-200 rounded-lg p-3 flex flex-col gap-3 bg-dash-action/5">
 
-        {reportsLoading ? (
-          <p className="text-dash-legend text-sm italic">Chargement...</p>
-        ) : reports.length === 0 ? (
-          <p className="text-dash-legend text-sm py-8 text-center">Aucun rapport pour le moment.</p>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {reports.map(r => (
-              <div key={r.id} className="border border-gray-200 rounded-lg p-3 flex flex-col gap-3 bg-dash-action/5">
+                  <div className="flex items-center justify-between">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                      r.is_active ? 'bg-dash-success/10 text-dash-success' : 'bg-dash-warning/10 text-dash-warning'
+                    }`}>
+                      {r.is_active ? 'Actif' : 'Inactif'}
+                    </span>
+                    <span className="text-xs text-dash-legend">{r.annee}</span>
+                  </div>
 
-                <div className="flex items-center justify-between">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                    r.is_active ? 'bg-dash-success/10 text-dash-success' : 'bg-dash-warning/10 text-dash-warning'
-                  }`}>
-                    {r.is_active ? 'Actif' : 'Inactif'}
-                  </span>
-                  <span className="text-xs text-dash-legend">{r.annee}</span>
+                  <div>
+                    <p className="text-sm text-dash-text font-medium truncate" title={r.auteur}>{r.auteur}</p>
+                    <p className="text-xs text-dash-legend">
+                      {REPORT_TYPE_LABELS[r.type] || r.type}{r.destination ? ` — ${r.destination}` : ''}
+                    </p>
+                  </div>
+
+                                    <div className="flex items-center justify-between">
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => { setEditingReport(r); setReportModalOpen(true) }}
+                        className="p-1.5 text-dash-legend hover:text-dash-action hover:bg-dash-action/10 rounded"
+                        aria-label={`Modifier le rapport de ${r.auteur}`}
+                      >
+                        <FiEdit2 size={16} />
+                      </button>
+                      <button
+                        onClick={() => setReportToTogglePause(r)}
+                        className={`p-1.5 text-dash-legend rounded ${
+                          r.is_active ? 'hover:text-dash-warning hover:bg-dash-warning/10' : 'hover:text-dash-success hover:bg-dash-success/10'
+                        }`}
+                        aria-label={r.is_active ? `Mettre en pause` : `Reprendre`}
+                      >
+                        {r.is_active ? <FiPause size={16} /> : <FiPlay size={16} />}
+                      </button>
+                      <button
+                        onClick={() => setReportToHardDelete(r)}
+                        className="p-1.5 text-dash-legend hover:text-dash-danger hover:bg-dash-danger/10 rounded"
+                        aria-label={`Supprimer définitivement`}
+                      >
+                        <FiTrash2 size={16} />
+                      </button>
+                    </div>
+                    <a
+                      href={r.pdf_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-dash-action hover:underline"
+                    >
+                      Voir le PDF →
+                    </a>
+                  </div>
+
                 </div>
-
-                <div>
-                  <p className="text-sm text-dash-text font-medium truncate" title={r.auteur}>{r.auteur}</p>
-                  <p className="text-xs text-dash-legend">
-                    {REPORT_TYPE_LABELS[r.type] || r.type}{r.destination ? ` — ${r.destination}` : ''}
-                  </p>
-                </div>
-
-                <div className="flex gap-1">
-                  <button
-                    onClick={() => { setEditingReport(r); setReportModalOpen(true) }}
-                    className="p-1.5 text-dash-legend hover:text-dash-action hover:bg-dash-action/10 rounded"
-                    aria-label={`Modifier le rapport de ${r.auteur}`}
-                  >
-                    <FiEdit2 size={16} />
-                  </button>
-                  <button
-                    onClick={() => setReportToTogglePause(r)}
-                    className={`p-1.5 text-dash-legend rounded ${
-                      r.is_active ? 'hover:text-dash-warning hover:bg-dash-warning/10' : 'hover:text-dash-success hover:bg-dash-success/10'
-                    }`}
-                    aria-label={r.is_active ? `Mettre en pause` : `Reprendre`}
-                  >
-                    {r.is_active ? <FiPause size={16} /> : <FiPlay size={16} />}
-                  </button>
-                  <button
-                    onClick={() => setReportToHardDelete(r)}
-                    className="p-1.5 text-dash-legend hover:text-dash-danger hover:bg-dash-danger/10 rounded"
-                    aria-label={`Supprimer définitivement`}
-                  >
-                    <FiTrash2 size={16} />
-                  </button>
-                </div>
-
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       {/* ── Modales ── */}
 
@@ -436,7 +471,7 @@ function TemoignagesRapportsPage() {
       {testimonialToDelete && (
         <ConfirmModal
           title="Supprimer définitivement"
-          message={`Voulez-vous supprimer définitivement le témoignage de "${testimonialToDelete.author_name}" ?\n\nCette action est définitive et le témoignage ne pourra pas être récupéré.`}
+          message={`Voulez-vous supprimer définitivement le témoignage de "${testimonialToDelete.author_name}" ?\n\nCette action est irréversible (droit à l'oubli RGPD).`}
           confirmLabel="Supprimer définitivement"
           onConfirm={confirmDelete}
           onCancel={() => setTestimonialToDelete(null)}
@@ -444,52 +479,52 @@ function TemoignagesRapportsPage() {
       )}
 
       {statusChangeTarget && (
-      <ConfirmModal
-        variant={statusChangeTarget.newStatus === 'approved' ? 'success' : 'warning'}
-        title={statusChangeTarget.newStatus === 'approved' ? 'Approuver ce témoignage' : 'Refuser ce témoignage'}
-        message={
-          statusChangeTarget.newStatus === 'approved'
-            ? `Approuver le témoignage de "${statusChangeTarget.testimonial.author_name}" ?\n\nUne fois approuvé, ce témoignage sera visible sur le site.`
-            : `Refuser le témoignage de "${statusChangeTarget.testimonial.author_name}" ?\n\nCe témoignage ne sera pas visible sur le site et sera retiré de la page d'accueil s'il y était affiché..`
-        }
-        confirmLabel={statusChangeTarget.newStatus === 'approved' ? 'Approuver' : 'Refuser'}
-        onConfirm={confirmStatusChange}
-        onCancel={() => setStatusChangeTarget(null)}
-      />
-    )}
+        <ConfirmModal
+          variant={statusChangeTarget.newStatus === 'approved' ? 'success' : 'warning'}
+          title={statusChangeTarget.newStatus === 'approved' ? 'Approuver ce témoignage' : 'Refuser ce témoignage'}
+          message={
+            statusChangeTarget.newStatus === 'approved'
+              ? `Approuver le témoignage de "${statusChangeTarget.testimonial.author_name}" ?\n\nIl sera visible sur le site.`
+              : `Refuser le témoignage de "${statusChangeTarget.testimonial.author_name}" ?\n\nIl ne sera plus visible sur le site, et retiré de l'accueil si mis en avant.`
+          }
+          confirmLabel={statusChangeTarget.newStatus === 'approved' ? 'Approuver' : 'Refuser'}
+          onConfirm={confirmStatusChange}
+          onCancel={() => setStatusChangeTarget(null)}
+        />
+      )}
 
-    {reportModalOpen && (
-      <MissionReportEditModal
-        report={editingReport}
-        onClose={() => setReportModalOpen(false)}
-        onSaved={() => { setReportModalOpen(false); loadReports() }}
-      />
-    )}
+      {reportModalOpen && (
+        <MissionReportEditModal
+          report={editingReport}
+          onClose={() => setReportModalOpen(false)}
+          onSaved={() => { setReportModalOpen(false); loadReports() }}
+        />
+      )}
 
-    {reportToTogglePause && (
-      <ConfirmModal
-        variant={reportToTogglePause.is_active ? 'warning' : 'success'}
-        title={reportToTogglePause.is_active ? 'Mettre en pause' : 'Réactiver'}
-        message={
-          reportToTogglePause.is_active
-            ? `Mettre en pause le rapport de "${reportToTogglePause.auteur}" ?\n\nLe rapport ne sera plus visible sur le site, mais restera enregistré dans le tableau de bord. Vous pourrez le réactiver à tout moment.`
-            : `Réactiver le rapport de "${reportToTogglePause.auteur}" ?\n\nLe rapport sera de nouveau visible et téléchargeable sur le site.`
-        }
-        confirmLabel={reportToTogglePause.is_active ? 'Mettre en pause' : 'Réactiver'}
-        onConfirm={confirmReportTogglePause}
-        onCancel={() => setReportToTogglePause(null)}
-      />
-    )}
+      {reportToTogglePause && (
+        <ConfirmModal
+          variant={reportToTogglePause.is_active ? 'warning' : 'success'}
+          title={reportToTogglePause.is_active ? 'Mettre en pause' : 'Réactiver'}
+          message={
+            reportToTogglePause.is_active
+              ? `Mettre en pause le rapport de "${reportToTogglePause.auteur}" ?\n\nIl deviendra invisible sur le site, mais reste récupérable.`
+              : `Réactiver le rapport de "${reportToTogglePause.auteur}" ?\n\nIl redeviendra visible sur le site.`
+          }
+          confirmLabel={reportToTogglePause.is_active ? 'Mettre en pause' : 'Réactiver'}
+          onConfirm={confirmReportTogglePause}
+          onCancel={() => setReportToTogglePause(null)}
+        />
+      )}
 
-    {reportToHardDelete && (
-      <ConfirmModal
-        title="Supprimer définitivement"
-        message={`Voulez-vous supprimer définitivement le rapport de "${reportToHardDelete.auteur}" ?\n\nCette action est irréversible.`}
-        confirmLabel="Supprimer définitivement"
-        onConfirm={confirmReportHardDelete}
-        onCancel={() => setReportToHardDelete(null)}
-      />
-    )}
+      {reportToHardDelete && (
+        <ConfirmModal
+          title="Supprimer définitivement"
+          message={`Voulez-vous supprimer définitivement le rapport de "${reportToHardDelete.auteur}" ?\n\nCette action est irréversible.`}
+          confirmLabel="Supprimer définitivement"
+          onConfirm={confirmReportHardDelete}
+          onCancel={() => setReportToHardDelete(null)}
+        />
+      )}
 
     </div>
   )

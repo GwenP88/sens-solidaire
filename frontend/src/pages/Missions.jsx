@@ -167,9 +167,9 @@ function Missions() {
   ]
 
   // Témoignages filtrés par type de mission — utilisés pour masquer les galeries si vides
-  const testimonialsGroupeJeunes = testimonials.filter(t => t.mission?.type === 'groupe_jeunes')
-  const testimonialsCongeSolidaire = testimonials.filter(t => t.mission?.type === 'conge_solidaire')
-  const testimonialsServiceCivique = testimonials.filter(t => t.mission?.type === 'service_civique')
+  const testimonialsGroupeJeunes = testimonials.filter(t => t.type === 'groupe_jeunes')
+  const testimonialsCongeSolidaire = testimonials.filter(t => t.type === 'conge_solidaire')
+  const testimonialsServiceCivique = testimonials.filter(t => t.type === 'service_civique')
 
   const actionsServiceCivique  = actions.filter(a => a.countries?.some(c => COUNTRIES_SERVICE_CIVIQUE.includes(c.country)))
   const actionsGroupeJeunes    = actions.filter(a => a.countries?.some(c => COUNTRIES_GROUPE_JEUNES.includes(c.country)))

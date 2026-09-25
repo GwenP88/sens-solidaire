@@ -37,7 +37,8 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
   const isEditing = Boolean(testimonial)
 
   // ── Champs toujours modifiables (édition ET création) ──
-  const [type, setType] = useState(API_TO_TYPE[testimonial?.mission?.type] || testimonial?.mission?.type || '')
+  const [type, setType] = useState(
+    testimonial?.type || API_TO_TYPE[testimonial?.mission?.type] || testimonial?.mission?.type || '')
   const [missionId, setMissionId] = useState(testimonial?.mission_id ? String(testimonial.mission_id) : '')
   const [destinations, setDestinations] = useState([])
 
@@ -63,14 +64,14 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
   }, [type])
 
   const handleSave = async () => {
-    if (!isEditing && (!authorName.trim() || !content.trim())) {
-      setError("Le nom du volontaire et le témoignage sont obligatoires.")
-      return
-    }
-    if (needsDestination && !missionId) {
-      setError("Sélectionnez une destination.")
-      return
-    }
+  if (!isEditing && (!authorName.trim() || !content.trim() || !type)) {
+    setError("Nom, témoignage et type de mission sont obligatoires.")
+    return
+  }
+  if (needsDestination && !missionId) {
+    setError("Sélectionnez une destination.")
+    return
+  }
 
     setSubmitting(true)
     setError(null)
@@ -88,6 +89,7 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
           mission_id: needsDestination ? Number(missionId) : null,
           annee: annee ? Number(annee) : null,
           mois: mois ? Number(mois) : null,
+          type,
           avatar_url: photo[0]?.file_url || null,
         })
       }
