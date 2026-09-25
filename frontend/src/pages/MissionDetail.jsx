@@ -22,6 +22,8 @@ import Button from '../components/ui/Button'
 import AnchorNav from '../components/navigation/AnchorNav'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import LignesToPuces from '../components/ui/LignesToPuces'
+import Modal from '../components/ui/Modal'
+import TestimonialForm from '../components/testimonials/TestimonialForm'
 
 // ── Composants métier
 import TestimonialCard from '../components/testimonials/TestimonialCard'
@@ -49,6 +51,7 @@ function MissionDetail() {
   const [loading, setLoading]   = useState(true)
   const [error, setError]       = useState(null)
   const [actions, setActions]   = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     const loadMission = async () => {
@@ -133,6 +136,10 @@ function MissionDetail() {
     }
     return step
   }
+
+  // Type au format court attendu par le filtre (mission.type = "volontariat_individuel" en base)
+  const testimonialFilterType = mission.type === 'volontariat_individuel' ? 'individuel' : mission.type
+  const testimonialsLink = `/temoignages?type=${testimonialFilterType}&destination=${mission.country?.toLowerCase()}`
 
   return (
     <div className="bg-surface min-h-screen">
@@ -492,35 +499,55 @@ function MissionDetail() {
         </section>
       )}
 
-      {/* ── Témoignages ── */}
-      {mission.testimonials?.length > 0 && (
-        <section id="temoignages" className={`padding-y padding-x ${sectionBg['temoignages']}`}>
-          <div className="flex flex-col lg:flex-row items-start justify-between gap-sm mb-8">
-            <div>
-              <h2 className="h2-style text-surface">Ils ont vécu l'aventure, découvrez leurs témoignages</h2>
-              <p className="text-body text-surface/60">
-                Chaque mission est une expérience unique. Découvrez les récits de volontaires partis avant vous.
-              </p>
-            </div>
-            <a href="/temoignages">
-              <Button label="Voir tous les témoignages →" variant="primary" />
-            </a>
-          </div>
-          <Carousel
-            items={mission.testimonials}
-            showPagination={true}
-            color="surface"
-            renderSlide={(t) => (
-              <TestimonialCard
-                quote={t.content}
-                name={t.author_name}
-                mission={t.mission?.title || ''}
-                avatar={t.avatar_url || undefined}
+      {/* ── Témoignages — version complète si témoignages existants, sinon CTA compact ── */}
+        <section id="temoignages" className={`padding-y padding-x ${mission.testimonials?.length > 0 ? sectionBg['temoignages'] : 'bg-accent-2'}`}>
+          {mission.testimonials?.length > 0 ? (
+            <>
+              <div className="flex flex-col lg:flex-row items-start justify-between gap-sm mb-8">
+                <div>
+                  <h2 className="h2-style text-surface">Ils ont vécu l'aventure, découvrez leurs témoignages</h2>
+                  <p className="text-body text-surface/60">
+                    Chaque mission est une expérience unique. Découvrez les récits de volontaires partis avant vous.
+                  </p>
+                </div>
+                <a href={testimonialsLink}>
+                  <Button label="Voir tous les témoignages →" variant="primary" />
+                </a>
+              </div>
+              <Carousel
+                items={mission.testimonials}
+                showPagination={true}
+                color="surface"
+                renderSlide={(t) => (
+                  <TestimonialCard
+                    quote={t.content}
+                    name={t.author_name}
+                    mission={t.mission?.title || ''}
+                    avatar={t.avatar_url || undefined}
+                  />
+                )}
               />
-            )}
-          />
+              <div className="mt-6 bg-accent-2 rounded-2xl p-6 flex justify-center">
+                <Button
+                  onClick={() => setModalOpen(true)}
+                  label="Vous êtes partis en mission ? Racontez-nous →"
+                  variant="light"
+                />
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-lg">
+              <Button
+                onClick={() => setModalOpen(true)}
+                label="Vous êtes partis en mission ? Racontez-nous →"
+                variant="light"
+              />
+              <a href={testimonialsLink}>
+                <Button label="Voir tous les témoignages →" variant="primary" />
+              </a>
+            </div>
+          )}
         </section>
-      )}
 
       {/* ── Galerie photos ── */}
       <section id="galerie" className={`padding-y padding-x ${sectionBg['galerie']}`}>
@@ -541,6 +568,10 @@ function MissionDetail() {
           )}
         />
       </section>
+
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Partager votre témoignage">
+        <TestimonialForm onClose={() => setModalOpen(false)} />
+      </Modal>
 
       <ScrollToTop />
     </div>

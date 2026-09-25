@@ -30,7 +30,10 @@ import { FILTER_CONFIG_TEMOIGNAGES } from '../utils/filters'
 
 function Testimonials() {
   const [searchParams] = useSearchParams()
-  const [filters, setFilters] = useState({ type: searchParams.get('type') || null })
+  const [filters, setFilters] = useState({
+    type: searchParams.get('type') || null,
+    destination: searchParams.get('destination') || null,
+  })
   const [testimonials, setTestimonials] = useState([])
   const [rapports, setRapports] = useState([])
   const [loading, setLoading] = useState(true)
@@ -50,8 +53,13 @@ function Testimonials() {
   }
 
   const filterFn = (item) => {
-    if (filters.type && item.type !== filters.type) return false
-    if (filters.destination && item.destination !== filters.destination) return false
+    // Un témoignage n'a pas item.type/item.destination directement (imbriqués
+    // dans item.mission) — un rapport de mission, si. On gère les deux formes ici.
+    const itemType = item.type || item.mission?.type
+    const itemDestination = item.destination || item.mission?.country?.toLowerCase()
+
+    if (filters.type && itemType !== filters.type) return false
+    if (filters.destination && itemDestination !== filters.destination) return false
     if (filters.annee && String(item.annee) !== filters.annee) return false
     return true
   }
@@ -76,6 +84,15 @@ function Testimonials() {
           selects={FILTER_CONFIG_TEMOIGNAGES}
           selectValues={filters}
           onSelectChange={handleFilter}
+        />
+      </div>
+
+      {/* ── CTA discret — partager son témoignage ── */}
+      <div className="flex justify-center py-6 bg-surface">
+        <Button
+          onClick={() => setModalOpen(true)}
+          label="Vous êtes partis en mission ? Racontez-nous →"
+          variant="secondary"
         />
       </div>
 

@@ -96,6 +96,9 @@ function ServiceCiviqueDetail() {
     { label: "Galerie",              id: "galerie",         show: mission.media?.filter(m => m.file_type === 'image').length > 0 },
   ].filter(s => s.show)
 
+  const testimonialFilterType = mission.type === 'volontariat_individuel' ? 'individuel' : mission.type
+  const testimonialsLink = `/temoignages?type=${testimonialFilterType}&destination=${mission.country?.toLowerCase()}`
+
   return (
     <div className="bg-surface min-h-screen">
 
@@ -336,7 +339,7 @@ function ServiceCiviqueDetail() {
                 Chaque mission est une expérience unique. Découvrez les récits de volontaires partis avant vous.
               </p>
             </div>
-            <a href="/temoignages">
+            <a href={testimonialsLink}>
               <Button label="Voir tous les témoignages →" variant="primary" />
             </a>
           </div>
