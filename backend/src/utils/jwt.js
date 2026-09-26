@@ -1,20 +1,15 @@
 // src/utils/jwt.js
-// JWT generation/verification helpers, used by authService (issuing tokens)
-// and authMiddleware (verifying them).
-//
-// Two-token design, deliberately asymmetric:
-// - the ACCESS token is SHORT-LIVED (15 min by default). It travels in the
-//   Authorization header of every request, so a leak (XSS, logs, a proxy)
-//   only stays valid for a few minutes.
-// - the REFRESH token is LONG-LIVED (7 days by default) but stays protected:
-//   HttpOnly cookie (never readable by JS), hashed in the DB, rotated on use.
-//   Its longevity is only safe *because* of those protections — if the
-//   access token shared the same lifetime, rotation would protect nothing.
+// Fonctions utilitaires pour générer et vérifier les tokens JWT.
+// L'application utilise :
+// - un access token de courte durée pour accéder aux routes protégées ;
+// - un refresh token de plus longue durée pour renouveler l'access token.
 
 import jwt from "jsonwebtoken"
 
-// Génère un access token — courte durée de vie (15 min par défaut)
-// Contient : id et role de l'admin
+// Génère un access token pour l'administrateur.
+// Contient son identifiant et son rôle.
+// Utilise le secret JWT dédié aux access tokens.
+// Durée de vie : 15 minutes par défaut.
 export const generateAccessToken = (admin) => {
   return jwt.sign(
     { id: admin.id, role: admin.role },
@@ -23,8 +18,10 @@ export const generateAccessToken = (admin) => {
   )
 }
 
-// Génère un refresh token — longue durée de vie (7 jours par défaut)
-// Contient uniquement l'id (moins d'infos = plus sûr)
+// Génère un refresh token pour l'administrateur.
+// Contient uniquement son identifiant.
+// Utilise un secret différent de celui de l'access token.
+// Durée de vie : 7 jours par défaut.
 export const generateRefreshToken = (admin) => {
   return jwt.sign(
     { id: admin.id },
@@ -33,13 +30,14 @@ export const generateRefreshToken = (admin) => {
   )
 }
 
-// Vérifie et décode un access token
-// Retourne le payload décodé si valide, lève une erreur sinon
+// Vérifie la validité d'un access token avec le secret correspondant.
+// Retourne les données du token s'il est valide.
 export const verifyAccessToken = (token) => {
   return jwt.verify(token, process.env.JWT_SECRET)
 }
 
-// Vérifie et décode un refresh token
+// Vérifie la validité d'un refresh token avec le secret correspondant.
+// Retourne les données du token s'il est valide.
 export const verifyRefreshToken = (token) => {
   return jwt.verify(token, process.env.JWT_REFRESH_SECRET)
 }
