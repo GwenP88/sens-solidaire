@@ -1,23 +1,19 @@
 // tests/Testimonials.admin.test.js
 // ============================================================
-// Automated tests for testimonial moderation (Jest + Supertest)
+// Tests automatisés de la modération des témoignages
+// Jest + Supertest
 // ------------------------------------------------------------
-// Covers:
-//   - PATCH /api/admin/testimonials/:id/approve (valid token, unknown id)
-//   - PATCH /api/admin/testimonials/:id/reject  (no token)
-//   - a token whose signature alone is tampered with (header/payload intact)
-//   - a mass-assignment attempt via the request body
+// Vérifie :
+//   - l'approbation d'un témoignage
+//   - le refus sans authentification
+//   - le rejet d'un JWT altéré
+//   - la protection contre le mass assignment
+//   - l'état réel des données en base
 //
-// Test testimonials are created through the PUBLIC submission route
-// (POST /api/testimonials), not via prisma.create — this exercises the
-// public submission path as a side effect of setting up each moderation
-// test. Every test also checks the database state, not just the response
-// body: a 200 doesn't prove a row actually changed.
-//
-// ⚠️ PRÉREQUIS pour lancer :
-//   - la base Postgres doit tourner (conteneur Docker up + seedée)
-//   - lancer DANS le conteneur backend (sinon "postgres" n'est pas résolu) :
-//       docker exec sensolidaire_backend npm test
+// Prérequis :
+//   - PostgreSQL doit être démarré et seedé
+//   - lancer les tests dans le conteneur backend :
+//     docker exec sensolidaire_backend npm test
 // ============================================================
 
 import { describe, it, expect, beforeAll, afterAll } from "@jest/globals"
@@ -25,19 +21,18 @@ import request from "supertest"
 import app from "../src/app.js"
 import prisma from "../src/config/db.js"
 
-// Identifiants de l'admin du seed
+// Compte administrateur créé par le seed
 const ADMIN = { email: "admin@sensolidaire.org", password: "Admin1234!" }
 
-// Every test testimonial's author_name starts with this — used both to
-// scope defensive cleanup and to identify what afterAll must remove.
+// Préfixe utilisé pour identifier les témoignages de test
 const NAME_PREFIX = "Jest Testimonial"
 
-// Base64url alphabet, used to reliably mutate one signature character.
+// Alphabet utilisé pour modifier la signature du JWT
 const BASE64URL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 
-let token // token admin récupéré au login
+let token // Jeton administrateur récupéré à la connexion
 
-// Submits a testimonial through the PUBLIC route and returns its DB id.
+// Crée un témoignage via la route publique et retourne son id
 const submitTestimonial = async (label) => {
   const res = await request(app)
     .post("/api/testimonials")
@@ -51,8 +46,7 @@ const submitTestimonial = async (label) => {
 
 // ── AVANT TOUS LES TESTS ──────────────────────────────────────────────────────
 beforeAll(async () => {
-  // Nettoyage défensif : si un run précédent a laissé des témoignages de
-  // test, on les supprime pour repartir propre.
+  // Supprime les éventuelles données laissées par un test précédent
   await prisma.testimonial.deleteMany({ where: { author_name: { startsWith: NAME_PREFIX } } })
 
   const res = await request(app).post("/api/auth/login").send(ADMIN)
@@ -66,7 +60,7 @@ afterAll(async () => {
 })
 
 // ============================================================
-// APPROVE — PATCH /api/admin/testimonials/:id/approve
+// APPROBATION — PATCH /api/admin/testimonials/:id/approve
 // ============================================================
 describe("PATCH /api/admin/testimonials/:id/approve", () => {
 
@@ -94,11 +88,11 @@ describe("PATCH /api/admin/testimonials/:id/approve", () => {
 })
 
 // ============================================================
-// REJECT — PATCH /api/admin/testimonials/:id/reject
+// REFUS — PATCH /api/admin/testimonials/:id/reject
 // ============================================================
 describe("PATCH /api/admin/testimonials/:id/reject", () => {
 
-  it("A3 — sans jeton → 401 et statut resté 'pending' en base", async () => {
+  it("A3 — refuse la modification sans authentification et préserve les données", async () => {
     const id = await submitTestimonial("A3")
 
     const res = await request(app).patch(`/api/admin/testimonials/${id}/reject`)
@@ -118,9 +112,7 @@ describe("Signature JWT altérée", () => {
   it("B1 — seule la signature est modifiée (header/payload intacts) → 401 et statut inchangé", async () => {
     const id = await submitTestimonial("B1")
 
-    // On ne touche qu'au dernier caractère de la signature : header et
-    // payload restent du base64url valide, donc une vérification naïve qui
-    // ne décoderait que le payload manquerait cette altération.
+    // Modifie uniquement le dernier caractère de la signature
     const [header, payload, signature] = token.split(".")
     const lastChar = signature.at(-1)
     const replacement = BASE64URL_CHARS[(BASE64URL_CHARS.indexOf(lastChar) + 1) % BASE64URL_CHARS.length]
@@ -138,7 +130,7 @@ describe("Signature JWT altérée", () => {
 })
 
 // ============================================================
-// MASS ASSIGNMENT
+// PROTECTION CONTRE LA MODIFICATION DE CHAMPS NON AUTORISÉS
 // ============================================================
 describe("Mass assignment via le corps de la requête", () => {
 
@@ -152,9 +144,7 @@ describe("Mass assignment via le corps de la requête", () => {
 
     expect(res.status).toBe(200)
 
-    // The route hardcodes the status server-side and never reads it from
-    // req.body — so this must be "approved", not the "rejected" a client
-    // tried to inject through the payload.
+    // Le statut est imposé côté serveur et ignore celui envoyé par le client
     const row = await prisma.testimonial.findUnique({ where: { id } })
     expect(row.status).toBe("approved")
   })

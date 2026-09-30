@@ -1,32 +1,19 @@
 // src/services/storageService.js
-// File storage service for uploaded files (Multer buffers written to disk).
-// This is the ONLY function that changes if we move to external storage
-// (Cloudinary, S3...) — the rest of the app must never know where files live.
-//
-// SECURITY: this file used to trust client input for both the destination
-// filename and its extension. That allowed a path traversal write (arbitrary
-// file overwrite via "../" segments in file.originalname) and a MIME/extension
-// mismatch (stored XSS: an HTML file mislabeled as image/png, saved with a
-// .html extension, then served as HTML by express.static). Every rule below
-// closes one of those two holes — see the comment next to each rule.
+// Gère le stockage sécurisé des fichiers reçus par Multer.
+// Centralise l'écriture pour faciliter un futur stockage externe.
 
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 import sharp from 'sharp'
 
-// Root uploads folder, at the backend root
+// Dossier racine des fichiers uploadés.
 const UPLOADS_ROOT = path.resolve('public/uploads')
 
-// Whitelist of writable/deletable subfolders. Closes: a caller passing an
-// arbitrary `folder` string could otherwise target any path via
-// path.join(UPLOADS_ROOT, folder, ...).
+// Sous-dossiers autorisés pour éviter l'écriture hors du répertoire prévu.
 const ALLOWED_FOLDERS = ['images', 'videos', 'documents']
 
-// Extension is derived from the (Multer-validated) MIME type, never from the
-// client-supplied filename. Closes: a file named "payload.html" declared as
-// image/png would otherwise keep its real .html extension and get served as
-// HTML by express.static('public/uploads') — stored XSS on our own origin.
+// Extension déterminée par le type MIME et non par le nom du fichier.
 const EXTENSION_BY_MIMETYPE = {
   'image/jpeg': '.jpg',
   'image/png': '.png',
@@ -36,8 +23,7 @@ const EXTENSION_BY_MIMETYPE = {
   'application/pdf': '.pdf',
 }
 
-// Table des tailles cibles par contexte d'usage — jamais fournie par le
-// client, toujours résolue côté serveur à partir du `imageType` reçu.
+// Tailles et qualités définies côté serveur selon l'usage.
 const IMAGE_SIZES = {
   hero:    { width: 1920, quality: 80 },
   gallery: { width: 1600, quality: 80 },
@@ -45,11 +31,7 @@ const IMAGE_SIZES = {
   avatar:  { width: 400,  quality: 75 },
 }
 
-// Turns the client-supplied original name into a harmless display label,
-// never a path. path.basename() strips any directory component first (so
-// "../../../../x" becomes "x"), then the whitelist regex keeps only
-// [a-z0-9-] — no dots, slashes, or null bytes survive to smuggle a
-// traversal or a double extension through.
+// Nettoie le nom d'origine pour empêcher les chemins malveillants.
 const slugifyOriginalName = (originalName) => {
   const base = path.basename(originalName || '', path.extname(originalName || ''))
   const withoutAccents = base.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -61,34 +43,30 @@ const slugifyOriginalName = (originalName) => {
   return slug || 'fichier'
 }
 
-// ── SAVE A FILE ───────────────────────────────────────────────
-// Prend un fichier Multer (buffer en mémoire) + le sous-dossier cible.
-// imageType (hero/gallery/card/avatar) n'est utilisé QUE pour les images —
-// il détermine la taille de redimensionnement (voir IMAGE_SIZES).
-// Retourne une URL relative à stocker en BDD (jamais une URL absolue).
+// ── ENREGISTREMENT D'UN FICHIER ────────────────────────────────
+
+// Enregistre le fichier et retourne son URL relative.
 export const saveFile = async (file, folder, imageType) => {
-  // 1. Dossier cible autorisé ? (whitelist — voir commentaire ALLOWED_FOLDERS)
+  // Vérifie que le dossier cible est autorisé.
   if (!ALLOWED_FOLDERS.includes(folder)) {
     const error = new Error(`Invalid target folder: ${folder}`)
     error.status = 400
     throw error
   }
 
-  // 2. Nom de fichier sûr — slug du nom original + suffixe unique (anti-collision)
+  // Génère un nom sécurisé et unique.
   const slug = slugifyOriginalName(file.originalname)
   const uniqueSuffix = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}`
 
-  // Buffer et extension par défaut — écrasés ci-dessous si c'est une image
+  // Récupère le fichier et son extension selon le type MIME.
   let buffer = file.buffer
   let extension = EXTENSION_BY_MIMETYPE[file.mimetype]
 
-  // 3. Images uniquement : redimensionnement + conversion WebP via Sharp
-  //    imageType vient du client, mais la TAILLE vient d'IMAGE_SIZES (serveur)
-  //    → même principe que pour l'extension : jamais confiance dans le client
+  // Redimensionne les images et les convertit en WebP.
   if (folder === 'images') {
     const sizeConfig = IMAGE_SIZES[imageType]
 
-    // imageType absent ou inconnu → on refuse plutôt que de deviner une taille
+    // Refuse un type d'image inconnu.
     if (!sizeConfig) {
       const error = new Error(`Type d'image invalide ou manquant : ${imageType}`)
       error.status = 400
@@ -96,46 +74,44 @@ export const saveFile = async (file, folder, imageType) => {
     }
 
     buffer = await sharp(file.buffer)
-      // withoutEnlargement : ne jamais agrandir une image plus petite que la cible
+      // Évite d'agrandir une image plus petite que la taille cible.
       .resize({ width: sizeConfig.width, withoutEnlargement: true })
       .webp({ quality: sizeConfig.quality })
       .toBuffer()
 
-    // Peu importe le format d'origine (jpg/png/webp) : la sortie est toujours .webp
+    // Les images sont toujours enregistrées en WebP.
     extension = '.webp'
   }
 
-  // 4. Vidéos/PDF : si le mimetype n'était pas dans la table → type non supporté
+  // Refuse les types de fichiers non supportés.
   if (!extension) {
     const error = new Error(`Unsupported file type: ${file.mimetype}`)
     error.status = 400
     throw error
   }
 
-  // 5. Écriture sur disque
+  // Construit le chemin puis écrit le fichier sur le disque.
   const uniqueName = `${uniqueSuffix}-${slug}${extension}`
   const targetDir = path.join(UPLOADS_ROOT, folder)
   const targetPath = path.join(targetDir, uniqueName)
 
-  // Le sous-dossier peut ne pas encore exister (checkout tout frais, volume neuf)
+  // Crée le dossier s'il n'existe pas.
   await fs.promises.mkdir(targetDir, { recursive: true })
   await fs.promises.writeFile(targetPath, buffer)
 
-  // URL relative — le front ajoute API_URL devant pour l'affichage
+  // Retourne uniquement l'URL relative à enregistrer en BDD.
   return `/uploads/${folder}/${uniqueName}`
 }
 
-// ── DELETE A FILE ─────────────────────────────────────────────
-// Used to clean up an old file when it gets replaced.
+// ── SUPPRESSION D'UN FICHIER ───────────────────────────────────
+
+// Supprime un ancien fichier lors de son remplacement.
 export const deleteFile = async (relativeUrl) => {
   if (!relativeUrl) return
 
   const filePath = path.join(UPLOADS_ROOT, relativeUrl.replace('/uploads/', ''))
 
-  // Defense in depth: relativeUrl normally comes back from our own DB
-  // (built by saveFile above), but never unlink a path that resolves
-  // outside UPLOADS_ROOT — one bad value here must not become an
-  // arbitrary-delete primitive.
+  // Bloque toute suppression en dehors du dossier uploads.
   if (!filePath.startsWith(UPLOADS_ROOT + path.sep)) {
     console.warn(`Deletion path escapes the uploads folder, ignored: ${relativeUrl}`)
     return
@@ -144,7 +120,7 @@ export const deleteFile = async (relativeUrl) => {
   try {
     await fs.promises.unlink(filePath)
   } catch (err) {
-    // File already gone — not an error, just a heads-up.
+    // Ignore un fichier déjà supprimé ou introuvable.
     console.warn(`File not found for deletion: ${relativeUrl}`)
   }
 }
