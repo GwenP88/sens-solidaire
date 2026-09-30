@@ -421,7 +421,7 @@ function MissionFormPage() {
         >
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-dash-text">
-              Description longue <span className="text-red-500">*</span>
+              Description <span className="text-red-500">*</span>
             </label>
             <p className="text-xs text-dash-legend -mt-0.5">
               Astuce : insère <code className="bg-gray-100 px-1 rounded">---</code> à l'endroit où tu veux que le résumé s'arrête (sinon coupé automatiquement à la fin de la dernière phrase complète).
