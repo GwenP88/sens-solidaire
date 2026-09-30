@@ -218,6 +218,9 @@
 A REVOIR :
 ajouter le bouton poster un témoiganges sur la page témoignages
 revoir le gap variant sans témoignages + hauteur de la section
+- ⚠️ **`MissionDetail.jsx` entièrement fait, `ServiceCiviqueDetail.jsx` reste à faire** (même traitement prévu : import Modal/TestimonialForm, state `modalOpen`, restructuration de la section témoignages pour rester visible même sans témoignage, CTA sur fond `accent-2`) — à reprendre en premier la prochaine session
+revoir les fichier / commentaires car certains en anglais...
+revoir le bloc photo obligatoire (manque *)
 
 
 ### Bloc C — Page Éducation & sensibilisation
