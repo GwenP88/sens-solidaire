@@ -218,10 +218,15 @@
 | 126 | Gwen | Tests d'intégration | ❌ |
 | 170 | Gwen | Filtres pays dynamiques sur /notre-impact et /temoignages (dérivés des vraies données en base — missions + actions terrain) au lieu de FILTERS_COUNTRY figée dans utils/filters.js — nouvelle route publique pays réellement utilisés | ❌ |
 
-A REVOIR :
-- ⚠️ **`MissionDetail.jsx` entièrement fait, `ServiceCiviqueDetail.jsx` reste à faire** (même traitement prévu : import Modal/TestimonialForm, state `modalOpen`, restructuration de la section témoignages pour rester visible même sans témoignage, CTA sur fond `accent-2`) + vérif les * sur les section obligatoire — à reprendre en premier la prochaine session
+## 🔴 À revoir en priorité — début de la prochaine session
 
-revoir les fichier / commentaires car certains en anglais...
+- [ ] **Vocabulaire** : astuces description au tutoiement (Mission, Carte pays) → vouvoiement ; faute `concerné.s` (aide lien ministère) ; label `Rôle du volontaire'` ; message de chargement de la carte pays (« mission en service civique ») ; idée « URL de la mission » → « Adresse de la page »
+- [ ] `TestimonialEditModal` : en modification, seul `mission_id` est envoyé → changement de type probablement perdu, **à vérifier**
+- [ ] `TestimonialEditModal` : Mois/Année côte à côte sur mobile → `flex-col sm:flex-row`
+- [ ] Logo partenaire obligatoire **aussi côté backend**
+- [ ] Année (rapports de mission et d'activité) : contrôle « 4 chiffres »
+- [ ] Rapports d'activité : lien PDF à coller → passer par un envoi de fichier comme les rapports de mission ? (à valider avec la cliente)
+- [ ] Ménage fichiers et commentaires en anglais
 
 ### Bloc C — Page Éducation & sensibilisation
 

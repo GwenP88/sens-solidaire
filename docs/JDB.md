@@ -2714,4 +2714,54 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 
 ---
 
+### 4 octobre 2026 — Formulaires dashboard : astérisques, erreurs visibles par champ, barre d'actions collante ; titre fixe dans la modale carte pays
+
+**Chantier formulaires du dashboard — chantier principal :**
+- Constat : plusieurs champs obligatoires sans astérisque, et des props `error` jamais transmises → certains formulaires bloquaient **en silence** (la cliente cliquait sur Enregistrer, rien ne se passait)
+- Nouveau composant `FormActionBar` dans `FormElements.jsx` : barre Annuler / Enregistrer fixée en bas de l'écran (décalée de la sidebar en desktop), conteneur de page en `pb-24` pour ne rien masquer
+- Appliqué sur `MissionFormPage`, `LocationFormPage`, `TeamMemberFormPage`, `FieldActionFormPage`, `ServiceCiviqueFormPage` : astérisques manquants, props `error` ajoutées, messages reformulés, pays obligatoire sur l'action terrain
+- `ServiceCiviqueFormPage` : erreurs Titre/Pays branchées, astérisque sur le bloc Photo (JSX passé dans `title` de `FormSection`), commentaire d'en-tête corrigé (`service_civique_pays` → `service_civique`), titre de page ajusté
+- `AdminFileUpload` : nouvelle prop facultative `error` → le cadre « Ajouter un fichier » passe en rouge. Branchée sur Mission, Lieu, Action terrain, Carte pays, avec effacement de l'erreur dès l'ajout d'une photo. Non branchée là où la photo est facultative (équipe, galerie, guide PDF, photo des référents)
+- **Modales migrées du message global vers les erreurs par champ** (même recette partout : `fieldErrors` + `validate()` + `clearError()`) : `TestimonialEditModal`, `MissionReportEditModal`, `PartnerEditModal` (logo désormais obligatoire), `ActivityReportEditModal`. Le message en haut ne sert plus qu'aux erreurs serveur
+- Vérification finale par `grep 'setError("'` : il ne reste que des erreurs de chargement, plus aucune validation en message global
+
+**Site public — `Missions.jsx` :**
+- Modale des cartes pays Service Civique : titre fixe « Votre rôle pour cette mission » (`h3`) regroupé avec la description dans la colonne de droite
+
+---
+
+#### Bugs rencontrés et résolus
+
+| Bug | Cause | Solution |
+|---|---|---|
+| `AdminFileUpload` plantait après ajout de la prop `error` | Conflit de nom avec le state interne `error` (erreur d'envoi de fichier) | State interne renommé `uploadError`, prop `error` conservée (cohérence avec `Field`) |
+| Bordure rouge invisible malgré un code correct | Cache HMR de Vite après modification d'un composant partagé | Rechargement complet `Ctrl+Maj+R` |
+| `MissionReportEditModal` plantait | Copier-coller depuis la modale témoignages : `setAuthorName`, `setMissionId`, `missionId` inexistants dans ce fichier | Noms corrigés (`setAuteur`, `setDestination`) — vérifier chaque variable après un copier-coller |
+| Rapport de mission : destination envoyée pour un type sans destination | Changer de type ne vidait pas la destination | `setDestination('')` dans le `onChange` du type |
+| Erreur photo toujours affichée après ajout d'une photo | Le `onChange` de l'upload ne nettoyait pas `fieldErrors` | Effacement de l'erreur dans le `onChange` |
+
+---
+
+#### Décisions
+
+| Décision | Justification |
+|---|---|
+| `AdminFileUpload` gère seulement la bordure, le message reste dans la page | Prop facultative : aucun autre formulaire à modifier |
+| Erreurs par champ aussi dans les modales | Même comportement sur tout le dashboard, la cliente voit directement quoi corriger |
+| Logo partenaire obligatoire | Affiché en bandeau sur le site public, une case vide ferait « cassé » |
+| « Votre rôle pour cette mission » codé en dur | Identique pour tous les pays, aucun besoin de le rendre modifiable |
+
+---
+
+#### 🔵 À faire — identifié
+
+- **Vocabulaire** : astuces description au tutoiement (Mission, Carte pays) → vouvoiement ; faute `concerné.s` (aide lien ministère) ; label `Rôle du volontaire'` ; message de chargement de la carte pays (« mission en service civique ») ; idée « URL de la mission » → « Adresse de la page »
+- `TestimonialEditModal` : Mois/Année côte à côte sur mobile ; en modification, seul `mission_id` est envoyé (changement de type probablement perdu, à vérifier)
+- Logo partenaire obligatoire **aussi côté backend**
+- Rapports d'activité : lien PDF à coller → passer par un envoi de fichier comme les rapports de mission ?
+- Année (rapports) : contrôle « 4 chiffres »
+- Ménage fichiers et commentaires en anglais
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
