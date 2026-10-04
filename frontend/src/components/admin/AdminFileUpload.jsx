@@ -31,11 +31,12 @@ function AdminFileUpload({
   showHeroSelector = false,
   layout = 'list',
   allowReorder = true,
+  error,
 }) {
 
   // Suivi des uploads en cours — évite de bloquer toute l'UI pendant l'envoi
   const [uploading, setUploading] = useState(false)
-  const [error, setError] = useState(null)
+  const [uploadError, setUploadError] = useState(null)
 
   // ── Sélection de nouveaux fichiers ──
   const handleFileSelect = async (e) => {
@@ -47,7 +48,7 @@ function AdminFileUpload({
     const filesToUpload = files.slice(0, remainingSlots)
 
     setUploading(true)
-    setError(null)
+    setUploadError(null)
 
     try {
       // Upload séquentiel — plus simple à débugger qu'en parallèle, et évite
@@ -59,7 +60,7 @@ function AdminFileUpload({
       }
       onChange([...value, ...newItems])
     } catch (err) {
-      setError(err.message)
+      setUploadError(err.message)
     } finally {
       setUploading(false)
       e.target.value = '' // permet de resélectionner le même fichier si besoin
@@ -213,7 +214,9 @@ function AdminFileUpload({
 
       {/* ── Zone de sélection ── */}
       {value.length < maxFiles && (
-        <label className="text-sm text-dash-action hover:text-dash-action/70 border border-dashed border-dash-action/30 rounded-lg px-4 py-2 transition-colors cursor-pointer text-center">
+        <label className={`text-sm text-dash-action hover:text-dash-action/70 border border-dashed rounded-lg px-4 py-2 transition-colors cursor-pointer text-center ${
+          error ? 'border-red-400' : 'border-dash-action/30'
+        }`}>
           {uploading ? 'Envoi en cours...' : '+ Ajouter un fichier'}
           <input
             type="file"
@@ -227,7 +230,7 @@ function AdminFileUpload({
       )}
 
       {helperText && <span className="text-xs text-dash-legend">{helperText}</span>}
-      {error && <span className="text-xs text-dash-danger">{error}</span>}
+      {uploadError && <span className="text-xs text-dash-danger">{uploadError}</span>}
 
     </div>
   )
