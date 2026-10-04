@@ -53,6 +53,7 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
 
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const needsDestination = type === 'individuel' || type === 'service_civique'
 
@@ -63,15 +64,29 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
       .catch(console.error)
   }, [type])
 
+  // Retire l'erreur d'un champ dès que la cliente le modifie
+  const clearError = (name) => {
+    if (fieldErrors[name]) setFieldErrors(prev => ({ ...prev, [name]: null }))
+  }
+
+    // Même principe que les formulaires pleine page : une erreur par champ
+  const validate = () => {
+    const newErrors = {}
+    if (!isEditing) {
+      if (!authorName.trim()) newErrors.authorName = "Le nom du volontaire est obligatoire."
+      if (!content.trim())    newErrors.content = "Le témoignage est obligatoire."
+      if (!type)              newErrors.type = "Choisissez un type de mission."
+    }
+    if (needsDestination && !missionId) newErrors.missionId = "Choisissez le pays de la mission."
+    return newErrors
+  }
+
   const handleSave = async () => {
-  if (!isEditing && (!authorName.trim() || !content.trim() || !type)) {
-    setError("Nom, témoignage et type de mission sont obligatoires.")
-    return
-  }
-  if (needsDestination && !missionId) {
-    setError("Sélectionnez une destination.")
-    return
-  }
+    const validationErrors = validate()
+    if (Object.keys(validationErrors).length > 0) {
+      setFieldErrors(validationErrors)
+      return
+    }
 
     setSubmitting(true)
     setError(null)
@@ -146,15 +161,18 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
             label="Nom du volontaire"
             name="author_name"
             value={authorName}
-            onChange={e => setAuthorName(e.target.value)}
+            onChange={e => { setAuthorName(e.target.value); clearError('authorName') }}
             required
+            error={fieldErrors.authorName}
           />
           <TextareaField
             label={`Témoignage — ${content.length}/280 caractères`}
             value={content}
-            onChange={e => setContent(e.target.value.slice(0, 280))}
+            onChange={e => { setContent(e.target.value.slice(0, 280)); clearError('content') }}
             rows={4}
             clearable
+            required
+            error={fieldErrors.content}
             hint="Saisissez le témoignage tel qu'il doit apparaître sur le site."
           />
           <div className="flex gap-2">
@@ -193,11 +211,15 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
 
       {/* ── Mission — toujours modifiable ── */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-dash-text">Type de mission</label>
+        <label className="text-sm font-medium text-dash-text">
+          Type de mission {!isEditing && <span className="text-red-500">*</span>}
+        </label>
         <select
           value={type}
-          onChange={e => { setType(e.target.value); setMissionId('') }}
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+          onChange={e => { setType(e.target.value); setMissionId(''); clearError('type'); clearError('missionId') }}
+          className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
+            fieldErrors.type ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
+          }`}
         >
           <option value="">Sélectionnez un type</option>
           <option value="individuel">Volontariat individuel</option>
@@ -205,24 +227,30 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
           <option value="groupe_jeunes">Groupe jeune</option>
           <option value="conge_solidaire">Congé solidaire</option>
         </select>
+        {fieldErrors.type && <span className="text-xs text-red-500">{fieldErrors.type}</span>}
       </div>
 
       {needsDestination && (
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-dash-text">Destination</label>
+          <label className="text-sm font-medium text-dash-text">
+            Destination <span className="text-red-500">*</span>
+          </label>
           <p className="text-xs text-dash-legend">
             Sélectionnez le pays dans lequel la mission a été réalisée.
           </p>
           <select
             value={missionId}
-            onChange={e => setMissionId(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+            onChange={e => { setMissionId(e.target.value); clearError('missionId') }}
+            className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
+              fieldErrors.missionId ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
+            }`}
           >
             <option value="">Sélectionnez une destination</option>
             {destinations.map(m => (
               <option key={m.id} value={m.id}>{m.country}</option>
             ))}
           </select>
+          {fieldErrors.missionId && <span className="text-xs text-red-500">{fieldErrors.missionId}</span>}
         </div>
       )}
 

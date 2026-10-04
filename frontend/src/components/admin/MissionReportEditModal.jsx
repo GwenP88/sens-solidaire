@@ -32,6 +32,7 @@ function MissionReportEditModal({ report, onClose, onSaved }) {
   )
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
+  const [fieldErrors, setFieldErrors] = useState({})
   const needsDestination = type === 'individuel' || type === 'service_civique'
 
   useEffect(() => {
@@ -41,9 +42,25 @@ function MissionReportEditModal({ report, onClose, onSaved }) {
       .catch(console.error)
   }, [type])
 
+  // Retire l'erreur d'un champ dès que la cliente le modifie
+  const clearError = (name) => {
+    if (fieldErrors[name]) setFieldErrors(prev => ({ ...prev, [name]: null }))
+  }
+
+  // Même principe que les formulaires pleine page : une erreur par champ
+  const validate = () => {
+    const newErrors = {}
+    if (!auteur.trim())   newErrors.auteur = "Le nom de l'auteur est obligatoire."
+    if (!type)            newErrors.type = "Choisissez un type de mission."
+    if (!annee.trim())    newErrors.annee = "L'année de la mission est obligatoire."
+    if (pdf.length === 0) newErrors.pdf = "Ajoutez le rapport au format PDF."
+    return newErrors
+  }
+
   const handleSave = async () => {
-    if (!auteur.trim() || !type || !annee || pdf.length === 0) {
-      setError("Veuillez renseigner l’auteur, le type de mission et l’année, puis ajouter le rapport au format PDF.")
+    const validationErrors = validate()
+    if (Object.keys(validationErrors).length > 0) {
+      setFieldErrors(validationErrors)
       return
     }
 
@@ -83,24 +100,30 @@ function MissionReportEditModal({ report, onClose, onSaved }) {
           label="Auteur du rapport"
           name="auteur"
           value={auteur}
-          onChange={e => setAuteur(e.target.value)}
+          onChange={e => { setAuteur(e.target.value); clearError('auteur') }}
           hint="Indiquez le prénom et le nom de la personne ayant rédigé le rapport."
           required
+          error={fieldErrors.auteur}
         />
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-dash-text">Type de mission</label>
+        <label className="text-sm font-medium text-dash-text">
+          Type de mission <span className="text-red-500">*</span>
+        </label>
         <p className="text-xs text-dash-legend">
           Sélectionnez le type de mission concerné par ce rapport.
         </p>
         <select
           value={type}
-          onChange={e => setType(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+          onChange={e => { setType(e.target.value); setDestination(''); clearError('type') }}
+          className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
+            fieldErrors.type ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
+          }`}
         >
           <option value="">Sélectionnez un type</option>
           {TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
         </select>
+        {fieldErrors.type && <span className="text-xs text-red-500">{fieldErrors.type}</span>}
       </div>
 
       {needsDestination && (
@@ -126,24 +149,26 @@ function MissionReportEditModal({ report, onClose, onSaved }) {
         label="Année de la mission"
         name="annee"
         value={annee}
-        onChange={e => setAnnee(e.target.value)}
+        onChange={e => { setAnnee(e.target.value); clearError('annee') }}
         required
+        error={fieldErrors.annee}
       />
 
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium text-dash-text">
-          Rapport de mission<span className="text-red-500">*</span>
+          Rapport de mission <span className="text-red-500">*</span>
         </label>
         <p className="text-xs text-dash-legend">
           Sélectionnez le rapport au format PDF à proposer au téléchargement sur le site.
         </p>
         <AdminFileUpload
           value={pdf}
-          onChange={setPdf}
+          onChange={(files) => { setPdf(files); clearError('pdf') }}
           accept="application/pdf"
           maxFiles={1}
-          showLabel={false}
+          error={fieldErrors.pdf}
         />
+        {fieldErrors.pdf && <span className="text-xs text-red-500">{fieldErrors.pdf}</span>}
       </div>
 
       <div className="flex justify-end gap-2">

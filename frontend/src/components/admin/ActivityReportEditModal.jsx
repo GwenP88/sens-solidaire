@@ -12,11 +12,26 @@ function ActivityReportEditModal({ report, onClose, onSaved }) {
   const [annee, setAnnee] = useState(report?.annee?.toString() || '')
   const [url, setUrl] = useState(report?.url || '')
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null)         // erreurs serveur (message en haut)
+  const [fieldErrors, setFieldErrors] = useState({}) // erreurs par champ
+
+  // Retire l'erreur d'un champ dès que la cliente le modifie
+  const clearError = (fieldName) => {
+    if (fieldErrors[fieldName]) setFieldErrors(prev => ({ ...prev, [fieldName]: null }))
+  }
+
+  // Même principe que les formulaires pleine page : une erreur par champ
+  const validate = () => {
+    const newErrors = {}
+    if (!annee.trim()) newErrors.annee = "L'année du rapport est obligatoire."
+    if (!url.trim())   newErrors.url = "Le lien du rapport est obligatoire."
+    return newErrors
+  }
 
   const handleSave = async () => {
-    if (!annee.trim() || !url.trim()) {
-      setError("Année et lien du PDF sont obligatoires.")
+    const validationErrors = validate()
+    if (Object.keys(validationErrors).length > 0) {
+      setFieldErrors(validationErrors)
       return
     }
 
@@ -48,13 +63,15 @@ function ActivityReportEditModal({ report, onClose, onSaved }) {
 
       <Field
         label="Année" name="annee" value={annee}
-        onChange={e => setAnnee(e.target.value)}
+        onChange={e => { setAnnee(e.target.value); clearError('annee') }}
         required
+        error={fieldErrors.annee}
       />
       <Field
         label="Lien du PDF" name="url" value={url}
-        onChange={e => setUrl(e.target.value)}
+        onChange={e => { setUrl(e.target.value); clearError('url') }}
         required
+        error={fieldErrors.url}
       />
 
       <div className="flex justify-end gap-2">
