@@ -12,7 +12,7 @@ import {
   fetchAdminMissions, fetchCountryNames, createDelegation, updateDelegation,
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
-import { FormSection, Field, TextareaField } from '../../components/admin/FormElements'
+import { FormSection, Field, TextareaField, FormActionBar } from '../../components/admin/FormElements'
 
 const EMPTY_FORM = {
   name: '',
@@ -201,7 +201,7 @@ function LocationFormPage() {
   if (loading) return <p className="text-dash-legend text-sm italic p-8">Chargement...</p>
 
   return (
-    <div className="max-w-4xl mx-auto py-10">
+    <div className="max-w-4xl mx-auto pt-10 pb-24">
 
       <button
         onClick={() => navigate('/admin/lieux')}
@@ -236,6 +236,7 @@ function LocationFormPage() {
             value={formData.name}
             onChange={handleChange}
             required
+            error={fieldErrors.name}
             hint="Indiquez le nom du lieu, de l'association ou de la structure partenaire."
           />
 
@@ -245,6 +246,7 @@ function LocationFormPage() {
             value={formData.country}
             onChange={handleChange}
             required
+            error={fieldErrors.country}
             list="country-list"
             autoComplete="off"
           />
@@ -255,6 +257,8 @@ function LocationFormPage() {
             value={formData.description}
             onChange={handleChange}
             rows={5}
+            required
+            error={fieldErrors.description}
             hint="Présentez la structure partenaire, son rôle, ses activités et son environnement."
           />
 
@@ -269,12 +273,16 @@ function LocationFormPage() {
         </FormSection>
 
         <FormSection
-          title="Photos"
+          title={<>Photos <span className="text-red-500">*</span></>}
           description="Ajoutez les photos du lieu. Sélectionnez celle qui sera utilisée comme image principale de la fiche ; les autres seront affichées dans la galerie."
         >
           <AdminFileUpload
             value={formData.photos}
-            onChange={(photos) => setFormData(prev => ({ ...prev, photos }))}
+            onChange={(photos) => {
+              setFormData(prev => ({ ...prev, photos }))
+              if (fieldErrors.photos) setFieldErrors(prev => ({ ...prev, photos: null }))
+            }}
+            error={fieldErrors.photos}
             accept="image/*"
             maxFiles={15}
             imageType="gallery"
@@ -388,29 +396,11 @@ function LocationFormPage() {
           )}
         </FormSection>
 
-        <div className="flex items-center justify-between">
-
-          <button
-            type="button"
-            onClick={() => navigate('/admin/lieux')}
-            className="px-5 py-2 text-sm text-dash-legend hover:text-dash-text hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            Annuler
-          </button>
-
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-6 py-2 text-sm font-medium bg-dash-action text-white rounded-lg hover:bg-dash-action/90 disabled:opacity-50 transition-colors"
-          >
-            {submitting
-              ? 'Enregistrement...'
-              : isEditing
-                ? 'Enregistrer'
-                : 'Créer le lieu'}
-          </button>
-
-        </div>
+        <FormActionBar
+          onCancel={() => navigate('/admin/lieux')}
+          submitting={submitting}
+          submitLabel={isEditing ? 'Enregistrer' : 'Créer le lieu'}
+        />
 
       </form>
     </div>

@@ -72,3 +72,29 @@ export function TextareaField({ label, name, value, onChange, required, rows = 4
     </div>
   )
 }
+
+// ── Barre d'actions collée en bas de l'écran ──────────────────────────────
+// Annuler / Enregistrer toujours accessibles sans avoir à scroller.
+// À placer DANS le <form> : le bouton Enregistrer est un type="submit".
+// Le conteneur de la page doit avoir un padding-bas suffisant (pb-24)
+// pour que la dernière section ne passe pas sous la barre.
+export function FormActionBar({ onCancel, submitting, submitLabel, submittingLabel = 'Enregistrement...' }) {
+  return (
+    <div className="fixed bottom-0 left-0 right-0 md:left-64 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] px-6 py-4 flex items-center justify-between z-10">
+      <button
+        type="button"
+        onClick={onCancel}
+        className="px-5 py-2 text-sm text-dash-legend hover:text-dash-text hover:bg-gray-100 rounded-lg transition-colors"
+      >
+        Annuler
+      </button>
+      <button
+        type="submit"
+        disabled={submitting}
+        className="px-6 py-2 text-sm font-medium bg-dash-action text-white rounded-lg hover:bg-dash-action/90 disabled:opacity-50 transition-colors"
+      >
+        {submitting ? submittingLabel : submitLabel}
+      </button>
+    </div>
+  )
+}

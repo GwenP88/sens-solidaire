@@ -22,7 +22,7 @@ import {
 
 // ── Composants 
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
-import { FormSection, Field, TextareaField } from '../../components/admin/FormElements'
+import { FormSection, Field, TextareaField, FormActionBar } from '../../components/admin/FormElements'
 import AnchorNav from '../../components/navigation/AnchorNav'
 
 // ── Composants utils
@@ -216,9 +216,9 @@ function MissionFormPage() {
     const newErrors = {}
     if (!formData.title.trim())             newErrors.title             = "Le titre est obligatoire."
     if (!formData.country.trim())           newErrors.country           = "Le pays est obligatoire."
-    if (!formData.slug.trim())              newErrors.slug              = "Le slug est obligatoire."
+    if (!formData.slug.trim())              newErrors.slug              = "L'URL est obligatoire."
     if (!formData.description.trim())       newErrors.description       = "La description est obligatoire."
-    if (formData.mission_photos.length < 2) newErrors.mission_photos = "2 photos sont obligatoires (hero + illustration)."
+    if (formData.mission_photos.length < 2) newErrors.mission_photos = "2 photos sont obligatoires."
     return newErrors
   }
 
@@ -390,8 +390,14 @@ function MissionFormPage() {
 
           {/* Ligne 3 — Slug, pleine largeur */}
           <Field
-            label="URL de la mission" name="slug" value={formData.slug} onChange={handleChange} required
-            hint="Partie de l’URL qui identifie la mission. Utilisez des mots-clés courts et descriptifs, séparés par des tirets. Ex. : volontariat-kenya-biodiversite" pattern="[a-z0-9\-]+" title="Minuscules, chiffres et tirets uniquement, sans espaces ni accents"
+            label="URL de la mission"
+            name="slug" value={formData.slug}
+            onChange={handleChange}
+            required
+            error={fieldErrors.slug}
+            hint="Partie de l’URL qui identifie la mission. Utilisez des mots-clés courts et descriptifs, séparés par des tirets. Ex. : volontariat-kenya-biodiversite"
+            pattern="[a-z0-9\-]+"
+            title="Minuscules, chiffres et tirets uniquement, sans espaces ni accents"
           />
 
         </FormSection>
@@ -399,12 +405,16 @@ function MissionFormPage() {
         {/* ── BLOC 2 : Photos ── */}
         <FormSection
           id="photos"
-          title="Photos"
+          title={<>Photos <span className="text-red-500">*</span></>}
           description="2 photos obligatoires. La première est affichée en haut de la page, la seconde illustre la section « La mission ». Utilisez les flèches pour modifier leur ordre."
         >
           <AdminFileUpload
             value={formData.mission_photos}
-            onChange={(mission_photos) => setFormData(prev => ({ ...prev, mission_photos }))}
+            onChange={(mission_photos) => {
+              setFormData(prev => ({ ...prev, mission_photos }))
+              if (fieldErrors.mission_photos) setFieldErrors(prev => ({ ...prev, mission_photos: null }))
+            }}
+            error={fieldErrors.mission_photos}
             accept="image/*"
             maxFiles={2}
             imageType="hero"
@@ -616,26 +626,12 @@ function MissionFormPage() {
           </div>
         </FormSection>
 
-        {/* ── Actions — barre collante en bas de l'écran, toujours accessible sans scroller ── */}
-        <div className="fixed bottom-0 left-0 right-0 md:left-64 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] px-6 py-4 flex items-center justify-between z-10">
-          <button
-            type="button"
-            onClick={() => navigate('/admin/missions')}
-            className="px-5 py-2 text-sm text-dash-legend hover:text-dash-text hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-6 py-2 text-sm font-medium bg-dash-action text-white rounded-lg hover:bg-dash-action/90 disabled:opacity-50 transition-colors"
-          >
-            {submitting
-              ? 'Enregistrement...'
-              : isEditing ? 'Enregistrer les modifications' : 'Créer la mission'
-            }
-          </button>
-        </div>
+        {/* ── Actions — barre collante en bas de l'écran ── */}
+        <FormActionBar
+          onCancel={() => navigate('/admin/missions')}
+          submitting={submitting}
+          submitLabel={isEditing ? 'Enregistrer les modifications' : 'Créer la mission'}
+        />
 
       </form>
     </div>

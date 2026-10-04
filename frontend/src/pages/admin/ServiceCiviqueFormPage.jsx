@@ -2,7 +2,7 @@
 // ServiceCiviqueFormPage.jsx
 // Création / édition d'une "carte pays" Service Civique
 // (titre, pays, description, 1 photo — réutilise la table Mission,
-// type: 'service_civique_pays'). Pas de slug visible : généré
+// type: 'service_civique'). Pas de slug visible : généré
 // automatiquement, la cliente ne le gère jamais.
 // ════════════════════════════════════════════════════════════════
 
@@ -15,7 +15,7 @@ import {
   fetchCountryNames
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
-import { FormSection, Field, TextareaField } from '../../components/admin/FormElements'
+import { FormSection, Field, FormActionBar } from '../../components/admin/FormElements'
 import { previewShortDescription } from '../../utils/shortDescription'
 
 const EMPTY_FORM = {
@@ -61,7 +61,7 @@ function ServiceCiviqueFormPage() {
             : [],
         })
       } catch (err) {
-        setError("Impossible de charger cette carte.")
+        setError("Impossible de charger cette mission en service civique.")
       } finally {
         setLoading(false)
       }
@@ -136,7 +136,7 @@ function ServiceCiviqueFormPage() {
   )
 
   return (
-    <div className="max-w-3xl mx-auto py-10">
+    <div className="max-w-3xl mx-auto py-10 pb-24">
 
       <button
         onClick={() => navigate('/admin/missions')}
@@ -145,7 +145,7 @@ function ServiceCiviqueFormPage() {
         ← Retour aux missions
       </button>
       <h1 className="font-heading font-bold text-2xl text-dash-title mb-8">
-        {isEditing ? 'Modifier la carte pays' : 'Ajouter une carte pays'}
+        {isEditing ? 'Modifier la mission de service civique' : 'Creer une mission de service civique'}
       </h1>
 
       {error && (
@@ -160,16 +160,17 @@ function ServiceCiviqueFormPage() {
           {countryNames.map(name => <option key={name} value={name} />)}
         </datalist>
 
-        <FormSection title="Informations">
-          <Field label="Titre" name="title" value={formData.title} onChange={handleChange} required />
-          <Field label="Pays" name="country" value={formData.country} onChange={handleChange} required list="country-list" autoComplete="off" />
+        <FormSection title="Informations sur la mission">
+          <Field label="Titre de la mission" name="title" value={formData.title} onChange={handleChange} required error={fieldErrors.title}/>
+          <p className="text-xs text-dash-legend -mt-0.5">Exemple : Service civique à l'international au Kenya</p>
+          <Field label="Pays" name="country" value={formData.country} onChange={handleChange} required list="country-list" autoComplete="off" error={fieldErrors.country}/>
 
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-dash-text">
-              Description <span className="text-red-500">*</span>
+              Description de la mission et rôle du volontaire<span className="text-red-500">*</span>
             </label>
             <p className="text-xs text-dash-legend -mt-0.5">
-              Astuce : insère <code className="bg-gray-100 px-1 rounded">---</code> à l'endroit où tu veux que le résumé (carte) s'arrête.
+              Décris le rôle et les activités du volontaire dans ce pays. Ce texte sera affiché en entier lorsque le visiteur cliquera sur « En savoir plus ». Pour choisir le résumé affiché sur la carte, ajoute <code className="bg-gray-100 px-1 rounded">---</code> après la partie que tu souhaites utiliser comme résumé.
             </p>
             <textarea
               name="description"
@@ -184,7 +185,7 @@ function ServiceCiviqueFormPage() {
             {formData.description && (
               <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg">
                 <p className="text-xs font-medium text-dash-legend mb-1">
-                  Aperçu de la carte — {shortDescriptionPreview.length}/150 caractères
+                  Aperçu du résumé affiché sur la carte — {shortDescriptionPreview.length}/150 caractères
                 </p>
                 <p className="text-sm text-dash-text italic">{shortDescriptionPreview}</p>
               </div>
@@ -192,35 +193,29 @@ function ServiceCiviqueFormPage() {
           </div>
         </FormSection>
 
-        <FormSection title="Photo">
+        <FormSection title={<>Photo de présentation <span className="text-red-500">*</span></>}>
           <AdminFileUpload
             value={formData.photo}
-            onChange={(photo) => setFormData(prev => ({ ...prev, photo }))}
+            onChange={(photo) => {
+              setFormData(prev => ({ ...prev, photo }))
+              if (fieldErrors.photo) setFieldErrors(prev => ({ ...prev, photo: null }))
+            }}
             accept="image/*"
             maxFiles={1}
             imageType="hero"
             showLabel={true}
-            helperText="Une seule photo — utilisée à la fois en fond de carte et dans la fenêtre détail."
+            helperText="Cette photo sera affichée sur la carte du Service Civique et dans la fenêtre de détail."
+            error={fieldErrors.photo}
           />
           {fieldErrors.photo && <span className="text-xs text-red-500">{fieldErrors.photo}</span>}
         </FormSection>
 
-        <div className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => navigate('/admin/missions')}
-            className="px-5 py-2 text-sm text-dash-legend hover:text-dash-text hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-6 py-2 text-sm font-medium bg-dash-editorial text-white rounded-lg hover:bg-dash-editorial/90 disabled:opacity-50 transition-colors"
-          >
-            {submitting ? 'Enregistrement...' : isEditing ? 'Enregistrer' : 'Créer la carte'}
-          </button>
-        </div>
+        {/* ── Actions — barre collante en bas de l'écran ── */}
+        <FormActionBar
+          onCancel={() => navigate('/admin/missions')}
+          submitting={submitting}
+          submitLabel={isEditing ? 'Enregistrer les modifications' : 'Ajouter cette mission'}
+        />
 
       </form>
     </div>

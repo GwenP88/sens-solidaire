@@ -10,7 +10,7 @@ import {
   fetchCountryNames,
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
-import { FormSection, Field } from '../../components/admin/FormElements'
+import { FormSection, Field, FormActionBar } from '../../components/admin/FormElements'
 import { ODDS } from '../../utils/odds'
 
 // Même mapping que côté public/backend — juste pour l'aperçu en direct.
@@ -118,7 +118,7 @@ function FieldActionFormPage() {
           photos,
         })
       } catch (err) {
-        setError("Impossible de charger cette action.")
+        setError("Impossible de charger ce projet.")
       } finally {
         setLoading(false)
       }
@@ -137,6 +137,7 @@ function FieldActionFormPage() {
     const value = countryInput.trim()
     if (!value || formData.countries.includes(value)) return
     setFormData(prev => ({ ...prev, countries: [...prev.countries, value] }))
+    if (fieldErrors.countries) setFieldErrors(prev => ({ ...prev, countries: null }))
     setCountryInput('')
   }
 
@@ -162,6 +163,7 @@ function FieldActionFormPage() {
     if (!formData.title.trim())          newErrors.title = "Le titre est obligatoire."
     if (!formData.descriptionRaw.trim()) newErrors.descriptionRaw = "La description est obligatoire."
     if (formData.odds.length === 0)      newErrors.odds = "Sélectionnez au moins un ODD."
+    if (formData.countries.length === 0) newErrors.countries = "Ajoutez au moins un pays : choisissez-le dans la liste, puis cliquez sur « Ajouter »."
     if (formData.photos.length > 0 && !formData.photos.some(p => p.is_hero)) {
       newErrors.photos = "Sélectionnez une photo principale."
     }
@@ -221,16 +223,16 @@ function FieldActionFormPage() {
   if (loading) return <p className="text-dash-legend text-sm italic p-8">Chargement...</p>
 
   return (
-    <div className="max-w-4xl mx-auto py-10">
+    <div className="max-w-4xl mx-auto pt-10 pb-24">
 
       <button
         onClick={() => navigate('/admin/actions-terrain')}
         className="text-sm text-dash-legend hover:text-dash-action mb-1 flex items-center gap-1"
       >
-        ← Retour aux actions terrain
+        ← Retour aux projets réalisés
       </button>
       <h1 className="font-heading font-bold text-2xl text-dash-title mb-8">
-        {isEditing ? 'Modifier l\'action' : 'Ajouter une action'}
+        {isEditing ? 'Modifier un projet de terrain' : 'Créer un projet de terrain'}
       </h1>
 
       {error && (
@@ -245,16 +247,17 @@ function FieldActionFormPage() {
           {countryNames.map(name => <option key={name} value={name} />)}
         </datalist>
 
-        <FormSection title="Informations">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormSection title="Présentation du projet">
+          <div className="grid grid-cols-1 gap-4">
             <Field
-              label="Titre" name="title" value={formData.title} onChange={handleChange}
+              label="Titre du projet" name="title" value={formData.title} onChange={handleChange}
               required error={fieldErrors.title}
             />
 
             {/* ── Pays — champ + datalist + étiquettes retirables ── */}
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-dash-text">Pays concernés</label>
+              <label className="text-sm font-medium text-dash-text">Pays concerné(s) <span className="text-red-500">*</span> </label>
+              <p className="text-xs text-dash-legend -mt-0.5">Sélectionne le ou les pays dans lesquels ce projet a été réalisé, puis clique sur « Ajouter ce pays ».</p>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -263,15 +266,17 @@ function FieldActionFormPage() {
                   value={countryInput}
                   onChange={e => setCountryInput(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddCountry() } }}
-                  placeholder="Choisis un pays"
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-dash-action/30"
+                  placeholder="Sélectionner un pays"
+                  className={`border rounded-lg px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 ${
+                    fieldErrors.countries ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
+                  }`}
                 />
                 <button
                   type="button"
                   onClick={handleAddCountry}
                   className="px-4 py-2 text-sm font-medium border border-dash-action text-dash-action rounded-lg hover:bg-dash-action/10 transition-colors"
                 >
-                  Ajouter
+                  Ajouter ce pays
                 </button>
               </div>
               {formData.countries.length > 0 && (
@@ -291,16 +296,17 @@ function FieldActionFormPage() {
                   ))}
                 </div>
               )}
+              {fieldErrors.countries && <span className="text-xs text-red-500">{fieldErrors.countries}</span>}
             </div>
           </div>
 
           {/* ── Description unique — scindée en H2 + contenu via --- ── */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-dash-text">
-              Description <span className="text-red-500">*</span>
+              Description du projet <span className="text-red-500">*</span>
             </label>
             <p className="text-xs text-dash-legend -mt-0.5">
-              Astuce : insère <code className="bg-gray-100 px-1 rounded">---</code> à l'endroit où tu veux que le titre (H2) s'arrête — le reste devient le contenu de la page. Sans marqueur, le titre est déduit automatiquement du début du texte.
+              Présente le projet, ses objectifs et les actions réalisées sur le terrain. Pour choisir le texte d'introduction affiché en haut de la page, ajoute --- après la partie que tu souhaites utiliser comme introduction. Le reste du texte apparaîtra à la suite sur la page du projet.
             </p>
             <textarea
               name="descriptionRaw"
@@ -316,12 +322,12 @@ function FieldActionFormPage() {
               <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg flex flex-col gap-2">
                 <div>
                   <p className="text-xs font-medium text-dash-legend mb-1">
-                    Aperçu du titre (H2) — {previewH2.length}/{H2_MAX_LENGTH} caractères
+                    Aperçu de l'introduction (H2) — {previewH2.length}/{H2_MAX_LENGTH} caractères
                   </p>
                   <p className="text-sm text-dash-text italic">{previewH2}</p>
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-dash-legend mb-1">Aperçu du contenu</p>
+                  <p className="text-xs font-medium text-dash-legend mb-1">Aperçu de la suite du contenu</p>
                   <p className="text-sm text-dash-text line-clamp-3">{previewContent}</p>
                 </div>
               </div>
@@ -330,12 +336,16 @@ function FieldActionFormPage() {
         </FormSection>
 
         <FormSection
-          title="Photos"
-          description="Sélectionnez la photo principale. Les autres seront affichées dans la galerie."
+          title="Photos du projet"
+          description="Sélectionne la photo principale du projet. Elle sera mise en avant sur le site. Les autres photos seront affichées dans la galerie."
         >
           <AdminFileUpload
             value={formData.photos}
-            onChange={(photos) => setFormData(prev => ({ ...prev, photos }))}
+            onChange={(photos) => {
+              setFormData(prev => ({ ...prev, photos }))
+              if (fieldErrors.photos) setFieldErrors(prev => ({ ...prev, photos: null }))
+            }}
+            error={fieldErrors.photos}
             accept="image/*"
             maxFiles={15}
             imageType="gallery"
@@ -347,8 +357,8 @@ function FieldActionFormPage() {
         </FormSection>
 
         <FormSection
-          title="Objectifs de Développement Durable (ODD)"
-          description="Les thèmes affichés sur le site sont déduits automatiquement des ODD sélectionnés."
+          title={<>Objectifs de Développement Durable (ODD) <span className="text-red-500">*</span></>}
+          description="Sélectionne le ou les Objectifs de Développement Durable auxquels ce projet contribue. Les thèmes correspondants seront ajoutés automatiquement sur le site."
         >
           <div className="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-9 gap-2">
             {ODDS.map(odd => {
@@ -376,7 +386,7 @@ function FieldActionFormPage() {
 
           {previewTags.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="text-xs text-dash-legend">Thèmes déduits :</span>
+              <span className="text-xs text-dash-legend">Thèmes qui seront affichés :</span>
               {previewTags.map(tag => (
                 <span key={tag} className="px-2 py-0.5 bg-dash-action/10 text-dash-action text-xs rounded-full">
                   {tag}
@@ -386,22 +396,11 @@ function FieldActionFormPage() {
           )}
         </FormSection>
 
-        <div className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => navigate('/admin/actions-terrain')}
-            className="px-5 py-2 text-sm text-dash-legend hover:text-dash-text hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-6 py-2 text-sm font-medium bg-dash-action text-white rounded-lg hover:bg-dash-action/90 disabled:opacity-50 transition-colors"
-          >
-            {submitting ? 'Enregistrement...' : isEditing ? 'Enregistrer' : 'Créer l\'action'}
-          </button>
-        </div>
+        <FormActionBar
+          onCancel={() => navigate('/admin/actions-terrain')}
+          submitting={submitting}
+          submitLabel={isEditing ? 'Enregistrer les modifications' : 'Ajouter le projet'}
+        />
 
       </form>
     </div>

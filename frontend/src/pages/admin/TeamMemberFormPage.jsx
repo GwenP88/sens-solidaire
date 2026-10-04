@@ -9,7 +9,7 @@ import {
   fetchAdminTeamMemberById, createTeamMember, updateTeamMember,
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
-import { FormSection, Field, TextareaField } from '../../components/admin/FormElements'
+import { FormSection, Field, TextareaField, FormActionBar } from '../../components/admin/FormElements'
 
 const EMPTY_FORM = {
   nom: '',
@@ -115,7 +115,7 @@ function TeamMemberFormPage() {
   if (loading) return <p className="text-dash-legend text-sm italic p-8">Chargement...</p>
 
   return (
-    <div className="max-w-3xl mx-auto py-10">
+    <div className="max-w-3xl mx-auto pt-10 pb-24">
 
       <button
         onClick={() => navigate('/admin/a-propos')}
@@ -162,7 +162,7 @@ function TeamMemberFormPage() {
           />
         </FormSection>
 
-        <FormSection title="Catégorie">
+        <FormSection title={<>Catégorie <span className="text-red-500">*</span></>}>
           <div className="flex flex-col gap-2">
             {CATEGORIES.map(cat => (
               <label key={cat.value} className="flex items-center gap-2 text-sm text-dash-text cursor-pointer">
@@ -181,22 +181,11 @@ function TeamMemberFormPage() {
           {fieldErrors.category && <span className="text-xs text-red-500">{fieldErrors.category}</span>}
         </FormSection>
 
-        <div className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => navigate('/admin/a-propos')}
-            className="px-5 py-2 text-sm text-dash-legend hover:text-dash-text hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-6 py-2 text-sm font-medium bg-dash-action text-white rounded-lg hover:bg-dash-action/90 disabled:opacity-50 transition-colors"
-          >
-            {submitting ? 'Enregistrement...' : isEditing ? 'Enregistrer' : 'Créer le membre'}
-          </button>
-        </div>
+        <FormActionBar
+          onCancel={() => navigate('/admin/a-propos')}
+          submitting={submitting}
+          submitLabel={isEditing ? 'Enregistrer' : 'Créer le membre'}
+        />
 
       </form>
     </div>
