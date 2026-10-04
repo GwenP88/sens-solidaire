@@ -16,7 +16,6 @@ import Layout from './components/layout/Layout'
 import Home from './pages/Home'
 import Missions from './pages/Missions'
 import MissionDetail from './pages/MissionDetail'
-import ServiceCiviqueDetail from './pages/ServiceCiviqueDetail'
 import LocationDetail from './pages/LocationDetail'
 
 // ── Pages publiques — site principal ────────────────────────────────────
@@ -57,7 +56,6 @@ import DashboardLayout from './components/admin/DashboardLayout'
 import Dashboard from './pages/admin/Dashboard'
 import MissionsPage from './pages/admin/MissionsPage'
 import MissionFormPage from './pages/admin/MissionFormPage'
-import ServiceCiviquePage from './pages/admin/ServiceCiviquePage'
 import ServiceCiviqueFormPage from './pages/admin/ServiceCiviqueFormPage'
 import GaleriePage from './pages/admin/GaleriePage'
 import LocationsPage from './pages/admin/LocationsPage'
@@ -87,7 +85,6 @@ function App() {
           {/* Missions & lieux */}
           <Route path="/missions" element={<Missions />} />
           <Route path="/missions/:slug" element={<MissionDetail />} />
-          <Route path="/service-civique/:slug" element={<ServiceCiviqueDetail />} />
           <Route path="/lieux/:slug" element={<LocationDetail />} />
 
           {/* Témoignages & rapports */}
@@ -147,7 +144,6 @@ function App() {
           <Route path="missions/:id/edit" element={<MissionFormPage />} />
 
           {/* Service civique */}
-          <Route path="service-civique" element={<ServiceCiviquePage />} />
           <Route path="service-civique/new" element={<ServiceCiviqueFormPage />} />
           <Route path="service-civique/:id/edit" element={<ServiceCiviqueFormPage />} />
 
