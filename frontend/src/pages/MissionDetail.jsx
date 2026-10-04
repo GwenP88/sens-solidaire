@@ -500,7 +500,14 @@ function MissionDetail() {
       )}
 
       {/* ── Témoignages — version complète si témoignages existants, sinon CTA compact ── */}
-        <section id="temoignages" className={`padding-y padding-x ${mission.testimonials?.length > 0 ? sectionBg['temoignages'] : 'bg-accent-2'}`}>
+        <section
+          id="temoignages"
+          className={`padding-x ${
+            mission.testimonials?.length > 0
+              ? `pt-8 md:pt-12 lg:pt-16 xl:pt-[4.5rem] pb-4 md:pb-6 lg:pb-8 ${sectionBg['temoignages']}`
+              : 'py-6 md:py-8 lg:py-10 bg-accent-2'
+          }`}
+        >
           {mission.testimonials?.length > 0 ? (
             <>
               <div className="flex flex-col lg:flex-row items-start justify-between gap-sm mb-8">
@@ -527,7 +534,7 @@ function MissionDetail() {
                   />
                 )}
               />
-              <div className="mt-6 bg-accent-2 rounded-2xl p-6 flex justify-center">
+              <div className="flex justify-center">
                 <Button
                   onClick={() => setModalOpen(true)}
                   label="Vous êtes partis en mission ? Racontez-nous →"
@@ -536,7 +543,7 @@ function MissionDetail() {
               </div>
             </>
           ) : (
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-lg">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-20 lg:gap-32">
               <Button
                 onClick={() => setModalOpen(true)}
                 label="Vous êtes partis en mission ? Racontez-nous →"
