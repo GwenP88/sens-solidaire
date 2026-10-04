@@ -422,9 +422,12 @@ function Missions() {
                   alt={selectedCountryCard.photo_hero_alt || selectedCountryCard.title}
                   className="w-full lg:w-[280px] h-64 object-cover rounded-xl shrink-0"
                 />
-                <p className="text-body text-primary/80 whitespace-pre-line lg:w-2/3">
-                  {selectedCountryCard.description?.replace('---', '').trim()}
-                </p>
+                <div className="flex flex-col gap-xs lg:w-2/3">
+                  <h3 className="h3-style text-primary mb-0">Votre rôle pour cette mission</h3>
+                  <p className="text-body text-primary/80 whitespace-pre-line">
+                    {selectedCountryCard.description?.replace('---', '').trim()}
+                  </p>
+                </div>
               </div>
             </Modal>
           )}
