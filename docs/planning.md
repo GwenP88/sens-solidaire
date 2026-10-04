@@ -205,7 +205,10 @@
 | 120 | Gwen | CRUD Logo/partenaire (admin) | ✅ |
 | 120A | Gwen | remplir le site : logo | ✅ |
 | 121 | Gwen | CRUD Testimonial + rapport de mission (admin) | ✅ |
-| 121A | Gwen | remplir le site : rapport de mission et témoignages| ❌ |
+| 121A | Gwen | Bouton « Vous êtes partis en mission ? Racontez-nous » sur la page Témoignages | ✅ |
+| 121B | Gwen | Bouton « Vous êtes partis en mission ? Racontez-nous » sur la page Témoignages et sur MissionDetail (visible même sans témoignage, fond accent-2, espacements ajustés) | ✅ |
+| 121C | Gwen | remplir le site : rapport de mission et témoignages| ❌ |
+| 121D | Gwen | Nettoyage code mort : suppression des pages ServiceCiviqueDetail (public) et ServiceCiviquePage (dashboard), devenues inaccessibles depuis la fusion Service Civique dans Missions | ✅ |
 | 122 | Gwen | CRUD FieldAction + pays + tags (admin) | ✅ |
 | 122A | Gwen | remplir le site : actions terrain| ❌ |
 | 123 | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) | ❌ |
@@ -216,12 +219,9 @@
 | 170 | Gwen | Filtres pays dynamiques sur /notre-impact et /temoignages (dérivés des vraies données en base — missions + actions terrain) au lieu de FILTERS_COUNTRY figée dans utils/filters.js — nouvelle route publique pays réellement utilisés | ❌ |
 
 A REVOIR :
-ajouter le bouton poster un témoiganges sur la page témoignages
-revoir le gap variant sans témoignages + hauteur de la section
-- ⚠️ **`MissionDetail.jsx` entièrement fait, `ServiceCiviqueDetail.jsx` reste à faire** (même traitement prévu : import Modal/TestimonialForm, state `modalOpen`, restructuration de la section témoignages pour rester visible même sans témoignage, CTA sur fond `accent-2`) — à reprendre en premier la prochaine session
-revoir les fichier / commentaires car certains en anglais...
-revoir le bloc photo obligatoire (manque *)
+- ⚠️ **`MissionDetail.jsx` entièrement fait, `ServiceCiviqueDetail.jsx` reste à faire** (même traitement prévu : import Modal/TestimonialForm, state `modalOpen`, restructuration de la section témoignages pour rester visible même sans témoignage, CTA sur fond `accent-2`) + vérif les * sur les section obligatoire — à reprendre en premier la prochaine session
 
+revoir les fichier / commentaires car certains en anglais...
 
 ### Bloc C — Page Éducation & sensibilisation
 
