@@ -221,9 +221,6 @@
 ## 🔴 À revoir en priorité — début de la prochaine session
 
 - [ ] **Vocabulaire** : astuces description au tutoiement (Mission, Carte pays) → vouvoiement ; faute `concerné.s` (aide lien ministère) ; label `Rôle du volontaire'` ; message de chargement de la carte pays (« mission en service civique ») ; idée « URL de la mission » → « Adresse de la page »
-- [ ] `TestimonialEditModal` : en modification, seul `mission_id` est envoyé → changement de type probablement perdu, **à vérifier**
-- [ ] `TestimonialEditModal` : Mois/Année côte à côte sur mobile → `flex-col sm:flex-row`
-- [ ] Logo partenaire obligatoire **aussi côté backend**
 - [ ] Année (rapports de mission et d'activité) : contrôle « 4 chiffres »
 - [ ] Rapports d'activité : lien PDF à coller → passer par un envoi de fichier comme les rapports de mission ? (à valider avec la cliente)
 - [ ] Ménage fichiers et commentaires en anglais
