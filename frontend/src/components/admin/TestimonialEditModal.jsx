@@ -175,7 +175,7 @@ function TestimonialEditModal({ testimonial, onClose, onSaved }) {
             error={fieldErrors.content}
             hint="Saisissez le témoignage tel qu'il doit apparaître sur le site."
           />
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <div className="flex flex-col gap-1 flex-1">
               <label className="text-sm font-medium text-dash-text">Mois de la mission (facultatif)</label>
               <select
