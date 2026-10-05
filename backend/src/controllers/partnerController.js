@@ -4,6 +4,20 @@ import {
   findAllForAdmin, findById, create, update, toggleActive, hardDelete,
 } from '../services/partnerService.js'
 
+// ── VALIDATION ─────────────────────────────────────────────────────────────
+// Nom et logo obligatoires (le logo est affiché dans le bandeau public).
+// partial = true pour une modification (PATCH) : on ne vérifie que les champs
+// envoyés, mais un champ envoyé vide est refusé.
+const validatePartner = (body, { partial = false } = {}) => {
+  if ((!partial || 'name' in body) && !body.name?.trim()) {
+    return "Le nom du partenaire est obligatoire."
+  }
+  if ((!partial || 'logo_url' in body) && !body.logo_url?.trim()) {
+    return "Le logo du partenaire est obligatoire."
+  }
+  return null
+}
+
 // ── GET (PUBLIC) ────────────────────────────────────────────────────────
 export const getPartnersController = async (req, res) => {
   try {
@@ -42,8 +56,9 @@ export const getPartnerByIdAdmin = async (req, res, next) => {
 // POST /api/admin/partners
 export const createPartner = async (req, res, next) => {
   try {
-    if (!req.body.name) {
-      return res.status(400).json({ error: true, message: "Le nom est obligatoire." })
+    const validationError = validatePartner(req.body)
+    if (validationError) {
+      return res.status(400).json({ error: true, message: validationError })
     }
     const partner = await create(req.body)
     return res.status(201).json({ partner })
@@ -56,6 +71,10 @@ export const createPartner = async (req, res, next) => {
 // PATCH /api/admin/partners/:id
 export const updatePartner = async (req, res, next) => {
   try {
+    const validationError = validatePartner(req.body, { partial: true })
+    if (validationError) {
+      return res.status(400).json({ error: true, message: validationError })
+    }
     const partner = await update(Number(req.params.id), req.body)
     return res.status(200).json({ partner })
   } catch (error) {
