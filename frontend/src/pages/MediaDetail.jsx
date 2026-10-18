@@ -16,6 +16,7 @@ import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
 import Button from '../components/ui/Button'
+import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
 function MediaDetail() {
@@ -57,8 +58,8 @@ function MediaDetail() {
   // ── Ressources à afficher dans la sidebar — PDF + liens externes
   const sidebarResources = [...mediaPdfs, ...mediaLinks]
 
-  // ── Ressources dans le contenu — vidéos + audio + images
-  const contentResources = [...mediaVideos, ...mediaAudios, ...mediaImages]
+  // Les images ont leur propre carrousel, plus bas
+  const contentResources = [...mediaVideos, ...mediaAudios]
 
   // ── Rendu d'une ressource dans le contenu
   const renderContentMedia = (m, i) => {
@@ -103,15 +104,20 @@ function MediaDetail() {
 
             {/* Contenu long — paragraphes lisibles */}
             {/* max-w-prose : limite la longueur des lignes pour le confort de lecture */}
+            {/* Chapô — le résumé de la carte, mis en avant en tête d'article */}
+            {post.lead && (
+              <p className="text-lg font-semibold text-primary leading-relaxed">{post.lead}</p>
+            )}
+
             {post.content && (
-              <div className="flex flex-col gap-sm max-w-prose">
+              <div className="flex flex-col gap-sm">
                 {post.content.split('\n\n').map((para, i) => (
                   <p key={i} className="text-body text-primary/80">{para}</p>
                 ))}
               </div>
             )}
 
-            {/* ── Ressources dans le contenu — vidéos, audio, images ── */}
+            {/* ── Ressources dans le contenu — vidéos, audio ── */}
             {/* Séparées du texte pour ne pas interrompre la lecture */}
             {contentResources.length > 0 && (
               <div className="flex flex-col gap-md">
@@ -206,8 +212,23 @@ function MediaDetail() {
             )}
 
           </aside>
-
         </div>
+
+          {/* ── Photos de l'article — même carrousel que les galeries de la page Missions ── */}
+            {mediaImages.length > 0 && (
+              <div className="flex flex-col gap-sm bg-primary rounded-2xl p-6 lg:p-10 mt-12">
+                <h3 className="h3-style text-surface mb-0">En images</h3>
+                <Carousel
+                  items={mediaImages}
+                  showPagination={true}
+                  color="surface"
+                  renderSlide={(m) => (
+                    <img src={m.file_url} alt={m.label || ''} className="w-full h-56 object-cover rounded-xl" />
+                  )}
+                />
+              </div>
+            )}
+
       </section>
 
       <ScrollToTop />

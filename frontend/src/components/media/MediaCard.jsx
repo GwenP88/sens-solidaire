@@ -5,7 +5,7 @@
 //          car la grille passe à 1 colonne sur cette plage et le format portrait y est moins lisible
 // Hauteur fixe dans les deux layouts — garantit des cards identiques dans la grille
 
-function MediaCard({ title, content, theme, date, image_url, slug, external_url }) {
+function MediaCard({ title, short_description, theme, date, image_url, slug, external_url }) {
 
   // ── Formate la date en français
   const formattedDate = new Date(date).toLocaleDateString('fr-FR', {
@@ -47,7 +47,7 @@ function MediaCard({ title, content, theme, date, image_url, slug, external_url 
         {/* h3-style mb-0 : dans un justify-between, pas besoin de marge basse en plus */}
         <div className="flex flex-col gap-xs flex-1 pt-6">
           <h3 className="h3-style text-primary line-clamp-2 mb-0">{title}</h3>
-          <p className="text-body text-primary/60 line-clamp-4">{content}</p>
+          <p className="text-body text-primary/60 line-clamp-4">{short_description}</p>
         </div>
 
         {/* ── Zone basse — CTA toujours aligné en bas ── */}
