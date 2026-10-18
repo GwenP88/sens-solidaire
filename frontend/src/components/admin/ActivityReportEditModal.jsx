@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { createActivityReport, updateActivityReport } from '../../services/api'
 import DashboardModal from './DashboardModal'
 import { Field } from './FormElements'
+import { isValidYear } from '../../utils/validation'
 
 function ActivityReportEditModal({ report, onClose, onSaved }) {
   const isEditing = Boolean(report)
@@ -23,7 +24,8 @@ function ActivityReportEditModal({ report, onClose, onSaved }) {
   // Même principe que les formulaires pleine page : une erreur par champ
   const validate = () => {
     const newErrors = {}
-    if (!annee.trim()) newErrors.annee = "L'année du rapport est obligatoire."
+    if (!annee.trim())              newErrors.annee = "L'année du rapport est obligatoire."
+    else if (!isValidYear(annee))   newErrors.annee = "Indiquez une année valide, par exemple 2025."
     if (!url.trim())   newErrors.url = "Le lien du rapport est obligatoire."
     return newErrors
   }

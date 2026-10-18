@@ -6,6 +6,7 @@ import { createMissionReport, updateMissionReport, fetchMissions } from '../../s
 import AdminFileUpload from './AdminFileUpload'
 import DashboardModal from './DashboardModal'
 import { Field } from './FormElements'
+import { isValidYear } from '../../utils/validation'
 
 const TYPES = [
   { value: 'individuel', label: 'Volontariat individuel' },
@@ -52,7 +53,8 @@ function MissionReportEditModal({ report, onClose, onSaved }) {
     const newErrors = {}
     if (!auteur.trim())   newErrors.auteur = "Le nom de l'auteur est obligatoire."
     if (!type)            newErrors.type = "Choisissez un type de mission."
-    if (!annee.trim())    newErrors.annee = "L'année de la mission est obligatoire."
+    if (!annee.trim())              newErrors.annee = "L'année de la mission est obligatoire."
+    else if (!isValidYear(annee))   newErrors.annee = "Indiquez une année valide, par exemple 2025."
     if (pdf.length === 0) newErrors.pdf = "Ajoutez le rapport au format PDF."
     return newErrors
   }
