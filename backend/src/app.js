@@ -40,6 +40,7 @@ import adminCountryRoutes from "./routes/adminCountryRoutes.js"
 import adminTeamMemberRoutes from "./routes/adminTeamMemberRoutes.js"
 import adminActivityReportRoutes from "./routes/adminActivityReportRoutes.js"
 import adminPartnerRoutes from "./routes/adminPartnerRoutes.js"
+import adminMediaPostRoutes from "./routes/adminMediaPostRoutes.js"
 import adminMissionReportRoutes from "./routes/adminMissionReportRoutes.js"
 import adminFieldActionRoutes from "./routes/adminFieldActionRoutes.js"
 
@@ -126,6 +127,7 @@ app.use('/api/admin/countries', adminCountryRoutes)
 app.use('/api/admin/team-members', adminTeamMemberRoutes)
 app.use('/api/admin/activity-reports', adminActivityReportRoutes)
 app.use('/api/admin/partners', adminPartnerRoutes)
+app.use('/api/admin/media-posts', adminMediaPostRoutes)
 app.use('/api/admin/mission-reports', adminMissionReportRoutes)
 app.use('/api/admin/field-actions', adminFieldActionRoutes)
 
