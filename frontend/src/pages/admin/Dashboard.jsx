@@ -24,7 +24,7 @@ function Dashboard() {
       setTestimonials(data)
     } catch (err) {
       console.error("Erreur chargement témoignages:", err)
-      setError("Impossible de charger les témoignages.")
+      setError("Impossible de charger les témoignages. Rechargez la page ou réessayez plus tard.")
     } finally {
       setLoading(false)
     }

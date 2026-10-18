@@ -90,7 +90,7 @@ function LocationFormPage() {
           mission_ids: (location.missions || []).map(m => m.id),
         })
       } catch (err) {
-        setError("Impossible de charger ce lieu.")
+        setError("Impossible de charger ce lieu. Rechargez la page ou réessayez plus tard.")
       } finally {
         setLoading(false)
       }

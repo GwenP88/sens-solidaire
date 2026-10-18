@@ -49,7 +49,7 @@ function FieldActionsPage() {
       setActions(data)
     } catch (err) {
       console.error('Erreur chargement actions terrain :', err)
-      setError('Impossible de charger les actions terrain.')
+      setError('Impossible de charger les actions terrain. Rechargez la page ou réessayez plus tard.')
     } finally {
       setLoading(false)
     }

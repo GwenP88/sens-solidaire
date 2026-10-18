@@ -85,7 +85,7 @@ function MissionsPage() {
       } catch (err) {
         if (err.name === 'AbortError') return
         console.error('Erreur chargement missions :', err)
-        setError('Impossible de charger les missions.')
+        setError('Impossible de charger les missions. Rechargez la page ou réessayez plus tard.')
       } finally {
         setLoading(false)
       }
@@ -102,7 +102,7 @@ function MissionsPage() {
       setAllMissions(data.filter(m => !m.slug.startsWith('ancre-')))
     } catch (err) {
       console.error('Erreur rechargement missions :', err)
-      setError('Impossible de recharger les missions.')
+      setError('Impossible de recharger les missions. Rechargez la page ou réessayez plus tard.')
     }
   }
 

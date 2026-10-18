@@ -61,7 +61,7 @@ function ServiceCiviqueFormPage() {
             : [],
         })
       } catch (err) {
-        setError("Impossible de charger cette mission en service civique.")
+        setError("Impossible de charger cette carte pays. Rechargez la page ou réessayez plus tard.")
       } finally {
         setLoading(false)
       }

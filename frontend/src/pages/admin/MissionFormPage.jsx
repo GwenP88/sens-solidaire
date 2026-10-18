@@ -184,7 +184,7 @@ function MissionFormPage() {
           guide_pdf,
         })
       } catch (err) {
-        setError("Impossible de charger la mission.")
+        setError("Impossible de charger la mission. Rechargez la page ou réessayez plus tard.")
       } finally {
         setLoading(false)
       }
@@ -216,7 +216,9 @@ function MissionFormPage() {
     const newErrors = {}
     if (!formData.title.trim())             newErrors.title             = "Le titre est obligatoire."
     if (!formData.country.trim())           newErrors.country           = "Le pays est obligatoire."
-    if (!formData.slug.trim())              newErrors.slug              = "L'URL est obligatoire."
+    if (!formData.slug.trim())              newErrors.slug              = "L'adresse de la page est obligatoire."
+    else if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(formData.slug.trim()))
+                                            newErrors.slug              = "Utilisez uniquement des minuscules sans accents, des chiffres et des tirets. Ex. : volontariat-kenya"
     if (!formData.description.trim())       newErrors.description       = "La description est obligatoire."
     if (formData.mission_photos.length < 2) newErrors.mission_photos = "2 photos sont obligatoires."
     return newErrors
@@ -390,12 +392,12 @@ function MissionFormPage() {
 
           {/* Ligne 3 — Slug, pleine largeur */}
           <Field
-            label="URL de la mission"
+            label="Adresse de la page"
             name="slug" value={formData.slug}
             onChange={handleChange}
             required
             error={fieldErrors.slug}
-            hint="Partie de l’URL qui identifie la mission. Utilisez des mots-clés courts et descriptifs, séparés par des tirets. Ex. : volontariat-kenya-biodiversite"
+            hint="Fin de l'adresse de la page sur le site. Mots courts en minuscules, sans accents, séparés par des tirets. Ex. : volontariat-kenya-biodiversite"
             pattern="[a-z0-9\-]+"
             title="Minuscules, chiffres et tirets uniquement, sans espaces ni accents"
           />
@@ -434,7 +436,7 @@ function MissionFormPage() {
               Description <span className="text-red-500">*</span>
             </label>
             <p className="text-xs text-dash-legend -mt-0.5">
-              Astuce : insère <code className="bg-gray-100 px-1 rounded">---</code> à l'endroit où tu veux que le résumé s'arrête (sinon coupé automatiquement à la fin de la dernière phrase complète).
+              Astuce : insérez <code className="bg-gray-100 px-1 rounded">---</code> à l'endroit où le résumé doit s'arrêter. Sans repère, il s'arrête à la fin de la dernière phrase complète.
             </p>
             <textarea
               name="description"
@@ -456,7 +458,7 @@ function MissionFormPage() {
             )}
           </div>
           <TextareaField
-            label="Rôle du volontaire'" name="volunteer_role"
+            label="Rôle du volontaire" name="volunteer_role"
             value={formData.volunteer_role} onChange={handleChange}
             rows={10} hint="Un rôle par ligne. Chaque ligne sera affichée sous forme de puce."
           />
@@ -612,7 +614,7 @@ function MissionFormPage() {
           <Field
             label="Lien des recommandations officielles" name="ministry_url"
             value={formData.ministry_url} onChange={handleChange}
-            hint="Lien vers les conseils aux voyageurs du ministère pour le pays concerné.s"
+            hint="Lien vers les conseils aux voyageurs du ministère pour le pays concerné."
           />
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-dash-text">Guide du volontaire (PDF)</label>

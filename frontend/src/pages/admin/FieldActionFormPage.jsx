@@ -118,7 +118,7 @@ function FieldActionFormPage() {
           photos,
         })
       } catch (err) {
-        setError("Impossible de charger ce projet.")
+        setError("Impossible de charger ce projet. Rechargez la page ou réessayez plus tard.")
       } finally {
         setLoading(false)
       }

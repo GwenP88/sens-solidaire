@@ -49,7 +49,7 @@ function LocationsPage() {
       setLocations(data)
     } catch (err) {
       console.error('Erreur chargement lieux :', err)
-      setError('Impossible de charger les lieux.')
+      setError('Impossible de charger les lieux. Rechargez la page ou réessayez plus tard.')
     } finally {
       setLoading(false)
     }
