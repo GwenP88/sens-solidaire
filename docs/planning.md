@@ -220,8 +220,16 @@
 
 ## 🔴 À revoir en priorité — début de la prochaine session
 
+- [ ] Retirer le bloc MediaPost de `seed.js` (+ sa ligne du récap)
+- [ ] Médias : colonnes **auteur** / **source** (migration) et **temps de lecture** (calculé, sans migration)
+- [ ] 124A — Remplir le blog ⚠️ re-télécharger les fichiers WordPress et les renvoyer via le dashboard, **jamais** de lien `wp-content`
+
+### En attente
+- [ ] Vérifier que l'envoi de fichiers accepte **mp3 / mp4** + l'adresse réelle d'un fichier envoyé (`isUploadedFile` dans `MediaPostFormPage`)
+- [ ] `MediaCard` / `MediaDetail` : `<a href>` → `<Link>` pour les liens internes
+- [ ] `LocationsPage` (et autres listes) : `alert('... Réessaie.')` → vouvoiement
+- [ ] Découper `services/api.js` (1 125 lignes) en un fichier par ressource dans `services/api/` + `index.js` qui réexporte tout — **avant la soutenance**
 - [ ] Ménage fichiers et commentaires en anglais
-- [ ] Découper `services/api.js` (1 125 lignes) en un fichier par ressource dans `services/api/` + `index.js` qui réexporte tout (aucun import à changer) — **avant la soutenance**
 
 ### Bloc C — Page Éducation & sensibilisation
 

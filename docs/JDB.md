@@ -2764,4 +2764,61 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 
 ---
 
+### Semaine du 5 au 18 octobre 2026 — Validation front/back terminée, rapports d'activité en PDF, 124 CRUD Médias & actualités
+
+**Validation : « le front aide, le back protège » :**
+- Partenaires : `validatePartner` dans le controller (nom + logo obligatoires), en création **et** en modification. Option `partial` pour le PATCH : seuls les champs envoyés sont contrôlés (le bouton pause n'envoie que `is_active`)
+- Année des rapports (mission + activité) : `isValidYear` (4 chiffres, de 2000 à l'année prochaine) dans `utils/validation.js` côté front **et** côté back (copie commentée « garder les deux identiques »), branchée dans les 2 modales et les 2 controllers. `isFilled` partagé côté back (gère texte **et** nombre, `null`, `undefined`)
+- Adresse de page (slug) : `isValidSlug` commune front/back, plus stricte que l'ancienne `SLUG_REGEX` (refuse tirets en début, en fin ou doublés). Vérification SQL préalable des adresses existantes (0 ligne non conforme) avant de resserrer la règle de la route publique
+- Messages serveur reformulés pour la cliente (« Adresse de la page : utilisez uniquement... » au lieu de « slug »)
+- Tests directs de l'API avec `curl` + token admin, pour prouver que la règle tient **sans passer par l'interface**
+
+**Rapports d'activité :**
+- Lien PDF à coller → **envoi du fichier** via `AdminFileUpload` (décision cliente : elle importe déjà ses fichiers). Aucune migration : la colonne `url` reçoit l'adresse du fichier envoyé
+
+**Vocabulaire du dashboard :**
+- Vouvoiement de l'astuce description, fautes de frappe, label « URL de la mission » → « Adresse de la page » + contrôle du format côté formulaire
+- 10 messages « Impossible de charger... » harmonisés en **une commande** `sed` (+ vérification `git diff --stat`), avec une action proposée : « Rechargez la page ou réessayez plus tard. »
+
+**Divers :**
+- `TestimonialEditModal` : mois / année empilés sur mobile. Changement de type en modification vérifié : pas de bug
+
+**124 — CRUD Médias & actualités :**
+- **Backend** : service complet (slug généré depuis le titre via nouveau `utils/slugify.js`, unique, **jamais modifié** en mise à jour pour ne pas casser les liens partagés ; `normalizeTheme` réutilise l'orthographe d'un thème existant ; suppression en **transaction** avec les médias liés), controller avec `validateMediaPost` (titre, thème, date valide, texte **ou** lien), routes admin + route publique `/themes` placée **avant** `/:slug`
+- **Bug corrigé** : un post en pause restait accessible par son adresse (`findFirst` + `is_active`)
+- **Résumé de carte** calculé par le serveur à la lecture (200 caractères, règle du `---`), sans colonne en base. **Chapô** en tête d'article (`splitLead`) sans répétition dans la suite
+- **Photos d'article** : `syncGalleryImages` (déjà utilisée pour les lieux) réutilisée telle quelle avec `entity_type: 'media_post'`
+- **Dashboard** : `MediaPostsPage` (colonne « Bouton sur la carte » en mots de la cliente, date en français), `MediaPostFormPage` en **formulaire unique** : lien **ou** fichier renseigné → la carte l'ouvre (« Consulter »), sinon page article (« Lire la suite », texte obligatoire). Thèmes en suggestions (`<datalist>`, tri à la française), aperçu du résumé, photos visibles seulement pour une page article. `Field` accepte désormais un `type` (sélecteur de date natif). Lien « Médias & actualités » dans la sidebar
+- **Site public** : `MediaCard` affiche le résumé serveur ; `MediaDetail` avec chapô en gras, texte élargi, carrousel « En images » pleine largeur sur fond vert (même pattern que les témoignages)
+
+---
+
+#### Bugs rencontrés et résolus
+
+| Bug | Cause | Solution |
+|---|---|---|
+| Dashboard vide, « plus aucune mission » | Backend planté au démarrage : `sharp` introuvable après recréation des conteneurs (image Docker en retard sur `package.json`) | `docker-compose up -d --build --renew-anon-volumes backend` — la base n'était pas touchée (vérifié par `SELECT COUNT(*)`) |
+| `Token invalide ou expiré` avec `curl` | 1) ligne `TOKEN="..."` tronquée au collage ; 2) vieux token dans `localStorage` (le refresh silencieux n'a lieu qu'à la 1re requête protégée) | Coller la ligne seule + `echo $TOKEN` ; naviguer dans le dashboard avant de relire le token. Lecture de `exp` dans le JWT décodé |
+| Carte « Consulter » sur un post sans lien, champ lien rempli avec `null` | `String(null)` donne le **texte** `"null"`, enregistré en base | `toNullable` traite `null` / `undefined` **avant** la conversion + nettoyage SQL des données abîmées |
+| Page Médias plantée (« Objects are not valid as a React child ») | `deriveShortDescription` (back) renvoie un **objet** `{ shortDescription, cleanedFullText }`, pas un texte | Utilisation de `.shortDescription` ; `cleanedFullText` réutilisé pour la page détail |
+| Backend planté : `updateMediaPostMedia is not defined` | Fonction utilisée dans les routes sans être importée | Ajout dans l'import (≠ « does not provide an export » qui signale une fonction absente du controller) |
+| Aucun espace au-dessus du carrousel | `mt-lg` n'existe pas dans le design system (seulement pour les `gap`) — Tailwind ignore la classe sans erreur | `mt-12`, valeur déjà utilisée sur la page Missions |
+
+---
+
+#### Décisions
+
+| Décision | Justification |
+|---|---|
+| Validation dupliquée front + back | Le front guide la cliente, le back protège même un appel direct à l'API |
+| Règles partagées dans `utils/validation.js` (front et back) | Une règle écrite une fois par projet ; copie commentée car front et back ne partagent pas de code |
+| Médias : formulaire unique, type de post **déduit** du lien | La cliente n'a rien à choisir : lien ou fichier → « Consulter », sinon « Lire la suite » |
+| Thèmes en suggestions (pas de table) | Même pattern que le pays, sans migration ; `normalizeTheme` limite les doublons |
+| Slug auto, jamais modifié | La cliente ne voit jamais l'adresse ; un lien partagé reste valable |
+| Résumé de carte à 200 caractères, calculé à la lecture | Texte assez explicite avant un lien externe ; correspond aux 4 lignes de la carte ; pas de colonne en base |
+| Photos d'article en V1, vidéos / audios / PDF attachés en V2 | Couvre le besoin principal sans alourdir le formulaire ; l'affichage existe déjà côté public |
+| Fichiers WordPress (`wp-content`) à re-télécharger puis renvoyer | Ces adresses disparaîtront avec l'ancien site |
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
