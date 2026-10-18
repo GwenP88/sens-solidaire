@@ -212,7 +212,7 @@
 | 122 | Gwen | CRUD FieldAction + pays + tags (admin) | ✅ |
 | 122A | Gwen | remplir le site : actions terrain| ❌ |
 | 123 | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) | ❌ |
-| 124 | Gwen | CRUD MediaPost / articles (admin) | ❌ |
+| 124 | Gwen | CRUD MediaPost / articles (admin) | ✅ |
 | 124A | Gwen | remplir le site : blog | ❌ |
 | 125 | Gwen | Dashboard responsive mobile | ❌ |
 | 126 | Gwen | Tests d'intégration | ❌ |
@@ -220,10 +220,8 @@
 
 ## 🔴 À revoir en priorité — début de la prochaine session
 
-- [ ] **Vocabulaire** : astuces description au tutoiement (Mission, Carte pays) → vouvoiement ; faute `concerné.s` (aide lien ministère) ; label `Rôle du volontaire'` ; message de chargement de la carte pays (« mission en service civique ») ; idée « URL de la mission » → « Adresse de la page »
-- [ ] Année (rapports de mission et d'activité) : contrôle « 4 chiffres »
-- [ ] Rapports d'activité : lien PDF à coller → passer par un envoi de fichier comme les rapports de mission ? (à valider avec la cliente)
 - [ ] Ménage fichiers et commentaires en anglais
+- [ ] Découper `services/api.js` (1 125 lignes) en un fichier par ressource dans `services/api/` + `index.js` qui réexporte tout (aucun import à changer) — **avant la soutenance**
 
 ### Bloc C — Page Éducation & sensibilisation
 
