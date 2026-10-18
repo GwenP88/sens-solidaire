@@ -1,8 +1,11 @@
 // ActivityReportEditModal.jsx
-// Modale de création/modification d'un rapport d'activité — Année + Lien PDF.
+// Modale de création/modification d'un rapport d'activité — Année + fichier PDF.
+// Le PDF est envoyé depuis l'ordinateur de la cliente (même principe que les
+// rapports de mission) ; son adresse est stockée dans le champ `url`.
 
 import { useState } from 'react'
 import { createActivityReport, updateActivityReport } from '../../services/api'
+import AdminFileUpload from './AdminFileUpload'
 import DashboardModal from './DashboardModal'
 import { Field } from './FormElements'
 import { isValidYear } from '../../utils/validation'
@@ -11,7 +14,9 @@ function ActivityReportEditModal({ report, onClose, onSaved }) {
   const isEditing = Boolean(report)
 
   const [annee, setAnnee] = useState(report?.annee?.toString() || '')
-  const [url, setUrl] = useState(report?.url || '')
+  const [pdf, setPdf] = useState(
+    report?.url ? [{ file_url: report.url, label: '' }] : []
+  )
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)         // erreurs serveur (message en haut)
   const [fieldErrors, setFieldErrors] = useState({}) // erreurs par champ
@@ -24,9 +29,9 @@ function ActivityReportEditModal({ report, onClose, onSaved }) {
   // Même principe que les formulaires pleine page : une erreur par champ
   const validate = () => {
     const newErrors = {}
-    if (!annee.trim())              newErrors.annee = "L'année du rapport est obligatoire."
-    else if (!isValidYear(annee))   newErrors.annee = "Indiquez une année valide, par exemple 2025."
-    if (!url.trim())   newErrors.url = "Le lien du rapport est obligatoire."
+    if (!annee.trim())            newErrors.annee = "L'année du rapport est obligatoire."
+    else if (!isValidYear(annee)) newErrors.annee = "Indiquez une année valide, par exemple 2025."
+    if (pdf.length === 0)         newErrors.pdf = "Ajoutez le rapport au format PDF."
     return newErrors
   }
 
@@ -40,7 +45,7 @@ function ActivityReportEditModal({ report, onClose, onSaved }) {
     setSubmitting(true)
     setError(null)
     try {
-      const payload = { annee: Number(annee), url }
+      const payload = { annee: Number(annee), url: pdf[0].file_url }
       if (isEditing) {
         await updateActivityReport(report.id, payload)
       } else {
@@ -69,12 +74,24 @@ function ActivityReportEditModal({ report, onClose, onSaved }) {
         required
         error={fieldErrors.annee}
       />
-      <Field
-        label="Lien du PDF" name="url" value={url}
-        onChange={e => { setUrl(e.target.value); clearError('url') }}
-        required
-        error={fieldErrors.url}
-      />
+
+      <div className="flex flex-col gap-1">
+        <label className="text-sm font-medium text-dash-text">
+          Rapport d'activité <span className="text-red-500">*</span>
+        </label>
+        <p className="text-xs text-dash-legend">
+          Sélectionnez le rapport au format PDF à proposer au téléchargement sur le site.
+        </p>
+        <AdminFileUpload
+          value={pdf}
+          onChange={(files) => { setPdf(files); clearError('pdf') }}
+          accept="application/pdf"
+          maxFiles={1}
+          showLabel={false}
+          error={fieldErrors.pdf}
+        />
+        {fieldErrors.pdf && <span className="text-xs text-red-500">{fieldErrors.pdf}</span>}
+      </div>
 
       <div className="flex justify-end gap-2">
         <button

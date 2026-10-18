@@ -15,7 +15,7 @@ const validateActivityReport = (body, { partial = false } = {}) => {
     if (!isFilled(body.annee))    return "L'année du rapport est obligatoire."
     if (!isValidYear(body.annee)) return "Indiquez une année valide, par exemple 2025."
   }
-  if (isChecked('url') && !isFilled(body.url)) return "Le lien du rapport est obligatoire."
+  if (isChecked('url') && !isFilled(body.url)) return "Ajoutez le rapport au format PDF."
   return null
 }
 
