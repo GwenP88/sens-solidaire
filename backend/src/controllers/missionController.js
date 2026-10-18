@@ -6,6 +6,7 @@
 
 // Import des fonctions du service missions
 import { findAll, findAllForAdmin, findById, findBySlug, create, update, softDelete, hardDelete, findServiceCiviqueGallery } from "../services/missionService.js"
+import { isValidSlug } from '../utils/validation.js'
 
 // ── CONSTANTES DE VALIDATION ──────────────────────────────────────────────────
 // ⚠️ TODO (à valider avec la cliente le [date]) : figer la taxonomie définitive.
@@ -22,13 +23,6 @@ const VALID_TYPES = [
 // Autorise : lettres (avec accents), espaces, tirets
 // Interdit : chiffres, <, >, ", ', ;, ( ) etc. → bloque les tentatives XSS
 const COUNTRY_REGEX = /^[a-zA-ZÀ-ÿ\s'-]+$/
-
-// Regex pour valider un slug
-// Un slug ne contient que des lettres minuscules, chiffres et tirets
-// Ex valide : "volontariat-kenya-faune-sauvage"
-// Ex invalide : "kenya<script>", "kenya/../../etc"
-const SLUG_REGEX = /^[a-z0-9-]+$/
-
 
 // ── GET ALL MISSIONS ──────────────────────────────────────────────────────────
 // GET /api/missions
@@ -114,7 +108,7 @@ export const getMissionBySlug = async (req, res, next) => {
     // ── Validation : format du slug ──
     // Un slug valide = lettres minuscules, chiffres, tirets uniquement
     // Bloque : "../../../etc/passwd", "<script>", espaces, majuscules
-    if (!SLUG_REGEX.test(slug)) {
+    if (!isValidSlug(slug)) {
       return res.status(400).json({
         error: true,
         message: "Format de slug invalide"
@@ -216,7 +210,7 @@ export const createMission = async (req, res, next) => {
 
     // 3. Validation des FORMATS
     // 👉 VALID_TYPES.includes(type) ?     sinon → 400   (si type fourni)
-    // 👉 SLUG_REGEX.test(slug) ?          sinon → 400
+    // 👉 isValidSlug(slug) ?          sinon → 400
     // 👉 COUNTRY_REGEX.test(country) ?    sinon → 400
     if (type !== undefined && !VALID_TYPES.includes(type)) {
       return res.status(400).json({
@@ -225,10 +219,10 @@ export const createMission = async (req, res, next) => {
       })
     }
 
-    if (!SLUG_REGEX.test(slug)) {
+    if (!isValidSlug(slug)) {
       return res.status(400).json({
         error: true,
-        message: "Caractére non accepté dans le slug"
+        message: "Adresse de la page : utilisez uniquement des minuscules sans accents, des chiffres et des tirets."
       })
     }
 
@@ -299,8 +293,8 @@ export const updateMission = async (req, res, next) => {
     if (data.type !== undefined && !VALID_TYPES.includes(data.type)) {
       return res.status(400).json({ error: true, message: "Type non valide" })
     }
-    if (data.slug !== undefined && !SLUG_REGEX.test(data.slug)) {
-      return res.status(400).json({ error: true, message: "Format de slug invalide" })
+    if (data.slug !== undefined && !isValidSlug(data.slug)) {
+      return res.status(400).json({ error: true, message: "Adresse de la page : utilisez uniquement des minuscules sans accents, des chiffres et des tirets." })
     }
     if (data.country !== undefined && !COUNTRY_REGEX.test(data.country)) {
       return res.status(400).json({ error: true, message: "Pays non valide" })

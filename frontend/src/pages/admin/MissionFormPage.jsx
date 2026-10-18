@@ -27,6 +27,7 @@ import AnchorNav from '../../components/navigation/AnchorNav'
 
 // ── Composants utils
 import { previewShortDescription } from '../../utils/shortDescription'
+import { isValidSlug } from '../../utils/validation'
 
 
 // ════════════════════════════════════════════════════════════════
@@ -217,7 +218,7 @@ function MissionFormPage() {
     if (!formData.title.trim())             newErrors.title             = "Le titre est obligatoire."
     if (!formData.country.trim())           newErrors.country           = "Le pays est obligatoire."
     if (!formData.slug.trim())              newErrors.slug              = "L'adresse de la page est obligatoire."
-    else if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(formData.slug.trim()))
+    else if (!isValidSlug(formData.slug))
                                             newErrors.slug              = "Utilisez uniquement des minuscules sans accents, des chiffres et des tirets. Ex. : volontariat-kenya"
     if (!formData.description.trim())       newErrors.description       = "La description est obligatoire."
     if (formData.mission_photos.length < 2) newErrors.mission_photos = "2 photos sont obligatoires."
