@@ -1061,3 +1061,76 @@ export const hardDeleteFieldAction = async (id) => {
   if (!response.ok) throw new Error("Échec de la suppression.")
   return await response.json()
 }
+
+// ── MÉDIAS & ACTUALITÉS (ADMIN) ─────────────────────────────────────────────
+
+export const fetchMediaPostThemes = async () => {
+  const response = await fetch(`${API_URL}/media-posts/themes`)
+  if (!response.ok) throw new Error("Impossible de charger les thèmes.")
+  return await response.json()
+}
+
+export const fetchAdminMediaPosts = async () => {
+  const response = await authFetch(`${API_URL}/admin/media-posts`)
+  if (!response.ok) throw new Error("Impossible de charger les publications.")
+  const data = await response.json()
+  return data.posts
+}
+
+export const fetchAdminMediaPostById = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/media-posts/${id}`)
+  if (!response.ok) throw new Error("Impossible de charger cette publication.")
+  const data = await response.json()
+  return data.post
+}
+
+export const createMediaPost = async (postData) => {
+  const response = await authFetch(`${API_URL}/admin/media-posts`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(postData),
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message || "Échec de l'enregistrement.")
+  return data.post
+}
+
+export const updateMediaPost = async (id, postData) => {
+  const response = await authFetch(`${API_URL}/admin/media-posts/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(postData),
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message || "Échec de l'enregistrement.")
+  return data.post
+}
+
+export const toggleMediaPostActive = async (id, is_active) => {
+  const response = await authFetch(`${API_URL}/admin/media-posts/${id}/toggle`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ is_active }),
+  })
+  if (!response.ok) throw new Error("Échec du changement de statut.")
+  return await response.json()
+}
+
+export const hardDeleteMediaPost = async (id) => {
+  const response = await authFetch(`${API_URL}/admin/media-posts/${id}`, {
+    method: 'DELETE',
+  })
+  if (!response.ok) throw new Error("Échec de la suppression.")
+  return await response.json()
+}
+
+export const updateMediaPostMedia = async (id, images) => {
+  const response = await authFetch(`${API_URL}/admin/media-posts/${id}/media`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ images }),
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message || "Échec de l'enregistrement des photos.")
+  return data
+}

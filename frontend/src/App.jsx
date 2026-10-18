@@ -60,6 +60,8 @@ import ServiceCiviqueFormPage from './pages/admin/ServiceCiviqueFormPage'
 import GaleriePage from './pages/admin/GaleriePage'
 import LocationsPage from './pages/admin/LocationsPage'
 import LocationFormPage from './pages/admin/LocationFormPage'
+import MediaPostsPage from './pages/admin/MediaPostsPage'
+import MediaPostFormPage from './pages/admin/MediaPostFormPage'
 import TeamMemberFormPage from './pages/admin/TeamMemberFormPage'
 import AProposPage from './pages/admin/AProposPage'
 import TemoignagesRapportsPage from './pages/admin/TemoignagesRapportsPage'
@@ -151,6 +153,11 @@ function App() {
           <Route path="lieux" element={<LocationsPage />} />
           <Route path="lieux/new" element={<LocationFormPage />} />
           <Route path="lieux/:id/edit" element={<LocationFormPage />} />
+
+          {/* Médias */}
+          <Route path="medias" element={<MediaPostsPage />} />
+          <Route path="medias/new" element={<MediaPostFormPage />} />
+          <Route path="medias/:id/edit" element={<MediaPostFormPage />} />
 
           {/* Équipe */}
           <Route path="equipe/new" element={<TeamMemberFormPage />} />
