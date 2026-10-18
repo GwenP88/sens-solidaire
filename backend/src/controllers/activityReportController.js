@@ -3,6 +3,21 @@ import {
   getActivityReports,
   findAllForAdmin, findById, create, update, toggleActive, hardDelete,
 } from '../services/activityReportService.js'
+import { isFilled, isValidYear } from '../utils/validation.js'
+
+// ── VALIDATION ─────────────────────────────────────────────────────────────
+// partial = true pour une modification (PATCH) : on ne vérifie que les champs
+// envoyés, mais un champ envoyé vide ou invalide est refusé.
+const validateActivityReport = (body, { partial = false } = {}) => {
+  const isChecked = (field) => !partial || field in body
+
+  if (isChecked('annee')) {
+    if (!isFilled(body.annee))    return "L'année du rapport est obligatoire."
+    if (!isValidYear(body.annee)) return "Indiquez une année valide, par exemple 2025."
+  }
+  if (isChecked('url') && !isFilled(body.url)) return "Le lien du rapport est obligatoire."
+  return null
+}
 
 // ── GET (PUBLIC) ────────────────────────────────────────────────────────
 export const getActivityReportsController = async (req, res) => {
@@ -42,8 +57,9 @@ export const getActivityReportByIdAdmin = async (req, res, next) => {
 // POST /api/admin/activity-reports
 export const createActivityReport = async (req, res, next) => {
   try {
-    if (!req.body.annee || !req.body.url) {
-      return res.status(400).json({ error: true, message: "Année et lien du PDF sont obligatoires." })
+    const validationError = validateActivityReport(req.body)
+    if (validationError) {
+      return res.status(400).json({ error: true, message: validationError })
     }
     const report = await create(req.body)
     return res.status(201).json({ report })
@@ -56,6 +72,10 @@ export const createActivityReport = async (req, res, next) => {
 // PATCH /api/admin/activity-reports/:id
 export const updateActivityReport = async (req, res, next) => {
   try {
+    const validationError = validateActivityReport(req.body, { partial: true })
+    if (validationError) {
+      return res.status(400).json({ error: true, message: validationError })
+    }
     const report = await update(Number(req.params.id), req.body)
     return res.status(200).json({ report })
   } catch (error) {
