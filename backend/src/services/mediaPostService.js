@@ -3,12 +3,47 @@
 
 import prisma from '../config/db.js'
 import { slugify } from '../utils/slugify.js'
+import { deriveShortDescription } from '../utils/shortDescription.js'
+
+// Résumé affiché sur les cartes (4 lignes ≈ 200 caractères)
+const CARD_SUMMARY_LENGTH = 200
+
+// Ajoute le résumé calculé, sans le stocker en base
+const withSummary = (post) => ({
+  ...post,
+  short_description: deriveShortDescription(post.content || '', CARD_SUMMARY_LENGTH).shortDescription,
+})
+
+// Découpe le texte en chapô (= résumé de la carte) + suite de l'article
+const CUT_MARKER = '---'
+const splitLead = (content) => {
+  if (!content) return { lead: null, body: null }
+
+  const markerIndex = content.indexOf(CUT_MARKER)
+  if (markerIndex !== -1) {
+    return {
+      lead: content.slice(0, markerIndex).trim() || null,
+      body: content.slice(markerIndex + CUT_MARKER.length).trim() || null,
+    }
+  }
+
+  // Sans repère : le résumé auto est le début exact du texte, sauf s'il a été coupé (« … »)
+  const { shortDescription } = deriveShortDescription(content, CARD_SUMMARY_LENGTH)
+  if (shortDescription && !shortDescription.endsWith('…') && content.startsWith(shortDescription)) {
+    return { lead: shortDescription, body: content.slice(shortDescription.length).trim() || null }
+  }
+  return { lead: null, body: content }
+}
 
 // ── OUTILS INTERNES ─────────────────────────────────────────────────────────
 
 // '' → null (champ vidé par la cliente) ; undefined → undefined (champ non
 // envoyé en PATCH : Prisma ne le touche pas)
-const toNullable = (value) => (value === undefined ? undefined : (String(value).trim() || null))
+const toNullable = (value) => {
+  if (value === undefined) return undefined   // champ non envoyé (PATCH) : on n'y touche pas
+  if (value === null) return null             // champ vidé
+  return String(value).trim() || null         // '' ou espaces → null
+}
 
 // Adresse unique : "titre", puis "titre-2", "titre-3"... si déjà prise
 const generateUniqueSlug = async (title) => {
@@ -35,10 +70,11 @@ const normalizeTheme = async (theme) => {
 
 // ── GET (PUBLIC) ────────────────────────────────────────────────────────────
 export const getAllMediaPosts = async () => {
-  return prisma.mediaPost.findMany({
+  const posts = await prisma.mediaPost.findMany({
     where: { is_active: true },
     orderBy: { date: 'desc' },
   })
+  return posts.map(withSummary)
 }
 
 // Corrigé : un post en pause n'est plus accessible par son adresse
@@ -55,7 +91,9 @@ export const getMediaPostBySlug = async (slug) => {
     orderBy: { display_order: 'asc' },
   })
 
-  return { ...post, media }
+  // Le marqueur --- ne sert qu'à couper le résumé : on le retire de l'article
+  const { lead, body } = splitLead(post.content)
+  return { ...post, lead, content: body, media }
 }
 
 // Liste des thèmes déjà utilisés — suggestions du formulaire (et futurs filtres)
@@ -77,9 +115,16 @@ export const findAllForAdmin = async () => {
 
 // ── FIND BY ID (ADMIN) ──────────────────────────────────────────────────────
 export const findById = async (id) => {
-  return prisma.mediaPost.findUnique({ where: { id } })
-}
+  const post = await prisma.mediaPost.findUnique({ where: { id } })
+  if (!post) return null
 
+  // Photos de l'article — pour pré-remplir le formulaire
+  const images = await prisma.media.findMany({
+    where: { entity_type: 'media_post', entity_id: id, file_type: 'image' },
+    orderBy: { display_order: 'asc' },
+  })
+  return { ...post, images }
+}
 // ── CREATE ──────────────────────────────────────────────────────────────────
 export const create = async (data) => {
   return prisma.mediaPost.create({

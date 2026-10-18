@@ -6,6 +6,7 @@ import {
   findAllForAdmin, findById, create, update, toggleActive, hardDelete,
 } from '../services/mediaPostService.js'
 import { isFilled } from '../utils/validation.js'
+import { syncGalleryImages } from '../services/mediaService.js'
 
 // ── VALIDATION ─────────────────────────────────────────────────────────────
 // partial = true pour une modification (PATCH) : on ne vérifie que les champs
@@ -109,6 +110,21 @@ export const updateMediaPost = async (req, res, next) => {
     }
     const post = await update(Number(req.params.id), req.body)
     return res.status(200).json({ post })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ── PHOTOS DE L'ARTICLE (ADMIN) ─────────────────────────────────────────────
+// PUT /api/admin/media-posts/:id/media — même principe que les lieux
+export const updateMediaPostMedia = async (req, res, next) => {
+  try {
+    const { images } = req.body
+    if (!Array.isArray(images)) {
+      return res.status(400).json({ error: true, message: "La liste des photos est invalide." })
+    }
+    await syncGalleryImages('media_post', Number(req.params.id), images)
+    return res.status(200).json({ success: true })
   } catch (error) {
     next(error)
   }

@@ -5,7 +5,7 @@ import express from 'express'
 import authMiddleware from '../middlewares/authMiddleware.js'
 import {
   getAllMediaPostsAdmin, getMediaPostByIdAdmin,
-  createMediaPost, updateMediaPost, toggleMediaPostActive, hardDeleteMediaPost,
+  createMediaPost, updateMediaPost, updateMediaPostMedia, toggleMediaPostActive, hardDeleteMediaPost,
 } from '../controllers/mediaPostController.js'
 
 const router = express.Router()
@@ -16,6 +16,7 @@ router.get('/:id', getMediaPostByIdAdmin)
 router.post('/', createMediaPost)
 router.patch('/:id', updateMediaPost)
 router.patch('/:id/toggle', toggleMediaPostActive)
+router.put('/:id/media', updateMediaPostMedia)
 router.delete('/:id', hardDeleteMediaPost)
 
 export default router
