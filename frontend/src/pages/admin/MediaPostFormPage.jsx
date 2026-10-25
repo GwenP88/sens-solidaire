@@ -35,10 +35,9 @@ const EMPTY_FORM = {
   theme: '',
   date: today(),
   content: '',
-  image: [],   // [{ file_url, label }] — 1 image max
+  photos: [],  // [{ file_url, label, is_hero }] — photo principale (carte + haut d'article) + carrousel
   url: '',     // lien vers un autre site
   file: [],    // [{ file_url, label }] — 1 fichier max (PDF, audio, vidéo)
-  images: [],  // [{ file_url, label }] — photos de l'article (carrousel)
   author: '',
   source: '',
   show_homepage: false,
@@ -74,10 +73,13 @@ function MediaPostFormPage() {
           theme: post.theme || '',
           date: post.date ? post.date.slice(0, 10) : today(),
           content: post.content || '',
-          image: post.image_url ? [{ file_url: post.image_url, label: '' }] : [],
+          // Photo principale en 1er (marquée is_hero), puis les photos du carrousel
+          photos: [
+            ...(post.image_url ? [{ file_url: post.image_url, label: '', is_hero: true }] : []),
+            ...(post.images || []).map(m => ({ file_url: m.file_url, label: m.label || '', is_hero: false })),
+          ],
           url: link && !isFile ? link : '',
           file: isFile ? [{ file_url: link, label: '' }] : [],
-          images: (post.images || []).map(m => ({ file_url: m.file_url, label: m.label || '' })),
           author: post.author || '',
           source: post.source || '',
           show_homepage: Boolean(post.show_homepage),
@@ -122,6 +124,9 @@ function MediaPostFormPage() {
       newErrors.url = "L'adresse doit commencer par http:// ou https://"
     }
 
+    if (hasLink && formData.photos.length > 1) {
+      newErrors.photos = "Avec un lien ou un fichier, seule la photo de la carte est utilisée : gardez-en une seule."
+    }
     if (!hasLink && !formData.content.trim()) {
       newErrors.content = "Ajoutez un texte, ou un lien / fichier à consulter."
     }
@@ -141,12 +146,18 @@ function MediaPostFormPage() {
 
     setSubmitting(true)
     try {
+      // Photo principale = celle cochée, sinon la 1re ; les autres vont au carrousel
+      const hero = formData.photos.find(p => p.is_hero) || formData.photos[0]
+      const gallery = hasLink
+        ? []
+        : formData.photos.filter(p => p !== hero).map(({ file_url, label }) => ({ file_url, label }))
+
       const payload = {
         title: formData.title,
         theme: formData.theme,
         date: formData.date,
         content: formData.content,
-        image_url: formData.image[0]?.file_url || null,
+        image_url: hero?.file_url || null,
         external_url: formData.url.trim() || formData.file[0]?.file_url || null,
         author: formData.author,
         source: formData.source,
@@ -160,7 +171,7 @@ function MediaPostFormPage() {
       if (isEditing) await updateMediaPost(postId, payload)
 
       // Photos seulement pour une page article ; sinon on vide (elles ne seraient jamais visibles)
-      await updateMediaPostMedia(postId, hasLink ? [] : formData.images)
+      await updateMediaPostMedia(postId, gallery)
 
       navigate('/admin/medias')
     } catch (err) {
@@ -228,21 +239,6 @@ function MediaPostFormPage() {
           </div>
         </FormSection>
 
-        {/* ── BLOC 2 : Image ── */}
-        <FormSection
-          title="Image"
-          description="Facultative — une illustration par défaut s'affiche si aucune image n'est ajoutée."
-        >
-          <AdminFileUpload
-            value={formData.image}
-            onChange={(image) => setField('image', image)}
-            accept="image/*"
-            maxFiles={1}
-            imageType="card"
-            showLabel={false}
-          />
-        </FormSection>
-
         {/* ── BLOC 3 : Texte ── */}
         <FormSection title="Texte">
           <div className="flex flex-col gap-1">
@@ -289,24 +285,27 @@ function MediaPostFormPage() {
           </div>
         </FormSection>
 
-        {/* ── BLOC 5 : Photos de l'article — seulement si la carte mène à la page article ── */}
-        {!hasLink && (
-          <FormSection
-            title="Photos de l'article (facultatif)"
-            description="Affichées en carrousel sur la page de l'article. La légende décrit la photo pour les personnes malvoyantes."
-          >
-            <AdminFileUpload
-              value={formData.images}
-              onChange={(images) => setField('images', images)}
-              accept="image/*"
-              maxFiles={15}
-              imageType="gallery"
-              showLabel={true}
-              layout="grid"
-              allowReorder={false}
-            />
-          </FormSection>
-        )}
+        {/* ── BLOC : Photos — une seule zone, adaptée selon où mène la carte ── */}
+        <FormSection
+          title="Photos (facultatif)"
+          description={hasLink
+            ? "Une photo : elle illustre la carte. Sans photo, une illustration par défaut s'affiche."
+            : "Jusqu'à 10 photos. La photo principale illustre la carte et le haut de l'article ; les autres s'affichent en carrousel."}
+        >
+          <AdminFileUpload
+            value={formData.photos}
+            onChange={(photos) => setField('photos', photos)}
+            accept="image/*"
+            maxFiles={hasLink ? 1 : 10}
+            imageType="hero"
+            showLabel={true}
+            layout="grid"
+            allowReorder={false}
+            showHeroSelector={!hasLink && formData.photos.length > 1}
+            error={fieldErrors.photos}
+          />
+          {fieldErrors.photos && <span className="text-xs text-red-500">{fieldErrors.photos}</span>}
+        </FormSection>
 
         {/* ── BLOC 6 : Mise en avant ── */}
         <FormSection title="Mise en avant">
