@@ -38,73 +38,6 @@ const seed = async () => {
   console.log(`Admin : ${admin.email}`)
 
   // ============================================================
-  // ARTICLES : MÉDIAS ET ACTUALITÉS
-  // ============================================================
-
-  const MEDIA_POSTS = [
-    {
-      slug: 'newsletter-juin-2026',
-      title: 'Newsletter Juin 2026',
-      content: 'Découvrez les dernières nouvelles de Sens Solidaires : nos missions en cours, les témoignages de volontaires et les actions menées sur le terrain au Kenya et au Sénégal.',
-      theme: 'Newsletter',
-      date: new Date('2026-05-01'),
-      image_url: null,
-      external_url: 'https://www.sensolidaire.org/wp-content/uploads/2026/05/NEWSLETTER-Juin-26-3.pdf',
-    },
-    {
-      slug: 'interview-france-bleu-personnalites-remarquables',
-      title: 'Personnalités remarquables — France Bleu',
-      content: 'Intervention de Delphine Thibaut au micro de Ségolène Alunni dans son émission Personnalités remarquables sur France Bleu, afin de promouvoir les départs en congé de solidarité et les projets de l\'association au Kenya.',
-      theme: 'Interview & radio',
-      date: new Date('2022-01-01'),
-      image_url: '/images/placeholders/placeholder-photo.webp',
-      external_url: 'https://www.francebleu.fr/emissions/18-19-personnalites-remarquables',
-    },
-    {
-      slug: 'post-instagram-willy-rovelli',
-      title: 'Willy Rovelli parle de Sens Solidaires',
-      content: 'Willy Rovelli a partagé son expérience de congé solidaire au Kenya avec Sens Solidaires.',
-      theme: 'Ils parlent de nous',
-      date: new Date('2024-06-01'),
-      image_url: null,
-      external_url: 'https://www.instagram.com/stories/highlights/18049986517744153/',
-      is_active: true,
-      show_homepage: true,
-    },
-    {
-      slug: 'article-nice-matin-festival-solidarites-2020',
-      title: 'Festival des solidarités — Nice Matin 2020',
-      content: 'Article de Nice-matin du 28 novembre 2020 sur le festival des solidarités et les interventions de Sens Solidaires dans les écoles élémentaires niçoises.',
-      theme: 'Revue de presse',
-      date: new Date('2020-11-28'),
-      image_url: '/images/placeholders/placeholder-photo.webp',
-      external_url: null,
-    },
-    {
-      slug: 'exposition-linogravures-felix-richard-2016',
-      title: 'Exposition — Linogravures de Felix Richard',
-      content: 'Novembre 2016 : Exposition des linogravures de Felix Richard sur le papier en bouse d\'éléphant du Sri Lanka. 25 euros le tableau encadré, l\'argent retourne directement à la Fabrique du papier pour maintenir son développement.',
-      theme: 'Vie de l\'association',
-      date: new Date('2016-11-01'),
-      image_url: '/images/placeholders/placeholder-photo.webp',
-      external_url: null,
-    },
-    {
-      slug: 'evenement-forum-partir-etranger-thonon',
-      title: 'Forum partir à l\'étranger — Thonon agglomération',
-      content: 'Stand d\'informations pour les jeunes désireux de s\'engager en mission de service civique à l\'international avec nous, au Sénégal ou au Kenya.',
-      theme: 'Événement',
-      date: new Date('2023-01-01'),
-      image_url: '/images/placeholders/placeholder-photo.webp',
-      external_url: null,
-    },
-  ]
-
-  await prisma.mediaPost.deleteMany({})
-  await prisma.mediaPost.createMany({ data: MEDIA_POSTS })
-  console.log(`MediaPosts créés (${MEDIA_POSTS.length})`)
-
-  // ============================================================
   // ÉDUCATION ET SENSIBILISATION
   // ============================================================
 
@@ -164,7 +97,6 @@ const seed = async () => {
   console.log(`Admin              : admin@sensolidaire.org`)
   console.log(`Password           : ${process.env.ADMIN_PASSWORD}`)
   console.log("─────────────────────────────────────────")
-  console.log(`MediaPosts         : ${MEDIA_POSTS.length}`)
   console.log(`EducationItems     : ${EDUCATION_ITEMS.length}`)
   console.log("─────────────────────────────────────────")
   console.log("Missions, Locations, Délégations et Témoignages : gérés via le dashboard / le flux de soumission, jamais par ce seed.")
