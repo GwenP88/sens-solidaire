@@ -5,7 +5,7 @@
 //          car la grille passe à 1 colonne sur cette plage et le format portrait y est moins lisible
 // Hauteur fixe dans les deux layouts — garantit des cards identiques dans la grille
 
-function MediaCard({ title, short_description, theme, date, image_url, slug, external_url }) {
+function MediaCard({ title, short_description, theme, date, image_url, slug, external_url, source, author }) {
 
   // ── Formate la date en français
   const formattedDate = new Date(date).toLocaleDateString('fr-FR', {
@@ -36,11 +36,18 @@ function MediaCard({ title, short_description, theme, date, image_url, slug, ext
       <div className="flex flex-col justify-center flex-1 min-w-0 p-6">
 
         {/* ── Zone haute — date + thème ── */}
-        {/* text-eyebrow mb-0 : inline dans flex items-center, pas besoin de marge basse */}
-        <div className="flex items-center gap-xs flex-wrap">
-          <span className="text-caption text-primary/50">{formattedDate}</span>
-          <span className="text-caption text-primary/30">—</span>
-          <span className="text-eyebrow text-accent-2 mb-0">{theme}</span>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-xs flex-wrap">
+            <span className="text-caption text-primary/50">{formattedDate}</span>
+            <span className="text-caption text-primary/30">—</span>
+            <span className="text-eyebrow text-accent-2 mb-0">{theme}</span>
+          </div>
+          {/* Source et auteur — seulement ce qui est renseigné, séparés par un tiret */}
+          {(source || author) && (
+            <span className="text-caption text-primary/50">
+              {[source && `Source : ${source}`, author && `Auteur : ${author}`].filter(Boolean).join(' — ')}
+            </span>
+          )}
         </div>
 
         {/* ── Zone centrale — titre (2 lignes max) + extrait (4 lignes max) ── */}

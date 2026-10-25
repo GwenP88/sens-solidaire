@@ -15,9 +15,19 @@ import { fetchMediaPostBySlug } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import Button from '../components/ui/Button'
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
+
+// Ligne du bloc Informations : « THÈME : Vie de l'association »
+// Mêmes typographies qu'avant (eyebrow pour le libellé, body pour la valeur)
+function InfoRow({ label, children }) {
+  return (
+    <p className="flex flex-wrap items-baseline gap-xs mb-0">
+      <span className="text-eyebrow text-primary/40 mb-0">{label} :</span>
+      <span className="text-body text-primary/80">{children}</span>
+    </p>
+  )
+}
 
 function MediaDetail() {
   // ── État local — article + chargement + erreur
@@ -135,56 +145,11 @@ function MediaDetail() {
             {/* Card infos — n'affiche que les données disponibles */}
             <div className="bg-surface-mid rounded-2xl p-6 flex flex-col gap-sm">
               <h3 className="h3-style text-primary mb-0">Informations</h3>
-
-              {/* Thème */}
-              {post.theme && (
-                <div className="flex flex-col gap-xs">
-                  <span className="text-eyebrow text-primary/40">Thème</span>
-                  <span className="text-body text-primary/80">{post.theme}</span>
-                </div>
-              )}
-
-              {/* Date */}
-              {post.date && (
-                <div className="flex flex-col gap-xs">
-                  <span className="text-eyebrow text-primary/40">Date</span>
-                  <span className="text-body text-primary/80">{formattedDate}</span>
-                </div>
-              )}
-
-              {/* Lien externe principal — si disponible */}
-              {post.external_url && (
-                <a
-                  href={post.external_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2"
-                >
-                  <Button label="Voir la source →" variant="primary" fullWidth />
-                </a>
-              )}
-
-              {/* ── Champs futurs — décommenter quand disponibles en BDD ──
-              {post.author && (
-                <div className="flex flex-col gap-xs">
-                  <span className="text-eyebrow text-primary/40">Auteur</span>
-                  <span className="text-body text-primary/80">{post.author}</span>
-                </div>
-              )}
-              {post.source && (
-                <div className="flex flex-col gap-xs">
-                  <span className="text-eyebrow text-primary/40">Source</span>
-                  <a href={post.source} target="_blank" rel="noopener noreferrer"
-                    className="link-cta text-accent">Voir la source →</a>
-                </div>
-              )}
-              {post.read_time && (
-                <div className="flex flex-col gap-xs">
-                  <span className="text-eyebrow text-primary/40">Lecture</span>
-                  <span className="text-body text-primary/80">{post.read_time} min</span>
-                </div>
-              )}
-              */}
+              {post.theme     && <InfoRow label="Thème">{post.theme}</InfoRow>}
+              {post.date      && <InfoRow label="Date">{formattedDate}</InfoRow>}
+              {post.source    && <InfoRow label="Source"><em>{post.source}</em></InfoRow>}
+              {post.author    && <InfoRow label="Auteur">{post.author}</InfoRow>}
+              {post.read_time && <InfoRow label="Temps de lecture">{post.read_time} min</InfoRow>}
             </div>
 
             {/* ── Ressources téléchargeables — PDFs + liens en cards ── */}
