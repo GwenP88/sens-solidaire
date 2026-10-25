@@ -156,12 +156,18 @@ function FieldActionFormPage() {
 
   // Aperçus en direct — H2 dérivé + tags déduits
   const { description: previewH2, content: previewContent } = splitDescriptionContent(formData.descriptionRaw || '')
+
+  // Repère --- trop loin : le texte entre la coupure et le repère serait perdu
+  const markerIndex = formData.descriptionRaw.indexOf(CUT_MARKER)
+  const introLength = markerIndex !== -1 ? formData.descriptionRaw.slice(0, markerIndex).trim().length : null
+  const isMarkerTooFar = introLength !== null && introLength > H2_MAX_LENGTH
   const previewTags = [...new Set(formData.odds.map(n => ODD_TO_CATEGORY_PREVIEW[n]).filter(Boolean))]
 
   const validate = () => {
     const newErrors = {}
     if (!formData.title.trim())          newErrors.title = "Le titre est obligatoire."
     if (!formData.descriptionRaw.trim()) newErrors.descriptionRaw = "La description est obligatoire."
+    else if (isMarkerTooFar) newErrors.descriptionRaw = `Le passage avant --- dépasse ${H2_MAX_LENGTH} caractères : placez le repère plus tôt.`
     if (formData.odds.length === 0)      newErrors.odds = "Sélectionnez au moins un ODD."
     if (formData.countries.length === 0) newErrors.countries = "Ajoutez au moins un pays : choisissez-le dans la liste, puis cliquez sur « Ajouter »."
     if (formData.photos.length > 0 && !formData.photos.some(p => p.is_hero)) {
@@ -322,9 +328,14 @@ function FieldActionFormPage() {
               <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg flex flex-col gap-2">
                 <div>
                   <p className="text-xs font-medium text-dash-legend mb-1">
-                    Aperçu de l'introduction (H2) — {previewH2.length}/{H2_MAX_LENGTH} caractères
+                    Aperçu de l'introduction — {previewH2.length}/{H2_MAX_LENGTH} caractères
                   </p>
                   <p className="text-sm text-dash-text italic">{previewH2}</p>
+                  {isMarkerTooFar && (
+                    <p role="status" className="text-xs text-dash-warning mt-2">
+                      ⚠️ Le passage avant <code className="bg-gray-100 px-1 rounded">---</code> fait {introLength} caractères (maximum {H2_MAX_LENGTH}). Placez le repère plus tôt, sinon une partie du texte serait perdue.
+                    </p>
+                  )}
                 </div>
                 <div>
                   <p className="text-xs font-medium text-dash-legend mb-1">Aperçu de la suite du contenu</p>

@@ -15,8 +15,7 @@ import {
   fetchCountryNames
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
-import { FormSection, Field, FormActionBar } from '../../components/admin/FormElements'
-import { previewShortDescription } from '../../utils/shortDescription'
+import { FormSection, Field, FormActionBar, ShortDescriptionPreview } from '../../components/admin/FormElements'
 
 const EMPTY_FORM = {
   title: '',
@@ -89,8 +88,6 @@ function ServiceCiviqueFormPage() {
     if (formData.photo.length < 1)    newErrors.photo = "Une photo est obligatoire."
     return newErrors
   }
-
-  const shortDescriptionPreview = previewShortDescription(formData.description)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -182,14 +179,7 @@ function ServiceCiviqueFormPage() {
               }`}
             />
             {fieldErrors.description && <span className="text-xs text-red-500">{fieldErrors.description}</span>}
-            {formData.description && (
-              <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="text-xs font-medium text-dash-legend mb-1">
-                  Aperçu du résumé affiché sur la carte — {shortDescriptionPreview.length}/150 caractères
-                </p>
-                <p className="text-sm text-dash-text italic">{shortDescriptionPreview}</p>
-              </div>
-            )}
+            <ShortDescriptionPreview text={formData.description} label="Aperçu du résumé affiché sur la carte" />
           </div>
         </FormSection>
 

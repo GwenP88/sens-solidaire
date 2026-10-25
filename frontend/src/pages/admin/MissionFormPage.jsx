@@ -22,11 +22,10 @@ import {
 
 // ── Composants 
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
-import { FormSection, Field, TextareaField, FormActionBar } from '../../components/admin/FormElements'
+import { FormSection, Field, TextareaField, FormActionBar, ShortDescriptionPreview } from '../../components/admin/FormElements'
 import AnchorNav from '../../components/navigation/AnchorNav'
 
 // ── Composants utils
-import { previewShortDescription } from '../../utils/shortDescription'
 import { isValidSlug } from '../../utils/validation'
 
 
@@ -321,8 +320,6 @@ function MissionFormPage() {
     <p className="text-dash-legend text-sm italic p-8">Chargement de la mission...</p>
   )
 
-  const shortDescriptionPreview = previewShortDescription(formData.description)
-
   // ════════════════════════════════════════════════════════════════
   // RENDU
   // ════════════════════════════════════════════════════════════════
@@ -448,15 +445,7 @@ function MissionFormPage() {
                 fieldErrors.description ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
               }`}
             />
-            {fieldErrors.description && <span className="text-xs text-red-500">{fieldErrors.description}</span>}
-            {formData.description && (
-              <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="text-xs font-medium text-dash-legend mb-1">
-                  Aperçu de la description courte (carte + hero) — {shortDescriptionPreview.length}/150 caractères
-                </p>
-                <p className="text-sm text-dash-text italic">{shortDescriptionPreview}</p>
-              </div>
-            )}
+            <ShortDescriptionPreview text={formData.description} label="Aperçu du résumé (carte et haut de la page)" />
           </div>
           <TextareaField
             label="Rôle du volontaire" name="volunteer_role"

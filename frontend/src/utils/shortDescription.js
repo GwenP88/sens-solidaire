@@ -2,7 +2,7 @@
 // formulaire uniquement. La version qui fait foi est côté backend
 // (backend/src/utils/shortDescription.js), calculée à l'enregistrement.
 
-const CUT_MARKER = '---'
+export const CUT_MARKER = '---'
 
 export const previewShortDescription = (fullText, maxLength = 150) => {
   if (!fullText) return ''

@@ -2,6 +2,8 @@
 // Composants de formulaire partagés — utilisés par MissionFormPage,
 // ServiceCiviqueFormPage, et tout futur formulaire admin.
 
+import { previewShortDescription, CUT_MARKER } from '../../utils/shortDescription'
+
 export function FormSection({ title, description, children, tone = 'bg-dash-action/5', id }) {
   return (
     <div id={id} className={`form-section flex flex-col gap-4 p-6 rounded-xl border border-gray-200 ${tone} transition-colors`}>
@@ -95,6 +97,35 @@ export function FormActionBar({ onCancel, submitting, submitLabel, submittingLab
       >
         {submitting ? submittingLabel : submitLabel}
       </button>
+    </div>
+  )
+}
+
+// ── Aperçu du résumé de carte ──────────────────────────────────────────────
+// Affiche le résumé tel qu'il apparaîtra sur la carte, et prévient la cliente
+// quand son repère --- est placé trop loin (sinon il est ignoré en silence).
+export function ShortDescriptionPreview({ text, maxLength = 150, label = 'Aperçu de la carte' }) {
+  if (!text) return null
+
+  const preview = previewShortDescription(text, maxLength)
+
+  // Longueur du passage avant le repère (null s'il n'y a pas de repère)
+  const markerIndex = text.indexOf(CUT_MARKER)
+  const excerptLength = markerIndex !== -1 ? text.slice(0, markerIndex).trim().length : null
+  const isMarkerTooFar = excerptLength !== null && excerptLength > maxLength
+
+  return (
+    <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+      <p className="text-xs font-medium text-dash-legend mb-1">
+        {label} — {preview.length}/{maxLength} caractères
+      </p>
+      <p className="text-sm text-dash-text italic">{preview}</p>
+
+      {isMarkerTooFar && (
+        <p role="status" className="text-xs text-dash-warning mt-2">
+          ⚠️ Le passage avant <code className="bg-gray-100 px-1 rounded">{CUT_MARKER}</code> fait {excerptLength} caractères (maximum {maxLength}) : la carte n'en affichera que {preview.length}. Placez le repère plus tôt.
+        </p>
+      )}
     </div>
   )
 }

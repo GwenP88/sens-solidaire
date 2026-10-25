@@ -18,8 +18,7 @@ import {
   updateMediaPostMedia,
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
-import { FormSection, Field, FormActionBar } from '../../components/admin/FormElements'
-import { previewShortDescription } from '../../utils/shortDescription'
+import { FormSection, Field, FormActionBar, ShortDescriptionPreview } from '../../components/admin/FormElements'
 
 const CARD_SUMMARY_LENGTH = 200 // même valeur que le backend (mediaPostService.js)
 
@@ -128,8 +127,6 @@ function MediaPostFormPage() {
     }
     return newErrors
   }
-
-  const shortDescriptionPreview = previewShortDescription(formData.content, CARD_SUMMARY_LENGTH)
 
   // ── Envoi ──
   const handleSubmit = async (e) => {
@@ -265,14 +262,7 @@ function MediaPostFormPage() {
               }`}
             />
             {fieldErrors.content && <span className="text-xs text-red-500">{fieldErrors.content}</span>}
-            {formData.content && (
-              <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="text-xs font-medium text-dash-legend mb-1">
-                  Aperçu de la carte — {shortDescriptionPreview.length}/{CARD_SUMMARY_LENGTH} caractères
-                </p>
-                <p className="text-sm text-dash-text italic">{shortDescriptionPreview}</p>
-              </div>
-            )}
+            <ShortDescriptionPreview text={formData.content} maxLength={CARD_SUMMARY_LENGTH} />
           </div>
         </FormSection>
 
@@ -291,10 +281,10 @@ function MediaPostFormPage() {
             <AdminFileUpload
               value={formData.file}
               onChange={(file) => { setField('file', file); setField('url', formData.url) }}
-              accept="application/pdf,audio/*,video/*"
+              accept="application/pdf,audio/mpeg,audio/mp4,audio/x-m4a,video/mp4,video/webm"
               maxFiles={1}
               showLabel={false}
-              helperText="PDF, audio ou vidéo."
+              helperText="PDF, audio (mp3, m4a) ou vidéo courte (mp4) — 20 Mo maximum. Pour une vidéo plus longue, publiez-la sur YouTube et collez le lien ci-dessus."
             />
           </div>
         </FormSection>
