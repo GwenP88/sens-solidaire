@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react'
 
 // ── Router
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 // ── API
 import { fetchMediaPostBySlug } from '../services/api'
@@ -49,7 +49,7 @@ function MediaDetail() {
   if (error || !post) return (
     <div className="p-12 text-center">
       <p className="text-body text-primary/50 italic">Article introuvable.</p>
-      <a href="/medias-et-actualites" className="link-inline text-accent">← Retour aux médias</a>
+      <Link to="/medias-et-actualites" className="link-inline text-accent">← Retour aux médias</Link>
     </div>
   )
 
@@ -102,9 +102,9 @@ function MediaDetail() {
       <section className="padding-y padding-x bg-surface">
 
         {/* Lien retour */}
-        <a href="/medias-et-actualites" className="link-nav text-primary/50 hover:text-primary block mb-8">
+        <Link to="/medias-et-actualites" className="link-nav text-primary/50 hover:text-primary block mb-8">
           ← Retour aux médias
-        </a>
+        </Link>
 
         {/* Grid — colonne contenu 70% + sidebar 30% à partir de lg */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-lg items-start">

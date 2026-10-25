@@ -5,6 +5,8 @@
 //          car la grille passe à 1 colonne sur cette plage et le format portrait y est moins lisible
 // Hauteur fixe dans les deux layouts — garantit des cards identiques dans la grille
 
+import { Link } from 'react-router-dom'
+
 function MediaCard({ title, short_description, theme, date, image_url, slug, external_url, source, author }) {
 
   // ── Formate la date en français
@@ -15,7 +17,6 @@ function MediaCard({ title, short_description, theme, date, image_url, slug, ext
   })
 
   // ── Lien : PDF/externe direct ou page détail
-  const href = external_url || `/medias/${slug}`
   const isExternal = !!external_url
 
   return (
@@ -59,14 +60,22 @@ function MediaCard({ title, short_description, theme, date, image_url, slug, ext
 
         {/* ── Zone basse — CTA toujours aligné en bas ── */}
         {/* mt-2 retiré : justify-between du parent gère déjà le positionnement en bas */}
-        <a
-          href={href}
-          target={isExternal ? '_blank' : '_self'}
-          rel={isExternal ? 'noopener noreferrer' : undefined}
-          className="link-cta text-accent hover:text-accent/80"
-        >
-          {isExternal ? 'Consulter →' : 'Lire la suite →'}
-        </a>
+        {isExternal ? (
+          // Externe (site, PDF, audio) : vrai lien, nouvel onglet
+          <a
+            href={external_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link-cta text-accent hover:text-accent/80"
+          >
+            Consulter →
+          </a>
+        ) : (
+          // Interne : navigation React, sans rechargement
+          <Link to={`/medias/${slug}`} className="link-cta text-accent hover:text-accent/80">
+            Lire la suite →
+          </Link>
+        )}
 
       </div>
     </article>
