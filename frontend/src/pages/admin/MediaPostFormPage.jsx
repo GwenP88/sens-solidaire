@@ -40,6 +40,8 @@ const EMPTY_FORM = {
   url: '',     // lien vers un autre site
   file: [],    // [{ file_url, label }] — 1 fichier max (PDF, audio, vidéo)
   images: [],  // [{ file_url, label }] — photos de l'article (carrousel)
+  author: '',
+  source: '',
   show_homepage: false,
 }
 
@@ -77,6 +79,8 @@ function MediaPostFormPage() {
           url: link && !isFile ? link : '',
           file: isFile ? [{ file_url: link, label: '' }] : [],
           images: (post.images || []).map(m => ({ file_url: m.file_url, label: m.label || '' })),
+          author: post.author || '',
+          source: post.source || '',
           show_homepage: Boolean(post.show_homepage),
         })
       } catch (err) {
@@ -147,6 +151,8 @@ function MediaPostFormPage() {
         content: formData.content,
         image_url: formData.image[0]?.file_url || null,
         external_url: formData.url.trim() || formData.file[0]?.file_url || null,
+        author: formData.author,
+        source: formData.source,
         show_homepage: formData.show_homepage,
       }
 
@@ -211,6 +217,16 @@ function MediaPostFormPage() {
             <Field
               label="Date" name="date" type="date" value={formData.date} onChange={handleChange}
               required error={fieldErrors.date}
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+            <Field
+              label="Source (facultatif)" name="source" value={formData.source} onChange={handleChange}
+              hint="Nom du média, affiché sur la carte et la page de l'article"
+            />
+            <Field
+              label="Auteur (facultatif)" name="author" value={formData.author} onChange={handleChange}
+              hint="Nom de l'auteur, affiché sur la carte et la page de l'article"
             />
           </div>
         </FormSection>
