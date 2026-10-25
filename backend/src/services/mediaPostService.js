@@ -72,7 +72,11 @@ const normalizeTheme = async (theme) => {
     where: { theme: { equals: cleaned, mode: 'insensitive' } },
     select: { theme: true },
   })
-  return existing?.theme || cleaned
+  if (existing) return existing.theme
+
+  // Nouveau thème : majuscule imposée sur la 1re lettre, le reste tel quel
+  // ("article" → "Article", "vie de l'association" → "Vie de l'association")
+  return cleaned.charAt(0).toLocaleUpperCase('fr') + cleaned.slice(1)
 }
 
 // ── GET (PUBLIC) ────────────────────────────────────────────────────────────
