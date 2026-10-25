@@ -35,6 +35,13 @@ const splitLead = (content) => {
   return { lead: null, body: content }
 }
 
+// Temps de lecture : ~200 mots par minute, 1 minute minimum
+const WORDS_PER_MINUTE = 200
+const readTime = (content) => {
+  const words = (content || '').trim().split(/\s+/).filter(Boolean).length
+  return words ? Math.max(1, Math.ceil(words / WORDS_PER_MINUTE)) : null
+}
+
 // ── OUTILS INTERNES ─────────────────────────────────────────────────────────
 
 // '' → null (champ vidé par la cliente) ; undefined → undefined (champ non
@@ -93,7 +100,7 @@ export const getMediaPostBySlug = async (slug) => {
 
   // Le marqueur --- ne sert qu'à couper le résumé : on le retire de l'article
   const { lead, body } = splitLead(post.content)
-  return { ...post, lead, content: body, media }
+  return { ...post, lead, content: body, read_time: readTime(post.content), media }
 }
 
 // Liste des thèmes déjà utilisés — suggestions du formulaire (et futurs filtres)
@@ -136,6 +143,8 @@ export const create = async (data) => {
       content: toNullable(data.content),
       image_url: toNullable(data.image_url),
       external_url: toNullable(data.external_url),
+      author: toNullable(data.author),
+      source: toNullable(data.source),
       show_homepage: Boolean(data.show_homepage),
     },
   })
@@ -154,6 +163,8 @@ export const update = async (id, data) => {
       content: toNullable(data.content),
       image_url: toNullable(data.image_url),
       external_url: toNullable(data.external_url),
+      author: toNullable(data.author),
+      source: toNullable(data.source),
       show_homepage: data.show_homepage !== undefined ? Boolean(data.show_homepage) : undefined,
     },
   })
