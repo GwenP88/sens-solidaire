@@ -201,35 +201,52 @@
 | 117C | Gwen | Page Lieu détail — bloc infos pratiques étiré sur toute la hauteur des 2 blocs de gauche (contenu réparti, plus de trou en bas) | ✅ |
 | 118 | Gwen | CRUD TeamMember (admin) | ✅ |
 | 119 | Gwen | CRUD ActivityReport (admin) | ✅ |
-| 119A | Gwen | remplir le site : team et rapport d'activité | ❌ |
 | 120 | Gwen | CRUD Logo/partenaire (admin) | ✅ |
 | 120A | Gwen | remplir le site : logo | ✅ |
 | 121 | Gwen | CRUD Testimonial + rapport de mission (admin) | ✅ |
 | 121A | Gwen | Bouton « Vous êtes partis en mission ? Racontez-nous » sur la page Témoignages | ✅ |
 | 121B | Gwen | Bouton « Vous êtes partis en mission ? Racontez-nous » sur la page Témoignages et sur MissionDetail (visible même sans témoignage, fond accent-2, espacements ajustés) | ✅ |
-| 121C | Gwen | remplir le site : rapport de mission et témoignages| ❌ |
 | 121D | Gwen | Nettoyage code mort : suppression des pages ServiceCiviqueDetail (public) et ServiceCiviquePage (dashboard), devenues inaccessibles depuis la fusion Service Civique dans Missions | ✅ |
 | 122 | Gwen | CRUD FieldAction + pays + tags (admin) | ✅ |
-| 122A | Gwen | remplir le site : actions terrain| ❌ |
-| 123 | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) | ❌ |
 | 124 | Gwen | CRUD MediaPost / articles (admin) | ✅ |
-| 124A | Gwen | remplir le site : blog | ❌ |
-| 125 | Gwen | Dashboard responsive mobile | ❌ |
-| 126 | Gwen | Tests d'intégration | ❌ |
+
+## 🔴 À finir en priorité 
+
+### 1. Petites tâches (≤ 1 session chacune)
+
+| N° | Qui | Tâche | Statut |
+|---|---|---|---|
+| 124B | Gwen | Vérifier que l'envoi de fichiers accepte mp3 / mp4 + adresse réelle d'un fichier envoyé (`isUploadedFile` dans `MediaPostFormPage`) — en premier : conditionne 124A et 123 | ✅ |
+| 124C | Gwen | `MediaCard` / `MediaDetail` : `<a href>` → `<Link>` pour les liens internes | ✅ |
+| 127 | Gwen | `LocationsPage` (et autres listes) : `alert('... Réessaie.')` → vouvoiement | ❌ |
+
+### 2. Fonctionnalité
+
+| N° | Qui | Tâche | Statut |
+|---|---|---|---|
 | 170 | Gwen | Filtres pays dynamiques sur /notre-impact et /temoignages (dérivés des vraies données en base — missions + actions terrain) au lieu de FILTERS_COUNTRY figée dans utils/filters.js — nouvelle route publique pays réellement utilisés | ❌ |
 
-## 🔴 À revoir en priorité — début de la prochaine session
+### 3. Qualité du code
 
-- [ ] Retirer le bloc MediaPost de `seed.js` (+ sa ligne du récap)
-- [ ] Médias : colonnes **auteur** / **source** (migration) et **temps de lecture** (calculé, sans migration)
-- [ ] 124A — Remplir le blog ⚠️ re-télécharger les fichiers WordPress et les renvoyer via le dashboard, **jamais** de lien `wp-content`
+| N° | Qui | Tâche | Statut |
+|---|---|---|---|
+| 128 | Gwen | Découper `services/api.js` (1 125 lignes) en un fichier par ressource dans `services/api/` + `index.js` qui réexporte tout — avant la soutenance | ❌ |
 
-### En attente
-- [ ] Vérifier que l'envoi de fichiers accepte **mp3 / mp4** + l'adresse réelle d'un fichier envoyé (`isUploadedFile` dans `MediaPostFormPage`)
-- [ ] `MediaCard` / `MediaDetail` : `<a href>` → `<Link>` pour les liens internes
-- [ ] `LocationsPage` (et autres listes) : `alert('... Réessaie.')` → vouvoiement
-- [ ] Découper `services/api.js` (1 125 lignes) en un fichier par ressource dans `services/api/` + `index.js` qui réexporte tout — **avant la soutenance**
-- [ ] Ménage fichiers et commentaires en anglais
+### 4. Dashboard et tests (à découper)
+
+| N° | Qui | Tâche | Statut |
+|---|---|---|---|
+| 125 | Gwen | Dashboard responsive mobile | ❌ |
+| 126 | Gwen | Tests d'intégration | ❌ |
+
+### 5. Finitions
+
+| N° | Qui | Tâche | Statut |
+|---|---|---|---|
+| 129 | Gwen | Ménage fichiers et commentaires en anglais — juste avant le rendu | ❌ |
+| 123 | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) — vidéos YouTube par lien (miniature automatique, lecteur youtube-nocookie chargé au clic), mélangées aux photos ; permet un article avec texte + vidéo | ❌ |
+
+---
 
 ### Bloc C — Page Éducation & sensibilisation
 
@@ -237,7 +254,7 @@
 |---|---|---|---|
 | 127 | Gwen | Refonte contenu dynamique | ❌ |
 | 127A | Gwen | CRUD gestion dashboard | ❌ |
-| 127B | Gwen | remplir la section| ❌ |
+
 | 127C | Gwen | Tests d'intégration  | ❌ |
 
 ### Bloc D — Finitions front
@@ -260,7 +277,14 @@
 | 136 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | ❌ |
 | 137 | Gwen | Seed BDD — contenus réels finaux | ❌ |
 
-### Bloc F — Déploiement & livraison
+### Bloc F — Remplir le site avec les données existantes
+| 119A | Gwen | remplir le site : team et rapport d'activité | ❌ |
+| 121C | Gwen | remplir le site : rapport de mission et témoignages| ❌ |
+| 122A | Gwen | remplir le site : actions terrain| ❌ |
+| 124A | Gwen | remplir le site : blog | ❌ |
+| 127B | Gwen | remplir le site : éducation | ❌ |
+
+### Bloc G — Déploiement & livraison
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
@@ -316,4 +340,4 @@
 | 167 | Gwen | Tooltips stylées dashboard (au lieu du title natif du navigateur) | ❌ |
 | 168 | Gwen | Scroll restauré au mauvais endroit sur F5 (pages avec chargement API/images dynamique, ex: Home) | ❌ |
 | 169 | Gwen | Découper api.js en plusieurs fichiers par domaine (services/api/missions.js, locations.js, etc. + client.js commun pour authFetch) — pas nécessaire mais plus propre/maintenable pour un vrai projet (+ autre fichier de + de 300-500 lignes selon les bonnes pratiques) | ❌ |
-| 170 | Gwen | Fabrique générique createResourceApi('team-members') pour générer les 6 fonctions CRUD standard (fetch/create/update/toggle/hardDelete) au lieu de les dupliquer par domaine — plus avancé, pas nécessaire pour la taille actuelle du projet | ❌ |
+| 171 | Gwen | Fabrique générique createResourceApi('team-members') pour générer les 6 fonctions CRUD standard (fetch/create/update/toggle/hardDelete) au lieu de les dupliquer par domaine — plus avancé, pas nécessaire pour la taille actuelle du projet | ❌ |

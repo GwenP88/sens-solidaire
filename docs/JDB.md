@@ -2821,4 +2821,63 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 
 ---
 
+### Semaine du 19 au 25 octobre 2026 — Médias : auteur / source / temps de lecture, envoi audio, photos unifiées ; aperçu du résumé partagé (4 formulaires) ; liens internes React Router
+
+**Seed :**
+- Bloc `MEDIA_POSTS` retiré de `seed.js` (+ ligne du récap) : son `deleteMany({})` aurait **effacé les vraies publications** de la cliente au prochain lancement du seed. Vérification sans exécution : `node --check prisma/seed.js`
+
+**Médias — auteur, source, temps de lecture :**
+- Migration SQL brut `20261025165743_add_media_post_author_source` : colonnes `author` et `source` (facultatives, car les posts existants n'en ont pas)
+- **Source = nom du média en texte** (« Nice-Matin »), pas un lien : le lien existe déjà (`external_url`), et un post avec lien n'a pas de page article
+- Carte : ligne 1 date — thème, ligne 2 « Source : … — Auteur : … » (seulement ce qui est renseigné, `filter(Boolean).join(' — ')`)
+- Page article : bloc Informations réécrit avec un composant local `InfoRow` (« THÈME : Vie de l'association », une info par ligne, mêmes typographies). Temps de lecture **calculé** par le serveur (~200 mots / min), sans colonne en base
+- Code mort retiré : bouton « Voir la source » (jamais affichable) + import `Button`
+
+**124B — Envoi de fichiers audio :**
+- mp3 et m4a ajoutés à 3 endroits côté serveur : types autorisés (`uploadMiddleware.js`, liste globale construite automatiquement via `Object.values(...).flat()`), extensions + dossier `audios` (`storageService.js`), choix du dossier (`uploadController.js`)
+- Limite de **20 Mo** conservée. Vidéos longues → publiées sur la chaîne YouTube de la cliente, puis lien collé
+- Champ fichier aligné sur ce que le serveur accepte (`accept` précis au lieu de `audio/*`, `video/*`), aide qui oriente vers YouTube
+- `isUploadedFile` validé : un fichier envoyé revient bien dans la zone fichier en modification
+
+**Aperçu du résumé de carte — composant partagé :**
+- Nouveau `ShortDescriptionPreview` dans `FormElements.jsx` (libellé et limite configurables), branché dans Médias, Mission et Carte pays : avertit quand le repère `---` est placé **trop loin** (avant, il était ignoré en silence). `CUT_MARKER` exporté depuis `utils/shortDescription.js`
+- **Actions terrain** : bug de **perte de texte** corrigé (voir tableau) — avertissement dans l'aperçu + enregistrement bloqué tant que le repère est trop loin
+
+**Médias — un seul bloc Photos :**
+- Les blocs « Image » et « Photos de l'article » fusionnés, sur le pattern `showHeroSelector` déjà utilisé par Lieux et Actions terrain : **1 photo** si la carte ouvre un lien / fichier, **jusqu'à 10** pour une page article avec radio « Photo principale » (carte + haut de l'article), les autres en carrousel
+- Contrôle : plusieurs photos + lien → message « gardez-en une seule » (sinon perte silencieuse)
+- `imageType="hero"` : la photo principale n'apparaît plus floue dans le bandeau de l'article
+
+**Thèmes :** majuscule imposée sur la 1re lettre d'un nouveau thème (`toLocaleUpperCase('fr')`, côté serveur)
+
+**124C — Liens internes :** `<a href>` → `<Link>` dans `MediaCard` (« Lire la suite ») et `MediaDetail` (« Retour aux médias ») : navigation sans rechargement. Les liens externes restent des `<a>` avec `target="_blank"` + `rel="noopener noreferrer"`
+
+**Planning :** tâches restantes avant le bloc C réorganisées et numérotées (124B, 124C, 127, 128, 129), 123 précisée (vidéos YouTube)
+
+---
+
+#### Bugs rencontrés et résolus
+
+| Bug | Cause | Solution |
+|---|---|---|
+| Actions terrain : texte perdu | Repère `---` au-delà de 150 caractères → introduction recoupée, et la suite ne commence qu'**après** le repère : le passage entre les deux n'était enregistré nulle part | Validation bloquante + avertissement dans l'aperçu |
+| Erreur de syntaxe affichée alors que le code était corrigé | Logs Docker horodatés en **UTC** : l'erreur datait d'avant la correction | Toujours vérifier l'heure d'une erreur dans les logs |
+| Thème « article » impossible à corriger depuis le formulaire | `normalizeTheme` retrouve « article » dans **ce même post** (recherche sans casse) et le conserve | Correction en SQL (`UPDATE`). Limite assumée de l'option « suggestions » |
+
+---
+
+#### Décisions
+
+| Décision | Justification |
+|---|---|
+| Source = nom du média, affichée sur la carte avec l'auteur | Crédibilité immédiate des cartes « Ils parlent de nous » ; visible même quand la carte ouvre un lien |
+| Temps de lecture calculé, non stocké | Toujours à jour, aucune migration |
+| Vidéos > 20 Mo sur YouTube (lien), pas sur le serveur | Hébergement et lecture fluides gérés par la plateforme ; la cliente a déjà une chaîne. Pour 123 : miniature automatique, lecteur `youtube-nocookie` chargé au clic (performance + RGPD) |
+| Composant `ShortDescriptionPreview` partagé | Un bug corrigé une fois pour 4 formulaires, 4 blocs copiés-collés supprimés |
+| Repère trop loin : **bloquer** l'enregistrement (actions terrain) | Mieux vaut un message clair qu'une perte de texte silencieuse |
+| Un seul bloc Photos avec photo principale | La cliente ne se demande plus « pourquoi deux endroits pour les images ? » ; pattern déjà existant |
+| `Link` pour l'interne, `a` pour l'externe | Navigation SPA sans rechargement ; sécurité `noopener noreferrer` pour l'externe |
+
+---
+
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*
