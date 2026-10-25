@@ -13,6 +13,8 @@ const ALLOWED_TYPES = {
   image: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/svg+xml'],
   video: ['video/mp4', 'video/webm'],
   document: ['application/pdf'],
+  // mp3 (format courant des interviews) + m4a (enregistrements de téléphone)
+  audio: ['audio/mpeg', 'audio/mp4', 'audio/x-m4a'],
 }
 
 // Rejecting a file for its type is a client mistake, not a server failure —

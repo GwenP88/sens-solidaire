@@ -11,7 +11,7 @@ import sharp from 'sharp'
 const UPLOADS_ROOT = path.resolve('public/uploads')
 
 // Sous-dossiers autorisés pour éviter l'écriture hors du répertoire prévu.
-const ALLOWED_FOLDERS = ['images', 'videos', 'documents']
+const ALLOWED_FOLDERS = ['images', 'videos', 'audios', 'documents']
 
 // Extension déterminée par le type MIME et non par le nom du fichier.
 const EXTENSION_BY_MIMETYPE = {
@@ -21,6 +21,9 @@ const EXTENSION_BY_MIMETYPE = {
   'video/mp4': '.mp4',
   'video/webm': '.webm',
   'application/pdf': '.pdf',
+  'audio/mpeg': '.mp3',
+  'audio/mp4': '.m4a',
+  'audio/x-m4a': '.m4a',
 }
 
 // Tailles et qualités définies côté serveur selon l'usage.

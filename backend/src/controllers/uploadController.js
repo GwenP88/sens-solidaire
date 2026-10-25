@@ -7,6 +7,7 @@ import { saveFile } from '../services/storageService.js'
 const getFolderFromMimetype = (mimetype) => {
   if (mimetype.startsWith('image/')) return 'images'
   if (mimetype.startsWith('video/')) return 'videos'
+  if (mimetype.startsWith('audio/')) return 'audios'
   if (mimetype === 'application/pdf') return 'documents'
   return 'others'
 }
