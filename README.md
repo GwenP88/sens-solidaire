@@ -85,7 +85,7 @@ Le frontend (React) et le backend (Express) sont deux applications indépendante
 ```mermaid
 erDiagram
     Mission ||--o{ MissionPricing : "a des tarifs"
-    Mission ||--o{ Location : "se déroule à"
+    Mission }o--o{ Location : "se déroule à"
     Mission ||--o{ Testimonial : "reçoit"
     Mission ||--o{ MissionReport : "génère"
     Location }o--|| Delegation : "rattachée à"
@@ -100,7 +100,6 @@ erDiagram
     }
     MissionPricing {
         int id PK
-        int mission_id FK
         string duration_label
         decimal price
     }
@@ -291,40 +290,62 @@ cd sens-solidaire
 
 ### 2. Variables d'environnement
 
-Copier le fichier d'exemple et adapter les valeurs (secrets JWT, mot de passe admin) :
+Deux fichiers `.env` sont nécessaires. Copier les fichiers d'exemple puis renseigner les valeurs :
 
 ```bash
+cp .env.example .env
 cp backend/.env.example backend/.env
 ```
+
+- `.env` (racine) : lu par Docker Compose. Mots de passe PostgreSQL (`POSTGRES_PASSWORD`, `DB_APP_PASSWORD`, `DB_OWNER_PASSWORD`) et secrets JWT.
+- `backend/.env` : configuration de l'API (Resend, mot de passe du compte admin, e-mail de contact).
+
+Les secrets JWT se génèrent avec `openssl rand -base64 48` (deux valeurs différentes).
 
 ### 3. Lancer les conteneurs
 
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
-### 4. Préparer la base de données
+### 4. Créer les comptes PostgreSQL
+
+L'application utilise deux comptes distincts (principe du moindre privilège) :
+`sensolidaire_owner` pour les migrations, `sensolidaire_app` pour l'API.
+Les mots de passe doivent être identiques à `DB_OWNER_PASSWORD` et `DB_APP_PASSWORD` du `.env` racine.
 
 ```bash
-docker-compose exec backend npx prisma migrate deploy
-docker-compose exec backend npx prisma generate
-docker-compose exec backend node prisma/seed.js
+docker compose exec -T postgres psql -U postgres -d sensolidaire \
+  -v owner_password='MOT_DE_PASSE_OWNER' -v app_password='MOT_DE_PASSE_APP' \
+  < backend/prisma/roles.sql
 ```
 
-### 5. Accéder à l'application
+À exécuter une seule fois, à la première installation.
+
+### 5. Préparer la base de données
+
+```bash
+docker compose exec backend npx prisma migrate deploy
+docker compose exec backend npx prisma generate
+docker compose exec backend node prisma/seed.js
+```
+
+### 6. Accéder à l'application
 
 | Service | URL |
 |---|---|
 | Frontend | http://localhost:5173 |
-| Backend API | http://localhost:3000/api/health |
+| Backend API | http://localhost:3001/api/health |
 | Prisma Studio | http://localhost:5555 |
+
+L'API écoute sur le port 3000 dans son conteneur, exposé sur le port 3001 de la machine hôte.
 
 ### Connexion au dashboard admin
 
 Un compte administrateur est créé automatiquement par le seed :
 
 - **Email** : `admin@sensolidaire.org`
-- **Mot de passe** : celui défini dans `ADMIN_PASSWORD` (voir `.env`)
+- **Mot de passe** : celui défini dans `ADMIN_PASSWORD` (voir `backend/.env`)
 
 ## Structure du repo
 
@@ -424,7 +445,7 @@ Un runbook complet est disponible dans [`docs/test_postman_back.md`](./docs/test
 ### Sécurité des dépendances
 
 Audit via `npm audit` (frontend et backend) avant chaque merge sur `dev`.
-Dernier audit : **[JJ/MM/2026]** — 0 vulnérabilité connue. Résultats consignés dans [`docs/veille.md`](./docs/veille.md).
+Dernier audit backend : **22/09/2026** — 16 vulnérabilités détectées, 12 corrigées par `npm audit fix`. Les 4 restantes concernent des dépendances indirectes de Prisma : leur correction imposerait un changement de version majeur, étudié séparément. Résultats consignés dans [`docs/veille.md`](./docs/veille.md).
 
 ## Équipe & rôles
 
@@ -462,4 +483,4 @@ La conception d'interface (personas, parcours, wireframes, maquettes Figma) a é
 - **Design system** : [`docs/guide-de-style.md`](./docs/guide-de-style.md)
 - **Runbook de tests API** : [`docs/test_postman_back.md`](./docs/test_postman_back.md)
 
-> **Environnement de production** : non déployé à ce stade — le déploiement est planifié en Phase 3 (septembre 2026), voir `docs/planning.md`.
+> **Environnement de production** : non déployé à ce stade — mise en production prévue sur un VPS OVH après la finalisation du dashboard, voir `docs/planning.md`.

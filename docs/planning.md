@@ -236,7 +236,7 @@
 
 | N° | Qui | Tâche | Statut |
 |---|---|---|---|
-| 125 | Gwen | Dashboard responsive mobile | ❌ |
+| 125 | Gwen | Dashboard mobile — uniquement modération des témoignages et publication d'articles (Médias) | ❌ |
 | 126 | Gwen | Tests d'intégration | ❌ |
 
 ### 5. Finitions

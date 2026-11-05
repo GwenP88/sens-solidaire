@@ -1,0 +1,7 @@
+# robots.txt — indique aux moteurs de recherche ce qu'ils peuvent explorer
+# Tous les robots sont autorisés sur le site public
+User-agent: *
+Allow: /
+
+# L'espace d'administration ne doit pas apparaître dans les résultats de recherche
+Disallow: /admin
