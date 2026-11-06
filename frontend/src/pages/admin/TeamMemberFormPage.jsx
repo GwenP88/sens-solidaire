@@ -52,6 +52,7 @@ function TeamMemberFormPage() {
           photo: member.avatar_url ? [{ file_url: member.avatar_url, label: '' }] : [],
         })
       } catch (err) {
+        console.error('Erreur chargement :', err)
         setError("Impossible de charger ce membre. Rechargez la page ou réessayez plus tard.")
       } finally {
         setLoading(false)

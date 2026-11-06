@@ -33,13 +33,6 @@ import { isValidSlug } from '../../utils/validation'
 // CONSTANTES
 // ════════════════════════════════════════════════════════════════
 
-const VALID_TYPES = [
-  { value: 'volontariat_individuel', label: 'Volontariat individuel' },
-  { value: 'service_civique',        label: 'Service Civique'        },
-  { value: 'groupe_jeunes',          label: 'Groupe jeunes'          },
-  { value: 'conge_solidaire',        label: 'Congé de solidarité'        },
-]
-
 // État initial du formulaire
 const EMPTY_FORM = {
   title:             '',
@@ -127,7 +120,7 @@ function MissionFormPage() {
 
         // Parsing programme JSON
         let programme = []
-        try { programme = mission.programme ? JSON.parse(mission.programme) : [] } catch {}
+        try { programme = mission.programme ? JSON.parse(mission.programme) : [] } catch { /* texte non JSON : programme laissé vide */ }
 
         // Parsing how_to_go — on récupère l'étape 1, en retirant le label
         // qu'on lui a préfixé à la sauvegarde (sinon il se réempile à chaque édition)
@@ -137,7 +130,7 @@ function MissionFormPage() {
           const step1 = parsed[0] || ''
           const prefix = `${HOW_TO_GO_STEP1_LABEL} : `
           how_to_go_villes = step1.startsWith(prefix) ? step1.slice(prefix.length) : step1
-        } catch {}
+        } catch { /* texte non JSON : champ laissé vide */ }
 
         // Pricing trié par display_order
         const pricing = mission.pricing
@@ -184,6 +177,7 @@ function MissionFormPage() {
           guide_pdf,
         })
       } catch (err) {
+        console.error('Erreur chargement :', err)
         setError("Impossible de charger la mission. Rechargez la page ou réessayez plus tard.")
       } finally {
         setLoading(false)

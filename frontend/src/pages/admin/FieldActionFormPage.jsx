@@ -118,6 +118,7 @@ function FieldActionFormPage() {
           photos,
         })
       } catch (err) {
+        console.error('Erreur chargement :', err)
         setError("Impossible de charger ce projet. Rechargez la page ou réessayez plus tard.")
       } finally {
         setLoading(false)

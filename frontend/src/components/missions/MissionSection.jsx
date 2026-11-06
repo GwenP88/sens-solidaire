@@ -8,7 +8,6 @@ import MissionInfoBar from './MissionInfoBar'
 import MissionCTA from './MissionCTA'
 import MissionSteps from './MissionSteps'
 import SubsectionEyebrow from './SubsectionEyebrow'
-import { IconPin } from '../../utils/icons'
 
 function MissionSection({
   // ── Identité de la section

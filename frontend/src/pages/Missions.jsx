@@ -33,7 +33,7 @@ import { FILTERS_MISSION_TYPE } from '../utils/filters'
 import {
   IconPerson, IconClock, IconPin, IconMoney,
   IconFrance, IconAbroad, IconGrow, IconBuilding,
-  IconHand, IconPeople, IconHeart, IconLeaf, IconPayment, IconGallery
+  IconHand, IconPeople, IconHeart, IconLeaf, IconPayment
 } from '../utils/icons'
 
 function Missions() {

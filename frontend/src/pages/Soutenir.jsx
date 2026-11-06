@@ -10,7 +10,7 @@ import ScrollToTop from '../components/ui/ScrollToTop'
 import AnchorNav from '../components/navigation/AnchorNav'
 
 // ── Utils
-import { IconHeart, IconPeople, IconGuide, IconGlobe, IconLeaf } from '../utils/icons'
+import { IconPeople, IconGuide, IconGlobe, IconLeaf } from '../utils/icons'
 
 // ── Liens HelloAsso
 const DON_URL = 'https://www.helloasso.com/associations/sens-solidaires/formulaires/1/widget'
