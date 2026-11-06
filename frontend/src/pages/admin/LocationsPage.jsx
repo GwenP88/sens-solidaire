@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import { fetchAdminLocations, toggleLocationActive, hardDeleteLocation } from '../../services/api'
 import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
+import ErrorModal from '../../components/admin/ErrorModal'
+import { ADMIN_ERRORS } from '../../utils/adminErrors'
 
 const COLUMNS = [
   { key: 'name', label: 'Nom' },
@@ -42,6 +44,7 @@ function LocationsPage() {
   const [error, setError] = useState(null)
   const [locationToHardDelete, setLocationToHardDelete] = useState(null)
   const [locationToTogglePause, setLocationToTogglePause] = useState(null)
+  const [actionError, setActionError] = useState(null)
 
   const load = async () => {
     try {
@@ -70,7 +73,7 @@ function LocationsPage() {
       await load()
     } catch (err) {
       console.error('Erreur changement statut :', err)
-      alert('Échec du changement de statut. Réessaie.')
+      setActionError(ADMIN_ERRORS.toggle)
     } finally {
       setLocationToTogglePause(null)
     }
@@ -82,7 +85,7 @@ function LocationsPage() {
       await load()
     } catch (err) {
       console.error('Erreur suppression définitive :', err)
-      alert('Échec de la suppression. Réessaie.')
+      setActionError(ADMIN_ERRORS.delete)
     } finally {
       setLocationToHardDelete(null)
     }
@@ -134,6 +137,10 @@ function LocationsPage() {
           onConfirm={confirmTogglePause}
           onCancel={() => setLocationToTogglePause(null)}
         />
+      )}
+
+      {actionError && (
+        <ErrorModal message={actionError} onClose={() => setActionError(null)} />
       )}
     </div>
   )

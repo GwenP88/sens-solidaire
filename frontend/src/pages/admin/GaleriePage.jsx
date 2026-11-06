@@ -18,6 +18,9 @@ import {
   fetchAdminTypeGallery, updateTypeGalleryMedia,
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
+import ConfirmModal from '../../components/admin/ConfirmModal'
+import ErrorModal from '../../components/admin/ErrorModal'
+import { ADMIN_ERRORS } from '../../utils/adminErrors'
 
 const DOMAINES = [
   { value: 'missions', label: 'Missions' },
@@ -50,6 +53,8 @@ function GaleriePage() {
   // ── Mode "Tous les pays" ──
   const [allPhotos, setAllPhotos] = useState([]) // [{ ...media, country, missionId }]
   const [loadingAll, setLoadingAll] = useState(false)
+  const [photoToDelete, setPhotoToDelete] = useState(null)
+  const [actionError, setActionError] = useState(null)
 
   const isTypeOnlyGallery = TYPE_ONLY_TYPES.includes(type)
   const isAllCountries = selectedMissionId === 'all'
@@ -171,20 +176,25 @@ function GaleriePage() {
     const updated = allPhotos.map(p =>
       p.file_url === photo.file_url ? { ...p, force_display: !p.force_display } : p
     )
+    const previous = allPhotos
     setAllPhotos(updated)
 
     const thisMissionPhotos = updated.filter(p => p.missionId === photo.missionId)
     try {
       await saveOnePhotoChange(photo.missionId, thisMissionPhotos)
     } catch (err) {
-      alert("Échec de l'enregistrement. Réessaie.")
+      console.error('Erreur enregistrement photo :', err)
+      setAllPhotos(previous) // l'écran reflète à nouveau ce qui est réellement enregistré
+      setActionError(ADMIN_ERRORS.save)
     }
   }
 
-  const handleDeletePhoto = async (photo) => {
-    const confirmed = window.confirm(`Supprimer cette photo de la galerie ${photo.country} ?`)
-    if (!confirmed) return
+  // Suppression en 2 temps : la croix ouvre la modale, la confirmation supprime
+  const confirmDeletePhoto = async () => {
+    const photo = photoToDelete
+    setPhotoToDelete(null)
 
+    const previous = allPhotos
     const updated = allPhotos.filter(p => p.file_url !== photo.file_url)
     setAllPhotos(updated)
 
@@ -192,7 +202,9 @@ function GaleriePage() {
     try {
       await saveOnePhotoChange(photo.missionId, thisMissionPhotos)
     } catch (err) {
-      alert("Échec de la suppression. Réessaie.")
+      console.error('Erreur suppression photo :', err)
+      setAllPhotos(previous)
+      setActionError(ADMIN_ERRORS.delete)
     }
   }
 
@@ -306,7 +318,7 @@ function GaleriePage() {
             <p className="text-dash-legend text-sm italic">Chargement...</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {allPhotos.map((photo, i) => (
+              {allPhotos.map((photo) => (
                 <div key={photo.file_url} className="flex flex-col gap-2 border border-gray-200 rounded-lg p-3">
                   <img src={photo.file_url} alt="" className="w-full h-32 object-cover rounded" />
                   <span className="text-sm text-dash-text truncate">{photo.label || 'Sans légende'}</span>
@@ -324,7 +336,8 @@ function GaleriePage() {
                       {photo.country}
                     </span>
                     <button
-                      onClick={() => handleDeletePhoto(photo)}
+                      onClick={() => setPhotoToDelete(photo)}
+                      aria-label="Supprimer cette photo"
                       className="text-gray-300 hover:text-dash-danger text-xl shrink-0"
                     >
                       ×
@@ -335,6 +348,20 @@ function GaleriePage() {
             </div>
           )}
         </div>
+      )}
+
+      {photoToDelete && (
+        <ConfirmModal
+          title="Supprimer la photo"
+          message={`Voulez-vous supprimer cette photo de la galerie ${photoToDelete.country} ?`}
+          confirmLabel="Supprimer"
+          onConfirm={confirmDeletePhoto}
+          onCancel={() => setPhotoToDelete(null)}
+        />
+      )}
+
+      {actionError && (
+        <ErrorModal message={actionError} onClose={() => setActionError(null)} />
       )}
     </div>
   )

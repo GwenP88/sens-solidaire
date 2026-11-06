@@ -20,6 +20,8 @@ import { fetchAdminMissions, deleteMission, updateMission, hardDeleteMission } f
 // ── Composants admin
 import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
+import ErrorModal from '../../components/admin/ErrorModal'
+import { ADMIN_ERRORS } from '../../utils/adminErrors'
 
 
 // ════════════════════════════════════════════════════════════════
@@ -62,6 +64,7 @@ function MissionsPage() {
 
   // ── États ──
   const [allMissions, setAllMissions] = useState([])
+  const [actionError, setActionError] = useState(null)
   const [loading,  setLoading]  = useState(true)
   const [error,    setError]    = useState(null)
   const [missionToHardDelete, setMissionToHardDelete] = useState(null)
@@ -149,7 +152,7 @@ function MissionsPage() {
       await reloadMissions()
     } catch (err) {
       console.error('Erreur changement de statut :', err)
-      alert('Échec du changement de statut. Réessaie.')
+      setActionError(ADMIN_ERRORS.toggle)
     } finally {
       setMissionToTogglePause(null)
     }
@@ -166,7 +169,7 @@ function MissionsPage() {
       await reloadMissions()
     } catch (err) {
       console.error('Erreur suppression définitive :', err)
-      alert('Échec de la suppression définitive. Réessaie.')
+      setActionError(ADMIN_ERRORS.delete)
     } finally {
       setMissionToHardDelete(null)
     }
@@ -275,6 +278,10 @@ function MissionsPage() {
         />
       )}
 
+
+      {actionError && (
+        <ErrorModal message={actionError} onClose={() => setActionError(null)} />
+      )}
     </div>
   )
 }
