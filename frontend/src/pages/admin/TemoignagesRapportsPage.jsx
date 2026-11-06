@@ -3,17 +3,20 @@
 // Page dashboard "Témoignages & rapports de mission"
 // ════════════════════════════════════════════════════════════════
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { FiEdit2, FiPause, FiPlay, FiTrash2 } from 'react-icons/fi'
 import {
+  fetchAdminMissions,
   fetchAdminTestimonials, approveTestimonial, rejectTestimonial, hardDeleteTestimonial, updateTestimonial,
   fetchAdminMissionReports, toggleMissionReportActive, hardDeleteMissionReport,
 } from '../../services/api'
 import AnchorNav from '../../components/navigation/AnchorNav'
 import ConfirmModal from '../../components/admin/ConfirmModal'
+import ErrorModal from '../../components/admin/ErrorModal'
+import { ADMIN_ERRORS } from '../../utils/adminErrors'
 import TestimonialEditModal from '../../components/admin/TestimonialEditModal'
 import MissionReportEditModal from '../../components/admin/MissionReportEditModal'
-import { FILTERS_MISSION_TYPE, FILTERS_COUNTRY } from '../../utils/filters'
+import { FILTERS_MISSION_TYPE, buildCountryOptions } from '../../utils/filters'
 
 const ANCHOR_SECTIONS = [
   { label: 'Témoignages', id: 'temoignages' },
@@ -49,6 +52,7 @@ const PAGE_SIZE = 10
 function TemoignagesRapportsPage() {
   // ── Filtres partagés — vue / statut / type / pays ────────────────────────
   const [vueFilter, setVueFilter] = useState('')       // '' | 'temoignages' | 'rapports'
+  const [actionError, setActionError] = useState(null)
   const [statusFilter, setStatusFilter] = useState('') // pertinent uniquement pour les témoignages
   const [typeFilter, setTypeFilter] = useState('')
   const [countryFilter, setCountryFilter] = useState('')
@@ -74,6 +78,9 @@ function TemoignagesRapportsPage() {
   const [editingReport, setEditingReport] = useState(null) // null = création
   const [reportToTogglePause, setReportToTogglePause] = useState(null)
   const [reportToHardDelete, setReportToHardDelete] = useState(null)
+
+  // ── Pays du filtre — dérivés des missions (le serveur filtre sur mission.country) + des rapports (tâche 170)
+  const [missionCountries, setMissionCountries] = useState([])
 
   const load = async () => {
     setLoading(true)
@@ -119,7 +126,15 @@ function TemoignagesRapportsPage() {
 
   useEffect(() => {
     loadReports()
+    fetchAdminMissions()
+      .then(missions => setMissionCountries(missions.map(m => m.country)))
+      .catch(err => console.error('Erreur chargement pays des missions :', err))
   }, [])
+
+  const countryOptions = useMemo(
+    () => buildCountryOptions([...missionCountries, ...reports.map(r => r.destination)]),
+    [missionCountries, reports]
+  )
 
   // Rapports — pas de filtre côté API, on filtre ici (type/pays partagés avec les témoignages)
   const filteredReports = reports.filter(r => {
@@ -152,7 +167,8 @@ function TemoignagesRapportsPage() {
       await load()
       await loadPending()
     } catch (err) {
-      alert('Échec du changement de statut. Réessaie.')
+      console.error('Erreur dashboard (toggle) :', err)
+      setActionError(ADMIN_ERRORS.toggle)
     } finally {
       setStatusChangeTarget(null)
     }
@@ -163,7 +179,8 @@ function TemoignagesRapportsPage() {
       await updateTestimonial(t.id, { show_homepage: !t.show_homepage })
       await load()
     } catch (err) {
-      alert('Échec de la mise à jour. Réessaie.')
+      console.error('Erreur dashboard (update) :', err)
+      setActionError(ADMIN_ERRORS.update)
     }
   }
 
@@ -173,7 +190,8 @@ function TemoignagesRapportsPage() {
       await load()
       await loadPending()
     } catch (err) {
-      alert('Échec de la suppression. Réessaie.')
+      console.error('Erreur dashboard (delete) :', err)
+      setActionError(ADMIN_ERRORS.delete)
     } finally {
       setTestimonialToDelete(null)
     }
@@ -184,7 +202,8 @@ function TemoignagesRapportsPage() {
       await toggleMissionReportActive(reportToTogglePause.id, !reportToTogglePause.is_active)
       await loadReports()
     } catch (err) {
-      alert('Échec du changement de statut. Réessaie.')
+      console.error('Erreur dashboard (toggle) :', err)
+      setActionError(ADMIN_ERRORS.toggle)
     } finally {
       setReportToTogglePause(null)
     }
@@ -195,7 +214,8 @@ function TemoignagesRapportsPage() {
       await hardDeleteMissionReport(reportToHardDelete.id)
       await loadReports()
     } catch (err) {
-      alert('Échec de la suppression. Réessaie.')
+      console.error('Erreur dashboard (delete) :', err)
+      setActionError(ADMIN_ERRORS.delete)
     } finally {
       setReportToHardDelete(null)
     }
@@ -218,7 +238,7 @@ function TemoignagesRapportsPage() {
 
       <p className="text-sm text-dash-text italic">{t.content}</p>
 
-      <div className="flex items-center justify-between text-xs text-dash-legend">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-dash-legend">
         <span>
           {t.mission ? `${t.mission.title} — ${t.mission.country}` : (REPORT_TYPE_LABELS[t.type] || 'Type non renseigné')}
           {(t.mois || t.annee) && ` · ${t.mois ? MONTHS[t.mois] : ''} ${t.annee || ''}`}
@@ -234,17 +254,17 @@ function TemoignagesRapportsPage() {
         </label>
       </div>
 
-      <div className="flex gap-2 mt-1">
+      <div className="flex flex-wrap gap-2 mt-1">
         <button
           onClick={() => setEditingTestimonial(t)}
-          className="px-3 py-1.5 text-xs text-dash-action border border-dash-action rounded-lg hover:bg-dash-action/10 transition-colors"
+          className="px-3 py-2.5 md:py-1.5 text-xs text-dash-action border border-dash-action rounded-lg hover:bg-dash-action/10 transition-colors"
         >
           Modifier
         </button>
         {t.status !== 'approved' && (
           <button
             onClick={() => setStatusChangeTarget({ testimonial: t, newStatus: 'approved' })}
-            className="px-3 py-1.5 text-xs text-dash-success border border-dash-success rounded-lg hover:bg-dash-success/10 transition-colors"
+            className="px-3 py-2.5 md:py-1.5 text-xs text-dash-success border border-dash-success rounded-lg hover:bg-dash-success/10 transition-colors"
           >
             Approuver
           </button>
@@ -252,14 +272,14 @@ function TemoignagesRapportsPage() {
         {t.status !== 'rejected' && (
           <button
             onClick={() => setStatusChangeTarget({ testimonial: t, newStatus: 'rejected' })}
-            className="px-3 py-1.5 text-xs text-dash-warning border border-dash-warning rounded-lg hover:bg-dash-warning/10 transition-colors"
+            className="px-3 py-2.5 md:py-1.5 text-xs text-dash-warning border border-dash-warning rounded-lg hover:bg-dash-warning/10 transition-colors"
           >
             Refuser
           </button>
         )}
         <button
           onClick={() => setTestimonialToDelete(t)}
-          className="px-3 py-1.5 text-xs text-dash-danger border border-dash-danger rounded-lg hover:bg-dash-danger/10 transition-colors"
+          className="px-3 py-2.5 md:py-1.5 text-xs text-dash-danger border border-dash-danger rounded-lg hover:bg-dash-danger/10 transition-colors"
         >
           Supprimer
         </button>
@@ -316,7 +336,7 @@ function TemoignagesRapportsPage() {
           className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-dash-action/30"
         >
           <option value="">Tous les pays</option>
-          {FILTERS_COUNTRY.filter(f => f.value !== null).map(f => (
+          {countryOptions.map(f => (
             <option key={f.value} value={f.value}>{f.label}</option>
           ))}
         </select>
@@ -336,7 +356,7 @@ function TemoignagesRapportsPage() {
 
       {showTemoignages && (
         <section id="temoignages" className="mt-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <h2 className="font-heading font-semibold text-lg text-dash-title">Témoignages</h2>
             <button
               onClick={() => setCreatingTestimonial(true)}
@@ -372,7 +392,7 @@ function TemoignagesRapportsPage() {
       {/* ── Section Rapports de mission ── */}
       {showRapports && (
         <section id="rapports" className="mt-12">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <h2 className="font-heading font-semibold text-lg text-dash-title">Rapports de mission</h2>
             <button
               onClick={() => { setEditingReport(null); setReportModalOpen(true) }}
@@ -526,6 +546,10 @@ function TemoignagesRapportsPage() {
         />
       )}
 
+
+      {actionError && (
+        <ErrorModal message={actionError} onClose={() => setActionError(null)} />
+      )}
     </div>
   )
 }

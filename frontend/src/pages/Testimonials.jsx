@@ -2,7 +2,7 @@
 // Page témoignages — témoignages courts + rapports de mission
 
 // ── React
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 // ── Router
 import { useSearchParams } from 'react-router-dom'
@@ -26,7 +26,7 @@ import TestimonialForm from '../components/testimonials/TestimonialForm'
 import RapportCard from '../components/ui/RapportCard'
 
 // ── Utils
-import { FILTER_CONFIG_TEMOIGNAGES } from '../utils/filters'
+import { buildCountryOptions, getFilterConfigTemoignages } from '../utils/filters'
 
 function Testimonials() {
   const [searchParams] = useSearchParams()
@@ -56,13 +56,24 @@ function Testimonials() {
     // Un témoignage n'a pas item.type/item.destination directement (imbriqués
     // dans item.mission) — un rapport de mission, si. On gère les deux formes ici.
     const itemType = item.type || item.mission?.type
-    const itemDestination = item.destination || item.mission?.country?.toLowerCase()
+    // Comparaison en minuscules des deux côtés : un rapport stocke "Kenya" (valeur
+    // du dashboard) alors que le filtre utilise "kenya" — avant, aucun rapport ne remontait
+    const itemDestination = (item.destination || item.mission?.country)?.toLowerCase()
 
     if (filters.type && itemType !== filters.type) return false
     if (filters.destination && itemDestination !== filters.destination) return false
     if (filters.annee && String(item.annee) !== filters.annee) return false
     return true
   }
+
+  // ── Destinations proposées — pays des témoignages ET des rapports réellement publiés (tâche 170)
+  const filterSelects = useMemo(
+    () => getFilterConfigTemoignages(buildCountryOptions(
+      [...testimonials.map(t => t.mission?.country), ...rapports.map(r => r.destination)],
+      { lowercaseValue: true }
+    )),
+    [testimonials, rapports]
+  )
 
   const filteredTestimonials = testimonials.filter(filterFn)
   const filteredRapports = rapports.filter(filterFn)
@@ -81,7 +92,7 @@ function Testimonials() {
       {/* ── Barre de filtres ── */}
       <div className="bg-primary padding-x filter-py">
         <Filters
-          selects={FILTER_CONFIG_TEMOIGNAGES}
+          selects={filterSelects}
           selectValues={filters}
           onSelectChange={handleFilter}
         />
