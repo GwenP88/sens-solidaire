@@ -22,8 +22,10 @@ export const getAllFieldActions = async (country = null) => {
 
 // ── GET (PUBLIC) — détail par slug ───────────────────────────────────────
 export const getFieldActionBySlugService = async (slug) => {
-  const action = await prisma.fieldAction.findUnique({
-    where: { slug },
+  // findFirst + is_active : une action en pause n'est plus accessible par son adresse
+  // (même règle que getMediaPostBySlug — la modale du dashboard annonce « invisible sur le site »)
+  const action = await prisma.fieldAction.findFirst({
+    where: { slug, is_active: true },
     include: {
       tags: true,
       odds: { orderBy: { odd_number: 'asc' } },
