@@ -37,9 +37,10 @@ export const upsertMedia = async (entityType, entityId, fileType, urls) => {
 // garde un sens dans le temps. Les photos déjà présentes gardent leur
 // created_at d'origine ; seules les nouvelles sont créées, seules celles
 // retirées sont supprimées.
-export const syncGalleryImages = async (entityType, entityId, items) => {
+// fileType : 'image' (défaut, tous les appels existants) | 'youtube' (vidéos d'un article, tâche 123)
+export const syncGalleryImages = async (entityType, entityId, items, fileType = 'image') => {
   const existing = await prisma.media.findMany({
-    where: { entity_type: entityType, entity_id: entityId, file_type: 'image' },
+    where: { entity_type: entityType, entity_id: entityId, file_type: fileType },
   })
 
   const incomingUrls = new Set(items.map(i => i.file_url))
@@ -69,7 +70,7 @@ export const syncGalleryImages = async (entityType, entityId, items) => {
           entity_type: entityType,
           entity_id: entityId,
           file_url: item.file_url,
-          file_type: 'image',
+          file_type: fileType,
           label: item.label || null,
           force_display: item.force_display || false,
           display_order: 0, // plus utilisé pour le tri galerie — voir created_at

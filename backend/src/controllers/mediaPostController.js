@@ -7,6 +7,10 @@ import {
 } from '../services/mediaPostService.js'
 import { isFilled } from '../utils/validation.js'
 import { syncGalleryImages } from '../services/mediaService.js'
+import { isYouTubeUrl } from '../utils/youtube.js'
+
+// Nombre maximum de vidéos YouTube dans le carrousel d'un article
+const MAX_VIDEOS = 5
 
 // ── VALIDATION ─────────────────────────────────────────────────────────────
 // partial = true pour une modification (PATCH) : on ne vérifie que les champs
@@ -117,13 +121,30 @@ export const updateMediaPost = async (req, res, next) => {
 
 // ── PHOTOS DE L'ARTICLE (ADMIN) ─────────────────────────────────────────────
 // PUT /api/admin/media-posts/:id/media — même principe que les lieux
+// Body : { images: [{ file_url, label }], videos?: [{ file_url, label }] }
+// videos est facultatif : absent → les vidéos déjà enregistrées ne sont pas touchées
 export const updateMediaPostMedia = async (req, res, next) => {
   try {
-    const { images } = req.body
+    const { images, videos } = req.body
     if (!Array.isArray(images)) {
       return res.status(400).json({ error: true, message: "La liste des photos est invalide." })
     }
+    if (videos !== undefined) {
+      if (!Array.isArray(videos)) {
+        return res.status(400).json({ error: true, message: "La liste des vidéos est invalide." })
+      }
+      if (videos.length > MAX_VIDEOS) {
+        return res.status(400).json({ error: true, message: `Ajoutez au maximum ${MAX_VIDEOS} vidéos.` })
+      }
+      // Seuls de vrais liens YouTube sont acceptés : ils sont affichés dans un lecteur intégré
+      if (videos.some(v => !isYouTubeUrl(v?.file_url))) {
+        return res.status(400).json({ error: true, message: "Un des liens n'est pas une vidéo YouTube. Copiez l'adresse depuis le bouton « Partager » de YouTube." })
+      }
+    }
     await syncGalleryImages('media_post', Number(req.params.id), images)
+    if (videos !== undefined) {
+      await syncGalleryImages('media_post', Number(req.params.id), videos, 'youtube')
+    }
     return res.status(200).json({ success: true })
   } catch (error) {
     next(error)
