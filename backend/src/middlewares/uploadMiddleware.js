@@ -1,14 +1,14 @@
 // src/middlewares/uploadMiddleware.js
-// Multer configuration — receives files IN MEMORY (not written to disk directly)
-// storageService.js is the one that decides where they actually get written.
+// Configuration de Multer — reçoit les fichiers EN MÉMOIRE (rien n'est écrit sur le disque ici)
+// C'est storageService.js qui décide où ils sont réellement enregistrés.
 
 import multer from 'multer'
 
-// ── In-memory storage ──
-// The file arrives as req.file.buffer — no disk write happens here
+// ── Stockage en mémoire ──
+// Le fichier arrive dans req.file.buffer — aucune écriture sur le disque ici
 const storage = multer.memoryStorage()
 
-// ── Filter: allowed file types ──
+// ── Filtre : types de fichiers autorisés ──
 const ALLOWED_TYPES = {
   image: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/svg+xml'],
   video: ['video/mp4', 'video/webm'],
@@ -17,9 +17,9 @@ const ALLOWED_TYPES = {
   audio: ['audio/mpeg', 'audio/mp4', 'audio/x-m4a'],
 }
 
-// Rejecting a file for its type is a client mistake, not a server failure —
-// tag the error with status 400 so it doesn't fall through to the generic
-// 500 in app.js's error handler.
+// Un fichier refusé à cause de son type est une erreur de l'utilisateur, pas une panne
+// du serveur : on attache le statut 400 à l'erreur, sinon elle tomberait dans le 500
+// par défaut du gestionnaire d'erreurs de app.js.
 const rejectFile = (message) => {
   const error = new Error(message)
   error.status = 400

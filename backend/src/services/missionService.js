@@ -1,9 +1,10 @@
 // src/services/missionService.js
-// Business logic for missions.
-// Handles: fetching the list with optional filters, fetching one by slug.
-// Interactions: Prisma (database).
-// Design note: missions are SOFT-deleted (is_active = false) — a hard
-// delete would break testimonials that reference a mission via mission_id.
+// Logique métier des missions.
+// Gère : liste avec filtres, détail par slug, création / modification / pause côté admin.
+// Accès aux données : Prisma.
+// Choix de conception : la « mise en pause » (is_active = false) est la suppression
+// par défaut, car les témoignages référencent la mission via mission_id ; la suppression
+// définitive existe aussi, en transaction (tâche 81).
 
 import prisma from "../config/db.js"
 import { deriveShortDescription } from '../utils/shortDescription.js'

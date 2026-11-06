@@ -243,7 +243,6 @@ export const createMission = async (req, res, next) => {
     })
 
     // 5. Réponse 201 Created (ressource créée, pas un simple 200)
-    // 👉 return res.status(201).json({ success: true, mission })
     return res.status(201).json({
       success: true,
       mission

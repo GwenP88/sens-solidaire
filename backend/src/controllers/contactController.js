@@ -1,16 +1,16 @@
 // contactController.js
-// Contact form controller — POST /api/contact
+// Contrôleur du formulaire de contact — POST /api/contact
 //
-// Server-side validation is mandatory here even though the frontend form
-// already validates: frontend checks never protect the API, because anyone
-// can call it directly with curl or Postman and skip the browser entirely.
+// La validation côté serveur est obligatoire ici, même si le formulaire du site
+// valide déjà : les contrôles du navigateur ne protègent jamais l'API, car n'importe
+// qui peut l'appeler directement (curl, Postman) sans passer par le site.
 
 import { sendContactEmail } from '../services/contactService.js'
 
 const LIMITS = { nom: 80, prenom: 80, email: 254, sujet: 150, message: 2000 }
 
-// Deliberately permissive: "something@something.something". The goal is to
-// reject obvious garbage, not to fully validate every RFC 5322 edge case.
+// Volontairement souple : "quelquechose@quelquechose.quelquechose". Le but est de
+// refuser les saisies manifestement fausses, pas de couvrir tous les cas de la norme RFC 5322.
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // POST /api/contact
