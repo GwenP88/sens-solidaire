@@ -1,86 +1,10 @@
 // components/admin/DashboardSidebar.jsx
 // Navigation latérale du dashboard admin — desktop uniquement.
-// Mobile (< md) : sidebar masquée, cf. maquette DB_temoignages_mobile.
+// Mobile (< md) : sidebar masquée, remplacée par DashboardMobileNav (cf. maquette DB_temoignages_mobile).
 
 import { NavLink } from 'react-router-dom'
-import {
-  FiHome,
-  FiGlobe,
-  FiFlag,
-  FiMessageCircle,
-  FiBookOpen,
-  FiFileText,
-  FiUsers,
-  FiMapPin,
-  FiHeart,
-  FiRss,
-  FiMail,
-  FiSettings,
-  FiLogOut,
-  FiImage,
-} from 'react-icons/fi'
-
-// Source unique de vérité pour la nav — modifier ici seulement.
-// Couleurs calées sur la maquette (chaque section a sa teinte propre).
-const navItems = [
-  {
-    label: 'Tableau de bord',
-    path: '/admin',
-    end: true, // évite que ce lien reste actif sur /admin/missions etc.
-    icon: FiHome,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Missions',
-    path: '/admin/missions',
-    icon: FiGlobe,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Projets réalisés',
-    path: '/admin/actions-terrain',
-    icon: FiFlag,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-    {
-    label: 'Lieux & délégations',
-    path: '/admin/lieux',
-    icon: FiMapPin,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Galerie',
-    path: '/admin/galerie',
-    icon: FiImage,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Médias & actualités',
-    path: '/admin/medias',
-    icon: FiRss,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Association & partenaires',
-    path: '/admin/a-propos',
-    icon: FiUsers,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-  {
-    label: 'Témoignages & rapports',
-    path: '/admin/temoignages-rapports',
-    icon: FiMessageCircle,
-    activeClass: 'bg-dash-action/10 text-dash-action',
-    iconActive: 'text-dash-action',
-  },
-]
+import { FiLogOut } from 'react-icons/fi'
+import { navItems } from './dashboardNav'
 
 function DashboardSidebar({ onLogout }) {
   return (

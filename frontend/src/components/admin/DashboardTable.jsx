@@ -4,7 +4,8 @@
 
 import { FiEdit2, FiPause, FiPlay, FiTrash2 } from 'react-icons/fi'
 
-// columns : [{ key, label, render?: (row) => ReactNode }]
+// columns : [{ key, label, render?: (row) => ReactNode, hideOnMobile?: boolean }]
+//   hideOnMobile : colonne masquée sous 768 px, pour garder Titre + Actions visibles sur téléphone
 // data    : tableau d'objets (doit contenir keyField, "id" par défaut)
 // onEdit / onDelete : callbacks reçoivent la ligne complète (row)
 function DashboardTable({ columns, data, onEdit, onDelete, onHardDelete, keyField = 'id' }) {
@@ -22,7 +23,7 @@ function DashboardTable({ columns, data, onEdit, onDelete, onHardDelete, keyFiel
         <thead className="bg-gray-50 text-dash-legend uppercase text-xs">
           <tr>
             {columns.map((col) => (
-              <th key={col.key} className="px-4 py-3 font-medium">
+              <th key={col.key} className={`px-4 py-3 font-medium ${col.hideOnMobile ? 'hidden md:table-cell' : ''}`}>
                 {col.label}
               </th>
             ))}
@@ -33,7 +34,7 @@ function DashboardTable({ columns, data, onEdit, onDelete, onHardDelete, keyFiel
           {data.map((row) => (
             <tr key={row[keyField]} className="hover:bg-gray-50">
               {columns.map((col) => (
-                <td key={col.key} className="px-4 py-3 text-dash-text">
+                <td key={col.key} className={`px-4 py-3 text-dash-text ${col.hideOnMobile ? 'hidden md:table-cell' : ''}`}>
                   {/* render() permet de personnaliser l'affichage (badge, date formatée...)
                       sans que DashboardTable connaisse le métier de la donnée. */}
                   {col.render ? col.render(row) : row[col.key]}
@@ -43,7 +44,7 @@ function DashboardTable({ columns, data, onEdit, onDelete, onHardDelete, keyFiel
                 <div className="flex justify-end gap-2">
                   <button
                     onClick={() => onEdit(row)}
-                    className="p-1.5 text-dash-legend hover:text-dash-action hover:bg-dash-action/10 rounded"
+                    className="p-2.5 md:p-1.5 text-dash-legend hover:text-dash-action hover:bg-dash-action/10 rounded"
                     aria-label={`Modifier ${row[keyField]}`}
                   >
                     <FiEdit2 size={16} />
@@ -51,7 +52,7 @@ function DashboardTable({ columns, data, onEdit, onDelete, onHardDelete, keyFiel
                   {onDelete && (
                     <button
                       onClick={() => onDelete(row)}
-                      className={`p-1.5 text-dash-legend rounded ${
+                      className={`p-2.5 md:p-1.5 text-dash-legend rounded ${
                         row.is_active ? 'hover:text-dash-warning hover:bg-dash-warning/10' : 'hover:text-dash-success hover:bg-dash-success/10'
                       }`}
                       aria-label={row.is_active ? `Mettre en pause ${row[keyField]}` : `Reprendre ${row[keyField]}`}
@@ -63,7 +64,7 @@ function DashboardTable({ columns, data, onEdit, onDelete, onHardDelete, keyFiel
                   {onHardDelete && (
                     <button
                       onClick={() => onHardDelete(row)}
-                      className="p-1.5 text-dash-legend hover:text-dash-danger hover:bg-dash-danger/10 rounded"
+                      className="p-2.5 md:p-1.5 text-dash-legend hover:text-dash-danger hover:bg-dash-danger/10 rounded"
                       aria-label={`Supprimer définitivement ${row[keyField]}`}
                       title="Supprimer définitivement"
                     >
