@@ -1,7 +1,7 @@
 # Modifications apportées en cours de développement
 ## Sens Solidaire — Refonte du site web
 *Pichot Gwen & Amblard Alison · Holberton School — Thonon-les-Bains*
-*Dernière mise à jour : 5 juillet 2026*
+*Dernière mise à jour : 6 novembre 2026*
 
 Ce document trace toutes les décisions qui s'écartent des guides initiaux.
 Il sera mis à jour en continu et servira à actualiser la documentation officielle en fin de projet.
@@ -73,6 +73,13 @@ Il sera mis à jour en continu et servira à actualiser la documentation officie
 | 57 | 03/07/26 | Nom du projet | Renommage global "Sens Solidaire" → "Sens Solidaires" — 23 occurrences corrigées (grep + sed) | Nom officiel exact de l'association | ✅ Appliquée |
 | 58 | 04/07/26 | Composant — LignesToPuces.jsx | Composant utilitaire créé puis extrait de `MissionDetail.jsx` vers `components/ui/` — transforme un texte multi-lignes (`\n`) en liste à puces | Permet à la cliente de saisir du contenu riche (rôle volontaire, infos santé/admin) sans éditeur WYSIWYG complexe ; extraction nécessaire pour rendre le composant testable unitairement | ✅ Appliquée |
 | 59 | 05/07/26 | schema.prisma — MissionReport | Ajout FK optionnelle `mission_id` (+ relation inverse `missionReports[]` sur `Mission`) | `destination`/`type` en texte libre dupliquaient l'information déjà présente sur `Mission` — même anti-pattern déjà corrigé sur `FieldActionCountry`. FK optionnelle car un rapport peut exister sans mission liée (ex : retour d'expérience enseignant) | ✅ Appliquée |
+| 60 | 06/11/26 | Planning — tâche 170 (filtres pays) | Pays des filtres `/notre-impact`, `/temoignages` et du dashboard **dérivés des données déjà chargées** par la page (`buildCountryOptions` dans `utils/filters.js`) au lieu d'une nouvelle route publique « pays utilisés » | Les pages chargent déjà toutes leurs données : aucun appel réseau en plus, aucun pays sans résultat, rien à maintenir côté backend. Le dashboard (témoignages paginés côté serveur) dérive ses pays des missions + rapports | ✅ Appliquée |
+| 61 | 06/11/26 | Architecture front — `services/api.js` | Découpage en `services/api/` : un fichier par ressource, `client.js` (URL + `authFetch`), `index.js` qui réexporte tout | Fichier de 1 135 lignes ; les 37 imports `from '../services/api'` restent inchangés (résolution automatique de `api/index.js`) | ✅ Appliquée |
+| 62 | 06/11/26 | BDD — `Media.file_type` | Nouvelle valeur `youtube` pour les vidéos des articles (lien YouTube stocké dans `file_url`), **sans migration** | `file_type` est un texte libre ; `video` reste réservé aux fichiers vidéo. Lecteur `youtube-nocookie` chargé seulement au clic (RGPD + performance), lien validé des deux côtés (`utils/youtube.js`, dupliqué) | ✅ Appliquée |
+| 63 | 06/11/26 | Dashboard — mobile | Barre de navigation **en haut** sur téléphone (Témoignages, Articles, Déconnexion) ; les autres pages affichent « prévue pour un ordinateur » ; liens partagés dans `components/admin/dashboardNav.js` | Avant, aucune navigation ni déconnexion sur mobile. En haut car le bas est occupé par la barre « Annuler / Enregistrer » des formulaires | ✅ Appliquée |
+| 64 | 06/11/26 | Dashboard — erreurs | `alert()` remplacés par `ErrorModal` ; textes centralisés dans `utils/adminErrors.js` | Charte du dashboard : vouvoiement, consigne claire, rendu cohérent avec les autres modales | ✅ Appliquée |
+| 65 | 06/11/26 | API — gestion des erreurs | Erreurs Prisma traduites dans le gestionnaire global de `app.js` (`utils/prismaErrors.js`) : `P2025` → 404, `P2002` → 409 ; CORS refusé → 403 | Un PATCH / DELETE sur un id inexistant renvoyait 500 sur 8 ressources : corrigé en un seul endroit plutôt que dans chaque service | ✅ Appliquée |
+| 66 | 06/11/26 | Stratégie de tests | Tests unitaires séparés (`tests/unit/`, sans base) ; scénario d'intégration commun aux 7 CRUD (`tests/helpers/adminCrud.js`) ; marqueur `jest-test` pour ne jamais toucher aux données réelles ; test de cohérence des règles dupliquées front / back | Les tests d'intégration tournent sur la base de développement qui contient les contenus de la cliente ; le scénario commun évite 7 copies du même fichier | ✅ Appliquée |
 
 ---
 

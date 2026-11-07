@@ -360,9 +360,9 @@ sens-solidaire/
 │   │   │   └── testimonials/  # Composants témoignages
 │   │   ├── pages/             # Une page par route
 │   │   │   └── admin/         # Pages du dashboard
-│   │   ├── services/          # api.js — appels HTTP centralisés
+│   │   ├── services/api/      # Appels HTTP : un fichier par ressource + client.js (authFetch) + index.js
 │   │   └── utils/             # Constantes partagées (filtres, icônes, footerCta...)
-│   ├── tests/                 # Tests Vitest + React Testing Library
+│   ├── tests/                 # Vitest + RTL : unit/, components/, pages/
 │   └── public/images/         # Images statiques, classées par contexte métier
 │
 ├── backend/                   # API Node.js / Express
@@ -370,13 +370,14 @@ sens-solidaire/
 │   │   ├── routes/            # Définition des endpoints
 │   │   ├── controllers/       # Validation + formatage réponse
 │   │   ├── services/          # Logique métier + accès Prisma
-│   │   ├── middlewares/       # authMiddleware (JWT)
+│   │   ├── middlewares/       # authMiddleware (JWT), uploadMiddleware (Multer)
+│   │   ├── utils/             # Fonctions pures (validation, slugify, youtube, prismaErrors...)
 │   │   └── config/            # Connexion DB
 │   ├── prisma/
 │   │   ├── schema.prisma      # Schéma de base de données
 │   │   ├── migrations/        # Historique des migrations
 │   │   └── seed.js            # Données de test
-│   └── tests/                 # Tests Jest + Supertest
+│   └── tests/                 # Jest : unit/ (sans base) + intégration Supertest (helpers/adminCrud.js)
 │
 ├── docs/                      # Documentation du projet — voir docs/README.md
 │   ├── README.md              # Sommaire de la documentation
@@ -392,43 +393,65 @@ sens-solidaire/
 
 ## Tests
 
-### Backend — Jest + Supertest
+Environ **400 tests automatisés** : 279 côté backend (90 unitaires + 189 d'intégration), 122 côté frontend.
 
-```bash
-docker exec sensolidaire_backend npm test
-```
+| Commande | Ce qu'elle lance | Base de données |
+|---|---|---|
+| `docker exec sensolidaire_backend npm run test:unit` | Tests unitaires backend (`tests/unit/`) — quelques secondes | Non |
+| `docker exec sensolidaire_backend npm run test:integration` | Tests d'intégration backend (routes HTTP réelles via Supertest) | **Oui** |
+| `docker exec sensolidaire_backend npm test` | Tous les tests backend | **Oui** |
+| `docker exec sensolidaire_frontend npm run test:run` | Tous les tests frontend, une seule fois | Non |
+| `cd frontend && npm run test:run` (sur le poste) | Idem + test de cohérence front / back (voir plus bas) | Non |
 
-**Couverture actuelle** — 3 fichiers, 20 cas au total :
+> **Avant de lancer les tests d'intégration** : faire une sauvegarde de la base ([`docs/sauvegarde-restauration.md`](./docs/sauvegarde-restauration.md)).
+> Ils tournent sur la vraie base du conteneur, mais ne créent, modifient et suppriment **que** des enregistrements marqués `jest-test`
+> (nettoyés avant et après chaque fichier). Ils se connectent avec le compte admin : une session ouverte dans le dashboard devra se reconnecter.
+> Aucun test n'envoie de vrai e-mail (le formulaire de contact n'est testé que sur ses refus).
 
-`tests/Missions.admin.test.js` (12 cas) :
-- Santé de l'API (`GET /api/health`) et authentification admin
-- `POST /api/admin/missions` — création (201) et cas d'erreur : 400 champ manquant, 400 type invalide, 401 sans token, 409 slug déjà pris
-- `PATCH /api/admin/missions/:id` — modification partielle (200) et id inexistant (404)
-- `DELETE /api/admin/missions/:id` — soft delete (200), ressource devenue inaccessible côté public (404), id inexistant (404)
+### Backend — tests unitaires (`backend/tests/unit/`, Jest)
 
-`tests/Testimonials.admin.test.js` (5 cas) :
-- `PATCH /api/admin/testimonials/:id/approve` — jeton valide (200, statut vérifié en base) et id inexistant (404)
-- `PATCH /api/admin/testimonials/:id/reject` — sans jeton (401, statut inchangé en base)
-- signature JWT altérée (header/payload intacts) → 401, statut inchangé
-- mass assignment via le corps de la requête (`{ status: "rejected" }` sur `/approve`) → statut toujours forcé côté serveur
+Fonctions pures et middleware, sans serveur ni base :
 
-`tests/Upload.security.test.js` (3 cas) — non-régression de la faille d'upload corrigée lors de l'audit sécurité :
-- tentative de path traversal via le nom de fichier (`../../../../../src/pwned.js`)
-- PDF envoyé sur la route publique (images seulement) → refus, pas un 500
-- `POST /api/admin/upload` sans jeton → 401
+| Fichier | Ce qui est vérifié |
+|---|---|
+| `validation.test.js` | `isFilled`, `isValidYear` (bornes 2000 → année prochaine), `isValidSlug` |
+| `slugify.test.js` | accents, ponctuation, longueur max 80, valeur de secours ; toute adresse générée passe `isValidSlug` |
+| `shortDescription.test.js` | repère `---` (retiré du texte complet), coupe à la dernière phrase, jamais en plein mot |
+| `odds.test.js` | les 17 ODD ont une catégorie, dédoublonnage des thèmes |
+| `countries.test.js` | code drapeau (Sumatra → Indonésie), nom inconnu → `null`, tri à la française |
+| `youtube.test.js` | formats de liens acceptés (watch, youtu.be, shorts, embed), liens piégés refusés |
+| `prismaErrors.test.js` | traduction des erreurs Prisma : `P2025` → 404, `P2002` → 409 |
+| `jwt.test.js` | access token 15 min / refresh token 7 j, secrets distincts, jeton expiré ou falsifié refusé |
+| `authMiddleware.test.js` | 401 sans jeton / format invalide / jeton invalide, 403 si rôle différent d'admin, `req.user` renseigné |
 
-### Frontend — Vitest + React Testing Library
+### Backend — tests d'intégration (`backend/tests/`, Jest + Supertest)
 
-```bash
-docker exec sensolidaire_frontend npm test
-```
+**CRUD du dashboard** — un scénario commun ([`tests/helpers/adminCrud.js`](./backend/tests/helpers/adminCrud.js)) joué sur 7 ressources
+(`MediaPosts`, `FieldActions`, `Locations`, `TeamMembers`, `Partners`, `ActivityReports`, `MissionReports`) :
+401 sans jeton · 400 champ obligatoire manquant · 201 création · lecture par id · 404 sur id inexistant (lecture, modification, pause, suppression) ·
+modification · visible sur le site public si actif · invisible une fois en pause · réactivation · suppression définitive.
+Cas propres en plus : page publique d'un contenu en pause → 404 (médias, actions, lieux), vidéos YouTube d'un article,
+adresse d'action déjà prise → 409, deux rapports d'activité la même année → 409.
 
-**Couverture** :
+| Fichier | Ce qui est vérifié |
+|---|---|
+| `Auth.integration.test.js` | login (400 / 401 / 200), même message pour un e-mail inconnu et un mauvais mot de passe, cookie refresh `HttpOnly` + `SameSite=Strict`, rotation du refresh token (l'ancien est refusé), déconnexion |
+| `Public.integration.test.js` | routes publiques : formats, filtres missions (type / pays / longueur), aucun contenu en pause ni témoignage non approuvé exposé, pages détail inexistantes → 404 |
+| `Security.integration.test.js` | en-têtes Helmet, CORS (origine autorisée / inconnue → 403), toutes les routes admin fermées sans jeton, jeton falsifié |
+| `Contact.integration.test.js` | validation serveur du formulaire de contact (champs manquants, trop longs, e-mail invalide) |
+| `Missions.admin.test.js` | CRUD missions : création, 400 / 401 / 409, modification partielle, soft delete |
+| `Testimonials.admin.test.js` | modération : approbation, JWT altéré, protection contre le mass assignment |
+| `Upload.security.test.js` | non-régression de l'audit : path traversal, type refusé en 400, upload admin sans jeton |
 
-- `LignesToPuces` — fonction utilitaire pure (transformation texte → liste à puces)
-- `Button` — composant présentationnel (rendu, `onClick`, état `disabled`)
-- `TestimonialForm` — règle métier (bouton d'envoi bloqué sans consentement RGPD)
-- `LoginAdmin` — composant avec appel API mocké (connexion réussie → redirection, échec → message d'erreur)
+### Frontend — Vitest + React Testing Library (`frontend/tests/`)
+
+| Dossier | Ce qui est vérifié |
+|---|---|
+| `unit/` | validation, aperçu du résumé, ODD (chaque catégorie correspond à un filtre de Notre Impact), filtres pays, messages d'erreur du dashboard (vouvoiement, pas de jargon) |
+| `unit/duplicatedRules.test.js` | les règles **dupliquées volontairement** entre front et back (slug, année, ODD, YouTube, résumé) donnent les mêmes résultats. Exécuté sur le poste uniquement : le conteneur frontend ne voit pas `backend/` (exclusion automatique dans `vite.config.js`) |
+| `components/` | `Modal`, `ConfirmModal`, `ErrorModal`, `DashboardTable`, `FormElements`, `FilterSelect`, `YouTubeLinksField`, navigation du dashboard (barre mobile, avertissement « prévue pour un ordinateur », `ProtectedRoute`) |
+| `pages/` | avec API simulée : `Testimonials` (filtre destination des rapports), `Impact` (pays dérivés des actions), `LocationsPage` (modale d'erreur au lieu d'un `alert`), `MediaPostFormPage` (validation et envoi des vidéos YouTube) |
+| racine | `LignesToPuces`, `Button`, `TestimonialForm` (consentement RGPD, erreur d'envoi), `LoginAdmin`, `filters`, `youtube` |
 
 ### Tests manuels (Postman)
 
@@ -438,7 +461,8 @@ Un runbook complet est disponible dans [`docs/test_postman_back.md`](./docs/test
 
 | Type | Usage |
 |---|---|
-| **Jest + Supertest (backend)** | Tests automatisés sur les routes critiques |
+| **Jest — unitaires (backend)** | Fonctions pures et middleware, sans base : rapides, lancés à chaque modification |
+| **Jest + Supertest (backend)** | Routes HTTP réelles sur la base Docker : CRUD, authentification, sécurité, visibilité publique |
 | **Vitest + RTL (frontend)** | Fonctions pures, composants, règles métier UI, appels API mockés |
 | **Postman (manuel)** | Exploration et validation des nouveaux endpoints avant automatisation |
 

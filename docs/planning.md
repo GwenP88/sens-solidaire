@@ -218,33 +218,35 @@
 |---|---|---|---|
 | 124B | Gwen | Vérifier que l'envoi de fichiers accepte mp3 / mp4 + adresse réelle d'un fichier envoyé (`isUploadedFile` dans `MediaPostFormPage`) — en premier : conditionne 124A et 123 | ✅ |
 | 124C | Gwen | `MediaCard` / `MediaDetail` : `<a href>` → `<Link>` pour les liens internes | ✅ |
-| 127 | Gwen | `LocationsPage` (et autres listes) : `alert('... Réessaie.')` → vouvoiement | ❌ |
+| 127 | Gwen | `LocationsPage` (et autres listes) : `alert('... Réessaie.')` → vouvoiement — `ErrorModal` + messages `ADMIN_ERRORS` (8 pages) ; formulaire témoignage public : erreur affichée dans le formulaire | ✅ |
 
 ### 2. Fonctionnalité
 
 | N° | Qui | Tâche | Statut |
 |---|---|---|---|
-| 170 | Gwen | Filtres pays dynamiques sur /notre-impact et /temoignages (dérivés des vraies données en base — missions + actions terrain) au lieu de FILTERS_COUNTRY figée dans utils/filters.js — nouvelle route publique pays réellement utilisés | ❌ |
+| 170 | Gwen | Filtres pays dynamiques sur /notre-impact et /temoignages (dérivés des vraies données en base — missions + actions terrain) au lieu de FILTERS_COUNTRY figée dans utils/filters.js — **réalisé sans nouvelle route** : pays dérivés des données déjà chargées par chaque page (`buildCountryOptions`), voir modif. 60 | ✅ |
 
 ### 3. Qualité du code
 
 | N° | Qui | Tâche | Statut |
 |---|---|---|---|
-| 128 | Gwen | Découper `services/api.js` (1 125 lignes) en un fichier par ressource dans `services/api/` + `index.js` qui réexporte tout — avant la soutenance | ❌ |
+| 128 | Gwen | Découper `services/api.js` (1 125 lignes) en un fichier par ressource dans `services/api/` + `index.js` qui réexporte tout — avant la soutenance | ✅ |
 
 ### 4. Dashboard et tests (à découper)
 
 | N° | Qui | Tâche | Statut |
 |---|---|---|---|
-| 125 | Gwen | Dashboard mobile — uniquement modération des témoignages et publication d'articles (Médias) | ❌ |
-| 126 | Gwen | Tests d'intégration | ❌ |
+| 125 | Gwen | Dashboard mobile — uniquement modération des témoignages et publication d'articles (Médias) — barre de navigation en haut sur téléphone, avertissement sur les autres pages | ✅ |
+| 126 | Gwen | Tests d'intégration — CRUD des 7 ressources du dashboard, auth, routes publiques, sécurité, contact + tests unitaires back / front (≈ 400 tests, voir README § Tests) | ✅ |
+| 126B | Gwen | Erreur 500 → 404 sur PATCH / DELETE d'un id inexistant (traduction globale des erreurs Prisma dans `app.js`) ; CORS refusé → 403 | ✅ |
 
 ### 5. Finitions
 
 | N° | Qui | Tâche | Statut |
 |---|---|---|---|
-| 129 | Gwen | Ménage fichiers et commentaires en anglais — juste avant le rendu | ❌ |
-| 123 | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) — vidéos YouTube par lien (miniature automatique, lecteur youtube-nocookie chargé au clic), mélangées aux photos ; permet un article avec texte + vidéo | ❌ |
+| 129 | Gwen | Ménage fichiers et commentaires en anglais — juste avant le rendu (commentaires traduits, imports inutilisés, fichiers de test et CV retirés du suivi Git) | ✅ |
+| 129B | Gwen | Lint : 20 avertissements `react-hooks` restants (`set-state-in-effect`, dépendances des `useEffect`) — refonte des chargements de données, après la soutenance | ❌ |
+| 123 | Gwen | Ajouter des vidéos au carrousel (icône play, pas d'autoplay, ouverture en modal au clic, format portrait/paysage préservé) — vidéos YouTube par lien (miniature automatique, lecteur youtube-nocookie chargé au clic), mélangées aux photos ; permet un article avec texte + vidéo — **articles Médias** ; extension possible aux missions / actions terrain (composants réutilisables) | ✅ |
 
 ---
 

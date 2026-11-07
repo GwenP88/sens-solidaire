@@ -3,7 +3,7 @@
 Ce fichier est lu automatiquement par Claude au début de chaque session dans ce dépôt.
 Il décrit le projet, la façon de travailler attendue, ce qui a été fait, pourquoi, et ce qui reste à faire.
 
-Dernière mise à jour : 6 novembre 2026 (état du dépôt : branche `dev-front`, dernier commit du 5 novembre 2026).
+Dernière mise à jour : 6 novembre 2026 (état du dépôt : branche `dev-front` — tâches 123 à 129 et 170 livrées, suite de tests étendue).
 
 ---
 
@@ -159,19 +159,23 @@ sens-solidaire/
 │   │   │   ├── layout/        Navbar, Footer*, Hero, HeroPage, Layout, StatsBar
 │   │   │   ├── ui/            Button, Modal, Carousel, Section, CTASection, BaseContentCard,
 │   │   │   │                  BaseOverlayCard, BadgeODD, RapportCard, LignesToPuces, CookieBanner...
-│   │   │   ├── admin/         DashboardLayout, DashboardSidebar, DashboardTable, DashboardModal,
-│   │   │   │                  ConfirmModal, FormElements, AdminFileUpload, *EditModal, ModerationCard
+│   │   │   ├── admin/         DashboardLayout, DashboardSidebar, DashboardMobileNav, dashboardNav.js (liens partagés),
+│   │   │   │                  DashboardTable, DashboardModal, ConfirmModal, ErrorModal, FormElements,
+│   │   │   │                  AdminFileUpload, YouTubeLinksField, *EditModal, ModerationCard (non branché)
 │   │   │   ├── missions/      MissionCard, MissionSection, MissionInfoBar, MissionSteps, MissionCTA...
 │   │   │   ├── navigation/    AnchorNav, FilterChips, FilterSelect, Filters, ProtectedRoute, RouteScrollReset
 │   │   │   ├── testimonials/  TestimonialCard, TestimonialForm
-│   │   │   ├── team/ locations/ media/ education/ actions/ forms/
+│   │   │   ├── media/         MediaCard, YouTubeSlide, YouTubeModal
+│   │   │   ├── team/ locations/ education/ actions/ forms/
 │   │   ├── pages/             une page par route publique
 │   │   │   └── admin/         pages du dashboard
-│   │   ├── services/api.js    TOUS les appels HTTP (1 135 lignes — découpage prévu, tâche 128)
-│   │   ├── utils/             constantes et fonctions partagées (filters, validation, shortDescription, odds...)
+│   │   ├── services/api/      TOUS les appels HTTP : un fichier par ressource, client.js (API_URL + authFetch),
+│   │   │                      index.js qui réexporte tout (on importe toujours `from '../services/api'`)
+│   │   ├── utils/             constantes et fonctions partagées (filters, validation, shortDescription, odds,
+│   │   │                      youtube, adminErrors...)
 │   │   ├── hooks/             useCountUp
 │   │   └── index.css          design system Tailwind v4 (@theme + @utility)
-│   ├── tests/                 Vitest + RTL
+│   ├── tests/                 Vitest + RTL : unit/, components/, pages/ (+ anciens tests à la racine)
 │   ├── scripts/optimize-placeholders.js
 │   └── public/images/         images statiques, classées par contexte métier
 ├── backend/
@@ -182,7 +186,7 @@ sens-solidaire/
 │   │   ├── controllers/       validation des entrées + formatage de la réponse
 │   │   ├── services/          logique métier + accès Prisma
 │   │   ├── middlewares/       authMiddleware (JWT), uploadMiddleware (Multer)
-│   │   ├── utils/             validation, slugify, shortDescription, countries, odds, jwt
+│   │   ├── utils/             validation, slugify, shortDescription, countries, odds, jwt, youtube, prismaErrors
 │   │   └── config/db.js       client Prisma (compte sensolidaire_app)
 │   ├── prisma/
 │   │   ├── schema.prisma
@@ -190,7 +194,8 @@ sens-solidaire/
 │   │   ├── roles.sql          création des 2 comptes PostgreSQL
 │   │   └── seed.js
 │   ├── public/uploads/        fichiers envoyés (images, documents, videos, audios)
-│   └── tests/                 Jest + Supertest
+│   └── tests/                 Jest : unit/ (sans base) + intégration Supertest (*.admin.test.js,
+│                              *.integration.test.js, helpers/adminCrud.js)
 ├── docs/                      documentation de suivi et de conception (voir section 14)
 └── docker-compose.yml
 ```
@@ -205,9 +210,10 @@ sens-solidaire/
 ### Frontend
 
 - Une seule application React pour le site public **et** le dashboard (`/admin/...`, protégé par `ProtectedRoute`).
-- `services/api.js` : `authFetch` ajoute le token, et au premier 401 tente un **refresh silencieux** via le cookie avant de déconnecter. Les erreurs réseau sont remplacées par un message compréhensible.
+- `services/api/client.js` : `authFetch` ajoute le token, et au premier 401 tente un **refresh silencieux** via le cookie avant de déconnecter. Les erreurs réseau sont remplacées par un message compréhensible.
 - **Liens internes** : `<Link>` (React Router). **Liens externes** : `<a target="_blank" rel="noopener noreferrer">`.
-- Règles de validation **dupliquées volontairement** entre `frontend/src/utils/validation.js` et `backend/src/utils/validation.js` (front et back ne partagent pas de code) : toute modification doit être faite **des deux côtés**.
+- Règles **dupliquées volontairement** entre front et back (ils ne partagent pas de code) : `utils/validation.js`, `utils/youtube.js`, `utils/odds.js` (correspondance ODD → catégorie), `utils/shortDescription.js`. Toute modification doit être faite **des deux côtés** — le test `frontend/tests/unit/duplicatedRules.test.js` (lancé sur le poste) échoue si les deux copies divergent.
+- `/admin` (accueil du dashboard) affiche volontairement « Vue d'ensemble — à construire » : la vue sera construite prochainement. `pages/admin/Dashboard.jsx` et `ModerationCard.jsx` ne sont pas branchés pour l'instant — **ne pas les supprimer**.
 
 ### Routes publiques
 
@@ -240,6 +246,7 @@ Schéma : `backend/prisma/schema.prisma`. Diagrammes Mermaid à jour dans `READM
 - **`Mission.image_url` (photo principale) séparée de la galerie `Media`** : unification prévue en V2. En attendant, le formulaire admin simule l'UX côté front (envoi multiple, 1re photo → `image_url`, suivantes → `Media`).
 - **Thèmes de `MediaPost`** : pas de table, simples suggestions (`normalizeTheme` limite les doublons, majuscule imposée sur la 1re lettre côté serveur). Limite connue : impossible de corriger la casse d'un thème depuis le formulaire si ce post est le seul à l'utiliser → correction en SQL.
 - **Slug** : généré automatiquement, **jamais modifié** ensuite (un lien partagé reste valable). La cliente ne voit jamais le mot « slug » (« Adresse de la page »).
+- **Vidéos YouTube des articles** : `Media` avec `file_type = 'youtube'` et le lien dans `file_url` (pas de migration, `file_type` est un texte libre ; `video` reste réservé aux fichiers vidéo). Max 5 par article, lien validé des deux côtés.
 - **Valeurs calculées à la lecture, non stockées** : résumé de carte (200 caractères pour les médias), temps de lecture (~200 mots/min).
 - **Description courte** : marqueur `---` dans le texte long (`utils/shortDescription.js`, des deux côtés). Si le repère est trop loin, l'aperçu `ShortDescriptionPreview` avertit ; pour les actions terrain l'enregistrement est **bloqué** (sinon perte de texte).
 
@@ -288,7 +295,10 @@ Lora (`font-heading`, titres) + Source Sans 3 (`font-body`, corps).
 - Carousel (Swiper) : navigation custom via `swiperRef.current?.slidePrev()/slideNext()` (le module Navigation officiel entre en conflit), `observer`/`observeParents`, `loop` seulement si `items.length >= 6`, contrôles masqués si peu d'éléments.
 - `react-scroll` est incompatible avec React 19 : utiliser le `smoothScrollTo` custom (`requestAnimationFrame`).
 - Composants de formulaire du dashboard : **toujours** passer par `components/admin/FormElements.jsx` (`FormSection`, `Field`, `TextareaField`, `FormActionBar` collante, `ShortDescriptionPreview`) et `AdminFileUpload` (prop `error`). Erreurs **par champ**, astérisques sur les champs obligatoires.
-- Modales du dashboard : `DashboardModal` / `ConfirmModal` (pas de `window.confirm` ni d'`alert`).
+- Modales du dashboard : `DashboardModal` / `ConfirmModal` / `ErrorModal` — **jamais** de `window.confirm` ni d'`alert`. Les messages d'erreur d'action viennent de `utils/adminErrors.js` (`ADMIN_ERRORS.toggle / delete / update / save`).
+- Dashboard sur téléphone : seules la modération des témoignages et la publication d'articles sont prévues (`mobile: true` dans `dashboardNav.js`). Barre de navigation **en haut** (le bas est pris par `FormActionBar`). Colonne de tableau masquable sur mobile : `hideOnMobile: true` dans la config de colonnes de `DashboardTable`.
+- Filtres pays du site : jamais de liste figée — `buildCountryOptions()` (`utils/filters.js`) à partir des données chargées.
+- Vidéos : `YouTubeSlide` (miniature, aucun lecteur avant le clic) + `YouTubeModal` (lecteur `youtube-nocookie`, portrait conservé pour les Shorts).
 
 ---
 
@@ -296,7 +306,7 @@ Lora (`font-heading`, titres) + Source Sans 3 (`font-body`, corps).
 
 - Commentaires **en français**, en-tête de fichier de 1 à 2 lignes, sections séparées par des bandeaux `// ── TITRE ───`.
 - Logs sans emoji.
-- Certains fichiers backend ont encore des commentaires d'en-tête en anglais (ex. `missionService.js`) : ménage prévu (tâche 129), ne pas en ajouter de nouveaux.
+- Plus aucun commentaire en anglais dans le code (ménage de la tâche 129) : ne pas en réintroduire.
 - Un fichier qui dépasse 300-500 lignes est candidat au découpage.
 - Uploads : types autorisés définis dans `uploadMiddleware.js` ; extensions + dossiers dans `storageService.js` ; choix du dossier dans `uploadController.js`. Limite **20 Mo**. Les vidéos longues vont sur YouTube (lien), pas sur le serveur.
 
@@ -379,6 +389,8 @@ Audit réalisé par Alison le 26/08/2026 (branche `fix/audit-securite-aout`, mer
 - séparation des droits PostgreSQL (2 comptes) ;
 - mass assignment sur la modération (statut forcé côté serveur).
 
+Gestion des erreurs HTTP (6 novembre) : les erreurs Prisma sont traduites dans le gestionnaire global de `app.js` (`utils/prismaErrors.js` : `P2025` → 404, `P2002` → 409), une origine CORS refusée renvoie 403. Ne plus rattraper `P2025` service par service.
+
 À conserver : Helmet en premier dans `app.js`, CORS restreint (localhost, ngrok, 192.168.x), refresh token en cookie HTTP-only, aucune donnée de `req.body` utilisée pour un champ que le serveur doit imposer.
 
 Dernier `npm audit` backend : 22/09/2026 (4 vulnérabilités restantes, indirectes via Prisma). Journal de veille : `docs/veille.md`.
@@ -389,10 +401,21 @@ Dernier `npm audit` backend : 22/09/2026 (4 vulnérabilités restantes, indirect
 
 ## 13. Tests
 
-- **Backend** (20 cas) : `Missions.admin.test.js` (12), `Testimonials.admin.test.js` (5), `Upload.security.test.js` (3, non-régression de l'audit).
-- **Frontend** : `LignesToPuces`, `Button`, `TestimonialForm` (consentement RGPD), `LoginAdmin` (API mockée).
-- **Manuel** : `docs/test_postman_back.md`.
-- **Manque** : tests d'intégration des nouveaux CRUD dashboard (tâche 126).
+Environ **400 tests** (détail complet : `README.md`, section Tests).
+
+| Commande | Contenu | Base |
+|---|---|---|
+| `docker exec sensolidaire_backend npm run test:unit` | 90 tests unitaires backend (`tests/unit/` : utils, jwt, authMiddleware) | Non |
+| `docker exec sensolidaire_backend npm run test:integration` | ~190 tests Supertest : CRUD des 7 ressources du dashboard (scénario commun `tests/helpers/adminCrud.js`), missions, témoignages, upload, auth, routes publiques, sécurité, contact | **Oui** |
+| `docker exec sensolidaire_frontend npm run test:run` | ~120 tests Vitest : `unit/`, `components/`, `pages/` (API simulée) | Non |
+
+Règles :
+- **Les tests d'intégration tournent sur la vraie base** (contenus de la cliente). Ils ne touchent qu'aux enregistrements marqués `jest-test`, nettoyés avant et après. Tout nouveau test doit respecter ce marqueur et ne **jamais** faire de suppression en masse. Faire un `pg_dump` avant le premier lancement.
+- Ils se connectent avec le compte admin : la session du dashboard doit ensuite se reconnecter (un seul refresh token actif).
+- Aucun test ne doit envoyer de vrai e-mail (contact testé uniquement sur ses refus).
+- Nouveau CRUD dashboard → appeler `describeAdminCrud()` dans un nouveau `Xxx.admin.test.js`.
+- `frontend/tests/unit/duplicatedRules.test.js` n'est exécuté que sur le poste (exclu automatiquement du conteneur, qui ne voit pas `backend/`).
+- Manuel : `docs/test_postman_back.md`.
 
 ---
 
@@ -443,6 +466,7 @@ Dernier `npm audit` backend : 22/09/2026 (4 vulnérabilités restantes, indirect
 - **Bloc B — CRUD manquants (terminé)** : Location, Delegation, TeamMember, ActivityReport (envoi du PDF depuis l'ordinateur), Partner, Testimonial + MissionReport, FieldAction (+ pays, tags, ODD), MediaPost (formulaire unique lien/fichier/article, auteur, source, temps de lecture, photos unifiées, audio mp3/m4a). Seed nettoyé en conséquence.
 - Harmonisation du vocabulaire du dashboard (vouvoiement, « Adresse de la page »), erreurs par champ, `FormActionBar` collante, `ShortDescriptionPreview` partagé (4 formulaires), liens internes en `<Link>`.
 - Règle `isValidSlug` commune front/back.
+- **6 novembre — priorité 1 avant soutenance** : modales d'erreur au lieu des `alert` (127), filtres pays dérivés des données (170), découpage de `api.js` (128), dashboard sur téléphone (125), vidéos YouTube dans les articles (123), ménage du code (129), erreurs Prisma → 404 / 409, suite de tests unitaires + intégration (126). Bugs corrigés au passage : BUG-56 à BUG-65 (`docs/bugTracker.md`).
 
 ---
 
@@ -452,15 +476,13 @@ Référence : `docs/planning.md` (toujours vérifier les statuts là-bas, ils pe
 
 ### Priorité 1 — avant la soutenance (23 novembre)
 
+Tâches 123, 125, 126, 127, 128, 129 et 170 **terminées le 6 novembre** (voir `docs/planning.md`). Reste :
+
 | N° | Tâche |
 |---|---|
-| 127 | `LocationsPage` (et autres listes) : remplacer les `alert('... Réessaie.')` par des messages vouvoyés (idéalement via les modales du dashboard) |
-| 170 | Filtres pays **dynamiques** sur `/notre-impact` et `/temoignages` (dérivés des données réelles : missions + actions terrain) au lieu de `FILTERS_COUNTRY` figé dans `utils/filters.js` — nouvelle route publique « pays réellement utilisés » |
-| 128 | Découper `services/api.js` (1 135 lignes) en un fichier par ressource dans `services/api/` + `client.js` commun (`authFetch`) + `index.js` qui réexporte tout (les imports existants ne doivent pas changer) |
-| 125 | Dashboard mobile — uniquement modération des témoignages et publication d'articles |
-| 126 | Tests d'intégration des CRUD dashboard |
-| 129 | Ménage des fichiers et commentaires en anglais — juste avant le rendu |
-| 123 | Vidéos YouTube dans le carrousel (miniature auto, icône play, lecteur `youtube-nocookie` chargé au clic, pas d'autoplay, modale, portrait/paysage préservé) |
+| — | Lancer la suite de tests d'intégration dans Docker et corriger ce qui échoue (jamais exécutée sur la base à ce jour) |
+| — | Purge du CV dans l'historique Git (BUG-66) — en attente de décision |
+| 129B | 20 avertissements lint `react-hooks` (`useEffect`) — après la soutenance |
 
 ### Bloc C — Page Éducation & sensibilisation
 
@@ -586,12 +608,15 @@ Galerie 15-20 photos, contenu générique éditable, Buffer API (brouillon rése
 - **Fichiers en propriétaire root** créés par Docker (migrations, dossiers) → `chown`.
 - `vite.config.js` : `allowedHosts` contient l'URL ngrok actuelle ; la changer si ngrok est relancé.
 - Le `README.md` mentionne Prisma Studio sur `:5555` : il ne fonctionne pas (voir ci-dessus).
+- **Tests backend hors Docker** : le client Prisma du poste (`backend/node_modules`) est périmé → `prisma.xxx` undefined. Les tests d'intégration se lancent dans le conteneur ; `npm run test:unit` fonctionne partout.
+- **Vitest** refuse un import calculé (chemin dans une variable) hors de `frontend/` : écrire le chemin relatif en entier.
+- `git acp` ajoute **tout** : pour des commits thématiques, `git add <fichiers>` puis `git commit`.
 
 ---
 
 ## 18. Points d'attention relevés dans le dépôt (à traiter avec Gwen)
 
-- **Fichiers de test committés dans `backend/public/uploads/`** (images de test, et deux PDF d'un CV personnel dans `uploads/documents/`). Le dépôt est **public** : à retirer du suivi Git et à ajouter au `.gitignore` (en gardant les `.gitkeep`).
-- `frontend/.vite/deps/` est suivi par Git alors qu'il s'agit d'un cache Vite : à ignorer.
+- Fichiers de test et CV retirés du suivi Git et du disque (6 novembre). Le CV reste dans l'**historique** du dépôt public (commit `d432efa`) tant qu'il n'est pas réécrit (BUG-66).
+- Avant la production : si Nginx ajoute une Content-Security-Policy, autoriser `i.ytimg.com` (images) et `www.youtube-nocookie.com` (iframe) ; mentionner YouTube sur la page Cookies.
 - `docker-compose.yml` définit `VITE_API_URL: http://localhost:3000` alors que `api.js` utilise `/api` en relatif (variable inutilisée) et que le backend est exposé sur 3001.
 - Numérotation en doublon dans `docs/planning.md` (127, 128, 129 utilisés deux fois pour des tâches différentes) : préciser le bloc quand on cite un numéro.
