@@ -96,6 +96,22 @@ export const describeAdminCrud = (config) => {
       expect(res.status).toBe(404)
     })
 
+    // ── Id inexistant : 404 et non 500 (erreur Prisma P2025 traduite dans app.js) ──
+    it("modification d'un id inexistant → 404", async () => {
+      const res = await request(app).patch(`${adminPath}/${UNKNOWN_ID}`).set("Authorization", `Bearer ${token}`).send(updateBody())
+      expect(res.status).toBe(404)
+    })
+
+    it("mise en pause d'un id inexistant → 404", async () => {
+      const res = await request(app).patch(`${adminPath}/${UNKNOWN_ID}/toggle`).set("Authorization", `Bearer ${token}`).send({ is_active: false })
+      expect(res.status).toBe(404)
+    })
+
+    it("suppression d'un id inexistant → 404", async () => {
+      const res = await request(app).delete(`${adminPath}/${UNKNOWN_ID}`).set("Authorization", `Bearer ${token}`)
+      expect(res.status).toBe(404)
+    })
+
     // ── Modification ──────────────────────────────────────────────────────
     it("modification → 200 et valeurs enregistrées", async () => {
       const res = await request(app).patch(`${adminPath}/${created.id}`).set("Authorization", `Bearer ${token}`).send(updateBody())
