@@ -26,7 +26,8 @@ const COUNTRY_NAME_TO_CODE = {
 }
 
 // Liste triée des noms de pays — pour peupler le <datalist> côté front
-export const getAllCountryNames = () => Object.keys(COUNTRY_NAME_TO_CODE).sort()
+// Tri à la française : sans localeCompare, « Égypte » se retrouvait après « Zimbabwe »
+export const getAllCountryNames = () => Object.keys(COUNTRY_NAME_TO_CODE).sort((a, b) => a.localeCompare(b, 'fr'))
 
 // Retrouve le code ISO à partir du nom exact du pays (tel que choisi dans le
 // <datalist>) — retourne null si le nom ne correspond à rien de connu
