@@ -45,11 +45,12 @@ function Carousel({ items, renderSlide, showPagination = false, color = 'primary
       <button
         type="button"
         onClick={() => swiperRef.current?.slidePrev()}
+        aria-label="Élément précédent"
         className={`${chevronVisibility} absolute -left-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
           color === 'surface' ? 'text-surface/50 hover:text-surface' : 'text-primary/50 hover:text-primary'
         }`}
       >
-        <FaChevronLeft />
+        <FaChevronLeft aria-hidden="true" />
       </button>
 
       <Swiper
@@ -76,11 +77,12 @@ function Carousel({ items, renderSlide, showPagination = false, color = 'primary
       <button
         type="button"
         onClick={() => swiperRef.current?.slideNext()}
+        aria-label="Élément suivant"
         className={`${chevronVisibility} absolute -right-8 top-[45%] -translate-y-1/2 z-10 text-4xl transition-colors ${
           color === 'surface' ? 'text-surface/50 hover:text-surface' : 'text-primary/50 hover:text-primary'
         }`}
       >
-        <FaChevronRight />
+        <FaChevronRight aria-hidden="true" />
       </button>
 
     </div>

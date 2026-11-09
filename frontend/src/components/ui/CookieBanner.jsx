@@ -4,6 +4,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 // ── Composants UI
 import Button from './Button'
@@ -29,14 +30,15 @@ function CookieBanner() {
   if (!visible) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-primary padding-x py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-sm md:gap-lg shadow-lg">
+    // role="region" + aria-label : la bannière est annoncée et retrouvable par les lecteurs d'écran
+    <div role="region" aria-label="Consentement aux cookies" className="fixed bottom-0 left-0 right-0 z-50 bg-primary padding-x py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-sm md:gap-lg shadow-lg">
 
       {/* Message d'information + lien politique cookies */}
       <p className="text-body text-surface/80 max-w-2xl">
         Ce site utilise des cookies strictement nécessaires à son fonctionnement. Aucun cookie publicitaire ou de tracking n'est utilisé.{' '}
-        <a href="/cookies" className="link-inline text-surface hover:text-accent">
+        <Link to="/cookies" className="link-inline text-surface hover:text-accent">
           En savoir plus
-        </a>
+        </Link>
       </p>
 
       {/* Boutons refuser / accepter */}

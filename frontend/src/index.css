@@ -589,6 +589,25 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ── Accessibilité (tâche 173) ── */
+/* Contour visible sur l'élément actif quand on navigue AU CLAVIER (Tab) — :focus-visible
+   ne s'affiche pas au clic de souris. Terracotta : contraste suffisant sur fonds clairs et sombres. */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Visiteurs qui ont demandé moins d'animations dans leur système : pas de scroll doux ni de transitions */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
 /* ── Scrollbar horizontale — AnchorNav et FilterChips ── */
 .overflow-x-auto::-webkit-scrollbar {
   height: 3px;

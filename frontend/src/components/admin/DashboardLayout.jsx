@@ -1,12 +1,18 @@
 // components/admin/DashboardLayout.jsx
 // Coquille du dashboard : Sidebar fixe (desktop) ou barre du haut (téléphone) + zone de contenu dynamique (<Outlet />).
 
+import { Suspense } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import DashboardSidebar from './DashboardSidebar'
 import DashboardMobileNav from './DashboardMobileNav'
 import { mobileNavItems } from './dashboardNav'
+import PageLoader from '../ui/PageLoader'
+import useSEO from '../../hooks/useSEO'
 
 function DashboardLayout() {
+  // Dashboard : titre d'onglet clair et page exclue de Google (tâche 174)
+  useSEO({ title: 'Tableau de bord', noindex: true })
+
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
@@ -34,7 +40,10 @@ function DashboardLayout() {
             Cette page est prévue pour un ordinateur. Sur téléphone, vous pouvez modérer les témoignages et publier des articles.
           </p>
         )}
-        <Outlet />
+        {/* Pages du dashboard chargées à la demande (tâche 130) : la barre latérale reste affichée pendant le chargement */}
+        <Suspense fallback={<PageLoader />}>
+          <Outlet />
+        </Suspense>
       </main>
     </div>
   )

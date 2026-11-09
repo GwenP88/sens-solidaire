@@ -17,17 +17,18 @@ export const DECOUVRIR_LINKS = [
 // ── Colonne "S'engager" ──
 export const ENGAGER_LINKS = [
   { label: 'Partir en mission', href: '/missions' },
-  { label: 'Faire un don', href: '/don' },
-  { label: "Adhérer à l'association", href: '/adhesion' },
+  // /don et /adhesion n'existaient pas (page vide) : le don et l'adhésion sont tous deux sur /soutenir
+  { label: 'Faire un don', href: '/soutenir' },
+  { label: "Adhérer à l'association", href: '/soutenir' },
 ]
 
-// ── Réseaux sociaux ──
+// ── Réseaux sociaux — `name` sert de texte pour les lecteurs d'écran (l'icône seule n'est pas lue) ──
 export const SOCIAL_LINKS = [
-  { icon: IconYoutube, href: 'https://www.youtube.com/channel/UC4lhQB-8zXiZJvD-kQS-q4A/featured' },
-  { icon: IconLinkedin, href: 'https://www.linkedin.com/company/sens-solidaires/' },
-  { icon: IconInstagram, href: 'https://www.instagram.com/sens_solidaires/' },
-  { icon: IconFacebook, href: 'https://www.facebook.com/Sensolidaires' },
-  { icon: IconTikTok, href: 'https://www.tiktok.com/@sensolidaires?lang=fr&is_copy_url=1&is_from_webapp=v1' },
+  { name: 'YouTube', icon: IconYoutube, href: 'https://www.youtube.com/channel/UC4lhQB-8zXiZJvD-kQS-q4A/featured' },
+  { name: 'LinkedIn', icon: IconLinkedin, href: 'https://www.linkedin.com/company/sens-solidaires/' },
+  { name: 'Instagram', icon: IconInstagram, href: 'https://www.instagram.com/sens_solidaires/' },
+  { name: 'Facebook', icon: IconFacebook, href: 'https://www.facebook.com/Sensolidaires' },
+  { name: 'TikTok', icon: IconTikTok, href: 'https://www.tiktok.com/@sensolidaires?lang=fr&is_copy_url=1&is_from_webapp=v1' },
 ]
 
 // ── Contacts — 3 adresses (lien Google Maps) + email ──

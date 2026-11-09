@@ -14,6 +14,7 @@ function TeamMemberCard({ variant = 'large', nom, role, description, avatar, bg 
     return (
       <div className={`flex flex-col items-center xl:flex-row xl:items-start gap-sm ${bg} rounded-2xl p-6 text-center xl:text-left`}>
         <img
+          loading="lazy"
           src={avatar || '/images/placeholders/placeholder-avatar.webp'}
           alt={`Portrait de ${nom}`}
           className="w-20 h-20 rounded-full object-cover shrink-0"
@@ -30,6 +31,7 @@ function TeamMemberCard({ variant = 'large', nom, role, description, avatar, bg 
   return (
     <div className={`flex flex-col items-center gap-sm ${bg} rounded-2xl p-4 text-center`}>
       <img
+        loading="lazy"
         src={avatar || '/images/placeholders/placeholder-avatar.webp'}
         alt={`Portrait de ${nom}`}
         className="w-16 h-16 rounded-full object-cover"

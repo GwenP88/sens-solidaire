@@ -16,7 +16,7 @@ function BaseContentCard({
 
       {/* ── Zone image ── */}
       <div className={`relative w-full ${imageHeight} ${imageWidth} md:h-full lg:w-full shrink-0 overflow-hidden`}>
-        <img src={image || fallbackImage} alt={alt} className="w-full h-full object-cover" />
+        <img loading="lazy" src={image || fallbackImage} alt={alt} className="w-full h-full object-cover" />
         {imageOverlay && imageOverlay}
       </div>
 

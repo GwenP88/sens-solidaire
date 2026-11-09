@@ -2,10 +2,18 @@
 // Composant racine de l'application — point d'entrée de tout le frontend
 // BrowserRouter gère la navigation entre les pages sans rechargement
 
+// ── React ────────────────────────────────────────────────────────────────
+// lazy + Suspense (tâche 130) : chaque page est un fichier JavaScript séparé, téléchargé seulement
+// quand on l'ouvre. Un visiteur du site ne télécharge jamais le code du dashboard.
+// Restent chargés d'emblée : Layout (présent sur toutes les pages publiques) et Home (page d'arrivée la plus fréquente).
+import { lazy, Suspense } from 'react'
+import PageLoader from './components/ui/PageLoader'
+
 // ── Router ───────────────────────────────────────────────────────────────
 // react-router-dom — gère les URLs et la navigation sans rechargement de page.
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import RouteScrollReset from './components/navigation/RouteScrollReset'
+import ProtectedRoute from './components/navigation/ProtectedRoute'
 
 // ── Layout global ────────────────────────────────────────────────────────
 // Wrapper Navbar + Footer, appliqué à toutes les pages publiques via <Outlet>.
@@ -14,60 +22,59 @@ import Layout from './components/layout/Layout'
 // ── Pages publiques — Missions & lieux ──────────────────────────────────
 // Volontariat individuel, Service Civique et les lieux partenaires associés.
 import Home from './pages/Home'
-import Missions from './pages/Missions'
-import MissionDetail from './pages/MissionDetail'
-import LocationDetail from './pages/LocationDetail'
+const Missions = lazy(() => import('./pages/Missions'))
+const MissionDetail = lazy(() => import('./pages/MissionDetail'))
+const LocationDetail = lazy(() => import('./pages/LocationDetail'))
 
 // ── Pages publiques — site principal ────────────────────────────────────
 // Témoignages, contact, soutien et transparence financière.
-import Testimonials from './pages/Testimonials'
-import Contact from './pages/Contact'
-import Soutenir from './pages/Soutenir'
-import RapportsActivite from './pages/RapportsActivite'
+const Testimonials = lazy(() => import('./pages/Testimonials'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Soutenir = lazy(() => import('./pages/Soutenir'))
+const RapportsActivite = lazy(() => import('./pages/RapportsActivite'))
 
 // ── Pages institutionnelles ──────────────────────────────────────────────
 // Présentation de l'association, équipe, et pages légales obligatoires.
-import APropos from './pages/APropos'
-import Equipe from './pages/Equipe'
-import MentionsLegales from './pages/MentionsLegales'
-import Confidentialite from './pages/Confidentialite'
-import Cookies from './pages/Cookies'
+const APropos = lazy(() => import('./pages/APropos'))
+const Equipe = lazy(() => import('./pages/Equipe'))
+const MentionsLegales = lazy(() => import('./pages/MentionsLegales'))
+const Confidentialite = lazy(() => import('./pages/Confidentialite'))
+const Cookies = lazy(() => import('./pages/Cookies'))
 
 // ── Pages Notre Impact ────────────────────────────────────────────────────
 // Actions sur le terrain, listées puis détaillées.
-import Impact from './pages/Impact'
-import ImpactDetail from './pages/ImpactDetail'
+const Impact = lazy(() => import('./pages/Impact'))
+const ImpactDetail = lazy(() => import('./pages/ImpactDetail'))
 
 // ── Pages Médias & Actualités ────────────────────────────────────────────
 // Articles publiés par l'association, listés puis détaillés.
-import MediaEtActualites from './pages/MediaEtActualites'
-import MediaDetail from './pages/MediaDetail'
+const MediaEtActualites = lazy(() => import('./pages/MediaEtActualites'))
+const MediaDetail = lazy(() => import('./pages/MediaDetail'))
 
 // ── Pages Éducation & Sensibilisation ────────────────────────────────────
 // Ateliers pédagogiques proposés aux écoles, listés puis détaillés.
-import Education from './pages/Education'
-import EducationDetail from './pages/EducationDetail'
+const Education = lazy(() => import('./pages/Education'))
+const EducationDetail = lazy(() => import('./pages/EducationDetail'))
 
 // ── Pages admin — sans Navbar ni Footer ──────────────────────────────────
 // Dashboard de gestion de contenu, protégé par ProtectedRoute (JWT requis).
-import LoginAdmin from './pages/admin/LoginAdmin'
-import ProtectedRoute from './components/navigation/ProtectedRoute'
-import DashboardLayout from './components/admin/DashboardLayout'
+const LoginAdmin = lazy(() => import('./pages/admin/LoginAdmin'))
+const DashboardLayout = lazy(() => import('./components/admin/DashboardLayout'))
 // pages/admin/Dashboard.jsx (accueil du dashboard) n'est pas encore branché : la vue d'ensemble
 // sera construite prochainement. Remettre ici `import Dashboard from './pages/admin/Dashboard'` à ce moment-là.
-import MissionsPage from './pages/admin/MissionsPage'
-import MissionFormPage from './pages/admin/MissionFormPage'
-import ServiceCiviqueFormPage from './pages/admin/ServiceCiviqueFormPage'
-import GaleriePage from './pages/admin/GaleriePage'
-import LocationsPage from './pages/admin/LocationsPage'
-import LocationFormPage from './pages/admin/LocationFormPage'
-import MediaPostsPage from './pages/admin/MediaPostsPage'
-import MediaPostFormPage from './pages/admin/MediaPostFormPage'
-import TeamMemberFormPage from './pages/admin/TeamMemberFormPage'
-import AProposPage from './pages/admin/AProposPage'
-import TemoignagesRapportsPage from './pages/admin/TemoignagesRapportsPage'
-import FieldActionsPage from './pages/admin/FieldActionsPage'
-import FieldActionFormPage from './pages/admin/FieldActionFormPage'
+const MissionsPage = lazy(() => import('./pages/admin/MissionsPage'))
+const MissionFormPage = lazy(() => import('./pages/admin/MissionFormPage'))
+const ServiceCiviqueFormPage = lazy(() => import('./pages/admin/ServiceCiviqueFormPage'))
+const GaleriePage = lazy(() => import('./pages/admin/GaleriePage'))
+const LocationsPage = lazy(() => import('./pages/admin/LocationsPage'))
+const LocationFormPage = lazy(() => import('./pages/admin/LocationFormPage'))
+const MediaPostsPage = lazy(() => import('./pages/admin/MediaPostsPage'))
+const MediaPostFormPage = lazy(() => import('./pages/admin/MediaPostFormPage'))
+const TeamMemberFormPage = lazy(() => import('./pages/admin/TeamMemberFormPage'))
+const AProposPage = lazy(() => import('./pages/admin/AProposPage'))
+const TemoignagesRapportsPage = lazy(() => import('./pages/admin/TemoignagesRapportsPage'))
+const FieldActionsPage = lazy(() => import('./pages/admin/FieldActionsPage'))
+const FieldActionFormPage = lazy(() => import('./pages/admin/FieldActionFormPage'))
 
 function App() {
   return (
@@ -76,6 +83,8 @@ function App() {
 
       <RouteScrollReset />
 
+      {/* Suspense général : page de connexion et dashboard (les pages publiques ont le leur dans Layout) */}
+      <Suspense fallback={<PageLoader />}>
       <Routes>
 
         {/* ── Routes publiques — avec Navbar + Footer via Layout ── */}
@@ -180,6 +189,7 @@ function App() {
         </Route>
 
       </Routes>
+      </Suspense>
 
     </BrowserRouter>
   )

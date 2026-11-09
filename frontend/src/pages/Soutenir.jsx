@@ -12,6 +12,9 @@ import AnchorNav from '../components/navigation/AnchorNav'
 // ── Utils
 import { IconPeople, IconGuide, IconGlobe, IconLeaf } from '../utils/icons'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 // ── Liens HelloAsso
 const DON_URL = 'https://www.helloasso.com/associations/sens-solidaires/formulaires/1/widget'
 const ADHESION_URL = 'https://www.helloasso.com/associations/sens-solidaires/adhesions/adhesion-a-l-association-sens-solidaires'
@@ -41,6 +44,9 @@ const ANCHOR_SECTIONS = [
 ]
 
 function Soutenir() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Nous soutenir', description: "Faire un don ou adhérer à Sens Solidaires : soutenez nos actions de solidarité internationale et de protection de l'environnement." })
+
   return (
     <div className="bg-surface min-h-screen">
 
@@ -105,6 +111,7 @@ function Soutenir() {
 
           <div className="overflow-hidden rounded-3xl">
             <img
+              loading="lazy"
               src='/images/placeholders/placeholder-galerie-1.webp'
               alt="Projet soutenu sur le terrain"
               className="w-full h-[360px] lg:h-[460px] object-cover"
@@ -152,6 +159,7 @@ function Soutenir() {
             {/* Don */}
             <article id="don" className="bg-surface-mid rounded-3xl overflow-hidden flex flex-col">
               <img
+                loading="lazy"
                 src='/images/placeholders/placeholder-galerie-2.webp'
                 alt="Faire un don"
                 className="w-full h-56 object-cover"
@@ -189,9 +197,7 @@ function Soutenir() {
                 </div>
 
                 <div className="flex flex-col gap-xs mt-auto">
-                  <a href={DON_URL} target="_blank" rel="noopener noreferrer">
-                    <Button label="Je fais un don →" variant="primary" fullWidth />
-                  </a>
+                  <Button href={DON_URL} label="Je fais un don →" variant="primary" fullWidth />
                   <p className="text-mention text-primary/40 text-center">
                     Paiement 100% sécurisé via HelloAsso
                   </p>
@@ -202,6 +208,7 @@ function Soutenir() {
             {/* Adhésion */}
             <article id="adhesion" className="bg-primary rounded-3xl overflow-hidden flex flex-col">
               <img
+                loading="lazy"
                 src='/images/placeholders/placeholder-galerie-3.webp'
                 alt="Adhérer à l'association"
                 className="w-full h-56 object-cover"
@@ -244,9 +251,7 @@ function Soutenir() {
                 </div>
 
                 <div className="flex flex-col gap-xs mt-auto">
-                  <a href={ADHESION_URL} target="_blank" rel="noopener noreferrer">
-                    <Button label="J'adhère à l'association →" variant="light" fullWidth />
-                  </a>
+                  <Button href={ADHESION_URL} label="J'adhère à l'association →" variant="light" fullWidth />
                   <p className="text-mention text-surface/50 text-center">
                     Adhésion en ligne via HelloAsso
                   </p>
@@ -282,13 +287,12 @@ function Soutenir() {
               ))}
             </div>
 
-            <a href="/rapports-activite">
-              <Button label="Consulter nos rapports d'activité →" variant="secondary" />
-            </a>
+            <Button to="/rapports-activite" label="Consulter nos rapports d'activité →" variant="secondary" />
           </div>
 
           <div className="overflow-hidden rounded-3xl">
             <img
+              loading="lazy"
               src="/images/placeholders/placeholder-rapport-activite.webp"
               alt="Rapport d'activité"
               className="w-full h-72 lg:h-96 object-cover"

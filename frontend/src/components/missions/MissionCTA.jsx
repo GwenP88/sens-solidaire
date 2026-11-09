@@ -1,9 +1,6 @@
 // MissionCTA.jsx
 // Barre de CTAs d'une section mission — bouton primaire optionnel + témoignages + contact
 
-// ── Router
-import { Link } from 'react-router-dom'
-
 // ── Composants UI
 import Button from '../ui/Button'
 
@@ -13,31 +10,21 @@ function MissionCTA({ primaryAction, secondaryAction, contactUrl = '/contact' })
 
       {primaryAction && (
         primaryAction.external ? (
-          <a href={primaryAction.href} target="_blank" rel="noopener noreferrer" className="flex-1">
-            <Button label={primaryAction.label} variant="primary" fullWidth />
-          </a>
+          <Button href={primaryAction.href} className="flex-1" label={primaryAction.label} variant="primary" fullWidth />
         ) : (
-          <Link to={primaryAction.href} className="flex-1">
-            <Button label={primaryAction.label} variant="primary" fullWidth />
-          </Link>
+          <Button to={primaryAction.href} className="flex-1" label={primaryAction.label} variant="primary" fullWidth />
         )
       )}
 
       {secondaryAction && (
         secondaryAction.external ? (
-          <a href={secondaryAction.href} target="_blank" rel="noopener noreferrer" className="flex-1">
-            <Button label={secondaryAction.label} variant="secondary" fullWidth />
-          </a>
+          <Button href={secondaryAction.href} className="flex-1" label={secondaryAction.label} variant="secondary" fullWidth />
         ) : (
-          <Link to={secondaryAction.href} className="flex-1">
-            <Button label={secondaryAction.label} variant="secondary" fullWidth />
-          </Link>
+          <Button to={secondaryAction.href} className="flex-1" label={secondaryAction.label} variant="secondary" fullWidth />
         )
       )}
 
-      <Link to={contactUrl} className="flex-1">
-        <Button label="Nous contacter →" variant="secondary" fullWidth />
-      </Link>
+      <Button to={contactUrl} className="flex-1" label="Nous contacter →" variant="secondary" fullWidth />
 
     </div>
   )

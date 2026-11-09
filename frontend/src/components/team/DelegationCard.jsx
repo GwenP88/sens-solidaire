@@ -21,7 +21,7 @@ function DelegationCard({ pays, flag, image, lieu, contacts }) {
         {/* h3-style mb-0 : dans flex flex-col gap-xs, marge redondante avec gap */}
         <div className="flex items-center gap-xs">
           <div className="w-7 h-7 rounded-full overflow-hidden shadow-sm shrink-0">
-            <img src={flag} alt={pays} className="w-full h-full object-cover" />
+            <img loading="lazy" src={flag} alt={pays} className="w-full h-full object-cover" />
           </div>
           <p className="h3-style text-surface mb-0">Délégation nationale — {pays}</p>
         </div>

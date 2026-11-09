@@ -17,9 +17,10 @@ function FooterBrand({ logoSize = 'h-12' }) {
       <p className="text-body text-surface">Une association engagée pour un monde plus solidaire et durable.</p>
       <p className="text-body text-surface/80">Sur le terrain, nous agissons aux côtés des communautés locales pour un impact positif et durable.</p>
       <div className="flex gap-md">
-        {SOCIAL_LINKS.map(({ icon: Icon, href }) => (
-          <a key={href} href={href}>
-            <Icon className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
+        {SOCIAL_LINKS.map(({ name, icon: Icon, href }) => (
+          // Lien externe : nouvel onglet ; aria-label = texte lu à la place de l'icône (tâche 173)
+          <a key={href} href={href} target="_blank" rel="noopener noreferrer" aria-label={`${name} (nouvel onglet)`}>
+            <Icon aria-hidden="true" className="text-surface text-2xl hover:text-accent-green cursor-pointer transition-colors" />
           </a>
         ))}
       </div>

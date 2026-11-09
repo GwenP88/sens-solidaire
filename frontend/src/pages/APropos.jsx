@@ -21,6 +21,9 @@ import AnchorNav from '../components/navigation/AnchorNav'
 // ── Utils
 import { IconHeart, IconGlobe, IconPeople, IconLeaf, IconGuide } from '../utils/icons'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 // ── Données statiques — valeurs de l'association (contenu fixe)
 const VALEURS = [
   { icon: IconHeart, titre: "Solidarité", description: "Placer l'humain au cœur de chaque action." },
@@ -47,6 +50,9 @@ const ANCHOR_SECTIONS = [
 ]
 
 function APropos() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'À propos', description: "Découvrez Sens Solidaires : notre histoire, nos valeurs, notre équipe, nos délégations et nos partenaires." })
+
 // ── État local — membres direction + bureau pour l'aperçu équipe
 const [direction, setDirection] = useState([])
 const [bureau, setBureau] = useState([])
@@ -88,6 +94,7 @@ useEffect(() => {
           </div>
           <div className="w-full xl:w-2/5 shrink-0">
             <img
+              loading="lazy"
               src="/images/design/groupe-jeune-2.jpg"
               alt="Sens Solidaires sur le terrain"
               className="w-full h-96 object-cover rounded-2xl"
@@ -168,12 +175,11 @@ useEffect(() => {
             <p className="text-body text-primary/80">
               Sens Solidaires agit en toute transparence. Nos comptes sont contrôlés et nos rapports d'activité sont publiés chaque année.
             </p>
-            <a href="/rapports-activite">
-              <Button label="Consulter nos rapports d'activité →" variant="secondary" />
-            </a>
+            <Button to="/rapports-activite" label="Consulter nos rapports d'activité →" variant="secondary" />
           </div>
           <div className="w-full md:w-2/5 shrink-0">
             <img
+              loading="lazy"
               src="/images/placeholders/placeholder-rapport-activite.webp"
               alt="Rapport d'activité"
               className="w-full h-64 object-cover rounded-2xl"

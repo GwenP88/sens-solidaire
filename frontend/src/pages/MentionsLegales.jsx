@@ -2,9 +2,16 @@
 // Page mentions légales
 
 // ── Composants UI
+import { Link } from 'react-router-dom'
 import ScrollToTop from '../components/ui/ScrollToTop'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function MentionsLegales() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Mentions légales', description: "Mentions légales du site de l'association Sens Solidaires." })
+
   return (
     <div className="bg-surface min-h-screen">
 
@@ -56,7 +63,7 @@ function MentionsLegales() {
             <h2 className="h2-style text-primary mb-0">Données personnelles</h2>
             <p className="text-body text-primary/80">
               Pour en savoir plus sur le traitement de vos données personnelles, consultez notre{' '}
-              <a href="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</a>.
+              <Link to="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</Link>.
             </p>
           </section>
 
@@ -64,7 +71,7 @@ function MentionsLegales() {
             <h2 className="h2-style text-primary mb-0">Cookies</h2>
             <p className="text-body text-primary/80">
               Pour en savoir plus sur les cookies utilisés sur ce site, consultez notre{' '}
-              <a href="/cookies" className="link-inline text-accent-2">politique de cookies</a>.
+              <Link to="/cookies" className="link-inline text-accent-2">politique de cookies</Link>.
             </p>
           </section>
 

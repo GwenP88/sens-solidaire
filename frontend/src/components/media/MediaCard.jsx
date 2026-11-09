@@ -27,6 +27,7 @@ function MediaCard({ title, short_description, theme, date, image_url, slug, ext
       {/* Image — hauteur fixe en portrait, largeur fixe en paysage, shrink-0 dans les deux cas */}
       <div className="w-full h-48 md:w-64 md:h-full lg:w-full lg:h-48 shrink-0 overflow-hidden">
         <img
+          loading="lazy"
           src={image_url || (theme === 'Newsletter' ? '/images/placeholders/placeholder-newsletter.webp' : '/images/placeholders/placeholder-photo.webp')}
           alt={title}
           className="w-full h-full object-cover"

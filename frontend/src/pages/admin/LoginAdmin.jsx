@@ -7,8 +7,12 @@ import { useNavigate } from 'react-router-dom'
 
 // ── API
 import { loginAdmin } from '../../services/api'
+import useSEO from '../../hooks/useSEO'
 
 function LoginAdmin() {
+  // Dashboard : titre d'onglet clair et page exclue de Google (tâche 174)
+  useSEO({ title: 'Connexion', noindex: true })
+
   const navigate = useNavigate()
 
   // États du formulaire

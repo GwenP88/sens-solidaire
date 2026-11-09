@@ -39,6 +39,9 @@ import {
   IconFileMission, IconCheck, IconTimes,
 } from '../utils/icons'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 // ── Icônes fixes pour les 7 étapes "Comment partir"
 const HOW_TO_GO_ICONS = [
   IconFlight, IconContact, IconBooking,
@@ -67,6 +70,9 @@ function MissionDetail() {
     }
     loadMission()
   }, [slug])
+
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: mission?.title, description: mission?.short_description || mission?.description, image: mission?.image_url })
 
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (error || !mission || mission.type !== 'volontariat_individuel') return (
@@ -169,6 +175,7 @@ function MissionDetail() {
             </div>
             <div className="w-full lg:w-1/3 shrink-0">
               <img
+                loading="lazy"
                 src={mission.photo_section_url || '/images/placeholders/placeholder-galerie-1.webp'}
                 alt={mission.photo_section_alt || mission.title}
                 className="w-full h-72 object-cover rounded-xl"
@@ -254,9 +261,7 @@ function MissionDetail() {
               Depuis plus de 20 ans, des centaines de volontaires mettent leur temps, leur énergie et leurs compétences au service de projets portés par nos partenaires locaux.
             </p>
           </div>
-          <a href={`/notre-impact?pays=${mission.country}`}>
-            <Button label="Voir toutes les actions →" variant="secondary" />
-          </a>
+          <Button to={`/notre-impact?pays=${mission.country}`} label="Voir toutes les actions →" variant="secondary" />
         </div>
         <Carousel
             items={actions.slice(0, 4)}
@@ -346,15 +351,11 @@ function MissionDetail() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-md mt-6">
             <div className="p-4 flex flex-col gap-sm">
               <h3 className="h3-style text-primary mb-0">Prêt à vous engager ?</h3>
-              <a href={mission.helloasso_url} target="_blank" rel="noopener noreferrer" className="block w-full">
-                <Button label="Je pars en mission →" variant="primary" fullWidth />
-              </a>
+              <Button href={mission.helloasso_url} label="Je pars en mission →" variant="primary" fullWidth />
             </div>
             <div className="p-4 flex flex-col gap-sm">
               <h3 className="h3-style text-primary mb-0">Besoin de plus d'informations ?</h3>
-              <a href="/contact">
-                <Button label="Nous contacter →" variant="secondary" fullWidth />
-              </a>
+              <Button to="/contact" label="Nous contacter →" variant="secondary" fullWidth />
             </div>
           </div>
 
@@ -480,9 +481,7 @@ function MissionDetail() {
                 <p className="text-body text-primary/60">Votre guide complet pour préparer votre mission.</p>
               </div>
               {guidePdf
-                ? <a href={guidePdf.file_url} target="_blank" rel="noopener noreferrer">
-                    <Button label="Télécharger ↓" variant="secondary" />
-                  </a>
+                ? <Button href={guidePdf.file_url} label="Télécharger ↓" variant="secondary" />
                 : <Button label="Télécharger ↓" variant="secondary" disabled />
               }
             </div>
@@ -491,9 +490,7 @@ function MissionDetail() {
                 <h3 className="h3-style text-primary mb-0">Recommandations officielles</h3>
                 <p className="text-body text-primary/60">Consultez les informations officielles avant votre départ.</p>
               </div>
-              <a href={mission.ministry_url || 'https://www.diplomatie.gouv.fr'} target="_blank" rel="noopener noreferrer">
-                <Button label="Consulter →" variant="secondary" />
-              </a>
+              <Button href={mission.ministry_url || 'https://www.diplomatie.gouv.fr'} label="Consulter →" variant="secondary" />
             </div>
           </div>
         </section>
@@ -517,9 +514,7 @@ function MissionDetail() {
                     Chaque mission est une expérience unique. Découvrez les récits de volontaires partis avant vous.
                   </p>
                 </div>
-                <a href={testimonialsLink}>
-                  <Button label="Voir tous les témoignages →" variant="primary" />
-                </a>
+                <Button to={testimonialsLink} label="Voir tous les témoignages →" variant="primary" />
               </div>
               <Carousel
                 items={mission.testimonials}
@@ -549,9 +544,7 @@ function MissionDetail() {
                 label="Vous êtes partis en mission ? Racontez-nous →"
                 variant="light"
               />
-              <a href={testimonialsLink}>
-                <Button label="Voir tous les témoignages →" variant="primary" />
-              </a>
+              <Button to={testimonialsLink} label="Voir tous les témoignages →" variant="primary" />
             </div>
           )}
         </section>
@@ -568,6 +561,7 @@ function MissionDetail() {
           color="primary"
           renderSlide={(item) => (
             <img
+              loading="lazy"
               src={item.file_url}
               alt={item.label || ''}
               className="w-full h-56 object-cover rounded-xl"

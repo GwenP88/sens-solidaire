@@ -25,7 +25,13 @@ import ImpactCard from '../components/actions/ImpactCard'
 import { ODDS } from '../utils/odds'
 import { FILTERS_ACTION_TAGS, buildCountryOptions, getFilterConfigCountry } from '../utils/filters'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function NotreImpact() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Notre impact', description: "Puits, potagers, reforestation, éducation : découvrez les actions de terrain menées par Sens Solidaires dans le monde, filtrables par pays." })
+
   // ── État local — actions + chargement + filtre thématique (chips)
   const [actions, setActions] = useState([])
   const [loading, setLoading] = useState(true)
@@ -85,6 +91,7 @@ function NotreImpact() {
           {ODDS.map(odd => (
             <div key={odd.n} className="flex flex-col items-center gap-xs w-20 text-center">
               <img
+                loading="lazy"
                 src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
                 alt={`ODD ${odd.n}`}
                 className="w-full rounded-lg object-cover"

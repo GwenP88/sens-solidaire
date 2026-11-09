@@ -3,6 +3,7 @@
 
 // ── React
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 // ── Composants UI
 import Button from '../ui/Button'
@@ -171,7 +172,7 @@ function ContactForm() {
           />
           <span className="text-caption text-primary/60 leading-relaxed">
             J'accepte que mes données soient utilisées pour traiter ma demande conformément à la {' '}
-                <a href="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</a>.
+                <Link to="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</Link>.
           </span>
         </label>
         {errors.rgpd && <span className="text-caption text-red-500">{errors.rgpd}</span>}

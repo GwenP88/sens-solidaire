@@ -21,7 +21,13 @@ import MediaCard from '../components/media/MediaCard'
 // ── Utils
 import { FILTER_CONFIG_MEDIAS } from '../utils/filters'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function MediaEtActualites() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Médias & actualités', description: "Articles, vidéos, newsletters et passages dans les médias : suivez l'actualité de l'association Sens Solidaires." })
+
   // ── État local — articles + chargement + filtres actifs
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)

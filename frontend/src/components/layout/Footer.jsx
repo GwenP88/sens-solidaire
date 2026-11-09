@@ -3,6 +3,9 @@
 // Factorisé en composants (FooterBrand, FooterLinksColumn, FooterContact, FooterCta) —
 // le contenu n'est plus dupliqué, seule la disposition (largeurs, gap, ordre) varie par breakpoint
 
+// ── Router
+import { Link } from 'react-router-dom'
+
 // ── Composants layout
 import FooterCta from './FooterCta'
 import FooterBrand from './FooterBrand'
@@ -90,9 +93,9 @@ function Footer({ hideCta = false }) {
           © 2026 Sens Solidaires. Tous droits réservés.
         </p>
         <div className="flex gap-md">
-          <a href="/mentions-legales" className="link-footer text-surface/50 hover:text-surface">Mentions légales</a>
-          <a href="/confidentialite" className="link-footer text-surface/50 hover:text-surface">Confidentialité</a>
-          <a href="/cookies" className="link-footer text-surface/50 hover:text-surface">Cookies</a>
+          <Link to="/mentions-legales" className="link-footer text-surface/50 hover:text-surface">Mentions légales</Link>
+          <Link to="/confidentialite" className="link-footer text-surface/50 hover:text-surface">Confidentialité</Link>
+          <Link to="/cookies" className="link-footer text-surface/50 hover:text-surface">Cookies</Link>
         </div>
       </div>
 

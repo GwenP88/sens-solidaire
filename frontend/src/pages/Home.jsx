@@ -28,6 +28,9 @@ import TestimonialForm from '../components/testimonials/TestimonialForm'
 // ── Utils
 import { ODDS } from '../utils/odds'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 // ── Données statiques — 4 types de missions (contenu fixe, non géré en BDD)
 const MISSION_TYPES = [
   {
@@ -73,6 +76,9 @@ const MISSION_TYPES = [
 ]
 
 function Home() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({})
+
   const [testimonials, setTestimonials] = useState([])
   const [actions, setActions] = useState([])
   const [partners, setPartners] = useState([])
@@ -171,6 +177,7 @@ function Home() {
           <div className="flex flex-wrap justify-center gap-xs">
             {ODDS.map(odd => (
               <img
+                loading="lazy"
                 key={odd.n}
                 src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
                 alt={`ODD ${odd.n}`}
@@ -178,9 +185,7 @@ function Home() {
               />
             ))}
           </div>
-          <a href="https://sdgs.un.org/goals" target="_blank" rel="noopener noreferrer">
-            <Button variant="secondary" label="En savoir plus sur les ODD →" />
-          </a>
+          <Button href="https://sdgs.un.org/goals" variant="secondary" label="En savoir plus sur les ODD →" />
         </div>
 
         <Carousel
@@ -236,6 +241,7 @@ function Home() {
           {partners.map(partner => {
             const logo = (
               <img 
+                loading="lazy" 
                 src={partner.logo_url} alt={`Logo de ${partner.name}`}
                 className="w-full h-full object-contain p-2" />
             )

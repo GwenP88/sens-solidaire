@@ -5,7 +5,7 @@
 import { useState, useEffect, useRef } from 'react'
 
 // ── Router
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 
 // ── API ──
 import { fetchMissions, fetchTestimonials, fetchFieldActions, fetchServiceCiviqueGallery, fetchTypeGallery } from '../services/api'
@@ -36,7 +36,13 @@ import {
   IconHand, IconPeople, IconHeart, IconLeaf, IconPayment
 } from '../utils/icons'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function Missions() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Nos missions', description: "Volontariat international, Service Civique, groupes jeunes et congés solidaires : découvrez les missions humanitaires et environnementales proposées par Sens Solidaires.", image: '/images/design/hero/hero-missions.jpg' })
+
   const [missions, setMissions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -346,9 +352,7 @@ function Missions() {
                     Découvrez les retours de nos volontaires en service civique.
                   </p>
                 </div>
-                <Link to="/temoignages?type=service_civique">
-                  <Button label="Voir tous les témoignages →" variant="primary" />
-                </Link>
+                <Button to="/temoignages?type=service_civique" label="Voir tous les témoignages →" variant="primary" />
               </div>
               <Carousel
                 items={testimonialsServiceCivique.slice(0, 10)}
@@ -404,7 +408,7 @@ function Missions() {
                 showPagination={true}
                 color="primary"
                 renderSlide={(item) => (
-                  <img src={item.file_url} alt={item.label || ''} className="w-full h-56 object-cover rounded-xl" />
+                  <img loading="lazy" src={item.file_url} alt={item.label || ''} className="w-full h-56 object-cover rounded-xl" />
                 )}
               />
             </div>
@@ -418,6 +422,7 @@ function Missions() {
             >
               <div className="flex flex-col lg:flex-row gap-md">
                 <img
+                  loading="lazy"
                   src={selectedCountryCard.photo_hero_url}
                   alt={selectedCountryCard.photo_hero_alt || selectedCountryCard.title}
                   className="w-full lg:w-[280px] h-64 object-cover rounded-xl shrink-0"
@@ -497,9 +502,7 @@ function Missions() {
                     Rencontres, découvertes, projets de terrain, moments de partage... découvrez quelques souvenirs de nos missions de groupe au Kenya et au Sénégal.
                   </p>
                 </div>
-                <Link to="/temoignages?type=groupe_jeunes">
-                  <Button label="Voir tous les témoignages →" variant="primary" />
-                </Link>
+                <Button to="/temoignages?type=groupe_jeunes" label="Voir tous les témoignages →" variant="primary" />
               </div>
               <Carousel
                 items={testimonialsGroupeJeunes.slice(0, 10)}
@@ -555,7 +558,7 @@ function Missions() {
                 showPagination={true}
                 color="primary"
                 renderSlide={(item) => (
-                  <img src={item.file_url} alt={item.label || ''} className="w-full h-56 object-cover rounded-xl" />
+                  <img loading="lazy" src={item.file_url} alt={item.label || ''} className="w-full h-56 object-cover rounded-xl" />
                 )}
               />
             </div>
@@ -608,9 +611,7 @@ function Missions() {
                     Découvrez quelques moments vécus lors de nos missions solidaires réalisées avec des entreprises partenaires au Kenya et au Sénégal.
                   </p>
                 </div>
-                <Link to="/temoignages?type=conge_solidaire">
-                  <Button label="Voir tous les témoignages →" variant="primary" />
-                </Link>
+                <Button to="/temoignages?type=conge_solidaire" label="Voir tous les témoignages →" variant="primary" />
               </div>
               <Carousel
                 items={testimonialsCongeSolidaire.slice(0, 10)}
@@ -666,7 +667,7 @@ function Missions() {
                 showPagination={true}
                 color="primary"
                 renderSlide={(item) => (
-                  <img src={item.file_url} alt={item.label || ''} className="w-full h-56 object-cover rounded-xl" />
+                  <img loading="lazy" src={item.file_url} alt={item.label || ''} className="w-full h-56 object-cover rounded-xl" />
                 )}
               />
             </div>

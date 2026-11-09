@@ -13,7 +13,13 @@ import ScrollToTop from '../components/ui/ScrollToTop'
 // ── Composants métier
 import RapportCard from '../components/ui/RapportCard'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function RapportsActivite() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: "Rapports d'activité", description: "Consultez les rapports d'activité annuels de Sens Solidaires : actions menées, bilan et transparence financière." })
+
   const [rapports, setRapports] = useState([])
 
   useEffect(() => {

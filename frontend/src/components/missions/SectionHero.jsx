@@ -29,7 +29,7 @@ function SectionHero({ title, audience, description, image }) {
         {/* Illustration décorative — optionnelle, visible uniquement sur desktop */}
         {image && (
           <div className="hidden lg:block w-full lg:w-1/3 shrink-0">
-            <img src={image} alt="" aria-hidden="true" className="w-full object-contain max-h-40" />
+            <img loading="lazy" src={image} alt="" aria-hidden="true" className="w-full object-contain max-h-40" />
           </div>
         )}
       </div>

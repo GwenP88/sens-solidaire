@@ -28,7 +28,13 @@ import RapportCard from '../components/ui/RapportCard'
 // ── Utils
 import { buildCountryOptions, getFilterConfigTemoignages } from '../utils/filters'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function Testimonials() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Témoignages', description: "Ils sont partis en mission avec Sens Solidaires : lisez les témoignages et rapports de mission de nos volontaires, ou racontez votre expérience." })
+
   const [searchParams] = useSearchParams()
   const [filters, setFilters] = useState({
     type: searchParams.get('type') || null,

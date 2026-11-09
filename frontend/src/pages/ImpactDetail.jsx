@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react'
 
 // ── Router
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 // ── API
 import { fetchFieldActionBySlug } from '../services/api'
@@ -22,6 +22,9 @@ import Section from '../components/ui/Section'
 // ── Utils
 import { ODDS_LABELS } from '../utils/odds'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function ImpactDetail() {
   const { slug } = useParams()
   const [action, setAction] = useState(null)
@@ -35,11 +38,14 @@ function ImpactDetail() {
       .finally(() => setLoading(false))
   }, [slug])
 
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: action?.title, description: action?.description || action?.content, image: action?.image_url })
+
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (error || !action) return (
     <div className="p-12 text-center">
       <p className="text-body text-primary/50 italic">Action introuvable.</p>
-      <a href="/notre-impact" className="link-inline text-accent">← Retour aux actions</a>
+      <Link to="/notre-impact" className="link-inline text-accent">← Retour aux actions</Link>
     </div>
   )
 
@@ -59,9 +65,9 @@ function ImpactDetail() {
 
         {/* Lien retour + titre */}
         <div className="flex flex-col gap-sm py-4">
-          <a href="/notre-impact" className="link-nav text-primary/50 hover:text-primary">
+          <Link to="/notre-impact" className="link-nav text-primary/50 hover:text-primary">
             ← Retour aux actions
-          </a>
+          </Link>
         </div>
 
         {/* Grid texte + aside sticky */}
@@ -83,6 +89,7 @@ function ImpactDetail() {
                 {action.odds.map(o => (
                   <div key={o.odd_number} className="flex items-center gap-xs">
                     <img
+                      loading="lazy"
                       src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(o.odd_number).padStart(2, '0')}.jpg`}
                       alt={`ODD ${o.odd_number}`}
                       className="w-16 h-16 rounded shrink-0 object-cover"
@@ -91,9 +98,7 @@ function ImpactDetail() {
                   </div>
                 ))}
               </div>
-              <a href="https://www.un.org/sustainabledevelopment/fr/" target="_blank" rel="noopener noreferrer" className="shrink-0">
-                <Button label="En savoir plus sur les 17 ODD →" variant="primary" />
-              </a>
+              <Button href="https://www.un.org/sustainabledevelopment/fr/" className="shrink-0" label="En savoir plus sur les 17 ODD →" variant="primary" />
             </div>
           </aside>
 
@@ -109,7 +114,7 @@ function ImpactDetail() {
             color="primary"
             renderSlide={(media) => (
               <div className="w-full h-56 overflow-hidden rounded-xl">
-                <img src={media.file_url} alt="" className="w-full h-full object-cover" />
+                <img loading="lazy" src={media.file_url} alt="" className="w-full h-full object-cover" />
               </div>
             )}
           />

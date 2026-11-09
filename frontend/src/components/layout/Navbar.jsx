@@ -104,9 +104,10 @@ function Navbar() {
           {/* ── Accueil ── */}
           <Link
             to="/"
+            aria-label="Accueil"
             className={`link-nav text-surface hover:text-accent font-bold ${location.pathname === '/' ? 'underline underline-offset-4' : ''}`}
           >
-            <GrHomeRounded />
+            <GrHomeRounded aria-hidden="true" />
           </Link>
 
           {/* ── DROPDOWN "NOS MISSIONS" — 2 colonnes ── */}
@@ -215,9 +216,7 @@ function Navbar() {
             FR <IoChevronDownSharp className="text-xs" />
           </button>
           */}
-          <Link to="/soutenir">
-            <Button label="Faire un don" variant="primary" />
-          </Link>
+          <Button to="/soutenir" label="Faire un don" variant="primary" />
           <button
             className="lg:hidden text-surface text-2xl"
             onClick={() => {

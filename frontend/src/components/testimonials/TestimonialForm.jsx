@@ -225,6 +225,7 @@ function TestimonialForm({ onClose }) {
         /> 
         {photoPreview && (
           <img
+            loading="lazy"
             src={photoPreview}
             alt="Aperçu de la photo"
             className="w-20 h-20 rounded-full object-cover mt-2"

@@ -4,7 +4,13 @@
 // ── Composants UI
 import ScrollToTop from '../components/ui/ScrollToTop'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function Confidentialite() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Politique de confidentialité', description: "Comment Sens Solidaires collecte, utilise et protège vos données personnelles." })
+
   return (
     <div className="bg-surface min-h-screen">
 

@@ -21,6 +21,9 @@ import Modal from '../components/ui/Modal'
 // ── Utils
 import { IconPin, IconGlobe, IconPerson } from '../utils/icons'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 // Construit l'URL d'intégration à partir de ce que la cliente a collé.
 // Accepte : un lien Google Maps normal (@lat,lng extrait automatiquement)
 // ou, par rétrocompatibilité, l'ancien format d'intégration déjà complet.
@@ -62,6 +65,9 @@ function LocationDetail() {
   }, [slug])
 
   // ── États de chargement et d'erreur
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: location?.name, description: location?.description, image: location?.image_url })
+
   if (loading) {
     return (
       <p className="text-body text-primary/50 italic p-12">
@@ -285,6 +291,7 @@ function LocationDetail() {
                   className="overflow-hidden rounded-xl"
                 >
                   <img
+                    loading="lazy"
                     src={media.file_url}
                     alt=""
                     onError={e => {
@@ -306,6 +313,7 @@ function LocationDetail() {
                 <div className="w-full h-56 overflow-hidden rounded-xl">
 
                   <img
+                    loading="lazy"
                     src={media.file_url}
                     alt=""
                     onError={e => {
@@ -333,6 +341,7 @@ function LocationDetail() {
         >
 
           <img
+            loading="lazy"
             src={
               location.delegation.image_url ||
               '/images/placeholders/placeholder-delegation.webp'

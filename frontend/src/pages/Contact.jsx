@@ -11,7 +11,13 @@ import Section from '../components/ui/Section'
 // ── Composants formulaire
 import ContactForm from '../components/forms/ContactForm'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function Contact() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Contact', description: "Une question sur une mission, un partenariat ou une action éducative ? Contactez l'association Sens Solidaires, en France et en Suisse.", image: '/images/design/hero/contact-hero.png' })
+
   return (
     <div className="bg-surface min-h-screen">
 
@@ -54,6 +60,7 @@ function Contact() {
           {/* Photo — cachée mobile, visible 768+, 1/3 desktop */}
           <div className="hidden md:block xl:w-1/3 xl:shrink-0">
             <img
+              loading="lazy"
               src="/images/design/contact.jpg"
               alt="Équipe Sens Solidaires"
               className="w-full h-64 xl:h-full object-cover rounded-2xl"

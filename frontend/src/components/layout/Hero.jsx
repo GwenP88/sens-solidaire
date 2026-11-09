@@ -30,9 +30,7 @@ function Hero() {
 
         {/* Boutons CTA */}
         <div className="flex gap-sm">
-          <a href="/missions">
-            <Button label="Partir en mission →" variant="primary" />
-          </a>
+          <Button to="/missions" label="Partir en mission →" variant="primary" />
         </div>
 
       </div>

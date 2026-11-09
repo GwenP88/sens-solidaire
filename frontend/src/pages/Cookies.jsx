@@ -4,7 +4,13 @@
 // ── Composants UI
 import ScrollToTop from '../components/ui/ScrollToTop'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function Cookies() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Politique de cookies', description: "Les cookies utilisés sur le site de Sens Solidaires et comment gérer votre consentement." })
+
   return (
     <div className="bg-surface min-h-screen">
 

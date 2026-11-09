@@ -25,6 +25,9 @@ import ImpactCard from '../components/actions/ImpactCard'
 // ── Utils
 import { ODDS } from '../utils/odds'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 // ── Sections de l'AnchorNav
 const ANCHOR_SECTIONS = [
   { label: "Label Éco-École",    id: "eco-ecole"       },
@@ -70,13 +73,9 @@ function InfoSidebar({ public: publicLabel, tarif, ctas = [], bg = 'bg-surface-m
         <div className="flex flex-col gap-sm">
           {ctas.map((cta, i) =>
             cta.external ? (
-              <a key={i} href={cta.href} target="_blank" rel="noopener noreferrer">
-                <Button label={cta.label} variant={cta.variant || 'secondary'} fullWidth />
-              </a>
+              <Button key={i} href={cta.href} label={cta.label} variant={cta.variant || 'secondary'} fullWidth />
             ) : (
-              <a key={i} href={cta.href}>
-                <Button label={cta.label} variant={cta.variant || 'secondary'} fullWidth />
-              </a>
+              <Button key={i} to={cta.href} label={cta.label} variant={cta.variant || 'secondary'} fullWidth />
             )
           )}
         </div>
@@ -86,6 +85,9 @@ function InfoSidebar({ public: publicLabel, tarif, ctas = [], bg = 'bg-surface-m
 }
 
 function Education() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Éducation & sensibilisation', description: "Ateliers pédagogiques, correspondance scolaire et relais Éco-École : les actions éducatives de Sens Solidaires pour les écoles et les jeunes.", image: '/images/design/hero/hero-education.jpg' })
+
   const [items, setItems] = useState([])
   const [actionsFrance, setActionsFrance] = useState([])
   const [loading, setLoading] = useState(true)
@@ -131,6 +133,7 @@ function Education() {
           {ODDS.map(odd => (
             <div key={odd.n} className="flex flex-col items-center gap-xs w-20 text-center">
               <img
+                loading="lazy"
                 src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
                 alt={`ODD ${odd.n}`}
                 className="w-full rounded-lg object-cover"
@@ -261,7 +264,7 @@ function Education() {
             color="primary"
             renderSlide={(url) => (
               <div className="w-full h-56 overflow-hidden rounded-xl">
-                <img src={url} alt="" className="w-full h-full object-cover" />
+                <img loading="lazy" src={url} alt="" className="w-full h-full object-cover" />
               </div>
             )}
           />

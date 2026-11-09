@@ -15,6 +15,7 @@ function LocationCard({ slug, name, image_url, fromMissionSlug }) {
         {/* Image — hauteur fixe, ne rétrécit pas */}
         <div className="h-36 md:h-40 lg:h-44 shrink-0 overflow-hidden">
           <img
+            loading="lazy"
             src={image_url || '/images/placeholders/placeholder-photo.webp'}
             alt={name}
             onError={e => { e.target.src = '/images/placeholders/placeholder-action-1.webp' }}

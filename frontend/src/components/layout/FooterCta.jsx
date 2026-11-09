@@ -29,9 +29,7 @@ const buttons = FOOTER_CTA_BUTTONS[resolvedRoute] || FOOTER_CTA_BUTTONS.default
         </p>
         <div className="flex flex-wrap gap-sm mt-2">
           {buttons.map(btn => (
-            <a key={btn.href} href={btn.href}>
-              <Button label={btn.label} variant={btn.variant} />
-            </a>
+            <Button key={btn.href} to={btn.href} label={btn.label} variant={btn.variant} />
           ))}
         </div>
       </div>

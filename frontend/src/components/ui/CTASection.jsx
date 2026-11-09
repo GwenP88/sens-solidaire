@@ -14,9 +14,7 @@ function CTASection({ title, text, ctaLabel, ctaHref, onCtaClick }) {
         {onCtaClick ? (
           <Button label={ctaLabel} variant="primary" onClick={onCtaClick} />
         ) : (
-          <a href={ctaHref}>
-            <Button label={ctaLabel} variant="primary" />
-          </a>
+          <Button to={ctaHref} label={ctaLabel} variant="primary" />
         )}
       </div>
     </section>

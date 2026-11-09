@@ -18,6 +18,9 @@ import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import CTASection from '../components/ui/CTASection'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 function EducationDetail() {
   const { slug } = useParams()
   const [item, setItem] = useState(null)
@@ -29,6 +32,9 @@ function EducationDetail() {
       .catch(console.error)
       .finally(() => setLoading(false))
   }, [slug])
+
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: item?.title, description: item?.content, image: item?.image_url })
 
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (!item) return (
@@ -78,13 +84,9 @@ function EducationDetail() {
               {item.duration && <p><strong>Durée :</strong> {item.duration}</p>}
             </div>
             {item.external_url && (
-              <a href={item.external_url} target="_blank" rel="noopener noreferrer">
-                <Button label="Télécharger la fiche →" variant="primary" fullWidth />
-              </a>
+              <Button href={item.external_url} label="Télécharger la fiche →" variant="primary" fullWidth />
             )}
-            <a href="/contact">
-              <Button label="Nous contacter →" variant="secondary" fullWidth />
-            </a>
+            <Button to="/contact" label="Nous contacter →" variant="secondary" fullWidth />
           </aside>
 
         </div>

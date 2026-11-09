@@ -20,6 +20,9 @@ import ScrollToTop from '../components/ui/ScrollToTop'
 import YouTubeSlide from '../components/media/YouTubeSlide'
 import YouTubeModal from '../components/media/YouTubeModal'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 // Ligne du bloc Informations : « THÈME : Vie de l'association »
 // Mêmes typographies qu'avant (eyebrow pour le libellé, body pour la valeur)
 function InfoRow({ label, children }) {
@@ -48,6 +51,9 @@ function MediaDetail() {
   }, [slug])
 
   // ── États de chargement et d'erreur
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: post?.title, description: post?.lead || post?.content, image: post?.image_url })
+
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (error || !post) return (
     <div className="p-12 text-center">
@@ -81,7 +87,7 @@ function MediaDetail() {
   // ── Rendu d'une ressource dans le contenu
   const renderContentMedia = (m, i) => {
     if (m.file_type === 'image') return (
-      <img key={i} src={m.file_url} alt="" className="w-full rounded-2xl object-cover" />
+      <img loading="lazy" key={i} src={m.file_url} alt="" className="w-full rounded-2xl object-cover" />
     )
     if (m.file_type === 'video') return (
       <div key={i} className="aspect-video w-full rounded-2xl overflow-hidden">
@@ -198,7 +204,7 @@ function MediaDetail() {
                   color="surface"
                   renderSlide={(m) => m.file_type === 'youtube'
                     ? <YouTubeSlide url={m.file_url} label={m.label} onPlay={() => setPlayingVideo(m)} />
-                    : <img src={m.file_url} alt={m.label || ''} className="w-full h-56 object-cover rounded-xl" />
+                    : <img loading="lazy" src={m.file_url} alt={m.label || ''} className="w-full h-56 object-cover rounded-xl" />
                   }
                 />
               </div>

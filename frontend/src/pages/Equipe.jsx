@@ -19,6 +19,9 @@ import AnchorNav from '../components/navigation/AnchorNav'
 import TeamMemberCard from '../components/team/TeamMemberCard'
 import DelegationCard from '../components/team/DelegationCard'
 
+// ── Référencement
+import useSEO from '../hooks/useSEO'
+
 // ── Sections de l'AnchorNav
 const ANCHOR_SECTIONS = [
   { label: "Direction",                id: "direction"   },
@@ -29,6 +32,9 @@ const ANCHOR_SECTIONS = [
 ]
 
 function Equipe() {
+  // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
+  useSEO({ title: 'Notre équipe', description: "Les bénévoles et professionnels qui font vivre Sens Solidaires, en France, en Suisse et sur le terrain." })
+
   // ── État local — membres par catégorie + délégations
   const [direction, setDirection] = useState([])
   const [bureau, setBureau] = useState([])

@@ -19,6 +19,7 @@ function RapportCard({ auteur, annee, destination, type, pdf_url, image, bg = 'b
       {/* ── Zone image ── */}
       <div className="w-full h-40 overflow-hidden shrink-0">
         <img
+          loading="lazy"
           src={image || '/images/placeholders/placeholder-rapport-mission.webp'}
           alt={`Rapport ${auteur}`}
           className="w-full h-full object-cover"
@@ -37,9 +38,7 @@ function RapportCard({ auteur, annee, destination, type, pdf_url, image, bg = 'b
         </div>
 
         {/* ── Zone basse — bouton télécharger ── */}
-        <a href={pdf_url} target="_blank" rel="noopener noreferrer">
-          <Button label="Télécharger le rapport ↓" variant="light" fullWidth />
-        </a>
+        <Button href={pdf_url} label="Télécharger le rapport ↓" variant="light" fullWidth />
 
       </div>
     </article>

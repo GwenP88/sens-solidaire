@@ -16,7 +16,7 @@ function TestimonialCard({ quote, name, mission, avatar = '/images/placeholders/
 
       {/* Auteur — mt-2 retiré, justify-between du parent gère le positionnement en bas */}
       <div className="flex items-center gap-xs">
-        <img src={avatar} alt={name} className="w-14 h-14 rounded-full object-cover" />
+        <img loading="lazy" src={avatar} alt={name} className="w-14 h-14 rounded-full object-cover" />
         <div>
           {/* h3-style sans mb-0 : pas de conteneur gap ici, la marge automatique sert normalement */}
           <p className="h3-style text-primary">{name}</p>
