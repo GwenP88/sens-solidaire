@@ -53,7 +53,8 @@ import EducationDetail from './pages/EducationDetail'
 import LoginAdmin from './pages/admin/LoginAdmin'
 import ProtectedRoute from './components/navigation/ProtectedRoute'
 import DashboardLayout from './components/admin/DashboardLayout'
-import Dashboard from './pages/admin/Dashboard'
+// pages/admin/Dashboard.jsx (accueil du dashboard) n'est pas encore branché : la vue d'ensemble
+// sera construite prochainement. Remettre ici `import Dashboard from './pages/admin/Dashboard'` à ce moment-là.
 import MissionsPage from './pages/admin/MissionsPage'
 import MissionFormPage from './pages/admin/MissionFormPage'
 import ServiceCiviqueFormPage from './pages/admin/ServiceCiviqueFormPage'

@@ -17,6 +17,8 @@ import HeroPage from '../components/layout/HeroPage'
 // ── Composants UI
 import Carousel from '../components/ui/Carousel'
 import ScrollToTop from '../components/ui/ScrollToTop'
+import YouTubeSlide from '../components/media/YouTubeSlide'
+import YouTubeModal from '../components/media/YouTubeModal'
 
 // Ligne du bloc Informations : « THÈME : Vie de l'association »
 // Mêmes typographies qu'avant (eyebrow pour le libellé, body pour la valeur)
@@ -35,6 +37,7 @@ function MediaDetail() {
   const [post, setPost] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [playingVideo, setPlayingVideo] = useState(null) // vidéo YouTube ouverte dans la modale, ou null
 
   // ── Chargement de l'article depuis l'API au montage
   useEffect(() => {
@@ -64,6 +67,10 @@ function MediaDetail() {
   const mediaLinks  = post.media?.filter(m => m.file_type === 'link')  || []
   const mediaVideos = post.media?.filter(m => m.file_type === 'video') || []
   const mediaAudios = post.media?.filter(m => m.file_type === 'audio') || []
+  const mediaYouTube = post.media?.filter(m => m.file_type === 'youtube') || []
+
+  // Carrousel : photos puis vidéos YouTube, mélangées dans le même défilement (tâche 123)
+  const carouselItems = [...mediaImages, ...mediaYouTube]
 
   // ── Ressources à afficher dans la sidebar — PDF + liens externes
   const sidebarResources = [...mediaPdfs, ...mediaLinks]
@@ -179,20 +186,26 @@ function MediaDetail() {
           </aside>
         </div>
 
-          {/* ── Photos de l'article — même carrousel que les galeries de la page Missions ── */}
-            {mediaImages.length > 0 && (
+          {/* ── Photos et vidéos de l'article — même carrousel que les galeries de la page Missions ── */}
+            {carouselItems.length > 0 && (
               <div className="flex flex-col gap-sm bg-primary rounded-2xl p-6 lg:p-10 mt-12">
-                <h3 className="h3-style text-surface mb-0">En images</h3>
+                <h3 className="h3-style text-surface mb-0">
+                  {mediaYouTube.length > 0 ? 'En images et en vidéos' : 'En images'}
+                </h3>
                 <Carousel
-                  items={mediaImages}
+                  items={carouselItems}
                   showPagination={true}
                   color="surface"
-                  renderSlide={(m) => (
-                    <img src={m.file_url} alt={m.label || ''} className="w-full h-56 object-cover rounded-xl" />
-                  )}
+                  renderSlide={(m) => m.file_type === 'youtube'
+                    ? <YouTubeSlide url={m.file_url} label={m.label} onPlay={() => setPlayingVideo(m)} />
+                    : <img src={m.file_url} alt={m.label || ''} className="w-full h-56 object-cover rounded-xl" />
+                  }
                 />
               </div>
             )}
+
+            {/* Lecteur chargé seulement après le clic sur une vidéo (performance + RGPD) */}
+            <YouTubeModal video={playingVideo} onClose={() => setPlayingVideo(null)} />
 
       </section>
 

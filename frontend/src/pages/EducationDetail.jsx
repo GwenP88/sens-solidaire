@@ -16,7 +16,6 @@ import HeroPage from '../components/layout/HeroPage'
 // ── Composants UI
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
-import Section from '../components/ui/Section'
 import CTASection from '../components/ui/CTASection'
 
 function EducationDetail() {

@@ -43,6 +43,7 @@ import adminPartnerRoutes from "./routes/adminPartnerRoutes.js"
 import adminMediaPostRoutes from "./routes/adminMediaPostRoutes.js"
 import adminMissionReportRoutes from "./routes/adminMissionReportRoutes.js"
 import adminFieldActionRoutes from "./routes/adminFieldActionRoutes.js"
+import { prismaErrorToHttp } from "./utils/prismaErrors.js"
 
 
 // ── INITIALISATION EXPRESS ───────────────────────────────────────────────────
@@ -69,7 +70,10 @@ app.use(cors({
     if (!origin || allowed.some(p => typeof p === 'string' ? p === origin : p.test(origin))) {
       callback(null, true)
     } else {
-      callback(new Error('CORS non autorisé'))
+      // 403 (et non 500 par défaut) : la requête vient d'un site non autorisé, ce n'est pas une panne
+      const error = new Error('CORS non autorisé')
+      error.status = 403
+      callback(error)
     }
   },
   credentials: true
@@ -164,6 +168,14 @@ app.use((err, req, res, next) => {
     LIMIT_PART_COUNT: 400,
   }
   if (MULTER_STATUS[err.code]) err.status = MULTER_STATUS[err.code]
+
+  // Erreurs Prisma attendues (id inexistant → 404, doublon → 409) : sans ce
+  // mapping, un PATCH / DELETE sur un id qui n'existe pas renvoyait 500
+  const prismaHttp = prismaErrorToHttp(err)
+  if (prismaHttp) {
+    err.status = prismaHttp.status
+    err.message = prismaHttp.message // message lisible, même en développement
+  }
 
   // Utilise le status attaché à l'erreur par le service (ex: 401, 404)
   // Si pas de status défini → 500 Internal Server Error par défaut

@@ -2,7 +2,7 @@
 // Page Notre Impact — actions terrain connectées à l'API
 
 // ── React
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 // ── Router
 import { useSearchParams } from 'react-router-dom'
@@ -14,7 +14,6 @@ import { fetchFieldActions } from '../services/api'
 import HeroPage from '../components/layout/HeroPage'
 
 // ── Composants UI
-import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import Filters from '../components/navigation/Filters'
 import Section from '../components/ui/Section'
@@ -24,7 +23,7 @@ import ImpactCard from '../components/actions/ImpactCard'
 
 // ── Utils
 import { ODDS } from '../utils/odds'
-import { FILTERS_ACTION_TAGS, FILTER_CONFIG_COUNTRY } from '../utils/filters'
+import { FILTERS_ACTION_TAGS, buildCountryOptions, getFilterConfigCountry } from '../utils/filters'
 
 function NotreImpact() {
   // ── État local — actions + chargement + filtre thématique (chips)
@@ -49,6 +48,13 @@ function NotreImpact() {
       .catch(err => console.error(err))
       .finally(() => setLoading(false))
   }, [])
+
+  // ── Filtre pays — construit à partir des pays des actions publiées (tâche 170)
+  // useMemo : recalculé seulement quand la liste d'actions change, pas à chaque clic de filtre
+  const countrySelects = useMemo(
+    () => getFilterConfigCountry(buildCountryOptions(actions.flatMap(a => a.countries.map(c => c.country)))),
+    [actions]
+  )
 
   // ── Filtrage combiné — par tag thématique ET par pays
   const filteredActions = actions.filter(a => {
@@ -92,7 +98,7 @@ function NotreImpact() {
       {/* ── Barre de filtres — select pays + chips thématiques ── */}
       <div className="bg-primary padding-x filter-py">
         <Filters
-          selects={FILTER_CONFIG_COUNTRY}
+          selects={countrySelects}
           selectValues={filters}
           onSelectChange={handleCountryFilter}
           chips={{

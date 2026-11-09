@@ -13,6 +13,8 @@ import {
 import AnchorNav from '../../components/navigation/AnchorNav'
 import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
+import ErrorModal from '../../components/admin/ErrorModal'
+import { ADMIN_ERRORS } from '../../utils/adminErrors'
 import ActivityReportEditModal from '../../components/admin/ActivityReportEditModal'
 import PartnerEditModal from '../../components/admin/PartnerEditModal'
 import { FiEdit2, FiPause, FiPlay, FiTrash2, FiCheck, FiX } from 'react-icons/fi'
@@ -75,35 +77,12 @@ const REPORT_COLUMNS = [
   },
 ]
 
-const PARTNER_COLUMNS = [
-  {
-    key: 'logo_url',
-    label: 'Logo',
-    render: (row) => row.logo_url ? (
-      <img src={row.logo_url} alt={`Logo de ${row.name}`} className="h-10 w-auto object-contain" />
-    ) : (
-      <span className="text-dash-legend text-xs italic">Aucun</span>
-    ),
-  },
-  { key: 'name', label: 'Nom' },
-  {
-    key: 'is_active',
-    label: 'Statut',
-    render: (row) => (
-      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-        row.is_active ? 'bg-dash-success/10 text-dash-success' : 'bg-dash-warning/10 text-dash-warning'
-      }`}>
-        {row.is_active ? 'Actif' : 'Inactif'}
-      </span>
-    ),
-  },
-]
-
 function AProposPage() {
   const navigate = useNavigate()
 
   // ── Équipe ──────────────────────────────────────────────────────────────
   const [members, setMembers] = useState([])
+  const [actionError, setActionError] = useState(null)
   const [membersLoading, setMembersLoading] = useState(true)
   const [categoryFilter, setCategoryFilter] = useState('')
   const [memberToTogglePause, setMemberToTogglePause] = useState(null)
@@ -171,7 +150,8 @@ function AProposPage() {
       await toggleTeamMemberActive(memberToTogglePause.id, !memberToTogglePause.is_active)
       await loadMembers()
     } catch (err) {
-      alert('Échec du changement de statut. Réessaie.')
+      console.error('Erreur dashboard (toggle) :', err)
+      setActionError(ADMIN_ERRORS.toggle)
     } finally {
       setMemberToTogglePause(null)
     }
@@ -182,7 +162,8 @@ function AProposPage() {
       await hardDeleteTeamMember(memberToHardDelete.id)
       await loadMembers()
     } catch (err) {
-      alert('Échec de la suppression. Réessaie.')
+      console.error('Erreur dashboard (delete) :', err)
+      setActionError(ADMIN_ERRORS.delete)
     } finally {
       setMemberToHardDelete(null)
     }
@@ -194,7 +175,8 @@ function AProposPage() {
       await toggleActivityReportActive(reportToTogglePause.id, !reportToTogglePause.is_active)
       await loadReports()
     } catch (err) {
-      alert('Échec du changement de statut. Réessaie.')
+      console.error('Erreur dashboard (toggle) :', err)
+      setActionError(ADMIN_ERRORS.toggle)
     } finally {
       setReportToTogglePause(null)
     }
@@ -205,7 +187,8 @@ function AProposPage() {
       await hardDeleteActivityReport(reportToHardDelete.id)
       await loadReports()
     } catch (err) {
-      alert('Échec de la suppression. Réessaie.')
+      console.error('Erreur dashboard (delete) :', err)
+      setActionError(ADMIN_ERRORS.delete)
     } finally {
       setReportToHardDelete(null)
     }
@@ -217,7 +200,8 @@ function AProposPage() {
       await togglePartnerActive(partnerToTogglePause.id, !partnerToTogglePause.is_active)
       await loadPartners()
     } catch (err) {
-      alert('Échec du changement de statut. Réessaie.')
+      console.error('Erreur dashboard (toggle) :', err)
+      setActionError(ADMIN_ERRORS.toggle)
     } finally {
       setPartnerToTogglePause(null)
     }
@@ -228,7 +212,8 @@ function AProposPage() {
       await hardDeletePartner(partnerToHardDelete.id)
       await loadPartners()
     } catch (err) {
-      alert('Échec de la suppression. Réessaie.')
+      console.error('Erreur dashboard (delete) :', err)
+      setActionError(ADMIN_ERRORS.delete)
     } finally {
       setPartnerToHardDelete(null)
     }
@@ -473,6 +458,10 @@ function AProposPage() {
         />
       )}
 
+
+      {actionError && (
+        <ErrorModal message={actionError} onClose={() => setActionError(null)} />
+      )}
     </div>
   )
 }

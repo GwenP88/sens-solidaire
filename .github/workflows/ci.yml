@@ -1,0 +1,130 @@
+# .github/workflows/ci.yml
+# Intégration continue : lint, tests et build à chaque push sur dev-front, dev et main (donc aussi à chaque merge).
+
+name: CI
+
+on:
+  push:
+    branches: [dev-front, dev, main]
+  # Pull requests vers dev / main : la CI vérifie le résultat AVANT le merge
+  pull_request:
+    branches: [dev, main]
+
+# Deux pushs rapprochés sur la même branche : on annule le premier passage, seul le dernier compte
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# La CI lit le code, elle n'a besoin d'aucun autre droit sur le dépôt
+permissions:
+  contents: read
+
+jobs:
+
+  # ── Frontend : lint, tests Vitest, build ──────────────────────────────────
+  frontend:
+    name: Frontend (lint, tests, build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      # Même version de Node que le Dockerfile ; le cache évite de tout retélécharger à chaque passage
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      # npm ci : installe exactement les versions du package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      # Le dossier backend est présent dans la CI : le test de cohérence front/back tourne aussi
+      - run: npm run test:run
+      - run: npm run build
+
+  # ── Backend : tests unitaires (sans base de données) ──────────────────────
+  backend:
+    name: Backend (tests unitaires)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - run: npm ci
+      - run: npm run test:unit
+
+  # ── Backend : tests d'intégration sur une base JETABLE ────────────────────
+  # La base est créée vide à chaque passage puis détruite : aucun lien avec les données de la cliente.
+  # Tous les mots de passe ci-dessous sont factices et ne servent qu'à cette base temporaire.
+  integration:
+    name: Backend (tests d'intégration)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    # Base PostgreSQL démarrée à côté de la CI, même version que docker-compose.yml
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: sensolidaire
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres-ci
+        ports:
+          - 5432:5432
+        # La CI attend que la base soit prête avant de lancer les étapes
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      # Compte de l'API (lecture / écriture des données uniquement), comme en vrai
+      DATABASE_URL: postgresql://sensolidaire_app:app-ci@localhost:5432/sensolidaire
+      # Super-utilisateur : sert uniquement à construire la base (migrations + comptes)
+      ADMIN_DATABASE_URL: postgresql://postgres:postgres-ci@localhost:5432/sensolidaire
+      JWT_SECRET: jwt-secret-factice-ci
+      JWT_REFRESH_SECRET: jwt-refresh-secret-factice-ci
+      ADMIN_PASSWORD: Admin1234!
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - run: npm ci
+      # Client Prisma généré à partir du schéma (comme dans le Dockerfile)
+      - run: npx prisma generate
+
+      # 1. Structure : toutes les migrations appliquées sur la base vide (même commande qu'en production)
+      - name: Migrations
+        run: npx prisma migrate deploy
+        env:
+          MIGRATE_DATABASE_URL: ${{ env.ADMIN_DATABASE_URL }}
+
+      # 2. Les 2 comptes PostgreSQL (owner + app), APRÈS les migrations comme l'indique roles.sql
+      - name: Comptes PostgreSQL
+        run: psql "$ADMIN_DATABASE_URL" -v ON_ERROR_STOP=1 -v owner_password=owner-ci -v app_password=app-ci -f prisma/roles.sql
+
+      # 3. Compte admin + contenus de la page Éducation
+      - run: npm run seed
+
+      # 4. Tests un par un : ils partagent le compte admin, qui n'a qu'une session active à la fois
+      - run: npm run test:integration -- --runInBand

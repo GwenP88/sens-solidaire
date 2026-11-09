@@ -1,10 +1,10 @@
 // src/services/testimonialService.js
-// Business logic for testimonials (public submission + admin moderation).
-// Handles: public listing/submission, admin listing, status updates, deletion.
-// Interactions: Prisma (database).
-// Design note: testimonials are HARD-deleted (GDPR art. 17), unlike missions
-// (soft delete) — they carry personal data (author_name, content), so the
-// row must actually disappear when erasure is requested.
+// Logique métier des témoignages (soumission publique + modération admin).
+// Gère : liste et soumission publiques, liste admin, changement de statut, suppression.
+// Accès aux données : Prisma.
+// Choix de conception : les témoignages sont supprimés DÉFINITIVEMENT (RGPD, art. 17) —
+// ils contiennent des données personnelles (author_name, content), la ligne doit donc
+// réellement disparaître lorsqu'une personne demande l'effacement.
 
 import prisma from "../config/db.js"
 

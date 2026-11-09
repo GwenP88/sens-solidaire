@@ -26,3 +26,6 @@ backend/node_modules/.prisma/
 *.Zone.Identifier
 # Sauvegardes de base de données — contiennent des données personnelles
 backups/
+
+# Cache de pré-bundle Vite — regénéré automatiquement au démarrage du serveur de dev
+frontend/.vite/

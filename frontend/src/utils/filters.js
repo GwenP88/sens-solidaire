@@ -8,17 +8,27 @@
 // ════════════════════════════════════════════════════════════════
 
 // ── Pays ──
-// Source unique pour tous les filtres pays du site (Testimonials + Impact)
-export const FILTERS_COUNTRY = [
-  { label: "Tous les pays", value: null },
-  { label: "Kenya", value: "Kenya" },
-  { label: "Sénégal", value: "Sénégal" },
-  { label: "Sri Lanka", value: "Sri Lanka" },
-  { label: "Pérou", value: "Pérou" },
-  { label: "Sumatra", value: "Sumatra" },
-  { label: "France", value: "France" },
-  { label: "Côte d'Ivoire", value: "Côte d'Ivoire" },
-]
+// Plus de liste figée (tâche 170) : les pays proposés sont DÉRIVÉS des données
+// réellement publiées (actions terrain, témoignages, rapports, missions).
+// → un pays n'apparaît que s'il a au moins un résultat, et un nouveau pays
+//   saisi dans le dashboard apparaît tout seul.
+//
+// buildCountryOptions(names, { lowercaseValue })
+//   names : tableau de noms de pays (doublons, vides et casse différente tolérés)
+//   lowercaseValue : true → value en minuscules (page Témoignages : ?destination=kenya)
+//   retourne [{ value, label }] trié par ordre alphabétique français
+export const buildCountryOptions = (names, { lowercaseValue = false } = {}) => {
+  const byKey = new Map() // clé en minuscules → 1 seule entrée pour "Kenya" et "kenya"
+  names.forEach(name => {
+    const label = name?.trim()
+    if (!label) return
+    const key = label.toLowerCase()
+    if (!byKey.has(key)) byKey.set(key, label)
+  })
+  return [...byKey.entries()]
+    .sort(([, a], [, b]) => a.localeCompare(b, 'fr'))
+    .map(([key, label]) => ({ value: lowercaseValue ? key : label, label }))
+}
 
 // ── Type de mission ──
 export const FILTERS_MISSION_TYPE = [
@@ -72,19 +82,20 @@ export const FILTERS_MEDIA_THEME = [
 // ════════════════════════════════════════════════════════════════
 
 // ── Filtre pays réutilisable ──
-// Dérivée de FILTERS_COUNTRY, sans dupliquer la liste de pays
+// countryOptions : résultat de buildCountryOptions() — calculé par la page à partir de ses données
 // Utilisable par n'importe quelle page ayant besoin d'un filtre pays via FilterSelect (ex: Impact)
-export const FILTER_CONFIG_COUNTRY = [
+export const getFilterConfigCountry = (countryOptions) => [
   {
     key: 'country',
     placeholder: 'Tous les pays',
-    options: FILTERS_COUNTRY.filter(f => f.value !== null).map(f => ({ value: f.value, label: f.label })),
+    options: countryOptions,
   },
 ]
 
 // ── Filtres — page Témoignages ──
 // 4 filtres combinés : vue (témoignages/rapports), type de mission, destination, année
-export const FILTER_CONFIG_TEMOIGNAGES = [
+// destinationOptions : buildCountryOptions(..., { lowercaseValue: true })
+export const getFilterConfigTemoignages = (destinationOptions) => [
   {
     key: 'vue',
     placeholder: 'Tous les types',
@@ -101,7 +112,7 @@ export const FILTER_CONFIG_TEMOIGNAGES = [
   {
     key: 'destination',
     placeholder: 'Toutes les destinations',
-    options: FILTERS_COUNTRY.filter(f => f.value !== null).map(f => ({ value: f.value?.toLowerCase(), label: f.label })),
+    options: destinationOptions,
   },
   {
     key: 'annee',

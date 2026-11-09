@@ -48,6 +48,10 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 | BUG-28 | Seed `FieldAction` — erreur de contrainte FK au `deleteMany` | Ordre de suppression incorrect (parent supprimé avant les enfants) | Ordre corrigé : `tags` → `odds` → `media` → `fieldAction` | 🟠 | ✅ Résolu |
 | BUG-29 | Erreur de validation Prisma — relation `MissionReport` manquante | FK `mission_id` ajoutée côté `MissionReport` sans relation inverse `missionReports[]` sur `Mission` | Ajout du champ inverse sur le modèle `Mission` | 🟠 | ✅ Résolu |
 | BUG-52 | `seed.js` cassé — erreur de validation Prisma sur `location.upsert` | La migration `location_mission_many_to_many` a remplacé la FK `mission_id` par une relation N-N, mais les sept blocs `location.upsert` du seed passaient encore `mission_id: 1` | Remplacement par la syntaxe de relation `connect: { id: kenyaMission.id }` (id résolu par slug, pas codé en dur) — aucune migration modifiée | 🔴 | ✅ Résolu |
+| BUG-57 | Action terrain ou lieu **en pause** toujours accessible par son adresse publique (`/notre-impact/:slug`, `/lieux/:slug`) | `findUnique({ where: { slug } })` sans condition `is_active`, alors que la modale du dashboard annonce « invisible sur le site » (déjà corrigé pour les médias) | `findFirst({ where: { slug, is_active: true } })` dans `fieldActionService` et `locationService` + tests d'intégration | 🟠 | ✅ Résolu |
+| BUG-60 | `PATCH` / `DELETE` / pause sur un id inexistant → 500 au lieu de 404 (8 ressources) | L'erreur Prisma `P2025` (enregistrement introuvable) n'était pas interceptée et tombait dans le 500 par défaut | Traduction globale dans le gestionnaire d'erreurs de `app.js` (`utils/prismaErrors.js` : `P2025` → 404, `P2002` → 409) + tests unitaires et d'intégration | 🟠 | ✅ Résolu |
+| BUG-61 | Requête d'une origine non autorisée → 500 au lieu de 403 | L'erreur levée par la fonction `origin` de CORS ne portait pas de `status` | `error.status = 403` + test `Security.integration.test.js` | 🟡 | ✅ Résolu |
+| BUG-62 | Liste des pays du dashboard : « Égypte », « Équateur »… rangés après « Zimbabwe » | `.sort()` compare les codes Unicode : une lettre accentuée passe après le « Z » | `.sort((a, b) => a.localeCompare(b, 'fr'))` + test unitaire | 🟡 | ✅ Résolu |
 
 ---
 
@@ -64,6 +68,10 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 | BUG-36 | Boutons `MissionCTA` prenaient toute la largeur | Combinaison `flex-1` + `fullWidth` mal utilisée | Suppression de `flex-1`/`fullWidth`, conteneur `flex-col` mobile / `flex-row` desktop | 🟡 | ✅ Résolu |
 | BUG-37 | `react-scroll` incompatible React 19 | Librairie non maintenue pour cette version de React | Remplacé par `smoothScrollTo` custom (`window.scrollTo` avec `behavior: 'smooth'`) | 🟠 | ✅ Résolu |
 | BUG-38 | Module `Navigation` de Swiper v12 cassé en React | Bug connu de Swiper v12 avec React | Navigation custom via `useRef` + boutons externes (`slidePrev`/`slideNext`) | 🟠 | ✅ Résolu |
+| BUG-56 | Page Témoignages : le filtre « destination » ne trouvait **jamais** les rapports de mission | Le rapport stocke « Kenya » (valeur du dashboard), le filtre comparait à « kenya » | Comparaison en minuscules des deux côtés + test de non-régression (`tests/pages/Testimonials.test.jsx`) | 🟠 | ✅ Résolu |
+| BUG-58 | Galerie (vue « Tous les pays ») : une photo disparaissait de l'écran même quand la suppression échouait | Mise à jour « optimiste » de l'affichage sans retour arrière en cas d'erreur | Restauration de l'état précédent + modale d'erreur | 🟡 | ✅ Résolu |
+| BUG-59 | Titre « Une mission en trois temps » jamais affiché sur `/missions` | `MissionSteps` recevait la prop `title` mais affichait un libellé écrit en dur | `<SubsectionEyebrow label={title} />` | 🟡 | ✅ Résolu |
+| BUG-65 | Dashboard inutilisable sur téléphone : ni navigation ni déconnexion | Barre latérale masquée sous 768 px (`hidden md:flex`) sans remplacement | `DashboardMobileNav` (barre du haut) + tests de navigation | 🟠 | ✅ Résolu |
 
 ---
 
@@ -73,6 +81,8 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 |---|---|---|---|---|---|
 | BUG-39 | `ReferenceError: expect is not defined` (setupTests.js) | `@testing-library/jest-dom` importé en version Jest, incompatible avec Vitest | Import changé pour `@testing-library/jest-dom/vitest` | 🔴 | ✅ Résolu |
 | BUG-40 | `Found multiple elements with the role "checkbox"` | Le DOM n'était pas nettoyé entre les tests (`cleanup()` non configuré) | Ajout de `afterEach(() => cleanup())` dans `setupTests.js` | 🔴 | ✅ Résolu |
+| BUG-63 | Tests backend lancés hors Docker : `prisma.partner` undefined | Le client Prisma de `node_modules` du poste datait de juin (généré avant les nouveaux modèles) ; celui du conteneur est à jour | Lancer les tests d'intégration dans Docker ; les tests unitaires (`npm run test:unit`) ne dépendent pas de Prisma | 🟡 | ✅ Résolu (procédure) |
+| BUG-64 | Vitest : `Failed to resolve import "../../../backend/..."` dans le conteneur frontend | Le conteneur ne monte que `./frontend` : le test de cohérence front / back ne trouve pas le backend | Exclusion conditionnelle du fichier dans `vite.config.js` (`existsSync('../backend/src/utils')`) | 🟡 | ✅ Résolu |
 
 ---
 
@@ -84,6 +94,7 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 | BUG-42 | `rm` refusé — Permission denied sur un fichier de migration | Fichier créé depuis l'intérieur du conteneur Docker, propriétaire `root` | `sudo rm -rf` | 🟡 | ✅ Résolu |
 | BUG-43 | Conflit de merge sur `backend/.env` / `.env.example` | Détrackage du `.env` par un membre de l'équipe pendant que l'autre avait un commit le référençant encore | Résolution manuelle : suppression de `.env.backup`, fusion des variables dans `.env.example` | 🟠 | ✅ Résolu |
 | BUG-44 | `backend/.env` supprimé du disque après un `git pull` | Le fichier n'étant plus suivi par Git, le pull a appliqué sa suppression physique | Récupération du contenu via `git show <commit>:backend/.env`, recréation manuelle + mise à jour de la clé Resend | 🔴 | ✅ Résolu |
+| BUG-66 | Fichiers personnels (CV) et images de test suivis par Git dans un dépôt public | Fichiers committés avant l'ajout des règles `public/uploads/*` au `.gitignore` | `git rm -r --cached backend/public/uploads` (les `.gitkeep` restent) ; fichiers supprimés du disque. ⚠️ Toujours présents dans l'**historique** tant qu'il n'est pas réécrit | 🟠 | ⏳ Historique à purger |
 
 ---
 
@@ -114,7 +125,7 @@ non exploitable en l'état actuel de l'application ; le correctif est planifié.
 
 | ID | Constat | Pourquoi non corrigé en V1 | Condition de reprise |
 |---|---|---|---|
-| DETTE-01 | `authMiddleware` vérifie l'authentification, pas l'autorisation : il ne lit jamais `payload.role` | Un seul rôle existe en base — non exploitable. Modifier la couche d'authentification à 16 jours du rendu est un risque de régression pour un gain nul | Obligatoire avant l'introduction d'un second rôle |
+| DETTE-01 | ✅ **Résolue** — `authMiddleware` vérifie désormais le rôle (403 si différent de `admin`), vérifié par `tests/unit/authMiddleware.test.js`. Constat d'origine : il ne lisait jamais `payload.role` | Un seul rôle existe en base — non exploitable. Modifier la couche d'authentification à 16 jours du rendu est un risque de régression pour un gain nul | Obligatoire avant l'introduction d'un second rôle |
 | DETTE-02 | Aucune limitation de débit sur `POST /api/auth/login` ni sur l'upload public | Application non déployée, non exposée. Ajout d'une dépendance + configuration + tests hors budget | Avant toute mise en production |
 | DETTE-03 | Timing attack théorique sur le login : `bcrypt.compare` n'est appelé que si l'admin existe, ce qui crée un écart de temps de réponse mesurable entre « email inconnu » et « mot de passe faux » | Non exploitable : un seul compte admin, dont l'email est connu d'avance. Le correctif (hash factice systématique) est subtil et touche le chemin critique de l'authentification | Avec l'ouverture des comptes à plusieurs utilisateurs |
 | DETTE-04 | Le type des fichiers uploadés repose sur le MIME déclaré par le client, sans vérification du contenu réel | Le correctif BUG-46 ferme déjà le vecteur dangereux en imposant l'extension. La vérification par nombre magique est un durcissement, pas la faille | V2, avec le passage à un stockage externe |
@@ -126,13 +137,13 @@ non exploitable en l'état actuel de l'application ; le correctif est planifié.
 | Catégorie | Nombre de bugs | Tous résolus ? |
 |---|---|---|
 | Environnement & Docker | 14 | ✅ |
-| Backend & Prisma | 17 | ✅ |
-| Frontend & React | 9 | ✅ |
-| Tests (Vitest) | 2 | ✅ |
-| Git & Environnement | 4 | ✅ |
+| Backend & Prisma | 21 | ✅ |
+| Frontend & React | 13 | ✅ |
+| Tests (Vitest / Jest) | 4 | ✅ |
+| Git & Environnement | 5 | ⏳ 1 (historique) |
 | Sécurité — audit du 26 août | 7 | ✅ |
-| **Total** | **53** | ✅ |
+| **Total** | **64** | ✅ sauf BUG-66 |
 
 **Aucun bug bloquant non résolu** dans le périmètre MVP.
-Quatre dettes techniques sont identifiées, documentées et non exploitables en l'état
+Trois dettes techniques restent ouvertes (DETTE-01 résolue), documentées et non exploitables en l'état
 (voir section *Dettes techniques assumées*).

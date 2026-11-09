@@ -1,7 +1,7 @@
 // TestimonialForm.jsx
-// Testimonial submission form, used inside a modal.
-// Design note: submitted with status "pending" — nothing gets published
-// without admin review. The consent checkbox is mandatory.
+// Formulaire de dépôt d'un témoignage, affiché dans une modale.
+// Choix de conception : envoyé avec le statut "pending" — rien n'est publié
+// sans validation dans le dashboard. La case de consentement est obligatoire.
 
 // ── React
 import { useState, useEffect } from 'react'
@@ -28,6 +28,7 @@ function TestimonialForm({ onClose }) {
   const [photoPreview, setPhotoPreview] = useState(null)
   const [destinations, setDestinations] = useState([]) // tableau de missions { id, country }, plus de strings
   const [errors, setErrors] = useState({})
+  const [submitError, setSubmitError] = useState(null) // échec d'envoi (serveur injoignable…)
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target
@@ -73,6 +74,7 @@ function TestimonialForm({ onClose }) {
       return
     }
 
+    setSubmitError(null)
     try {
       // Si une photo a été sélectionnée, on l'upload d'abord pour obtenir son URL
       let avatarUrl = null
@@ -97,7 +99,7 @@ function TestimonialForm({ onClose }) {
       setSubmitted(true)
     } catch (err) {
       console.error(err)
-      alert("Une erreur est survenue, veuillez réessayer.")
+      setSubmitError("Votre témoignage n'a pas pu être envoyé. Vérifiez votre connexion, puis réessayez.")
     }
   }
 
@@ -252,6 +254,11 @@ function TestimonialForm({ onClose }) {
       </div>
 
       <span className="text-caption text-primary/60 leading-relaxed">* Champs obligatoires</span>
+
+      {/* Erreur d'envoi — affichée dans le formulaire (role="alert" : lue par les lecteurs d'écran) */}
+      {submitError && (
+        <p role="alert" className="text-caption text-red-500">{submitError}</p>
+      )}
 
       {/* Boutons — annuler ou soumettre */}
       <div className="flex flex-col sm:flex-row gap-sm">

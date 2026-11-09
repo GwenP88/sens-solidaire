@@ -4,6 +4,12 @@
 import { defineConfig } from 'vite'           // Fonction qui définit la config Vite
 import react from '@vitejs/plugin-react'       // Plugin qui permet à Vite de comprendre React (JSX)
 import tailwindcss from '@tailwindcss/vite'    // Plugin qui intègre Tailwind CSS dans Vite
+import { configDefaults } from 'vitest/config' // Exclusions par défaut de Vitest (node_modules, dist...)
+import { existsSync } from 'node:fs'
+
+// Le test qui compare les règles dupliquées front / back a besoin du dossier backend voisin :
+// présent sur le poste de développement, absent du conteneur frontend (qui ne monte que ./frontend)
+const hasBackend = existsSync(new URL('../backend/src/utils', import.meta.url))
 
 export default defineConfig({
   plugins: [
@@ -46,5 +52,9 @@ export default defineConfig({
   test: {
     environment: 'jsdom',                 // simule un navigateur pour les tests
     setupFiles: './src/setupTests.js',    // fichier de config globale (à créer ensuite)
+    exclude: [
+      ...configDefaults.exclude,
+      ...(hasBackend ? [] : ['tests/unit/duplicatedRules.test.js']),
+    ],
   },
 })

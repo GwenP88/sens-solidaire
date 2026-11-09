@@ -8,23 +8,27 @@ import { useNavigate } from 'react-router-dom'
 import { fetchAdminMediaPosts, toggleMediaPostActive, hardDeleteMediaPost } from '../../services/api'
 import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
+import ErrorModal from '../../components/admin/ErrorModal'
+import { ADMIN_ERRORS } from '../../utils/adminErrors'
 
 const formatDate = (date) =>
   new Date(date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
 
 const COLUMNS = [
   { key: 'title', label: 'Titre' },
-  { key: 'theme', label: 'Thème' },
+  { key: 'theme', label: 'Thème', hideOnMobile: true },
   { key: 'date', label: 'Date', render: (row) => formatDate(row.date) },
   {
     key: 'external_url',
     label: 'Bouton sur la carte',
+    hideOnMobile: true,
     // Même règle que sur le site : lien/fichier → « Consulter », sinon « Lire la suite »
     render: (row) => row.external_url ? 'Consulter (lien ou fichier)' : 'Lire la suite (article)',
   },
   {
     key: 'show_homepage',
     label: 'Accueil',
+    hideOnMobile: true,
     render: (row) => row.show_homepage ? 'Oui' : <span className="text-dash-legend">—</span>,
   },
   {
@@ -46,6 +50,7 @@ function MediaPostsPage() {
   const navigate = useNavigate()
 
   const [posts, setPosts] = useState([])
+  const [actionError, setActionError] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [postToHardDelete, setPostToHardDelete] = useState(null)
@@ -74,7 +79,7 @@ function MediaPostsPage() {
       await load()
     } catch (err) {
       console.error('Erreur changement statut :', err)
-      alert('Échec du changement de statut. Réessayez.')
+      setActionError(ADMIN_ERRORS.toggle)
     } finally {
       setPostToTogglePause(null)
     }
@@ -86,7 +91,7 @@ function MediaPostsPage() {
       await load()
     } catch (err) {
       console.error('Erreur suppression définitive :', err)
-      alert('Échec de la suppression. Réessayez.')
+      setActionError(ADMIN_ERRORS.delete)
     } finally {
       setPostToHardDelete(null)
     }
@@ -138,6 +143,10 @@ function MediaPostsPage() {
           onConfirm={confirmTogglePause}
           onCancel={() => setPostToTogglePause(null)}
         />
+      )}
+
+      {actionError && (
+        <ErrorModal message={actionError} onClose={() => setActionError(null)} />
       )}
     </div>
   )

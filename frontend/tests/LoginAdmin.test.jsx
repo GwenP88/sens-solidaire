@@ -12,12 +12,12 @@ vi.mock('react-router-dom', () => ({
 describe('LoginAdmin', () => {
   beforeEach(() => {
     mockNavigate.mockClear()
-    global.fetch = vi.fn()  // remplace fetch par une fonction contrôlée
+    globalThis.fetch = vi.fn()  // remplace fetch par une fonction contrôlée
   })
 
   it('redirige vers /admin après une connexion réussie', async () => {
     // On dit à "fetch" : la prochaine fois qu'on t'appelle, réponds ceci
-    global.fetch.mockResolvedValueOnce({
+    globalThis.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ accessToken: 'fake-token' }),
     })
@@ -39,7 +39,7 @@ describe('LoginAdmin', () => {
   })
 
   it("affiche un message d'erreur si les identifiants sont incorrects", async () => {
-    global.fetch.mockResolvedValueOnce({
+    globalThis.fetch.mockResolvedValueOnce({
       ok: false,
       json: async () => ({ message: 'Email ou mot de passe incorrect.' }),
     })

@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import { fetchAdminFieldActions, toggleFieldActionActive, hardDeleteFieldAction } from '../../services/api'
 import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
+import ErrorModal from '../../components/admin/ErrorModal'
+import { ADMIN_ERRORS } from '../../utils/adminErrors'
 
 const COLUMNS = [
   { key: 'title', label: 'Titre' },
@@ -38,6 +40,7 @@ function FieldActionsPage() {
   const navigate = useNavigate()
 
   const [actions, setActions] = useState([])
+  const [actionError, setActionError] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [actionToHardDelete, setActionToHardDelete] = useState(null)
@@ -65,7 +68,8 @@ function FieldActionsPage() {
       await toggleFieldActionActive(actionToTogglePause.id, !actionToTogglePause.is_active)
       await load()
     } catch (err) {
-      alert('Échec du changement de statut. Réessaie.')
+      console.error('Erreur dashboard (toggle) :', err)
+      setActionError(ADMIN_ERRORS.toggle)
     } finally {
       setActionToTogglePause(null)
     }
@@ -76,7 +80,8 @@ function FieldActionsPage() {
       await hardDeleteFieldAction(actionToHardDelete.id)
       await load()
     } catch (err) {
-      alert('Échec de la suppression. Réessaie.')
+      console.error('Erreur dashboard (delete) :', err)
+      setActionError(ADMIN_ERRORS.delete)
     } finally {
       setActionToHardDelete(null)
     }
@@ -128,6 +133,10 @@ function FieldActionsPage() {
           onConfirm={confirmTogglePause}
           onCancel={() => setActionToTogglePause(null)}
         />
+      )}
+
+      {actionError && (
+        <ErrorModal message={actionError} onClose={() => setActionError(null)} />
       )}
     </div>
   )

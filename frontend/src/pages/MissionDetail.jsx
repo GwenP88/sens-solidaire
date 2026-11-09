@@ -33,7 +33,7 @@ import ImpactCard from '../components/actions/ImpactCard'
 // ── Utils
 import { getDuration } from '../utils/missions'
 import {
-  IconClock, IconPin, IconMoney,
+  IconClock, IconMoney,
   IconFlight, IconContact, IconBooking,
   IconPayment, IconContract, IconGuide,
   IconFileMission, IconCheck, IconTimes,

@@ -18,9 +18,12 @@ import {
   updateMediaPostMedia,
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
+import YouTubeLinksField from '../../components/admin/YouTubeLinksField'
+import { isYouTubeUrl } from '../../utils/youtube'
 import { FormSection, Field, FormActionBar, ShortDescriptionPreview } from '../../components/admin/FormElements'
 
 const CARD_SUMMARY_LENGTH = 200 // même valeur que le backend (mediaPostService.js)
+const MAX_VIDEOS = 5            // même valeur que le backend (mediaPostController.js)
 
 // Un fichier envoyé via le dashboard a une adresse de notre serveur ;
 // un lien externe commence par http(s):// vers un autre site.
@@ -36,6 +39,7 @@ const EMPTY_FORM = {
   date: today(),
   content: '',
   photos: [],  // [{ file_url, label, is_hero }] — photo principale (carte + haut d'article) + carrousel
+  videos: [],  // [{ file_url, label }] — vidéos YouTube du carrousel de l'article (tâche 123)
   url: '',     // lien vers un autre site
   file: [],    // [{ file_url, label }] — 1 fichier max (PDF, audio, vidéo)
   author: '',
@@ -78,6 +82,7 @@ function MediaPostFormPage() {
             ...(post.image_url ? [{ file_url: post.image_url, label: '', is_hero: true }] : []),
             ...(post.images || []).map(m => ({ file_url: m.file_url, label: m.label || '', is_hero: false })),
           ],
+          videos: (post.videos || []).map(m => ({ file_url: m.file_url, label: m.label || '' })),
           url: link && !isFile ? link : '',
           file: isFile ? [{ file_url: link, label: '' }] : [],
           author: post.author || '',
@@ -85,6 +90,7 @@ function MediaPostFormPage() {
           show_homepage: Boolean(post.show_homepage),
         })
       } catch (err) {
+        console.error('Erreur chargement :', err)
         setError("Impossible de charger cette publication. Rechargez la page ou réessayez plus tard.")
       } finally {
         setLoading(false)
@@ -126,6 +132,13 @@ function MediaPostFormPage() {
 
     if (hasLink && formData.photos.length > 1) {
       newErrors.photos = "Avec un lien ou un fichier, seule la photo de la carte est utilisée : gardez-en une seule."
+    }
+    // Lignes laissées vides : ignorées à l'enregistrement, pas une erreur
+    const videos = formData.videos.filter(v => v.file_url.trim())
+    if (videos.some(v => !isYouTubeUrl(v.file_url))) {
+      newErrors.videos = "Un des liens n'est pas une vidéo YouTube : corrigez-le ou retirez-le."
+    } else if (hasLink && videos.length > 0) {
+      newErrors.videos = "Avec un lien ou un fichier, la carte n'ouvre pas de page article : les vidéos ne seraient pas visibles. Retirez-les, ou retirez le lien."
     }
     if (!hasLink && !formData.content.trim()) {
       newErrors.content = "Ajoutez un texte, ou un lien / fichier à consulter."
@@ -170,8 +183,13 @@ function MediaPostFormPage() {
         : (await createMediaPost(payload)).id
       if (isEditing) await updateMediaPost(postId, payload)
 
-      // Photos seulement pour une page article ; sinon on vide (elles ne seraient jamais visibles)
-      await updateMediaPostMedia(postId, gallery)
+      // Photos et vidéos seulement pour une page article ; sinon on vide (elles ne seraient jamais visibles)
+      const videos = hasLink
+        ? []
+        : formData.videos
+          .filter(v => v.file_url.trim())
+          .map(v => ({ file_url: v.file_url.trim(), label: v.label.trim() }))
+      await updateMediaPostMedia(postId, gallery, videos)
 
       navigate('/admin/medias')
     } catch (err) {
@@ -305,6 +323,22 @@ function MediaPostFormPage() {
             error={fieldErrors.photos}
           />
           {fieldErrors.photos && <span className="text-xs text-red-500">{fieldErrors.photos}</span>}
+        </FormSection>
+
+        {/* ── BLOC : Vidéos YouTube — affichées dans le carrousel de l'article (tâche 123) ── */}
+        <FormSection
+          title="Vidéos YouTube (facultatif)"
+          description={hasLink
+            ? "Les vidéos s'affichent sur la page de l'article. Cette publication ouvre un lien ou un fichier : retirez-le pour pouvoir ajouter des vidéos."
+            : `Jusqu'à ${MAX_VIDEOS} vidéos, affichées avec les photos dans le carrousel de l'article. Publiez d'abord la vidéo sur YouTube, puis collez son lien ici.`}
+        >
+          <YouTubeLinksField
+            value={formData.videos}
+            onChange={(videos) => setField('videos', videos)}
+            max={MAX_VIDEOS}
+            error={fieldErrors.videos}
+            disabled={hasLink}
+          />
         </FormSection>
 
         {/* ── BLOC 6 : Mise en avant ── */}

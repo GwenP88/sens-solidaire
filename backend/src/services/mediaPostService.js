@@ -129,12 +129,14 @@ export const findById = async (id) => {
   const post = await prisma.mediaPost.findUnique({ where: { id } })
   if (!post) return null
 
-  // Photos de l'article — pour pré-remplir le formulaire
-  const images = await prisma.media.findMany({
-    where: { entity_type: 'media_post', entity_id: id, file_type: 'image' },
-    orderBy: { display_order: 'asc' },
+  // Photos et vidéos YouTube de l'article — pour pré-remplir le formulaire
+  const media = await prisma.media.findMany({
+    where: { entity_type: 'media_post', entity_id: id, file_type: { in: ['image', 'youtube'] } },
+    orderBy: [{ display_order: 'asc' }, { created_at: 'asc' }],
   })
-  return { ...post, images }
+  const images = media.filter(m => m.file_type === 'image')
+  const videos = media.filter(m => m.file_type === 'youtube')
+  return { ...post, images, videos }
 }
 // ── CREATE ──────────────────────────────────────────────────────────────────
 export const create = async (data) => {

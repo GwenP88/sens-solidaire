@@ -4,8 +4,10 @@
 import prisma from '../config/db.js'
 
 export const getLocationBySlugService = async (slug) => {
-  const location = await prisma.location.findUnique({
-    where: { slug },
+  // findFirst + is_active : un lieu en pause n'est plus accessible par son adresse
+  // (même règle que getMediaPostBySlug — la modale du dashboard annonce « invisible sur le site »)
+  const location = await prisma.location.findFirst({
+    where: { slug, is_active: true },
     include: {
       missions: { select: { slug: true, title: true } },
       delegation: { select: { contacts: true, lieu: true, image_url: true } },
