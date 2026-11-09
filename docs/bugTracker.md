@@ -24,6 +24,8 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 | BUG-12 | `resend` disparaît après rebuild Docker | Package installé sans `--save`, non persisté dans `package.json` | Réinstallation avec `--save` | 🟠 | ✅ Résolu |
 | BUG-13 | Vulnérabilité `npm audit` (high) sur `vite` | Failles connues sur `vite` 8.0.0–8.0.15 (spécifiques Windows) | `npm audit fix` — 0 vulnérabilité restante | 🟠 | ✅ Résolu |
 | BUG-53 | `multer` et 12 autres paquets absents du conteneur backend | Volume anonyme `node_modules` créé lors d'un build antérieur à l'ajout de la dépendance : le conteneur ne reflétait plus le `package.json` | `docker exec sensolidaire_backend npm install` pour resynchroniser le volume | 🟠 | ✅ Résolu |
+| BUG-67 | `docker start sensolidaire_db` : « ports are not available: exposing port TCP 0.0.0.0:5432 » | Un PostgreSQL installé directement dans WSL (projets Holberton) démarrait avec WSL et occupait le port 5432 | `sudo systemctl disable --now postgresql` : arrêté et plus lancé au démarrage (démarrage manuel possible avec `sudo systemctl start postgresql`, après `docker compose stop`) | 🔴 | ✅ Résolu |
+| BUG-68 | `npm audit` avant merge : 1 vulnérabilité **critical** (`proxy-addr`, dépendance d'Express) et 16 **high** (front + back : `multer`, `sharp`, `react-router`, `vite`…) | Dépendances non mises à jour depuis septembre | `npm audit fix` (sans `--force`) des deux côtés : plus aucune critical ni high ; restent des moderate dans les outils de développement (`jest`, `nodemon`, `eslint`), jamais installés en production | 🔴 | ✅ Résolu |
 
 ---
 
@@ -72,6 +74,9 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 | BUG-58 | Galerie (vue « Tous les pays ») : une photo disparaissait de l'écran même quand la suppression échouait | Mise à jour « optimiste » de l'affichage sans retour arrière en cas d'erreur | Restauration de l'état précédent + modale d'erreur | 🟡 | ✅ Résolu |
 | BUG-59 | Titre « Une mission en trois temps » jamais affiché sur `/missions` | `MissionSteps` recevait la prop `title` mais affichait un libellé écrit en dur | `<SubsectionEyebrow label={title} />` | 🟡 | ✅ Résolu |
 | BUG-65 | Dashboard inutilisable sur téléphone : ni navigation ni déconnexion | Barre latérale masquée sous 768 px (`hidden md:flex`) sans remplacement | `DashboardMobileNav` (barre du haut) + tests de navigation | 🟠 | ✅ Résolu |
+| BUG-69 | Une trentaine de boutons placés **dans** des liens (`<a><button>`) | Habitude d'envelopper `Button` dans un lien pour le rendre cliquable vers une page | HTML invalide et deux arrêts au clavier sur le même élément : `Button` accepte désormais `to` (lien interne) et `href` (lien externe) et rend un vrai lien stylé en bouton (tâche 173) | 🟠 | ✅ Résolu |
+| BUG-70 | Pied de page : « Faire un don » et « Adhérer à l'association » mènent à une page vide | Liens vers `/don` et `/adhesion`, routes qui n'existent pas | Les deux liens pointent vers `/soutenir` (don et adhésion y sont présentés) | 🟠 | ✅ Résolu |
+| BUG-71 | Icône d'onglet (favicon) absente en production | `index.html` appelait `/Logo.png` alors que le fichier est `public/logo.png` : invisible sous Windows, mais le serveur Linux distingue majuscules et minuscules | Chemin corrigé en `/logo.png` | 🟡 | ✅ Résolu |
 
 ---
 
@@ -83,6 +88,7 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 | BUG-40 | `Found multiple elements with the role "checkbox"` | Le DOM n'était pas nettoyé entre les tests (`cleanup()` non configuré) | Ajout de `afterEach(() => cleanup())` dans `setupTests.js` | 🔴 | ✅ Résolu |
 | BUG-63 | Tests backend lancés hors Docker : `prisma.partner` undefined | Le client Prisma de `node_modules` du poste datait de juin (généré avant les nouveaux modèles) ; celui du conteneur est à jour | Lancer les tests d'intégration dans Docker ; les tests unitaires (`npm run test:unit`) ne dépendent pas de Prisma | 🟡 | ✅ Résolu (procédure) |
 | BUG-64 | Vitest : `Failed to resolve import "../../../backend/..."` dans le conteneur frontend | Le conteneur ne monte que `./frontend` : le test de cohérence front / back ne trouve pas le backend | Exclusion conditionnelle du fichier dans `vite.config.js` (`existsSync('../backend/src/utils')`) | 🟡 | ✅ Résolu |
+| BUG-72 | Mise en place de la CI : `npm run lint` en échec (13 erreurs) | Règle `react-hooks/set-state-in-effect` apparue avec la mise à jour du plugin (12 chargements de données dans un `useEffect`) + import `Dashboard` inutilisé dans `App.jsx` | Règle passée en avertissement dans `eslint.config.js` (correction prévue : tâche 129B), import retiré : lint à 0 erreur | 🟠 | ✅ Résolu |
 
 ---
 
@@ -94,7 +100,7 @@ Suivi des bugs rencontrés et résolus au cours du développement, extrait du Jo
 | BUG-42 | `rm` refusé — Permission denied sur un fichier de migration | Fichier créé depuis l'intérieur du conteneur Docker, propriétaire `root` | `sudo rm -rf` | 🟡 | ✅ Résolu |
 | BUG-43 | Conflit de merge sur `backend/.env` / `.env.example` | Détrackage du `.env` par un membre de l'équipe pendant que l'autre avait un commit le référençant encore | Résolution manuelle : suppression de `.env.backup`, fusion des variables dans `.env.example` | 🟠 | ✅ Résolu |
 | BUG-44 | `backend/.env` supprimé du disque après un `git pull` | Le fichier n'étant plus suivi par Git, le pull a appliqué sa suppression physique | Récupération du contenu via `git show <commit>:backend/.env`, recréation manuelle + mise à jour de la clé Resend | 🔴 | ✅ Résolu |
-| BUG-66 | Fichiers personnels (CV) et images de test suivis par Git dans un dépôt public | Fichiers committés avant l'ajout des règles `public/uploads/*` au `.gitignore` | `git rm -r --cached backend/public/uploads` (les `.gitkeep` restent) ; fichiers supprimés du disque. ⚠️ Toujours présents dans l'**historique** tant qu'il n'est pas réécrit | 🟠 | ⏳ Historique à purger |
+| BUG-66 | Fichiers personnels (CV) et images de test suivis par Git dans un dépôt public | Fichiers committés avant l'ajout des règles `public/uploads/*` au `.gitignore` | `git rm -r --cached backend/public/uploads` (les `.gitkeep` restent) ; fichiers supprimés du disque. Toujours présents dans l'**historique**. **Décision du 08/11/2026 : pas de réécriture** (opération irréversible, push forcé sur les 4 branches, identifiants de commits changés) | 🟠 | ✅ Clos — risque accepté |
 
 ---
 
@@ -136,13 +142,13 @@ non exploitable en l'état actuel de l'application ; le correctif est planifié.
 
 | Catégorie | Nombre de bugs | Tous résolus ? |
 |---|---|---|
-| Environnement & Docker | 14 | ✅ |
+| Environnement & Docker | 16 | ✅ |
 | Backend & Prisma | 21 | ✅ |
-| Frontend & React | 13 | ✅ |
-| Tests (Vitest / Jest) | 4 | ✅ |
-| Git & Environnement | 5 | ⏳ 1 (historique) |
+| Frontend & React | 16 | ✅ |
+| Tests (Vitest / Jest) | 5 | ✅ |
+| Git & Environnement | 5 | ✅ (BUG-66 : risque accepté) |
 | Sécurité — audit du 26 août | 7 | ✅ |
-| **Total** | **64** | ✅ sauf BUG-66 |
+| **Total** | **70** | ✅ |
 
 **Aucun bug bloquant non résolu** dans le périmètre MVP.
 Trois dettes techniques restent ouvertes (DETTE-01 résolue), documentées et non exploitables en l'état

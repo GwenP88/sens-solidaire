@@ -128,9 +128,9 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 73 | Gwen | Accessibilité basique | ❌ |
-| 74 | Gwen | SEO basique (SEOHead) | ❌ |
-| 75 | Gwen | Lazy loading | ❌ |
+| 73 | Gwen | Accessibilité basique | ✅ |
+| 74 | Gwen | SEO basique (SEOHead) | ✅ |
+| 75 | Gwen | Lazy loading | ✅ |
 | 76 | Gwen | maxLength 280 textarea témoignage | 🔵 |
 | 77 | Gwen | Buffer API (V2) | ❌ |
 | 78 | Gwen | PageLayout — factorisation | ❌ |
@@ -240,6 +240,14 @@
 | 126 | Gwen | Tests d'intégration — CRUD des 7 ressources du dashboard, auth, routes publiques, sécurité, contact + tests unitaires back / front (≈ 400 tests, voir README § Tests) | ✅ |
 | 126B | Gwen | Erreur 500 → 404 sur PATCH / DELETE d'un id inexistant (traduction globale des erreurs Prisma dans `app.js`) ; CORS refusé → 403 | ✅ |
 
+### 6. Outillage (week-end du 7-8 novembre)
+
+| N° | Qui | Tâche | Statut |
+|---|---|---|---|
+| 175 | Gwen | Docker installé directement dans WSL (Docker Desktop n'est plus nécessaire) : sauvegarde `pg_dump`, recréation des comptes PostgreSQL, restauration | ✅ |
+| 176 | Gwen | Intégration continue GitHub Actions : lint, tests et build à chaque push sur `dev-front`, `dev` et `main` ; tests d'intégration sur une base PostgreSQL jetable ; `main` protégée (pull request + CI verte) | ✅ |
+| 177 | Gwen | `npm audit fix` front et back : plus aucune vulnérabilité critical ni high | ✅ |
+
 ### 5. Finitions
 
 | N° | Qui | Tâche | Statut |
@@ -254,18 +262,18 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 127 | Gwen | Refonte contenu dynamique | ❌ |
-| 127A | Gwen | CRUD gestion dashboard | ❌ |
+| 172 | Gwen | Refonte contenu dynamique | ❌ |
+| 172A | Gwen | CRUD gestion dashboard | ❌ |
 
-| 127C | Gwen | Tests d'intégration  | ❌ |
+| 172C | Gwen | Tests d'intégration  | ❌ |
 
 ### Bloc D — Finitions front
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 128 | Gwen | Accessibilité basique | ❌ |
-| 129 | Gwen | SEO basique (SEOHead) | ❌ |
-| 130 | Gwen | Lazy loading | ❌ |
+| 173 | Gwen | Accessibilité basique | ✅ |
+| 174 | Gwen | SEO basique (SEOHead) | ✅ |
+| 130 | Gwen | Lazy loading | ✅ |
 | 131 | Gwen | Optimisations WebP + images production | ❌ |
 | 132 | Gwen | maxLength 280 textarea témoignage | 🔵 |
 | 133 | Gwen | PageLayout — factorisation | ❌ |
@@ -284,7 +292,7 @@
 | 121C | Gwen | remplir le site : rapport de mission et témoignages| ❌ |
 | 122A | Gwen | remplir le site : actions terrain| ❌ |
 | 124A | Gwen | remplir le site : blog | ❌ |
-| 127B | Gwen | remplir le site : éducation | ❌ |
+| 172B | Gwen | remplir le site : éducation | ❌ |
 
 ### Bloc G — Déploiement & livraison
 
@@ -309,7 +317,7 @@
 > - **Une migration Prisma ≠ un transfert de données.** Appliquer les migrations en production recrée la STRUCTURE des tables (schéma), mais ne transfère jamais le contenu (missions, lieux, textes...) — deux opérations totalement distinctes.
 > - Base actuelle : PostgreSQL en local (conteneur Docker, host `postgres`), persistée via le volume `postgres_data` — les données survivent à un `docker compose down` + `up`, mais **pas** à une suppression volontaire du volume (`down -v` ou équivalent). Ne jamais faire ça sans y penser à deux fois.
 > - Au déploiement, la base de production sera une **base neuve**, distincte de celle en local — le contenu actuel ne s'y retrouve pas tout seul.
-> - **Plan retenu pour #139 (Migration BDD production)** : export de la base PostgreSQL locale actuelle → création/config de la base de prod → application des migrations (structure) → import des données exportées. Étape par étape, jamais en une seule commande automatique.
+> - **Plan retenu pour #141 (Migration BDD production)** : export de la base PostgreSQL locale actuelle → création/config de la base de prod → application des migrations (structure) → import des données exportées. Étape par étape, jamais en une seule commande automatique.
 >
 > **Pour l'instant** : rien à changer dans la façon de travailler — continuer de remplir le dashboard normalement, rien n'est perdu. Juste garder ce plan en tête le jour venu.
 
@@ -341,5 +349,5 @@
 | 166 | Gwen | Compte admin + compte invité (rôles) | ❌ |
 | 167 | Gwen | Tooltips stylées dashboard (au lieu du title natif du navigateur) | ❌ |
 | 168 | Gwen | Scroll restauré au mauvais endroit sur F5 (pages avec chargement API/images dynamique, ex: Home) | ❌ |
-| 169 | Gwen | Découper api.js en plusieurs fichiers par domaine (services/api/missions.js, locations.js, etc. + client.js commun pour authFetch) — pas nécessaire mais plus propre/maintenable pour un vrai projet (+ autre fichier de + de 300-500 lignes selon les bonnes pratiques) | ❌ |
+| 169 | Gwen | Découper api.js en plusieurs fichiers par domaine (services/api/missions.js, locations.js, etc. + client.js commun pour authFetch) — pas nécessaire mais plus propre/maintenable pour un vrai projet (+ autre fichier de + de 300-500 lignes selon les bonnes pratiques) | ✅ |
 | 171 | Gwen | Fabrique générique createResourceApi('team-members') pour générer les 6 fonctions CRUD standard (fetch/create/update/toggle/hardDelete) au lieu de les dupliquer par domaine — plus avancé, pas nécessaire pour la taille actuelle du projet | ❌ |

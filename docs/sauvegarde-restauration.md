@@ -118,3 +118,40 @@ dépôt public.
   attendu : ça confirme que la séparation des droits mise en place à la
   phase 6 (voir [`prisma/roles.sql`](../backend/prisma/roles.sql)) fonctionne
   réellement, et pas seulement sur le papier.
+
+## Restauration réelle — changement d'installation Docker (8 novembre 2026)
+
+Passage de Docker Desktop à Docker installé directement dans WSL : la nouvelle
+installation démarre avec un volume `postgres_data` **vide**. Les données de la
+cliente ont été transférées par sauvegarde puis restauration, dans cet ordre :
+
+1. **Sauvegarde** (ancienne installation), au format personnalisé `-Fc`, écrite
+   dans le conteneur puis copiée hors du dépôt avec `docker cp` (évite les
+   redirections `>` qui peuvent abîmer un fichier binaire) :
+   ```bash
+   docker exec sensolidaire_db pg_dump -U postgres -d sensolidaire -Fc -f /tmp/sauvegarde-2026-11-07.dump
+   docker cp sensolidaire_db:/tmp/sauvegarde-2026-11-07.dump ~/sauvegardes/
+   ```
+   Contrôle sans rien restaurer : `pg_restore -l <fichier> | grep "TABLE DATA"` liste les tables présentes (20 tables).
+2. **Base seule** démarrée sur la nouvelle installation : `docker compose up -d postgres`.
+3. **Comptes PostgreSQL recréés** — un `pg_dump` sauvegarde les tables et les
+   données, **pas les comptes** (objets globaux du serveur) :
+   ```bash
+   set -a; source .env; set +a
+   docker compose exec -T postgres psql -U postgres -d sensolidaire -v ON_ERROR_STOP=1 \
+     -v owner_password="$DB_OWNER_PASSWORD" -v app_password="$DB_APP_PASSWORD" < backend/prisma/roles.sql
+   unset POSTGRES_PASSWORD DB_APP_PASSWORD DB_OWNER_PASSWORD JWT_SECRET JWT_REFRESH_SECRET
+   ```
+4. **Restauration** « tout ou rien » (`--single-transaction` : une erreur annule tout) :
+   ```bash
+   docker exec -i sensolidaire_db pg_restore -U postgres -d sensolidaire --single-transaction < ~/sauvegardes/sauvegarde-2026-11-07.dump
+   ```
+5. **Vérification** : 11 missions présentes (`SELECT id, title FROM "Mission";`),
+   puis `docker compose up -d --build`, site et dashboard contrôlés dans le navigateur.
+
+| | Base d'origine | Base restaurée |
+|---|---|---|
+| `Mission` | 11 | 11 |
+
+- **Date :** 7-8 novembre 2026 — **Sauvegarde :** `~/sauvegardes/sauvegarde-2026-11-07.dump` (95 Ko, hors dépôt)
+- **Conclusion :** restauration complète sur une installation neuve, aucune perte constatée.

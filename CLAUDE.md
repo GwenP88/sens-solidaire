@@ -3,7 +3,7 @@
 Ce fichier est lu automatiquement par Claude au début de chaque session dans ce dépôt.
 Il décrit le projet, la façon de travailler attendue, ce qui a été fait, pourquoi, et ce qui reste à faire.
 
-Dernière mise à jour : 6 novembre 2026 (état du dépôt : branche `dev-front` — tâches 123 à 129 et 170 livrées, suite de tests étendue).
+Dernière mise à jour : 8 novembre 2026 (état du dépôt : branche `dev-front` — tâches 123 à 129, 170, 130, 173 à 177 livrées : accessibilité, SEO, lazy loading, CI GitHub Actions, Docker sans Docker Desktop).
 
 ---
 
@@ -100,7 +100,11 @@ Le dashboard est utilisé par la **cliente, qui n'est pas développeuse**. Tous 
 
 ## 4. Environnement local
 
-Gwen travaille sous **Windows + WSL**, avec **Docker Desktop**, repo dans `~/sens-solidaire`.
+Gwen travaille sous **Windows + WSL (Ubuntu 24.04)**, repo dans `~/sens-solidaire`.
+
+- **Docker est installé directement dans WSL** (Docker Engine + plugin Compose, depuis le 8 novembre) : **Docker Desktop n'est plus utilisé** (trop gourmand). Le service Docker démarre tout seul avec WSL ; `docker` fonctionne sans `sudo` (groupe `docker`). Site toujours sur `localhost:5173` depuis Windows.
+- Docker Desktop est encore installé (base d'origine dans son propre volume, plus utilisée) : à désinstaller quand tout est validé. **Ne pas réactiver son intégration WSL** : les deux Docker se marcheraient dessus.
+- Un **PostgreSQL natif** est installé dans WSL (projets Holberton) : **désactivé au démarrage** (`systemctl disable`) car il occupe le port 5432. Pour s'en servir : `docker compose stop` puis `sudo systemctl start postgresql`.
 
 ### Services Docker
 
@@ -126,9 +130,9 @@ docker compose logs -f backend
 # Accès SQL direct (Prisma Studio ne fonctionne pas dans Docker avec Prisma v7)
 docker compose exec postgres psql -U postgres -d sensolidaire
 
-# Tests
-docker exec sensolidaire_backend npm test
-docker exec sensolidaire_frontend npm test
+# Tests (détail : section 13)
+docker exec sensolidaire_backend npm run test:unit
+docker exec sensolidaire_frontend npm run test:run
 
 # Après ajout d'une dépendance : resynchroniser le volume node_modules
 docker exec sensolidaire_backend npm install
@@ -158,7 +162,7 @@ sens-solidaire/
 │   │   ├── components/
 │   │   │   ├── layout/        Navbar, Footer*, Hero, HeroPage, Layout, StatsBar
 │   │   │   ├── ui/            Button, Modal, Carousel, Section, CTASection, BaseContentCard,
-│   │   │   │                  BaseOverlayCard, BadgeODD, RapportCard, LignesToPuces, CookieBanner...
+│   │   │   │                  BaseOverlayCard, BadgeODD, RapportCard, LignesToPuces, CookieBanner, PageLoader...
 │   │   │   ├── admin/         DashboardLayout, DashboardSidebar, DashboardMobileNav, dashboardNav.js (liens partagés),
 │   │   │   │                  DashboardTable, DashboardModal, ConfirmModal, ErrorModal, FormElements,
 │   │   │   │                  AdminFileUpload, YouTubeLinksField, *EditModal, ModerationCard (non branché)
@@ -173,7 +177,7 @@ sens-solidaire/
 │   │   │                      index.js qui réexporte tout (on importe toujours `from '../services/api'`)
 │   │   ├── utils/             constantes et fonctions partagées (filters, validation, shortDescription, odds,
 │   │   │                      youtube, adminErrors...)
-│   │   ├── hooks/             useCountUp
+│   │   ├── hooks/             useCountUp, useSEO (titre / description / Open Graph par page)
 │   │   └── index.css          design system Tailwind v4 (@theme + @utility)
 │   ├── tests/                 Vitest + RTL : unit/, components/, pages/ (+ anciens tests à la racine)
 │   ├── scripts/optimize-placeholders.js
@@ -196,6 +200,7 @@ sens-solidaire/
 │   ├── public/uploads/        fichiers envoyés (images, documents, videos, audios)
 │   └── tests/                 Jest : unit/ (sans base) + intégration Supertest (*.admin.test.js,
 │                              *.integration.test.js, helpers/adminCrud.js)
+├── .github/workflows/ci.yml   intégration continue GitHub Actions (voir section 9)
 ├── docs/                      documentation de suivi et de conception (voir section 14)
 └── docker-compose.yml
 ```
@@ -212,6 +217,10 @@ sens-solidaire/
 - Une seule application React pour le site public **et** le dashboard (`/admin/...`, protégé par `ProtectedRoute`).
 - `services/api/client.js` : `authFetch` ajoute le token, et au premier 401 tente un **refresh silencieux** via le cookie avant de déconnecter. Les erreurs réseau sont remplacées par un message compréhensible.
 - **Liens internes** : `<Link>` (React Router). **Liens externes** : `<a target="_blank" rel="noopener noreferrer">`.
+- **Lien qui ressemble à un bouton** : `<Button to="/contact" />` (interne) ou `<Button href="https://…" />` (externe, nouvel onglet). **Jamais** de `<Button>` à l'intérieur d'un `<a>` ou d'un `<Link>` (HTML invalide, double arrêt au clavier).
+- **Référencement** : chaque page publique appelle `useSEO({ title, description, image })` (`hooks/useSEO.js`) **avant** ses `return` de chargement ; pages du dashboard : `noindex: true`. Les robots des réseaux sociaux n'exécutant pas JavaScript, `index.html` garde des valeurs Open Graph par défaut.
+- **Lazy loading** : toutes les pages sauf `Home` sont chargées à la demande (`lazy()` dans `App.jsx`, `Suspense` + `PageLoader` dans `Layout` et `DashboardLayout`). Toute nouvelle page : `const X = lazy(() => import('./pages/X'))`. Images du site public : `loading="lazy"` (sauf logo de la Navbar).
+- **Accessibilité** : lien d'évitement « Aller au contenu » (`Layout`, cible `#contenu`), contour `:focus-visible` global (`index.css`), modales en `role="dialog"` avec gestion du focus, `aria-label` sur toute icône seule (bouton ou lien).
 - Règles **dupliquées volontairement** entre front et back (ils ne partagent pas de code) : `utils/validation.js`, `utils/youtube.js`, `utils/odds.js` (correspondance ODD → catégorie), `utils/shortDescription.js`. Toute modification doit être faite **des deux côtés** — le test `frontend/tests/unit/duplicatedRules.test.js` (lancé sur le poste) échoue si les deux copies divergent.
 - `/admin` (accueil du dashboard) affiche volontairement « Vue d'ensemble — à construire » : la vue sera construite prochainement. `pages/admin/Dashboard.jsx` et `ModerationCard.jsx` ne sont pas branchés pour l'instant — **ne pas les supprimer**.
 
@@ -295,7 +304,7 @@ Lora (`font-heading`, titres) + Source Sans 3 (`font-body`, corps).
 - Carousel (Swiper) : navigation custom via `swiperRef.current?.slidePrev()/slideNext()` (le module Navigation officiel entre en conflit), `observer`/`observeParents`, `loop` seulement si `items.length >= 6`, contrôles masqués si peu d'éléments.
 - `react-scroll` est incompatible avec React 19 : utiliser le `smoothScrollTo` custom (`requestAnimationFrame`).
 - Composants de formulaire du dashboard : **toujours** passer par `components/admin/FormElements.jsx` (`FormSection`, `Field`, `TextareaField`, `FormActionBar` collante, `ShortDescriptionPreview`) et `AdminFileUpload` (prop `error`). Erreurs **par champ**, astérisques sur les champs obligatoires.
-- Modales du dashboard : `DashboardModal` / `ConfirmModal` / `ErrorModal` — **jamais** de `window.confirm` ni d'`alert`. Les messages d'erreur d'action viennent de `utils/adminErrors.js` (`ADMIN_ERRORS.toggle / delete / update / save`).
+- Modales du dashboard : `DashboardModal` / `ConfirmModal` / `ErrorModal` (dialogue accessible : titre relié, focus géré) — **jamais** de `window.confirm` ni d'`alert`. Les messages d'erreur d'action viennent de `utils/adminErrors.js` (`ADMIN_ERRORS.toggle / delete / update / save`).
 - Dashboard sur téléphone : seules la modération des témoignages et la publication d'articles sont prévues (`mobile: true` dans `dashboardNav.js`). Barre de navigation **en haut** (le bas est pris par `FormActionBar`). Colonne de tableau masquable sur mobile : `hideOnMobile: true` dans la config de colonnes de `DashboardTable`.
 - Filtres pays du site : jamais de liste figée — `buildCountryOptions()` (`utils/filters.js`) à partir des données chargées.
 - Vidéos : `YouTubeSlide` (miniature, aucun lecteur avant le clic) + `YouTubeModal` (lecteur `youtube-nocookie`, portrait conservé pour les Shorts).
@@ -318,7 +327,9 @@ Lora (`font-heading`, titres) + Source Sans 3 (`font-body`, corps).
 - **Commits thématiques** : un commit par changement logique (pas un par session).
 - Format des messages : `type(portée): description en français`, ex. `feat(admin): ...`, `fix(api): ...`, `docs: ...`, `chore(seed): ...`, `refactor(medias): ...`.
 - Gwen utilise un alias personnel **`git acp "message"`** (add + commit + push).
-- Merge `dev-front` → `dev` en fin de session ou par groupe logique ; `npm audit` (front et back) avant chaque merge sur `dev`.
+- Merge `dev-front` → `dev` en fin de session ou par groupe logique (en local, puis `git push`) ; `npm audit` (front et back) avant chaque merge sur `dev`.
+- **`main` est protégée** (ruleset GitHub « Protection main ») : pas de push direct ; `dev` → `main` **uniquement par pull request**, mergeable seulement si la CI est verte.
+- **CI GitHub Actions** (`.github/workflows/ci.yml`) à chaque push sur `dev-front`, `dev`, `main` et à chaque PR vers `dev` / `main` — 3 blocs en parallèle : *Frontend* (lint, tests, build), *Backend (tests unitaires)*, *Backend (tests d'intégration)* sur une **base PostgreSQL jetable** (migrations `prisma migrate deploy` + `roles.sql` + seed, mots de passe factices). Le lint doit rester à **0 erreur** (les avertissements ne bloquent pas).
 - Piège : `git checkout dev` peut échouer à cause de fichiers créés par Docker (propriétaire `root`) → `sudo chown -R $USER:$USER <dossier>` avant.
 
 ---
@@ -393,7 +404,7 @@ Gestion des erreurs HTTP (6 novembre) : les erreurs Prisma sont traduites dans l
 
 À conserver : Helmet en premier dans `app.js`, CORS restreint (localhost, ngrok, 192.168.x), refresh token en cookie HTTP-only, aucune donnée de `req.body` utilisée pour un champ que le serveur doit imposer.
 
-Dernier `npm audit` backend : 22/09/2026 (4 vulnérabilités restantes, indirectes via Prisma). Journal de veille : `docs/veille.md`.
+Dernier `npm audit` : 08/11/2026, `npm audit fix` front et back — plus aucune vulnérabilité critical ni high ; restent des moderate dans les outils de développement (`jest`, `nodemon`, `eslint`), corrigeables seulement avec `--force` (rétrogradations cassantes, à ne pas faire). Journal de veille : `docs/veille.md`.
 
 **Avant la production** : changer le mot de passe admin.
 
@@ -401,16 +412,16 @@ Dernier `npm audit` backend : 22/09/2026 (4 vulnérabilités restantes, indirect
 
 ## 13. Tests
 
-Environ **400 tests** (détail complet : `README.md`, section Tests).
+Environ **415 tests**, tous verts dans la CI (détail complet : `README.md`, section Tests).
 
 | Commande | Contenu | Base |
 |---|---|---|
 | `docker exec sensolidaire_backend npm run test:unit` | 90 tests unitaires backend (`tests/unit/` : utils, jwt, authMiddleware) | Non |
 | `docker exec sensolidaire_backend npm run test:integration` | ~190 tests Supertest : CRUD des 7 ressources du dashboard (scénario commun `tests/helpers/adminCrud.js`), missions, témoignages, upload, auth, routes publiques, sécurité, contact | **Oui** |
-| `docker exec sensolidaire_frontend npm run test:run` | ~120 tests Vitest : `unit/`, `components/`, `pages/` (API simulée) | Non |
+| `docker exec sensolidaire_frontend npm run test:run` | ~135 tests Vitest : `unit/` (dont `useSEO`), `components/` (dont accessibilité), `pages/` (API simulée) | Non |
 
 Règles :
-- **Les tests d'intégration tournent sur la vraie base** (contenus de la cliente). Ils ne touchent qu'aux enregistrements marqués `jest-test`, nettoyés avant et après. Tout nouveau test doit respecter ce marqueur et ne **jamais** faire de suppression en masse. Faire un `pg_dump` avant le premier lancement.
+- **Dans la CI**, les tests d'intégration tournent sur une base jetable (aucun risque). **En local**, ils tournent sur la vraie base (contenus de la cliente) : ils ne touchent qu'aux enregistrements marqués `jest-test`, nettoyés avant et après. Tout nouveau test doit respecter ce marqueur et ne **jamais** faire de suppression en masse. Faire un `pg_dump` avant le premier lancement.
 - Ils se connectent avec le compte admin : la session du dashboard doit ensuite se reconnecter (un seul refresh token actif).
 - Aucun test ne doit envoyer de vrai e-mail (contact testé uniquement sur ses refus).
 - Nouveau CRUD dashboard → appeler `describeAdminCrud()` dans un nouveau `Xxx.admin.test.js`.
@@ -430,7 +441,6 @@ Règles :
 | `docs/bugTracker.md` | Bugs déjà rencontrés et leur solution — **à consulter avant de déboguer** |
 | `docs/guide-de-style.md` | Design system (attention : valeurs de palette anciennes, voir section 7) |
 | `docs/questions-cliente.md` | Points en attente de réponse de la cliente |
-| `docs/helper-sql.md` | Aide-mémoire SQL / psql + questions probables du jury |
 | `docs/sauvegarde-restauration.md` | Procédure `pg_dump` / restauration |
 | `docs/veille.md` | Journal de veille sécurité |
 | `docs/sprintReviews.md`, `docs/sprintRetrospectives.md` | Bilans de sprint |
@@ -467,6 +477,7 @@ Règles :
 - Harmonisation du vocabulaire du dashboard (vouvoiement, « Adresse de la page »), erreurs par champ, `FormActionBar` collante, `ShortDescriptionPreview` partagé (4 formulaires), liens internes en `<Link>`.
 - Règle `isValidSlug` commune front/back.
 - **6 novembre — priorité 1 avant soutenance** : modales d'erreur au lieu des `alert` (127), filtres pays dérivés des données (170), découpage de `api.js` (128), dashboard sur téléphone (125), vidéos YouTube dans les articles (123), ménage du code (129), erreurs Prisma → 404 / 409, suite de tests unitaires + intégration (126). Bugs corrigés au passage : BUG-56 à BUG-65 (`docs/bugTracker.md`).
+- **8 novembre — outillage et finitions** : Docker installé dans WSL à la place de Docker Desktop (sauvegarde + restauration de la base), CI GitHub Actions (lint, tests, build, tests d'intégration sur base jetable) et protection de `main`, `npm audit fix`, accessibilité (173 : boutons-liens, lien d'évitement, focus visible, modales, icônes nommées), SEO (174 : `useSEO` sur les 19 pages publiques), lazy loading (130 : JavaScript initial divisé par 2). Bugs : BUG-67 à BUG-72.
 
 ---
 
@@ -476,12 +487,11 @@ Référence : `docs/planning.md` (toujours vérifier les statuts là-bas, ils pe
 
 ### Priorité 1 — avant la soutenance (23 novembre)
 
-Tâches 123, 125, 126, 127, 128, 129 et 170 **terminées le 6 novembre** (voir `docs/planning.md`). Reste :
+Tâches 123, 125, 126, 127, 128, 129 et 170 **terminées le 6 novembre** ; 130 (lazy loading), 173 (accessibilité), 174 (SEO), 175 (Docker dans WSL), 176 (CI), 177 (`npm audit fix`) **terminées le 8 novembre** (voir `docs/planning.md`). Tests d'intégration exécutés pour la 1re fois dans la CI : tous verts. BUG-66 (CV dans l'historique Git) : **décision de ne pas réécrire l'historique**. Reste :
 
 | N° | Tâche |
 |---|---|
-| — | Lancer la suite de tests d'intégration dans Docker et corriger ce qui échoue (jamais exécutée sur la base à ce jour) |
-| — | Purge du CV dans l'historique Git (BUG-66) — en attente de décision |
+| 134 | Audit Lighthouse (objectif > 90) — chiffres pour le diaporama |
 | 129B | 20 avertissements lint `react-hooks` (`useEffect`) — après la soutenance |
 
 ### Bloc C — Page Éducation & sensibilisation
@@ -564,7 +574,7 @@ Actuellement **entièrement codée en dur** (seul `EducationItem` vient du seed)
 
 ### Bloc D / E — Finitions front et qualité
 
-Accessibilité basique puis audit WCAG 2.1 AA, SEO basique (`SEOHead` : title, meta description, Open Graph par page), lazy loading (routes et images), optimisation des images de production, `maxLength={280}` sur le textarea des témoignages (partiel), factorisation `PageLayout`, audit Lighthouse (objectif > 90).
+Faits le 8 novembre : accessibilité basique (173), SEO basique (174, hook `useSEO`), lazy loading des pages et des images (130). Restent : audit WCAG 2.1 AA (136), optimisation des images de production, `maxLength={280}` sur le textarea des témoignages (partiel), factorisation `PageLayout`, audit Lighthouse (objectif > 90).
 
 ### Bloc F — Remplir le site avec les vraies données
 
@@ -611,12 +621,16 @@ Galerie 15-20 photos, contenu générique éditable, Buffer API (brouillon rése
 - **Tests backend hors Docker** : le client Prisma du poste (`backend/node_modules`) est périmé → `prisma.xxx` undefined. Les tests d'intégration se lancent dans le conteneur ; `npm run test:unit` fonctionne partout.
 - **Vitest** refuse un import calculé (chemin dans une variable) hors de `frontend/` : écrire le chemin relatif en entier.
 - `git acp` ajoute **tout** : pour des commits thématiques, `git add <fichiers>` puis `git commit`.
+- **`ports are not available … 5432`** au démarrage de la base : le PostgreSQL natif de WSL tourne → `sudo systemctl stop postgresql` (BUG-67).
+- **Build Vite hors Docker : `EACCES … frontend/dist`** : le dossier a été créé par Docker (propriétaire `root`) → `sudo chown -R $USER:$USER frontend/dist`. Sans effet sur la CI.
+- **Restaurer un `pg_dump` dans une base neuve** : recréer d'abord les 2 comptes (`roles.sql`), qu'une sauvegarde ne contient pas (voir `docs/sauvegarde-restauration.md`).
+- **Lien vers une ancre d'une autre page** (`/soutenir#don`) : `RouteScrollReset` remonte en haut de page, l'ancre n'est pas atteinte → lier la page seule.
 
 ---
 
 ## 18. Points d'attention relevés dans le dépôt (à traiter avec Gwen)
 
-- Fichiers de test et CV retirés du suivi Git et du disque (6 novembre). Le CV reste dans l'**historique** du dépôt public (commit `d432efa`) tant qu'il n'est pas réécrit (BUG-66).
+- Fichiers de test et CV retirés du suivi Git et du disque (6 novembre). Le CV reste dans l'**historique** du dépôt public (commit `d432efa`) : **décision du 8 novembre de ne pas réécrire l'historique** (BUG-66, risque accepté). Ne pas reproposer la purge.
 - Avant la production : si Nginx ajoute une Content-Security-Policy, autoriser `i.ytimg.com` (images) et `www.youtube-nocookie.com` (iframe) ; mentionner YouTube sur la page Cookies.
 - `docker-compose.yml` définit `VITE_API_URL: http://localhost:3000` alors que `api.js` utilise `/api` en relatif (variable inutilisée) et que le backend est exposé sur 3001.
-- Numérotation en doublon dans `docs/planning.md` (127, 128, 129 utilisés deux fois pour des tâches différentes) : préciser le bloc quand on cite un numéro.
+- Numérotation du planning dédoublonnée le 8 novembre : 127, 128 et 129 désignent les tâches **terminées** (alert, `api.js`, ménage) ; Bloc C → 172 (172A/B/C), accessibilité → 173, SEO → 174.

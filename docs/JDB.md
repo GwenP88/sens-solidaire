@@ -2878,6 +2878,81 @@ Trouvé en chemin : `components/admin/MissionForm.jsx`, code mort (aucune réfé
 | Un seul bloc Photos avec photo principale | La cliente ne se demande plus « pourquoi deux endroits pour les images ? » ; pattern déjà existant |
 | `Link` pour l'interne, `a` pour l'externe | Navigation SPA sans rechargement ; sécurité `noopener noreferrer` pour l'externe |
 
+
+---
+
+### Week-end du 7 au 8 novembre 2026 — Docker sans Docker Desktop, intégration continue, accessibilité, SEO, lazy loading
+
+**Sauvegarde de la base avant tout changement :**
+- `pg_dump` au format personnalisé (`-Fc`) écrit **dans** le conteneur puis copié avec `docker cp` vers `~/sauvegardes/`, hors du dépôt (données de la cliente) : 95 Ko, 20 tables contrôlées avec `pg_restore -l` sans rien restaurer
+- Le conteneur de la base refusait de démarrer : le port 5432 était pris par un PostgreSQL installé dans WSL pour les projets Holberton (voir tableau)
+
+**175 — Docker directement dans WSL (fin de Docker Desktop) :**
+- Docker Desktop devait rester ouvert en continu et faisait ramer le PC. Docker Engine + plugin Compose installés dans WSL (script officiel `get.docker.com`, utilisateur ajouté au groupe `docker`), démarrage automatique avec WSL
+- Docker Desktop débranché (démarrage automatique et intégration WSL désactivés) mais **pas désinstallé** : solution de secours le temps de valider
+- Nouvelle installation = volume `postgres_data` **vide**. Ordre suivi : base seule (`docker compose up -d postgres`) → **comptes recréés** avec `roles.sql` (un `pg_dump` ne contient pas les comptes, objets globaux du serveur) → `pg_restore --single-transaction` (tout ou rien) → 11 missions retrouvées → `docker compose up -d --build` → site et dashboard vérifiés
+- Mots de passe chargés depuis `.env` dans le terminal (`set -a; source .env`), jamais écrits dans la commande, puis effacés (`unset`)
+
+**176 — Intégration continue GitHub Actions (`.github/workflows/ci.yml`) :**
+- Déclenchée à chaque push sur `dev-front`, `dev`, `main` (donc aussi à chaque merge) et à chaque pull request vers `dev` / `main`
+- 3 blocs en parallèle : **Frontend** (lint, tests, build), **Backend — tests unitaires**, **Backend — tests d'intégration**
+- Tests d'intégration sur une **base PostgreSQL 16 jetable** : `prisma migrate deploy` → `roles.sql` → seed → tests avec le compte `sensolidaire_app` (comme l'API réelle), mots de passe factices. **Première exécution de ces 189 tests : tous verts du premier coup**, et preuve que les migrations reconstruisent la base depuis zéro (prérequis du déploiement)
+- `--runInBand` : un fichier de test à la fois, car tous partagent le compte admin (un seul refresh token actif)
+- Avant la CI, le lint était en échec (13 erreurs) : règle `set-state-in-effect` passée en avertissement (correction prévue en 129B), import `Dashboard` inutilisé retiré
+- `main` protégée par un *ruleset* GitHub : pull request obligatoire, mergeable seulement si les 3 blocs sont verts ; pas de push forcé ni de suppression
+
+**177 — `npm audit` avant le merge sur `dev` :**
+- Backend : 22 vulnérabilités dont **1 critical** (`proxy-addr`, usurpation d'adresse IP, via Express) et 7 high (`multer`, `sharp`, `body-parser`…) ; frontend : 17 dont 9 high (`react-router`, `vite`…)
+- `npm audit fix` **sans `--force`** : plus aucune critical ni high. Restent des *moderate* dans les outils de développement (`jest`, `nodemon`, `eslint`) : `--force` les rétrograderait vers d'anciennes versions et casserait les tests
+
+**173 — Accessibilité basique :**
+- **31 boutons placés dans des liens** (`<a><button>`, HTML invalide, deux arrêts au clavier) : `Button` accepte maintenant `to` (lien interne → `<Link>`) et `href` (lien externe, nouvel onglet) et rend un vrai lien stylé en bouton
+- Lien d'évitement « Aller au contenu » (invisible tant qu'on n'appuie pas sur Tab), contour `:focus-visible` terracotta pour la navigation au clavier, animations coupées si le système le demande (`prefers-reduced-motion`)
+- Modales (`Modal`, `DashboardModal`) annoncées comme fenêtres de dialogue (`role="dialog"`, titre relié), focus placé dedans à l'ouverture et rendu au bouton d'origine à la fermeture
+- Icônes seules nommées pour les lecteurs d'écran : accueil de la Navbar, flèches du carrousel, 5 réseaux sociaux du pied de page (+ ouverture dans un nouvel onglet)
+- Derniers liens internes en `<a href>` passés en `<Link>` (pied de page, pages légales, bannière cookies…)
+
+**174 — SEO basique :**
+- Hook `useSEO({ title, description, image })` appelé en haut des **19 pages publiques** : titre d'onglet « Page | Sens Solidaires », description Google (repère `---` retiré, ~160 caractères), adresse canonique, aperçu de partage Open Graph ; pages détail mises à jour à l'arrivée des données
+- Connexion et dashboard en `noindex` ; valeurs Open Graph par défaut ajoutées à `index.html` pour les robots des réseaux sociaux (ils n'exécutent pas JavaScript)
+
+**130 — Lazy loading :**
+- Toutes les pages sauf l'accueil chargées à la demande (`React.lazy` + `Suspense`, composant `PageLoader`) : la Navbar et le pied de page restent affichés pendant le chargement ; le visiteur ne télécharge plus le code du dashboard
+- JavaScript à l'arrivée sur le site : **678 Ko → 360 Ko** (180 → 110 Ko compressé). Images du site public en `loading="lazy"` (sauf le logo de la Navbar)
+
+**Tests :** 14 nouveaux tests frontend (accessibilité, `useSEO`) — **136 tests frontend**, ~415 au total, tous verts
+
+**Documentation :** `CLAUDE.md`, `README.md` (prérequis, CI, tests, audit), `routine_quotidienne.md` (démarrage sans Docker Desktop, PR vers `main`), `sauvegarde-restauration.md` (restauration réelle), `bugTracker.md` (BUG-67 à 72, BUG-66 clos), `modif-en-cours-de-dev.md` (67 à 71). Planning : numéros en doublon corrigés (Bloc C → 172, accessibilité → 173, SEO → 174). `docs/helper-sql.md` retiré du projet
+
+---
+
+#### Bugs rencontrés et résolus
+
+| Bug | Cause | Solution |
+|---|---|---|
+| Base Docker impossible à démarrer : « ports are not available … 5432 » | PostgreSQL natif de WSL (projets Holberton) lancé au démarrage | `sudo systemctl disable --now postgresql` (BUG-67) |
+| Vulnérabilité critical + 16 high | Dépendances non mises à jour depuis septembre | `npm audit fix` sans `--force` (BUG-68) |
+| Boutons dans des liens | `Button` enveloppé dans un `<a>` pour naviguer | Props `to` / `href` sur `Button` (BUG-69) |
+| « Faire un don » / « Adhérer » du pied de page → page vide | Liens vers `/don` et `/adhesion`, routes inexistantes | Liens vers `/soutenir` (BUG-70) |
+| Favicon absent en production | `/Logo.png` appelé, fichier `logo.png` : le serveur Linux distingue la casse | Chemin corrigé (BUG-71) |
+| CI rouge dès le départ (13 erreurs de lint) | Nouvelle règle `react-hooks/set-state-in-effect` + import inutilisé | Règle en avertissement (129B), import retiré (BUG-72) |
+| Build local : `EACCES … frontend/dist` | Dossier créé par Docker (propriétaire `root`) | `chown` ; sans effet sur la CI, qui part d'un dossier neuf |
+
+---
+
+#### Décisions
+
+| Décision | Justification |
+|---|---|
+| Docker Engine dans WSL plutôt que Docker Desktop | Beaucoup plus léger, même `docker-compose.yml` ; le jury retrouve le même environnement Docker. Installer PostgreSQL et Node sans Docker a été écarté (configuration à changer, contraire à la règle « tout dans Docker ») |
+| Docker Desktop conservé quelques jours | Retour arrière possible tant que la nouvelle installation n'est pas validée |
+| CI avec base jetable | Les tests d'intégration ne risquent plus les données de la cliente ; ils valident aussi la reconstruction de la base pour le déploiement |
+| Protection de `main` par pull request | Aucun code cassé ne peut arriver sur la branche de production, même par erreur ; pratique courante en entreprise |
+| Règle `set-state-in-effect` en avertissement | Le chargement de données dans un `useEffect` fonctionne ; corriger 12 cas dans 9 pages du dashboard à deux semaines de la soutenance était un risque inutile (129B après la soutenance) |
+| `useSEO` (hook) plutôt que `SEOHead` / React Helmet | Aucune dépendance, une ligne par page, compatible avec les pages détail (titre mis à jour à l'arrivée des données) |
+| Pas de réécriture de l'historique Git pour le CV (BUG-66) | Opération irréversible (push forcé sur 4 branches, identifiants de commits changés) ; risque accepté |
+| Renumérotation du planning : les tâches terminées gardent leur numéro | Leurs numéros sont cités dans les messages de commit, qu'on ne peut plus modifier |
+
 ---
 
 *Journal de bord — Sens Solidaire · Holberton School Thonon-les-Bains | À compléter chaque jour de développement.*

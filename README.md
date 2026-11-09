@@ -278,8 +278,9 @@ erDiagram
 
 ### Prérequis
 
-- Docker et Docker Compose installés
+- Docker et Docker Compose installés — sous Windows : **Docker Engine installé directement dans WSL** (`curl -fsSL https://get.docker.com | sudo sh`, puis `sudo usermod -aG docker $USER`) ; Docker Desktop fonctionne aussi mais consomme beaucoup plus de ressources
 - Git
+- Port **5432** libre : si un PostgreSQL est déjà installé sur la machine, l'arrêter (`sudo systemctl stop postgresql`)
 
 ### 1. Cloner le repo
 
@@ -361,6 +362,7 @@ sens-solidaire/
 │   │   ├── pages/             # Une page par route
 │   │   │   └── admin/         # Pages du dashboard
 │   │   ├── services/api/      # Appels HTTP : un fichier par ressource + client.js (authFetch) + index.js
+│   │   ├── hooks/             # useCountUp, useSEO (titre, description, Open Graph par page)
 │   │   └── utils/             # Constantes partagées (filtres, icônes, footerCta...)
 │   ├── tests/                 # Vitest + RTL : unit/, components/, pages/
 │   └── public/images/         # Images statiques, classées par contexte métier
@@ -379,6 +381,8 @@ sens-solidaire/
 │   │   └── seed.js            # Données de test
 │   └── tests/                 # Jest : unit/ (sans base) + intégration Supertest (helpers/adminCrud.js)
 │
+├── .github/workflows/ci.yml   # Intégration continue (lint, tests, build, intégration sur base jetable)
+│
 ├── docs/                      # Documentation du projet — voir docs/README.md
 │   ├── README.md              # Sommaire de la documentation
 │   ├── JDB.md                 # Journal de bord quotidien
@@ -393,7 +397,7 @@ sens-solidaire/
 
 ## Tests
 
-Environ **400 tests automatisés** : 279 côté backend (90 unitaires + 189 d'intégration), 122 côté frontend.
+Environ **415 tests automatisés** : 279 côté backend (90 unitaires + 189 d'intégration), 136 côté frontend. Ils sont tous lancés automatiquement par la CI (voir plus bas).
 
 | Commande | Ce qu'elle lance | Base de données |
 |---|---|---|
@@ -447,11 +451,26 @@ adresse d'action déjà prise → 409, deux rapports d'activité la même année
 
 | Dossier | Ce qui est vérifié |
 |---|---|
-| `unit/` | validation, aperçu du résumé, ODD (chaque catégorie correspond à un filtre de Notre Impact), filtres pays, messages d'erreur du dashboard (vouvoiement, pas de jargon) |
+| `unit/` | référencement (`useSEO` : titre, description nettoyée, robots, image de partage), validation, aperçu du résumé, ODD (chaque catégorie correspond à un filtre de Notre Impact), filtres pays, messages d'erreur du dashboard (vouvoiement, pas de jargon) |
 | `unit/duplicatedRules.test.js` | les règles **dupliquées volontairement** entre front et back (slug, année, ODD, YouTube, résumé) donnent les mêmes résultats. Exécuté sur le poste uniquement : le conteneur frontend ne voit pas `backend/` (exclusion automatique dans `vite.config.js`) |
-| `components/` | `Modal`, `ConfirmModal`, `ErrorModal`, `DashboardTable`, `FormElements`, `FilterSelect`, `YouTubeLinksField`, navigation du dashboard (barre mobile, avertissement « prévue pour un ordinateur », `ProtectedRoute`) |
+| `components/` | accessibilité (bouton-lien sans `<button>` imbriqué, modale annoncée comme dialogue avec gestion du focus, icônes des réseaux sociaux nommées), `Modal`, `ConfirmModal`, `ErrorModal`, `DashboardTable`, `FormElements`, `FilterSelect`, `YouTubeLinksField`, navigation du dashboard (barre mobile, avertissement « prévue pour un ordinateur », `ProtectedRoute`) |
 | `pages/` | avec API simulée : `Testimonials` (filtre destination des rapports), `Impact` (pays dérivés des actions), `LocationsPage` (modale d'erreur au lieu d'un `alert`), `MediaPostFormPage` (validation et envoi des vidéos YouTube) |
 | racine | `LignesToPuces`, `Button`, `TestimonialForm` (consentement RGPD, erreur d'envoi), `LoginAdmin`, `filters`, `youtube` |
+
+### Intégration continue (GitHub Actions)
+
+Fichier [`.github/workflows/ci.yml`](./.github/workflows/ci.yml). Déclenchée à chaque push sur `dev-front`, `dev` et `main`, et à chaque pull request vers `dev` ou `main`. Trois blocs en parallèle :
+
+| Bloc | Étapes |
+|---|---|
+| Frontend (lint, tests, build) | `npm ci` → `npm run lint` (0 erreur exigée) → `npm run test:run` (test de cohérence front / back inclus) → `npm run build` |
+| Backend (tests unitaires) | `npm ci` → `npm run test:unit` |
+| Backend (tests d'intégration) | base **PostgreSQL 16 jetable** → `prisma migrate deploy` → `roles.sql` (les 2 comptes) → seed → `npm run test:integration -- --runInBand` |
+
+- Les tests d'intégration de la CI ne touchent **jamais** aux données réelles : la base est créée vide puis détruite à chaque passage, avec des mots de passe factices.
+- Ils vérifient aussi que les migrations **reconstruisent la base depuis zéro**, comme il faudra le faire en production.
+- `--runInBand` : un fichier de test à la fois, car tous partagent le compte admin (une seule session active).
+- La branche `main` est protégée : on n'y arrive que par pull request, mergeable seulement si les 3 blocs sont verts.
 
 ### Tests manuels (Postman)
 
@@ -465,11 +484,12 @@ Un runbook complet est disponible dans [`docs/test_postman_back.md`](./docs/test
 | **Jest + Supertest (backend)** | Routes HTTP réelles sur la base Docker : CRUD, authentification, sécurité, visibilité publique |
 | **Vitest + RTL (frontend)** | Fonctions pures, composants, règles métier UI, appels API mockés |
 | **Postman (manuel)** | Exploration et validation des nouveaux endpoints avant automatisation |
+| **GitHub Actions (CI)** | Rejoue tout automatiquement à chaque push, base jetable pour l'intégration |
 
 ### Sécurité des dépendances
 
 Audit via `npm audit` (frontend et backend) avant chaque merge sur `dev`.
-Dernier audit backend : **22/09/2026** — 16 vulnérabilités détectées, 12 corrigées par `npm audit fix`. Les 4 restantes concernent des dépendances indirectes de Prisma : leur correction imposerait un changement de version majeur, étudié séparément. Résultats consignés dans [`docs/veille.md`](./docs/veille.md).
+Dernier audit : **08/11/2026** — 1 critical (`proxy-addr`, via Express) et 16 high (front + back) corrigées par `npm audit fix`, sans `--force`. Restent uniquement des vulnérabilités *moderate* dans les outils de développement (`jest`, `nodemon`, `eslint`), jamais installés en production : leur correction imposerait des rétrogradations cassantes. Résultats consignés dans [`docs/veille.md`](./docs/veille.md).
 
 ## Équipe & rôles
 

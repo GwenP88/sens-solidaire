@@ -2,7 +2,7 @@
 
 ## 🌅 Matin — Démarrage
 
-1. **Lancer Docker Desktop** (Windows) — attendre que Docker soit complètement démarré
+1. **Ouvrir le terminal WSL** — Docker est installé directement dans WSL et démarre tout seul avec lui (Docker Desktop n'est plus utilisé depuis le 8 novembre 2026). Vérifier avec `docker ps` (pas d'erreur = Docker est prêt)
 
 2. **Récupérer les dernières modifications de l'équipe** :
 ```bash
@@ -16,13 +16,14 @@ git merge dev
 3. **Démarrer les conteneurs** :
 ```bash
 cd ~/sens-solidaire
-docker-compose up -d
+docker compose up -d
 ```
 
 ✅ Le site est accessible sur http://localhost:5173
-✅ L'API est accessible sur http://localhost:3000
+✅ L'API est accessible sur http://localhost:3001
 ✅ PostgreSQL tourne dans Docker — pas besoin de le démarrer séparément
 ⚠️ Ne jamais lancer npm run dev manuellement quand Docker est en route
+⚠️ Erreur « ports are not available … 5432 » : le PostgreSQL de WSL (projets Holberton) tourne → `sudo systemctl stop postgresql`
 
 ---
 
@@ -49,30 +50,38 @@ ngrok http 3000 --config ~/.config/ngrok/ngrok2.yml
 
 ## 🌙 Soir — Fermeture
 
-1. **Arrêter les conteneurs** :
+1. **Arrêter les conteneurs** (libère la mémoire ; les données restent dans le volume) :
 ```bash
 cd ~/sens-solidaire
-docker-compose down
+docker compose stop
 ```
-2. **Fermer Docker Desktop** (Windows)
+⚠️ Jamais `docker compose down -v` : le `-v` supprime la base de données.
 
 ---
 
 ## 📝 Fin de session — Git
 
-1. **Commit sur dev-front** :
+1. **Commits thématiques sur dev-front** (un commit par changement logique) :
 ```bash
-git add .
-git commit -m "feat: ..."
+git add <fichiers concernés>
+git commit -m "feat(portée): ..."
 git push origin dev-front
 ```
-2. **Merge dans dev** :
+La CI GitHub Actions se lance à chaque push (onglet **Actions** du dépôt) : attendre la coche verte.
+
+2. **`npm audit` puis merge dans dev** :
+```bash
+docker exec sensolidaire_backend npm audit
+docker exec sensolidaire_frontend npm audit
+```
 ```bash
 git checkout dev
 git merge dev-front
 git push origin dev
 git checkout dev-front
 ```
+
+3. **Vers `main` (occasionnel)** : `main` est protégée, pas de push direct. Sur GitHub : **Pull requests → New pull request**, base `main` ← compare `dev`, attendre la CI verte, **Merge pull request**. Puis en local : `git checkout main && git pull`.
 
 ---
 
@@ -82,7 +91,7 @@ git checkout dev-front
 
 ### Se connecter à la BDD
 ```bash
-docker-compose exec postgres psql -U postgres -d sensolidaire
+docker compose exec postgres psql -U postgres -d sensolidaire
 ```
 
 ### Explorer (une fois connecté dans psql)
@@ -110,12 +119,14 @@ DELETE FROM "TeamMember" WHERE id = 1;   -- une ligne précise
 ```
 
 ### Repartir de zéro (reset complet de la BDD)
+
+⚠️ **Efface toutes les données de la cliente.** Faire d'abord une sauvegarde, et suivre plutôt `docs/sauvegarde-restauration.md` (les 2 comptes PostgreSQL de `roles.sql` doivent être recréés, ce que les étapes ci-dessous ne font pas).
 ```bash
 # 1. Supprime le conteneur ET le volume (= toutes les données)
-docker-compose down -v
+docker compose down -v
 
 # 2. Reconstruit et redémarre
-docker-compose up -d --build
+docker compose up -d --build
 
 # 3. Réapplique les migrations
 docker exec sensolidaire_backend npx prisma migrate deploy

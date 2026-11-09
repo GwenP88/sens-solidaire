@@ -1,7 +1,7 @@
 # Modifications apportées en cours de développement
 ## Sens Solidaire — Refonte du site web
 *Pichot Gwen & Amblard Alison · Holberton School — Thonon-les-Bains*
-*Dernière mise à jour : 6 novembre 2026*
+*Dernière mise à jour : 8 novembre 2026*
 
 Ce document trace toutes les décisions qui s'écartent des guides initiaux.
 Il sera mis à jour en continu et servira à actualiser la documentation officielle en fin de projet.
@@ -80,6 +80,11 @@ Il sera mis à jour en continu et servira à actualiser la documentation officie
 | 64 | 06/11/26 | Dashboard — erreurs | `alert()` remplacés par `ErrorModal` ; textes centralisés dans `utils/adminErrors.js` | Charte du dashboard : vouvoiement, consigne claire, rendu cohérent avec les autres modales | ✅ Appliquée |
 | 65 | 06/11/26 | API — gestion des erreurs | Erreurs Prisma traduites dans le gestionnaire global de `app.js` (`utils/prismaErrors.js`) : `P2025` → 404, `P2002` → 409 ; CORS refusé → 403 | Un PATCH / DELETE sur un id inexistant renvoyait 500 sur 8 ressources : corrigé en un seul endroit plutôt que dans chaque service | ✅ Appliquée |
 | 66 | 06/11/26 | Stratégie de tests | Tests unitaires séparés (`tests/unit/`, sans base) ; scénario d'intégration commun aux 7 CRUD (`tests/helpers/adminCrud.js`) ; marqueur `jest-test` pour ne jamais toucher aux données réelles ; test de cohérence des règles dupliquées front / back | Les tests d'intégration tournent sur la base de développement qui contient les contenus de la cliente ; le scénario commun évite 7 copies du même fichier | ✅ Appliquée |
+| 67 | 08/11/26 | Environnement — Docker | **Docker Engine installé directement dans WSL** au lieu de Docker Desktop ; données transférées par `pg_dump` → comptes recréés (`roles.sql`) → `pg_restore` | Docker Desktop devait rester ouvert en permanence et ralentissait le poste. Même `docker-compose.yml`, mêmes commandes ; restauration réelle documentée dans `sauvegarde-restauration.md` | ✅ Appliquée |
+| 68 | 08/11/26 | Qualité — intégration continue (non prévue dans les guides) | **GitHub Actions** : lint, tests, build et tests d'intégration sur une **base PostgreSQL jetable** à chaque push sur `dev-front` / `dev` / `main` ; `main` protégée (pull request + CI verte) | Les tests d'intégration ne tournaient que sur la base de développement (données de la cliente) : la base jetable supprime ce risque et vérifie que les migrations reconstruisent la base depuis zéro (prérequis du déploiement) | ✅ Appliquée |
+| 69 | 08/11/26 | SEO — `SEOHead` prévu (tâche 174) | Hook **`useSEO()`** (`hooks/useSEO.js`) au lieu d'un composant `SEOHead` / React Helmet ; aucune dépendance ajoutée | Une ligne en haut de chaque page, appelée avant les `return` de chargement : les pages détail mettent leur titre à jour quand les données arrivent. Met à jour les balises existantes (pas de doublon). Les valeurs Open Graph par défaut restent dans `index.html` pour les robots des réseaux sociaux, qui n'exécutent pas JavaScript | ✅ Appliquée |
+| 70 | 08/11/26 | Composant — `Button.jsx` | `Button` rend un lien quand il reçoit `to` (interne, `<Link>`) ou `href` (externe, nouvel onglet) ; les 31 `<a><Button/></a>` remplacés | Un `<button>` dans un `<a>` est du HTML invalide (deux éléments cliquables imbriqués, deux arrêts au clavier) — tâche 173 accessibilité | ✅ Appliquée |
+| 71 | 08/11/26 | Performance — chargement des pages (tâche 130) | Pages chargées à la demande (`React.lazy` + `Suspense`, sauf `Home`) ; images du site public en `loading="lazy"` | JavaScript téléchargé à l'arrivée sur le site : 678 Ko → 360 Ko (180 → 110 Ko compressé) ; un visiteur ne télécharge plus le code du dashboard | ✅ Appliquée |
 
 ---
 
