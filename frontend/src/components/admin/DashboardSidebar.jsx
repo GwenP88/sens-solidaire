@@ -11,7 +11,7 @@ function DashboardSidebar({ onLogout }) {
     <aside className="hidden md:flex w-64 h-screen bg-white border-r border-gray-200 flex-col fixed left-0 top-0 z-20">
 
       <div className="flex items-center gap-2 px-6 py-6">
-        <img src="/logo.webp" alt="Sens Solidaires" className="h-12" />
+        <img src="/logo.webp" alt="Sens Solidaires" width="160" height="160" className="h-12 w-auto" />
         <span className="font-heading font-bold text-lg text-dash-title">
           Sens Solidaires
         </span>

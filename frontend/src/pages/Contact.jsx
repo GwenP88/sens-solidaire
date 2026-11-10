@@ -34,20 +34,20 @@ function Contact() {
         <div className="flex flex-col md:flex-row gap-lg items-start">
 
           {/* Texte d'introduction — 2/3 */}
-          <p className="text-body text-primary/80 flex-1">
+          <p className="text-body text-primary/90 flex-1">
             Notre équipe est à votre écoute. Contactez-nous via le formulaire ci-dessous ou par téléphone : nous prendrons le temps de répondre à vos questions et de vous accompagner dans votre démarche.<br /><br />
-            <span className="text-mention text-primary/60">Notre équipe s'engage à vous répondre dans les meilleurs délais.</span>
+            <span className="text-mention text-primary/90">Notre équipe s'engage à vous répondre dans les meilleurs délais.</span>
           </p>
 
           {/* Carte référente — 1/3 */}
           {/* h3-style mb-0 : dans flex flex-col gap-xs, marge redondante avec gap */}
           <div className="w-full md:w-1/3 shrink-0 flex flex-col items-center gap-xs p-6 bg-surface-mid rounded-2xl text-center">
             <h3 className="h3-style text-primary mb-0">Delphine Thibaut</h3>
-            <p className="text-caption text-primary/60">Fondatrice et Chargée des Programmes</p>
-            <a href="mailto:contact@sensolidaire.org" className="link-inline text-primary/60 hover:text-accent">
+            <p className="text-caption text-primary/90">Fondatrice et Chargée des Programmes</p>
+            <a href="mailto:contact@sensolidaire.org" className="link-inline text-primary/90 hover:text-accent">
               contact@sensolidaire.org
             </a>
-            <a href="tel:+33637766013" className="link-nav text-primary/40">
+            <a href="tel:+33637766013" className="link-nav text-primary/90">
               +33 6 73 76 60 13
             </a>
           </div>

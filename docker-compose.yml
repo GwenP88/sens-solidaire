@@ -65,6 +65,8 @@ services:
       VITE_API_URL: http://localhost:3000
     ports:
       - "5173:5173"
+      # Version de production servie par `vite preview` (audit Lighthouse, tâche 134)
+      - "4173:4173"
     volumes:
       # Montage du code source pour le hot reload
       - ./frontend:/app

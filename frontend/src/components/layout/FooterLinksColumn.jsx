@@ -14,7 +14,7 @@ function FooterLinksColumn({ title, links }) {
         <Link
           key={link.label}
           to={link.href}
-          className={`link-footer text-surface/70 hover:text-surface ${i === 0 ? 'pt-4' : ''}`}
+          className={`link-footer text-surface/80 hover:text-surface ${i === 0 ? 'pt-4' : ''}`}
         >
           {link.label}
         </Link>

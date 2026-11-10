@@ -92,7 +92,8 @@ function Navbar() {
         {/* ── Logo ── */}
         <Link to="/">
           <div className="bg-white/40 rounded-full p-1">
-            <img src="/logo.webp" alt="Sens Solidaires" className="h-12 md:h-14" />
+            {/* width / height : réservent la place du logo avant son chargement (pas de décalage de la page) */}
+            <img src="/logo.webp" alt="Sens Solidaires" width="160" height="160" className="h-12 md:h-14 w-auto" />
           </div>
         </Link>
 

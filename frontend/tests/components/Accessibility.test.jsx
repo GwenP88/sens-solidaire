@@ -8,6 +8,7 @@ import { useState } from 'react'
 import Button from '../../src/components/ui/Button'
 import Modal from '../../src/components/ui/Modal'
 import FooterBrand from '../../src/components/layout/FooterBrand'
+import ContactForm from '../../src/components/forms/ContactForm'
 
 describe('Button — lien qui ressemble à un bouton', () => {
   it('avec `to` : un seul lien interne, sans <button> imbriqué', () => {
@@ -72,5 +73,16 @@ describe('Pied de page — réseaux sociaux', () => {
       const link = screen.getByRole('link', { name: `${name} (nouvel onglet)` })
       expect(link).toHaveAttribute('target', '_blank')
     }
+  })
+})
+
+describe('Formulaire de contact — libellés reliés aux champs', () => {
+  it('chaque champ est retrouvé par son libellé (comme le fait un lecteur d\'écran)', () => {
+    render(<MemoryRouter><ContactForm /></MemoryRouter>)
+    expect(screen.getByLabelText('Prénom *').tagName).toBe('INPUT')
+    expect(screen.getByLabelText('Nom *').tagName).toBe('INPUT')
+    expect(screen.getByLabelText('Email *')).toHaveAttribute('type', 'email')
+    expect(screen.getByLabelText('Sujet *').tagName).toBe('SELECT')
+    expect(screen.getByLabelText('Message *').tagName).toBe('TEXTAREA')
   })
 })

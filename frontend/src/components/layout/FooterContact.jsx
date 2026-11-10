@@ -13,14 +13,14 @@ function FooterContact() {
           {contact.type === 'address' ? (
             <>
               <IconPin className="text-surface text-lg mt-1 shrink-0" />
-              <a href={contact.href} target="_blank" rel="noopener noreferrer" className="link-inline text-surface/70 hover:text-surface">
+              <a href={contact.href} target="_blank" rel="noopener noreferrer" className="link-inline text-surface/80 hover:text-surface">
                 {contact.label}<br />{contact.detail}
               </a>
             </>
           ) : (
             <>
               <IconMail className="text-surface text-lg mt-1 shrink-0" />
-              <a href={contact.href} className="link-inline text-surface/70 hover:text-surface">
+              <a href={contact.href} className="link-inline text-surface/80 hover:text-surface">
                 {contact.label}
               </a>
             </>

@@ -50,7 +50,7 @@ function LoginAdmin() {
 
       {/* Côté gauche — image immersive avec overlay */}
       <div className="relative w-1/2 hidden lg:block">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(/images/design/hero/hero-home.jpg)` }}></div>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(/images/design/hero/hero-home.webp)` }}></div>
         <div className="absolute inset-0 bg-black/50"></div>
       </div>
 
@@ -59,7 +59,7 @@ function LoginAdmin() {
 
         {/* Logo */}
         <div className="rounded-full p-2 mb-4">
-          <img src="/logo.webp" alt="Sens Solidaires" className="h-24" />
+          <img src="/logo.webp" alt="Sens Solidaires" width="160" height="160" className="h-24 w-auto" />
         </div>
 
         {/* Titre */}

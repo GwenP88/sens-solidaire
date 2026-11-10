@@ -300,6 +300,7 @@ Lora (`font-heading`, titres) + Source Sans 3 (`font-body`, corps).
 
 ### Règles UI
 
+- **Contraste des textes (WCAG AA, 4,5 pour 1)** : sur fond clair, `text-primary/90` minimum (`/80` ne passe pas sur `surface`) ; sur fond `primary`, `text-surface/80` minimum. Logo et nouvelles images : attributs `width` / `height` (place réservée, pas de décalage de la page).
 - Tailwind v4 ne génère pas de classes dynamiques : pour une couleur venant de la BDD, utiliser `style={{ ... }}`.
 - Témoignages limités à **280 caractères** ; `TestimonialCard` à hauteur fixe `h-[270px]` + `line-clamp`.
 - Carousel (Swiper) : navigation custom via `swiperRef.current?.slidePrev()/slideNext()` (le module Navigation officiel entre en conflit), `observer`/`observeParents`, `loop` seulement si `items.length >= 6`, contrôles masqués si peu d'éléments.

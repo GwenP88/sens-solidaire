@@ -2,13 +2,16 @@
 // Formulaire de contact — prénom, nom, email, sujet, message, RGPD
 
 // ── React
-import { useState } from 'react'
+import { useState, useId } from 'react'
 import { Link } from 'react-router-dom'
 
 // ── Composants UI
 import Button from '../ui/Button'
 
 function ContactForm() {
+  // Préfixe unique pour relier chaque libellé à son champ (htmlFor ↔ id) : un lecteur d'écran annonce
+  // ainsi « Prénom, champ de saisie » au lieu de « champ de saisie » (accessibilité, tâche 134)
+  const uid = useId()
 
   // ── État local — champs du formulaire
   const [form, setForm] = useState({
@@ -90,7 +93,7 @@ function ContactForm() {
   if (status === 'success') return (
     <div className="bg-accent-2/10 rounded-xl p-8 text-center">
       <p className="h3-style text-primary mb-2">Message envoyé ✓</p>
-      <p className="text-body text-primary/60">Nous vous répondrons dans les plus brefs délais.</p>
+      <p className="text-body text-primary/90">Nous vous répondrons dans les plus brefs délais.</p>
       <div className="mt-4">
         <Button label="Envoyer un autre message" variant="secondary" onClick={() => setStatus(null)} />
       </div>
@@ -104,17 +107,17 @@ function ContactForm() {
       <div className="flex flex-col sm:flex-row gap-sm">
         <div className="flex flex-col gap-xs flex-1">
           {/* text-eyebrow mb-0 : gap-xs du parent gère déjà l'espacement avec l'input */}
-          <label className="text-eyebrow text-primary/60 mb-0">Prénom *</label>
+          <label htmlFor={`${uid}-prenom`} className="text-eyebrow text-primary/90 mb-0">Prénom *</label>
           <input
-            name="prenom" value={form.prenom} onChange={handleChange}
+            id={`${uid}-prenom`} name="prenom" value={form.prenom} onChange={handleChange}
             className={errors.prenom ? errorInputClass : inputClass}
           />
           {errors.prenom && <span className="text-caption text-red-500">{errors.prenom}</span>}
         </div>
         <div className="flex flex-col gap-xs flex-1">
-          <label className="text-eyebrow text-primary/60 mb-0">Nom *</label>
+          <label htmlFor={`${uid}-nom`} className="text-eyebrow text-primary/90 mb-0">Nom *</label>
           <input
-            name="nom" value={form.nom} onChange={handleChange}
+            id={`${uid}-nom`} name="nom" value={form.nom} onChange={handleChange}
             className={errors.nom ? errorInputClass : inputClass}
           />
           {errors.nom && <span className="text-caption text-red-500">{errors.nom}</span>}
@@ -123,9 +126,9 @@ function ContactForm() {
 
       {/* Champ email */}
       <div className="flex flex-col gap-xs">
-        <label className="text-eyebrow text-primary/60 mb-0">Email *</label>
+        <label htmlFor={`${uid}-email`} className="text-eyebrow text-primary/90 mb-0">Email *</label>
         <input
-          name="email" type="email" value={form.email} onChange={handleChange}
+          id={`${uid}-email`} name="email" type="email" value={form.email} onChange={handleChange}
           className={errors.email ? errorInputClass : inputClass}
         />
         {errors.email && <span className="text-caption text-red-500">{errors.email}</span>}
@@ -133,9 +136,9 @@ function ContactForm() {
 
       {/* Menu déroulant sujet */}
       <div className="flex flex-col gap-xs">
-        <label className="text-eyebrow text-primary/60 mb-0">Sujet *</label>
+        <label htmlFor={`${uid}-sujet`} className="text-eyebrow text-primary/90 mb-0">Sujet *</label>
         <select
-          name="sujet" value={form.sujet} onChange={handleChange}
+          id={`${uid}-sujet`} name="sujet" value={form.sujet} onChange={handleChange}
           className={errors.sujet ? errorInputClass : inputClass}
         >
           <option value="">Sélectionnez un sujet</option>
@@ -152,9 +155,9 @@ function ContactForm() {
 
       {/* Zone de message libre */}
       <div className="flex flex-col gap-xs">
-        <label className="text-eyebrow text-primary/60 mb-0">Message *</label>
+        <label htmlFor={`${uid}-message`} className="text-eyebrow text-primary/90 mb-0">Message *</label>
         <textarea
-          name="message" value={form.message} onChange={handleChange} rows={6}
+          id={`${uid}-message`} name="message" value={form.message} onChange={handleChange} rows={6}
           className={`${errors.message ? errorInputClass : inputClass} resize-none`}
         />
         {errors.message && <span className="text-caption text-red-500">{errors.message}</span>}
@@ -170,7 +173,7 @@ function ContactForm() {
             onChange={handleChange}
             className="mt-1 shrink-0 accent-accent"
           />
-          <span className="text-caption text-primary/60 leading-relaxed">
+          <span className="text-caption text-primary/90 leading-relaxed">
             J'accepte que mes données soient utilisées pour traiter ma demande conformément à la {' '}
                 <Link to="/confidentialite" className="link-inline text-accent-2">politique de confidentialité</Link>.
           </span>
@@ -178,7 +181,7 @@ function ContactForm() {
         {errors.rgpd && <span className="text-caption text-red-500">{errors.rgpd}</span>}
       </div>
 
-      <span className="text-caption text-primary/60 leading-relaxed">* Champs obligatoires</span>
+      <span className="text-caption text-primary/90 leading-relaxed">* Champs obligatoires</span>
 
       {/* Message d'erreur si l'envoi échoue */}
       {status === 'error' && (
