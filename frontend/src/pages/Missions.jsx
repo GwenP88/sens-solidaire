@@ -41,7 +41,7 @@ import useSEO from '../hooks/useSEO'
 
 function Missions() {
   // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
-  useSEO({ title: 'Nos missions', description: "Volontariat international, Service Civique, groupes jeunes et congés solidaires : découvrez les missions humanitaires et environnementales proposées par Sens Solidaires.", image: '/images/design/hero/hero-missions.jpg' })
+  useSEO({ title: 'Nos missions', description: "Volontariat international, Service Civique, groupes jeunes et congés solidaires : découvrez les missions humanitaires et environnementales proposées par Sens Solidaires.", image: '/images/design/hero/hero-missions.webp' })
 
   const [missions, setMissions] = useState([])
   const [loading, setLoading] = useState(true)
@@ -186,7 +186,7 @@ function Missions() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/design/hero/hero-missions.jpg"
+        image="/images/design/hero/hero-missions.webp"
         title="Partez en mission et agissez concrètement"
         subtitle="Parce que l'engagement est ouvert à tous, nos missions s'adaptent à chaque profil : seul, à deux, en groupe, en famille ou avec votre entreprise, vivez une expérience humaine et solidaire au service de projets utiles et durables."
       />
@@ -231,7 +231,7 @@ function Missions() {
           title="Je pars en mission individuelle"
           audience="Pour les volontaires individuels"
           description="Vivez une expérience utile, authentique et accessible à tous."
-          decorImage="/images/design/ui/one-line-1.png"
+          decorImage="/images/design/ui/one-line-1.webp"
           image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Volontariat individuel"
           carouselTitle="Où partir ?"
@@ -284,7 +284,7 @@ function Missions() {
           title="Je m'engage en Service Civique à l'international"
           audience="Pour les 16 à 25 ans"
           description="Vivez une expérience de plusieurs mois en France et à l'international tout en développant vos compétences et votre engagement."
-          decorImage="/images/design/ui/one-line-2.png"
+          decorImage="/images/design/ui/one-line-2.webp"
           image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Service civique"
           introSlot={
@@ -447,7 +447,7 @@ function Missions() {
           title="Je pars avec mon groupe"
           audience="Pour les lycées, MJC et structures de jeunesse"
           description="Construisez avec votre établissement ou votre structure jeunesse un projet collectif de solidarité internationale au Kenya ou au Sénégal."
-          decorImage="/images/design/ui/one-line-3.png"
+          decorImage="/images/design/ui/one-line-3.webp"
           image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Mission groupe jeunes"
           introSlot={
@@ -575,7 +575,7 @@ function Missions() {
           title="J'agis avec mon entreprise"
           audience="Pour les salariés et les entreprises"
           description="Une expérience humaine forte pour les salariés et un engagement concret pour les entreprises."
-          decorImage="/images/design/ui/one-line-4.png"
+          decorImage="/images/design/ui/one-line-4.webp"
           image="/images/placeholders/placeholder-photo.webp"
           imageAlt="Congé de solidarité"
           introSlot={

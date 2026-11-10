@@ -274,7 +274,7 @@
 | 173 | Gwen | Accessibilité basique | ✅ |
 | 174 | Gwen | SEO basique (SEOHead) | ✅ |
 | 130 | Gwen | Lazy loading | ✅ |
-| 131 | Gwen | Optimisations WebP + images production | ❌ |
+| 131 | Gwen | Optimisations WebP + images production | ✅ |
 | 132 | Gwen | maxLength 280 textarea témoignage | 🔵 |
 | 133 | Gwen | PageLayout — factorisation | ❌ |
 

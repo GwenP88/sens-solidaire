@@ -49,7 +49,7 @@ function EducationDetail() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image={item.image_url || '/images/design/hero/hero-education.jpg'}
+        image={item.image_url || '/images/design/hero/hero-education.webp'}
         title={item.title}
         tags={item.public?.split(',').map(p => p.trim())}
       />

@@ -52,7 +52,7 @@ function Soutenir() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/design/hero/hero-home.jpg"
+        image="/images/design/hero/hero-home.webp"
         title="Soutenir des actions utiles, concrètes et durables"
         subtitle="Chaque don, chaque adhésion permet de faire vivre des projets solidaires sur le terrain, aux côtés des volontaires et des communautés locales."
       />

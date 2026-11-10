@@ -86,7 +86,7 @@ function InfoSidebar({ public: publicLabel, tarif, ctas = [], bg = 'bg-surface-m
 
 function Education() {
   // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
-  useSEO({ title: 'Éducation & sensibilisation', description: "Ateliers pédagogiques, correspondance scolaire et relais Éco-École : les actions éducatives de Sens Solidaires pour les écoles et les jeunes.", image: '/images/design/hero/hero-education.jpg' })
+  useSEO({ title: 'Éducation & sensibilisation', description: "Ateliers pédagogiques, correspondance scolaire et relais Éco-École : les actions éducatives de Sens Solidaires pour les écoles et les jeunes.", image: '/images/design/hero/hero-education.webp' })
 
   const [items, setItems] = useState([])
   const [actionsFrance, setActionsFrance] = useState([])
@@ -114,7 +114,7 @@ function Education() {
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/design/hero/hero-education.jpg"
+        image="/images/design/hero/hero-education.webp"
         title="Éducation & Sensibilisation"
         subtitle="Nous intervenons dans les écoles, collèges et lycées pour sensibiliser les jeunes à la biodiversité et au développement durable."
       />

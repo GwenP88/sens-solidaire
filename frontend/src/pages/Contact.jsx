@@ -16,14 +16,14 @@ import useSEO from '../hooks/useSEO'
 
 function Contact() {
   // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
-  useSEO({ title: 'Contact', description: "Une question sur une mission, un partenariat ou une action éducative ? Contactez l'association Sens Solidaires, en France et en Suisse.", image: '/images/design/hero/contact-hero.png' })
+  useSEO({ title: 'Contact', description: "Une question sur une mission, un partenariat ou une action éducative ? Contactez l'association Sens Solidaires, en France et en Suisse.", image: '/images/design/hero/contact-hero.webp' })
 
   return (
     <div className="bg-surface min-h-screen">
 
       {/* ── Hero immersif ── */}
       <HeroPage
-        image="/images/design/hero/contact-hero.png"
+        image="/images/design/hero/contact-hero.webp"
         title="Parlons de votre projet"
         subtitle="Une équipe à votre écoute pour vous accompagner dans votre projet."
       />
@@ -61,7 +61,7 @@ function Contact() {
           <div className="hidden md:block xl:w-1/3 xl:shrink-0">
             <img
               loading="lazy"
-              src="/images/design/contact.jpg"
+              src="/images/design/contact.webp"
               alt="Équipe Sens Solidaires"
               className="w-full h-64 xl:h-full object-cover rounded-2xl"
             />

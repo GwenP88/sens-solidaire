@@ -137,8 +137,8 @@ docker exec sensolidaire_frontend npm run test:run
 # Après ajout d'une dépendance : resynchroniser le volume node_modules
 docker exec sensolidaire_backend npm install
 
-# Conversion des images placeholder PNG -> WebP (toujours via ce script, dans Docker)
-docker compose exec frontend node scripts/optimize-placeholders.js
+# Optimisation des images statiques (photos -> WebP, logos partenaires recompressés), dans Docker
+docker compose exec --user "$(id -u):$(id -g)" frontend node scripts/optimize-images.js
 ```
 
 ### Variables d'environnement
@@ -180,7 +180,7 @@ sens-solidaire/
 │   │   ├── hooks/             useCountUp, useSEO (titre / description / Open Graph par page)
 │   │   └── index.css          design system Tailwind v4 (@theme + @utility)
 │   ├── tests/                 Vitest + RTL : unit/, components/, pages/ (+ anciens tests à la racine)
-│   ├── scripts/optimize-placeholders.js
+│   ├── scripts/optimize-images.js   photos statiques → WebP, logos partenaires recompressés (tâche 131)
 │   └── public/images/         images statiques, classées par contexte métier
 ├── backend/
 │   ├── src/
@@ -220,6 +220,7 @@ sens-solidaire/
 - **Lien qui ressemble à un bouton** : `<Button to="/contact" />` (interne) ou `<Button href="https://…" />` (externe, nouvel onglet). **Jamais** de `<Button>` à l'intérieur d'un `<a>` ou d'un `<Link>` (HTML invalide, double arrêt au clavier).
 - **Référencement** : chaque page publique appelle `useSEO({ title, description, image })` (`hooks/useSEO.js`) **avant** ses `return` de chargement ; pages du dashboard : `noindex: true`. Les robots des réseaux sociaux n'exécutant pas JavaScript, `index.html` garde des valeurs Open Graph par défaut.
 - **Lazy loading** : toutes les pages sauf `Home` sont chargées à la demande (`lazy()` dans `App.jsx`, `Suspense` + `PageLoader` dans `Layout` et `DashboardLayout`). Toute nouvelle page : `const X = lazy(() => import('./pages/X'))`. Images du site public : `loading="lazy"` (sauf logo de la Navbar).
+- **Images statiques** (`public/images/design/`, logo) : toujours référencer la version **`.webp`** produite par `scripts/optimize-images.js` (nouvelle image : la déposer en JPG/PNG puis relancer le script). Exceptions : `logo-partners/` (adresses enregistrées en base dans `Partner.logo_url` → recompressés sur place, même nom) et `og-default.jpg` (aperçu réseaux sociaux, JPEG 1200 × 630).
 - **Accessibilité** : lien d'évitement « Aller au contenu » (`Layout`, cible `#contenu`), contour `:focus-visible` global (`index.css`), modales en `role="dialog"` avec gestion du focus, `aria-label` sur toute icône seule (bouton ou lien).
 - Règles **dupliquées volontairement** entre front et back (ils ne partagent pas de code) : `utils/validation.js`, `utils/youtube.js`, `utils/odds.js` (correspondance ODD → catégorie), `utils/shortDescription.js`. Toute modification doit être faite **des deux côtés** — le test `frontend/tests/unit/duplicatedRules.test.js` (lancé sur le poste) échoue si les deux copies divergent.
 - `/admin` (accueil du dashboard) affiche volontairement « Vue d'ensemble — à construire » : la vue sera construite prochainement. `pages/admin/Dashboard.jsx` et `ModerationCard.jsx` ne sont pas branchés pour l'instant — **ne pas les supprimer**.

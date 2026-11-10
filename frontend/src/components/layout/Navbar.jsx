@@ -92,7 +92,7 @@ function Navbar() {
         {/* ── Logo ── */}
         <Link to="/">
           <div className="bg-white/40 rounded-full p-1">
-            <img src="/logo.png" alt="Sens Solidaires" className="h-12 md:h-14" />
+            <img src="/logo.webp" alt="Sens Solidaires" className="h-12 md:h-14" />
           </div>
         </Link>
 

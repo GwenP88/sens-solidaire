@@ -12,7 +12,8 @@ import { previewShortDescription } from '../utils/shortDescription'
 // ── Valeurs par défaut — reprises de index.html (ce que voient les robots qui n'exécutent pas JavaScript)
 const SITE_NAME = 'Sens Solidaires'
 const DEFAULT_DESCRIPTION = "Sens Solidaires, association de volontariat international : missions humanitaires et environnementales, actions éducatives et solidaires en France et à l'étranger."
-const DEFAULT_IMAGE = '/images/design/hero/hero-home.jpg'
+// JPEG 1200 × 630 : format recommandé pour les aperçus, lu par tous les réseaux sociaux (pas tous le WebP)
+const DEFAULT_IMAGE = '/images/design/og-default.jpg'
 
 // ── Crée la balise <meta> si elle n'existe pas encore, puis met à jour son contenu
 // attr : 'name' (description, robots, twitter:…) ou 'property' (og:…)
