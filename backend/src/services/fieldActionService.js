@@ -3,6 +3,7 @@
 
 import prisma from '../config/db.js'
 import { deriveTagsFromOdds } from '../utils/odds.js'
+import { toRattachement } from '../utils/rattachement.js'
 
 // ── GET (PUBLIC) — liste ─────────────────────────────────────────────────
 export const getAllFieldActions = async (country = null) => {
@@ -89,6 +90,7 @@ export const create = async (data) => {
       description: data.description,
       content: data.content,
       image_url: data.image_url || null,
+      rattachement: toRattachement(data.rattachement),
       tags:      { create: tags.map(tag => ({ tag })) },
       odds:      { create: (data.odds || []).map(n => ({ odd_number: n })) },
       countries: { create: (data.countries || []).map(c => ({ country: c })) },
@@ -109,6 +111,8 @@ export const update = async (id, data) => {
       description: data.description,
       content: data.content,
       image_url: data.image_url,
+      // Absent de la requête → inchangé (undefined est ignoré par Prisma)
+      rattachement: 'rattachement' in data ? toRattachement(data.rattachement) : undefined,
       tags: {
         deleteMany: {},
         create: tags.map(tag => ({ tag })),

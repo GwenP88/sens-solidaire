@@ -7,6 +7,19 @@ datasource db {
 }
 
 // ─────────────────────────────────────────
+// RATTACHEMENT PAYS (tâche 172D)
+// ─────────────────────────────────────────
+// Sur quelle page financeurs le contenu est mis en avant (/france, /suisse, ou les deux).
+// Dans le dashboard : 2 cases à cocher « France » / « Suisse » (les deux = COMMUN).
+// Vide = pas encore renseigné (contenus créés avant la fonctionnalité).
+
+enum Rattachement {
+  FRANCE
+  SUISSE
+  COMMUN
+}
+
+// ─────────────────────────────────────────
 // MISSION DETAILLEE
 // ─────────────────────────────────────────
 
@@ -169,6 +182,7 @@ model FieldAction {
   content     String   // texte long — paragraphes séparés par \n\n
   countries   FieldActionCountry[]
   image_url   String?  // image principale
+  rattachement Rattachement? // page financeurs (≠ pays où l'action a lieu)
   is_active   Boolean  @default(true)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
@@ -227,13 +241,44 @@ model MediaPost {
   author       String?  
   source       String? 
   show_homepage Boolean @default(false)
+  rattachement Rattachement? // page financeurs
   is_active    Boolean  @default(true)
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 }
 
 // ─────────────────────────────────────────
-// ARTICLE : EDUCATION ET SENSIBILISATION
+// SECTION : EDUCATION ET SENSIBILISATION (tâche 172)
+// ─────────────────────────────────────────
+// La cliente crée, ordonne et masque les sections de la page ; la mise en page reste fixe.
+// Chaque bloc ne s'affiche que s'il est rempli.
+// Photos et boutons : table Media (entity_type 'education_section', file_type 'image' / 'link').
+
+model EducationSection {
+  id            Int      @id @default(autoincrement())
+  slug          String   @unique   // ancre du menu (#label-eco-ecole) : générée depuis le titre, jamais modifiée
+  eyebrow       String?            // surtitre (« Programme international »)
+  title         String
+  content       String             // texte : paragraphes séparés par une ligne vide
+  list_title    String?            // titre de la liste à puces (« Apports éducatifs »)
+  list_items    String?            // une puce par ligne (LignesToPuces)
+  audience      String?            // infos pratiques : public
+  price         String?            // infos pratiques : « Gratuit », « 500 € », « Sur devis »
+  price_detail  String?
+  pdf_url       String?            // fiche PDF envoyée depuis l'ordinateur
+  pdf_label     String?            // texte du bouton de téléchargement
+  field_actions_country String?    // pays des actions terrain affichées en carrousel (ex. France) ; vide = pas de carrousel
+  rattachement  Rattachement?      // page financeurs (les cards de la section en héritent)
+  display_order Int      @default(0)
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  items         EducationItem[]    // les cards (ateliers…)
+}
+
+// ─────────────────────────────────────────
+// CARD : EDUCATION ET SENSIBILISATION (ateliers…)
 // ─────────────────────────────────────────
 
 model EducationItem {
@@ -242,10 +287,12 @@ model EducationItem {
   title        String
   description  String
   content      String?
-  type         String   // Atelier, Correspondance, Éco-École
+  type         String   // surtitre de la card (Atelier…)
   public       String   // primaire, college_lycee, adultes — séparés par virgule
   image_url    String?
-  external_url String?  // PDF ou lien externe
+  external_url String?  // fiche PDF (envoyée depuis l'ordinateur) ou lien externe
+  section      EducationSection? @relation(fields: [section_id], references: [id], onDelete: SetNull)
+  section_id   Int?     // section qui affiche la card ; vide si la section a été supprimée
   is_active    Boolean  @default(true)
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt

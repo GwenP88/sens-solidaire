@@ -69,3 +69,24 @@ it("deux actions avec la même adresse → 409", async () => {
 
   await cleanup()
 })
+
+// ── Rattachement France / Suisse (tâche 172D) ──
+it("rattachement : enregistré, refusé s'il est inconnu, conservé si non envoyé", async () => {
+  const token = await loginAsAdmin()
+  const created = await request(app).post("/api/admin/field-actions").set("Authorization", `Bearer ${token}`)
+    .send({ ...fullBody(`Action ${TEST_MARKER} rattachement`), rattachement: "SUISSE" })
+  expect(created.status).toBe(201)
+  expect(created.body.action.rattachement).toBe("SUISSE")
+  const id = created.body.action.id
+
+  const refused = await request(app).patch(`/api/admin/field-actions/${id}`).set("Authorization", `Bearer ${token}`)
+    .send({ ...fullBody(`Action ${TEST_MARKER} rattachement`), rattachement: "ALLEMAGNE" })
+  expect(refused.status).toBe(400)
+
+  const kept = await request(app).patch(`/api/admin/field-actions/${id}`).set("Authorization", `Bearer ${token}`)
+    .send(fullBody(`Action ${TEST_MARKER} rattachement modifiée`))
+  expect(kept.status).toBe(200)
+  expect(kept.body.action.rattachement).toBe("SUISSE")
+
+  await cleanup()
+})

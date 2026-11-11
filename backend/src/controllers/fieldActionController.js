@@ -5,6 +5,9 @@ import {
   getAllFieldActions, getFieldActionBySlugService,
   findAllForAdmin, findById, create, update, updateGallery, toggleActive, hardDelete,
 } from '../services/fieldActionService.js'
+import { isValidRattachement } from '../utils/rattachement.js'
+
+const RATTACHEMENT_ERROR = "Le pays de rattachement est invalide. Cochez France, Suisse ou les deux."
 
 // ── PUBLIC ────────────────────────────────────────────────────────────────
 export const getFieldActions = async (req, res) => {
@@ -59,6 +62,9 @@ export const createFieldAction = async (req, res, next) => {
     if (!req.body.slug || !req.body.title || !req.body.description || !req.body.content) {
       return res.status(400).json({ error: true, message: "Titre, description courte et contenu sont obligatoires." })
     }
+    if (!isValidRattachement(req.body.rattachement)) {
+      return res.status(400).json({ error: true, message: RATTACHEMENT_ERROR })
+    }
     const action = await create(req.body)
     return res.status(201).json({ action })
   } catch (error) {
@@ -73,6 +79,9 @@ export const createFieldAction = async (req, res, next) => {
 // PATCH /api/admin/field-actions/:id
 export const updateFieldAction = async (req, res, next) => {
   try {
+    if (!isValidRattachement(req.body.rattachement)) {
+      return res.status(400).json({ error: true, message: RATTACHEMENT_ERROR })
+    }
     const action = await update(Number(req.params.id), req.body)
     return res.status(200).json({ action })
   } catch (error) {

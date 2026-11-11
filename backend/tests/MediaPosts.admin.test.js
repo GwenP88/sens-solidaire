@@ -7,7 +7,7 @@ import { it, expect, afterAll } from "@jest/globals"
 import request from "supertest"
 import app from "../src/app.js"
 import prisma from "../src/config/db.js"
-import { describeAdminCrud, TEST_MARKER } from "./helpers/adminCrud.js"
+import { describeAdminCrud, loginAsAdmin, TEST_MARKER } from "./helpers/adminCrud.js"
 
 const TITLE = `Article ${TEST_MARKER}`
 const THEME = `Thème ${TEST_MARKER}` // thème dédié : n'apparaît dans les suggestions que le temps du test
@@ -66,4 +66,25 @@ describeAdminCrud({
       expect(check.body.post.videos.map(v => v.file_url)).toEqual([url])
     })
   },
+})
+
+// ── Rattachement France / Suisse (tâche 172D) ──
+it("rattachement : enregistré, refusé s'il est inconnu, conservé si non envoyé", async () => {
+  const token = await loginAsAdmin()
+  const created = await request(app).post("/api/admin/media-posts").set("Authorization", `Bearer ${token}`)
+    .send({ title: `${TITLE} rattachement`, theme: THEME, date: "2026-01-15", content: "Texte.", rattachement: "COMMUN" })
+  expect(created.status).toBe(201)
+  expect(created.body.post.rattachement).toBe("COMMUN")
+  const id = created.body.post.id
+
+  const refused = await request(app).patch(`/api/admin/media-posts/${id}`).set("Authorization", `Bearer ${token}`)
+    .send({ rattachement: "ALLEMAGNE" })
+  expect(refused.status).toBe(400)
+
+  const kept = await request(app).patch(`/api/admin/media-posts/${id}`).set("Authorization", `Bearer ${token}`)
+    .send({ author: "Équipe test" })
+  expect(kept.status).toBe(200)
+  expect(kept.body.post.rattachement).toBe("COMMUN")
+
+  await cleanup()
 })

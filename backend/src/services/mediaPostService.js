@@ -3,6 +3,7 @@
 
 import prisma from '../config/db.js'
 import { slugify } from '../utils/slugify.js'
+import { toRattachement } from '../utils/rattachement.js'
 import { deriveShortDescription } from '../utils/shortDescription.js'
 
 // Résumé affiché sur les cartes (4 lignes ≈ 200 caractères)
@@ -152,6 +153,7 @@ export const create = async (data) => {
       author: toNullable(data.author),
       source: toNullable(data.source),
       show_homepage: Boolean(data.show_homepage),
+      rattachement: toRattachement(data.rattachement),
     },
   })
 }
@@ -172,6 +174,8 @@ export const update = async (id, data) => {
       author: toNullable(data.author),
       source: toNullable(data.source),
       show_homepage: data.show_homepage !== undefined ? Boolean(data.show_homepage) : undefined,
+      // Absent de la requête → inchangé (undefined est ignoré par Prisma)
+      rattachement: 'rattachement' in data ? toRattachement(data.rattachement) : undefined,
     },
   })
 }

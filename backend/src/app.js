@@ -19,6 +19,7 @@ import contactRouter from "./routes/contactRoutes.js"
 import fieldActionRouter from "./routes/fieldActionRoutes.js"
 import mediaPostRouter from "./routes/mediaPostRoutes.js"
 import educationItemRouter from "./routes/educationItemRoutes.js"
+import educationSectionRouter from "./routes/educationSectionRoutes.js"
 import teamMemberRouter from "./routes/teamMemberRoutes.js"
 import activityReportRouter from "./routes/activityReportRoutes.js"
 import delegationRouter from "./routes/delegationRoutes.js"
@@ -43,6 +44,8 @@ import adminPartnerRoutes from "./routes/adminPartnerRoutes.js"
 import adminMediaPostRoutes from "./routes/adminMediaPostRoutes.js"
 import adminMissionReportRoutes from "./routes/adminMissionReportRoutes.js"
 import adminFieldActionRoutes from "./routes/adminFieldActionRoutes.js"
+import adminEducationSectionRoutes from "./routes/adminEducationSectionRoutes.js"
+import adminEducationItemRoutes from "./routes/adminEducationItemRoutes.js"
 import { prismaErrorToHttp } from "./utils/prismaErrors.js"
 
 
@@ -109,6 +112,7 @@ app.use("/api/contact", contactRouter)
 app.use('/api/field-actions', fieldActionRouter)
 app.use('/api/media-posts', mediaPostRouter)
 app.use('/api/education-items', educationItemRouter)
+app.use('/api/education-sections', educationSectionRouter)
 app.use('/api/team-members', teamMemberRouter)
 app.use('/api/activity-reports', activityReportRouter)
 app.use('/api/delegations', delegationRouter)
@@ -134,6 +138,8 @@ app.use('/api/admin/partners', adminPartnerRoutes)
 app.use('/api/admin/media-posts', adminMediaPostRoutes)
 app.use('/api/admin/mission-reports', adminMissionReportRoutes)
 app.use('/api/admin/field-actions', adminFieldActionRoutes)
+app.use('/api/admin/education-sections', adminEducationSectionRoutes)
+app.use('/api/admin/education-items', adminEducationItemRoutes)
 
 
 // ── ROUTE NON TROUVÉE (404) ───────────────────────────────────────────────────

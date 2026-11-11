@@ -6,6 +6,7 @@ import {
   findAllForAdmin, findById, create, update, toggleActive, hardDelete,
 } from '../services/mediaPostService.js'
 import { isFilled } from '../utils/validation.js'
+import { isValidRattachement } from '../utils/rattachement.js'
 import { syncGalleryImages } from '../services/mediaService.js'
 import { isYouTubeUrl } from '../utils/youtube.js'
 
@@ -31,6 +32,7 @@ const validateMediaPost = (body, { partial = false } = {}) => {
       && !isFilled(body.external_url) && !isFilled(body.content)) {
     return "Ajoutez un texte, ou un lien / fichier à consulter."
   }
+  if (!isValidRattachement(body.rattachement)) return "Le pays de rattachement est invalide. Cochez France, Suisse ou les deux."
   return null
 }
 

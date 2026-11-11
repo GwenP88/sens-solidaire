@@ -2,7 +2,7 @@
 *Pichot Gwen & Amblard Alison (jusqu'à fin août) · Pichot Gwen seule à partir du 18/09/2026*
 *Holberton School — Thonon-les-Bains*
 
-**Légende** : ✅ Fait · 🔵 Partiel · ❌ Pas fait
+**Légende** : ✅ Fait · 🔵 Partiel · ❌ Pas fait · ➡️ Repris dans une tâche plus récente (numéro indiqué)
 
 ---
 
@@ -104,14 +104,14 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 59 | Alison | Dashboard : gestion médias | 🔵 |
-| 60 | Alison | Dashboard : gestion équipe (CRUD) | ❌ |
-| 61 | Alison | Dashboard : gestion rapports d'activité | ❌ |
-| 62 | Alison | Dashboard : CRUD actions terrain + pays + tags | ❌ |
-| 63 | Alison | Dashboard : responsive | ❌ |
-| 64 | Alison | APIs restantes : locations, équipe | ❌ |
+| 59 | Alison | Dashboard : gestion médias → repris en 124 | ➡️ |
+| 60 | Alison | Dashboard : gestion équipe (CRUD) → repris en 118 | ➡️ |
+| 61 | Alison | Dashboard : gestion rapports d'activité → repris en 119 | ➡️ |
+| 62 | Alison | Dashboard : CRUD actions terrain + pays + tags → repris en 122 | ➡️ |
+| 63 | Alison | Dashboard : responsive → repris en 125 | ➡️ |
+| 64 | Alison | APIs restantes : locations, équipe → repris en 116 et 118 | ➡️ |
 | 65 | Gwen | Upload Multer | ✅ |
-| 66 | Alison | Tests d'intégration dashboard | 🔵 |
+| 66 | Alison | Tests d'intégration dashboard → repris en 126 | ➡️ |
 
 ### S7 (suite) — 5 juillet · Documentation, qualité & dette technique
 
@@ -131,9 +131,9 @@
 | 73 | Gwen | Accessibilité basique | ✅ |
 | 74 | Gwen | SEO basique (SEOHead) | ✅ |
 | 75 | Gwen | Lazy loading | ✅ |
-| 76 | Gwen | maxLength 280 textarea témoignage | 🔵 |
-| 77 | Gwen | Buffer API (V2) | ❌ |
-| 78 | Gwen | PageLayout — factorisation | ❌ |
+| 76 | Gwen | maxLength 280 textarea témoignage → repris en 132 | ➡️ |
+| 77 | Gwen | Buffer API (V2) → repris en 150 | ➡️ |
+| 78 | Gwen | PageLayout — factorisation → repris en 133 | ➡️ |
 | 79 | Ensemble | Corrections bugs post-recette | ❌ |
 | 80 | Ensemble | Code freeze — pause estivale (18 juillet) | ✅ |
 
@@ -183,7 +183,7 @@
 | 106 | Gwen | Refonte galerie — migration BDD | ✅ |
 | 107 | Gwen | Refonte galerie — MissionFormPage simplifié | ✅ |
 | 108 | Gwen | Refonte galerie — nouvelle page Galerie dashboard | ✅ |
-| 109 | Gwen | ~~Passer de 10 à 15-20 photos galerie publique (à voir avec la cliente)~~ | 🔵 |
+| 109 | Gwen | ~~Passer de 10 à 15-20 photos galerie publique (à voir avec la cliente)~~ → repris en 148 | ➡️ |
 | 110 | Gwen | Fusionner Service Civique dans Missions (sidebar) | ✅ |
 | 111 | Gwen | Supprimer MissionForm.jsx (code mort) | ✅ |
 | 112 | Gwen | Pré-remplir tarifs/inclus standards | ✅ |
@@ -262,10 +262,11 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 172 | Gwen | Refonte contenu dynamique | ❌ |
-| 172A | Gwen | CRUD gestion dashboard | ❌ |
-
+| 172 | Gwen | Refonte contenu dynamique — **une section type** (`EducationSection`) que la cliente peut créer, ordonner, masquer : surtitre, titre, texte, liste à puces, infos pratiques (public, tarif), boutons, fiche PDF, photos, cards (ateliers), carrousel d'actions terrain. Fixes (structure) : hero, menu d'ancres (généré à partir des sections), bloc ODD | ❌ |
+| 172A | Gwen | CRUD gestion dashboard — un seul formulaire de section + cards rattachées à une section (fiche PDF envoyée depuis l'ordinateur) ; bloc `EducationItem` retiré du seed | ❌ |
 | 172C | Gwen | Tests d'intégration  | ❌ |
+| 172D | Gwen | Rattachement France / Suisse / Commun (enum, une seule migration) sur les sections Éducation, les actions terrain et les articles — 2 cases à cocher dans les formulaires (« France », « Suisse », les deux = Commun), au moins une obligatoire ; contenus existants : vide en base, « Pays à renseigner » dans le dashboard | ❌ |
+| 178 | Gwen | Section ODD à retravailler sur tout le site (Éducation, Notre impact…) | ❌ |
 
 ### Bloc D — Finitions front
 
@@ -282,7 +283,7 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 134 | Gwen | Audit Lighthouse (objectif > 90) | ❌ |
+| 134 | Gwen | Audit Lighthouse (objectif > 90) — corrections faites (images, libellés, contraste, décalage), nouvelle mesure à faire | 🔵 |
 | 135 | Gwen | Bilingue FR/EN (react-i18next, si décision cliente) | ❌ |
 | 136 | Gwen | Accessibilité WCAG 2.1 AA — audit complet | ❌ |
 | 137 | Gwen | Seed BDD — contenus réels finaux | ❌ |
