@@ -26,6 +26,13 @@ export const ODDS = Object.entries(ODDS_LABELS).map(([n, label]) => ({
   label,
 }))
 
+// Icône officielle de l'ONU d'un ODD (ex. 4 → E_SDG_Icons-04.jpg)
+export const oddIconUrl = n =>
+  `https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(n).padStart(2, '0')}.jpg`
+
+// Page officielle des ODD, en français (lien « En savoir plus » des composants ODD)
+export const ODD_INFO_URL = 'https://www.un.org/sustainabledevelopment/fr/'
+
 // Mapping ODD → catégorie thématique
 export const ODD_TO_CATEGORY = {
   14: 'Biodiversité',

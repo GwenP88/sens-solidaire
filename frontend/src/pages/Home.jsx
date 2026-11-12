@@ -26,7 +26,7 @@ import TestimonialCard from '../components/testimonials/TestimonialCard'
 import TestimonialForm from '../components/testimonials/TestimonialForm'
 
 // ── Utils
-import { ODDS } from '../utils/odds'
+import BandeauODD from '../components/ui/BandeauODD'
 
 // ── Référencement
 import useSEO from '../hooks/useSEO'
@@ -172,21 +172,8 @@ function Home() {
         subtitle="Depuis plus de 20 ans, nous menons des projets en faveur des Objectifs de Développement Durable (ODD), un cadre international regroupant 17 objectifs fixés par les Nations Unies."
         cta={{ label: "Voir toutes les actions →", href: "/notre-impact" }}
       >
-        {/* ── Ligne ODD ── */}
-        <div className="flex flex-col items-center gap-sm my-8">
-          <div className="flex flex-wrap justify-center gap-xs">
-            {ODDS.map(odd => (
-              <img
-                loading="lazy"
-                key={odd.n}
-                src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
-                alt={`ODD ${odd.n}`}
-                className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded object-cover"
-              />
-            ))}
-          </div>
-          <Button href="https://sdgs.un.org/goals" variant="secondary" label="En savoir plus sur les ODD →" />
-        </div>
+        {/* ── Ligne ODD (composant partagé, version compacte) ── */}
+        <BandeauODD />
 
         <Carousel
           items={actions}

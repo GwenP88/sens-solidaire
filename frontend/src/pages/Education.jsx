@@ -14,7 +14,6 @@ import CTASection from '../components/ui/CTASection'
 // ── Composants UI
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
-import Section from '../components/ui/Section'
 import Carousel from '../components/ui/Carousel'
 import TexteMisEnForme from '../components/ui/TexteMisEnForme'
 import AnchorNav from '../components/navigation/AnchorNav'
@@ -23,7 +22,7 @@ import AnchorNav from '../components/navigation/AnchorNav'
 import EducationCard from '../components/education/EducationCard'
 
 // ── Utils
-import { ODDS } from '../utils/odds'
+import SectionODD from '../components/ui/SectionODD'
 import { SECTION_AUDIENCE_OPTIONS } from '../utils/filters'
 
 // ── Référencement
@@ -177,27 +176,8 @@ function Education() {
       {/* ── Navigation ancres ── */}
       {anchorSections.length > 0 && <AnchorNav variant="dark" sections={anchorSections} />}
 
-      {/* ── Section ODD (fixe) ── */}
-      <Section
-        bg="bg-surface-mid"
-        title="Nos actions et les Objectifs de Développement Durable"
-        subtitle="Les Objectifs de Développement Durable (ODD) sont 17 grands objectifs définis par l'ONU pour relever les défis sociaux, environnementaux et économiques de notre époque. Toutes nos actions d'éducation et de sensibilisation s'inscrivent dans cette dynamique."
-        cta={{ label: "En savoir plus sur les ODD →", href: "https://www.un.org/sustainabledevelopment/fr/", target: "_blank" }}
-      >
-        <div className="flex flex-wrap gap-xs justify-center mt-8">
-          {ODDS.map(odd => (
-            <div key={odd.n} className="flex flex-col items-center gap-xs w-20 text-center">
-              <img
-                loading="lazy"
-                src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
-                alt={`ODD ${odd.n}`}
-                className="w-full rounded-lg object-cover"
-              />
-              <p className="text-caption text-primary/90 leading-tight">{odd.label}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
+      {/* ── Section ODD (fixe, composant partagé) ── */}
+      <SectionODD subtitle="Les Objectifs de Développement Durable (ODD) sont 17 grands objectifs définis par l'ONU pour relever les défis sociaux, environnementaux et économiques de notre époque. Toutes nos actions d'éducation et de sensibilisation s'inscrivent dans cette dynamique." />
 
       {/* ── Sections gérées depuis le dashboard ── */}
       {loading && <p className="text-body text-primary/90 italic padding-x padding-y">Chargement...</p>}

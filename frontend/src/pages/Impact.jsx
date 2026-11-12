@@ -22,7 +22,7 @@ import Section from '../components/ui/Section'
 import ImpactCard from '../components/actions/ImpactCard'
 
 // ── Utils
-import { ODDS } from '../utils/odds'
+import SectionODD from '../components/ui/SectionODD'
 import { FILTERS_ACTION_TAGS, buildCountryOptions, getFilterConfigCountry } from '../utils/filters'
 
 // ── Référencement
@@ -79,28 +79,8 @@ function NotreImpact() {
         subtitle="Depuis plus de 15 ans, nous agissons aux côtés des communautés locales pour un impact concret et durable."
       />
 
-      {/* ── Section ODD ── */}
-      <Section
-        bg="bg-surface-mid"
-        title="Nos actions et les Objectifs de Développement Durable"
-        subtitle="Les Objectifs de Développement Durable (ODD) sont 17 grands objectifs définis par l'ONU pour relever les défis sociaux, environnementaux et économiques de notre époque. À notre échelle, chacun de nos projets s'inscrit dans cette dynamique."
-        cta={{ label: "En savoir plus →", href: "https://www.un.org/sustainabledevelopment/fr/", target: "_blank" }}
-      >
-        {/* Grille ODD */}
-        <div className="flex flex-wrap gap-xs justify-center mt-8">
-          {ODDS.map(odd => (
-            <div key={odd.n} className="flex flex-col items-center gap-xs w-20 text-center">
-              <img
-                loading="lazy"
-                src={`https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${String(odd.n).padStart(2, '0')}.jpg`}
-                alt={`ODD ${odd.n}`}
-                className="w-full rounded-lg object-cover"
-              />
-              <p className="text-caption text-primary/60 leading-tight">{odd.label}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
+      {/* ── Section ODD (composant partagé) ── */}
+      <SectionODD subtitle="Les Objectifs de Développement Durable (ODD) sont 17 grands objectifs définis par l'ONU pour relever les défis sociaux, environnementaux et économiques de notre époque. À notre échelle, chacun de nos projets s'inscrit dans cette dynamique." />
 
       {/* ── Barre de filtres — select pays + chips thématiques ── */}
       <div className="bg-primary padding-x filter-py">
