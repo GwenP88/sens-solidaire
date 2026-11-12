@@ -21,6 +21,7 @@ import AdminFileUpload from '../../components/admin/AdminFileUpload'
 import YouTubeLinksField from '../../components/admin/YouTubeLinksField'
 import { isYouTubeUrl } from '../../utils/youtube'
 import { FormSection, Field, FormActionBar, ShortDescriptionPreview } from '../../components/admin/FormElements'
+import RattachementField from '../../components/admin/RattachementField'
 
 const CARD_SUMMARY_LENGTH = 200 // même valeur que le backend (mediaPostService.js)
 const MAX_VIDEOS = 5            // même valeur que le backend (mediaPostController.js)
@@ -45,6 +46,7 @@ const EMPTY_FORM = {
   author: '',
   source: '',
   show_homepage: false,
+  rattachement: null, // FRANCE | SUISSE | COMMUN — mise en avant auprès des financeurs (172D)
 }
 
 function MediaPostFormPage() {
@@ -88,6 +90,7 @@ function MediaPostFormPage() {
           author: post.author || '',
           source: post.source || '',
           show_homepage: Boolean(post.show_homepage),
+          rattachement: post.rattachement,
         })
       } catch (err) {
         console.error('Erreur chargement :', err)
@@ -140,6 +143,7 @@ function MediaPostFormPage() {
     } else if (hasLink && videos.length > 0) {
       newErrors.videos = "Avec un lien ou un fichier, la carte n'ouvre pas de page article : les vidéos ne seraient pas visibles. Retirez-les, ou retirez le lien."
     }
+    if (!formData.rattachement) newErrors.rattachement = "Cochez au moins un pays : France, Suisse ou les deux."
     if (!hasLink && !formData.content.trim()) {
       newErrors.content = "Ajoutez un texte, ou un lien / fichier à consulter."
     }
@@ -175,6 +179,7 @@ function MediaPostFormPage() {
         author: formData.author,
         source: formData.source,
         show_homepage: formData.show_homepage,
+        rattachement: formData.rattachement,
       }
 
       // On a besoin de l'id pour rattacher les photos : en création, c'est le serveur qui le donne
@@ -341,7 +346,19 @@ function MediaPostFormPage() {
           />
         </FormSection>
 
-        {/* ── BLOC 6 : Mise en avant ── */}
+        {/* ── BLOC 6 : Pays concerné (mise en avant auprès des financeurs) ── */}
+        <FormSection
+          title={<>Pays concerné <span className="text-red-500">*</span></>}
+          description="Pour quel pays cette publication est-elle mise en avant auprès des financeurs ? Cochez les deux si elle concerne la France et la Suisse."
+        >
+          <RattachementField
+            value={formData.rattachement}
+            onChange={(value) => setField('rattachement', value)}
+            error={fieldErrors.rattachement}
+          />
+        </FormSection>
+
+        {/* ── BLOC 7 : Mise en avant ── */}
         <FormSection title="Mise en avant">
           <label className="flex items-center gap-2 text-sm text-dash-text cursor-pointer">
             <input

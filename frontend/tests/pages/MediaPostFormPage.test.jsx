@@ -1,5 +1,5 @@
 // tests/pages/MediaPostFormPage.test.jsx
-// Formulaire admin Médias : règles de validation et envoi des vidéos YouTube (tâche 123).
+// Formulaire admin Médias : règles de validation, envoi des vidéos YouTube (tâche 123), pays concerné (tâche 172D).
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
@@ -31,6 +31,7 @@ const fillRequired = () => {
   type('title', 'Atelier à Nice')
   type('theme', 'Événement')
   type('content', "Compte rendu de l'atelier.")
+  fireEvent.click(screen.getByRole('checkbox', { name: 'France' }))
 }
 
 const addVideo = (url) => {
@@ -53,7 +54,16 @@ describe('MediaPostFormPage', () => {
     submit()
     expect(await screen.findByText('Le titre est obligatoire.')).toBeInTheDocument()
     expect(screen.getByText('Choisissez ou saisissez un thème.')).toBeInTheDocument()
+    expect(screen.getByText('Cochez au moins un pays : France, Suisse ou les deux.')).toBeInTheDocument()
     expect(createMediaPost).not.toHaveBeenCalled()
+  })
+
+  it('France et Suisse cochées → envoyé comme « COMMUN »', async () => {
+    renderForm()
+    fillRequired()
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Suisse' }))
+    submit()
+    await waitFor(() => expect(createMediaPost).toHaveBeenCalledWith(expect.objectContaining({ rattachement: 'COMMUN' })))
   })
 
   it('lien vidéo qui n\'est pas YouTube → enregistrement bloqué', async () => {
@@ -72,7 +82,7 @@ describe('MediaPostFormPage', () => {
     submit()
 
     expect(await screen.findByText('Liste des publications')).toBeInTheDocument()
-    expect(createMediaPost).toHaveBeenCalledWith(expect.objectContaining({ title: 'Atelier à Nice', theme: 'Événement' }))
+    expect(createMediaPost).toHaveBeenCalledWith(expect.objectContaining({ title: 'Atelier à Nice', theme: 'Événement', rattachement: 'FRANCE' }))
     expect(updateMediaPostMedia).toHaveBeenCalledWith(12, [], [{ file_url: 'https://youtu.be/dQw4w9WgXcQ', label: '' }])
   })
 

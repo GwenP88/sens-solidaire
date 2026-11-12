@@ -10,6 +10,7 @@ import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
 import ErrorModal from '../../components/admin/ErrorModal'
 import { ADMIN_ERRORS } from '../../utils/adminErrors'
+import RattachementBadge from '../../components/admin/RattachementBadge'
 
 const formatDate = (date) =>
   new Date(date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -24,6 +25,12 @@ const COLUMNS = [
     hideOnMobile: true,
     // Même règle que sur le site : lien/fichier → « Consulter », sinon « Lire la suite »
     render: (row) => row.external_url ? 'Consulter (lien ou fichier)' : 'Lire la suite (article)',
+  },
+  {
+    key: 'rattachement',
+    label: 'Pays concerné',
+    hideOnMobile: true,
+    render: (row) => <RattachementBadge value={row.rattachement} />,
   },
   {
     key: 'show_homepage',

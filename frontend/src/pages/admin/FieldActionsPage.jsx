@@ -10,13 +10,20 @@ import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
 import ErrorModal from '../../components/admin/ErrorModal'
 import { ADMIN_ERRORS } from '../../utils/adminErrors'
+import RattachementBadge from '../../components/admin/RattachementBadge'
 
 const COLUMNS = [
   { key: 'title', label: 'Titre' },
   {
     key: 'countries',
-    label: 'Pays',
+    label: 'Réalisé en',
     render: (row) => row.countries.map(c => c.country).join(', ') || '—',
+  },
+  {
+    key: 'rattachement',
+    label: 'Pays concerné',
+    hideOnMobile: true,
+    render: (row) => <RattachementBadge value={row.rattachement} />,
   },
   {
     key: 'tags',

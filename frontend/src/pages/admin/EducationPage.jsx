@@ -14,7 +14,7 @@ import DashboardTable from '../../components/admin/DashboardTable'
 import ConfirmModal from '../../components/admin/ConfirmModal'
 import ErrorModal from '../../components/admin/ErrorModal'
 import { ADMIN_ERRORS } from '../../utils/adminErrors'
-import { RATTACHEMENT_LABELS } from '../../utils/rattachement'
+import RattachementBadge from '../../components/admin/RattachementBadge'
 import { FILTERS_EDUCATION_PUBLIC } from '../../utils/filters'
 
 // ── Badges ──────────────────────────────────────────────────────────────────
@@ -24,13 +24,6 @@ const StatusBadge = ({ active }) => (
   }`}>
     {active ? 'Visible' : 'Masquée'}
   </span>
-)
-
-// Pays non renseigné : signalé en orange pour que la cliente pense à le compléter
-const RattachementBadge = ({ value }) => (
-  value
-    ? <span>{RATTACHEMENT_LABELS[value]}</span>
-    : <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-dash-warning/10 text-dash-warning">À renseigner</span>
 )
 
 // Codes de public → libellés lisibles (« primaire,adultes » → « Maternelle & Primaire, Adultes & Étudiants »)

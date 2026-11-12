@@ -11,6 +11,7 @@ import {
 } from '../../services/api'
 import AdminFileUpload from '../../components/admin/AdminFileUpload'
 import { FormSection, Field, FormActionBar } from '../../components/admin/FormElements'
+import RattachementField from '../../components/admin/RattachementField'
 import { ODDS } from '../../utils/odds'
 
 // Même mapping que côté public/backend — juste pour l'aperçu en direct.
@@ -66,6 +67,7 @@ const EMPTY_FORM = {
   countries: [],
   odds: [],
   photos: [], // [{ file_url, label, is_hero }] — 1ère = hero, le reste = galerie
+  rattachement: null, // FRANCE | SUISSE | COMMUN — mise en avant auprès des financeurs (172D)
 }
 
 // Slug technique, jamais affiché — même principe que Lieux/Missions
@@ -116,6 +118,7 @@ function FieldActionFormPage() {
           countries: action.countries.map(c => c.country),
           odds: action.odds.map(o => o.odd_number),
           photos,
+          rattachement: action.rattachement,
         })
       } catch (err) {
         console.error('Erreur chargement :', err)
@@ -171,6 +174,7 @@ function FieldActionFormPage() {
     else if (isMarkerTooFar) newErrors.descriptionRaw = `Le passage avant --- dépasse ${H2_MAX_LENGTH} caractères : placez le repère plus tôt.`
     if (formData.odds.length === 0)      newErrors.odds = "Sélectionnez au moins un ODD."
     if (formData.countries.length === 0) newErrors.countries = "Ajoutez au moins un pays : choisissez-le dans la liste, puis cliquez sur « Ajouter »."
+    if (!formData.rattachement) newErrors.rattachement = "Cochez au moins un pays : France, Suisse ou les deux."
     if (formData.photos.length > 0 && !formData.photos.some(p => p.is_hero)) {
       newErrors.photos = "Sélectionnez une photo principale."
     }
@@ -203,6 +207,7 @@ function FieldActionFormPage() {
         odds: formData.odds,
         image_url: heroPhoto ? heroPhoto.file_url : null,
         slug: slugify(formData.title),
+        rattachement: formData.rattachement,
       }
 
       let actionId
@@ -263,8 +268,8 @@ function FieldActionFormPage() {
 
             {/* ── Pays — champ + datalist + étiquettes retirables ── */}
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-dash-text">Pays concerné(s) <span className="text-red-500">*</span> </label>
-              <p className="text-xs text-dash-legend -mt-0.5">Sélectionne le ou les pays dans lesquels ce projet a été réalisé, puis clique sur « Ajouter ce pays ».</p>
+              <label className="text-sm font-medium text-dash-text">Pays où le projet a été réalisé <span className="text-red-500">*</span></label>
+              <p className="text-xs text-dash-legend -mt-0.5">Choisissez le ou les pays dans lesquels ce projet a été réalisé, puis cliquez sur « Ajouter ce pays ».</p>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -313,7 +318,7 @@ function FieldActionFormPage() {
               Description du projet <span className="text-red-500">*</span>
             </label>
             <p className="text-xs text-dash-legend -mt-0.5">
-              Présente le projet, ses objectifs et les actions réalisées sur le terrain. Pour choisir le texte d'introduction affiché en haut de la page, ajoute --- après la partie que tu souhaites utiliser comme introduction. Le reste du texte apparaîtra à la suite sur la page du projet.
+              Présentez le projet, ses objectifs et les actions réalisées sur le terrain. Pour choisir le texte d'introduction affiché en haut de la page, ajoutez --- après la partie que vous souhaitez utiliser comme introduction. Le reste du texte apparaîtra à la suite sur la page du projet.
             </p>
             <textarea
               name="descriptionRaw"
@@ -349,7 +354,7 @@ function FieldActionFormPage() {
 
         <FormSection
           title="Photos du projet"
-          description="Sélectionne la photo principale du projet. Elle sera mise en avant sur le site. Les autres photos seront affichées dans la galerie."
+          description="Sélectionnez la photo principale du projet. Elle sera mise en avant sur le site. Les autres photos seront affichées dans la galerie."
         >
           <AdminFileUpload
             value={formData.photos}
@@ -370,7 +375,7 @@ function FieldActionFormPage() {
 
         <FormSection
           title={<>Objectifs de Développement Durable (ODD) <span className="text-red-500">*</span></>}
-          description="Sélectionne le ou les Objectifs de Développement Durable auxquels ce projet contribue. Les thèmes correspondants seront ajoutés automatiquement sur le site."
+          description="Sélectionnez le ou les Objectifs de Développement Durable auxquels ce projet contribue. Les thèmes correspondants seront ajoutés automatiquement sur le site."
         >
           <div className="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-9 gap-2">
             {ODDS.map(odd => {
@@ -406,6 +411,21 @@ function FieldActionFormPage() {
               ))}
             </div>
           )}
+        </FormSection>
+
+        {/* ── Pays concerné : mise en avant auprès des financeurs (≠ pays où le projet a été réalisé) ── */}
+        <FormSection
+          title={<>Pays concerné (financeurs) <span className="text-red-500">*</span></>}
+          description="Pour quel pays ce projet est-il mis en avant auprès des financeurs ? Ce n'est pas forcément le pays où il a été réalisé : un puits au Sénégal construit avec des élèves suisses concerne la Suisse. Cochez les deux si le projet concerne la France et la Suisse."
+        >
+          <RattachementField
+            value={formData.rattachement}
+            onChange={(value) => {
+              setFormData(prev => ({ ...prev, rattachement: value }))
+              if (fieldErrors.rattachement) setFieldErrors(prev => ({ ...prev, rattachement: null }))
+            }}
+            error={fieldErrors.rattachement}
+          />
         </FormSection>
 
         <FormActionBar

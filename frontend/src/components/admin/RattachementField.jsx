@@ -1,5 +1,5 @@
 // RattachementField.jsx
-// Cases « France » / « Suisse » des formulaires du dashboard (tâche 172D) — sections Éducation, projets réalisés, articles.
+// Cases « France » / « Suisse » des formulaires du dashboard (tâche 172D) — sections Éducation, actions terrain, articles.
 
 import { toCheckboxes, fromCheckboxes } from '../../utils/rattachement'
 
@@ -14,7 +14,7 @@ function RattachementField({ value, onChange, error }) {
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="sr-only">Pages pays</legend>
+      <legend className="sr-only">Pays concerné</legend>
       <div className="flex flex-wrap gap-6">
         {[
           { key: 'france', label: 'France' },
