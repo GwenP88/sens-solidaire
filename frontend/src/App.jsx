@@ -75,6 +75,9 @@ const AProposPage = lazy(() => import('./pages/admin/AProposPage'))
 const TemoignagesRapportsPage = lazy(() => import('./pages/admin/TemoignagesRapportsPage'))
 const FieldActionsPage = lazy(() => import('./pages/admin/FieldActionsPage'))
 const FieldActionFormPage = lazy(() => import('./pages/admin/FieldActionFormPage'))
+const EducationPage = lazy(() => import('./pages/admin/EducationPage'))
+const EducationSectionFormPage = lazy(() => import('./pages/admin/EducationSectionFormPage'))
+const EducationItemFormPage = lazy(() => import('./pages/admin/EducationItemFormPage'))
 
 function App() {
   return (
@@ -185,6 +188,13 @@ function App() {
           <Route path="actions-terrain" element={<FieldActionsPage />} />
           <Route path="actions-terrain/new" element={<FieldActionFormPage />} />
           <Route path="actions-terrain/:id/edit" element={<FieldActionFormPage />} />
+
+          {/* Éducation & sensibilisation : sections de la page + cartes (tâche 172A) */}
+          <Route path="education" element={<EducationPage />} />
+          <Route path="education/sections/new" element={<EducationSectionFormPage />} />
+          <Route path="education/sections/:id/edit" element={<EducationSectionFormPage />} />
+          <Route path="education/cartes/new" element={<EducationItemFormPage />} />
+          <Route path="education/cartes/:id/edit" element={<EducationItemFormPage />} />
 
         </Route>
 

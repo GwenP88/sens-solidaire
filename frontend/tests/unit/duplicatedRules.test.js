@@ -39,6 +39,12 @@ describe.skipIf(!hasBackend)('Règles identiques front / back', () => {
     SAMPLES.years.forEach(y => expect(frontValidation.isValidYear(y)).toBe(back.isValidYear(y)))
   })
 
+  it('isValidButtonUrl (boutons des sections Éducation)', async () => {
+    const back = await load('validation.js')
+    const links = ['/contact', 'https://www.eco-ecole.org/', 'http://site.fr', '//site.com', 'javascript:alert(1)', 'contact', '', ' /soutenir ']
+    links.forEach(l => expect(frontValidation.isValidButtonUrl(l)).toBe(back.isValidButtonUrl(l)))
+  })
+
   it('correspondance ODD → catégorie', async () => {
     const back = await load('odds.js')
     expect(FRONT_ODD).toEqual(back.ODD_TO_CATEGORY)

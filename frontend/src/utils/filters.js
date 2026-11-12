@@ -47,6 +47,17 @@ export const FILTERS_EDUCATION_PUBLIC = [
   { label: "Adultes & Étudiants", value: "adultes" },
 ]
 
+// ── Publics d'une section de la page Éducation (cases à cocher du dashboard, tâche 172A) ──
+// Plus détaillés que ceux des cartes (FILTERS_EDUCATION_PUBLIC).
+// ⚠️ Mêmes codes que SECTION_AUDIENCES (backend/src/services/educationSectionService.js)
+export const SECTION_AUDIENCE_OPTIONS = [
+  { label: "École maternelle", value: "maternelle" },
+  { label: "École élémentaire", value: "elementaire" },
+  { label: "Collège", value: "college" },
+  { label: "Lycée", value: "lycee" },
+  { label: "Adultes", value: "adultes" },
+]
+
 // ── Catégories ODD — page Notre Impact (FilterChips) ──
 // Mapping ODD → catégorie géré séparément dans utils/odds.js (ODD_TO_CATEGORY)
 // Les `value` doivent correspondre EXACTEMENT aux valeurs de ODD_TO_CATEGORY.

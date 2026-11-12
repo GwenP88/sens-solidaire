@@ -10,6 +10,7 @@ import {
   FiMapPin,
   FiRss,
   FiImage,
+  FiBookOpen,
 } from 'react-icons/fi'
 
 // Source unique de vérité pour la nav — modifier ici seulement.
@@ -34,6 +35,13 @@ export const navItems = [
     label: 'Projets réalisés',
     path: '/admin/actions-terrain',
     icon: FiFlag,
+    activeClass: 'bg-dash-action/10 text-dash-action',
+    iconActive: 'text-dash-action',
+  },
+  {
+    label: 'Éducation & sensibilisation',
+    path: '/admin/education',
+    icon: FiBookOpen,
     activeClass: 'bg-dash-action/10 text-dash-action',
     iconActive: 'text-dash-action',
   },
