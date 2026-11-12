@@ -3,7 +3,7 @@
 Ce fichier est lu automatiquement par Claude au début de chaque session dans ce dépôt.
 Il décrit le projet, la façon de travailler attendue, ce qui a été fait, pourquoi, et ce qui reste à faire.
 
-Dernière mise à jour : 8 novembre 2026 (état du dépôt : branche `dev-front` — tâches 123 à 129, 170, 130, 173 à 177 livrées : accessibilité, SEO, lazy loading, CI GitHub Actions, Docker sans Docker Desktop).
+Dernière mise à jour : 12 novembre 2026 (état du dépôt : branche `dev-front` — Bloc C livré : page Éducation entièrement gérée depuis le dashboard (172, 172A, 172C), « Pays concerné » France / Suisse sur les sections Éducation, actions terrain et articles (172D) ; journal de bord par jour).
 
 ---
 
@@ -23,7 +23,7 @@ Ces règles sont **fermes**. Elles priment sur les habitudes par défaut de Clau
 - **Une étape à la fois.** Proposer l'étape, l'expliquer, **attendre la validation** avant de passer à la suivante.
 - **Validation à chaque commande terminal** : proposer la commande, attendre le OK, puis l'exécuter (ou la laisser l'exécuter).
 - **Ne jamais supposer** qu'une étape précédente a été faite sans confirmation explicite. Vérifier (lire le fichier, `git status`, requête SQL) plutôt que présumer.
-- Gwen travaille par **petites sessions d'environ 30 minutes** : en fin de session, commits + push seulement (pas de JDB à chaque session, un JDB de la semaine en fin de semaine).
+- Gwen travaille par **petites sessions d'environ 30 minutes**. En fin de journée : **entrée du jour dans le journal de bord** (`docs/journal-de-bord/AAAA-MM-JJ.md`, modèle dans le `README.md` du dossier, ligne ajoutée à son index) + commandes de commit à donner à Gwen (c'est elle qui commit et push).
 
 ### Modifications de fichiers
 
@@ -231,7 +231,7 @@ sens-solidaire/
 
 ### Routes dashboard
 
-`/admin/login`, `/admin` (Dashboard), `temoignages-rapports`, `missions` (+ `new`, `:id/edit`), `service-civique/new|:id/edit`, `lieux` (+ formulaire), `medias` (+ formulaire), `equipe/...`, `a-propos` (équipe, délégations, partenaires, rapports d'activité), `galerie`, `actions-terrain` (+ formulaire).
+`/admin/login`, `/admin` (Dashboard), `temoignages-rapports`, `missions` (+ `new`, `:id/edit`), `service-civique/new|:id/edit`, `lieux` (+ formulaire), `medias` (+ formulaire), `equipe/...`, `a-propos` (équipe, délégations, partenaires, rapports d'activité), `galerie`, `actions-terrain` (+ formulaire), `education` (+ `education/sections/new|:id/edit`, `education/cartes/new|:id/edit`).
 
 ---
 
@@ -242,7 +242,7 @@ Schéma : `backend/prisma/schema.prisma`. Diagrammes Mermaid à jour dans `READM
 | Domaine | Modèles |
 |---|---|
 | Missions | `Mission`, `MissionPricing`, `Location` (many-to-many avec Mission), `Delegation`, `Testimonial`, `MissionReport` |
-| Contenu éditorial | `MediaPost`, `EducationItem`, `ActivityReport` |
+| Contenu éditorial | `MediaPost`, `EducationSection`, `EducationItem` (carte, rattachée à une section), `ActivityReport` |
 | Impact terrain | `FieldAction`, `FieldActionCountry`, `FieldActionTag`, `FieldActionODD` |
 | Communauté | `TeamMember`, `Partner` |
 | Admin / médias | `Admin`, `Media` (polymorphique) |
@@ -257,6 +257,8 @@ Schéma : `backend/prisma/schema.prisma`. Diagrammes Mermaid à jour dans `READM
 - **Thèmes de `MediaPost`** : pas de table, simples suggestions (`normalizeTheme` limite les doublons, majuscule imposée sur la 1re lettre côté serveur). Limite connue : impossible de corriger la casse d'un thème depuis le formulaire si ce post est le seul à l'utiliser → correction en SQL.
 - **Slug** : généré automatiquement, **jamais modifié** ensuite (un lien partagé reste valable). La cliente ne voit jamais le mot « slug » (« Adresse de la page »).
 - **Vidéos YouTube des articles** : `Media` avec `file_type = 'youtube'` et le lien dans `file_url` (pas de migration, `file_type` est un texte libre ; `video` reste réservé aux fichiers vidéo). Max 5 par article, lien validé des deux côtés.
+- **Page Éducation** : un seul type de section générique (`EducationSection`) que la cliente crée, ordonne (`display_order`) et masque. Photos et boutons d'une section dans `Media` (`entity_type 'education_section'`, `file_type 'image'` / `'link'`, `label` = texte du bouton). Tarif en texte libre, en euros **et** en francs suisses (`price_eur` / `price_chf`). Mise en page écrite dans le texte (ligne vide = paragraphe, « - » = puce) : `TexteMisEnForme`. Supprimer une section ne supprime pas ses cartes (`ON DELETE SET NULL`). Résumé d'une carte déduit du repère `---` (200 caractères max).
+- **Rattachement France / Suisse** (`enum Rattachement { FRANCE SUISSE COMMUN }`) sur `EducationSection`, `FieldAction`, `MediaPost` : colonne **facultative en base** (contenus anciens = « À renseigner » dans le dashboard), **obligatoire dans les formulaires** (2 cases « France » / « Suisse », les deux = `COMMUN` : `RattachementField`, `RattachementBadge`). Dans le dashboard on dit « Pays concerné » ; pour les actions terrain, à ne pas confondre avec les pays où le projet a été réalisé.
 - **Valeurs calculées à la lecture, non stockées** : résumé de carte (200 caractères pour les médias), temps de lecture (~200 mots/min).
 - **Description courte** : marqueur `---` dans le texte long (`utils/shortDescription.js`, des deux côtés). Si le repère est trop loin, l'aperçu `ShortDescriptionPreview` avertit ; pour les actions terrain l'enregistrement est **bloqué** (sinon perte de texte).
 
@@ -376,11 +378,9 @@ Rappels :
 
 ## 11. Seed
 
-`backend/prisma/seed.js` ne crée plus que :
-- le compte **admin** (`admin@sensolidaire.org`, mot de passe = `ADMIN_PASSWORD`) ;
-- les **`EducationItem`** (la page Éducation n'a pas encore de CRUD).
+`backend/prisma/seed.js` ne crée plus que le compte **admin** (`admin@sensolidaire.org`, mot de passe = `ADMIN_PASSWORD`).
 
-Missions, lieux, délégations, témoignages, médias, équipe, partenaires, rapports, actions terrain sont **gérés via le dashboard** et ne doivent **jamais** revenir dans le seed.
+**Tous** les contenus (missions, lieux, délégations, témoignages, médias, équipe, partenaires, rapports, actions terrain, sections et cartes Éducation) sont **gérés via le dashboard** et ne doivent **jamais** revenir dans le seed.
 
 **Règle** : dès qu'un CRUD dashboard existe pour une ressource, retirer son bloc du seed (et la ligne du récap final). Un `deleteMany({})` dans le seed effacerait les vraies données de la cliente.
 
@@ -438,7 +438,7 @@ Règles :
 |---|---|
 | `README.md` | Installation, architecture, diagrammes BDD à jour, tests |
 | `docs/planning.md` | **Source de vérité de ce qui reste à faire** (numéros de tâches, statuts) |
-| `docs/JDB.md` | Journal de bord : décisions, bugs, justification de chaque choix récent (semaine par semaine) |
+| `docs/journal-de-bord/` | Journal de bord, **un fichier par jour** (`AAAA-MM-JJ.md`, index et modèle dans `README.md`) : décisions, bugs, justification de chaque choix. `docs/JDB.md` ne contient plus qu'un renvoi |
 | `docs/modif-en-cours-de-dev.md` | Écarts par rapport aux guides de conception initiaux, avec justification |
 | `docs/bugTracker.md` | Bugs déjà rencontrés et leur solution — **à consulter avant de déboguer** |
 | `docs/guide-de-style.md` | Design system (attention : valeurs de palette anciennes, voir section 7) |
@@ -480,6 +480,8 @@ Règles :
 - Règle `isValidSlug` commune front/back.
 - **6 novembre — priorité 1 avant soutenance** : modales d'erreur au lieu des `alert` (127), filtres pays dérivés des données (170), découpage de `api.js` (128), dashboard sur téléphone (125), vidéos YouTube dans les articles (123), ménage du code (129), erreurs Prisma → 404 / 409, suite de tests unitaires + intégration (126). Bugs corrigés au passage : BUG-56 à BUG-65 (`docs/bugTracker.md`).
 - **8 novembre — outillage et finitions** : Docker installé dans WSL à la place de Docker Desktop (sauvegarde + restauration de la base), CI GitHub Actions (lint, tests, build, tests d'intégration sur base jetable) et protection de `main`, `npm audit fix`, accessibilité (173 : boutons-liens, lien d'évitement, focus visible, modales, icônes nommées), SEO (174 : `useSEO` sur les 19 pages publiques), lazy loading (130 : JavaScript initial divisé par 2). Bugs : BUG-67 à BUG-72.
+- **10 novembre** : images statiques en WebP (131), corrections issues de Lighthouse (134 : libellés du formulaire de contact, contraste, décalage de page, port 4173 pour mesurer la version de production).
+- **11-12 novembre — Bloc C** : page Éducation générée depuis le dashboard (sections, cartes, menu d'ancres automatique), « Pays concerné » France / Suisse (172D), seed réduit au compte admin, journal de bord découpé par jour.
 
 ---
 
@@ -498,7 +500,7 @@ Tâches 123, 125, 126, 127, 128, 129 et 170 **terminées le 6 novembre** ; 130 (
 
 ### Bloc C — Page Éducation & sensibilisation
 
-Actuellement **entièrement codée en dur** (seul `EducationItem` vient du seed). À faire : contenu dynamique, CRUD dashboard, tests, retrait du bloc `EducationItem` du seed une fois le CRUD en place.
+**Livré les 11 et 12 novembre** (172, 172A, 172C, 172D côté dashboard). Fixes (structure, non modifiables par la cliente) : hero, menu d'ancres (généré à partir des sections visibles), section ODD, appel à contacter final. Reste : 178 (section ODD à retravailler sur tout le site), 172B (contenu réel), pages `/france` et `/suisse` (voir ci-dessous).
 
 #### Fonctionnalité à venir — Rattachement pays (France / Suisse)
 
@@ -554,11 +556,11 @@ Actuellement **entièrement codée en dur** (seul `EducationItem` vient du seed)
 #### Découpage
 
 1. Conception ✅
-2. Inventaire des modèles existants (`schema.prisma`) — **prochaine étape**
-3. BDD : enum + champ sur les modèles concernés *(Alison)*
-4. API : filtre par pays *(Alison)*
-5. Dashboard : menu déroulant + encart liens financeurs *(Alison)*
-6. Front : pages `/france` et `/suisse` *(Gwen)*
+2. Inventaire des modèles ✅ (sections Éducation, actions terrain, articles)
+3. BDD : enum + champ sur les modèles concernés ✅ (11 novembre)
+4. API : rattachement enregistré et validé ✅ — **filtre par pays à faire**
+5. Dashboard : cases « France » / « Suisse » + colonne « Pays concerné » ✅ — **encart « Liens financeurs » à faire**
+6. Front : pages `/france` et `/suisse` (prix en euros sur `/france`, en francs suisses sur `/suisse`)
 7. Validation avec Delphine
 
 #### Questions ouvertes pour Delphine
@@ -588,16 +590,6 @@ Faits le 8 novembre : accessibilité basique (173), SEO basique (174, hook `useS
 - Dockerfiles de production (multi-stage), Nginx + SSL, variables d'environnement et secrets de prod, monitoring (UptimeRobot), tests en production, guide utilisateur du dashboard (PDF), remise des accès.
 - **Migration des données** (plan retenu) : `pg_dump` de la base locale → création de la base de prod → `prisma migrate deploy` (structure) → import des données. **Étape par étape, jamais en une seule commande automatique.**
 - Ne pas oublier : `VITE_API_URL` / proxy (le proxy Vite n'existe qu'en dev), `FRONTEND_URL` pour CORS, mot de passe admin, fichiers de `backend/public/uploads/` à transférer.
-
-### Nouveau besoin cliente (rendez-vous du 04/11/2026) — non commencé
-
-Pour les demandes de subventions, les financeurs **suisses** et **français** demandent des liens vers le site. Le site doit pouvoir montrer **séparément** les actions liées à la Suisse et celles liées à la France :
-
-- éducation : ateliers pédagogiques, correspondance scolaire, relais Éco-École (France uniquement) ;
-- actions terrain ;
-- événements : plaidoyer Genève, ONU, « La ville est à nous », salons…
-
-Contraintes connues : une action est rattachée à **un seul pays** (un financeur ne finance pas si l'autre l'a fait) ; la cliente préfère que les Suisses ne voient pas forcément tout ce qui est fait en France, et inversement. Piste de Gwen : marquer le contenu dynamique concerné comme **FR, CH ou les deux**. Lien avec la tâche V2 158 (filtrage par zone). **À concevoir avec Gwen avant tout code** (modèle de données, URL partageables par zone, impact sur la page Éducation).
 
 ### Points ouverts à clarifier
 

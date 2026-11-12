@@ -385,7 +385,7 @@ sens-solidaire/
 │
 ├── docs/                      # Documentation du projet — voir docs/README.md
 │   ├── README.md              # Sommaire de la documentation
-│   ├── JDB.md                 # Journal de bord quotidien
+│   ├── journal-de-bord/       # Journal de bord, un fichier par jour
 │   ├── planning.md            # Sprint planning
 │   ├── veille.md              # Journal de veille sécurité
 │   ├── modif-en-cours-de-dev.md  # Écarts assumés par rapport aux guides initiaux
@@ -500,7 +500,7 @@ Projet réalisé en binôme dans le cadre de la formation Holberton School (Thon
 | **Développement Frontend** | Gwen Pichot (principal) · Alison Amblard (dashboard) | React, Tailwind, design system, intégration API |
 | **Développement Backend** | Alison Amblard (principal) · Gwen Pichot (certains items) | Node.js, Express, Prisma, base de données |
 | **Conception UX / UI** | Gwen Pichot | Personas, parcours utilisateurs, wireframes et maquettes Figma |
-| **Project Manager** | Gwen & Alison | Sprint planning, suivi d'avancement (voir `docs/JDB.md`, `docs/planning.md`) |
+| **Project Manager** | Gwen & Alison | Sprint planning, suivi d'avancement (voir `docs/journal-de-bord/`, `docs/planning.md`) |
 | **Source Control Manager (SCM)** | Gwen & Alison | Gestion des branches, revue mutuelle avant merge sur `dev` |
 | **Quality Assurance (QA)** | Gwen & Alison | Tests manuels croisés, Postman, Jest, Vitest |
 
@@ -514,14 +514,14 @@ La conception d'interface (personas, parcours, wireframes, maquettes Figma) a é
 
 - **Sprints** d'une semaine, détaillés dans `docs/planning.md`
 - **Branches** : `main` (production), `dev` (intégration), `dev-front` (Gwen), `dev-back` (Alison)
-- **Suivi quotidien** dans `docs/JDB.md` — décisions, bugs, avancement
+- **Suivi quotidien** dans `docs/journal-de-bord/` (un fichier par jour) — décisions, bugs, avancement
 - **Merge** systématique `dev-front`/`dev-back` → `dev` après chaque groupe de tâches cohérent
 
 ## Liens
 
 - **Dépôt GitHub** (public) : [github.com/GwenP88/sens-solidaire](https://github.com/GwenP88/sens-solidaire)
 - **Sommaire de la documentation** : [`docs/README.md`](./docs/README.md)
-- **Journal de bord** : [`docs/JDB.md`](./docs/JDB.md)
+- **Journal de bord** : [`docs/journal-de-bord/`](./docs/journal-de-bord/README.md)
 - **Journal de veille sécurité** : [`docs/veille.md`](./docs/veille.md)
 - **Sprint planning** : [`docs/planning.md`](./docs/planning.md)
 - **Design system** : [`docs/guide-de-style.md`](./docs/guide-de-style.md)

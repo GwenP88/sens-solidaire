@@ -6,7 +6,7 @@ Sommaire des documents de suivi et de conception du projet.
 
 | Fichier | Contenu |
 |---|---|
-| [`JDB.md`](./JDB.md) | Journal de bord quotidien — décisions, bugs rencontrés, avancement jour par jour |
+| [`journal-de-bord/`](./journal-de-bord/README.md) | Journal de bord, un fichier par jour — décisions, bugs rencontrés, avancement |
 | [`planning.md`](./planning.md) | Sprint planning — découpage en phases/sprints, tâches assignées, statuts |
 | [`modif-en-cours-de-dev.md`](./modif-en-cours-de-dev.md) | Décisions qui s'écartent des guides initiaux, avec justification |
 

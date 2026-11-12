@@ -262,10 +262,11 @@
 
 | # | Dev | Tâche | Statut |
 |---|---|---|---|
-| 172 | Gwen | Refonte contenu dynamique — **une section type** (`EducationSection`) que la cliente peut créer, ordonner, masquer : surtitre, titre, texte, liste à puces, infos pratiques (public, tarif), boutons, fiche PDF, photos, cards (ateliers), carrousel d'actions terrain. Fixes (structure) : hero, menu d'ancres (généré à partir des sections), bloc ODD | ❌ |
-| 172A | Gwen | CRUD gestion dashboard — un seul formulaire de section + cards rattachées à une section (fiche PDF envoyée depuis l'ordinateur) ; bloc `EducationItem` retiré du seed | ❌ |
-| 172C | Gwen | Tests d'intégration  | ❌ |
-| 172D | Gwen | Rattachement France / Suisse / Commun (enum, une seule migration) sur les sections Éducation, les actions terrain et les articles — 2 cases à cocher dans les formulaires (« France », « Suisse », les deux = Commun), au moins une obligatoire ; contenus existants : vide en base, « Pays à renseigner » dans le dashboard | ❌ |
+| 172 | Gwen | Refonte contenu dynamique — **une section type** (`EducationSection`) que la cliente crée, ordonne, masque : petit titre, titre, texte mis en forme (ligne vide = paragraphe, « - » = puce), infos pratiques (public, tarif en € et en CHF), 3 boutons max (lien ou PDF importé), photos en carrousel, cartes en carrousel. Fixes (structure) : hero, menu d'ancres (généré à partir des sections), bloc ODD, appel à contacter | ✅ |
+| 172A | Gwen | CRUD dashboard — un seul formulaire de section, cartes créées à part et reliées à une section (description unique avec repère `---`, résumé de 200 caractères, carte à hauteur fixe) ; bloc `EducationItem` retiré du seed | ✅ |
+| 172C | Gwen | Tests d'intégration (sections, cartes, rattachement) + tests front (page publique, mise en forme du texte) | ✅ |
+| 172D | Gwen | Rattachement France / Suisse / Commun (enum, une seule migration) sur les sections Éducation, les actions terrain et les articles — 2 cases à cocher « Pays concerné » dans les 3 formulaires (les deux = Commun), au moins une obligatoire ; colonne « Pays concerné » dans les 3 listes, « À renseigner » pour les contenus existants | ✅ |
+| 172E | Gwen | Pages `/france` et `/suisse` (filtre par pays dans l'API, tarif dans la devise du pays) + encart « Liens financeurs » dans le dashboard — après la soutenance | ❌ |
 | 178 | Gwen | Section ODD à retravailler sur tout le site (Éducation, Notre impact…) | ❌ |
 
 ### Bloc D — Finitions front
