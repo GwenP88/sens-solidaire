@@ -17,6 +17,7 @@ import HeroPage from '../components/layout/HeroPage'
 import Button from '../components/ui/Button'
 import ScrollToTop from '../components/ui/ScrollToTop'
 import CTASection from '../components/ui/CTASection'
+import TexteMisEnForme from '../components/ui/TexteMisEnForme'
 
 // ── Référencement
 import useSEO from '../hooks/useSEO'
@@ -68,10 +69,9 @@ function EducationDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-lg items-start">
 
           {/* Colonne contenu — 2/3 */}
-          <div className="lg:col-span-2 flex flex-col gap-sm">
-            {item.content?.split('\n\n').map((para, i) => (
-              <p key={i} className="text-body text-primary/80">{para}</p>
-            ))}
+          {/* Même mise en forme que les sections : ligne vide = paragraphe, « - » = puce */}
+          <div className="lg:col-span-2">
+            <TexteMisEnForme texte={item.content} />
           </div>
 
           {/* Aside — infos clés + CTA */}

@@ -1,6 +1,7 @@
 // EducationCard.jsx
 // Card atelier éducatif — wrapper de BaseContentCard
 // Zone haute : type + public | Zone centrale : titre + description | Zone basse : CTA
+// Hauteur fixe agrandie pour afficher le résumé entier (200 caractères max, tâche 172A)
 
 // ── Router
 import { Link } from 'react-router-dom'
@@ -26,6 +27,7 @@ function EducationCard({ item }) {
       bg="bg-surface-mid"
       fallbackImage="/images/placeholders/placeholder-educ-1.webp"
       alt={item.title}
+      height="h-[470px] min-[400px]:h-[440px] md:h-[280px] lg:h-[460px] xl:h-[520px]"
     >
 
       {/* ── Zone haute — type + public cible ── */}
@@ -38,7 +40,8 @@ function EducationCard({ item }) {
       {/* ── Zone centrale — titre + description ── */}
       <div className="flex flex-col gap-xs flex-1 pt-6">
         <h3 className="h3-style text-primary line-clamp-2 mb-0">{item.title}</h3>
-        <p className="text-body text-primary/60 line-clamp-3">{item.description}</p>
+        {/* 6 lignes : le résumé de 200 caractères (repère ---) tient sans être coupé */}
+        <p className="text-body text-primary/60 line-clamp-6">{item.description}</p>
       </div>
 
       {/* ── Zone basse — CTA ── */}
