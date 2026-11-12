@@ -162,7 +162,7 @@ sens-solidaire/
 │   │   ├── components/
 │   │   │   ├── layout/        Navbar, Footer*, Hero, HeroPage, Layout, StatsBar
 │   │   │   ├── ui/            Button, Modal, Carousel, Section, CTASection, BaseContentCard,
-│   │   │   │                  BaseOverlayCard, BadgeODD, RapportCard, LignesToPuces, CookieBanner, PageLoader...
+│   │   │   │                  BaseOverlayCard, BadgeODD, SectionODD, BandeauODD, RapportCard, LignesToPuces, CookieBanner, PageLoader...
 │   │   │   ├── admin/         DashboardLayout, DashboardSidebar, DashboardMobileNav, dashboardNav.js (liens partagés),
 │   │   │   │                  DashboardTable, DashboardModal, ConfirmModal, ErrorModal, FormElements,
 │   │   │   │                  AdminFileUpload, YouTubeLinksField, *EditModal, ModerationCard (non branché)
@@ -311,6 +311,7 @@ Lora (`font-heading`, titres) + Source Sans 3 (`font-body`, corps).
 - Modales du dashboard : `DashboardModal` / `ConfirmModal` / `ErrorModal` (dialogue accessible : titre relié, focus géré) — **jamais** de `window.confirm` ni d'`alert`. Les messages d'erreur d'action viennent de `utils/adminErrors.js` (`ADMIN_ERRORS.toggle / delete / update / save`).
 - Dashboard sur téléphone : seules la modération des témoignages et la publication d'articles sont prévues (`mobile: true` dans `dashboardNav.js`). Barre de navigation **en haut** (le bas est pris par `FormActionBar`). Colonne de tableau masquable sur mobile : `hideOnMobile: true` dans la config de colonnes de `DashboardTable`.
 - Filtres pays du site : jamais de liste figée — `buildCountryOptions()` (`utils/filters.js`) à partir des données chargées.
+- Section ODD : composant partagé `SectionODD` (Notre impact, Éducation : 17 icônes officielles de l'ONU sur 2 lignes, libellés français, bouton vers le site de l'ONU) et `BandeauODD` (accueil, version compacte). Libellés et adresse des icônes : `utils/odds.js`. Ne pas recopier le bloc dans une page.
 - Vidéos : `YouTubeSlide` (miniature, aucun lecteur avant le clic) + `YouTubeModal` (lecteur `youtube-nocookie`, portrait conservé pour les Shorts).
 
 ---
@@ -481,7 +482,7 @@ Règles :
 - **6 novembre — priorité 1 avant soutenance** : modales d'erreur au lieu des `alert` (127), filtres pays dérivés des données (170), découpage de `api.js` (128), dashboard sur téléphone (125), vidéos YouTube dans les articles (123), ménage du code (129), erreurs Prisma → 404 / 409, suite de tests unitaires + intégration (126). Bugs corrigés au passage : BUG-56 à BUG-65 (`docs/bugTracker.md`).
 - **8 novembre — outillage et finitions** : Docker installé dans WSL à la place de Docker Desktop (sauvegarde + restauration de la base), CI GitHub Actions (lint, tests, build, tests d'intégration sur base jetable) et protection de `main`, `npm audit fix`, accessibilité (173 : boutons-liens, lien d'évitement, focus visible, modales, icônes nommées), SEO (174 : `useSEO` sur les 19 pages publiques), lazy loading (130 : JavaScript initial divisé par 2). Bugs : BUG-67 à BUG-72.
 - **10 novembre** : images statiques en WebP (131), corrections issues de Lighthouse (134 : libellés du formulaire de contact, contraste, décalage de page, port 4173 pour mesurer la version de production).
-- **11-12 novembre — Bloc C** : page Éducation générée depuis le dashboard (sections, cartes, menu d'ancres automatique), « Pays concerné » France / Suisse (172D), seed réduit au compte admin, journal de bord découpé par jour.
+- **11-12 novembre — Bloc C** : page Éducation générée depuis le dashboard (sections, cartes, menu d'ancres automatique), « Pays concerné » France / Suisse (172D), seed réduit au compte admin, journal de bord découpé par jour, section ODD partagée (178).
 
 ---
 
@@ -500,7 +501,7 @@ Tâches 123, 125, 126, 127, 128, 129 et 170 **terminées le 6 novembre** ; 130 (
 
 ### Bloc C — Page Éducation & sensibilisation
 
-**Livré les 11 et 12 novembre** (172, 172A, 172C, 172D côté dashboard). Fixes (structure, non modifiables par la cliente) : hero, menu d'ancres (généré à partir des sections visibles), section ODD, appel à contacter final. Reste : 178 (section ODD à retravailler sur tout le site), 172B (contenu réel), pages `/france` et `/suisse` (voir ci-dessous).
+**Livré les 11 et 12 novembre** (172, 172A, 172C, 172D côté dashboard). Fixes (structure, non modifiables par la cliente) : hero, menu d'ancres (généré à partir des sections visibles), section ODD, appel à contacter final. Section ODD refaite en composant partagé (178, 12 novembre). Reste : 172B (contenu réel), pages `/france` et `/suisse` (voir ci-dessous).
 
 #### Fonctionnalité à venir — Rattachement pays (France / Suisse)
 

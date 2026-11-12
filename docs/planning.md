@@ -267,7 +267,7 @@
 | 172C | Gwen | Tests d'intégration (sections, cartes, rattachement) + tests front (page publique, mise en forme du texte) | ✅ |
 | 172D | Gwen | Rattachement France / Suisse / Commun (enum, une seule migration) sur les sections Éducation, les actions terrain et les articles — 2 cases à cocher « Pays concerné » dans les 3 formulaires (les deux = Commun), au moins une obligatoire ; colonne « Pays concerné » dans les 3 listes, « À renseigner » pour les contenus existants | ✅ |
 | 172E | Gwen | Pages `/france` et `/suisse` (filtre par pays dans l'API, tarif dans la devise du pays) + encart « Liens financeurs » dans le dashboard — après la soutenance | ❌ |
-| 178 | Gwen | Section ODD à retravailler sur tout le site (Éducation, Notre impact…) | ❌ |
+| 178 | Gwen | Section ODD partagée : `SectionODD` (Notre impact, Éducation, icônes officielles sur 2 lignes + bouton ONU) et `BandeauODD` (accueil) | ✅ |
 
 ### Bloc D — Finitions front
 

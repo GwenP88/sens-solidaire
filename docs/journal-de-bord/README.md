@@ -71,4 +71,4 @@ Quelques entrées anciennes couvrent plusieurs jours ou une semaine : elles ont 
 | [2026-11-07_au_08](2026-11-07_au_08.md) | Week-end du 7 au 8 novembre 2026 — Docker sans Docker Desktop, intégration continue, accessibilité, SEO, lazy loading |
 | [2026-11-10](2026-11-10.md) | 10 novembre 2026 — Images en WebP (131), corrections issues de l'audit Lighthouse (134) |
 | [2026-11-11](2026-11-11.md) | 11 novembre 2026 — Bloc C : sections de la page Éducation, rattachement France / Suisse |
-| [2026-11-12](2026-11-12.md) | 12 novembre 2026 — Page Éducation générée depuis le dashboard, « Pays concerné » sur les actions terrain et les articles, seed réduit à l'admin, journal de bord par jour |
+| [2026-11-12](2026-11-12.md) | 12 novembre 2026 — Page Éducation générée depuis le dashboard, « Pays concerné » sur les actions terrain et les articles, seed réduit à l'admin, section ODD partagée, journal de bord par jour |
