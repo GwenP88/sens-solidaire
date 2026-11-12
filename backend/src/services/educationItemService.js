@@ -3,6 +3,10 @@
 
 import prisma from '../config/db.js'
 import { slugify } from '../utils/slugify.js'
+import { deriveShortDescription } from '../utils/shortDescription.js'
+
+// Longueur maximale du résumé affiché sur la carte (3 lignes environ)
+export const CARD_SUMMARY_LENGTH = 200
 
 // Type d'entité dans la table Media (polymorphe) — photos de la page détail d'une card
 const ENTITY_TYPE = 'education_item'
@@ -12,19 +16,30 @@ export const EDUCATION_PUBLICS = ['primaire', 'college_lycee', 'adultes']
 
 // ── CHAMPS MODIFIABLES ────────────────────────────────────────────────────
 // Liste explicite (pas d'assignation en masse). PATCH : un champ absent n'est pas vidé en base.
+// Texte unique (comme les missions et les articles) : content garde le repère « --- » saisi par la cliente,
+// description (le résumé de la carte) en est déduite — jamais envoyée par le formulaire.
 const pickFields = (data) => {
   const fields = {
     title:        data.title?.trim(),
-    description:  data.description?.trim(),
-    content:      data.content || null,
+    content:      data.content?.trim(),
     type:         data.type?.trim(),
     public:       Array.isArray(data.public) ? data.public.join(',') : data.public,
     image_url:    data.image_url || null,
     external_url: data.external_url || null,
     section_id:   data.section_id ? Number(data.section_id) : null,
   }
-  return Object.fromEntries(Object.entries(fields).filter(([key]) => key in data))
+  const picked = Object.fromEntries(Object.entries(fields).filter(([key]) => key in data))
+  if ('content' in picked) {
+    picked.description = deriveShortDescription(picked.content, CARD_SUMMARY_LENGTH).shortDescription
+  }
+  return picked
 }
+
+// Site public : le repère « --- » ne doit jamais apparaître sur la page détail
+const withCleanContent = (item) => ({
+  ...item,
+  content: item.content ? deriveShortDescription(item.content, CARD_SUMMARY_LENGTH).cleanedFullText : item.content,
+})
 
 // ── ADRESSE DE PAGE UNIQUE — générée depuis le titre, jamais modifiée ─────
 const generateUniqueSlug = async (title) => {
@@ -40,10 +55,11 @@ const generateUniqueSlug = async (title) => {
 
 // ── GET (PUBLIC) — liste ──────────────────────────────────────────────────
 export const getAllEducationItems = async () => {
-  return await prisma.educationItem.findMany({
+  const items = await prisma.educationItem.findMany({
     where: { is_active: true },
     orderBy: { created_at: 'asc' },
   })
+  return items.map(withCleanContent)
 }
 
 // ── GET (PUBLIC) — détail par slug ────────────────────────────────────────
@@ -60,7 +76,7 @@ export const getEducationItemBySlug = async (slug) => {
     orderBy: { display_order: 'asc' },
   })
 
-  return { ...item, media }
+  return { ...withCleanContent(item), media }
 }
 
 // ── FIND ALL (ADMIN) — visibles + masquées, avec le titre de leur section ─

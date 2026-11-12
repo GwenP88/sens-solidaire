@@ -14,3 +14,6 @@ export const isValidYear = (value) => {
 // Adresse de page (slug) : minuscules sans accents, chiffres, tirets simples.
 // Ex. : volontariat-kenya-biodiversite
 export const isValidSlug = (value) => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(String(value ?? '').trim())
+// Lien d'un bouton (sections Éducation, tâche 172A) : page du site (/contact) ou adresse complète (https://…).
+// Refuse « //site.com » (adresse externe déguisée) et « javascript: ».
+export const isValidButtonUrl = (url) => /^\/[^/]/.test(String(url ?? '').trim()) || /^https?:\/\/\S+$/i.test(String(url ?? '').trim())

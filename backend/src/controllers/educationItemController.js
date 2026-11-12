@@ -21,7 +21,8 @@ const validateItem = (body, { partial = false } = {}) => {
   const isChecked = (field) => !partial || field in body
 
   if (isChecked('title') && !isFilled(body.title))             return "Le titre est obligatoire."
-  if (isChecked('description') && !isFilled(body.description)) return "La description courte est obligatoire."
+  // Texte unique : le résumé de la carte en est déduit (repère « --- ») — voir educationItemService
+  if (isChecked('content') && !isFilled(body.content))         return "La description est obligatoire."
   if (isChecked('type') && !isFilled(body.type))               return "La catégorie est obligatoire (ex. Atelier)."
   if (isChecked('public')) {
     const list = toPublicList(body.public)

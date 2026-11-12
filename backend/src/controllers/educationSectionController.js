@@ -4,15 +4,13 @@
 import {
   getAllEducationSections, findAllForAdmin, findById,
   create, update, updateMedia, reorder, toggleActive, hardDelete,
+  SECTION_AUDIENCES,
 } from '../services/educationSectionService.js'
-import { isFilled } from '../utils/validation.js'
+import { isFilled, isValidButtonUrl } from '../utils/validation.js'
 import { isValidRattachement } from '../utils/rattachement.js'
 
 // Nombre maximum de boutons dans le bloc « Informations pratiques »
 const MAX_BUTTONS = 3
-
-// Lien de bouton accepté : page du site (/contact) ou adresse complète (https://…)
-const isValidButtonUrl = (url) => /^\/[^/]/.test(url) || /^https?:\/\/\S+$/i.test(url)
 
 // ── VALIDATION ─────────────────────────────────────────────────────────────
 // partial = true pour une modification (PATCH) : seuls les champs envoyés sont vérifiés.
@@ -21,7 +19,12 @@ const validateSection = (body, { partial = false } = {}) => {
 
   if (isChecked('title') && !isFilled(body.title))     return "Le titre de la section est obligatoire."
   if (isChecked('content') && !isFilled(body.content)) return "Le texte de présentation est obligatoire."
-  if (!isValidRattachement(body.rattachement))         return "Le pays de rattachement est invalide. Cochez France, Suisse ou les deux."
+  if (!isValidRattachement(body.rattachement))         return "Le pays concerné est invalide. Cochez France, Suisse ou les deux."
+  // Public facultatif, mais chaque code envoyé doit être connu
+  if (isFilled(body.audience)) {
+    const codes = (Array.isArray(body.audience) ? body.audience : String(body.audience).split(',')).map(c => String(c).trim())
+    if (codes.some(c => !SECTION_AUDIENCES.includes(c))) return "Le public choisi est invalide. Rechargez la page et cochez de nouveau les cases."
+  }
   return null
 }
 

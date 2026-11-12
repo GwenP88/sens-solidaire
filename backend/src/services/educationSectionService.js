@@ -9,6 +9,10 @@ import { syncGalleryImages, upsertMedia } from './mediaService.js'
 // Type d'entité dans la table Media (polymorphe) : photos (file_type 'image') et boutons (file_type 'link')
 const ENTITY_TYPE = 'education_section'
 
+// Publics d'une section (cases à cocher du dashboard)
+// ⚠️ Même liste que SECTION_AUDIENCE_OPTIONS (frontend/src/utils/filters.js)
+export const SECTION_AUDIENCES = ['maternelle', 'elementaire', 'college', 'lycee', 'adultes']
+
 // ── CHAMPS MODIFIABLES ────────────────────────────────────────────────────
 // Liste explicite : rien d'autre que ces champs n'est lu dans req.body (pas d'assignation en masse).
 // slug, display_order et is_active ont leurs propres règles (voir plus bas).
@@ -19,18 +23,15 @@ const pickFields = (data) => {
 }
 
 const allFields = (data) => ({
-  eyebrow:               data.eyebrow || null,
-  title:                 data.title,
-  content:               data.content,
-  list_title:            data.list_title || null,
-  list_items:            data.list_items || null,
-  audience:              data.audience || null,
-  price:                 data.price || null,
-  price_detail:          data.price_detail || null,
-  pdf_url:               data.pdf_url || null,
-  pdf_label:             data.pdf_label || null,
-  field_actions_country: data.field_actions_country || null,
-  rattachement:          toRattachement(data.rattachement),
+  eyebrow:      data.eyebrow || null,
+  title:        data.title,
+  content:      data.content,
+  // Public : tableau de codes (cases à cocher) → texte « maternelle,college »
+  audience:     (Array.isArray(data.audience) ? data.audience.join(',') : data.audience) || null,
+  price_eur:    data.price_eur || null,
+  price_chf:    data.price_chf || null,
+  price_detail: data.price_detail || null,
+  rattachement: toRattachement(data.rattachement),
 })
 
 // ── ADRESSE D'ANCRE UNIQUE ────────────────────────────────────────────────

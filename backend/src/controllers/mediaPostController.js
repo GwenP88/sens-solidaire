@@ -32,7 +32,7 @@ const validateMediaPost = (body, { partial = false } = {}) => {
       && !isFilled(body.external_url) && !isFilled(body.content)) {
     return "Ajoutez un texte, ou un lien / fichier à consulter."
   }
-  if (!isValidRattachement(body.rattachement)) return "Le pays de rattachement est invalide. Cochez France, Suisse ou les deux."
+  if (!isValidRattachement(body.rattachement)) return "Le pays concerné est invalide. Cochez France, Suisse ou les deux."
   return null
 }
 

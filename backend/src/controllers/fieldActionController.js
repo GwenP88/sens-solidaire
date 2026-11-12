@@ -7,7 +7,7 @@ import {
 } from '../services/fieldActionService.js'
 import { isValidRattachement } from '../utils/rattachement.js'
 
-const RATTACHEMENT_ERROR = "Le pays de rattachement est invalide. Cochez France, Suisse ou les deux."
+const RATTACHEMENT_ERROR = "Le pays concerné est invalide. Cochez France, Suisse ou les deux."
 
 // ── PUBLIC ────────────────────────────────────────────────────────────────
 export const getFieldActions = async (req, res) => {

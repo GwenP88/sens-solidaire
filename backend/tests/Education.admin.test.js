@@ -43,14 +43,15 @@ const sectionBody = (title = `Section ${TEST_MARKER}`) => ({
   title,
   eyebrow: "Programme de test",
   content: "Premier paragraphe.\n\nSecond paragraphe.",
-  audience: "Écoles primaires",
-  price: "Gratuit",
+  audience: ["maternelle", "elementaire"],
+  price_eur: "Gratuit",
+  price_chf: "Gratuit",
   rattachement: "FRANCE",
 })
 
 const itemBody = (title = `Card ${TEST_MARKER}`) => ({
   title,
-  description: "Description courte de test",
+  content: "Résumé de la carte.---Suite du texte, visible seulement sur la page de l'atelier.",
   type: "Atelier",
   public: ["primaire", "adultes"],
 })
@@ -76,7 +77,8 @@ describeAdminCrud({
     expect(section.rattachement).toBe("COMMUN")
     // Champs non envoyés : conservés, pas vidés
     expect(section.eyebrow).toBe("Programme de test")
-    expect(section.price).toBe("Gratuit")
+    expect(section.price_eur).toBe("Gratuit")
+    expect(section.audience).toBe("maternelle,elementaire")
   },
   publicList: { path: "/api/education-sections", extract: (body) => body },
   cleanup: cleanupSections,
@@ -93,6 +95,11 @@ describeAdminCrud({
       expect(res.status).toBe(400)
     })
 
+    it("public inconnu → 400", async () => {
+      const res = await request(app).patch(`${SECTIONS}/${created().id}`).set(auth(token())).send({ audience: ["retraites"] })
+      expect(res.status).toBe(400)
+    })
+
     it("plus de 3 boutons → 400", async () => {
       const buttons = Array.from({ length: 4 }, (_, i) => ({ label: `Bouton ${i}`, url: "/contact" }))
       const res = await request(app).put(`${SECTIONS}/${created().id}/media`).set(auth(token())).send({ buttons })
@@ -105,19 +112,20 @@ describeAdminCrud({
       expect(res.status).toBe(400)
     })
 
-    it("photos et boutons enregistrés, boutons dans l'ordre envoyé", async () => {
+    it("photos et boutons (page, autre site, document importé) enregistrés dans l'ordre envoyé", async () => {
       const res = await request(app).put(`${SECTIONS}/${created().id}/media`).set(auth(token())).send({
         images: [{ file_url: `/uploads/images/${TEST_MARKER}.webp`, label: "Photo de test" }],
         buttons: [
           { label: "Nous contacter", url: "/contact" },
           { label: "Site officiel", url: "https://www.eco-ecole.org/" },
+          { label: "Programme", url: `/uploads/documents/${TEST_MARKER}.pdf` },
         ],
       })
       expect(res.status).toBe(200)
 
       const check = await request(app).get(`${SECTIONS}/${created().id}`).set(auth(token()))
       expect(check.body.section.images).toHaveLength(1)
-      expect(check.body.section.buttons.map(b => b.label)).toEqual(["Nous contacter", "Site officiel"])
+      expect(check.body.section.buttons.map(b => b.label)).toEqual(["Nous contacter", "Site officiel", "Programme"])
       expect(check.body.section.buttons[1].file_url).toBe("https://www.eco-ecole.org/")
     })
 
@@ -185,6 +193,12 @@ describeAdminCrud({
       expect(res.status).toBe(404)
     })
 
+    it("résumé de la carte déduit du texte (avant ---), texte complet gardé avec son repère", async () => {
+      const res = await request(app).get(`${ITEMS}/${created().id}`).set(auth(token()))
+      expect(res.body.item.description).toBe("Résumé de la carte.")
+      expect(res.body.item.content).toContain("---") // le formulaire retrouve le repère à la modification
+    })
+
     it("public inconnu → 400", async () => {
       const res = await request(app).patch(`${ITEMS}/${created().id}`).set(auth(token())).send({ public: ["retraites"] })
       expect(res.status).toBe(400)
@@ -207,4 +221,18 @@ describeAdminCrud({
       expect(res.body.item.external_url).toBe(`/uploads/documents/${TEST_MARKER}.pdf`)
     })
   },
+})
+
+// ── Site public : le repère « --- » n'apparaît jamais sur la page détail d'une carte ──
+it("page publique d'une carte : texte complet sans le repère ---", async () => {
+  const token = await loginAsAdmin()
+  const card = await request(app).post(ITEMS).set(auth(token)).send(itemBody(`Card ${TEST_MARKER} publique`))
+  expect(card.status).toBe(201)
+
+  const res = await request(app).get(`/api/education-items/${card.body.item.slug}`)
+  expect(res.status).toBe(200)
+  expect(res.body.content).not.toContain("---")
+  expect(res.body.content).toContain("Suite du texte")
+
+  await cleanupItems()
 })

@@ -253,22 +253,19 @@ model MediaPost {
 // La cliente crée, ordonne et masque les sections de la page ; la mise en page reste fixe.
 // Chaque bloc ne s'affiche que s'il est rempli.
 // Photos et boutons : table Media (entity_type 'education_section', file_type 'image' / 'link').
+// Un bouton mène à une page, un autre site ou un document PDF importé (/uploads/documents/…).
 
 model EducationSection {
   id            Int      @id @default(autoincrement())
   slug          String   @unique   // ancre du menu (#label-eco-ecole) : générée depuis le titre, jamais modifiée
   eyebrow       String?            // surtitre (« Programme international »)
   title         String
-  content       String             // texte : paragraphes séparés par une ligne vide
-  list_title    String?            // titre de la liste à puces (« Apports éducatifs »)
-  list_items    String?            // une puce par ligne (LignesToPuces)
-  audience      String?            // infos pratiques : public
-  price         String?            // infos pratiques : « Gratuit », « 500 € », « Sur devis »
+  content       String             // texte mis en forme par la cliente : ligne vide = paragraphe, « - » = puce
+  audience      String?            // infos pratiques : public — codes séparés par des virgules (maternelle, elementaire, college, lycee, adultes)
+  price_eur     String?            // infos pratiques : tarif en euros (« Gratuit », « 500 € », « Sur devis ») — page /france
+  price_chf     String?            // infos pratiques : tarif en francs suisses — page /suisse (page générale : les deux)
   price_detail  String?
-  pdf_url       String?            // fiche PDF envoyée depuis l'ordinateur
-  pdf_label     String?            // texte du bouton de téléchargement
-  field_actions_country String?    // pays des actions terrain affichées en carrousel (ex. France) ; vide = pas de carrousel
-  rattachement  Rattachement?      // page financeurs (les cards de la section en héritent)
+  rattachement  Rattachement?      // page financeurs (les cartes de la section en héritent)
   display_order Int      @default(0)
   is_active     Boolean  @default(true)
   created_at    DateTime @default(now())
