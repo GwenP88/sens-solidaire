@@ -195,7 +195,7 @@ export const create = async (data) => {
   } catch (error) {
     // P2002 = violation de contrainte @unique (ici : slug déjà pris)
     if (error.code === "P2002") {
-      const err = new Error("Une mission avec ce slug existe déjà")
+      const err = new Error("Cette adresse de page est déjà utilisée par une autre mission. Choisissez-en une autre.")
       err.status = 409
       err.code = "SLUG_TAKEN" // 👈 clé stable pour le front
       throw err
@@ -231,7 +231,7 @@ export const update = async (id, data) => {
     }
     // P2002 = violation @unique → le nouveau slug est déjà pris par une autre mission
     if (error.code === "P2002") {
-      const err = new Error("Une mission avec ce slug existe déjà")
+      const err = new Error("Cette adresse de page est déjà utilisée par une autre mission. Choisissez-en une autre.")
       err.status = 409
       err.code = "SLUG_TAKEN"
       throw err
