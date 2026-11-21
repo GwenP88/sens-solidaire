@@ -303,12 +303,11 @@ function MissionFormPage() {
 
       navigate('/admin/missions')
     } catch (err) {
-      // Adresse de page déjà prise : erreur affichée sous le champ (bordure rouge),
-      // comme les erreurs de format. Les autres erreurs restent dans l'encart du haut.
+      setError(err.message)
+      // Adresse de page déjà prise : le message reste en haut, et le champ
+      // concerné est encadré en rouge (sans texte dessous) pour le repérer
       if (err.code === 'SLUG_TAKEN') {
-        setFieldErrors(prev => ({ ...prev, slug: err.message }))
-      } else {
-        setError(err.message)
+        setFieldErrors(prev => ({ ...prev, slug: true }))
       }
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } finally {

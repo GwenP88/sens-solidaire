@@ -17,6 +17,7 @@ export function FormSection({ title, description, children, tone = 'bg-dash-acti
 }
 
 // error : message de validation à afficher sous le champ (texte rouge)
+//         ou true = bordure rouge seule (message affiché ailleurs, ex. erreur serveur en haut de page)
 export function Field({ label, name, value, onChange, required, hint, pattern, title: fieldTitle, error, autoComplete, list, type = 'text' }) {
   return (
     <div className="flex flex-col gap-1">
@@ -37,7 +38,7 @@ export function Field({ label, name, value, onChange, required, hint, pattern, t
           error ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-dash-action/30'
         }`}
       />
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {typeof error === 'string' && <span className="text-xs text-red-500">{error}</span>}
     </div>
   )
 }
