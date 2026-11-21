@@ -3,7 +3,8 @@
 // Page dashboard "Témoignages & rapports de mission"
 // ════════════════════════════════════════════════════════════════
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import useRefreshOnFocus from '../../hooks/useRefreshOnFocus'
 import { FiEdit2, FiPause, FiPlay, FiTrash2 } from 'react-icons/fi'
 import {
   fetchAdminMissions,
@@ -82,8 +83,10 @@ function TemoignagesRapportsPage() {
   // ── Pays du filtre — dérivés des missions (le serveur filtre sur mission.country) + des rapports (tâche 170)
   const [missionCountries, setMissionCountries] = useState([])
 
-  const load = async () => {
-    setLoading(true)
+  // silent = rechargement en arrière-plan (retour sur l'onglet, vérification
+  // périodique) : pas de « Chargement... », la liste ne saute pas
+  const load = async ({ silent = false } = {}) => {
+    if (!silent) setLoading(true)
     try {
       const { testimonials, total } = await fetchAdminTestimonials({
         status: statusFilter || undefined,
@@ -123,6 +126,23 @@ function TemoignagesRapportsPage() {
     load()
     loadPending()
   }, [statusFilter, typeFilter, countryFilter, limit])
+
+  // ── Nouveaux témoignages sans F5 : rechargement silencieux au retour sur
+  // l'onglet + vérification toutes les 60 s tant que l'onglet est visible
+  const refreshKey = useRefreshOnFocus()
+  const silentRefresh = useRef(null)
+  silentRefresh.current = () => { load({ silent: true }); loadPending() }
+
+  useEffect(() => {
+    if (refreshKey > 0) silentRefresh.current()
+  }, [refreshKey])
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (document.visibilityState === 'visible') silentRefresh.current()
+    }, 60000)
+    return () => clearInterval(id)
+  }, [])
 
   useEffect(() => {
     loadReports()
