@@ -156,6 +156,7 @@ function Home() {
               quote={t.content}
               name={t.author_name}
               mission={t.mission?.title || ''}
+              avatar={t.avatar_url || undefined}
             />
           )}
           showPagination={true}
