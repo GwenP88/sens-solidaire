@@ -100,6 +100,9 @@ function MissionDetail() {
   // Récupère le PDF guide du volontaire depuis les médias de la mission
   const guidePdf = mission.media?.find(m => m.file_type === 'pdf')
 
+  // Photos de la galerie — la section n'apparaît que s'il y en a au moins une
+  const galleryImages = mission.media?.filter(m => m.file_type === 'image') || []
+
   // Source unique — sert à la fois à la nav d'ancres et à la couleur de fond
   // de chaque section. fixedBg = couleur volontairement figée (témoignages,
   // mise en avant), mais la section compte quand même dans le rythme
@@ -113,7 +116,7 @@ function MissionDetail() {
     { label: "Comment partir",    id: "comment-partir",  show: howToGoSteps.length > 0 },
     { label: "Infos pratiques",   id: "infos-pratiques", show: !!mission.health_info || !!mission.admin_info },
     { label: "Témoignages",       id: "temoignages",     show: mission.testimonials?.length > 0, fixedBg: 'bg-accent-2' },
-    { label: "Galerie",           id: "galerie",         show: mission.media?.filter(m => m.file_type === 'image').length > 0 },
+    { label: "Galerie",           id: "galerie",         show: galleryImages.length > 0 },
   ]
 
   const anchorSections = SECTIONS.filter(s => s.show)
@@ -551,26 +554,28 @@ function MissionDetail() {
           )}
         </section>
 
-      {/* ── Galerie photos ── */}
-      <section id="galerie" className={`padding-y padding-x ${sectionBg['galerie']}`}>
-        <h2 className="h2-style text-primary">Plongez dans l'aventure</h2>
-        <p className="text-body text-primary/60 mb-8">
-          Explorez la mission à travers les images de nos volontaires et découvrez l'environnement, les projets et les expériences qui vous attendent sur le terrain.
-        </p>
-        <Carousel
-          items={mission.media?.filter(m => m.file_type === 'image') || []}
-          showPagination={true}
-          color="primary"
-          renderSlide={(item) => (
-            <img
-              loading="lazy"
-              src={item.file_url}
-              alt={item.label || ''}
-              className="w-full h-56 object-cover rounded-xl"
-            />
-          )}
-        />
-      </section>
+      {/* ── Galerie photos — masquée s'il n'y a aucune photo ── */}
+      {galleryImages.length > 0 && (
+        <section id="galerie" className={`padding-y padding-x ${sectionBg['galerie']}`}>
+          <h2 className="h2-style text-primary">Plongez dans l'aventure</h2>
+          <p className="text-body text-primary/60 mb-8">
+            Explorez la mission à travers les images de nos volontaires et découvrez l'environnement, les projets et les expériences qui vous attendent sur le terrain.
+          </p>
+          <Carousel
+            items={galleryImages}
+            showPagination={true}
+            color="primary"
+            renderSlide={(item) => (
+              <img
+                loading="lazy"
+                src={item.file_url}
+                alt={item.label || ''}
+                className="w-full h-56 object-cover rounded-xl"
+              />
+            )}
+          />
+        </section>
+      )}
 
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Partager votre témoignage">
         <TestimonialForm onClose={() => setModalOpen(false)} />
