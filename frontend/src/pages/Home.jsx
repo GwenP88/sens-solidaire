@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── API
 import { fetchTestimonials, fetchFieldActions, fetchPartners, fetchMediaPosts } from '../services/api'
@@ -85,6 +86,7 @@ function Home() {
   const [mediaPosts, setMediaPosts] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
 
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchTestimonials()
       .then(data => setTestimonials(data.filter(t => t.show_homepage)))
@@ -106,7 +108,7 @@ function Home() {
     fetchMediaPosts()
       .then(data => setMediaPosts(data.slice(0, 6)))
       .catch(console.error)
-  }, [])
+  }, [refreshKey])
 
   return (
     <div>

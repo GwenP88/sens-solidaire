@@ -6,6 +6,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── Router
 import { useParams, Link } from 'react-router-dom'
@@ -56,6 +57,7 @@ function MissionDetail() {
   const [actions, setActions]   = useState([])
   const [modalOpen, setModalOpen] = useState(false)
 
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     const loadMission = async () => {
       try {
@@ -69,7 +71,7 @@ function MissionDetail() {
       }
     }
     loadMission()
-  }, [slug])
+  }, [slug, refreshKey])
 
   // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
   useSEO({ title: mission?.title, description: mission?.short_description || mission?.description, image: mission?.image_url })

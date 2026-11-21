@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── API
 import { fetchTeamMembers } from '../services/api'
@@ -57,6 +58,7 @@ function APropos() {
 const [direction, setDirection] = useState([])
 const [bureau, setBureau] = useState([])
 
+const refreshKey = useRefreshOnFocus()
 useEffect(() => {
   fetchTeamMembers('direction', 4)
     .then(setDirection)
@@ -64,7 +66,7 @@ useEffect(() => {
   fetchTeamMembers('bureau', 4)
     .then(setBureau)
     .catch(console.error)
-}, [])
+}, [refreshKey])
 
   return (
     <div className="bg-surface min-h-screen">

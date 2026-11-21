@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── API
 import { fetchTeamMembers, fetchDelegations } from '../services/api'
@@ -43,13 +44,14 @@ function Equipe() {
   const [delegations, setDelegations] = useState([])
 
   // ── Chargement de toutes les données en parallèle au montage
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchTeamMembers('direction').then(setDirection).catch(console.error)
     fetchTeamMembers('bureau').then(setBureau).catch(console.error)
     fetchTeamMembers('ca').then(setCa).catch(console.error)
     fetchTeamMembers('egalement').then(setEgalement).catch(console.error)
     fetchDelegations().then(setDelegations).catch(console.error)
-  }, [])
+  }, [refreshKey])
 
   return (
     <div className="bg-surface min-h-screen">

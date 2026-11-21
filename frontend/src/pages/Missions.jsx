@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect, useRef } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── Router
 import { useSearchParams } from 'react-router-dom'
@@ -72,6 +73,7 @@ function Missions() {
     }, 50)
   }
 
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     const loadMissions = async () => {
       try {
@@ -84,15 +86,15 @@ function Missions() {
       }
     }
     loadMissions()
-  }, [])
+  }, [refreshKey])
 
   useEffect(() => {
     fetchTestimonials().then(setTestimonials).catch(console.error)
-  }, [])
+  }, [refreshKey])
 
   useEffect(() => {
     fetchFieldActions().then(setActions).catch(console.error)
-  }, [])
+  }, [refreshKey])
 
   useEffect(() => {
     if (activeFilter) {
@@ -102,15 +104,15 @@ function Missions() {
 
   useEffect(() => {
     fetchServiceCiviqueGallery().then(setServiceCiviqueGallery).catch(console.error)
-  }, [])
+  }, [refreshKey])
 
   useEffect(() => {
     fetchTypeGallery('groupe_jeunes').then(setGroupeJeunesGallery).catch(console.error)
-  }, [])
+  }, [refreshKey])
 
   useEffect(() => {
     fetchTypeGallery('conge_solidaire').then(setCongeSolidaireGallery).catch(console.error)
-  }, [])
+  }, [refreshKey])
 
   if (loading) return <p className="text-body text-primary/50 italic p-12">Chargement...</p>
   if (error) return <p className="text-body text-accent p-12">Erreur : {error}</p>

@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── Router
 import { useParams, Link } from 'react-router-dom'
@@ -31,12 +32,13 @@ function ImpactDetail() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchFieldActionBySlug(slug)
       .then(data => setAction(data))
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
-  }, [slug])
+  }, [slug, refreshKey])
 
   // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
   useSEO({ title: action?.title, description: action?.description || action?.content, image: action?.image_url })

@@ -4,6 +4,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── Router
 import { useParams, Link } from 'react-router-dom'
@@ -43,12 +44,13 @@ function MediaDetail() {
   const [playingVideo, setPlayingVideo] = useState(null) // vidéo YouTube ouverte dans la modale, ou null
 
   // ── Chargement de l'article depuis l'API au montage
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchMediaPostBySlug(slug)
       .then(data => setPost(data))
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
-  }, [slug])
+  }, [slug, refreshKey])
 
   // ── États de chargement et d'erreur
   // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)

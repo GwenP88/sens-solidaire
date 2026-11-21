@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── Router
 import { useParams } from 'react-router-dom'
@@ -27,12 +28,13 @@ function EducationDetail() {
   const [item, setItem] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchEducationItemBySlug(slug)
       .then(setItem)
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [slug])
+  }, [slug, refreshKey])
 
   // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
   useSEO({ title: item?.title, description: item?.content, image: item?.image_url })

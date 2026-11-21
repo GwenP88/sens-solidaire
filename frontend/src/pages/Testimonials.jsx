@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect, useMemo } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── Router
 import { useSearchParams } from 'react-router-dom'
@@ -45,10 +46,11 @@ function Testimonials() {
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
 
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchTestimonials().then(setTestimonials).catch(console.error).finally(() => setLoading(false))
     fetchMissionReports().then(setRapports).catch(console.error)
-  }, [])
+  }, [refreshKey])
 
   const handleFilter = (key, value) => {
     setFilters(prev => {

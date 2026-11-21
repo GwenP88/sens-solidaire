@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── API
 import { fetchMediaPosts } from '../services/api'
@@ -34,12 +35,13 @@ function MediaEtActualites() {
   const [filters, setFilters] = useState({})
 
   // ── Chargement des articles depuis l'API au montage
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchMediaPosts()
       .then(data => setPosts(data))
       .catch(err => console.error(err))
       .finally(() => setLoading(false))
-  }, [])
+  }, [refreshKey])
 
   // ── Mise à jour d'un filtre individuel
   const handleFilter = (key, value) => {

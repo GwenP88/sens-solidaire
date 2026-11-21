@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect, useMemo } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── Router
 import { useSearchParams } from 'react-router-dom'
@@ -48,12 +49,13 @@ function NotreImpact() {
   }
 
   // ── Chargement des actions depuis l'API au montage
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchFieldActions()
       .then(data => setActions(data))
       .catch(err => console.error(err))
       .finally(() => setLoading(false))
-  }, [])
+  }, [refreshKey])
 
   // ── Filtre pays — construit à partir des pays des actions publiées (tâche 170)
   // useMemo : recalculé seulement quand la liste d'actions change, pas à chaque clic de filtre

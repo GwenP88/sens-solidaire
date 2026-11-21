@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── API
 import { fetchActivityReports } from '../services/api'
@@ -22,9 +23,10 @@ function RapportsActivite() {
 
   const [rapports, setRapports] = useState([])
 
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchActivityReports().then(setRapports).catch(console.error)
-  }, [])
+  }, [refreshKey])
 
   return (
     <div className="bg-surface min-h-screen">

@@ -7,6 +7,7 @@
 
 // ── React
 import { useState, useRef, useEffect } from 'react'
+import useRefreshOnFocus from '../../hooks/useRefreshOnFocus'
 
 // ── Router
 import { useLocation, Link } from 'react-router-dom'
@@ -66,11 +67,12 @@ function Navbar() {
   const isOnApropos  = location.pathname.startsWith('/a-propos') || location.pathname.startsWith('/equipe')
 
   // ── Fetch des missions volontariat individuel au montage ──
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchMissions({ type: 'volontariat_individuel' })
       .then(data => setMissionsNav(data ?? []))
       .catch(() => {}) // silencieux — la navbar ne doit jamais planter
-  }, [])
+  }, [refreshKey])
 
   // ── Fermeture complète du menu mobile ──
   const handleMobileNav = () => {

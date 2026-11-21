@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── API
 import { fetchEducationSections } from '../services/api'
@@ -150,6 +151,7 @@ function Education() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchEducationSections()
       .then(setSections)
@@ -158,7 +160,7 @@ function Education() {
         setError(err.message)
       })
       .finally(() => setLoading(false))
-  }, [])
+  }, [refreshKey])
 
   // Menu d'ancres généré à partir des sections visibles, dans l'ordre choisi dans le dashboard
   const anchorSections = sections.map(s => ({ label: s.title, id: s.slug }))

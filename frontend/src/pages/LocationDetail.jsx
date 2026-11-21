@@ -3,6 +3,7 @@
 
 // ── React
 import { useState, useEffect } from 'react'
+import useRefreshOnFocus from '../hooks/useRefreshOnFocus'
 
 // ── Router
 import { useParams, useSearchParams } from 'react-router-dom'
@@ -57,12 +58,13 @@ function LocationDetail() {
 
   // ── Chargement du lieu depuis l'API
   // delegation inclus via include Prisma
+  const refreshKey = useRefreshOnFocus()
   useEffect(() => {
     fetchLocationBySlug(slug)
       .then(data => setLocation(data))
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
-  }, [slug])
+  }, [slug, refreshKey])
 
   // ── États de chargement et d'erreur
   // ── Référencement : titre d'onglet, description Google, aperçu réseaux sociaux (tâche 174)
