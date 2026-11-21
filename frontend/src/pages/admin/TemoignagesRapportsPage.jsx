@@ -176,8 +176,13 @@ function TemoignagesRapportsPage() {
 
   const handleToggleHomepage = async (t) => {
     try {
-      await updateTestimonial(t.id, { show_homepage: !t.show_homepage })
-      await load()
+      const show_homepage = !t.show_homepage
+      await updateTestimonial(t.id, { show_homepage })
+      // Mise à jour locale des 2 listes (à modérer + principale) : pas de rechargement,
+      // sinon « Chargement... » remplace la liste et l'écran saute
+      const patch = list => list.map(x => (x.id === t.id ? { ...x, show_homepage } : x))
+      setTestimonials(patch)
+      setPendingTestimonials(patch)
     } catch (err) {
       console.error('Erreur dashboard (update) :', err)
       setActionError(ADMIN_ERRORS.update)
