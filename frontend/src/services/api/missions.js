@@ -63,7 +63,8 @@ export const createMission = async (missionData) => {
     // On propage le message d'erreur précis du backend (400 champs manquants,
     // 409 slug dupliqué...) plutôt qu'un message générique.
     const data = await response.json()
-    throw new Error(data.message || "Échec de la création de la mission.")
+    // code (ex. SLUG_TAKEN) transmis pour que le formulaire cible le bon champ
+    throw Object.assign(new Error(data.message || "Échec de la création de la mission."), { code: data.code })
   }
   const data = await response.json()
   return data.mission
@@ -78,7 +79,7 @@ export const updateMission = async (id, missionData) => {
   })
   if (!response.ok) {
     const data = await response.json()
-    throw new Error(data.message || "Échec de la mise à jour de la mission.")
+    throw Object.assign(new Error(data.message || "Échec de la mise à jour de la mission."), { code: data.code })
   }
   const data = await response.json()
   return data.mission
