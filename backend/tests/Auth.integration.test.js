@@ -111,6 +111,16 @@ describe("POST /api/auth/logout", () => {
     const logout = await request(app).post("/api/auth/logout").set("Authorization", `Bearer ${login.body.accessToken}`)
     expect(logout.status).toBe(200)
 
+    // Session révoquée en base : plus aucun hash de refresh token
+    const admin = await prisma.admin.findUnique({ where: { email: ADMIN.email } })
+    expect(admin.refresh_token_hash).toBeNull()
+
+    // Cookie supprimé côté navigateur : valeur vide + date d'expiration dans le passé
+    const cleared = getRefreshCookie(logout)
+    expect(cleared).toMatch(/^refreshToken=;/)
+    expect(cleared).toMatch(/Expires=Thu, 01 Jan 1970/)
+    expect(cleared).toMatch(/HttpOnly/)
+
     const refreshed = await request(app).post("/api/auth/refresh").set("Cookie", cookie)
     expect(refreshed.status).toBe(401)
   })

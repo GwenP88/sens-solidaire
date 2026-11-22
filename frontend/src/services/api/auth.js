@@ -1,7 +1,8 @@
 // services/api/auth.js
-// Connexion au dashboard — n'utilise PAS authFetch (le login produit l'auth, il ne la consomme pas).
+// Connexion / déconnexion du dashboard.
+// Le login n'utilise PAS authFetch (il produit l'auth, il ne la consomme pas) ; le logout, si (route protégée).
 
-import { API_URL } from './client.js'
+import { API_URL, authFetch } from './client.js'
 
 // Connexion admin : envoie email + password, récupère l'access token.
 // credentials: "include" → indispensable pour que le navigateur accepte
@@ -24,4 +25,15 @@ export const loginAdmin = async (email, password) => {
 
   const data = await response.json()
   return data.accessToken
+}
+
+// Déconnexion côté serveur : efface le hash du refresh token en base et supprime le cookie HTTP-Only.
+// authFetch : la route exige le Bearer ; si l'access token a expiré, authFetch le renouvelle d'abord.
+// credentials: "include" → le navigateur applique la suppression du cookie renvoyée par le back.
+export const logoutAdmin = async () => {
+  const response = await authFetch(`${API_URL}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  })
+  if (!response.ok) throw new Error("Échec de la déconnexion côté serveur.")
 }

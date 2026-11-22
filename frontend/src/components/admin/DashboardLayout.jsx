@@ -8,6 +8,10 @@ import DashboardMobileNav from './DashboardMobileNav'
 import { mobileNavItems } from './dashboardNav'
 import PageLoader from '../ui/PageLoader'
 import useSEO from '../../hooks/useSEO'
+import { logoutAdmin } from '../../services/api'
+
+// Au-delà de ce délai, on n'attend plus le serveur : la déconnexion locale ne doit jamais rester bloquée
+const LOGOUT_TIMEOUT_MS = 5000
 
 function DashboardLayout() {
   // Dashboard : titre d'onglet clair et page exclue de Google (tâche 174)
@@ -19,11 +23,27 @@ function DashboardLayout() {
   // Pages prévues sur téléphone : celles de la barre mobile et leurs sous-pages (ex. /admin/medias/new)
   const isMobileReady = mobileNavItems.some(item => pathname.startsWith(item.path))
 
-  // Déconnexion : on annule exactement la condition vérifiée par ProtectedRoute
-  // (présence du token en localStorage), puis on redirige.
-  const handleLogout = () => {
-    localStorage.removeItem('admin_token')
-    navigate('/admin/login', { replace: true })
+  // Déconnexion :
+  // 1. révoque la session côté serveur (refresh token effacé en base + cookie supprimé) ;
+  // 2. dans TOUS les cas (serveur en erreur, injoignable ou trop lent), annule la condition
+  //    vérifiée par ProtectedRoute (token en localStorage) et renvoie vers la connexion.
+  // Le token est retiré APRÈS l'appel : si authFetch a dû le renouveler, le nouveau est bien effacé aussi.
+  const handleLogout = async () => {
+    let timer
+    try {
+      await Promise.race([
+        logoutAdmin(),
+        new Promise((_, reject) => {
+          timer = setTimeout(() => reject(new Error('Délai dépassé')), LOGOUT_TIMEOUT_MS)
+        }),
+      ])
+    } catch (err) {
+      console.error('Déconnexion côté serveur impossible :', err)
+    } finally {
+      clearTimeout(timer)
+      localStorage.removeItem('admin_token')
+      navigate('/admin/login', { replace: true })
+    }
   }
 
   return (
