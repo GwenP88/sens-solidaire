@@ -130,8 +130,12 @@ function TemoignagesRapportsPage() {
   // ── Nouveaux témoignages sans F5 : rechargement silencieux au retour sur
   // l'onglet + vérification toutes les 60 s tant que l'onglet est visible
   const refreshKey = useRefreshOnFocus()
+  // Ref mis à jour dans un effet (pas pendant le rendu — règle react-hooks/refs) :
+  // déclaré avant les effets qui l'utilisent, il est donc toujours à jour pour eux
   const silentRefresh = useRef(null)
-  silentRefresh.current = () => { load({ silent: true }); loadPending() }
+  useEffect(() => {
+    silentRefresh.current = () => { load({ silent: true }); loadPending() }
+  })
 
   useEffect(() => {
     if (refreshKey > 0) silentRefresh.current()
