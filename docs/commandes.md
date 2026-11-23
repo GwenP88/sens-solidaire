@@ -85,6 +85,26 @@ git checkout dev-front
 
 ---
 
+## Tests — commandes utiles
+
+Tests unitaires du back
+
+```bash
+docker exec sensolidaire_backend npm run test:unit
+```
+
+Tests du front
+
+```bash
+docker exec sensolidaire_frontend npm run test:run
+```
+
+Les tests d'intégration
+
+```bash
+docker exec sensolidaire_backend npm run test:integration
+```
+
 ## 🗄️ Base de données — commandes utiles
 
 > Prisma Studio ne fonctionne pas sous Docker (bug connu v7) → tout passe par `psql` directement.
